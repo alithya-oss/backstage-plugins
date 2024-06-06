@@ -1,0 +1,32 @@
+name: PR
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    # Avoid running on issue comments
+    if: github.repository == 'alithya-oss/backstage-plugins' && ( github.event.pull_request || github.event.issue.pull_request )
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+        with:
+          egress-policy: audit
+
+      - name: PR sync
+        uses: backstage/actions/pr-sync@v0.6.11
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN  }}
+          app-id: ${{ secrets.BACKSTAGE_BOT_APPLICATION_ID }}
+          private-key: ${{ secrets.BACKSTAGE_BOT_PRIVATE_KEY }}
+          installation-id: ${{ secrets.BACKSTAGE_BOT_INSTALLATION_ID }}
+          auto-assign: false
