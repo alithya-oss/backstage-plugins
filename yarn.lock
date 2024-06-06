@@ -12,6 +12,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alithya-oss/backstage-plugins@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@alithya-oss/backstage-plugins@workspace:."
+  dependencies:
+    "@backstage-community/cli": "portal:./workspaces/repo-tools/packages/cli"
+    "@backstage/cli-node": ^0.2.2
+    "@changesets/parse": ^0.4.0
+  languageName: unknown
+  linkType: soft
+
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.3.0
   resolution: "@ampproject/remapping@npm:2.3.0"
@@ -1623,9 +1633,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/cli@portal:./workspaces/repo-tools/packages/cli::locator=%40philips-software%2Fphilips-backstage-plugins%40workspace%3A.":
+"@backstage-community/cli@portal:./workspaces/repo-tools/packages/cli::locator=%40alithya-oss%2Fbackstage-plugins%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "@backstage-community/cli@portal:./workspaces/repo-tools/packages/cli::locator=%40philips-software%2Fphilips-backstage-plugins%40workspace%3A."
+  resolution: "@backstage-community/cli@portal:./workspaces/repo-tools/packages/cli::locator=%40alithya-oss%2Fbackstage-plugins%40workspace%3A."
   dependencies:
     "@backstage/cli": ^0.26.2
     "@backstage/errors": ^1.2.4
@@ -2892,16 +2902,6 @@ __metadata:
   checksum: f55d096aaed3e04b8308d4422104fb888f355988056ba7b7ef0a4c397b8a3e54290d7827b06774dbe0c9ce55280b00db486286954f9c265aa6b03091026d9da8
   languageName: node
   linkType: hard
-
-"@philips-software/philips-backstage-plugins@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@philips-software/philips-backstage-plugins@workspace:."
-  dependencies:
-    "@backstage-community/cli": "portal:./workspaces/repo-tools/packages/cli"
-    "@backstage/cli-node": ^0.2.2
-    "@changesets/parse": ^0.4.0
-  languageName: unknown
-  linkType: soft
 
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0

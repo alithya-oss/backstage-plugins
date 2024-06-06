@@ -45,6 +45,7 @@ dist-types
 
 # Temporary change files created by Vim
 *.swp
+.tmp/
 
 # MkDocs build output
 site
