@@ -31,6 +31,10 @@ describe('searchModuleConfluenceCollator', () => {
             },
             confluence: {
               baseUrl: "https://confluence.mock",
+              auth: {
+                "type": "bearer",
+                "token": "M0ck1ng.confluence"
+              }
             },
           },
         }),
