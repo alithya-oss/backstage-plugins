@@ -1,26 +1,16 @@
-/* istanbul ignore file */
 import {
   coreServices,
   createBackendModule,
 } from '@backstage/backend-plugin-api';
 import { readTaskScheduleDefinitionFromConfig } from '@backstage/backend-tasks';
 import { searchIndexRegistryExtensionPoint } from '@backstage/plugin-search-backend-node/alpha';
-import {
-  ConfluenceCollatorFactory,
-  confluenceDefaultSchedule,
-} from './search/ConfluenceCollatorFactory';
-import { loggerToWinstonLogger } from '@backstage/backend-common';
+import { ConfluenceCollatorFactory } from './collators';
 
-/**
- * Confluence search backend plugin
- *
- * @public
- */
-export const confluencePlugin = createBackendModule({
-  moduleId: 'confluence',
-  pluginId: 'confluence-search-backend',
-  register(env) {
-    env.registerInit({
+export const searchModuleConfluenceCollator = createBackendModule({
+  pluginId: 'search',
+  moduleId: 'confluence-collator',
+  register(reg) {
+    reg.registerInit({
       deps: {
         config: coreServices.rootConfig,
         logger: coreServices.logger,
@@ -28,17 +18,24 @@ export const confluencePlugin = createBackendModule({
         indexRegistry: searchIndexRegistryExtensionPoint,
       },
       async init({ config, logger, scheduler, indexRegistry }) {
-        // If not, the Confluence plugin's default schedule is used.
-        const schedule = config.has('confluence.schedule')
-          ? readTaskScheduleDefinitionFromConfig(
-              config.getConfig('confluence.schedule'),
-            )
-          : confluenceDefaultSchedule;
+        const defaultSchedule = {
+          frequency: { minutes: 120 },
+          timeout: { minutes: 60 },
+          initialDelay: { seconds: 30 },
+        };
 
+        const schedule = config.has('search.collators.confluence.schedule')
+          ? readTaskScheduleDefinitionFromConfig(
+              config.getConfig('search.collators.confluence.schedule'),
+            )
+          : defaultSchedule;
+
+        logger.info(`Indexing Confluence instance: "${config.getString('confluence.baseUrl')}"`);
+        logger.info(`Confluence indexing schedule ${JSON.stringify(schedule)}`);
         indexRegistry.addCollator({
           schedule: scheduler.createScheduledTaskRunner(schedule),
           factory: ConfluenceCollatorFactory.fromConfig(config, {
-            logger: loggerToWinstonLogger(logger),
+            logger: logger,
           }),
         });
       },
