@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Logger } from 'winston';
+import { LoggerService } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 import { PluginDatabaseManager } from '@backstage/backend-common';
 import { TimeSaverHandler } from '../timeSaver/handler';
@@ -27,7 +27,7 @@ import { PluginTaskScheduler } from '@backstage/backend-tasks';
 
 interface PluginDependencies {
   router: Router;
-  logger: Logger;
+  logger: LoggerService;
   config: Config;
   database: PluginDatabaseManager;
   scheduler: PluginTaskScheduler;
@@ -46,7 +46,7 @@ const TS_PLUGIN_DEFAULT_SCHEDULE = {
 };
 
 export class PluginInitializer {
-  private logger!: Logger;
+  private logger!: LoggerService;
   private config!: Config;
   private scheduler!: PluginTaskScheduler;
   private database!: PluginDatabaseManager;
@@ -57,7 +57,7 @@ export class PluginInitializer {
 
   private constructor(
     router: Router,
-    logger: Logger,
+    logger: LoggerService,
     config: Config,
     database: PluginDatabaseManager,
     scheduler: PluginTaskScheduler,
@@ -71,7 +71,7 @@ export class PluginInitializer {
 
   static async builder(
     router: Router,
-    logger: Logger,
+    logger: LoggerService,
     config: Config,
     database: PluginDatabaseManager,
     scheduler: PluginTaskScheduler,

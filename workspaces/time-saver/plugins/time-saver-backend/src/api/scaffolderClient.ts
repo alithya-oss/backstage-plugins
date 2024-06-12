@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 import { Config } from '@backstage/config';
-import { Logger } from 'winston';
+import { LoggerService } from '@backstage/backend-plugin-api';
 import jwt from 'jsonwebtoken';
 import * as base64 from 'base64-js';
 
 export class ScaffolderClient {
   constructor(
-    private readonly logger: Logger,
+    private readonly logger: LoggerService,
     private readonly config: Config,
   ) {}
 

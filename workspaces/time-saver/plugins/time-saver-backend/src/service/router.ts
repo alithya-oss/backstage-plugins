@@ -20,17 +20,16 @@ import {
 import {
   PluginDatabaseManager,
   errorHandler,
-  loggerToWinstonLogger,
 } from '@backstage/backend-common';
 import { PluginTaskScheduler } from '@backstage/backend-tasks';
 import express from 'express';
 import Router from 'express-promise-router';
-import { Logger } from 'winston';
+import { LoggerService } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 import { PluginInitializer } from './pluginInitializer';
 
 export interface RouterOptions {
-  logger: Logger;
+  logger: LoggerService;
   database: PluginDatabaseManager;
   config: Config;
   scheduler: PluginTaskScheduler;
@@ -72,10 +71,9 @@ export const timeSaverPlugin = createBackendPlugin({
       },
       async init({ config, logger, scheduler, database, http }) {
         const baseRouter = registerRouter();
-        const winstonLogger = loggerToWinstonLogger(logger);
         const plugin = await PluginInitializer.builder(
           baseRouter,
-          winstonLogger,
+          logger,
           config,
           database,
           scheduler,

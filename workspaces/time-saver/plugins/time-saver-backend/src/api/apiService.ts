@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Logger } from 'winston';
+import { LoggerService } from '@backstage/backend-plugin-api';
 import { Knex } from 'knex';
 import { DatabaseOperations } from '../database/databaseOperations';
 import { ScaffolderClient } from './scaffolderClient';
@@ -22,7 +22,7 @@ import { ScaffolderDatabaseOperations } from '../database/scaffolderDatabaseOper
 
 export class TsApi {
   constructor(
-    private readonly logger: Logger,
+    private readonly logger: LoggerService,
     private readonly config: Config,
     knex: Knex,
     scaffoldKx: Knex,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { TaskRunner } from '@backstage/backend-tasks';
-import { Logger } from 'winston';
+import { LoggerService } from '@backstage/backend-plugin-api';
 import * as uuid from 'uuid';
 import { TimeSaverHandler } from './handler';
 import { Knex } from 'knex';
@@ -22,7 +22,7 @@ import { Config } from '@backstage/config';
 
 export class TsScheduler {
   constructor(
-    private readonly logger: Logger,
+    private readonly logger: LoggerService,
     private readonly config: Config,
     private readonly knex: Knex,
   ) {}
