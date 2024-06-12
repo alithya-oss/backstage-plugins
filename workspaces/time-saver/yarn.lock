@@ -7270,7 +7270,6 @@ __metadata:
     react-router-dom: ^5.2.0
     supertest: ^6.2.4
     uuid: ^9.0.1
-    winston: ^3.2.1
     yn: ^4.0.0
   languageName: unknown
   linkType: soft
