@@ -18,7 +18,7 @@ import { Config } from '@backstage/config';
 import { PluginDatabaseManager } from '@backstage/backend-common';
 import { TimeSaverHandler } from '../timeSaver/handler';
 import { TsApi } from '../api/apiService';
-import { TsDatabase } from '../database/tsDatabase';
+import { TsDatabase } from '../database/timeSaverDatabase';
 import { ScaffolderDb } from '../database/scaffolderDb';
 import { TsScheduler } from '../timeSaver/scheduler';
 import { setupCommonRoutes } from './commonRouter';
@@ -95,8 +95,8 @@ export class PluginInitializer {
     this.scheduler = this.dependencies.scheduler;
 
     // Initialize TsDatabase and run migrations
-    const tsDatabaseInstance = TsDatabase.create(this.database);
-    const kx = await tsDatabaseInstance.get();
+    const timeSaverDatabaseInstance = TsDatabase.create(this.database);
+    const kx = await timeSaverDatabaseInstance.get();
     await TsDatabase.runMigrations(kx);
 
     // Initialize ScaffolderDb

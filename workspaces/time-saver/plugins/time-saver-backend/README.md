@@ -17,13 +17,13 @@ https://github.com/tduniec/backstage-timesaver-plugin.git
 
 ```sh
 # From your Backstage root directory
-yarn add --cwd packages/backend @tduniec/backstage-plugin-time-saver-backend
+yarn add --cwd packages/backend @internal/backstage-plugin-time-saver-backend
 ```
 
 2. Wire up the API implementation to your App in `timeSaver.ts` file in `packages/backend/src/plugins/`:
 
 ```ts
-import { createRouter } from '@tduniec/backstage-plugin-time-saver-backend';
+import { createRouter } from '@internal/backstage-plugin-time-saver-backend';
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 
@@ -75,7 +75,7 @@ backend:
 in `packages/backend/src/index.ts`
 
 ```ts
-backend.add(import('@tduniec/backstage-plugin-time-saver-backend'));
+backend.add(import('@internal/backstage-plugin-time-saver-backend'));
 ```
 
 3. Install [time-saver](../time-saver/README.md) part if not installed already
@@ -133,7 +133,7 @@ ts:
             "development_team": 8,
             "security": 3
           }
-        } 
+        }
       ]
     # extend this list if needed
 ```
