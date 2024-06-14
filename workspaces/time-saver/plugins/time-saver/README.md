@@ -24,14 +24,14 @@ https://github.com/tduniec/backstage-timesaver-plugin.git
 
 ```sh
 # From your Backstage root directory
-yarn add --cwd packages/app @tduniec/backstage-plugin-time-saver
+yarn add --cwd packages/app @internal/backstage-plugin-time-saver
 ```
 
 2. Now open the `packages/app/src/App.tsx` file
 3. Then after all the import statements add the following line:
 
    ```ts
-   import { TimeSaverPage } from '@tduniec/backstage-plugin-time-saver';
+   import { TimeSaverPage } from '@internal/backstage-plugin-time-saver';
    ```
 
 4. In this same file just before the closing `</ FlatRoutes>`, this will be near the bottom of the file, add this line:
@@ -100,7 +100,7 @@ ts:
             "development_team": 8,
             "security": 3
           }
-        } 
+        }
       ]
     # extend this list if needed
 ```
