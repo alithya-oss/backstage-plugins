@@ -34,7 +34,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-search-confluence@workspace:plugins/search-confluence"
   dependencies:
-    "@backstage/cli": ^0.26.5
+    "@backstage/cli": ^0.26.6
     "@backstage/core-app-api": ^1.12.5
     "@backstage/core-components": ^0.14.7
     "@backstage/core-plugin-api": ^1.9.2
@@ -2851,7 +2851,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/cli@npm:^0.26.5, @backstage/cli@npm:^0.26.6":
+"@backstage/cli@npm:^0.26.6":
   version: 0.26.6
   resolution: "@backstage/cli@npm:0.26.6"
   dependencies:
