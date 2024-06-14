@@ -1,5 +1,5 @@
 {
-  "name": "@tduniec/backstage-plugin-time-saver-common",
+  "name": "@internal/backstage-plugin-time-saver-common",
   "description": "Common functionalities for the time-saver plugin",
   "version": "0.1.2",
   "main": "src/index.ts",

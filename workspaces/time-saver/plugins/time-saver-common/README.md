@@ -17,20 +17,20 @@ https://github.com/tduniec/backstage-timesaver-plugin.git
 
 ```sh
 # From your Backstage root directory
-yarn add --cwd packages/backend @tduniec/backstage-plugin-time-saver-common
+yarn add --cwd packages/backend @internal/backstage-plugin-time-saver-common
 ```
 
 or
 
 ```sh
 # From your Backstage root directory
-yarn add --cwd packages/app @tduniec/backstage-plugin-time-saver-common
+yarn add --cwd packages/app @internal/backstage-plugin-time-saver-common
 ```
 
 2. Wire up the API implementation to your `packages/app/src/App.tsx`:
 
 ```tsx
-import { timeSaverPermission } from '@tduniec/backstage-plugin-time-saver-common';
+import { timeSaverPermission } from '@internal/backstage-plugin-time-saver-common';
 
 ...
 
@@ -49,7 +49,7 @@ import { timeSaverPermission } from '@tduniec/backstage-plugin-time-saver-common
 
 ```tsx
 
-import { timeSaverPermission } from '@tduniec/backstage-plugin-time-saver-common';
+import { timeSaverPermission } from '@internal/backstage-plugin-time-saver-common';
 
 ...
 
@@ -69,7 +69,7 @@ import { timeSaverPermission } from '@tduniec/backstage-plugin-time-saver-common
 
 ```ts
 ...
-import { timeSaverPermission } from '@tduniec/backstage-plugin-time-saver-common';
+import { timeSaverPermission } from '@internal/backstage-plugin-time-saver-common';
 ...
 
     if (isPermission(request.permission, timeSaverPermission)) {
