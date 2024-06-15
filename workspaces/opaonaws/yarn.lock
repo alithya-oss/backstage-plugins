@@ -3019,6 +3019,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@backstage-community/plugin-aws-apps-common@workspace:plugins/aws-apps-common":
+  version: 0.0.0-use.local
+  resolution: "@backstage-community/plugin-aws-apps-common@workspace:plugins/aws-apps-common"
+  dependencies:
+    "@backstage/cli": ^0.26.5
+  languageName: unknown
+  linkType: soft
+
 "@backstage/backend-app-api@npm:^0.7.0, @backstage/backend-app-api@npm:^0.7.3":
   version: 0.7.5
   resolution: "@backstage/backend-app-api@npm:0.7.5"
@@ -4653,6 +4661,7 @@ __metadata:
     "@backstage/catalog-model": ^1.4.3
     "@backstage/cli": ^0.26.5
     "@backstage/config": ^1.2.0
+    "@backstage/errors": ^1.2.4
     "@backstage/plugin-auth-backend": ^0.22.5
     "@backstage/plugin-auth-backend-module-guest-provider": ^0.1.4
     "@backstage/plugin-auth-node": ^0.4.2
