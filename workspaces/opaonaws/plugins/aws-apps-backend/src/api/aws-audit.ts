@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { AwsAppsApi } from './AwsAppsApi';
-import { Logger } from 'winston';
+import { LoggerService } from '@backstage/backend-plugin-api';
 
 export interface AwsAuditRequest {
   envProviderPrefix: string;
@@ -10,7 +10,7 @@ export interface AwsAuditRequest {
   appName:string;
   apiClient: AwsAppsApi;
   roleArn: string;
-  logger: Logger;
+  logger: LoggerService;
   awsRegion: string;
   awsAccount: string;
   requester: string;

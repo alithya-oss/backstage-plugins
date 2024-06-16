@@ -108,7 +108,7 @@ import {
   
   import { AwsCredentialIdentity } from '@aws-sdk/types';
   import { parse as parseArn } from '@aws-sdk/util-arn-parser';
-  import { AWSServiceResources } from '@aws/plugin-aws-apps-common-for-backstage';
+  import { AWSServiceResources } from '@internal/plugin-aws-apps-common';
   import { Logger } from 'winston';
   
   export type DynamoDBTableData = {

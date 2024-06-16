@@ -1,5 +1,13 @@
-# @backstage-community/plugin-aws-apps-common
+<!--
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: Apache-2.0
+-->
 
-Welcome to the common package for the aws-apps plugin!
+# AWS Apps Common
 
-_This plugin was created through the Backstage CLI_
+Shared isomorphic code for the aws-apps plugins.
+
+## Links
+
+- [Frontend part of aws-apps](https://www.npmjs.com/package/@aws/plugin-aws-apps-for-backstage)
+- [Backend part of aws-apps](https://www.npmjs.com/package/@aws/plugin-aws-apps-backend-for-backstage)

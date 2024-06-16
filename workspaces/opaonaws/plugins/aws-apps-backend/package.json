@@ -1,5 +1,5 @@
 {
-  "name": "@internal/plugin-aws-apps-backend-for-backstage",
+  "name": "@internal/plugin-aws-apps-backend",
   "description": "App Development for Backstage.io on AWS Backend plugin",
   "version": "0.3.2",
   "main": "src/index.ts",
@@ -48,7 +48,6 @@
     "@aws-sdk/client-sts": "^3.290.0",
     "@aws-sdk/types": "^3.290.0",
     "@aws-sdk/util-arn-parser": "^3.310.0",
-    "@aws/plugin-aws-apps-common-for-backstage": "^0.3.2",
     "@backstage/backend-common": "^0.22.0",
     "@backstage/backend-defaults": "^0.2.18",
     "@backstage/backend-plugin-api": "^0.6.18",
@@ -58,6 +57,7 @@
     "@backstage/plugin-catalog-common": "^1.0.19",
     "@backstage/plugin-catalog-node": "^1.6.0",
     "@backstage/types": "^1.1.1",
+    "@internal/plugin-aws-apps-common": "^0.3.2",
     "@kubernetes/client-node": "^0.18.1",
     "@types/express": "*",
     "express": "^4.17.3",

@@ -5,23 +5,23 @@ import {
   AppPromoParams,
   BindResourceParams,
   readOpaAppAuditPermission,
-} from '@aws/plugin-aws-apps-common-for-backstage';
+} from '@internal/plugin-aws-apps-common';
 import { NotAllowedError } from '@backstage/errors';
 import { IdentityApi, getBearerTokenFromAuthorizationHeader } from '@backstage/plugin-auth-node';
 import { AuthorizeResult, PermissionEvaluator } from '@backstage/plugin-permission-common';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
 import express from 'express';
 import Router from 'express-promise-router';
-import { Logger } from 'winston';
+import { LoggerService } from '@backstage/backend-plugin-api';
 import YAML from 'yaml';
 import { AwsAppsApi, getAWScreds } from '../api';
 import { AwsAuditResponse, createAuditRecord } from '../api/aws-audit';
 import { AwsAppsPlatformApi } from '../api/aws-platform';
 import { Config } from '@backstage/config';
-import { PlatformSCMParams } from '@aws/plugin-aws-apps-common-for-backstage/src/types/PlatformTypes';
+import { PlatformSCMParams } from '@internal/plugin-aws-apps-common/src/types/PlatformTypes';
 
 export interface RouterOptions {
-  logger: Logger;
+  logger: LoggerService;
   userIdentity?: IdentityApi;
   config: Config;
   permissions: PermissionEvaluator;

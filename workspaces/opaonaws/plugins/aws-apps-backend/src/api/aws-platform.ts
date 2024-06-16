@@ -23,7 +23,7 @@ import {
   AppPromoParams,
   BindResourceParams,
   GitRepoParams,
-} from '@aws/plugin-aws-apps-common-for-backstage';
+} from '@internal/plugin-aws-apps-common';
 import { Logger } from 'winston';
 import YAML from 'yaml';
 
