@@ -1,5 +1,5 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import '@testing-library/jest-dom';
-import 'cross-fetch/polyfill';
+export * from './OPAApi';
+export * from './OPAApiClient';
