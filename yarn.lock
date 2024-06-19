@@ -17,7 +17,7 @@ __metadata:
   resolution: "@alithya-oss/backstage-plugins@workspace:."
   dependencies:
     "@backstage-community/cli": "portal:./workspaces/repo-tools/packages/cli"
-    "@backstage/cli-node": ^0.2.2
+    "@backstage/cli-node": ^0.2.6
     "@changesets/parse": ^0.4.0
   languageName: unknown
   linkType: soft
@@ -1671,7 +1671,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/cli-node@npm:^0.2.2, @backstage/cli-node@npm:^0.2.5":
+"@backstage/cli-common@npm:^0.1.14":
+  version: 0.1.14
+  resolution: "@backstage/cli-common@npm:0.1.14"
+  checksum: 6c5031ae31f08b405e5e59105d98e43dc6d865f960e5d016067267ecabccd5a892ab65d59d5b9e31850dccddb9eb29e06bf360ab6be8f7949991561ddb163fcb
+  languageName: node
+  linkType: hard
+
+"@backstage/cli-node@npm:^0.2.5":
   version: 0.2.5
   resolution: "@backstage/cli-node@npm:0.2.5"
   dependencies:
@@ -1684,6 +1691,22 @@ __metadata:
     semver: ^7.5.3
     zod: ^3.22.4
   checksum: 4007377a0c9f9258b3ba1aa8006aa6a6810e794a30ff1bf83a06b6a374fd4d27e1d3632de3a41b9f65eb268517147e792d25a21b8a01dbbbfcfd78fc005f86c4
+  languageName: node
+  linkType: hard
+
+"@backstage/cli-node@npm:^0.2.6":
+  version: 0.2.6
+  resolution: "@backstage/cli-node@npm:0.2.6"
+  dependencies:
+    "@backstage/cli-common": ^0.1.14
+    "@backstage/errors": ^1.2.4
+    "@backstage/types": ^1.1.1
+    "@manypkg/get-packages": ^1.1.3
+    "@yarnpkg/parsers": ^3.0.0
+    fs-extra: ^11.2.0
+    semver: ^7.5.3
+    zod: ^3.22.4
+  checksum: 01b14fd7134e97874d0b300a43c1a246e1fa0b741c34fba07410efc1841dafbbb1ea020c5a8eb61908bc787ca0f33826c4cdb215fe2246eeeb655d5f9d7bf695
   languageName: node
   linkType: hard
 
@@ -4349,6 +4372,16 @@ __metadata:
   version: 1.1.0
   resolution: "@yarnpkg/lockfile@npm:1.1.0"
   checksum: 05b881b4866a3546861fee756e6d3812776ea47fa6eb7098f983d6d0eefa02e12b66c3fff931574120f196286a7ad4879ce02743c8bb2be36c6a576c7852083a
+  languageName: node
+  linkType: hard
+
+"@yarnpkg/parsers@npm:^3.0.0":
+  version: 3.0.2
+  resolution: "@yarnpkg/parsers@npm:3.0.2"
+  dependencies:
+    js-yaml: ^3.10.0
+    tslib: ^2.4.0
+  checksum: fb40a87ae7c9f3fc0b2a6b7d84375d1c69ae8304daf598c089b52966bfb4ac94fbd2dcd87ed041970416e03d34359cb5ff16be5f5601f48d1f936213a8edaf4d
   languageName: node
   linkType: hard
 
