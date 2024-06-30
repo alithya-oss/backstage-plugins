@@ -12,6 +12,59 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alithya-oss/plugin-confluence@workspace:^, @alithya-oss/plugin-confluence@workspace:plugins/confluence":
+  version: 0.0.0-use.local
+  resolution: "@alithya-oss/plugin-confluence@workspace:plugins/confluence"
+  dependencies:
+    "@backstage/cli": ^0.26.10
+    "@backstage/core-app-api": ^1.13.0
+    "@backstage/core-components": ^0.14.8
+    "@backstage/core-plugin-api": ^1.9.3
+    "@backstage/dev-utils": ^1.0.34
+    "@backstage/plugin-search-common": ^1.2.12
+    "@backstage/plugin-search-react": ^1.7.12
+    "@backstage/test-utils": ^1.5.7
+    "@backstage/theme": ^0.5.6
+    "@material-ui/core": ^4.12.4
+    "@material-ui/icons": ^4.11.3
+    "@material-ui/lab": ^4.0.0-alpha.61
+    "@testing-library/jest-dom": ^6.4.2
+    "@testing-library/react": ^15.0.2
+    "@types/react": ^18
+    "@types/react-dom": ^18
+    jest: ^29.7.0
+    jest-canvas-mock: ^2.5.2
+    msw: ^1.2.1
+    react: ^18.3.1
+    react-dom: ^18.3.1
+    react-router-dom: ^6.23.1
+    react-use: ^17.2.4
+  peerDependencies:
+    react: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.13.1 || ^17.0.2
+    react-router-dom: ^6.14.1
+  languageName: unknown
+  linkType: soft
+
+"@alithya-oss/plugin-search-backend-module-confluence-collator@workspace:^, @alithya-oss/plugin-search-backend-module-confluence-collator@workspace:plugins/search-backend-module-confluence-collator":
+  version: 0.0.0-use.local
+  resolution: "@alithya-oss/plugin-search-backend-module-confluence-collator@workspace:plugins/search-backend-module-confluence-collator"
+  dependencies:
+    "@backstage/backend-common": ^0.23.2
+    "@backstage/backend-plugin-api": ^0.6.21
+    "@backstage/backend-tasks": ^0.5.26
+    "@backstage/backend-test-utils": ^0.4.3
+    "@backstage/cli": ^0.26.10
+    "@backstage/config": ^1.2.0
+    "@backstage/plugin-search-backend-node": ^1.2.26
+    "@backstage/plugin-search-common": ^1.2.12
+    "@types/node-fetch": ^2.6.11
+    msw: ^1.0.0
+    node-fetch: ^2.6.7
+    p-limit: ^3.1.0
+  languageName: unknown
+  linkType: soft
+
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.3.0
   resolution: "@ampproject/remapping@npm:2.3.0"
@@ -2828,59 +2881,6 @@ __metadata:
   checksum: 3e4437fced97e02982972ce5bebd318c47d42c9be2152c0fd28c6f786cc74086cc0a8fb83b602b846e41df37f22c36254338eada1a47ef9d8a1ec92332ca3ea8
   languageName: node
   linkType: hard
-
-"@backstage-community/plugin-confluence@workspace:^, @backstage-community/plugin-confluence@workspace:plugins/confluence":
-  version: 0.0.0-use.local
-  resolution: "@backstage-community/plugin-confluence@workspace:plugins/confluence"
-  dependencies:
-    "@backstage/cli": ^0.26.10
-    "@backstage/core-app-api": ^1.13.0
-    "@backstage/core-components": ^0.14.8
-    "@backstage/core-plugin-api": ^1.9.3
-    "@backstage/dev-utils": ^1.0.34
-    "@backstage/plugin-search-common": ^1.2.12
-    "@backstage/plugin-search-react": ^1.7.12
-    "@backstage/test-utils": ^1.5.7
-    "@backstage/theme": ^0.5.6
-    "@material-ui/core": ^4.12.4
-    "@material-ui/icons": ^4.11.3
-    "@material-ui/lab": ^4.0.0-alpha.61
-    "@testing-library/jest-dom": ^6.4.2
-    "@testing-library/react": ^15.0.2
-    "@types/react": ^18
-    "@types/react-dom": ^18
-    jest: ^29.7.0
-    jest-canvas-mock: ^2.5.2
-    msw: ^1.2.1
-    react: ^18.3.1
-    react-dom: ^18.3.1
-    react-router-dom: ^6.23.1
-    react-use: ^17.2.4
-  peerDependencies:
-    react: ^16.13.1 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.13.1 || ^17.0.2
-    react-router-dom: ^6.14.1
-  languageName: unknown
-  linkType: soft
-
-"@backstage-community/plugin-search-backend-module-confluence-collator@workspace:^, @backstage-community/plugin-search-backend-module-confluence-collator@workspace:plugins/search-backend-module-confluence-collator":
-  version: 0.0.0-use.local
-  resolution: "@backstage-community/plugin-search-backend-module-confluence-collator@workspace:plugins/search-backend-module-confluence-collator"
-  dependencies:
-    "@backstage/backend-common": ^0.23.2
-    "@backstage/backend-plugin-api": ^0.6.21
-    "@backstage/backend-tasks": ^0.5.26
-    "@backstage/backend-test-utils": ^0.4.3
-    "@backstage/cli": ^0.26.10
-    "@backstage/config": ^1.2.0
-    "@backstage/plugin-search-backend-node": ^1.2.26
-    "@backstage/plugin-search-common": ^1.2.12
-    "@types/node-fetch": ^2.6.11
-    msw: ^1.0.0
-    node-fetch: ^2.6.7
-    p-limit: ^3.1.0
-  languageName: unknown
-  linkType: soft
 
 "@backstage/app-defaults@npm:^1.5.6, @backstage/app-defaults@npm:^1.5.7":
   version: 1.5.7
@@ -6706,8 +6706,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@internal/confluence@workspace:."
   dependencies:
-    "@backstage-community/plugin-confluence": "workspace:^"
-    "@backstage-community/plugin-search-backend-module-confluence-collator": "workspace:^"
+    "@alithya-oss/plugin-confluence": "workspace:^"
+    "@alithya-oss/plugin-search-backend-module-confluence-collator": "workspace:^"
     "@backstage/cli": ^0.26.10
     "@backstage/e2e-test-utils": ^0.1.1
     "@backstage/repo-tools": ^0.9.3
@@ -13918,7 +13918,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "app@workspace:packages/app"
   dependencies:
-    "@backstage-community/plugin-confluence": "workspace:^"
+    "@alithya-oss/plugin-confluence": "workspace:^"
     "@backstage/app-defaults": ^1.5.6
     "@backstage/catalog-model": ^1.5.0
     "@backstage/cli": ^0.26.7
@@ -14665,7 +14665,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "backend@workspace:packages/backend"
   dependencies:
-    "@backstage-community/plugin-search-backend-module-confluence-collator": "workspace:^"
+    "@alithya-oss/plugin-search-backend-module-confluence-collator": "workspace:^"
     "@backstage/backend-common": ^0.23.0
     "@backstage/backend-defaults": ^0.3.0
     "@backstage/backend-tasks": ^0.5.24
