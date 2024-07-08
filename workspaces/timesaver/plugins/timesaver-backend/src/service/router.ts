@@ -22,6 +22,33 @@ export async function createRouter(
     response.json({ status: 'ok' });
   });
 
+  //  Get all groups
+
+  //  Get all templates
+
+  //  Get all templates tasks
+
+  //  Get all templates count
+
+  //  Get time saved sum
+
+  //  Get savings
+
+  //  Get statistics
+
+  //  Get stats per group
+
+  //  Get daily time summary per team
+
+  //  Get daily time summary per template
+
+  //  Get time summary per team
+
+  //  Get time summary per template
+
+  //  Execute migration
+
+
   const middleware = MiddlewareFactory.create({ logger, config });
 
   router.use(middleware.error());
