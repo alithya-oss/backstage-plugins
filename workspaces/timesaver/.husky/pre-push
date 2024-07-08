@@ -1,1 +1,1 @@
-yarn tsc
+yarn tsc:full
