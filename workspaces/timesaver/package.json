@@ -1,5 +1,5 @@
 {
-  "name": "@internal/time-saver",
+  "name": "@internal/timesaver",
   "version": "1.0.0",
   "private": true,
   "engines": {
@@ -18,7 +18,8 @@
     "lint": "backstage-cli repo lint --since origin/main",
     "lint:all": "backstage-cli repo lint",
     "prettier:check": "prettier --check .",
-    "new": "backstage-cli new --scope @backstage-community"
+    "new": "backstage-cli new --scope @backstage-community",
+    "prepare": "cd ../../ && husky workspaces/timesaver/.husky"
   },
   "workspaces": {
     "packages": [
@@ -29,10 +30,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/backstage/community-plugins",
-    "directory": "workspaces/time-saver"
+    "directory": "workspaces/timesaver"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.26.5",
+    "@backstage/cli": "^0.26.7",
     "@backstage/e2e-test-utils": "^0.1.1",
     "@backstage/repo-tools": "^0.8.0",
     "@changesets/cli": "^2.27.1",
