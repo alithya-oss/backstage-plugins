@@ -2561,6 +2561,7 @@ __metadata:
   resolution: "@backstage-community/plugin-timesaver-common@workspace:plugins/timesaver-common"
   dependencies:
     "@backstage/cli": ^0.26.7
+    "@backstage/plugin-permission-common": ^0.7.14
   languageName: unknown
   linkType: soft
 
