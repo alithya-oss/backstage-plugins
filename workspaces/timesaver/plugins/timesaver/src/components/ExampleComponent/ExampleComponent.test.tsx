@@ -22,8 +22,6 @@ describe('ExampleComponent', () => {
 
   it('should render', async () => {
     await renderInTestApp(<ExampleComponent />);
-    expect(
-      screen.getByText('Welcome to timesaver!'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Welcome to timesaver!')).toBeInTheDocument();
   });
 });

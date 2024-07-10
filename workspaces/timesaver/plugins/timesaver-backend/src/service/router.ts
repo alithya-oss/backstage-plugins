@@ -48,7 +48,6 @@ export async function createRouter(
 
   //  Execute migration
 
-
   const middleware = MiddlewareFactory.create({ logger, config });
 
   router.use(middleware.error());
