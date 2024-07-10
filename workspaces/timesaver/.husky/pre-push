@@ -1,2 +1,3 @@
-yarn test
+cd workspaces/timesaver
+yarn test --coverage
 yarn tsc:full
