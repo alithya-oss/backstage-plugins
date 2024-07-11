@@ -25,10 +25,13 @@ export const timesaverPlugin = createBackendPlugin({
             config,
           }),
         );
-        httpRouter.addAuthPolicy({
-          path: '/health',
-          allow: 'unauthenticated',
-        });
+
+        if (process.env.NODE_ENV === 'development') {
+          httpRouter.addAuthPolicy({
+            path: '*',
+            allow: 'unauthenticated',
+          });
+        }
       },
     });
   },
