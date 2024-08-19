@@ -1,4 +1,4 @@
-import { TaskScheduleDefinitionConfig } from '@backstage/backend-tasks';
+import { SchedulerServiceTaskScheduleDefinitionConfig } from '@backstage/backend-plugin-api';
 
 export interface Config {
   search?: {
@@ -10,7 +10,7 @@ export interface Config {
         /**
          * The schedule for how often to run the collation job.
          */
-        schedule?: TaskScheduleDefinitionConfig;
+        schedule?: SchedulerServiceTaskScheduleDefinitionConfig;
       };
     };
   };
@@ -27,12 +27,17 @@ export interface Config {
       /**
        * Authentication method - basic, userpass
        */
-      type: 'bearer' | 'userpass';
+      type: 'basic' | 'bearer' | 'userpass';
       /**
        * Confluence bearer authentication token
        * @visibility secret
        */
       token?: string;
+      /**
+       * Email used with the token for the basic auth method
+       * @visibility secret
+       */
+      email?: string;
       /**
        * Confluence basic authentication username.
        * While Confluence supports BASIC authentication, using an API token is preferred.
