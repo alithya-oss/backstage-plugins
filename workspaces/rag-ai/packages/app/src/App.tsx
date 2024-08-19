@@ -37,6 +37,8 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 
+import { RagModal } from '@alithya-oss/plugin-rag-ai';
+
 const app = createApp({
   apis,
   bindRoutes({ bind }) {
@@ -103,6 +105,7 @@ export default app.createRoot(
     <AlertDisplay />
     <OAuthRequestDialog />
     <AppRouter>
+      <RagModal />
       <Root>{routes}</Root>
     </AppRouter>
   </>,
