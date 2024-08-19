@@ -59,7 +59,7 @@ export class SearchClient {
 
     const { token } = await this.auth.getPluginRequestToken({
       onBehalfOf: await this.auth.getOwnServiceCredentials(),
-      targetPluginId: 'catalog',
+      targetPluginId: 'search',
     });
 
     const response = await fetch(url, {
