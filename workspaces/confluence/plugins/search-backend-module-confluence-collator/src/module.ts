@@ -2,10 +2,15 @@ import {
   coreServices,
   createBackendModule,
 } from '@backstage/backend-plugin-api';
-import { readTaskScheduleDefinitionFromConfig } from '@backstage/backend-tasks';
+import { readSchedulerServiceTaskScheduleDefinitionFromConfig } from '@backstage/backend-plugin-api';
 import { searchIndexRegistryExtensionPoint } from '@backstage/plugin-search-backend-node/alpha';
 import { ConfluenceCollatorFactory } from './collators';
 
+/**
+ * Search backend module for the Confluence index.
+ *
+ * @public
+ */
 export const searchModuleConfluenceCollator = createBackendModule({
   pluginId: 'search',
   moduleId: 'confluence-collator',
@@ -25,12 +30,16 @@ export const searchModuleConfluenceCollator = createBackendModule({
         };
 
         const schedule = config.has('search.collators.confluence.schedule')
-          ? readTaskScheduleDefinitionFromConfig(
+          ? readSchedulerServiceTaskScheduleDefinitionFromConfig(
               config.getConfig('search.collators.confluence.schedule'),
             )
           : defaultSchedule;
 
-        logger.info(`Indexing Confluence instance: "${config.getString('confluence.baseUrl')}"`);
+        logger.info(
+          `Indexing Confluence instance: "${config.getString(
+            'confluence.baseUrl',
+          )}"`,
+        );
         logger.info(`Confluence indexing schedule ${JSON.stringify(schedule)}`);
         indexRegistry.addCollator({
           schedule: scheduler.createScheduledTaskRunner(schedule),

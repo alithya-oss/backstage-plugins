@@ -1,31 +1,38 @@
 # Confluence Search Backend Module
 
-A plugin that provides confluence specific functionality that can be used in different ways (e.g. for search) to compose your Backstage App.
+This plugin provides the `ConfluenceCollatorFactory`, which can be used in the search backend to index Confluence space documents to your Backstage Search.
 
-## Getting started
+## Installation
 
-Before we begin, make sure:
+Add the module package as dependency:
 
-- You have created your own standalone Backstage app using @backstage/create-app and not using a fork of the backstage repository. If you haven't setup Backstage already, start [here](https://backstage.io/docs/getting-started/).
-
-To use any of the functionality this plugin provides, you need to start by configuring your App with the following config:
-
-```yaml
-confluence:
-  baseUrl: http://confluence.example.com
-  auth:
-    type: bearer
-    token: youApiToken
-  spaces: []  # Warning, it is highly recommended to safely list the spaces that you want to index, either all documents will be indexed.
+```bash
+# From your Backstage root directory
+yarn --cwd packages/backend add @alithya-oss/plugin-search-backend-module-confluence-collator
 ```
 
-## Areas of Responsibility
+### New Backend System
 
-This confluence backend plugin is primarily responsible for the following:
+This backend plugin has support for the [new backend system](https://backstage.io/docs/backend-system/), here's how you can set that up:
 
-- Provides a `ConfluenceCollatorFactory`, which can be used in the search backend to index confluence space documents to your Backstage Search
+In your `packages/backend/src/index.ts`, Add the collator to your backend instance, along with the search plugin itself:
 
-### Index Confluence Spaces to search
+```tsx
+import { createBackend } from '@backstage/backend-defaults';
+
+const backend = createBackend();
+backend.add(import('@backstage/plugin-search-backend/alpha'));
+backend.add(
+  import(
+    '@alithya-oss/plugin-search-backend-module-confluence-collator'
+  ),
+);
+backend.start();
+```
+
+### Legacy backend
+
+#### Index Confluence Spaces to search
 
 Before you are able to start index confluence spaces to search, you need to go through the [search getting started guide](https://backstage.io/docs/features/search/getting-started).
 
@@ -45,34 +52,79 @@ indexBuilder.addCollator({
 });
 ```
 
-## New Backend System
+## Configuration
 
-This package exports a module that extends the search backend to also indexing the questions exposed by the [`Confluence` API](https://developer.atlassian.com/cloud/confluence/rest/v1).
+There is some configuration that needs to be setup to use this action, these are the base parameters:
 
-### Installation
-
-Add the module package as a dependency:
-
-```bash
-# From your Backstage root directory
-yarn --cwd packages/backend add @alithya-oss/plugin-search-backend-module-confluence-collator
+```yaml
+confluence:
+  baseUrl: 'http://confluence.example.com'
+  auth:
+    token: '${CONFLUENCE_TOKEN}'
+  spaces: [] # Warning, it is highly recommended to safely list the spaces that you want to index, either all documents will be indexed.
 ```
 
-Add the collator to your backend instance, along with the search plugin itself:
+The sections below will go into more details about the Base URL and Auth Methods.
 
-```tsx
-// packages/backend/src/index.ts
-import { createBackend } from '@backstage/backend-defaults';
+#### Base URL
 
-const backend = createBackend();
-backend.add(import('@backstage/plugin-search-backend/alpha'));
-backend.add(
-  import('@alithya-oss/plugin-search-backend-module-confluence-collator'),
-);
-backend.start();
+The `baseUrl` for Confluence Cloud should include the product name which is `wiki` by default but can be something else if your Org has changed it. An example `baseUrl` for Confluence Cloud would look like this: `https://example.atlassian.net/wiki`
+
+If you are using a self-hosted Confluence instance this does not apply to you. Your `baseUrl` would look something like this: `https://confluence.example.com`
+
+#### Auth Methods
+
+The default authorization method is `bearer` but `basic` and `userpass` are also supported. Here's how you would configure each of these:
+
+For `bearer`:
+
+```yaml
+confluence:
+  baseUrl: 'https://confluence.example.com'
+  auth:
+    type: 'bearer'
+    token: '${CONFLUENCE_TOKEN}'
 ```
 
-You may also want to add configuration parameters to your app-config, for example for controlling the scheduled indexing interval. These parameters should be placed under the `search.collators.confluence` key. See [the config definition file](./config.d.ts) for more details.
+For `basic`:
+
+```yaml
+confluence:
+  baseUrl: 'https://confluence.example.com'
+  auth:
+    type: 'basic'
+    token: '${CONFLUENCE_TOKEN}'
+    email: 'example@company.org'
+```
+
+For `userpass`
+
+```yaml
+confluence:
+  baseUrl: 'https://confluence.example.com'
+  auth:
+    type: 'userpass'
+    username: 'your-username'
+    password: 'your-password'
+```
+
+**Note:** For `basic` and `bearer` authorization methods you will need an access token for authorization with `Read` permissions. You can create a Personal Access Token (PAT) in Confluence. The value used should be the raw token as it will be encoded for you by the action.
+
+#### Search Schedule
+
+By default the Confluence documents indexing will run every two hours. Here's how to configure the schedule:
+
+```yaml
+search:
+  collators:
+    confluence:
+      frequency:
+        minutes: 45
+      timeout:
+        minutes: 3
+      initialDelay:
+        minutes: 3
+```
 
 ## Special thanks & Disclaimer
 
