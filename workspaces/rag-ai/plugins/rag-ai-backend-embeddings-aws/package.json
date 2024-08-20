@@ -42,7 +42,6 @@
     "@backstage/catalog-client": "^1.6.5",
     "@backstage/config": "^1.2.0",
     "@langchain/aws": "^0.0.10",
-    "@langchain/community": "^0.2.28",
     "@langchain/core": "^0.2.27",
     "langchain": "^0.2.16",
     "winston": "^3.11.0"
