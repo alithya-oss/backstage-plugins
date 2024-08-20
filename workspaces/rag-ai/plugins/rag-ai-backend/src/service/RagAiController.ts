@@ -20,7 +20,11 @@ import {
   EmbeddingsSource,
   RetrievalPipeline,
 } from '@alithya-oss/plugin-rag-ai-node';
-import { AuthService, HttpAuthService, LoggerService } from '@backstage/backend-plugin-api';
+import {
+  AuthService,
+  HttpAuthService,
+  LoggerService,
+} from '@backstage/backend-plugin-api';
 
 export class RagAiController {
   private logger: LoggerService;
