@@ -48,6 +48,7 @@ backend:
           subject: external-caller
         accessRestrictions:
           - plugin: rag-ai
+    dangerouslyDisableDefaultAuthPolicy: false
 integrations:
   github:
     - host: github.com
