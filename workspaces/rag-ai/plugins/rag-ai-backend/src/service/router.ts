@@ -15,44 +15,29 @@
  */
 
 import {
-  errorHandler,
   createLegacyAuthAdapters,
+  errorHandler,
 } from '@backstage/backend-common';
-import express, { NextFunction, Request, Response } from 'express';
-import Router from 'express-promise-router';
-import { AugmentationIndexer, RetrievalPipeline } from '@alithya-oss/plugin-rag-ai-node';
-import { BaseLLM } from '@langchain/core/language_models/llms';
-import { LlmService } from './LlmService';
-import { RagAiController } from './RagAiController';
-import { isEmpty } from 'lodash';
-import { Config } from '@backstage/config';
 import {
   AuthService,
   DiscoveryService,
   HttpAuthService,
   LoggerService,
 } from '@backstage/backend-plugin-api';
+import express, { NextFunction, Request, Response } from 'express';
+import Router from 'express-promise-router';
+import {
+  AugmentationIndexer,
+  RetrievalPipeline,
+} from '@alithya-oss/plugin-rag-ai-node';
+import { BaseLLM } from '@langchain/core/language_models/llms';
+import { LlmService } from './LlmService';
+import { RagAiController } from './RagAiController';
+import { isEmpty } from 'lodash';
+import { Config } from '@backstage/config';
 
-type AiBackendConfig = {
-  prompts: {
-    prefix: string;
-    suffix: string;
-  };
-  supportedSources: string[];
-};
 
-export interface RouterOptions {
-  augmentationIndexer: AugmentationIndexer;
-  retrievalPipeline: RetrievalPipeline;
-  model: BaseLLM;
-  discovery?: DiscoveryService;
-  config: Config;
-  logger: LoggerService;
-  auth?: AuthService;
-  httpAuth?: HttpAuthService;
-}
-
-const sourceValidator =
+const _sourceValidator =
   (supportedSources: string[]) =>
   (req: Request, res: Response, next: NextFunction) => {
     const source = req.params.source;
@@ -66,7 +51,7 @@ const sourceValidator =
     return next();
   };
 
-const queryQueryValidator = (
+const _queryQueryValidator = (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -79,7 +64,8 @@ const queryQueryValidator = (
   }
   return next();
 };
-const bodyQueryValidator = (
+
+const _bodyQueryValidator = (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -93,6 +79,27 @@ const bodyQueryValidator = (
   return next();
 };
 
+/** @public */
+type AiBackendConfig = {
+  prompts: {
+    prefix: string;
+    suffix: string;
+  };
+  supportedSources: string[];
+};
+
+/** @public */
+export interface RouterOptions {
+  logger: LoggerService;
+  augmentationIndexer: AugmentationIndexer;
+  retrievalPipeline: RetrievalPipeline;
+  model: BaseLLM;
+  discovery: DiscoveryService;
+  config: Config;
+  auth?: AuthService;
+  httpAuth?: HttpAuthService;
+}
+
 /**
  * @public
  */
@@ -100,21 +107,17 @@ export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
   const {
+    logger,
     augmentationIndexer,
     retrievalPipeline,
     model,
-    discovery,
     config,
-    logger,
   } = options;
-
-  const { auth, httpAuth } = createLegacyAuthAdapters({
-    ...options,
-    discovery,
-  });
 
   const aiBackendConfig = config.getOptional<AiBackendConfig>('ai');
   const supportedSources = aiBackendConfig?.supportedSources ?? ['catalog'];
+
+  const { auth, httpAuth } = createLegacyAuthAdapters(options);
 
   const llmService = new LlmService({
     logger,
@@ -124,6 +127,8 @@ export async function createRouter(
 
   const controller = RagAiController.getInstance({
     logger,
+    auth,
+    httpAuth,
     augmentationIndexer,
     retrievalPipeline,
     llmService,
@@ -132,7 +137,7 @@ export async function createRouter(
   const router = Router();
   router.use(express.json());
 
-  const sourceValidatorMiddleware = sourceValidator(supportedSources);
+  const _sourceValidatorMiddleware = _sourceValidator(supportedSources);
 
   router.get('/health', (_req, res) => {
     res.status(200).json({ status: 'ok' });
@@ -140,17 +145,17 @@ export async function createRouter(
 
   router
     .route('/embeddings/:source')
-    .post(sourceValidatorMiddleware, controller.createEmbeddings)
-    .delete(sourceValidatorMiddleware, controller.deleteEmbeddings)
+    .post(_sourceValidatorMiddleware, controller.createEmbeddings)
+    .delete(_sourceValidatorMiddleware, controller.deleteEmbeddings)
     .get(
-      sourceValidatorMiddleware,
-      queryQueryValidator,
+      _sourceValidatorMiddleware,
+      _queryQueryValidator,
       controller.getEmbeddings,
     );
 
   router
     .route('/query/:source')
-    .post(sourceValidatorMiddleware, bodyQueryValidator, controller.query);
+    .post(_sourceValidatorMiddleware, _bodyQueryValidator, controller.query);
 
   router.use(errorHandler());
   return router;

@@ -13,16 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { LoggerService, AuthService } from '@backstage/backend-plugin-api';
-import { AugmentationIndexer, RetrievalPipeline } from '@alithya-oss/plugin-rag-ai-node';
+
+import {
+  LoggerService,
+  AuthService,
+  HttpAuthService,
+  RootConfigService,
+  DiscoveryService,
+} from '@backstage/backend-plugin-api';
+import {
+  AugmentationIndexer,
+  RetrievalPipeline,
+} from '@alithya-oss/plugin-rag-ai-node';
 import { BaseLLM } from '@langchain/core/language_models/llms';
-import { Config } from '@backstage/config';
+// import { Config } from '@backstage/config';
 
 export interface RagAiConfig {
   logger: LoggerService;
-  auth: AuthService;
   augmentationIndexer: AugmentationIndexer;
   retrievalPipeline: RetrievalPipeline;
   model: BaseLLM;
-  config: Config;
+  discovery: DiscoveryService;
+  config: RootConfigService;
+  auth: AuthService;
+  httpAuth: HttpAuthService;
 }

@@ -84,7 +84,6 @@ export const ragAiModuleBedrock = createBackendModule({
               config.getOptionalNumber('ai.embeddings.bedrock.maxTokens') ??
               config.getOptionalNumber('ai.embeddings.awsBedrock.maxTokens') ??
               4096,
-            // model: 'anthropic.claude-instant-v1', // 'amazon.titan-text-express-v1', 'anthropic.claude-v2', 'mistral-xx'*
             model:
               config.getString('ai.embeddings.bedrock.modelName') ||
               config.getString('ai.embeddings.awsBedrock.modelName') ||

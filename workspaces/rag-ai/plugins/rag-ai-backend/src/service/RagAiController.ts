@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 import { Request, Response } from 'express';
-import { LoggerService } from '@backstage/backend-plugin-api';
 import { LlmService } from './LlmService';
 import {
   AugmentationIndexer,
   EmbeddingsSource,
   RetrievalPipeline,
 } from '@alithya-oss/plugin-rag-ai-node';
+import { AuthService, HttpAuthService, LoggerService } from '@backstage/backend-plugin-api';
 
 export class RagAiController {
+  private logger: LoggerService;
   private static instance: RagAiController;
   private readonly llmService: LlmService;
   private readonly augmentationIndexer: AugmentationIndexer;
   private readonly retrievalPipeline?: RetrievalPipeline;
-  private logger: LoggerService;
 
   constructor(
     logger: LoggerService,
@@ -51,6 +51,8 @@ export class RagAiController {
     llmService: LlmService;
     augmentationIndexer: AugmentationIndexer;
     retrievalPipeline?: RetrievalPipeline;
+    auth?: AuthService;
+    httpAuth?: HttpAuthService;
   }): RagAiController {
     if (!RagAiController.instance) {
       RagAiController.instance = new RagAiController(
