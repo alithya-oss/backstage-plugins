@@ -19,7 +19,6 @@ import {
   coreServices,
 } from '@backstage/backend-plugin-api';
 import { createRouter } from './service/router';
-
 import {
   AugmentationIndexer,
   RetrievalPipeline,

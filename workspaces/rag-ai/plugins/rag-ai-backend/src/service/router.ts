@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-import {
-  createLegacyAuthAdapters,
-  errorHandler,
-} from '@backstage/backend-common';
+import { createLegacyAuthAdapters } from '@backstage/backend-common';
+import { MiddlewareFactory } from '@backstage/backend-defaults/rootHttpRouter';
 import {
   AuthService,
   DiscoveryService,
@@ -36,7 +34,6 @@ import { LlmService } from './LlmService';
 import { RagAiController } from './RagAiController';
 import { isEmpty } from 'lodash';
 import { Config } from '@backstage/config';
-
 
 const _sourceValidator =
   (supportedSources: string[]) =>
@@ -107,13 +104,8 @@ export interface RouterOptions {
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const {
-    logger,
-    augmentationIndexer,
-    retrievalPipeline,
-    model,
-    config,
-  } = options;
+  const { logger, augmentationIndexer, retrievalPipeline, model, config } =
+    options;
 
   const aiBackendConfig = config.getOptional<AiBackendConfig>('ai');
   const supportedSources = aiBackendConfig?.supportedSources ?? ['catalog'];
@@ -158,6 +150,6 @@ export async function createRouter(
     .route('/query/:source')
     .post(_sourceValidatorMiddleware, _bodyQueryValidator, controller.query);
 
-  router.use(errorHandler());
+  router.use(MiddlewareFactory.create({ config, logger }).error());
   return router;
 }
