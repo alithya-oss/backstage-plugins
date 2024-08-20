@@ -18,7 +18,6 @@ import {
   LoggerService,
   AuthService,
   HttpAuthService,
-  RootConfigService,
   DiscoveryService,
 } from '@backstage/backend-plugin-api';
 import {
@@ -26,15 +25,16 @@ import {
   RetrievalPipeline,
 } from '@alithya-oss/plugin-rag-ai-node';
 import { BaseLLM } from '@langchain/core/language_models/llms';
-// import { Config } from '@backstage/config';
+import { BaseChatModel } from '@langchain/core/language_models/chat_models';
+import { Config } from '@backstage/config';
 
 export interface RagAiConfig {
   logger: LoggerService;
   augmentationIndexer: AugmentationIndexer;
   retrievalPipeline: RetrievalPipeline;
-  model: BaseLLM;
+  model: BaseLLM | BaseChatModel;
   discovery: DiscoveryService;
-  config: RootConfigService;
+  config: Config;
   auth: AuthService;
   httpAuth: HttpAuthService;
 }

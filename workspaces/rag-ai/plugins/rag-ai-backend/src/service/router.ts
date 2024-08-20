@@ -31,6 +31,7 @@ import {
   RetrievalPipeline,
 } from '@alithya-oss/plugin-rag-ai-node';
 import { BaseLLM } from '@langchain/core/language_models/llms';
+import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { LlmService } from './LlmService';
 import { RagAiController } from './RagAiController';
 import { isEmpty } from 'lodash';
@@ -93,7 +94,7 @@ export interface RouterOptions {
   logger: LoggerService;
   augmentationIndexer: AugmentationIndexer;
   retrievalPipeline: RetrievalPipeline;
-  model: BaseLLM;
+  model: BaseLLM | BaseChatModel;
   discovery: DiscoveryService;
   config: Config;
   auth?: AuthService;
