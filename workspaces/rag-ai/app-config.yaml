@@ -145,7 +145,7 @@ ai:
     chunkOverlap: 500
     concurrencyLimit: 10
     bedrock:
-      # modelName: amazon.titan-embed-text-v2:0
-      modelName: amazon.titan-embed-g1-text-02
+      # modelName: amazon.titan-text-express-v1
+      modelName: amazon.titan-embed-text-v2:0
       region: us-east-1
       maxToken: 300
