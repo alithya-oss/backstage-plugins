@@ -18,7 +18,10 @@ import {
   LoggerService,
   DiscoveryService,
 } from '@backstage/backend-plugin-api';
-import { EmbeddingDoc, EmbeddingsSource } from '@alithya-oss/plugin-rag-ai-node';
+import {
+  EmbeddingDoc,
+  EmbeddingsSource,
+} from '@alithya-oss/plugin-rag-ai-node';
 import { SearchResultSet } from '@backstage/plugin-search-common';
 
 export type SearchClientQuery = {

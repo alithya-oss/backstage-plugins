@@ -134,19 +134,19 @@ export class RagAiController {
         )
       : [];
 
-      const embeddingsEvent = `event: embeddings\n`;
-      const embeddingsData = `data: ${JSON.stringify(embeddingDocs)}\n\n`;
-      res.write(embeddingsEvent + embeddingsData);
+    const embeddingsEvent = `event: embeddings\n`;
+    const embeddingsData = `data: ${JSON.stringify(embeddingDocs)}\n\n`;
+    res.write(embeddingsEvent + embeddingsData);
 
-      const stream = await this.llmService.query(embeddingDocs, query);
+    const stream = await this.llmService.query(embeddingDocs, query);
 
-      for await (const chunk of stream) {
-        const text = typeof chunk === 'string' ? chunk : chunk.content;
-        const event = `event: response\n`;
-        const data = `data: ${text}\n\n`;
-        res.write(event + data);
-      }
+    for await (const chunk of stream) {
+      const text = typeof chunk === 'string' ? chunk : chunk.content;
+      const event = `event: response\n`;
+      const data = `data: ${text}\n\n`;
+      res.write(event + data);
+    }
 
-      res.end();
+    res.end();
   };
 }

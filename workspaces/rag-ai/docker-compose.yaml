@@ -14,7 +14,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-postgres}
     ports:
       - 5432:5432
-    volumes: 
+    volumes:
       - backstage-postgres:/var/lib/postgresql/data
       # - ./hack/init.sql:/docker-entrypoint-initdb.d/init.sql
 

@@ -71,13 +71,12 @@ export const ragAiPlugin = createBackendPlugin({
       deps: {
         logger: coreServices.logger,
         config: coreServices.rootConfig,
-        discovery:coreServices.discovery,
+        discovery: coreServices.discovery,
         httpRouter: coreServices.httpRouter,
         auth: coreServices.auth,
         httpAuth: coreServices.httpAuth,
       },
       async init({ logger, discovery, config, httpRouter, auth, httpAuth }) {
-
         if (!(augmentationIndexer && model && retrievalPipeline)) {
           throw new Error('augmentationIndexer must be registered');
         }

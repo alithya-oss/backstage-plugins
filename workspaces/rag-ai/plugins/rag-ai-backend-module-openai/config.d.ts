@@ -40,7 +40,7 @@ export interface Config {
         openAIApiKey?: string;
         /**
          * Name of the OpenAI model to use to create Embeddings. Defaults to text-embedding-3-small
-         * 
+         *
          * @default gpt-4o-mini
          */
         modelName?: string;
@@ -66,7 +66,7 @@ export interface Config {
         openAIApiKey?: string;
         /**
          * Name of the OpenAI model to use to create Embeddings.
-         * 
+         *
          * @default text-embedding-3-small
          */
         modelName?: string;

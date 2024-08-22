@@ -15,41 +15,41 @@
  */
 
 export interface Config {
-    /**
-     * OpenAI Embeddings configuration
-     *
-     */
-    ai: {
-      embeddings: {
-        openai: {
-          /**
-           * The endpoint for accessing OpenAI services. Default to process.env.OPENAI_BASE_URL
-           */
-          baseURL?: string;
-          /**
-           * The API key for accessing OpenAI services. Defaults to process.env.OPENAI_API_KEY
-           * 
-           * @secret
-           */
-          openAIApiKey?: string;
-  
-          /**
-           * Name of the OpenAI model to use to create Embeddings. Defaults to text-embedding-3-small
-           */
-          modelName?: string;
-  
-          /**
-           * The size of the batch to use when creating embeddings.
-           * 
-           * @default 512
-           */
-          batchSize?: number;
-  
-          /**
-           * The number of dimensions to generate. Defaults to use the default value from the chosen model
-           */
-          embeddingsDimensions?: number;
-        };
+  /**
+   * OpenAI Embeddings configuration
+   *
+   */
+  ai: {
+    embeddings: {
+      openai: {
+        /**
+         * The endpoint for accessing OpenAI services. Default to process.env.OPENAI_BASE_URL
+         */
+        baseURL?: string;
+        /**
+         * The API key for accessing OpenAI services. Defaults to process.env.OPENAI_API_KEY
+         *
+         * @secret
+         */
+        openAIApiKey?: string;
+
+        /**
+         * Name of the OpenAI model to use to create Embeddings. Defaults to text-embedding-3-small
+         */
+        modelName?: string;
+
+        /**
+         * The size of the batch to use when creating embeddings.
+         *
+         * @default 512
+         */
+        batchSize?: number;
+
+        /**
+         * The number of dimensions to generate. Defaults to use the default value from the chosen model
+         */
+        embeddingsDimensions?: number;
       };
     };
-  }
+  };
+}
