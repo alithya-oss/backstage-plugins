@@ -1,13 +1,13 @@
 name: Automate changeset feedback
 on:
   pull_request_target:
-    branches: ["main"]
+    branches: ['main']
 
 permissions:
   pull-requests: write
   actions: none
   checks: none
-  contents: read
+  contents: none
   deployments: none
   issues: none
   packages: none
@@ -18,10 +18,9 @@ permissions:
 
 jobs:
   changeset-feedback:
-    name:
-      Generate Changeset Feedback
-      # prevent running towards forks and version packages
-    if: github.repository == 'alithya-oss/backstage-plugins' && github.event.pull_request.user.login != 'backstage-service'
+    name: Generate Changeset Feedback
+    # prevent running towards forks and version packages
+    if: github.repository == 'backstage/community-plugins' && github.event.pull_request.user.login != 'backstage-service'
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
@@ -33,18 +32,18 @@ jobs:
         with:
           # Fetch the commit that's merged into the base rather than the target ref
           # This will let us diff only the contents of the PR, without fetching more history
-          ref: "refs/pull/${{ github.event.pull_request.number }}/merge"
+          ref: 'refs/pull/${{ github.event.pull_request.number }}/merge'
       - name: fetch base
         run: git fetch --depth 1 origin ${{ github.base_ref }}
 
-      - uses: backstage/actions/changeset-feedback@v0.6.11
+      - uses: backstage/actions/changeset-feedback@v0.6.10
         name: Generate feedback
         with:
-          diff-ref: "origin/main"
+          diff-ref: 'origin/main'
           marker: <!-- changeset-feedback -->
           issue-number: ${{ github.event.pull_request.number }}
-          bot-username: philips-backstage-plugins-bot[bot]
-          app-id: ${{ secrets.BACKSTAGE_BOT_APPLICATION_ID }}
-          private-key: ${{ secrets.BACKSTAGE_BOT_PRIVATE_KEY }}
-          installation-id: ${{ secrets.BACKSTAGE_BOT_INSTALLATION_ID }}
+          bot-username: backstage-goalie[bot]
+          app-id: ${{ secrets.BACKSTAGE_GOALIE_APPLICATION_ID }}
+          private-key: ${{ secrets.BACKSTAGE_GOALIE_PRIVATE_KEY }}
+          installation-id: ${{ secrets.BACKSTAGE_GOALIE_INSTALLATION_ID }}
           multiple-workspaces: true
