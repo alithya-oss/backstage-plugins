@@ -1,5 +1,11 @@
 # @internal/plugin-time-saver-backend
 
+## 0.3.0
+
+### Minor Changes
+
+- Migrated into alithya's backstage plugins repository
+
 ## 0.2.0
 
 ### Minor Changes
