@@ -145,11 +145,8 @@ ai:
     chunkOverlap: 500
     concurrencyLimit: 10
     bedrock:
-      # aws bedrock list-foundation-models --query 'modelSummaries[?responseStreamingSupported==`true`].modelId'
       # List models supporting Embedding as output
       # aws bedrock list-foundation-models --query 'modelSummaries[?contains(outputModalities,`EMBEDDING`)].modelId'
-      # modelName: amazon.titan-text-express-v1
-      # modelName: amazon.titan-embed-text-v2:0
-      modelName: cohere.embed-english-v3
+      modelName: amazon.titan-embed-text-v2:0
       region: us-east-1
       maxToken: 300
