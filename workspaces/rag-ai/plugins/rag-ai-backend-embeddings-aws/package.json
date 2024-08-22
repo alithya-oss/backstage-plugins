@@ -43,8 +43,7 @@
     "@backstage/config": "^1.2.0",
     "@langchain/aws": "^0.0.10",
     "@langchain/core": "^0.2.27",
-    "langchain": "^0.2.16",
-    "winston": "^3.11.0"
+    "langchain": "^0.2.16"
   },
   "devDependencies": {
     "@backstage/backend-test-utils": "^0.4.4",

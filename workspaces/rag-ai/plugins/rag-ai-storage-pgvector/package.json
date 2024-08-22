@@ -36,8 +36,7 @@
     "@backstage/backend-plugin-api": "^0.7.0",
     "@backstage/config": "^1.2.0",
     "@langchain/core": "^0.2.27",
-    "knex": "^3.0.0",
-    "winston": "^3.2.1"
+    "knex": "^3.0.0"
   },
   "devDependencies": {
     "@backstage/cli": "^0.26.11",
