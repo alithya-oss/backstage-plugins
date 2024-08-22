@@ -80,6 +80,7 @@ export const ragAiModuleBedrock = createBackendModule({
 
         model.setBaseLLM(
           new Bedrock({
+            streaming: true,
             maxTokens:
               config.getOptionalNumber('ai.embeddings.bedrock.maxTokens') ??
               config.getOptionalNumber('ai.embeddings.awsBedrock.maxTokens') ??

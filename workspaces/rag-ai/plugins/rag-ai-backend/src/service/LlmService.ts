@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { LoggerService } from '@backstage/backend-plugin-api';
 import { BaseLLM } from '@langchain/core/language_models/llms';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
-import { EmbeddingDoc } from '@roadiehq/rag-ai-node';
-import { Logger } from 'winston';
+import { EmbeddingDoc } from '@alithya-oss/plugin-rag-ai-node';
 import { createPromptTemplates } from './prompts';
 
 export class LlmService {
-  private readonly logger: Logger;
+  private readonly logger: LoggerService;
   private readonly model: BaseLLM | BaseChatModel;
   private readonly prompts: {
     prefixPrompt: (embedding: string) => string;
@@ -32,7 +32,7 @@ export class LlmService {
     model,
     configuredPrompts,
   }: {
-    logger: Logger;
+    logger: LoggerService;
     model: BaseLLM | BaseChatModel;
     configuredPrompts?: {
       prefix?: string;
@@ -55,7 +55,6 @@ export class LlmService {
 
     this.logger.debug(`${prompt}`);
 
-    const response = await this.model.invoke(prompt);
-    return typeof response === 'string' ? response : response.content;
+    return this.model.stream(prompt);
   }
 }

@@ -154,6 +154,7 @@ __metadata:
     "@testing-library/react": ^12.1.3
     "@testing-library/user-event": ^14.0.0
     "@types/react-syntax-highlighter": ^15.5.7
+    eventsource-parser: ^2.0.1
     lodash: ^4.17.21
     msw: ^1.0.0
     react-hotkeys-hook: ^4.4.3
@@ -20615,6 +20616,13 @@ __metadata:
   version: 3.3.0
   resolution: "events@npm:3.3.0"
   checksum: f6f487ad2198aa41d878fa31452f1a3c00958f46e9019286ff4787c84aac329332ab45c9cdc8c445928fc6d7ded294b9e005a7fce9426488518017831b272780
+  languageName: node
+  linkType: hard
+
+"eventsource-parser@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "eventsource-parser@npm:2.0.1"
+  checksum: 572fbf02acaaee3a1133d8e8189ef2553983969283df069be6dc5ab4d2fe01391114fe44ecad9e890b5009e7fa20cb4fd83592b0018eb8f51c0310f1cd1413e7
   languageName: node
   linkType: hard
 
