@@ -150,3 +150,7 @@ ai:
       modelName: amazon.titan-embed-text-v2:0
       region: us-east-1
       maxToken: 300
+    openAi:
+      # Generate token from https://platform.openai.com/api-keys
+      openAIApiKey: ${OPENAPI_API_KEY}
+      modelName: text-embedding-3-small

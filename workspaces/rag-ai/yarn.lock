@@ -54,6 +54,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@alithya-oss/plugin-rag-ai-backend-module-openai@workspace:plugins/rag-ai-backend-module-openai":
+  version: 0.0.0-use.local
+  resolution: "@alithya-oss/plugin-rag-ai-backend-module-openai@workspace:plugins/rag-ai-backend-module-openai"
+  dependencies:
+    "@alithya-oss/plugin-rag-ai-backend-embeddings-aws": "workspace:^"
+    "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter": "workspace:^"
+    "@alithya-oss/plugin-rag-ai-node": "workspace:^"
+    "@alithya-oss/plugin-rag-ai-storage-pgvector": "workspace:^"
+    "@backstage/backend-common": ^0.23.3
+    "@backstage/backend-plugin-api": ^0.7.0
+    "@backstage/backend-test-utils": ^0.4.4
+    "@backstage/catalog-client": ^1.6.5
+    "@backstage/cli": ^0.26.11
+    "@langchain/openai": ^0.2.7
+  languageName: unknown
+  linkType: soft
+
 "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@workspace:^, @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@workspace:plugins/rag-ai-backend-retrieval-augmenter":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@workspace:plugins/rag-ai-backend-retrieval-augmenter"

@@ -50,6 +50,7 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
 // rag-ai plugin
 // backend.add(legacyPlugin('rag-ai', import('./plugins/ai')));
 backend.add(import('@alithya-oss/plugin-rag-ai-backend'));
-backend.add(import('@alithya-oss/plugin-rag-ai-backend-module-bedrock'));
+// backend.add(import('@alithya-oss/plugin-rag-ai-backend-module-bedrock'));
+backend.add(import('@alithya-oss/plugin-rag-ai-backend-module-openai'));
 
 backend.start();

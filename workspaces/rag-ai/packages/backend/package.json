@@ -18,6 +18,7 @@
   "dependencies": {
     "@alithya-oss/plugin-rag-ai-backend": "workspace:^",
     "@alithya-oss/plugin-rag-ai-backend-module-bedrock": "workspace:^",
+    "@alithya-oss/plugin-rag-ai-backend-module-openai": "workspace:^",
     "@backstage/backend-common": "^0.23.3",
     "@backstage/backend-defaults": "^0.4.1",
     "@backstage/backend-tasks": "^0.5.27",
