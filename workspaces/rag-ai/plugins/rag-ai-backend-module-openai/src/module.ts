@@ -11,8 +11,7 @@ import {
 } from '@alithya-oss/plugin-rag-ai-node';
 import { createRoadiePgVectorStore } from '@alithya-oss/plugin-rag-ai-storage-pgvector';
 import { createDefaultRetrievalPipeline } from '@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter';
-import { initializeBedrockEmbeddings } from '@alithya-oss/plugin-rag-ai-backend-embeddings-aws';
-import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
+import { initializeOpenAiEmbeddings } from '@alithya-oss/plugin-rag-ai-backend-embeddings-openai';
 import { OpenAI } from '@langchain/openai';
 
 export const ragAiModuleOpenAI = createBackendModule({
@@ -47,25 +46,14 @@ export const ragAiModuleOpenAI = createBackendModule({
           config,
         });
 
-        const awsCredentialsManager =
-          DefaultAwsCredentialsManager.fromConfig(config);
-        const credProvider =
-          await awsCredentialsManager.getCredentialProvider();
         indexer.setAugmentationIndexer(
-          await initializeBedrockEmbeddings({
+          await initializeOpenAiEmbeddings({
             logger: loggerToWinstonLogger(logger),
             auth,
             catalogApi,
             vectorStore,
             discovery,
             config,
-            options: {
-              region:
-                config.getString('ai.embeddings.bedrock.region') ||
-                config.getString('ai.embeddings.awsBedrock.region') ||
-                'us-east-1',
-              credentials: credProvider.sdkCredentialProvider,
-            },
           }),
         );
 
@@ -82,12 +70,15 @@ export const ragAiModuleOpenAI = createBackendModule({
           new OpenAI({
             configuration: {
               apiKey:
-                config.getOptionalString('ai.embeddings.openapi.apiKey') ??
-                config.getOptionalString('ai.embeddings.openapi.openAIApiKey'),
+                config.getOptionalString('ai.query.openapi.apiKey') ??
+                config.getOptionalString('ai.query.openapi.openAIApiKey'),
             },
             apiKey:
-              config.getOptionalString('ai.embeddings.openapi.apiKey') ??
-              config.getOptionalString('ai.embeddings.openapi.openAIApiKey'),
+              config.getOptionalString('ai.query.openapi.apiKey') ??
+              config.getOptionalString('ai.query.openapi.openAIApiKey'),
+            modelName:
+              config.getOptionalString('ai.query.openai.modelName') ??
+              'gpt-4o-mini',
           }),
         );
       },

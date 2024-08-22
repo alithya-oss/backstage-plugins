@@ -20,6 +20,32 @@ export interface Config {
    *
    */
   ai: {
+    query: {
+      openai: {
+        /**
+         * The endpoint for accessing OpenAI services. Default to process.env.OPENAI_BASE_URL
+         */
+        baseURL?: string;
+        /**
+         * The API key for accessing OpenAI services. Defaults to process.env.OPENAI_API_KEY
+         *
+         * @secret
+         */
+        apiKey?: string;
+        /**
+         * An alias to apiKey
+         *
+         * @secret
+         */
+        openAIApiKey?: string;
+        /**
+         * Name of the OpenAI model to use to create Embeddings. Defaults to text-embedding-3-small
+         * 
+         * @default gpt-4o-mini
+         */
+        modelName?: string;
+      };
+    };
     embeddings: {
       openai: {
         /**
@@ -31,10 +57,17 @@ export interface Config {
          *
          * @secret
          */
-        openAIApiKey?: string;
-
+        apiKey?: string;
         /**
-         * Name of the OpenAI model to use to create Embeddings. Defaults to text-embedding-3-small
+         * An alias to apiKey
+         *
+         * @secret
+         */
+        openAIApiKey?: string;
+        /**
+         * Name of the OpenAI model to use to create Embeddings.
+         * 
+         * @default text-embedding-3-small
          */
         modelName?: string;
 

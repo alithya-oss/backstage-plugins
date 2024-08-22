@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/rag-ai-backend-embeddings-openai",
+  "name": "@alithya-oss/plugin-rag-ai-backend-embeddings-openai",
   "description": "The OpenAI backend module for the @alithya-oss/rag-ai plugin.",
   "version": "0.2.6",
   "main": "src/index.ts",
