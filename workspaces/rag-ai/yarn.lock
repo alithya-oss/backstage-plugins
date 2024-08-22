@@ -167,6 +167,27 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@alithya-oss/rag-ai-backend-embeddings-openai@workspace:plugins/rag-ai-backend-embeddings-openai":
+  version: 0.0.0-use.local
+  resolution: "@alithya-oss/rag-ai-backend-embeddings-openai@workspace:plugins/rag-ai-backend-embeddings-openai"
+  dependencies:
+    "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter": "workspace:^"
+    "@alithya-oss/plugin-rag-ai-node": "workspace:^"
+    "@backstage/backend-common": ^0.23.3
+    "@backstage/backend-test-utils": ^0.4.4
+    "@backstage/catalog-client": ^1.6.5
+    "@backstage/cli": ^0.26.11
+    "@backstage/config": ^1.2.0
+    "@langchain/community": ^0.2.28
+    "@langchain/core": ^0.2.27
+    "@langchain/openai": ^0.2.7
+    esbuild: ^0.19.9
+    langchain: ^0.2.16
+    tsx: ^4.6.2
+    winston: ^3.11.0
+  languageName: unknown
+  linkType: soft
+
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.3.0
   resolution: "@ampproject/remapping@npm:2.3.0"
@@ -8486,7 +8507,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@langchain/openai@npm:>=0.1.0 <0.3.0, @langchain/openai@npm:>=0.2.0 <0.3.0":
+"@langchain/openai@npm:>=0.1.0 <0.3.0, @langchain/openai@npm:>=0.2.0 <0.3.0, @langchain/openai@npm:^0.2.7":
   version: 0.2.7
   resolution: "@langchain/openai@npm:0.2.7"
   dependencies:
