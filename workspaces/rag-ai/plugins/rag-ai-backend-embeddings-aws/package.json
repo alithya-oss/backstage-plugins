@@ -11,7 +11,7 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "backend-plugin-module"
+    "role": "node-library"
   },
   "bugs": {
     "url": "https://github.com/RoadieHQ/roadie-backstage-plugins/issues",

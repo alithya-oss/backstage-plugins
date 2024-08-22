@@ -23,7 +23,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-rag-ai-backend-embeddings-aws": "workspace:^",
+    "@alithya-oss/plugin-rag-ai-backend-embeddings-openai": "workspace:^",
     "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter": "workspace:^",
     "@alithya-oss/plugin-rag-ai-node": "workspace:^",
     "@alithya-oss/plugin-rag-ai-storage-pgvector": "workspace:^",
