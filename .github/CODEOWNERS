@@ -8,4 +8,5 @@
 yarn.lock                                           @alithya-oss/backstage-plugins-maintainers
 */yarn.lock                                         @alithya-oss/backstage-plugins-maintainers
 
-/workspaces/upptime                                 @alithya-oss/backstage-plugins-maintainers @scottguymer
+/workspaces/confluence                              @alithya-oss/backstage-plugins-maintainers @fjudith
+/workspaces/rag-ai                                  @alithya-oss/backstage-plugins-maintainers @fjudith
