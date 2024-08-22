@@ -20,6 +20,53 @@ export interface Config {
    *
    */
   ai: {
+    query:
+      | {
+          awsBedrock: {
+            /**
+             * Name of the Bedrock model to use to create Embeddings
+             *
+             * Defaults to `amazon.titan-embed-text-v1`
+             */
+            modelName: string;
+            /**
+             * AWS region where the model is enabled
+             *
+             * Defaults to `us-east-1`
+             */
+            region: string;
+            /**
+             * The maximum number of tokens allowed in the generated response.
+             * See: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent-runtime_InferenceConfiguration.html
+             *
+             * Defaults to `4096`
+             */
+            maxTokens: number;
+          };
+        }
+      | {
+          bedrock: {
+            /**
+             * Name of the Bedrock model to use to create Embeddings
+             *
+             * Defaults to `amazon.titan-embed-text-v1`
+             */
+            modelName: string;
+            /**
+             * AWS region where the model is enabled
+             *
+             * Defaults to `us-east-1`
+             */
+            region: string;
+            /**
+             * The maximum number of tokens allowed in the generated response.
+             * See: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent-runtime_InferenceConfiguration.html
+             *
+             * Defaults to `4096`
+             */
+            maxTokens: number;
+          };
+        };
     embeddings:
       | {
           awsBedrock: {

@@ -61,8 +61,8 @@ export const ragAiModuleBedrock = createBackendModule({
             config,
             options: {
               region:
-                config.getString('ai.embeddings.bedrock.region') ||
-                config.getString('ai.embeddings.awsBedrock.region') ||
+                config.getString('ai.embeddings.bedrock.region') ??
+                config.getString('ai.embeddings.awsBedrock.region') ??
                 'us-east-1',
               credentials: credProvider.sdkCredentialProvider,
             },
@@ -82,16 +82,16 @@ export const ragAiModuleBedrock = createBackendModule({
           new Bedrock({
             streaming: true,
             maxTokens:
-              config.getOptionalNumber('ai.embeddings.bedrock.maxTokens') ??
-              config.getOptionalNumber('ai.embeddings.awsBedrock.maxTokens') ??
+              config.getOptionalNumber('ai.query.bedrock.maxTokens') ??
+              config.getOptionalNumber('ai.query.awsBedrock.maxTokens') ??
               4096,
             model:
-              config.getString('ai.embeddings.bedrock.modelName') ||
-              config.getString('ai.embeddings.awsBedrock.modelName') ||
+              config.getString('ai.query.bedrock.modelName') ??
+              config.getString('ai.query.awsBedrock.modelName') ??
               'amazon.titan-embed-text-v1',
             region:
-              config.getString('ai.embeddings.bedrock.region') ||
-              config.getString('ai.embeddings.awsBedrock.region') ||
+              config.getString('ai.query.bedrock.region') ??
+              config.getString('ai.query.awsBedrock.region') ??
               'us-east-1',
             credentials: credProvider.sdkCredentialProvider,
           }),
