@@ -1,0 +1,6 @@
+{
+    "platform": "github",
+    "includeForks": false,
+    "repositories": ["alithya-oss/backstage-plugins"],
+    "gitAuthor": "Renovate Bot <bot@renovateapp.com>"
+  }
