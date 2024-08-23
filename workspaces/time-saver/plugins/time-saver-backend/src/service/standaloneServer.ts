@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { LoggerService } from '@backstage/backend-plugin-api';
 import {
-  DatabaseManager,
+  LoggerService,
+  SchedulerService,
+  SchedulerServiceTaskInvocationDefinition,
+  SchedulerServiceTaskRunner,
+} from '@backstage/backend-plugin-api';
+import {
   createServiceBuilder,
   loadBackendConfig,
-  HostDiscovery,
-  UrlReaders,
 } from '@backstage/backend-common';
 import { Server } from 'http';
 import { createRouter } from './router';
 import { ConfigReader } from '@backstage/config';
-import {
-  PluginTaskScheduler,
-  TaskInvocationDefinition,
-  TaskRunner,
-} from '@backstage/backend-tasks';
+import { UrlReaders } from '@backstage/backend-defaults/urlReader';
+import { DatabaseManager } from '@backstage/backend-defaults/database';
+import { HostDiscovery } from '@backstage/backend-defaults/discovery';
 
 export interface ServerOptions {
   port: number;
@@ -43,24 +43,24 @@ export async function startStandaloneServer(
   const config = await loadBackendConfig({ logger, argv: process.argv });
   const discovery = HostDiscovery.fromConfig(config);
 
-  class PersistingTaskRunner implements TaskRunner {
-    private tasks: TaskInvocationDefinition[] = [];
+  class PersistingSchedulerServiceTaskRunner implements SchedulerServiceTaskRunner {
+    private tasks: SchedulerServiceTaskInvocationDefinition[] = [];
 
     getTasks() {
       return this.tasks;
     }
 
-    run(task: TaskInvocationDefinition): Promise<void> {
+    run(task: SchedulerServiceTaskInvocationDefinition): Promise<void> {
       this.tasks.push(task);
       return Promise.resolve(undefined);
     }
   }
 
-  const taskRunner = new PersistingTaskRunner();
+  const SchedulerServiceTaskRunner = new PersistingSchedulerServiceTaskRunner();
   const scheduler = {
-    createScheduledTaskRunner: (_: unknown) => taskRunner,
-  } as unknown as PluginTaskScheduler;
-  //  TODO : Validate createScheduledTaskRunner type
+    createScheduledSchedulerServiceTaskRunner: (_: unknown) => SchedulerServiceTaskRunner,
+  } as unknown as SchedulerService;
+  //  TODO : Validate createScheduledSchedulerServiceTaskRunner type
 
   const manager = DatabaseManager.fromConfig(
     new ConfigReader({

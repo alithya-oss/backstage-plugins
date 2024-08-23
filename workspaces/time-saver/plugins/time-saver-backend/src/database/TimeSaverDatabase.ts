@@ -74,7 +74,7 @@ export interface TimeSaverStore {
 }
 
 const migrationsDir = resolvePackagePath(
-  '@internal/plugin-time-saver-backend',
+  '@alithya-oss/plugin-time-saver-backend',
   'migrations',
 );
 
@@ -318,16 +318,16 @@ export class TimeSaverDatabase implements TimeSaverStore {
   async getDailyTimeSummariesTeamWise() {
     try {
       const result = await this.db.raw(`
-            SELECT 
+            SELECT
             TO_CHAR(DATE_TRUNC('day', created_at), 'YYYY-MM-DD') AS date,
             team,
             SUM(time_saved) AS total_time_saved
-          FROM 
+          FROM
             ts_template_time_savings
-          GROUP BY 
+          GROUP BY
             TO_CHAR(DATE_TRUNC('day', created_at), 'YYYY-MM-DD'),
             team
-          ORDER BY 
+          ORDER BY
             date;
             `);
       const { rows } = result;
@@ -345,17 +345,17 @@ export class TimeSaverDatabase implements TimeSaverStore {
   async getDailyTimeSummariesTemplateWise() {
     try {
       const result = await this.db.raw(`
-            SELECT 
+            SELECT
             TO_CHAR(DATE_TRUNC('day', created_at), 'YYYY-MM-DD') AS date,
             template_name,
             SUM(time_saved) AS total_time_saved
-            FROM 
+            FROM
             ts_template_time_savings
-            GROUP BY 
+            GROUP BY
             TO_CHAR(DATE_TRUNC('day', created_at), 'YYYY-MM-DD'),
             template_name
-            ORDER BY 
-            date;             
+            ORDER BY
+            date;
             `);
       const { rows } = result;
       this.logger.debug(`Data selected successfully ${JSON.stringify(rows)}`);
@@ -405,7 +405,7 @@ export class TimeSaverDatabase implements TimeSaverStore {
             FROM
             ts_template_time_savings
             ORDER BY
-            TO_CHAR(DATE_TRUNC('day', created_at), 'YYYY-MM-DD');            
+            TO_CHAR(DATE_TRUNC('day', created_at), 'YYYY-MM-DD');
             `);
       const { rows } = result;
       this.logger.debug(`Data selected successfully ${JSON.stringify(rows)}`);

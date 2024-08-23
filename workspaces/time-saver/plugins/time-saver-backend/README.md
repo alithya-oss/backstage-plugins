@@ -17,13 +17,13 @@ This plugin provides an implementation of charts and statistics related to your 
 
 ```sh
 # From your Backstage root directory
-yarn workspace packages/backend @internal/plugin-time-saver-backend
+yarn workspace packages/backend @alithya-oss/plugin-time-saver-backend
 ```
 
 2. Wire up the API implementation to your App in `timeSaver.ts` file in `packages/backend/src/plugins/`:
 
 ```ts
-import { createRouter } from '@internal/plugin-time-saver-backend';
+import { createRouter } from '@alithya-oss/plugin-time-saver-backend';
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 
@@ -62,7 +62,7 @@ apiRouter.use('/time-saver', await timeSaver(timeSaverEnv)); // you should use a
 in `packages/backend/src/index.ts`
 
 ```ts
-backend.add(import('@internal/plugin-time-saver-backend'));
+backend.add(import('@alithya-oss/plugin-time-saver-backend'));
 ```
 
 2. Install [time-saver](../time-saver/README.md) part if not installed already
@@ -90,15 +90,6 @@ Provide an object under `metadata`. Provide quantities of saved time by each gro
 ```
 
 Scheduler is running with its default setup every **5 minutes** to generate data from executed templates with these information.
-
-## Optional configuration
-
-If your backend deployment is separate from your frontend you can use below config to override the setup
-
-```yaml
-ts:
-  backendUrl: https://my-awesome-backstage.com
-```
 
 ## Migration
 

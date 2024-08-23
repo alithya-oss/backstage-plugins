@@ -16,7 +16,8 @@
 import {
   AuthService,
   LoggerService,
-  RootConfigService,
+  DiscoveryService,
+  RootConfigService
 } from '@backstage/backend-plugin-api';
 import { ScaffolderClient } from './scaffolderClient';
 import { ScaffolderStore } from '../database/ScaffolderDatabase';
@@ -56,6 +57,7 @@ export class TsApi {
   constructor(
     private readonly logger: LoggerService,
     private readonly config: RootConfigService,
+    private readonly discovery: DiscoveryService,
     private readonly auth: AuthService,
     private readonly timeSaverDb: TimeSaverStore,
     private readonly scaffolderDb: ScaffolderStore,
@@ -292,8 +294,8 @@ export class TsApi {
       this.logger.info(`Starting backward migration`);
       const taskTemplateList = await new ScaffolderClient(
         this.logger,
-        this.config,
         this.auth,
+        this.discovery,
       ).fetchTemplatesFromScaffolder();
       for (let i = 0; i < taskTemplateList.length; i++) {
         const scaffolderTaskRecord = taskTemplateList[i];
@@ -376,7 +378,7 @@ export class TsApi {
       );
       return {
         status: 'error',
-        error: error ? (error as Error) : undefined,
+        error: error as Error,
       };
     }
     return {

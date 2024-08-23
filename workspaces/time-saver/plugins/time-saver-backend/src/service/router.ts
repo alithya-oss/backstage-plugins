@@ -53,12 +53,13 @@ function registerRouter() {
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { logger, config, database, scheduler } = options;
+  const { logger, discovery, config, database, scheduler } = options;
   const baseRouter = registerRouter();
   const { auth } = createLegacyAuthAdapters(options);
   const plugin = await PluginInitializer.builder(
     baseRouter,
     logger,
+    discovery,
     config,
     auth,
     database,
@@ -75,6 +76,7 @@ export const timeSaverPlugin = createBackendPlugin({
     env.registerInit({
       deps: {
         logger: coreServices.logger,
+        discovery: coreServices.discovery,
         config: coreServices.rootConfig,
         auth: coreServices.auth,
         scheduler: coreServices.scheduler,
@@ -86,6 +88,7 @@ export const timeSaverPlugin = createBackendPlugin({
       async init({
         auth,
         config,
+        discovery,
         logger,
         scheduler,
         database,
@@ -96,6 +99,7 @@ export const timeSaverPlugin = createBackendPlugin({
         const plugin = await PluginInitializer.builder(
           baseRouter,
           logger,
+          discovery,
           config,
           auth,
           database,

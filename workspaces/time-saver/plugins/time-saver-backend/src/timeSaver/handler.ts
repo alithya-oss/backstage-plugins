@@ -15,8 +15,8 @@
  */
 import {
   AuthService,
+  DiscoveryService,
   LoggerService,
-  RootConfigService,
 } from '@backstage/backend-plugin-api';
 import { TimeSaverStore } from '../database/TimeSaverDatabase';
 import { ScaffolderClient } from '../api/scaffolderClient';
@@ -24,7 +24,7 @@ import { ScaffolderClient } from '../api/scaffolderClient';
 export class TimeSaverHandler {
   constructor(
     private readonly logger: LoggerService,
-    private readonly config: RootConfigService,
+    private readonly discovery: DiscoveryService,
     private readonly auth: AuthService,
     private readonly db: TimeSaverStore,
   ) {}
@@ -33,8 +33,8 @@ export class TimeSaverHandler {
   async fetchTemplates() {
     const scaffolderClient = new ScaffolderClient(
       this.logger,
-      this.config,
       this.auth,
+      this.discovery,
     );
     this.logger.info(`START - Collecting Time Savings data from templates...}`);
 
