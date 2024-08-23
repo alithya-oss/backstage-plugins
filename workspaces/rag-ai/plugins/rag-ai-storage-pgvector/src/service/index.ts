@@ -22,17 +22,24 @@ import { applyDatabaseMigrations } from '../database/migrations';
 import { RoadieVectorStore } from '@alithya-oss/plugin-rag-ai-node';
 import { RoadiePgVectorStore } from './RoadiePgVectorStore';
 
+/** @public */
 export interface PgVectorStoreInitConfig {
   logger: LoggerService;
   database: DatabaseService;
   config: RootConfigService;
 }
 
+/**
+ * Options for {@link createRoadiePgVectorStore}
+ *
+ * @public
+ */
 export interface RoadiePgVectorStoreOptions {
   chunkSize?: number;
   amount?: number;
 }
 
+/** @public */
 export async function createRoadiePgVectorStore({
   logger,
   database,
