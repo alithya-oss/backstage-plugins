@@ -1,4 +1,4 @@
-# @backstage-community/plugin-catalog-backend-module-time-saver-processor
+# @alithya-oss/plugin-catalog-backend-module-time-saver-processor
 
 ## 0.2.0
 

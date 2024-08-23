@@ -12,6 +12,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alithya-oss/plugin-catalog-backend-module-time-saver-processor@workspace:^, @alithya-oss/plugin-catalog-backend-module-time-saver-processor@workspace:plugins/catalog-backend-module-time-saver-processor":
+  version: 0.0.0-use.local
+  resolution: "@alithya-oss/plugin-catalog-backend-module-time-saver-processor@workspace:plugins/catalog-backend-module-time-saver-processor"
+  dependencies:
+    "@backstage/backend-common": ^0.24.0
+    "@backstage/backend-plugin-api": ^0.8.0
+    "@backstage/backend-test-utils": ^0.5.0
+    "@backstage/catalog-model": ^1.6.0
+    "@backstage/cli": ^0.27.0
+    "@backstage/plugin-catalog-node": ^1.12.5
+    "@backstage/types": ^1.1.1
+  languageName: unknown
+  linkType: soft
+
 "@alithya-oss/plugin-time-saver-backend@workspace:^, @alithya-oss/plugin-time-saver-backend@workspace:plugins/time-saver-backend":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-time-saver-backend@workspace:plugins/time-saver-backend"
@@ -2889,20 +2903,6 @@ __metadata:
   checksum: 497f8b583c54a92a59c3ec542144695064cd5c384fcca46ba1aa301d5e5dd6c1d011f312ca024cb0f9c956da07ae82fb4c348c31a30afa31a074c027720d2aa8
   languageName: node
   linkType: hard
-
-"@backstage-community/plugin-catalog-backend-module-time-saver-processor@workspace:^, @backstage-community/plugin-catalog-backend-module-time-saver-processor@workspace:plugins/catalog-backend-module-time-saver-processor":
-  version: 0.0.0-use.local
-  resolution: "@backstage-community/plugin-catalog-backend-module-time-saver-processor@workspace:plugins/catalog-backend-module-time-saver-processor"
-  dependencies:
-    "@backstage/backend-common": ^0.24.0
-    "@backstage/backend-plugin-api": ^0.8.0
-    "@backstage/backend-test-utils": ^0.5.0
-    "@backstage/catalog-model": ^1.6.0
-    "@backstage/cli": ^0.27.0
-    "@backstage/plugin-catalog-node": ^1.12.5
-    "@backstage/types": ^1.1.1
-  languageName: unknown
-  linkType: soft
 
 "@backstage/app-defaults@npm:^1.5.10":
   version: 1.5.10
@@ -15245,8 +15245,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "backend@workspace:packages/backend"
   dependencies:
+    "@alithya-oss/plugin-catalog-backend-module-time-saver-processor": "workspace:^"
     "@alithya-oss/plugin-time-saver-backend": "workspace:^"
-    "@backstage-community/plugin-catalog-backend-module-time-saver-processor": "workspace:^"
     "@backstage/backend-common": ^0.24.0
     "@backstage/backend-defaults": ^0.4.3
     "@backstage/backend-tasks": ^0.6.0

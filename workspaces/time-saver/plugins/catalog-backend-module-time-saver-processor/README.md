@@ -12,7 +12,7 @@ which may be leveraged by the Analytics API.
 
    ```sh
    # From your Backstage root directory
-   yarn workspace packages/backend add @backstage-community/plugin-catalog-backend-module-time-saver-processor
+   yarn workspace packages/backend add @alithya-oss/plugin-catalog-backend-module-time-saver-processor
    ```
 
 2. Wire up the processor in your backend.
@@ -23,7 +23,7 @@ which may be leveraged by the Analytics API.
    ```diff
    + import {
    +   TimeSaverProcessor,
-   + } from '@backstage-community/plugin-catalog-backend-module-time-saver-processor';
+   + } from '@alithya-oss/plugin-catalog-backend-module-time-saver-processor';
    import { Router } from 'express';
    import { PluginEnvironment } from '../types';
 
@@ -47,7 +47,7 @@ which may be leveraged by the Analytics API.
 
    const backend = createBackend();
    backend.add(import('@backstage/plugin-app-backend/alpha'));
-   + backend.add(import('@backstage-community/plugin-catalog-backend-module-time-saver-processor'));
+   + backend.add(import('@alithya-oss/plugin-catalog-backend-module-time-saver-processor'));
    // ...
    backend.start();
    ```

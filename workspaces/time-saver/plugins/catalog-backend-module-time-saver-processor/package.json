@@ -1,5 +1,5 @@
 {
-  "name": "@backstage-community/plugin-catalog-backend-module-time-saver-processor",
+  "name": "@alithya-oss/plugin-catalog-backend-module-time-saver-processor",
   "description": "The time-saver-processor backend module for the catalog plugin.",
   "version": "0.2.0",
   "main": "src/index.ts",
