@@ -18,28 +18,34 @@ import { AugmentationIndexer, RetrievalPipeline } from './types';
 import { createExtensionPoint } from '@backstage/backend-plugin-api';
 import { BaseLLM } from '@langchain/core/language_models/llms';
 
+/** @public */
 export interface AugmentationIndexerExtensionPoint {
   setAugmentationIndexer(augmentationIndexer: AugmentationIndexer): void;
 }
 
+/** @public */
 export const augmentationIndexerExtensionPoint =
   createExtensionPoint<AugmentationIndexerExtensionPoint>({
     id: 'rag-ai.augmentation-indexer',
   });
 
+/** @public */
 export interface RetrievalPipelineExtensionPoint {
   setRetrievalPipeline(retrievalPipeline: RetrievalPipeline): void;
 }
 
+/** @public */
 export const retrievalPipelineExtensionPoint =
   createExtensionPoint<RetrievalPipelineExtensionPoint>({
     id: 'rag-ai.retrieval-pipeline',
   });
 
+/** @public */
 export interface ModelExtensionPoint {
   setBaseLLM(baseLLM: BaseLLM): void;
 }
 
+/** @public */
 export const modelExtensionPoint = createExtensionPoint<ModelExtensionPoint>({
   id: 'rag-ai.model',
 });
