@@ -35,7 +35,7 @@
     "@backstage/backend-common": "^0.24.0",
     "@backstage/backend-plugin-api": "^0.8.0",
     "@backstage/config": "^1.2.0",
-    "@langchain/core": "^0.2.27",
+    "@langchain/core": "^0.2.28",
     "knex": "^3.0.0"
   },
   "devDependencies": {
