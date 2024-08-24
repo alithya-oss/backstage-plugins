@@ -1,3 +1,5 @@
+[![OpenSSF Scorecard](htt‌ps://api.securityscorecards.dev/projects/github.com/alithya-oss/backstage-plugins/badge)](htt‌ps://securityscorecards.dev/viewer/?uri=github.com/alithya-oss/backstage-plugins)
+
 # Alithya-OSS Backstage Plugins
 
 The `alithya-oss/backstage-plugins` repository is a   
