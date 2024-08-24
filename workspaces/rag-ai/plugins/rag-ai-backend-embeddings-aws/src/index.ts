@@ -31,6 +31,10 @@ import { AwsCredentialIdentity, Provider } from '@aws-sdk/types';
 import { Config } from '@backstage/config';
 import { AugmentationOptions } from '@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter';
 
+/**
+ * Amazon Bedrock client configuration to generate embeddings
+ * @public
+ */
 export interface RoadieBedrockEmbeddingsConfig {
   logger: LoggerService;
   auth: AuthService;
@@ -44,6 +48,7 @@ export interface RoadieBedrockEmbeddingsConfig {
   };
 }
 
+/** @public */
 export async function initializeBedrockEmbeddings({
   logger,
   auth,

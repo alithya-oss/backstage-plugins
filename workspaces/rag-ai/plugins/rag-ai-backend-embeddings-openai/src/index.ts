@@ -27,7 +27,11 @@ import { CatalogApi } from '@backstage/catalog-client';
 import { Config } from '@backstage/config';
 import { AugmentationOptions } from '@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter';
 
-export interface RoadieBedrockEmbeddingsConfig {
+/**
+ * OpenAI client configuration to generate embeddings
+ * @public
+ */
+export interface RoadieOpenAiEmbeddingsConfig {
   logger: LoggerService;
   auth: AuthService;
   vectorStore: RoadieVectorStore;
@@ -36,6 +40,7 @@ export interface RoadieBedrockEmbeddingsConfig {
   config: Config;
 }
 
+/** @public */
 export async function initializeOpenAiEmbeddings({
   logger,
   auth,
@@ -43,7 +48,7 @@ export async function initializeOpenAiEmbeddings({
   catalogApi,
   discovery,
   config,
-}: RoadieBedrockEmbeddingsConfig): Promise<AugmentationIndexer> {
+}: RoadieOpenAiEmbeddingsConfig): Promise<AugmentationIndexer> {
   logger.info('Initializing Roadie OpenAI Embeddings');
   const openAiConfig = config.get<OpenAiConfig>('ai.embeddings.openai');
 
