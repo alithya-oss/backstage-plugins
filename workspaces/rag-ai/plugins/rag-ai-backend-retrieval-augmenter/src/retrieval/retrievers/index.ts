@@ -15,3 +15,5 @@
  */
 export { VectorEmbeddingsRetriever } from './VectorEmbeddingsRetriever';
 export { SearchRetriever } from './SearchRetriever';
+export { SearchClient } from './SearchClient';
+export type { SearchClientQuery } from './SearchClient';

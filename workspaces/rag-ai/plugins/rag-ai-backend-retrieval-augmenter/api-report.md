@@ -20,8 +20,6 @@ import { RetrievalPipeline } from '@alithya-oss/plugin-rag-ai-node';
 import { RetrievalRouter } from '@alithya-oss/plugin-rag-ai-node';
 import { RoadieVectorStore } from '@alithya-oss/plugin-rag-ai-node';
 
-// Warning: (ae-missing-release-tag) "AugmentationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export type AugmentationOptions = {
   chunkSize?: number;
@@ -29,8 +27,6 @@ export type AugmentationOptions = {
   concurrencyLimit?: number;
 };
 
-// Warning: (ae-missing-release-tag) "CombiningPostProcessor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class CombiningPostProcessor implements AugmentationPostProcessor {
   // (undocumented)
@@ -41,8 +37,6 @@ export class CombiningPostProcessor implements AugmentationPostProcessor {
   ): Promise<EmbeddingDoc[]>;
 }
 
-// Warning: (ae-missing-release-tag) "createDefaultRetrievalPipeline" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export const createDefaultRetrievalPipeline: ({
   vectorStore,
@@ -51,8 +45,6 @@ export const createDefaultRetrievalPipeline: ({
   auth,
 }: DefaultRetrievalPipelineOptions) => DefaultRetrievalPipeline;
 
-// Warning: (ae-missing-release-tag) "DefaultRetrievalPipeline" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class DefaultRetrievalPipeline implements RetrievalPipeline {
   constructor({
@@ -72,9 +64,7 @@ export class DefaultRetrievalPipeline implements RetrievalPipeline {
   ): Promise<EmbeddingDoc[]>;
 }
 
-// Warning: (ae-missing-release-tag) "DefaultRetrievalPipelineOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
+// @public
 export type DefaultRetrievalPipelineOptions = {
   vectorStore: RoadieVectorStore;
   logger: LoggerService;
@@ -82,8 +72,6 @@ export type DefaultRetrievalPipelineOptions = {
   auth: AuthService;
 };
 
-// Warning: (ae-missing-release-tag) "DefaultVectorAugmentationIndexer" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
   protected constructor({
@@ -108,8 +96,6 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
     entities: Entity[],
     source: EmbeddingsSource,
   ): Promise<EmbeddingDoc[]>;
-  // Warning: (ae-forgotten-export) The symbol "TechDocsDocument" needs to be exported by the entry point index.d.ts
-  //
   // (undocumented)
   protected constructTechDocsEmbeddingDocuments(
     documents: TechDocsDocument[],
@@ -130,15 +116,11 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
     source: EmbeddingsSource,
     filter?: EntityFilterShape,
   ): Promise<EmbeddingDoc[]>;
-  // Warning: (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
-  // Warning: (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
   protected getSplitter(): RecursiveCharacterTextSplitter;
   // (undocumented)
   get vectorStore(): RoadieVectorStore;
 }
 
-// Warning: (ae-missing-release-tag) "RoadieEmbeddingsConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export interface RoadieEmbeddingsConfig {
   // (undocumented)
@@ -155,8 +137,23 @@ export interface RoadieEmbeddingsConfig {
   vectorStore: RoadieVectorStore;
 }
 
-// Warning: (ae-missing-release-tag) "SearchRetriever" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
+// @public (undocumented)
+export class SearchClient {
+  constructor(options: {
+    discoveryApi: DiscoveryService;
+    logger: LoggerService;
+    auth: AuthService;
+  });
+  // (undocumented)
+  query(query: SearchClientQuery): Promise<EmbeddingDoc[]>;
+}
+
+// @public (undocumented)
+export type SearchClientQuery = {
+  term: string;
+  source: EmbeddingsSource;
+};
+
 // @public (undocumented)
 export class SearchRetriever implements AugmentationRetriever {
   constructor({
@@ -176,8 +173,6 @@ export class SearchRetriever implements AugmentationRetriever {
   retrieve(query: string, source: EmbeddingsSource): Promise<EmbeddingDoc[]>;
 }
 
-// Warning: (ae-missing-release-tag) "SourceBasedRetrievalRouter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export class SourceBasedRetrievalRouter implements RetrievalRouter {
   constructor({
@@ -194,8 +189,14 @@ export class SourceBasedRetrievalRouter implements RetrievalRouter {
   ): Promise<AugmentationRetriever[]>;
 }
 
-// Warning: (ae-missing-release-tag) "VectorEmbeddingsRetriever" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
+// @public (undocumented)
+export type TechDocsDocument = {
+  text: string;
+  entity: Entity;
+  title: string;
+  location: string;
+};
+
 // @public (undocumented)
 export class VectorEmbeddingsRetriever implements AugmentationRetriever {
   constructor({
@@ -214,10 +215,6 @@ export class VectorEmbeddingsRetriever implements AugmentationRetriever {
     _filter?: EntityFilterShape,
   ): Promise<EmbeddingDoc[]>;
 }
-
-// Warnings were encountered during analysis:
-//
-// src/retrieval/retrievers/SearchRetriever.d.ts:10:9 - (ae-forgotten-export) The symbol "SearchClient" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 ```

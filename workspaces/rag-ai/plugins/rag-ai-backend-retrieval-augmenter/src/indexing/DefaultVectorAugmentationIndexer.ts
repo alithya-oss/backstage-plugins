@@ -33,6 +33,7 @@ import {
 } from '@alithya-oss/plugin-rag-ai-node';
 import pLimit from 'p-limit';
 
+/** @public */
 export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
   private readonly _vectorStore: RoadieVectorStore;
   private readonly catalogApi: CatalogApi;
@@ -77,8 +78,6 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
    * which is likely not the best candidate for structured data splitting.
    *
    * It is recommended that this method is overwritten with more applicable implementation
-   *
-   * @returns {RecursiveCharacterTextSplitter} The splitter object.
    */
   protected getSplitter() {
     // Defaults to 1000 chars, 200 overlap

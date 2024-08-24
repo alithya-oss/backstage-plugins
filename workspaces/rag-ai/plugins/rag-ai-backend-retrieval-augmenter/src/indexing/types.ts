@@ -22,12 +22,14 @@ import { CatalogApi } from '@backstage/catalog-client';
 import { RoadieVectorStore } from '@alithya-oss/plugin-rag-ai-node';
 import { Entity } from '@backstage/catalog-model';
 
+/** @public */
 export type AugmentationOptions = {
   chunkSize?: number;
   chunkOverlap?: number;
   concurrencyLimit?: number;
 };
 
+/** @public */
 export interface RoadieEmbeddingsConfig {
   logger: LoggerService;
   auth: AuthService;
@@ -37,6 +39,7 @@ export interface RoadieEmbeddingsConfig {
   augmentationOptions?: AugmentationOptions;
 }
 
+/** @public */
 export type SearchIndex = {
   config: {
     indexing: string;
@@ -52,6 +55,8 @@ export type SearchIndex = {
   }[];
 };
 
+/** 
+ * @public */
 export type TechDocsDocument = {
   text: string;
   entity: Entity;

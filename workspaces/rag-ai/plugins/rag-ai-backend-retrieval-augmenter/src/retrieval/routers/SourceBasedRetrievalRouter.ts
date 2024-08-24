@@ -21,6 +21,7 @@ import {
 } from '@alithya-oss/plugin-rag-ai-node';
 import { LoggerService } from '@backstage/backend-plugin-api';
 
+/** @public */
 export class SourceBasedRetrievalRouter implements RetrievalRouter {
   private readonly logger: LoggerService;
   private readonly retrievers: Map<EmbeddingsSource, AugmentationRetriever[]>;

@@ -23,6 +23,7 @@ import {
 } from '@alithya-oss/plugin-rag-ai-node';
 import { LoggerService } from '@backstage/backend-plugin-api';
 
+/** @public */
 export class VectorEmbeddingsRetriever implements AugmentationRetriever {
   private readonly logger: LoggerService;
   private readonly vectorStore: RoadieVectorStore;
