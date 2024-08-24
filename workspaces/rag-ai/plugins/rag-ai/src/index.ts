@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 export { ragAiPlugin, RagModal, SidebarRagModal } from './plugin';
-export type { RoadieRagAiClient, RagAiApi, ragAiApiRef } from './api';
+export { RoadieRagAiClient, ragAiApiRef } from './api';
+export type { RagAiApi } from './api';
 export type {
   RagModalProps,
   SidebarRagModalProps,
