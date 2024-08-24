@@ -15,10 +15,10 @@ import { initializeBedrockEmbeddings } from '@alithya-oss/plugin-rag-ai-backend-
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 import { Bedrock } from '@langchain/community/llms/bedrock/web';
 
-/** Amzone Bedrock module for Rag AI backend plugin 
+/** Amzone Bedrock module for Rag AI backend plugin
  * @public
- * 
-*/
+ *
+ */
 export const ragAiModuleBedrock = createBackendModule({
   pluginId: 'rag-ai',
   moduleId: 'bedrock',

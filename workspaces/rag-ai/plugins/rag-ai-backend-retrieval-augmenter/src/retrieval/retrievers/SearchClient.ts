@@ -24,7 +24,6 @@ import {
 } from '@alithya-oss/plugin-rag-ai-node';
 import { SearchResultSet } from '@backstage/plugin-search-common';
 
-
 /** @public */
 export type SearchClientQuery = {
   term: string;

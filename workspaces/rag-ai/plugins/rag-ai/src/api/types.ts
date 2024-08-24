@@ -18,7 +18,7 @@ import { ParsedEvent } from 'eventsource-parser/stream';
 
 /**
  * Utitlity API reference for {@link RagAiApi}
- * 
+ *
  * @public
  */
 export const ragAiApiRef = createApiRef<RagAiApi>({
@@ -27,7 +27,7 @@ export const ragAiApiRef = createApiRef<RagAiApi>({
 
 /**
  * API to talk to rag-ai-backend
- * 
+ *
  * @public
  */
 export interface RagAiApi {

@@ -35,7 +35,6 @@ import { RagAiController } from './RagAiController';
 import { isEmpty } from 'lodash';
 import { Config } from '@backstage/config';
 
-
 const _sourceValidator =
   (supportedSources: string[]) =>
   (req: Request, res: Response, next: NextFunction) => {
@@ -91,7 +90,7 @@ type AiBackendConfig = {
  * Router Options
  *
  * @public
- */export interface RagAiRouterOptions {
+ */ export interface RagAiRouterOptions {
   logger: LoggerService;
   augmentationIndexer: AugmentationIndexer;
   retrievalPipeline: RetrievalPipeline;

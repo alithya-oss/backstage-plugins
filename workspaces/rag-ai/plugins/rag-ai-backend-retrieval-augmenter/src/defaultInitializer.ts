@@ -27,10 +27,10 @@ import {
   DiscoveryService,
 } from '@backstage/backend-plugin-api';
 
-/** 
+/**
  * Option for {@link createDefaultRetrievalPipeline}
  * @public
-*/
+ */
 export type DefaultRetrievalPipelineOptions = {
   vectorStore: RoadieVectorStore;
   logger: LoggerService;

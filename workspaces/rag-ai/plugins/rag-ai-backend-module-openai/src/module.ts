@@ -14,10 +14,10 @@ import { createDefaultRetrievalPipeline } from '@alithya-oss/plugin-rag-ai-backe
 import { initializeOpenAiEmbeddings } from '@alithya-oss/plugin-rag-ai-backend-embeddings-openai';
 import { OpenAI } from '@langchain/openai';
 
-/** OpenAI module for Rag AI backend plugin 
+/** OpenAI module for Rag AI backend plugin
  * @public
- * 
-*/
+ *
+ */
 export const ragAiModuleOpenAI = createBackendModule({
   pluginId: 'rag-ai',
   moduleId: 'openai',

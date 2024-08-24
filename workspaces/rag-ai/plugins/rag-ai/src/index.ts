@@ -15,4 +15,7 @@
  */
 export { ragAiPlugin, RagModal, SidebarRagModal } from './plugin';
 export type { RoadieRagAiClient, RagAiApi, ragAiApiRef } from './api';
-export type { RagModalProps, SidebarRagModalProps } from './components/RagModal'
+export type {
+  RagModalProps,
+  SidebarRagModalProps,
+} from './components/RagModal';

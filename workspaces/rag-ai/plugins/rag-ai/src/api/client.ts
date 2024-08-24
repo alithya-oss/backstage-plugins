@@ -27,7 +27,7 @@ import {
 
 /**
  * A frontend compatible client for communicating with rag-ai
- * 
+ *
  * @public
  */
 export class RoadieRagAiClient implements RagAiApi {

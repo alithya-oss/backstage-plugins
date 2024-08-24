@@ -55,7 +55,7 @@ export type SearchIndex = {
   }[];
 };
 
-/** 
+/**
  * @public */
 export type TechDocsDocument = {
   text: string;
