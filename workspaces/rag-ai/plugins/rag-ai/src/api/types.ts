@@ -16,10 +16,20 @@
 import { createApiRef } from '@backstage/core-plugin-api';
 import { ParsedEvent } from 'eventsource-parser/stream';
 
-export interface RagAiApi {
-  ask(question: string, source: string): AsyncGenerator<ParsedEvent>;
-}
-
+/**
+ * Utitlity API reference for {@link RagAiApi}
+ * 
+ * @public
+ */
 export const ragAiApiRef = createApiRef<RagAiApi>({
   id: 'plugin.rag-ai.api',
 });
+
+/**
+ * API to talk to rag-ai-backend
+ * 
+ * @public
+ */
+export interface RagAiApi {
+  ask(question: string, source: string): AsyncGenerator<ParsedEvent>;
+}

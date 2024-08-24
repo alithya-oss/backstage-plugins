@@ -15,26 +15,28 @@ import { IdentityApi } from '@backstage/core-plugin-api';
 import { JSX as JSX_2 } from 'react';
 import { ParsedEvent } from 'eventsource-parser/stream';
 
-// Warning: (ae-forgotten-export) The symbol "RagAiApi" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "ragAiApiRef" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
+// @public
+export interface RagAiApi {
+  // (undocumented)
+  ask(question: string, source: string): AsyncGenerator<ParsedEvent>;
+}
+
+// @public
 export const ragAiApiRef: ApiRef<RagAiApi>;
 
-// Warning: (ae-missing-release-tag) "ragAiPlugin" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
+// @public
 export const ragAiPlugin: BackstagePlugin<{}, {}, {}>;
 
-// Warning: (ae-forgotten-export) The symbol "RagModalProps" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "RagModal" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export const RagModal: (props: RagModalProps) => JSX_2.Element;
 
-// Warning: (ae-missing-release-tag) "RoadieRagAiClient" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
+export type RagModalProps = {
+  title?: string;
+  hotkey?: string;
+};
+
+// @public
 export class RoadieRagAiClient implements RagAiApi {
   constructor(options: {
     discoveryApi: DiscoveryApi;
@@ -46,15 +48,17 @@ export class RoadieRagAiClient implements RagAiApi {
   ask(question: string, source: string): AsyncGenerator<ParsedEvent>;
 }
 
-// Warning: (ae-forgotten-export) The symbol "SidebarRagModalProps" needs to be exported by the entry point index.d.ts
-// Warning: (ae-missing-release-tag) "SidebarRagModal" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export const SidebarRagModal: ({
   title,
   icon,
   ...props
 }: SidebarRagModalProps) => JSX_2.Element;
+
+// @public (undocumented)
+export type SidebarRagModalProps = RagModalProps & {
+  icon?: IconComponent;
+};
 
 // (No @packageDocumentation comment for this package)
 ```

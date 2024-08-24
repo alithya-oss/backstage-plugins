@@ -34,6 +34,7 @@ import { useApi } from '@backstage/core-plugin-api';
 import { ResponseEmbedding } from '../../types';
 import { Thinking } from './Thinking';
 
+/** @public */
 export type RagModalProps = {
   title?: string;
   hotkey?: string;
