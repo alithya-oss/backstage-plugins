@@ -10,7 +10,16 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "backend-plugin"
+    "role": "backend-plugin",
+    "pluginId": "rag-ai",
+    "pluginPackages": [
+      "@alithya-oss/plugin-rag-ai",
+      "@alithya-oss/plugin-rag-ai-backend",
+      "@alithya-oss/plugin-rag-ai-backend-embeddings-aws",
+      "@alithya-oss/plugin-rag-ai-backend-embeddings-openai",
+      "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter",
+      "@alithya-oss/plugin-rag-ai-node"
+    ]
   },
   "bugs": {
     "url": "https://github.com/RoadieHQ/roadie-backstage-plugins/issues",
