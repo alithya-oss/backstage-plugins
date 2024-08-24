@@ -19,6 +19,7 @@ import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { EmbeddingDoc } from '@alithya-oss/plugin-rag-ai-node';
 import { createPromptTemplates } from './prompts';
 
+/** @public */
 export class LlmService {
   private readonly logger: LoggerService;
   private readonly model: BaseLLM | BaseChatModel;

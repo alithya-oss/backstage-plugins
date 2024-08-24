@@ -17,10 +17,10 @@
 import { createLegacyAuthAdapters } from '@backstage/backend-common';
 import { MiddlewareFactory } from '@backstage/backend-defaults/rootHttpRouter';
 import {
-  AuthService,
-  DiscoveryService,
-  HttpAuthService,
   LoggerService,
+  AuthService,
+  HttpAuthService,
+  DiscoveryService,
 } from '@backstage/backend-plugin-api';
 import express, { NextFunction, Request, Response } from 'express';
 import Router from 'express-promise-router';
@@ -34,6 +34,7 @@ import { LlmService } from './LlmService';
 import { RagAiController } from './RagAiController';
 import { isEmpty } from 'lodash';
 import { Config } from '@backstage/config';
+
 
 const _sourceValidator =
   (supportedSources: string[]) =>
@@ -86,8 +87,11 @@ type AiBackendConfig = {
   supportedSources: string[];
 };
 
-/** @public */
-export interface RouterOptions {
+/**
+ * Router Options
+ *
+ * @public
+ */export interface RagAiRouterOptions {
   logger: LoggerService;
   augmentationIndexer: AugmentationIndexer;
   retrievalPipeline: RetrievalPipeline;
@@ -102,7 +106,7 @@ export interface RouterOptions {
  * @public
  */
 export async function createRouter(
-  options: RouterOptions,
+  options: RagAiRouterOptions,
 ): Promise<express.Router> {
   const { logger, augmentationIndexer, retrievalPipeline, model, config } =
     options;

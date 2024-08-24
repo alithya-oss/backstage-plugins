@@ -14,10 +14,5 @@
  * limitations under the License.
  */
 
-import { createRouter } from './router';
-import { RagAiConfig } from './types';
-
-export const createApiRoutes = async (config: RagAiConfig) => {
-  const router = await createRouter(config);
-  return { router };
-};
+export { createRouter } from './router';
+export type { RagAiRouterOptions } from './router';
