@@ -43,6 +43,8 @@ jobs:
 
   maybe-release-workspace:
     name: Maybe release ${{ matrix.workspace }}
+    permissions:
+      contents: write
     needs: find-changed-workspaces
     if: ${{ needs.find-changed-workspaces.outputs.workspaces != '[]' }}
     strategy:
