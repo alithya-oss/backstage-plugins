@@ -6,10 +6,15 @@ on:
       - main
   workflow_dispatch:
 
+# Declare default permissions as read only.
+permissions: read-all
+
 jobs:
   find-changed-workspaces:
     name: Detect workspace changes
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     outputs:
       workspaces: ${{ steps.find-changed-workspaces.outputs.workspaces }}
     steps:

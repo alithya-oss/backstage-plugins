@@ -35,16 +35,10 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ inputs.workspace }}
 
-# Declare default permissions as read only.
-permissions: read-all
-
 jobs:
   changesets-pr:
     name: Update Version Packages PR for ${{ inputs.workspace }} on branch ${{ inputs.branch }}
     runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-      id-token: write
     defaults:
       run:
         working-directory: ./workspaces/${{ inputs.workspace }}
