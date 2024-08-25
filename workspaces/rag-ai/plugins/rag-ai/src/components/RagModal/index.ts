@@ -15,3 +15,5 @@
  */
 export { UncontrolledRagModal } from './RagModal';
 export { SidebarRagModal } from './SidebarRagModal';
+export type { RagModalProps } from './RagModal';
+export type { SidebarRagModalProps } from './SidebarRagModal';

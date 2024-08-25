@@ -26,6 +26,7 @@ import {
   DiscoveryService,
 } from '@backstage/backend-plugin-api';
 
+/** @public */
 export class SearchRetriever implements AugmentationRetriever {
   private readonly searchClient: SearchClient;
   private readonly logger: LoggerService;

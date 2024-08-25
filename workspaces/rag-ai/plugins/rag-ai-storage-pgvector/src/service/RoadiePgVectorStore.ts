@@ -22,6 +22,11 @@ import { Embeddings } from '@langchain/core/embeddings';
 import { Knex } from 'knex';
 import { LoggerService } from '@backstage/backend-plugin-api';
 
+/**
+ * Configuration for {@link RoadiePgVectorStore}
+ *
+ * @public
+ */
 export interface RoadiePgVectorStoreConfig {
   logger: LoggerService;
   db: Knex;

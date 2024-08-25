@@ -20,6 +20,7 @@ import {
   EmbeddingsSource,
 } from '@alithya-oss/plugin-rag-ai-node';
 
+/** @public */
 export class CombiningPostProcessor implements AugmentationPostProcessor {
   async process(
     _query: string,

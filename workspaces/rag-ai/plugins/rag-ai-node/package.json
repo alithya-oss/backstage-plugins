@@ -10,7 +10,16 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "node-library"
+    "role": "node-library",
+    "pluginId": "rag-ai",
+    "pluginPackages": [
+      "@alithya-oss/plugin-rag-ai",
+      "@alithya-oss/plugin-rag-ai-backend",
+      "@alithya-oss/plugin-rag-ai-backend-embeddings-aws",
+      "@alithya-oss/plugin-rag-ai-backend-embeddings-openai",
+      "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter",
+      "@alithya-oss/plugin-rag-ai-node"
+    ]
   },
   "bugs": {
     "url": "https://github.com/RoadieHQ/roadie-backstage-plugins/issues",
@@ -31,12 +40,12 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage/backend-plugin-api": "^0.7.0",
+    "@backstage/backend-plugin-api": "^0.8.0",
     "@backstage/types": "^1.1.1",
-    "@langchain/core": "^0.2.27"
+    "@langchain/core": "^0.2.28"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.26.11"
+    "@backstage/cli": "^0.27.0"
   },
   "files": [
     "dist"

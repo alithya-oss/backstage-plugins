@@ -19,6 +19,7 @@ import { SidebarItem } from '@backstage/core-components';
 import { IconComponent } from '@backstage/core-plugin-api';
 import { ControlledRagModal, RagModalProps } from './RagModal';
 
+/** @public */
 export type SidebarRagModalProps = RagModalProps & {
   icon?: IconComponent;
 };

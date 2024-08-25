@@ -19,12 +19,17 @@ import {
   FetchApi,
   IdentityApi,
 } from '@backstage/core-plugin-api';
-import { RagAiApi } from './ragApi';
+import { RagAiApi } from './types';
 import {
   EventSourceParserStream,
   ParsedEvent,
 } from 'eventsource-parser/stream';
 
+/**
+ * A frontend compatible client for communicating with rag-ai
+ *
+ * @public
+ */
 export class RoadieRagAiClient implements RagAiApi {
   private readonly discoveryApi: DiscoveryApi;
   private readonly fetchApi: FetchApi;

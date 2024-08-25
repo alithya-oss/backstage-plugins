@@ -25,6 +25,7 @@ import {
 } from '@alithya-oss/plugin-rag-ai-node';
 import { CombiningPostProcessor } from './postProcessors/CombiningPostProcessor';
 
+/** @public */
 export class DefaultRetrievalPipeline implements RetrievalPipeline {
   private readonly routers: RetrievalRouter[];
   private readonly retrievers: AugmentationRetriever[];

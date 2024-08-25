@@ -15,18 +15,30 @@
  */
 import { Embeddings } from '@langchain/core/embeddings';
 
+/**
+ * Supported embeddings source
+ *
+ * @public
+ */
 export type EmbeddingsSource = 'catalog' | 'tech-docs' | 'all';
 
+/** @public */
 export type EmbeddingDocMetadata = Partial<{
   source: EmbeddingsSource;
   [key: string]: string;
 }>;
 
+/** @public */
 export type EntityFilterShape =
   | Record<string, string | symbol | (string | symbol)[]>[]
   | Record<string, string | symbol | (string | symbol)[]>
   | undefined;
 
+/**
+ * Embedding output format
+ *
+ * @public
+ */
 export type RoadieEmbedding = {
   metadata: EmbeddingDocMetadata;
   content: string;
@@ -34,11 +46,17 @@ export type RoadieEmbedding = {
   id: string;
 };
 
+/**
+ * Embedding input format
+ *
+ * @public
+ */
 export type EmbeddingDoc = {
   metadata: EmbeddingDocMetadata;
   content: string;
 };
 
+/** @public */
 export interface AugmentationIndexer {
   vectorStore: RoadieVectorStore;
   createEmbeddings(
@@ -51,6 +69,7 @@ export interface AugmentationIndexer {
   ): Promise<void>;
 }
 
+/** @public */
 export interface RetrievalRouter {
   determineRetriever(
     query: string,
@@ -58,6 +77,7 @@ export interface RetrievalRouter {
   ): Promise<AugmentationRetriever[]>;
 }
 
+/** @public */
 export interface AugmentationRetriever {
   id: string;
   retrieve(
@@ -67,6 +87,7 @@ export interface AugmentationRetriever {
   ): Promise<EmbeddingDoc[]>;
 }
 
+/** @public */
 export interface AugmentationPostProcessor {
   process(
     query: string,
@@ -75,6 +96,7 @@ export interface AugmentationPostProcessor {
   ): Promise<EmbeddingDoc[]>;
 }
 
+/** @public */
 export interface RetrievalPipeline {
   retrieveAugmentationContext(
     query: string,
@@ -83,11 +105,13 @@ export interface RetrievalPipeline {
   ): Promise<EmbeddingDoc[]>;
 }
 
-type DeletionParams = {
+/** @public */
+export type DeletionParams = {
   ids?: string[];
   filter?: EmbeddingDocMetadata;
 };
 
+/** @public */
 export interface RoadieVectorStore {
   connectEmbeddings(embeddings: Embeddings): void;
   addDocuments(docs: EmbeddingDoc[]): Promise<void>;

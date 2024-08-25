@@ -19,6 +19,10 @@ import {
   RoadieEmbeddingsConfig,
 } from '@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter';
 
+/**
+ * OpenAI configuration to generate embeddings
+ * @public
+ */
 export type OpenAiConfig = {
   baseUrl?: string;
   apiKey?: string;

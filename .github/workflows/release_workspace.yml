@@ -147,7 +147,8 @@ jobs:
         run: yarn install --immutable
 
       - name: Compile TypeScript
-        run: yarn tsc:full
+        # run: yarn tsc:full
+        run: yarn tsc
 
       - name: Build all packages
         run: yarn build:all

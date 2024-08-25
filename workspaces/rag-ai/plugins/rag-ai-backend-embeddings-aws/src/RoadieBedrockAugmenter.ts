@@ -21,6 +21,10 @@ import {
   RoadieEmbeddingsConfig,
 } from '@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter';
 
+/**
+ * Amazon Bedrock configuration to generate embeddings
+ * @public
+ */
 export type BedrockConfig = {
   modelName: string;
 };

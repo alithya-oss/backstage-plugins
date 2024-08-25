@@ -18,10 +18,15 @@ import {
   createPlugin,
 } from '@backstage/core-plugin-api';
 
+/**
+ * The Backstage plugin that holds RAG-AI specific components
+ * @public
+ */
 export const ragAiPlugin = createPlugin({
   id: 'rag-ai',
 });
 
+/** @public */
 export const RagModal = ragAiPlugin.provide(
   createComponentExtension({
     name: 'RagModal',
@@ -32,6 +37,7 @@ export const RagModal = ragAiPlugin.provide(
   }),
 );
 
+/** @public */
 export const SidebarRagModal = ragAiPlugin.provide(
   createComponentExtension({
     name: 'SidebarRagModal',

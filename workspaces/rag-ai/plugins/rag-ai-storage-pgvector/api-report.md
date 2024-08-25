@@ -8,8 +8,6 @@ import { LoggerService } from '@backstage/backend-plugin-api';
 import { RoadieVectorStore } from '@alithya-oss/plugin-rag-ai-node';
 import { RootConfigService } from '@backstage/backend-plugin-api';
 
-// Warning: (ae-missing-release-tag) "createRoadiePgVectorStore" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export function createRoadiePgVectorStore({
   logger,
@@ -17,8 +15,6 @@ export function createRoadiePgVectorStore({
   config,
 }: PgVectorStoreInitConfig): Promise<RoadieVectorStore>;
 
-// Warning: (ae-missing-release-tag) "PgVectorStoreInitConfig" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export interface PgVectorStoreInitConfig {
   // (undocumented)
@@ -29,9 +25,7 @@ export interface PgVectorStoreInitConfig {
   logger: LoggerService;
 }
 
-// Warning: (ae-missing-release-tag) "RoadiePgVectorStoreOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
+// @public
 export interface RoadiePgVectorStoreOptions {
   // (undocumented)
   amount?: number;
