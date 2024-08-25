@@ -59,6 +59,7 @@ describe('SearchClient', () => {
       term: 'catalog',
       source: 'catalog' as EmbeddingsSource,
     };
+    expect(query).not.toBeNull();
 
     // await searchClient.query(query)
 
