@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { MiddlewareFactory } from '@backstage/backend-defaults/rootHttpRouter';
 import {
   LoggerService,
   AuthService,
   HttpAuthService,
   DiscoveryService,
 } from '@backstage/backend-plugin-api';
+import { createLegacyAuthAdapters } from '@backstage/backend-common';
+import { MiddlewareFactory } from '@backstage/backend-defaults/rootHttpRouter';
 import express, { NextFunction, Request, Response } from 'express';
 import Router from 'express-promise-router';
 import {
@@ -110,6 +111,8 @@ export async function createRouter(
 
   const aiBackendConfig = config.getOptional<AiBackendConfig>('ai');
   const supportedSources = aiBackendConfig?.supportedSources ?? ['catalog'];
+
+  const { auth, httpAuth } = createLegacyAuthAdapters(options);
 
   const llmService = new LlmService({
     logger,
