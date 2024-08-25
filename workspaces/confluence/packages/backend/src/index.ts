@@ -33,9 +33,7 @@ backend.add(import('@backstage/plugin-search-backend-module-catalog/alpha'));
 
 // confluence search plugin
 backend.add(
-  import(
-    '@alithya-oss/plugin-search-backend-module-confluence-collator'
-  ),
+  import('@alithya-oss/plugin-search-backend-module-confluence-collator'),
 );
 
 backend.start();
