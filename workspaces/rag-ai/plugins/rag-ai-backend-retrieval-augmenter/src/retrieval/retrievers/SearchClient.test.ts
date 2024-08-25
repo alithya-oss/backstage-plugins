@@ -26,12 +26,14 @@ describe('SearchClient', () => {
 
   beforeEach(() => {
     mockDiscoveryApi = {
-      getBaseUrl: jest.fn().mockResolvedValue('http://backstage.mock/api/search'),
+      getBaseUrl: jest
+        .fn()
+        .mockResolvedValue('http://backstage.mock/api/search'),
       getExternalBaseUrl: jest.fn(),
     };
     mockAuth = mockServices.auth.mock({
-        getPluginRequestToken: async () => ({ token: 'abc123' }),
-      });
+      getPluginRequestToken: async () => ({ token: 'abc123' }),
+    });
     mockLogger = {
       warn: jest.fn(),
     };
