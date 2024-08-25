@@ -7130,6 +7130,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@internal/rag-ai@workspace:."
   dependencies:
+    "@backstage/backend-test-utils": ^0.5.0
     "@backstage/cli": ^0.27.0
     "@backstage/e2e-test-utils": ^0.1.1
     "@backstage/repo-tools": ^0.9.5
