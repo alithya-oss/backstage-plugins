@@ -23,9 +23,7 @@ import { createBackend } from '@backstage/backend-defaults';
 const backend = createBackend();
 backend.add(import('@backstage/plugin-search-backend/alpha'));
 backend.add(
-  import(
-    '@alithya-oss/plugin-search-backend-module-confluence-collator'
-  ),
+  import('@alithya-oss/plugin-search-backend-module-confluence-collator'),
 );
 backend.start();
 ```
