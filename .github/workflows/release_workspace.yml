@@ -11,11 +11,6 @@ on:
         description: "Force release even if no changesets are present"
         required: false
         type: boolean
-      branch:
-        description: "Branch to run the workflow on"
-        required: false
-        default: "main"
-        type: string
   workflow_call:
     inputs:
       force_release:
@@ -25,11 +20,6 @@ on:
       workspace:
         description: "Name of the Workspace"
         required: true
-        type: string
-      branch:
-        description: "Branch to run the workflow on"
-        required: false
-        default: "main"
         type: string
 
 concurrency:
@@ -85,7 +75,7 @@ jobs:
         run: node ../../scripts/ci/check-if-release.js
         env:
           WORKSPACE_NAME: ${{ inputs.workspace }}
-          COMMIT_SHA_BEFORE: '${{ github.event.before }}'
+          COMMIT_SHA_BEFORE: "${{ github.event.before }}"
 
       - name: Update Version Packages (${{ inputs.workspace }}) PR
         id: changesets-pr
@@ -99,8 +89,6 @@ jobs:
           skipRootChangelogUpdate: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
 
   release:
     name: Release workspace ${{ inputs.workspace }} on branch ${{ inputs.branch }}
@@ -127,10 +115,6 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/ # Needed for auth
-
-      - name: Install root dependencies
-        run: yarn install --immutable
-        working-directory: ${{ github.workspace }}
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -159,10 +143,3 @@ jobs:
           yarn workspaces foreach -v --no-private npm publish --access public --tolerate-republish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Create tag
-        working-directory: ${{ github.workspace }}/scripts/ci
-        run: node create-tag.js
-        env:
-          WORKSPACE_NAME: ${{ inputs.workspace }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
