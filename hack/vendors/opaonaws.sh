@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-
-#!/usr/bin/env bash
-
 set -eEuo pipefail
 
 VERSION="prateek/plugin-confluence-frontend"
