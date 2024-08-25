@@ -1,5 +1,11 @@
 # @alithya-oss/plugin-rag-ai
 
+## 1.2.0
+
+### Minor Changes
+
+- cff627d: Migrated RAG AI plugin to new backend system.
+
 ## 1.0.0
 
 ### Major Changes

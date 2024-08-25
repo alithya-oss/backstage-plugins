@@ -1,5 +1,16 @@
 # @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter
 
+## 1.0.0
+
+### Major Changes
+
+- cff627d: Migrated RAG AI plugin to new backend system.
+
+### Patch Changes
+
+- Updated dependencies [cff627d]
+  - @alithya-oss/plugin-rag-ai-node@0.2.0
+
 ## 0.3.6
 
 ### Patch Changes
