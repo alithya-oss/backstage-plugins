@@ -10,4 +10,4 @@
 '@alithya-oss/plugin-rag-ai-backend-module-openai': minor
 ---
 
-Migrated to new backend system and fixed deprecated APIs.
+Migrated RAG AI plugin to new backend system.
