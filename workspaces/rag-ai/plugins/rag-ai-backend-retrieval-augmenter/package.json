@@ -55,6 +55,7 @@
   },
   "devDependencies": {
     "@backstage/cli": "^0.27.0",
+    "@types/node-fetch": "^2.6.11",
     "@types/supertest": "^2.0.8",
     "msw": "^1.0.0",
     "supertest": "^6.1.3"

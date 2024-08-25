@@ -23,6 +23,7 @@ import {
   EmbeddingsSource,
 } from '@alithya-oss/plugin-rag-ai-node';
 import { SearchResultSet } from '@backstage/plugin-search-common';
+import fetch from 'node-fetch';
 
 /** @public */
 export type SearchClientQuery = {
