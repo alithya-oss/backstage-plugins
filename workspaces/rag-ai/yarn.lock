@@ -19,7 +19,7 @@ __metadata:
     "@alithya-oss/plugin-rag-ai-backend": "workspace:^"
     "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter": "workspace:^"
     "@alithya-oss/plugin-rag-ai-node": "workspace:^"
-    "@aws-sdk/client-bedrock-runtime": ^3.635.0
+    "@aws-sdk/client-bedrock-runtime": ^3.637.0
     "@aws-sdk/types": ^3.609.0
     "@backstage/backend-common": ^0.24.0
     "@backstage/backend-plugin-api": ^0.8.0
@@ -527,7 +527,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-bedrock-runtime@npm:^3.602.0, @aws-sdk/client-bedrock-runtime@npm:^3.635.0":
+"@aws-sdk/client-bedrock-runtime@npm:^3.602.0, @aws-sdk/client-bedrock-runtime@npm:^3.637.0":
   version: 3.637.0
   resolution: "@aws-sdk/client-bedrock-runtime@npm:3.637.0"
   dependencies:
