@@ -107,8 +107,6 @@ jobs:
   release:
     name: Release workspace ${{ inputs.workspace }} on branch ${{ inputs.branch }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     needs: changesets-pr
     if: needs.changesets-pr.outputs.needs_release == 'true' || inputs.force_release == true
     defaults:
