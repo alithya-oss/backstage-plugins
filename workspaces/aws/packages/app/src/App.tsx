@@ -37,8 +37,11 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 
+import { costInsightsAwsPlugin } from '@alithya-oss/plugin-cost-insights-aws';
+
 const app = createApp({
   apis,
+  plugins: [ costInsightsAwsPlugin],
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,

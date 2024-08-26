@@ -59,6 +59,16 @@ import {
   isKubernetesAvailable,
 } from '@backstage/plugin-kubernetes';
 
+import { isAmazonEcsServiceAvailable, EntityAmazonEcsServicesContent } from '@alithya-oss/plugin-amazon-ecs';
+import {
+  EntityAwsCodePipelineExecutionsContent,
+  isAwsCodePipelineAvailable,
+} from '@alithya-oss/plugin-aws-codepipeline';
+import { EntityAwsCodePipelineCard } from '@alithya-oss/plugin-aws-codepipeline';
+import { EntityAwsCodeBuildCard } from '@alithya-oss/plugin-aws-codebuild';
+import { EntityCostInsightsContent } from '@backstage-community/plugin-cost-insights';
+
+
 const techdocsContent = (
   <EntityTechdocsContent>
     <TechDocsAddons>
@@ -155,6 +165,10 @@ const serviceEntityPage = (
       {cicdContent}
     </EntityLayout.Route>
 
+    <EntityLayout.Route path="/ecs" title="Amazon ECS" if={isAmazonEcsServiceAvailable}>
+      <EntityAmazonEcsServicesContent />
+    </EntityLayout.Route>
+
     <EntityLayout.Route
       path="/kubernetes"
       title="Kubernetes"
@@ -199,6 +213,10 @@ const websiteEntityPage = (
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/ecs" title="Amazon ECS" if={isAmazonEcsServiceAvailable}>
+      <EntityAmazonEcsServicesContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route

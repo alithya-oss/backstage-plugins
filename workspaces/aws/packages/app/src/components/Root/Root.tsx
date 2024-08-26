@@ -28,6 +28,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import { MyGroupsSidebarItem } from '@backstage/plugin-org';
 import GroupIcon from '@material-ui/icons/People';
 
+import MoneyIcon from '@material-ui/icons/MonetizationOn';
+
 const useSidebarLogoStyles = makeStyles({
   root: {
     width: sidebarConfig.drawerWidthClosed,
@@ -79,6 +81,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarDivider />
         <SidebarScrollWrapper>
           {/* Items in this group will be scrollable if they run out of space */}
+          <SidebarItem icon={MoneyIcon} to="cost-insights" text="Cost Insights" />
         </SidebarScrollWrapper>
       </SidebarGroup>
       <SidebarSpace />
