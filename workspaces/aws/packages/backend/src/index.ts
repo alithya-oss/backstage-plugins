@@ -51,4 +51,16 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
 // kubernetes
 backend.add(import('@backstage/plugin-kubernetes-backend/alpha'));
 
+// amazon ecs plugin
+backend.add(import('@alithya-oss/plugin-amazon-ecs-backend'));
+
+// aws codebuild plugin
+backend.add(import('@alithya-oss/plugin-aws-codebuild-backend'));
+
+// aws codepipeline plugin
+backend.add(import('@alithya-oss/plugin-aws-codepipeline-backend'));
+
+// aws cost insights
+backend.add(import('@alithya-oss/plugin-cost-insights-aws-backend'));
+
 backend.start();

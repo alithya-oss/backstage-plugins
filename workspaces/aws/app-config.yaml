@@ -111,3 +111,45 @@ kubernetes:
 permission:
   # setting this to `false` will disable permissions
   enabled: true
+
+aws:
+  accountDefaults:
+    roleName: BackstageIntegration
+    partition: aws
+    region: us-east-1
+  mainAccount:
+    accessKeyId: ${AWS_ACCESS_KEY_ID}
+    secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+    region: us-east-1
+  accounts:
+    - accountId: '012345678901'
+      roleName: BillingReadOnly
+  locator:
+    resourceTaggingApi:
+      accounts:
+        - '012345678901'
+      regions:
+        - us-east-1
+  # Identity Manager subdomain
+  # sso:
+  #   subdomain: example
+  costInsights:
+    costExplorer:
+      accountId: '012345678901'
+      region: us-east-1
+    cache:
+      enabled: true
+      defaultTtl: 1000
+      readTime: 1000
+    entityGroups:
+      - kind: Component
+        groups:
+          - name: service
+            type: DIMENSION
+            key: SERVICE
+          - name: environment
+            type: TAG
+            key: Environment
+
+costInsights:
+  engineerCost: 20000
