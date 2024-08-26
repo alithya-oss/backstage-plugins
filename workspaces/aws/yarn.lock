@@ -12,7 +12,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alithya-oss/plugin-amazon-ecs-backend@workspace:plugins/amazon-ecs-backend":
+"@alithya-oss/plugin-amazon-ecs-backend@workspace:^, @alithya-oss/plugin-amazon-ecs-backend@workspace:plugins/amazon-ecs-backend":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-amazon-ecs-backend@workspace:plugins/amazon-ecs-backend"
   dependencies:
@@ -92,7 +92,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-codebuild-backend@workspace:plugins/aws-codebuild-backend":
+"@alithya-oss/plugin-aws-codebuild-backend@workspace:^, @alithya-oss/plugin-aws-codebuild-backend@workspace:plugins/aws-codebuild-backend":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-aws-codebuild-backend@workspace:plugins/aws-codebuild-backend"
   dependencies:
@@ -171,7 +171,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-codepipeline-backend@workspace:plugins/aws-codepipeline-backend":
+"@alithya-oss/plugin-aws-codepipeline-backend@workspace:^, @alithya-oss/plugin-aws-codepipeline-backend@workspace:plugins/aws-codepipeline-backend":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-aws-codepipeline-backend@workspace:plugins/aws-codepipeline-backend"
   dependencies:
@@ -288,7 +288,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-cost-insights-aws-backend@workspace:plugins/aws-cost-insights-backend":
+"@alithya-oss/plugin-cost-insights-aws-backend@workspace:^, @alithya-oss/plugin-cost-insights-aws-backend@workspace:plugins/aws-cost-insights-backend":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-cost-insights-aws-backend@workspace:plugins/aws-cost-insights-backend"
   dependencies:
@@ -378,6 +378,35 @@ __metadata:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
     react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
     react-router-dom: 6.0.0-beta.0 || ^6.3.0
+  languageName: unknown
+  linkType: soft
+
+"@alithya-oss/scaffolder-backend-module-aws-core@workspace:^, @alithya-oss/scaffolder-backend-module-aws-core@workspace:plugins/scaffolder-backend-module-aws-core-actions":
+  version: 0.0.0-use.local
+  resolution: "@alithya-oss/scaffolder-backend-module-aws-core@workspace:plugins/scaffolder-backend-module-aws-core-actions"
+  dependencies:
+    "@alithya-oss/plugin-aws-core-common": "workspace:^"
+    "@aws-sdk/client-cloudcontrol": ^3.511.0
+    "@aws-sdk/client-codecommit": ^3.511.0
+    "@aws-sdk/client-eventbridge": ^3.511.0
+    "@aws-sdk/client-s3": ^3.511.0
+    "@aws-sdk/types": ^3.511.0
+    "@backstage/backend-common": ^0.24.0
+    "@backstage/backend-plugin-api": ^0.8.0
+    "@backstage/backend-test-utils": ^0.5.0
+    "@backstage/cli": ^0.27.0
+    "@backstage/config": ^1.2.0
+    "@backstage/errors": ^1.2.4
+    "@backstage/integration-aws-node": ^0.1.12
+    "@backstage/plugin-scaffolder-node": ^0.4.9
+    "@backstage/plugin-scaffolder-node-test-utils": ^0.1.10
+    "@types/fs-extra": ^11
+    "@types/glob": ^7.2.0
+    aws-sdk-client-mock: ^4.0.0
+    aws-sdk-client-mock-jest: ^4.0.0
+    fs-extra: ^11.2.0
+    glob: ^11.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -16122,6 +16151,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "backend@workspace:packages/backend"
   dependencies:
+    "@alithya-oss/plugin-amazon-ecs-backend": "workspace:^"
+    "@alithya-oss/plugin-aws-codebuild-backend": "workspace:^"
+    "@alithya-oss/plugin-aws-codepipeline-backend": "workspace:^"
+    "@alithya-oss/plugin-cost-insights-aws-backend": "workspace:^"
+    "@alithya-oss/scaffolder-backend-module-aws-core": "workspace:^"
     "@backstage/backend-common": ^0.24.0
     "@backstage/backend-defaults": ^0.4.3
     "@backstage/backend-tasks": ^0.6.0
@@ -32193,35 +32227,6 @@ __metadata:
   checksum: d3fa3e2aaf6c65ed52ee993aff1891fc47d5e47d515164b5449cbf5da2cbdc396137e55590472e64c5c436c14ae64a8a03c29b9e7389fc6f14035cf4e982ef3b
   languageName: node
   linkType: hard
-
-"scaffolder-backend-module-aws-core@workspace:plugins/scaffolder-backend-module-aws-core-actions":
-  version: 0.0.0-use.local
-  resolution: "scaffolder-backend-module-aws-core@workspace:plugins/scaffolder-backend-module-aws-core-actions"
-  dependencies:
-    "@alithya-oss/plugin-aws-core-common": "workspace:^"
-    "@aws-sdk/client-cloudcontrol": ^3.511.0
-    "@aws-sdk/client-codecommit": ^3.511.0
-    "@aws-sdk/client-eventbridge": ^3.511.0
-    "@aws-sdk/client-s3": ^3.511.0
-    "@aws-sdk/types": ^3.511.0
-    "@backstage/backend-common": ^0.24.0
-    "@backstage/backend-plugin-api": ^0.8.0
-    "@backstage/backend-test-utils": ^0.5.0
-    "@backstage/cli": ^0.27.0
-    "@backstage/config": ^1.2.0
-    "@backstage/errors": ^1.2.4
-    "@backstage/integration-aws-node": ^0.1.12
-    "@backstage/plugin-scaffolder-node": ^0.4.9
-    "@backstage/plugin-scaffolder-node-test-utils": ^0.1.10
-    "@types/fs-extra": ^11
-    "@types/glob": ^7.2.0
-    aws-sdk-client-mock: ^4.0.0
-    aws-sdk-client-mock-jest: ^4.0.0
-    fs-extra: ^11.2.0
-    glob: ^11.0.0
-    zod: ^3.22.4
-  languageName: unknown
-  linkType: soft
 
 "scheduler@npm:^0.23.2":
   version: 0.23.2

@@ -60,7 +60,10 @@ backend.add(import('@alithya-oss/plugin-aws-codebuild-backend'));
 // aws codepipeline plugin
 backend.add(import('@alithya-oss/plugin-aws-codepipeline-backend'));
 
-// aws cost insights
-backend.add(import('@alithya-oss/plugin-cost-insights-aws-backend'));
+// aws cost-insights plugin
+backend.add(import('@alithya-oss/scaffolder-backend-module-aws-core'));
+
+// scaffolder 
+backend.add(import())
 
 backend.start();
