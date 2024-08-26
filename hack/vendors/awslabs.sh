@@ -54,13 +54,13 @@ function sync() {
     # cost-insights
     rsync -av \
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/cost-insights/backend/* \
-        ./workspaces/aws/plugins/codepipeline-backend
+        ./workspaces/aws/plugins/cost-insights-backend
     rsync -av \
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/cost-insights/common/* \
-        ./workspaces/aws/plugins/codepipeline-common
+        ./workspaces/aws/plugins/cost-insights-common
     rsync -av \
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/cost-insights/frontend/* \
-        ./workspaces/aws/plugins/codepipeline
+        ./workspaces/aws/plugins/cost-insights
     rsync -av \
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/cost-insights/README.md \
         ./workspaces/aws/plugins/cost-insights.md
@@ -68,16 +68,16 @@ function sync() {
     # ecs
     rsync -av \
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/ecs/backend/* \
-        ./workspaces/aws/plugins/codepipeline-backend
+        ./workspaces/aws/plugins/ecs-backend
     rsync -av \
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/ecs/common/* \
-        ./workspaces/aws/plugins/codepipeline-common
+        ./workspaces/aws/plugins/ecs-common
     rsync -av \
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/ecs/frontend/* \
-        ./workspaces/aws/plugins/codepipeline
+        ./workspaces/aws/plugins/ecs
     rsync -av \
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/ecs/README.md \
-        ./workspaces/aws/plugins/codepipeline.md
+        ./workspaces/aws/plugins/ecs.md
 }
 
 sync

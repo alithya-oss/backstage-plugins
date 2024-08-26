@@ -11,52 +11,54 @@
  * limitations under the License.
  */
 
-import { CompoundEntityRef, Entity } from '@backstage/catalog-model';
-import { AmazonEcsApi } from '../api';
+import { CompoundEntityRef } from '@backstage/catalog-model';
+import { AwsCodePipelineApi } from '../api';
 import {
-  AWS_ECS_SERVICE_TAGS_ANNOTATION,
-  ServicesResponse,
-  mockEcsCluster,
-  mockEcsService,
-  mockEcsTask,
-} from '@aws/amazon-ecs-plugin-for-backstage-common';
+  PipelineExecutionsResponse,
+  PipelineStateResponse,
+  mockCodePipelineExecutions,
+  mockCodePipelineStatus as mockCodePipelineState,
+} from '@aws/aws-codepipeline-plugin-for-backstage-common';
 
-export class MockAmazonEcsApiClient implements AmazonEcsApi {
+export class MockAwsCodePipelineApiClient implements AwsCodePipelineApi {
   // @ts-ignore
-  getServicesByEntity({
+  getPipelineExecutionsByEntity({
     entity,
   }: {
     entity: CompoundEntityRef;
-  }): Promise<ServicesResponse> {
+  }): Promise<PipelineExecutionsResponse> {
     return Promise.resolve({
-      clusters: [
+      pipelineExecutions: [
         {
-          cluster: mockEcsCluster('cluster1'),
-          services: [
-            {
-              service: mockEcsService('service1', 'cluster1', 1, 1, 0),
-              tasks: [mockEcsTask('service1', 'cluster1')],
-            },
-          ],
+          pipelineName: 'pipeline1',
+          pipelineRegion: 'us-west-2',
+          pipelineArn: 'arn:aws:codepipeline:us-west-2:1234567890:pipeline1',
+          pipelineExecutions: mockCodePipelineExecutions(),
+        },
+        {
+          pipelineName: 'pipeline2',
+          pipelineRegion: 'us-west-2',
+          pipelineArn: 'arn:aws:codepipeline:us-west-2:1234567890:pipeline2',
+          pipelineExecutions: mockCodePipelineExecutions(),
+        },
+      ],
+    });
+  }
+  // @ts-ignore
+  getPipelineStateByEntity({
+    entity,
+  }: {
+    entity: CompoundEntityRef;
+  }): Promise<PipelineStateResponse> {
+    return Promise.resolve({
+      pipelines: [
+        {
+          pipelineName: 'pipeline2',
+          pipelineRegion: 'us-west-2',
+          pipelineArn: 'arn:aws:codepipeline:us-west-2:1234567890:pipeline2',
+          pipelineState: mockCodePipelineState(),
         },
       ],
     });
   }
 }
-
-export const mockEntity: Entity = {
-  apiVersion: 'backstage.io/v1alpha1',
-  kind: 'Component',
-  metadata: {
-    name: 'backstage',
-    description: 'backstage.io',
-    annotations: {
-      [AWS_ECS_SERVICE_TAGS_ANNOTATION]: 'component=test',
-    },
-  },
-  spec: {
-    lifecycle: 'production',
-    type: 'service',
-    owner: 'user:guest',
-  },
-};

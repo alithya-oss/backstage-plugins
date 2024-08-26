@@ -18,10 +18,10 @@ import {
 } from '@backstage/backend-plugin-api';
 import { createRouter } from './service/router';
 import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
-import { DefaultAmazonEcsService } from './service';
+import { DefaultAwsCodePipelineService } from './service/DefaultAwsCodePipelineService';
 
-export const amazonEcsPlugin = createBackendPlugin({
-  pluginId: 'amazon-ecs',
+export const awsCodePiplinePlugin = createBackendPlugin({
+  pluginId: 'aws-codepipeline',
   register(env) {
     env.registerInit({
       deps: {
@@ -44,17 +44,18 @@ export const amazonEcsPlugin = createBackendPlugin({
       }) {
         const winstonLogger = loggerToWinstonLogger(logger);
 
-        const amazonEcsApi = await DefaultAmazonEcsService.fromConfig(config, {
-          catalogApi,
-          auth,
-          httpAuth,
-          discovery,
-          logger: winstonLogger,
-        });
+        const awsCodePipelineApi =
+          await DefaultAwsCodePipelineService.fromConfig(config, {
+            catalogApi,
+            auth,
+            httpAuth,
+            discovery,
+            logger: winstonLogger,
+          });
         httpRouter.use(
           await createRouter({
             logger: winstonLogger,
-            amazonEcsApi,
+            awsCodePipelineApi,
             discovery,
             auth,
             httpAuth,

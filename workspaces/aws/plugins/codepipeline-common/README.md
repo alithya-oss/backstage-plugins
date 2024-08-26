@@ -1,3 +1,3 @@
-# Amazon Elastic Container Service plugin for Backstage - Common
+# AWS CodePipeline plugin for Backstage - Common
 
-This a common plugin package for Backstage related to Amazon ECS. For more information see the [documentation](../README.md).
+This a common plugin package for Backstage related to AWS CodePipeline. For more information see the [documentation](../README.md).

@@ -11,23 +11,36 @@
  * limitations under the License.
  */
 
-import { Cluster, Service, Task } from '@aws-sdk/client-ecs';
+import {
+  GetPipelineStateOutput,
+  PipelineExecutionSummary,
+} from '@aws-sdk/client-codepipeline';
 
-export const AWS_ECS_SERVICE_ARN_ANNOTATION =
-  'aws.amazon.com/amazon-ecs-service-arn';
-export const AWS_ECS_SERVICE_TAGS_ANNOTATION =
-  'aws.amazon.com/amazon-ecs-service-tags';
+export const AWS_CODEPIPELINE_ARN_ANNOTATION =
+  'aws.amazon.com/aws-codepipeline-arn';
+export const AWS_CODEPIPELINE_TAGS_ANNOTATION =
+  'aws.amazon.com/aws-codepipeline-tags';
+export const AWS_CODEPIPELINE_ARN_ANNOTATION_LEGACY =
+  'aws.amazon.com/aws-codepipeline';
 
-export interface ServicesResponse {
-  clusters: Array<ClusterResponse>;
+export interface PipelineExecutions {
+  pipelineExecutions: Array<PipelineExecutionSummary>;
+  pipelineName: string;
+  pipelineArn: string;
+  pipelineRegion: string;
 }
 
-export interface ClusterResponse {
-  services: Array<ServiceResponse>;
-  cluster: Cluster;
+export interface PipelineExecutionsResponse {
+  pipelineExecutions: Array<PipelineExecutions>;
 }
 
-export interface ServiceResponse {
-  tasks: Array<Task>;
-  service: Service;
+export interface PipelineState {
+  pipelineName: string;
+  pipelineArn: string;
+  pipelineRegion: string;
+  pipelineState: GetPipelineStateOutput;
+}
+
+export interface PipelineStateResponse {
+  pipelines: Array<PipelineState>;
 }

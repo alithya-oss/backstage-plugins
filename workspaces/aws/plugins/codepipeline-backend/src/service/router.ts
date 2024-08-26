@@ -18,7 +18,7 @@ import {
 import express from 'express';
 import Router from 'express-promise-router';
 import { Logger } from 'winston';
-import { AmazonECSService } from './types';
+import { AwsCodePipelineService } from './types';
 import {
   AuthService,
   DiscoveryService,
@@ -27,7 +27,7 @@ import {
 
 export interface RouterOptions {
   logger: Logger;
-  amazonEcsApi: AmazonECSService;
+  awsCodePipelineApi: AwsCodePipelineService;
   discovery: DiscoveryService;
   auth?: AuthService;
   httpAuth?: HttpAuthService;
@@ -36,7 +36,7 @@ export interface RouterOptions {
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { logger, amazonEcsApi } = options;
+  const { logger, awsCodePipelineApi } = options;
 
   const router = Router();
   router.use(express.json());
@@ -44,11 +44,28 @@ export async function createRouter(
   const { httpAuth } = createLegacyAuthAdapters(options);
 
   router.get(
-    '/v1/entity/:namespace/:kind/:name/services',
+    '/v1/entity/:namespace/:kind/:name/executions',
     async (request, response) => {
       const { namespace, kind, name } = request.params;
 
-      const services = await amazonEcsApi.getServicesByEntity({
+      const services = await awsCodePipelineApi.getPipelineExecutionsByEntity({
+        entityRef: {
+          kind,
+          namespace,
+          name,
+        },
+        credentials: await httpAuth.credentials(request),
+      });
+      response.status(200).json(services);
+    },
+  );
+
+  router.get(
+    '/v1/entity/:namespace/:kind/:name/state',
+    async (request, response) => {
+      const { namespace, kind, name } = request.params;
+
+      const services = await awsCodePipelineApi.getPipelineStateByEntity({
         entityRef: {
           kind,
           namespace,
@@ -68,4 +85,4 @@ export async function createRouter(
   return router;
 }
 
-export * from './DefaultAmazonEcsService';
+export * from './DefaultAwsCodePipelineService';

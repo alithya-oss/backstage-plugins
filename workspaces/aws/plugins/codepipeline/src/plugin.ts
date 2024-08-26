@@ -13,35 +13,49 @@
 
 import {
   createApiFactory,
+  createComponentExtension,
   createPlugin,
   createRoutableExtension,
   discoveryApiRef,
   fetchApiRef,
 } from '@backstage/core-plugin-api';
-import { AmazonEcsApiClient, amazonEcsApiRef } from './api';
+import { AwsCodePipelineApiClient, awsCodePipelineApiRef } from './api';
 import { rootRouteRef } from './routes';
 
-export const amazonEcsPlugin = createPlugin({
-  id: 'amazon-ecs',
+export const awsCodePipelinePlugin = createPlugin({
+  id: 'aws-codepipeline',
   routes: {
     root: rootRouteRef,
   },
   apis: [
     createApiFactory({
-      api: amazonEcsApiRef,
+      api: awsCodePipelineApiRef,
       deps: { discoveryApi: discoveryApiRef, fetchApi: fetchApiRef },
       factory: ({ discoveryApi, fetchApi }) =>
-        new AmazonEcsApiClient({ discoveryApi, fetchApi }),
+        new AwsCodePipelineApiClient({ discoveryApi, fetchApi }),
     }),
   ],
 });
 
-export const EntityAmazonEcsServicesContent = amazonEcsPlugin.provide(
-  createRoutableExtension({
-    name: 'EntityAmazonEcsServicesContent',
-    component: () => import('./components/Router').then(m => m.Router),
-    mountPoint: rootRouteRef,
+export const EntityAwsCodePipelineExecutionsContent =
+  awsCodePipelinePlugin.provide(
+    createRoutableExtension({
+      name: 'EntityAwsCodePipelineExecutionsContent',
+      component: () => import('./components/Router').then(m => m.Router),
+      mountPoint: rootRouteRef,
+    }),
+  );
+
+export const EntityAwsCodePipelineCard = awsCodePipelinePlugin.provide(
+  createComponentExtension({
+    name: 'EntityAwsCodePipelineCard',
+    component: {
+      lazy: () =>
+        import('./components/CodePipelineStateCard').then(
+          m => m.CodePipelineStateCard,
+        ),
+    },
   }),
 );
 
-export { isAmazonEcsServiceAvailable } from './components';
+export { isAwsCodePipelineAvailable } from './components';

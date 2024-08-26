@@ -11,5 +11,5 @@
  * limitations under the License.
  */
 
-export * from './AmazonEcsApi';
-export * from './AmazonEcsApiClient';
+export * from './AwsCodePipelineApi';
+export * from './AwsCodePipelineApiClient';

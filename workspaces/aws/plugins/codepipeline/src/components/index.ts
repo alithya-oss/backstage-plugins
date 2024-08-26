@@ -11,4 +11,4 @@
  * limitations under the License.
  */
 
-export { Router, isAmazonEcsServiceAvailable } from './Router';
+export { Router, isAwsCodePipelineAvailable } from './Router';

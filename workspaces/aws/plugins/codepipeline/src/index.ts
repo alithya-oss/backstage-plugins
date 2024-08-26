@@ -12,7 +12,8 @@
  */
 
 export {
-  amazonEcsPlugin,
-  EntityAmazonEcsServicesContent,
-  isAmazonEcsServiceAvailable,
+  awsCodePipelinePlugin,
+  EntityAwsCodePipelineExecutionsContent,
+  EntityAwsCodePipelineCard,
+  isAwsCodePipelineAvailable,
 } from './plugin';

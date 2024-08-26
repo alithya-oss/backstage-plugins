@@ -11,10 +11,10 @@
  * limitations under the License.
  */
 
-import { amazonEcsPlugin } from './plugin';
+import { awsCodePipelinePlugin } from './plugin';
 
-describe('amazon-ecs-plugin', () => {
+describe('aws-codepipeline-plugin', () => {
   it('should export plugin', () => {
-    expect(amazonEcsPlugin).toBeDefined();
+    expect(awsCodePipelinePlugin).toBeDefined();
   });
 });

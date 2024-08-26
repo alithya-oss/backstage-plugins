@@ -11,240 +11,139 @@
  * limitations under the License.
  */
 
+import {
+  ActionExecutionStatus,
+  PipelineExecutionStatus,
+  StageExecutionStatus,
+  TriggerType,
+} from '@aws-sdk/client-codepipeline';
 import { Entity } from '@backstage/catalog-model';
 import {
-  LaunchType,
-  AssignPublicIp,
-  DeploymentRolloutState,
-  SchedulingStrategy,
-  DeploymentControllerType,
-  PropagateTags,
-  Connectivity,
-  HealthStatus,
-} from '@aws-sdk/client-ecs';
-import {
-  AWS_ECS_SERVICE_ARN_ANNOTATION,
-  AWS_ECS_SERVICE_TAGS_ANNOTATION,
+  AWS_CODEPIPELINE_ARN_ANNOTATION,
+  AWS_CODEPIPELINE_ARN_ANNOTATION_LEGACY,
+  AWS_CODEPIPELINE_TAGS_ANNOTATION,
 } from '../types';
 
-export function mockEcsCluster(cluster: string) {
-  return {
-    activeServicesCount: 1,
-    capacityProviders: ['FARGATE'],
-    clusterArn: `arn:aws:ecs:us-west-2:1234567890:cluster/${cluster}`,
-    clusterName: cluster,
-    defaultCapacityProviderStrategy: [
-      {
-        base: 0,
-        capacityProvider: 'FARGATE',
-        weight: 100,
-      },
-    ],
-    pendingTasksCount: 0,
-    registeredContainerInstancesCount: 0,
-    runningTasksCount: 1,
-    settings: [],
-    statistics: [],
-    status: 'ACTIVE',
-    tags: [],
-  };
-}
-
-export function mockEcsService(
-  service: string,
-  cluster: string,
-  desiredCount: number,
-  runningCount: number,
-  pendingCount: number,
-) {
-  return {
-    clusterArn: `arn:aws:ecs:us-west-2:1234567890:cluster/${cluster}`,
-    createdAt: new Date(),
-    createdBy: 'arn:aws:iam::1234567890:role/SomeRole',
-    deploymentConfiguration: {
-      deploymentCircuitBreaker: {
-        enable: false,
-        rollback: false,
-      },
-      maximumPercent: 200,
-      minimumHealthyPercent: 66,
-    },
-    deploymentController: {
-      type: DeploymentControllerType.ECS,
-    },
-    deployments: [
-      {
-        createdAt: new Date(),
-        desiredCount: 1,
-        failedTasks: 0,
-        id: 'ecs-svc/8485161018856190923',
-        launchType: LaunchType.FARGATE,
-        networkConfiguration: {
-          awsvpcConfiguration: {
-            assignPublicIp: AssignPublicIp.DISABLED,
-            securityGroups: ['sg-0b5a37d8956ed8b8b'],
-            subnets: [
-              'subnet-074fe57bdcc82b24e',
-              'subnet-045459243dda22d1b',
-              'subnet-0b9b95853df2d6157',
-            ],
-          },
-        },
-        pendingCount: 0,
-        platformFamily: 'Linux',
-        platformVersion: '1.4.0',
-        rolloutState: DeploymentRolloutState.COMPLETED,
-        rolloutStateReason:
-          'ECS deployment ecs-svc/8485161018856190923 completed.',
-        runningCount: 1,
-        status: 'PRIMARY',
-        taskDefinition:
-          'arn:aws:ecs:us-west-2:1234567890:task-definition/service1:2',
-        updatedAt: new Date(),
-      },
-    ],
-    desiredCount,
-    enableECSManagedTags: true,
-    enableExecuteCommand: true,
-    events: [
-      {
-        createdAt: new Date(),
-        id: 'a1ef07b3-10b4-4947-b721-e617b00f2509',
-        message: '(service service1) has reached a steady state.',
-      },
-    ],
-    healthCheckGracePeriodSeconds: 0,
-    launchType: LaunchType.FARGATE,
-    loadBalancers: [
-      {
-        containerName: 'application',
-        containerPort: 8080,
-        targetGroupArn:
-          'arn:aws:elasticloadbalancing:us-west-2:1234567890:targetgroup/tg-name/c3d499a1c7c719c5',
-      },
-    ],
-    networkConfiguration: {
-      awsvpcConfiguration: {
-        assignPublicIp: AssignPublicIp.DISABLED,
-        securityGroups: ['sg-0b5a37d8956ed8b8b'],
-        subnets: [
-          'subnet-074fe57bdcc82b24e',
-          'subnet-045459243dda22d1b',
-          'subnet-0b9b95853df2d6157',
-        ],
-      },
-    },
-    pendingCount,
-    placementConstraints: [],
-    placementStrategy: [],
-    platformFamily: 'Linux',
-    platformVersion: 'LATEST',
-    propagateTags: PropagateTags.SERVICE,
-    roleArn:
-      'arn:aws:iam::1234567890:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS',
-    runningCount,
-    schedulingStrategy: SchedulingStrategy.REPLICA,
-    serviceArn: `arn:aws:ecs:us-west-2:1234567890:service/${cluster}/${service}`,
-    serviceName: service,
-    serviceRegistries: [],
-    status: 'ACTIVE',
-    taskDefinition: 'arn:aws:ecs:us-west-2:1234567890:task-definition/task:2',
-  };
-}
-
-export function mockEcsTask(service: string, cluster: string) {
-  return {
-    attachments: [
-      {
-        details: [
-          {
-            name: 'subnetId',
-            value: 'subnet-045459243dda22d1b',
-          },
-          {
-            name: 'networkInterfaceId',
-            value: 'eni-07deb783d53d7728b',
-          },
-          {
-            name: 'macAddress',
-            value: '0a:46:53:40:19:83',
-          },
-          {
-            name: 'privateDnsName',
-            value: 'ip-10-0-35-183.us-west-2.compute.internal',
-          },
-          {
-            name: 'privateIPv4Address',
-            value: '10.0.35.183',
-          },
-        ],
-        id: '2e106e1b-edb6-4ef6-a5df-8edb17adada6',
-        status: 'ATTACHED',
-        type: 'ElasticNetworkInterface',
-      },
-    ],
-    attributes: [
-      {
-        name: 'ecs.cpu-architecture',
-        value: 'x86_64',
-      },
-    ],
-    availabilityZone: 'us-west-2c',
-    clusterArn: `arn:aws:ecs:us-west-2:1234567890:cluster/${cluster}`,
-    connectivity: Connectivity.CONNECTED,
-    connectivityAt: new Date(),
-    containers: [
-      {
-        containerArn: `arn:aws:ecs:us-west-2:1234567890:container/${cluster}/b11f3040982e4f7ab2412d9aa0a2645c/5454846d-2159-4842-9bb5-c15db1a1a18c`,
-        cpu: '0',
-        healthStatus: HealthStatus.UNKNOWN,
-        image: '1234567890.dkr.ecr.us-west-2.amazonaws.com/some-image:0d1a26f',
-        imageDigest:
-          'sha256:768b38622170720b5e12d7a5919a750cfed087679d07f086b840c677a19b57d1',
-        lastStatus: 'RUNNING',
-        name: 'application',
-        networkBindings: [],
-        networkInterfaces: [
-          {
-            attachmentId: '2e106e1b-edb6-4ef6-a5df-8edb17adada6',
-            privateIpv4Address: '10.0.35.183',
-          },
-        ],
-        runtimeId: 'b11f3040982e4f7ab2412d9aa0a2645c-524788293',
-        taskArn: `arn:aws:ecs:us-west-2:1234567890:task/${cluster}/b11f3040982e4f7ab2412d9aa0a2645c`,
-      },
-    ],
-    cpu: '1024',
-    createdAt: new Date(),
-    desiredStatus: 'RUNNING',
-    enableExecuteCommand: true,
-    ephemeralStorage: {
-      sizeInGiB: 20,
-    },
-    group: `service:${service}`,
-    healthStatus: HealthStatus.HEALTHY,
-    lastStatus: 'RUNNING',
-    launchType: LaunchType.FARGATE,
-    memory: '4096',
-    overrides: {
-      containerOverrides: [
+export function mockCodePipelineExecutions() {
+  return [
+    {
+      lastUpdateTime: new Date('2022-05-03T00:52:45.631Z'),
+      pipelineExecutionId: 'e6c91a02-d844-4663-ad62-b719608f8fc5',
+      sourceRevisions: [
         {
-          name: 'application',
+          actionName: 'Checkout',
+          revisionId: 'da7add70427515f20f736525be1b92bf23ff6b6f',
+          revisionSummary:
+            '{"ProviderType":"GitHub","CommitMessage":"Updated some files"}',
+          revisionUrl:
+            'https://us-west-2.console.aws.amazon.com/codesuite/settings/connections/redirect?connectionArn=arn:aws:codestar-connections:us-west-2:1234567890:connection/4dde5c82-51d6-4ea9-918e-03aed6972ff3&referenceType=COMMIT&FullRepositoryId=aws/dummy-repository&Commit=da7add70427515f20f736525be1b92bf23ff6b6f',
         },
       ],
-      inferenceAcceleratorOverrides: [],
+      startTime: new Date('2022-05-03T00:51:35.229Z'),
+      status: PipelineExecutionStatus.InProgress,
+      stopTrigger: undefined,
+      trigger: {
+        triggerType: TriggerType.Webhook,
+        triggerDetail:
+          'arn:aws:codestar-connections:us-west-2:111111111111:connection/4dde5c82-51d6-4ea9-918e-03aed6971ff3',
+      },
     },
-    platformFamily: 'Linux',
-    platformVersion: '1.4.0',
-    pullStartedAt: new Date(),
-    pullStoppedAt: new Date(),
-    startedAt: new Date(),
-    startedBy: 'ecs-svc/8485161018856190923',
-    tags: [],
-    taskArn: `arn:aws:ecs:us-west-2:1234567890:task/${cluster}/b11f3040982e4f7ab2412d9aa0a2645c`,
-    taskDefinitionArn:
-      'arn:aws:ecs:us-west-2:1234567890:task-definition/task:2',
-    version: 4,
+    {
+      lastUpdateTime: new Date('2022-04-15T17:55:04.950Z'),
+      pipelineExecutionId: '17baba6f-22f6-4f6d-8d37-96321a35f77e',
+      sourceRevisions: [
+        {
+          actionName: 'SourceAction',
+          revisionId: 'bf8606e49a5ec67d31c24665e921d0cc2d52d71a',
+          revisionSummary: 'Initial commit by AWS CodeCommit',
+          revisionUrl:
+            'https://console.aws.amazon.com/codecommit/home?region=us-west-2#/repository/dummy/commit/bf8606e49a5ec67d31c24665e921d0cc2d52d71a',
+        },
+      ],
+      startTime: new Date('2022-04-15T17:45:51.244Z'),
+      status: PipelineExecutionStatus.Failed,
+      stopTrigger: undefined,
+      trigger: {
+        triggerType: TriggerType.CreatePipeline,
+        triggerDetail:
+          'arn:aws:sts::1234567890:assumed-role/ServiceRole/DummyRole',
+      },
+    },
+    {
+      lastUpdateTime: new Date('2022-04-15T17:55:04.950Z'),
+      pipelineExecutionId: '17baba6f-22f6-4f6d-8d37-96321a35f77e',
+      sourceRevisions: [
+        {
+          actionName: 'Source',
+          revisionId: 'CXkyGc4T_6.0ZrS3vwWYfF1NHHYqGtmh',
+          revisionSummary:
+            'Amazon S3 version id: CXkyGc4T_6.0ZrS3vwWYfF1NHHYqGtmh',
+        },
+      ],
+      startTime: new Date('2022-04-15T17:45:51.244Z'),
+      status: PipelineExecutionStatus.Succeeded,
+      stopTrigger: undefined,
+      trigger: {
+        triggerType: TriggerType.StartPipelineExecution,
+        triggerDetail:
+          'arn:aws:sts::1234567890:assumed-role/ServiceRole/DummyRole',
+      },
+    },
+  ];
+}
+
+export function mockCodePipelineStatus() {
+  return {
+    created: new Date('2022-04-15T17:45:51.244Z'),
+    pipelineName: 'test-pipeline',
+    pipelineVersion: 1,
+    stageStates: [
+      {
+        actionStates: [
+          {
+            actionName: 'Source',
+            entityUrl: 'https://console.aws.amazon.com/s3/home?#',
+            latestExecution: {
+              lastStatusChange: new Date('2022-04-15T17:45:51.244Z'),
+              status: ActionExecutionStatus.Succeeded,
+              actionExecutionId: '17baba6f-22f6-4f6d-8d37-96321a35f77e',
+            },
+          },
+        ],
+        latestExecution: {
+          pipelineExecutionId: 'e8e9ca8f-bacf-4878-8887-05a6ccec0019',
+          status: StageExecutionStatus.Succeeded,
+        },
+        stageName: 'Source',
+      },
+      {
+        actionStates: [
+          {
+            actionName: 'CodePipelineDemoFleet',
+            entityUrl:
+              'https://console.aws.amazon.com/codedeploy/home?#/applications/CodePipelineDemoApplication/deployment-groups/CodePipelineDemoFleet',
+            latestExecution: {
+              externalExecutionId: 'd-EXAMPLE',
+              externalExecutionUrl:
+                'https://console.aws.amazon.com/codedeploy/home?#/deployments/d-EXAMPLE',
+              lastStatusChange: new Date('2022-04-15T17:45:51.244Z'),
+              status: ActionExecutionStatus.Succeeded,
+              summary: 'Deployment Succeeded',
+              actionExecutionId: 'e6c91a02-d844-4663-ad62-b719608f8fc5',
+            },
+          },
+        ],
+        inboundTransitionState: {
+          enabled: true,
+        },
+        latestExecution: {
+          pipelineExecutionId: 'e8e9ca8f-bacf-4878-8887-05a6ccec0019',
+          status: StageExecutionStatus.Succeeded,
+        },
+        stageName: 'Beta',
+      },
+    ],
+    updated: new Date('2022-04-15T17:45:51.244Z'),
   };
 }
 
@@ -255,7 +154,7 @@ export const mockEntityWithTags: Entity = {
     name: 'backstage',
     description: 'backstage.io',
     annotations: {
-      [AWS_ECS_SERVICE_TAGS_ANNOTATION]: 'component=test',
+      [AWS_CODEPIPELINE_TAGS_ANNOTATION]: 'component=test',
     },
   },
   spec: {
@@ -272,8 +171,26 @@ export const mockEntityWithArn: Entity = {
     name: 'backstage',
     description: 'backstage.io',
     annotations: {
-      [AWS_ECS_SERVICE_ARN_ANNOTATION]:
-        'arn:aws:ecs:us-west-2:1234567890:service/cluster/service',
+      [AWS_CODEPIPELINE_ARN_ANNOTATION]:
+        'arn:aws:codepipeline:us-west-2:1234567890:pipeline1',
+    },
+  },
+  spec: {
+    lifecycle: 'production',
+    type: 'service',
+    owner: 'user:guest',
+  },
+};
+
+export const mockEntityWithArnLegacy: Entity = {
+  apiVersion: 'backstage.io/v1alpha1',
+  kind: 'Component',
+  metadata: {
+    name: 'backstage',
+    description: 'backstage.io',
+    annotations: {
+      [AWS_CODEPIPELINE_ARN_ANNOTATION_LEGACY]:
+        'arn:aws:codepipeline:us-west-2:1234567890:pipeline1',
     },
   },
   spec: {

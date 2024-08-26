@@ -1,12 +1,13 @@
-# Amazon Elastic Container Service plugin for Backstage
+# AWS CodePipeline plugin for Backstage
 
-This is the Amazon Elastic Container Service plugin for backstage.io.
+This is the AWS CodePipeline plugin for backstage.io.
 
-![Amazon ECS plugin tab](../../docs/images/ecs-tab.png)
+![AWS CodePipeline plugin tab](../../docs/images/codepipeline-tab.png)
 
 It provides:
 
-1. Entity content that displays the status of Amazon ECS services related to that specific entity
+1. Entity content that displays the AWS CodePipeline executions related to that specific entity
+1. Entity card that displays the status of the AWS CodePipeline stages related to that specific entity
 
 The plugin consists of the following packages:
 
@@ -29,10 +30,8 @@ The IAM role(s) used by Backstage will require the following permissions:
     {
       "Effect": "Allow",
       "Action": [
-        "ecs:DescribeServices",
-        "ecs:ListTasks",
-        "ecs:DescribeTasks",
-        "ecs:DescribeClusters"
+        "codepipeline:GetPipelineState",
+        "codepipeline:ListPipelineExecutions"
       ],
       "Resource": "*"
     }
@@ -47,7 +46,7 @@ Note: This policy does not reflect least privilege and you should further limit 
 Install the backend package in your Backstage app:
 
 ```shell
-yarn workspace backend add @aws/amazon-ecs-plugin-for-backstage-backend
+yarn workspace backend add @aws/aws-codepipeline-plugin-for-backstage-backend
 ```
 
 #### New backend
@@ -57,34 +56,37 @@ Add the plugin to the `packages/backend/src/index.ts`:
 ```typescript
 const backend = createBackend();
 // ...
-backend.add(import('@aws/amazon-ecs-plugin-for-backstage-backend'));
+backend.add(import('@aws/aws-codepipeline-plugin-for-backstage-backend'));
 // ...
 backend.start();
 ```
 
 #### Old backend
 
-Create a file `packages/backend/src/plugins/ecs.ts` with the following content:
+Create a file `packages/backend/src/plugins/codepipeline.ts` with the following content:
 
 ```typescript
 import {
   createRouter,
-  DefaultAmazonEcsService,
-} from '@aws/amazon-ecs-plugin-for-backstage-backend';
+  DefaultAwsCodePipelineService,
+} from '@aws/aws-codepipeline-plugin-for-backstage-backend';
 import { CatalogClient } from '@backstage/catalog-client';
 import { PluginEnvironment } from '../types';
 
 export default async function createPlugin(env: PluginEnvironment) {
   const catalogApi = new CatalogClient({ discoveryApi: env.discovery });
-  const amazonEcsApi = await DefaultAmazonEcsService.fromConfig(env.config, {
-    catalogApi,
-    discovery: env.discovery,
-    logger: env.logger,
-  });
+  const awsCodePipelineApi = await DefaultAwsCodePipelineService.fromConfig(
+    env.config,
+    {
+      catalogApi,
+      discovery: env.discovery,
+      logger: env.logger,
+    },
+  );
   return createRouter({
     logger: env.logger,
     discovery: env.discovery,
-    amazonEcsApi,
+    awsCodePipelineApi,
   });
 }
 ```
@@ -93,59 +95,66 @@ Edit `packages/backend/src/index.ts` to register the backend plugin:
 
 ```typescript
 // ..
-import ecs from './plugins/ecs';
+import codepipeline from './plugins/codepipeline';
 
 async function main() {
   // ...
-  const ecsEnv = useHotMemoize(module, () => createEnv('amazon-ecs'));
+  const codepipelineEnv = useHotMemoize(module, () =>
+    createEnv('aws-codepipeline'),
+  );
   // ...
-  apiRouter.use('/amazon-ecs', await ecs(ecsEnv));
+  apiRouter.use('/aws-codepipeline', await codepipeline(codepipelineEnv));
   // ...
 }
 ```
 
 Verify that the backend plugin is running in your Backstage app. You should receive `{"status":"ok"}` when accessing this URL:
 
-`https://<your backstage app>/api/amazon-ecs/health`.
+`https://<your backstage app>/api/aws-codepipeline/health`.
 
 ### Frontend package
 
 Install the frontend package in your Backstage app:
 
 ```shell
-yarn workspace app add @aws/amazon-ecs-plugin-for-backstage
+yarn workspace app add @aws/aws-codepipeline-plugin-for-backstage
 ```
 
-Edit `packages/app/src/components/catalog/EntityPage.tsx` to add an Amazon ECS service tab to the entity page:
+Edit `packages/app/src/components/catalog/EntityPage.tsx` to add AWS CodePipeline content to the CI/CD tab of the entity page:
 
 ```typescript
-import {EntityAmazonEcsServicesContent} from '@aws/amazon-ecs-plugin-for-backstage';
+import {
+  EntityAwsCodePipelineExecutionsContent,
+  isAwsCodePipelineAvailable,
+} from '@aws/aws-codepipeline-plugin-for-backstage';
 
-{
-  /* ... */
-}
+// For example in the CI/CD section
+const cicdContent = (
+  <EntitySwitch>
+    <EntitySwitch.Case if= {isAwsCodePipelineAvailable} >
+      <EntityAwsCodePipelineExecutionsContent / >
+    </EntitySwitch.Case>
+```
 
-const serviceEntityPage = (
-  <EntityLayout>
-    {
-      /* ... */
-    }
-    < EntityLayout.Route path = "/ecs" title = "Amazon ECS" >
-      <EntityAmazonEcsServicesContent / >
-    </EntityLayout.Route>
-  < /EntityLayout>
-  {
-    /* ... */
-  }
-)
-;
+Edit the same file to add the AWS CodePipeline card to the entity page:
+
+```typescript
+import { EntityAwsCodePipelineCard } from '@aws/aws-codepipeline-plugin-for-backstage';
+
+// For example in the overview section
+const overviewContent = (
+  <Grid container spacing={3} alignItems="stretch">
+  // ...
+    <Grid item md={6}>
+      <EntityAwsCodePipelineCard />
+    </Grid>
 ```
 
 ## Entity annotations
 
-There are two annotations that can be used to reference ECS services for an entity.
+There are two annotations that can be used to reference CodePipeline resources for an entity.
 
-The first will retrieve all ECS services with the matching tags, this is done with the `aws.amazon.com/amazon-ecs-service-tags` annotation:
+The first will retrieve all CodePipeline resources with the matching tags, this is done with the `aws.amazon.com/aws-codepipeline-tags` annotation:
 
 ```yaml
 # Example
@@ -154,7 +163,7 @@ kind: Component
 metadata:
   # ...
   annotations:
-    aws.amazon.com/amazon-ecs-service-tags: component=myapp,environment=prod
+    aws.amazon.com/aws-codepipeline-tags: component=myapp
 spec:
   type: service
   # ...
@@ -162,7 +171,7 @@ spec:
 
 Please review the [Locating resources documentation](../../docs/locating-resources.md) to understand any additional configuration required for tag-based lookup.
 
-The alternative is to reference a specific ECS service by ARN, this is done with the `aws.amazon.com/amazon-ecs-service-arn` annotation:
+The alternative is to reference a specific ECS service by ARN, this is done with the `aws.amazon.com/aws-codepipeline-arn` annotation:
 
 ```yaml
 # Example
@@ -171,8 +180,18 @@ kind: Component
 metadata:
   # ...
   annotations:
-    aws.amazon.com/amazon-ecs-service-arn: arn:aws:ecs:us-west-2:1234567890:service/cluster1/myapp-service
+    aws.amazon.com/aws-codepipeline-arn: arn:aws:codepipeline:us-west-2:1234567890:myapp-pipeline
 spec:
   type: service
   # ...
+```
+
+## IAM Identity Center shortcut links
+
+As a user of [IAM Identity Center](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html), you can make use of [shortcut links](https://docs.aws.amazon.com/singlesignon/latest/userguide/createshortcutlink.html) by adding your AWS access portal subdomain to your `app-config.yaml`:
+
+```yaml
+aws:
+  sso:
+    subdomain: d-xxxxxxxxxx
 ```

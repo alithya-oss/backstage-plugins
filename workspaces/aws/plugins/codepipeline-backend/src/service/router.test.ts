@@ -16,19 +16,20 @@ import express from 'express';
 import request from 'supertest';
 
 import { createRouter } from './router';
-import { AmazonECSService } from './types';
+import { AwsCodePipelineService } from './types';
 import { mockServices } from '@backstage/backend-test-utils';
 
 describe('createRouter', () => {
   let app: express.Express;
-  const mockService: jest.Mocked<AmazonECSService> = {
-    getServicesByEntity: jest.fn(),
+  const mockService: jest.Mocked<AwsCodePipelineService> = {
+    getPipelineExecutionsByEntity: jest.fn(),
+    getPipelineStateByEntity: jest.fn(),
   };
 
   beforeAll(async () => {
     const router = await createRouter({
       logger: getVoidLogger(),
-      amazonEcsApi: mockService,
+      awsCodePipelineApi: mockService,
       discovery: mockServices.discovery(),
     });
     app = express().use(router);

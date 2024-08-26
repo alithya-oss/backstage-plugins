@@ -11,5 +11,5 @@
  * limitations under the License.
  */
 
-export { DefaultAmazonEcsService } from './DefaultAmazonEcsService';
+export { DefaultAwsCodePipelineService } from './DefaultAwsCodePipelineService';
 export * from './types';

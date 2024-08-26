@@ -18,28 +18,30 @@ import {
   useEntity,
   MissingAnnotationEmptyState,
 } from '@backstage/plugin-catalog-react';
-import {
-  AWS_ECS_SERVICE_ARN_ANNOTATION,
-  AWS_ECS_SERVICE_TAGS_ANNOTATION,
-} from '@aws/amazon-ecs-plugin-for-backstage-common';
 import { getOneOfEntityAnnotations } from '@aws/aws-core-plugin-for-backstage-common';
-import { EcsServices } from './EcsServices';
+import {
+  AWS_CODEPIPELINE_ARN_ANNOTATION,
+  AWS_CODEPIPELINE_ARN_ANNOTATION_LEGACY,
+  AWS_CODEPIPELINE_TAGS_ANNOTATION,
+} from '@aws/aws-codepipeline-plugin-for-backstage-common';
+import { CodePipelineExecutions } from './CodePipelineExecutions';
 
-export const isAmazonEcsServiceAvailable = (entity: Entity) =>
+export const isAwsCodePipelineAvailable = (entity: Entity) =>
   getOneOfEntityAnnotations(entity, [
-    AWS_ECS_SERVICE_ARN_ANNOTATION,
-    AWS_ECS_SERVICE_TAGS_ANNOTATION,
+    AWS_CODEPIPELINE_ARN_ANNOTATION,
+    AWS_CODEPIPELINE_TAGS_ANNOTATION,
+    AWS_CODEPIPELINE_ARN_ANNOTATION_LEGACY,
   ]) !== undefined;
 
 export const Router = () => {
   const { entity } = useEntity();
 
-  if (!isAmazonEcsServiceAvailable(entity)) {
+  if (!isAwsCodePipelineAvailable(entity)) {
     return (
       <MissingAnnotationEmptyState
         annotation={[
-          AWS_ECS_SERVICE_ARN_ANNOTATION,
-          AWS_ECS_SERVICE_TAGS_ANNOTATION,
+          AWS_CODEPIPELINE_ARN_ANNOTATION,
+          AWS_CODEPIPELINE_TAGS_ANNOTATION,
         ]}
       />
     );
@@ -47,7 +49,7 @@ export const Router = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<EcsServices entity={entity} />} />
+      <Route path="/" element={<CodePipelineExecutions entity={entity} />} />
     </Routes>
   );
 };

@@ -3,26 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [0.3.4](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/amazon-ecs-plugin-for-backstage-backend@0.3.3...@aws/amazon-ecs-plugin-for-backstage-backend@0.3.4) (2024-07-09)
+## [0.4.2](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/aws-codepipeline-plugin-for-backstage-backend@0.4.1...@aws/aws-codepipeline-plugin-for-backstage-backend@0.4.2) (2024-07-09)
 
-**Note:** Version bump only for package @aws/amazon-ecs-plugin-for-backstage-backend
-
-
-
-
-
-## [0.3.3](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/amazon-ecs-plugin-for-backstage-backend@0.3.2...@aws/amazon-ecs-plugin-for-backstage-backend@0.3.3) (2024-05-31)
-
-
-### Bug Fixes
-
-* Handle case where no ECS tasks are returned ([#146](https://github.com/awslabs/backstage-plugins-for-aws/issues/146)) ([b441b78](https://github.com/awslabs/backstage-plugins-for-aws/commit/b441b782822a95dc8bbb937ac943f09f0ceb3b6a))
+**Note:** Version bump only for package @aws/aws-codepipeline-plugin-for-backstage-backend
 
 
 
 
 
-## [0.3.2](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/amazon-ecs-plugin-for-backstage-backend@0.3.1...@aws/amazon-ecs-plugin-for-backstage-backend@0.3.2) (2024-05-08)
+## [0.4.1](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/aws-codepipeline-plugin-for-backstage-backend@0.4.0...@aws/aws-codepipeline-plugin-for-backstage-backend@0.4.1) (2024-05-31)
+
+**Note:** Version bump only for package @aws/aws-codepipeline-plugin-for-backstage-backend
+
+
+
+
+
+# [0.4.0](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/aws-codepipeline-plugin-for-backstage-backend@0.3.1...@aws/aws-codepipeline-plugin-for-backstage-backend@0.4.0) (2024-05-08)
 
 
 ### Bug Fixes
@@ -30,18 +27,23 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * Consistent user agent header for all AWS API calls ([#104](https://github.com/awslabs/backstage-plugins-for-aws/issues/104)) ([3fbd5c7](https://github.com/awslabs/backstage-plugins-for-aws/commit/3fbd5c7fcc9c7095d7eff5fb2bacc77fda9e5a81))
 
 
+### Features
 
-
-
-## [0.3.1](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/amazon-ecs-plugin-for-backstage-backend@0.3.0...@aws/amazon-ecs-plugin-for-backstage-backend@0.3.1) (2024-04-26)
-
-**Note:** Version bump only for package @aws/amazon-ecs-plugin-for-backstage-backend
+* Make CodePipeline and CodeBuild annotations backwards-compatible ([#109](https://github.com/awslabs/backstage-plugins-for-aws/issues/109)) ([a7fccbf](https://github.com/awslabs/backstage-plugins-for-aws/commit/a7fccbff5d52e1a1c3820b57152cb77e6373672d))
 
 
 
 
 
-# [0.3.0](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/amazon-ecs-plugin-for-backstage-backend@0.2.0...@aws/amazon-ecs-plugin-for-backstage-backend@0.3.0) (2024-04-03)
+## [0.3.1](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/aws-codepipeline-plugin-for-backstage-backend@0.3.0...@aws/aws-codepipeline-plugin-for-backstage-backend@0.3.1) (2024-04-26)
+
+**Note:** Version bump only for package @aws/aws-codepipeline-plugin-for-backstage-backend
+
+
+
+
+
+# [0.3.0](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/aws-codepipeline-plugin-for-backstage-backend@0.2.0...@aws/aws-codepipeline-plugin-for-backstage-backend@0.3.0) (2024-04-03)
 
 
 ### Features
@@ -53,7 +55,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-# [0.2.0](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/amazon-ecs-plugin-for-backstage-backend@0.1.1...@aws/amazon-ecs-plugin-for-backstage-backend@0.2.0) (2024-03-30)
+# [0.2.0](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/aws-codepipeline-plugin-for-backstage-backend@0.1.1...@aws/aws-codepipeline-plugin-for-backstage-backend@0.2.0) (2024-03-30)
 
 
 ### Features
@@ -64,7 +66,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [0.1.1](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/amazon-ecs-plugin-for-backstage-backend@0.1.0...@aws/amazon-ecs-plugin-for-backstage-backend@0.1.1) (2024-03-27)
+## [0.1.1](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/aws-codepipeline-plugin-for-backstage-backend@0.1.0...@aws/aws-codepipeline-plugin-for-backstage-backend@0.1.1) (2024-03-27)
 
 
 ### Bug Fixes

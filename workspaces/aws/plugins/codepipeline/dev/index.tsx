@@ -13,32 +13,69 @@
 
 import React from 'react';
 import { createDevApp } from '@backstage/dev-utils';
-import { EntityAmazonEcsServicesContent, amazonEcsPlugin } from '../src/plugin';
+import {
+  EntityAwsCodePipelineExecutionsContent,
+  awsCodePipelinePlugin,
+} from '../src/plugin';
 import { TestApiRegistry } from '@backstage/test-utils';
 import { ApiProvider, ConfigReader } from '@backstage/core-app-api';
 import { configApiRef, ConfigApi } from '@backstage/core-plugin-api';
-import { amazonEcsApiRef } from '../src/api';
-import { MockAmazonEcsApiClient, mockEntity } from '../src/mocks';
+import { awsCodePipelineApiRef } from '../src/api';
+import { MockAwsCodePipelineApiClient } from '../src/mocks';
 import { EntityProvider } from '@backstage/plugin-catalog-react';
+import { mockEntityWithTags } from '@aws/aws-codepipeline-plugin-for-backstage-common';
+import { CodePipelineStateCard } from '../src/components/CodePipelineStateCard';
 
 const configApi: ConfigApi = new ConfigReader({});
 
 const apis = TestApiRegistry.from(
   [configApiRef, configApi],
-  [amazonEcsApiRef, new MockAmazonEcsApiClient()],
+  [awsCodePipelineApiRef, new MockAwsCodePipelineApiClient()],
 );
 
 createDevApp()
-  .registerPlugin(amazonEcsPlugin)
+  .registerPlugin(awsCodePipelinePlugin)
   .addPage({
     element: (
       <ApiProvider apis={apis}>
-        <EntityProvider entity={mockEntity}>
-          <EntityAmazonEcsServicesContent />
+        <EntityProvider entity={mockEntityWithTags}>
+          <EntityAwsCodePipelineExecutionsContent />
         </EntityProvider>
       </ApiProvider>
     ),
-    title: 'Root Page',
-    path: '/amazon-ecs-plugin-for-backstage',
+    title: 'Pipeline Executions',
+    path: '/codepipeline-executions',
+  })
+  .addPage({
+    element: (
+      <ApiProvider apis={apis}>
+        <EntityProvider
+          entity={{
+            apiVersion: 'backstage.io/v1alpha1',
+            kind: 'Component',
+            metadata: {
+              name: 'backstage',
+              description: 'backstage.io',
+              annotations: {},
+            },
+          }}
+        >
+          <EntityAwsCodePipelineExecutionsContent />
+        </EntityProvider>
+      </ApiProvider>
+    ),
+    title: 'Pipeline Executions (Missing Annotation)',
+    path: '/codepipeline-executions-missing-annotation',
+  })
+  .addPage({
+    path: '/fixture-pipeline-card',
+    title: 'Pipeline Card',
+    element: (
+      <ApiProvider apis={apis}>
+        <EntityProvider entity={mockEntityWithTags}>
+          <CodePipelineStateCard />
+        </EntityProvider>
+      </ApiProvider>
+    ),
   })
   .render();

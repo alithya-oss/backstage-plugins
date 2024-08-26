@@ -1,40 +1,14 @@
-import humanizeDuration from 'humanize-duration';
-import { parse } from '@aws-sdk/util-arn-parser';
+/**
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-export function formatTime(date: Date | undefined): string {
-  if (date) {
-    const difference = new Date().getTime() - new Date(date).getTime();
-    return `${humanizeDuration(difference, {
-      largest: 1,
-      round: true,
-    })} ago`;
-  }
-  return '-';
-}
-
-export function getTaskId(taskArn: string | undefined): string {
-  if (taskArn) {
-    const { resource } = parse(taskArn);
-    const parts = resource.split('/');
-    if (parts.length === 3) {
-      return parts[2];
-    }
-  }
-  return '-';
-}
-
-export function getTaskDefinition(
-  taskDefinitionArn: string | undefined,
-): string {
-  if (taskDefinitionArn) {
-    const { resource } = parse(taskDefinitionArn);
-    const parts = resource.split('/');
-    if (parts.length === 2) {
-      return parts[1];
-    }
-  }
-  return '-';
-}
-
-export const stringOrDefault = (value: string | undefined) =>
-  value ? value : '-';
+export * from './time';

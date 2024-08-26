@@ -12,12 +12,20 @@
  */
 
 import { CompoundEntityRef } from '@backstage/catalog-model';
-import { ServicesResponse } from '@aws/amazon-ecs-plugin-for-backstage-common';
+import {
+  PipelineExecutionsResponse,
+  PipelineStateResponse,
+} from '@aws/aws-codepipeline-plugin-for-backstage-common';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 
-export interface AmazonECSService {
-  getServicesByEntity(options: {
+export interface AwsCodePipelineService {
+  getPipelineExecutionsByEntity(options: {
     entityRef: CompoundEntityRef;
     credentials?: BackstageCredentials;
-  }): Promise<ServicesResponse>;
+  }): Promise<PipelineExecutionsResponse>;
+
+  getPipelineStateByEntity(options: {
+    entityRef: CompoundEntityRef;
+    credentials?: BackstageCredentials;
+  }): Promise<PipelineStateResponse>;
 }
