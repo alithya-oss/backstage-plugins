@@ -1,11 +1,11 @@
 {
-  "name": "@aws/aws-codepipeline-plugin-for-backstage-common",
-  "description": "Common functionality for the aws-codepipeline-plugin-for-backstage plugin",
+  "name": "@aws/aws-codebuild-plugin-for-backstage-common",
+  "description": "Common functionality for the aws-codebuild-plugin-for-backstage plugin",
   "version": "0.3.0",
   "repository": {
     "type": "git",
     "url": "github:awslabs/backstage-plugins-for-aws",
-    "directory": "plugins/codepipeline/common"
+    "directory": "plugins/codebuild/common"
   },
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -29,13 +29,13 @@
     "postpack": "backstage-cli package postpack"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.27.0"
+    "@backstage/cli": "^0.26.2"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@aws-sdk/client-codepipeline": "^3.511.0",
-    "@backstage/catalog-model": "^1.6.0"
+    "@aws-sdk/client-codebuild": "^3.511.0",
+    "@backstage/catalog-model": "^1.4.5"
   }
 }
