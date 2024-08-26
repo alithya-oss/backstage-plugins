@@ -18,7 +18,7 @@ import {
   PipelineStateResponse,
   mockCodePipelineExecutions,
   mockCodePipelineStatus as mockCodePipelineState,
-} from '@aws/aws-codepipeline-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-aws-codepipeline-common';
 
 export class MockAwsCodePipelineApiClient implements AwsCodePipelineApi {
   // @ts-ignore

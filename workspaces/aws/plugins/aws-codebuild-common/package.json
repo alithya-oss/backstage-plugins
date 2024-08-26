@@ -1,5 +1,5 @@
 {
-  "name": "@aws/aws-codebuild-plugin-for-backstage-common",
+  "name": "@alithya-oss/plugin-aws-codebuild-common",
   "description": "Common functionality for the aws-codebuild-plugin-for-backstage plugin",
   "version": "0.3.0",
   "repository": {

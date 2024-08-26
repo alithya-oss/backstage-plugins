@@ -21,7 +21,7 @@ import {
 import { AwsCredentialsManager } from '@backstage/integration-aws-node';
 import { AwsCredentialIdentityProvider } from '@aws-sdk/types';
 import { z } from 'zod';
-import { AWS_SDK_CUSTOM_USER_AGENT } from '@aws/aws-core-plugin-for-backstage-common';
+import { AWS_SDK_CUSTOM_USER_AGENT } from '@alithya-oss/plugin-aws-core-common';
 
 export const createAwsCloudControlCreateAction = (options: {
   credsManager: AwsCredentialsManager;

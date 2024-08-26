@@ -23,7 +23,7 @@ import { AwsCredentialIdentityProvider } from '@aws-sdk/types';
 import fs from 'fs';
 import path from 'path';
 import { z } from 'zod';
-import { AWS_SDK_CUSTOM_USER_AGENT } from '@aws/aws-core-plugin-for-backstage-common';
+import { AWS_SDK_CUSTOM_USER_AGENT } from '@alithya-oss/plugin-aws-core-common';
 
 export const createAwsCodeCommitPublishAction = (options: {
   credsManager: AwsCredentialsManager;

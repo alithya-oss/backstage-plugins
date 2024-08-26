@@ -1,5 +1,5 @@
 {
-  "name": "@aws/amazon-ecs-plugin-for-backstage-common",
+  "name": "@alithya-oss/plugin-amazon-ecs-common",
   "description": "Common functionality for the amazon-ecs-plugin-for-backstage plugin",
   "version": "0.2.0",
   "repository": {

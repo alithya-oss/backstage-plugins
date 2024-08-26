@@ -16,7 +16,7 @@ import { useApi } from '@backstage/core-plugin-api';
 import { awsCodePipelineApiRef } from '../api';
 import type { Entity } from '@backstage/catalog-model';
 import { getCompoundEntityRef } from '@backstage/catalog-model';
-import { PipelineExecutionsResponse } from '@aws/aws-codepipeline-plugin-for-backstage-common';
+import { PipelineExecutionsResponse } from '@alithya-oss/plugin-aws-codepipeline-common';
 
 export function usePipelineExecutions({ entity }: { entity: Entity }) {
   const awsCodePipelineApi = useApi(awsCodePipelineApiRef);

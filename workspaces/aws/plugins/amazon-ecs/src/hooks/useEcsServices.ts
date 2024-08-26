@@ -14,7 +14,7 @@
 import { useAsyncRetry } from 'react-use';
 import { useApi } from '@backstage/core-plugin-api';
 import { amazonEcsApiRef } from '../api';
-import { ServicesResponse } from '@aws/amazon-ecs-plugin-for-backstage-common';
+import { ServicesResponse } from '@alithya-oss/plugin-amazon-ecs-common';
 import type { Entity } from '@backstage/catalog-model';
 import { getCompoundEntityRef } from '@backstage/catalog-model';
 

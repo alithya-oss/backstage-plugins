@@ -1,5 +1,5 @@
 {
-  "name": "@aws/aws-core-plugin-for-backstage-scaffolder-actions",
+  "name": "scaffolder-backend-module-aws-core",
   "description": "Scaffolder actions related to the AWS core plugin for Backstage",
   "version": "0.2.6",
   "repository": {
@@ -28,12 +28,12 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
+    "@alithya-oss/plugin-aws-core-common": "workspace:^",
     "@aws-sdk/client-cloudcontrol": "^3.511.0",
     "@aws-sdk/client-codecommit": "^3.511.0",
     "@aws-sdk/client-eventbridge": "^3.511.0",
     "@aws-sdk/client-s3": "^3.511.0",
     "@aws-sdk/types": "^3.511.0",
-    "@aws/aws-core-plugin-for-backstage-common": "workspace:^",
     "@backstage/backend-common": "^0.21.6",
     "@backstage/backend-plugin-api": "^0.6.16",
     "@backstage/errors": "^1.2.4",

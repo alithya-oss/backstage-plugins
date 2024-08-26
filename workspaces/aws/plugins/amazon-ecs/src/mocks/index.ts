@@ -19,7 +19,7 @@ import {
   mockEcsCluster,
   mockEcsService,
   mockEcsTask,
-} from '@aws/amazon-ecs-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-amazon-ecs-common';
 
 export class MockAmazonEcsApiClient implements AmazonEcsApi {
   // @ts-ignore

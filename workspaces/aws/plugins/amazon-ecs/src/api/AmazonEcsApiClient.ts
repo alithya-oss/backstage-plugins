@@ -13,8 +13,8 @@
 
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 
-import { ServicesResponse } from '@aws/amazon-ecs-plugin-for-backstage-common';
-import { AwsApiClient } from '@aws/aws-core-plugin-for-backstage-react';
+import { ServicesResponse } from '@alithya-oss/plugin-amazon-ecs-common';
+import { AwsApiClient } from '@alithya-oss/plugin-aws-core-react';
 import type { CompoundEntityRef } from '@backstage/catalog-model';
 import { AmazonEcsApi } from '.';
 

@@ -23,7 +23,7 @@ import {
 import {
   COST_INSIGHTS_AWS_COST_CATEGORY_ANNOTATION,
   COST_INSIGHTS_AWS_TAGS_ANNOTATION,
-} from '@aws/cost-insights-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-cost-insights-aws-common';
 import {
   ChangeStatistic,
   Cost,
@@ -34,7 +34,7 @@ import { CatalogApi } from '@backstage/catalog-client';
 import {
   AWS_SDK_CUSTOM_USER_AGENT,
   getOneOfEntityAnnotations,
-} from '@aws/aws-core-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-aws-core-common';
 import {
   CompoundEntityRef,
   stringifyEntityRef,

@@ -23,7 +23,7 @@ import { configApiRef, ConfigApi } from '@backstage/core-plugin-api';
 import { awsCodePipelineApiRef } from '../src/api';
 import { MockAwsCodePipelineApiClient } from '../src/mocks';
 import { EntityProvider } from '@backstage/plugin-catalog-react';
-import { mockEntityWithTags } from '@aws/aws-codepipeline-plugin-for-backstage-common';
+import { mockEntityWithTags } from '@alithya-oss/plugin-aws-codepipeline-common';
 import { CodePipelineStateCard } from '../src/components/CodePipelineStateCard';
 
 const configApi: ConfigApi = new ConfigReader({});

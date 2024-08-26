@@ -22,7 +22,7 @@ import { Logger } from 'winston';
 import {
   AWS_SDK_CUSTOM_USER_AGENT,
   AwsResourceLocator,
-} from '@aws/aws-core-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-aws-core-common';
 import { AwsCredentialIdentityProvider, Paginator } from '@aws-sdk/types';
 import { Config } from '@backstage/config';
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';

@@ -17,7 +17,7 @@ import { ConfigReader } from '@backstage/config';
 import { mockClient } from 'aws-sdk-client-mock';
 import { getVoidLogger } from '@backstage/backend-common';
 import { DefaultAwsCodeBuildService } from './DefaultAwsCodeBuildService';
-import { AwsResourceLocator } from '@aws/aws-core-plugin-for-backstage-common';
+import { AwsResourceLocator } from '@alithya-oss/plugin-aws-core-common';
 import {
   DefaultAwsCredentialsManager,
   AwsCredentialProvider,
@@ -35,7 +35,7 @@ import {
   AWS_CODEBUILD_TAGS_ANNOTATION,
   mockCodeBuildProject,
   mockCodeBuildProjectBuild,
-} from '@aws/aws-codebuild-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-aws-codebuild-common';
 import { mockServices } from '@backstage/backend-test-utils';
 
 function getMockCredentialProvider(): Promise<AwsCredentialProvider> {

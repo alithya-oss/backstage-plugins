@@ -1,5 +1,5 @@
 {
-  "name": "@aws/aws-codepipeline-plugin-for-backstage",
+  "name": "@alithya-oss/plugin-aws-codepipeline",
   "version": "0.5.1",
   "repository": {
     "type": "git",
@@ -28,11 +28,11 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
+    "@alithya-oss/plugin-aws-codepipeline-common": "workspace:^",
+    "@alithya-oss/plugin-aws-core-common": "workspace:^",
+    "@alithya-oss/plugin-aws-core-react": "workspace:^",
     "@aws-sdk/client-codepipeline": "^3.511.0",
     "@aws-sdk/util-arn-parser": "^3.568.0",
-    "@aws/aws-codepipeline-plugin-for-backstage-common": "workspace:^",
-    "@aws/aws-core-plugin-for-backstage-common": "workspace:^",
-    "@aws/aws-core-plugin-for-backstage-react": "workspace:^",
     "@backstage/catalog-model": "^1.4.5",
     "@backstage/core-components": "^0.14.3",
     "@backstage/core-plugin-api": "^1.9.1",

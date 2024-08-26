@@ -13,8 +13,8 @@
 
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 
-import { ProjectsResponse } from '@aws/aws-codebuild-plugin-for-backstage-common';
-import { AwsApiClient } from '@aws/aws-core-plugin-for-backstage-react';
+import { ProjectsResponse } from '@alithya-oss/plugin-aws-codebuild-common';
+import { AwsApiClient } from '@alithya-oss/plugin-aws-core-react';
 import type { CompoundEntityRef } from '@backstage/catalog-model';
 import { AwsCodeBuildApi } from '.';
 

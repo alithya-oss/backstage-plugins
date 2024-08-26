@@ -15,8 +15,8 @@ import {
   AWS_CODEBUILD_ARN_ANNOTATION,
   AWS_CODEBUILD_ARN_ANNOTATION_LEGACY,
   AWS_CODEBUILD_TAGS_ANNOTATION,
-} from '@aws/aws-codebuild-plugin-for-backstage-common';
-import { getOneOfEntityAnnotations } from '@aws/aws-core-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-aws-codebuild-common';
+import { getOneOfEntityAnnotations } from '@alithya-oss/plugin-aws-core-common';
 import { Entity } from '@backstage/catalog-model';
 import {
   createApiFactory,

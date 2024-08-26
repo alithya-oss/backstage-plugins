@@ -27,14 +27,14 @@ import {
   AwsResourceLocator,
   getOneOfEntityAnnotations,
   AWS_SDK_CUSTOM_USER_AGENT,
-} from '@aws/aws-core-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-aws-core-common';
 import {
   AWS_ECS_SERVICE_ARN_ANNOTATION,
   AWS_ECS_SERVICE_TAGS_ANNOTATION,
   ClusterResponse,
   ServiceResponse,
   ServicesResponse,
-} from '@aws/amazon-ecs-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-amazon-ecs-common';
 import { AwsCredentialsManager } from '@backstage/integration-aws-node';
 import {
   CompoundEntityRef,

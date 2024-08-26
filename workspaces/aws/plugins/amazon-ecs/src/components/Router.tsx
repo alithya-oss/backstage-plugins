@@ -21,8 +21,8 @@ import {
 import {
   AWS_ECS_SERVICE_ARN_ANNOTATION,
   AWS_ECS_SERVICE_TAGS_ANNOTATION,
-} from '@aws/amazon-ecs-plugin-for-backstage-common';
-import { getOneOfEntityAnnotations } from '@aws/aws-core-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-amazon-ecs-common';
+import { getOneOfEntityAnnotations } from '@alithya-oss/plugin-aws-core-common';
 import { EcsServices } from './EcsServices';
 
 export const isAmazonEcsServiceAvailable = (entity: Entity) =>

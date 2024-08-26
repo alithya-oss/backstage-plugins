@@ -1,5 +1,5 @@
 {
-  "name": "@aws/cost-insights-plugin-for-backstage-common",
+  "name": "@alithya-oss/plugin-cost-insights-aws-common",
   "description": "Common functionality for the amazon-ecs-plugin-for-backstage plugin",
   "version": "0.1.0",
   "repository": {

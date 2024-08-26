@@ -1,5 +1,5 @@
 {
-  "name": "@aws/aws-codebuild-plugin-for-backstage",
+  "name": "@alithya-oss/plugin-aws-codebuild",
   "version": "0.5.1",
   "repository": {
     "type": "git",
@@ -28,10 +28,10 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
+    "@alithya-oss/plugin-aws-codebuild-common": "workspace:^",
+    "@alithya-oss/plugin-aws-core-common": "workspace:^",
+    "@alithya-oss/plugin-aws-core-react": "workspace:^",
     "@aws-sdk/client-codebuild": "^3.511.0",
-    "@aws/aws-codebuild-plugin-for-backstage-common": "workspace:^",
-    "@aws/aws-core-plugin-for-backstage-common": "workspace:^",
-    "@aws/aws-core-plugin-for-backstage-react": "workspace:^",
     "@backstage/catalog-model": "^1.4.5",
     "@backstage/core-components": "^0.14.3",
     "@backstage/core-plugin-api": "^1.9.1",

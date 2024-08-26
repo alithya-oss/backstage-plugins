@@ -21,7 +21,7 @@ import fs from 'fs-extra';
 import { z } from 'zod';
 import { resolveSafeChildPath } from '@backstage/backend-common';
 import { glob } from 'glob';
-import { AWS_SDK_CUSTOM_USER_AGENT } from '@aws/aws-core-plugin-for-backstage-common';
+import { AWS_SDK_CUSTOM_USER_AGENT } from '@alithya-oss/plugin-aws-core-common';
 
 export const createAwsS3CpAction = (options: {
   credsManager: AwsCredentialsManager;

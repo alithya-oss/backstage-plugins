@@ -16,7 +16,7 @@ import { Logger } from 'winston';
 import {
   AwsResourceLocator,
   AwsResourceTaggingApiLocator,
-} from '@aws/aws-core-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-aws-core-common';
 import { AwsResourceExplorerLocator } from './resource-explorer-locator';
 import { AwsConfigResourceLocator } from './aws-config-locator';
 

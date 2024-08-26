@@ -83,14 +83,28 @@ function sync() {
 function rename() {
     cd ./workspaces/aws/
 
+    changes=(
+        "s#@aws/aws-core-plugin-for-backstage-scaffolder-actions#scaffolder-backend-module-aws-core#g"
+        "s#@aws/amazon-ecs-plugin-for-backstage#@alithya-oss/plugin-amazon-ecs#g"
+        "s#@aws/aws-codebuild-plugin-for-backstage#@alithya-oss/plugin-aws-codebuild#g"
+        "s#@aws/aws-codepipeline-plugin-for-backstage#@alithya-oss/plugin-aws-codepipeline#g"
+        "s#@aws/cost-insights-plugin-for-backstage#@alithya-oss/plugin-cost-insights-aws#g"
+        "s#@aws/aws-core-plugin-for-backstage#@alithya-oss/plugin-aws-core#g"
+    )
+
+    for item in "${changes[@]}"; do
     find -type f \
         -not -name "install-state.gz" \
         -not -name "yarn.lock" \
         -not -name "CHANGELOG.md" \
+        -not -path "**/.yarn*" \
+        -not -path "**/.changeset" \
         -not -path "**/node_modules*" \
         -not -path "**/dist*" \
-        -exec sed -e 's#\@aws\/#\@alithya-oss\/#g' {} +
+        -exec sed -i ${item} {} +
+    done
 }
 
 sync
 rename
+yarn install

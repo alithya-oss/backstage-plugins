@@ -18,12 +18,12 @@ import {
   useEntity,
   MissingAnnotationEmptyState,
 } from '@backstage/plugin-catalog-react';
-import { getOneOfEntityAnnotations } from '@aws/aws-core-plugin-for-backstage-common';
+import { getOneOfEntityAnnotations } from '@alithya-oss/plugin-aws-core-common';
 import {
   AWS_CODEPIPELINE_ARN_ANNOTATION,
   AWS_CODEPIPELINE_ARN_ANNOTATION_LEGACY,
   AWS_CODEPIPELINE_TAGS_ANNOTATION,
-} from '@aws/aws-codepipeline-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-aws-codepipeline-common';
 import { CodePipelineExecutions } from './CodePipelineExecutions';
 
 export const isAwsCodePipelineAvailable = (entity: Entity) =>

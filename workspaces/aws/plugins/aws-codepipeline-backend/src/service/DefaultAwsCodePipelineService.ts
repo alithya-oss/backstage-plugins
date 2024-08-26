@@ -19,7 +19,7 @@ import {
   AwsResourceLocator,
   getOneOfEntityAnnotations,
   AWS_SDK_CUSTOM_USER_AGENT,
-} from '@aws/aws-core-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-aws-core-common';
 import { AwsCredentialsManager } from '@backstage/integration-aws-node';
 import {
   CompoundEntityRef,
@@ -40,7 +40,7 @@ import {
   AWS_CODEPIPELINE_TAGS_ANNOTATION,
   PipelineExecutionsResponse,
   PipelineStateResponse,
-} from '@aws/aws-codepipeline-plugin-for-backstage-common';
+} from '@alithya-oss/plugin-aws-codepipeline-common';
 import {
   AuthService,
   BackstageCredentials,

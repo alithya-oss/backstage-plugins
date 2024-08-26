@@ -46,7 +46,7 @@ Note: This policy does not reflect least privilege and you should further limit 
 Install the backend package in your Backstage app:
 
 ```shell
-yarn workspace backend add @aws/aws-codepipeline-plugin-for-backstage-backend
+yarn workspace backend add @alithya-oss/plugin-aws-codepipeline-backend
 ```
 
 #### New backend
@@ -56,7 +56,7 @@ Add the plugin to the `packages/backend/src/index.ts`:
 ```typescript
 const backend = createBackend();
 // ...
-backend.add(import('@aws/aws-codepipeline-plugin-for-backstage-backend'));
+backend.add(import('@alithya-oss/plugin-aws-codepipeline-backend'));
 // ...
 backend.start();
 ```
@@ -69,7 +69,7 @@ Create a file `packages/backend/src/plugins/codepipeline.ts` with the following 
 import {
   createRouter,
   DefaultAwsCodePipelineService,
-} from '@aws/aws-codepipeline-plugin-for-backstage-backend';
+} from '@alithya-oss/plugin-aws-codepipeline-backend';
 import { CatalogClient } from '@backstage/catalog-client';
 import { PluginEnvironment } from '../types';
 
@@ -117,7 +117,7 @@ Verify that the backend plugin is running in your Backstage app. You should rece
 Install the frontend package in your Backstage app:
 
 ```shell
-yarn workspace app add @aws/aws-codepipeline-plugin-for-backstage
+yarn workspace app add @alithya-oss/plugin-aws-codepipeline
 ```
 
 Edit `packages/app/src/components/catalog/EntityPage.tsx` to add AWS CodePipeline content to the CI/CD tab of the entity page:
@@ -126,7 +126,7 @@ Edit `packages/app/src/components/catalog/EntityPage.tsx` to add AWS CodePipelin
 import {
   EntityAwsCodePipelineExecutionsContent,
   isAwsCodePipelineAvailable,
-} from '@aws/aws-codepipeline-plugin-for-backstage';
+} from '@alithya-oss/plugin-aws-codepipeline';
 
 // For example in the CI/CD section
 const cicdContent = (
@@ -139,7 +139,7 @@ const cicdContent = (
 Edit the same file to add the AWS CodePipeline card to the entity page:
 
 ```typescript
-import { EntityAwsCodePipelineCard } from '@aws/aws-codepipeline-plugin-for-backstage';
+import { EntityAwsCodePipelineCard } from '@alithya-oss/plugin-aws-codepipeline';
 
 // For example in the overview section
 const overviewContent = (
