@@ -41,7 +41,7 @@ import { costInsightsAwsPlugin } from '@alithya-oss/plugin-cost-insights-aws';
 
 const app = createApp({
   apis,
-  plugins: [ costInsightsAwsPlugin],
+  plugins: [costInsightsAwsPlugin],
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,

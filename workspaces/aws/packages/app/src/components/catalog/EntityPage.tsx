@@ -59,15 +59,20 @@ import {
   isKubernetesAvailable,
 } from '@backstage/plugin-kubernetes';
 
-import { isAmazonEcsServiceAvailable, EntityAmazonEcsServicesContent } from '@alithya-oss/plugin-amazon-ecs';
+import {
+  isAmazonEcsServiceAvailable,
+  EntityAmazonEcsServicesContent,
+} from '@alithya-oss/plugin-amazon-ecs';
 import {
   EntityAwsCodePipelineExecutionsContent,
   isAwsCodePipelineAvailable,
 } from '@alithya-oss/plugin-aws-codepipeline';
 import { EntityAwsCodePipelineCard } from '@alithya-oss/plugin-aws-codepipeline';
-import { EntityAwsCodeBuildCard, isAwsCodeBuildAvailable } from '@alithya-oss/plugin-aws-codebuild';
+import {
+  EntityAwsCodeBuildCard,
+  isAwsCodeBuildAvailable,
+} from '@alithya-oss/plugin-aws-codebuild';
 import { EntityCostInsightsContent } from '@backstage-community/plugin-cost-insights';
-
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -88,12 +93,11 @@ const cicdContent = (
         <EntityGithubActionsContent />
       </EntitySwitch.Case>
      */}
-        <EntitySwitch>
-          <EntitySwitch.Case if={isAwsCodePipelineAvailable}>
-            <EntityAwsCodePipelineExecutionsContent />
-          </EntitySwitch.Case>
-        </EntitySwitch>
-
+    <EntitySwitch>
+      <EntitySwitch.Case if={isAwsCodePipelineAvailable}>
+        <EntityAwsCodePipelineExecutionsContent />
+      </EntitySwitch.Case>
+    </EntitySwitch>
 
     <EntitySwitch.Case>
       <EmptyState
@@ -187,7 +191,11 @@ const serviceEntityPage = (
       {cicdContent}
     </EntityLayout.Route>
 
-    <EntityLayout.Route path="/ecs" title="Amazon ECS" if={isAmazonEcsServiceAvailable}>
+    <EntityLayout.Route
+      path="/ecs"
+      title="Amazon ECS"
+      if={isAmazonEcsServiceAvailable}
+    >
       <EntityAmazonEcsServicesContent />
     </EntityLayout.Route>
 
@@ -228,7 +236,6 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/costs" title="Cost Insights">
       <EntityCostInsightsContent />
     </EntityLayout.Route>
-
   </EntityLayout>
 );
 
@@ -242,7 +249,11 @@ const websiteEntityPage = (
       {cicdContent}
     </EntityLayout.Route>
 
-    <EntityLayout.Route path="/ecs" title="Amazon ECS" if={isAmazonEcsServiceAvailable}>
+    <EntityLayout.Route
+      path="/ecs"
+      title="Amazon ECS"
+      if={isAmazonEcsServiceAvailable}
+    >
       <EntityAmazonEcsServicesContent />
     </EntityLayout.Route>
 
@@ -272,7 +283,6 @@ const websiteEntityPage = (
     <EntityLayout.Route path="/costs" title="Cost Insights">
       <EntityCostInsightsContent />
     </EntityLayout.Route>
-
   </EntityLayout>
 );
 
