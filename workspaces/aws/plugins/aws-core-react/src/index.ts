@@ -14,8 +14,6 @@
 /***/
 /**
  * Web library for the aws-core-plugin-for-backstage plugin.
- *
- * @packageDocumentation
  */
 
 // In this package you might for example export components or hooks
@@ -23,3 +21,4 @@
 
 export * from './api';
 export * from './components';
+export type { TabbedContent, TabbedContentProps } from './components';

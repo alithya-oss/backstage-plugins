@@ -14,6 +14,7 @@
 import React from 'react';
 import { WarningPanel } from '@backstage/core-components';
 
+/** @public */
 export function MissingResources() {
   return (
     <WarningPanel

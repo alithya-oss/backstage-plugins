@@ -15,6 +15,7 @@ import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 
 import { ResponseError } from '@backstage/errors';
 
+/** @public */
 export abstract class AwsApiClient {
   private readonly backendName: string;
   private readonly discoveryApi: DiscoveryApi;

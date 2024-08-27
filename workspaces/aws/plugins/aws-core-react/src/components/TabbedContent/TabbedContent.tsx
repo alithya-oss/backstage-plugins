@@ -21,7 +21,8 @@ import React, {
 import { TabProps } from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
-type TabbedContentProps = {
+/** @public */
+export type TabbedContentProps = {
   children?: ReactElement<TabProps>[];
 };
 
@@ -39,6 +40,7 @@ const useTabsStyles = makeStyles(
   { name: 'TabbedContent' },
 );
 
+/** @public */
 export function TabbedContent(props: PropsWithChildren<TabbedContentProps>) {
   const { children } = props;
   const tabsClasses = useTabsStyles();
