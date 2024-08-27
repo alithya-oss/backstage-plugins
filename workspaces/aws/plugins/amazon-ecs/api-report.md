@@ -10,9 +10,7 @@ import { Entity } from '@backstage/catalog-model';
 import { JSX as JSX_2 } from 'react';
 import { RouteRef } from '@backstage/core-plugin-api';
 
-// Warning: (ae-missing-release-tag) "amazonEcsPlugin" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public
+// @public (undocumented)
 export const amazonEcsPlugin: BackstagePlugin<
   {
     root: RouteRef<undefined>;
@@ -21,13 +19,9 @@ export const amazonEcsPlugin: BackstagePlugin<
   {}
 >;
 
-// Warning: (ae-missing-release-tag) "EntityAmazonEcsServicesContent" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export const EntityAmazonEcsServicesContent: () => JSX_2.Element;
 
-// Warning: (ae-missing-release-tag) "isAmazonEcsServiceAvailable" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export const isAmazonEcsServiceAvailable: (entity: Entity) => boolean;
 
