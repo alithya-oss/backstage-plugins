@@ -51,6 +51,7 @@ import {
 } from '@backstage/backend-plugin-api';
 import { createLegacyAuthAdapters } from '@backstage/backend-common';
 
+/** @public */
 export class DefaultAmazonEcsService implements AmazonECSService {
   public constructor(
     private readonly logger: Logger,

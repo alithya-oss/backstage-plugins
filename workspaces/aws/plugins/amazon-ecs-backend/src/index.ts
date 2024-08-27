@@ -13,3 +13,4 @@
 
 export * from './service/router';
 export { amazonEcsPlugin as default } from './plugin';
+export type { AmazonECSService } from './service';

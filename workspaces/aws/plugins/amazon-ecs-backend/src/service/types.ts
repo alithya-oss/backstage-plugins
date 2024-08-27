@@ -15,6 +15,7 @@ import { CompoundEntityRef } from '@backstage/catalog-model';
 import { ServicesResponse } from '@alithya-oss/plugin-amazon-ecs-common';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 
+/** @public */
 export interface AmazonECSService {
   getServicesByEntity(options: {
     entityRef: CompoundEntityRef;

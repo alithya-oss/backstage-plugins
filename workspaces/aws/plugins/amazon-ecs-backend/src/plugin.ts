@@ -20,6 +20,7 @@ import { createRouter } from './service/router';
 import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
 import { DefaultAmazonEcsService } from './service';
 
+/** @public */
 export const amazonEcsPlugin = createBackendPlugin({
   pluginId: 'amazon-ecs',
   register(env) {
