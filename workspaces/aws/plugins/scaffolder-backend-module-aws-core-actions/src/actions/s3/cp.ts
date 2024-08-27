@@ -23,6 +23,7 @@ import { resolveSafeChildPath } from '@backstage/backend-common';
 import { glob } from 'glob';
 import { AWS_SDK_CUSTOM_USER_AGENT } from '@alithya-oss/plugin-aws-core-common';
 
+/** @public */
 export const createAwsS3CpAction = (options: {
   credsManager: AwsCredentialsManager;
 }) => {

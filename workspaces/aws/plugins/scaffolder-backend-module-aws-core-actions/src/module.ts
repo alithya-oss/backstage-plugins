@@ -11,6 +11,7 @@ import {
   createAwsS3CpAction,
 } from './actions';
 
+/** @public */
 export const awsCoreScaffolderModule = createBackendModule({
   pluginId: 'scaffolder',
   moduleId: 'aws-core-actions',

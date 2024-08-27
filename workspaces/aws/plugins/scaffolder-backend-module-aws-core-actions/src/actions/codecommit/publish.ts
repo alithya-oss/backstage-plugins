@@ -25,6 +25,7 @@ import path from 'path';
 import { z } from 'zod';
 import { AWS_SDK_CUSTOM_USER_AGENT } from '@alithya-oss/plugin-aws-core-common';
 
+/** @public */
 export const createAwsCodeCommitPublishAction = (options: {
   credsManager: AwsCredentialsManager;
 }) => {

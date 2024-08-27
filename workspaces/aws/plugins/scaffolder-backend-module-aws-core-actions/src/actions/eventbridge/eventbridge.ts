@@ -21,6 +21,7 @@ import { AwsCredentialIdentityProvider } from '@aws-sdk/types';
 import { z } from 'zod';
 import { AWS_SDK_CUSTOM_USER_AGENT } from '@alithya-oss/plugin-aws-core-common';
 
+/** @public */
 export const createAwsEventBridgeEventAction = (options: {
   credsManager: AwsCredentialsManager;
 }) => {
