@@ -11,29 +11,34 @@
  * limitations under the License.
  */
 
+/** @public */
 export type CostInsightsAwsConfig = {
   cache: CostInsightsAwsConfigCache;
   entityGroups: CostInsightsAwsConfigEntityGroup[];
   costExplorer: CostInsightsAwsConfigCostExplorer;
 };
 
+/** @public */
 export type CostInsightsAwsConfigCache = {
   enable: boolean;
   defaultTtl: number;
   readTimeout: number;
 };
 
+/** @public */
 export type CostInsightsAwsConfigEntityGroup = {
   kind: string;
   groups: CostInsightsAwsConfigGroup[];
 };
 
+/** @public */
 export type CostInsightsAwsConfigGroup = {
   name: string;
   key: string;
   type: string;
 };
 
+/** @public */
 export type CostInsightsAwsConfigCostExplorer = {
   accountId: string | undefined;
   region: string | undefined;

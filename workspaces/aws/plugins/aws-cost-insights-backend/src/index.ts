@@ -13,3 +13,11 @@
 
 export * from './service/router';
 export { costInsightsAwsPlugin as default } from './plugin';
+export type { CostInsightsAwsService } from './service';
+export type {
+  CostInsightsAwsConfig,
+  CostInsightsAwsConfigCache,
+  CostInsightsAwsConfigGroup,
+  CostInsightsAwsConfigEntityGroup,
+  CostInsightsAwsConfigCostExplorer,
+} from './config';

@@ -53,6 +53,7 @@ import regression, { DataPoint } from 'regression';
 import { CostInsightsAwsConfig } from '../config';
 import { DateTime, Duration as LuxonDuration } from 'luxon';
 
+/** @public */
 export class CostExplorerCostInsightsAwsService
   implements CostInsightsAwsService
 {

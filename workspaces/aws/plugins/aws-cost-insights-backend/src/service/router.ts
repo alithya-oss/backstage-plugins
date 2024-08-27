@@ -28,6 +28,7 @@ import {
 import { CostInsightsCache } from '../cache';
 import { CostInsightsAwsConfig } from '../config';
 
+/** @public */
 export interface RouterOptions {
   logger: Logger;
   costInsightsAwsService: CostInsightsAwsService;
@@ -38,6 +39,7 @@ export interface RouterOptions {
   config: CostInsightsAwsConfig;
 }
 
+/** @public */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {

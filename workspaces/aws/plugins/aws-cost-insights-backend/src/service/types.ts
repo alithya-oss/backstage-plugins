@@ -15,6 +15,7 @@ import { CompoundEntityRef } from '@backstage/catalog-model';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 import { Cost } from '@backstage-community/plugin-cost-insights-common';
 
+/** @public */
 export interface CostInsightsAwsService {
   getCatalogEntityDailyCost(options: {
     entityRef: CompoundEntityRef;

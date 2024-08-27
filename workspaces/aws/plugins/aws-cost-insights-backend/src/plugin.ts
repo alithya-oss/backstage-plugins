@@ -22,6 +22,7 @@ import { CostExplorerCostInsightsAwsService } from './service';
 import { readCostInsightsAwsConfig } from './config';
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 
+/** @public */
 export const costInsightsAwsPlugin = createBackendPlugin({
   pluginId: 'cost-insights-aws',
   register(env) {
