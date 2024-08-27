@@ -18,6 +18,7 @@ import {
 } from '@alithya-oss/plugin-aws-codepipeline-common';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 
+/** @public */
 export interface AwsCodePipelineService {
   getPipelineExecutionsByEntity(options: {
     entityRef: CompoundEntityRef;

@@ -13,3 +13,4 @@
 
 export * from './service/router';
 export { awsCodePiplinePlugin as default } from './plugin';
+export type { AwsCodePipelineService } from './service';

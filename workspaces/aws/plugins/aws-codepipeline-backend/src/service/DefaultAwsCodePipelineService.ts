@@ -51,6 +51,7 @@ import { createLegacyAuthAdapters } from '@backstage/backend-common';
 
 const DEFAULT_EXECUTIONS_LIMIT = 100;
 
+/** @public */
 export class DefaultAwsCodePipelineService implements AwsCodePipelineService {
   public constructor(
     private readonly logger: Logger,

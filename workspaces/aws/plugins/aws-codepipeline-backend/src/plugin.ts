@@ -20,6 +20,7 @@ import { createRouter } from './service/router';
 import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
 import { DefaultAwsCodePipelineService } from './service/DefaultAwsCodePipelineService';
 
+/** @public */
 export const awsCodePiplinePlugin = createBackendPlugin({
   pluginId: 'aws-codepipeline',
   register(env) {
