@@ -16,13 +16,19 @@ import {
   PipelineExecutionSummary,
 } from '@aws-sdk/client-codepipeline';
 
+/** @public */
 export const AWS_CODEPIPELINE_ARN_ANNOTATION =
   'aws.amazon.com/aws-codepipeline-arn';
+
+/** @public */
 export const AWS_CODEPIPELINE_TAGS_ANNOTATION =
   'aws.amazon.com/aws-codepipeline-tags';
+
+/** @public */
 export const AWS_CODEPIPELINE_ARN_ANNOTATION_LEGACY =
   'aws.amazon.com/aws-codepipeline';
 
+/** @public */
 export interface PipelineExecutions {
   pipelineExecutions: Array<PipelineExecutionSummary>;
   pipelineName: string;
@@ -30,10 +36,12 @@ export interface PipelineExecutions {
   pipelineRegion: string;
 }
 
+/** @public */
 export interface PipelineExecutionsResponse {
   pipelineExecutions: Array<PipelineExecutions>;
 }
 
+/** @public */
 export interface PipelineState {
   pipelineName: string;
   pipelineArn: string;
@@ -41,6 +49,7 @@ export interface PipelineState {
   pipelineState: GetPipelineStateOutput;
 }
 
+/** @public */
 export interface PipelineStateResponse {
   pipelines: Array<PipelineState>;
 }

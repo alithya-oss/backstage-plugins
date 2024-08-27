@@ -24,6 +24,7 @@ import {
   AWS_CODEPIPELINE_TAGS_ANNOTATION,
 } from '../types';
 
+/** @public */
 export function mockCodePipelineExecutions() {
   return [
     {
@@ -92,6 +93,7 @@ export function mockCodePipelineExecutions() {
   ];
 }
 
+/** @public */
 export function mockCodePipelineStatus() {
   return {
     created: new Date('2022-04-15T17:45:51.244Z'),
@@ -147,6 +149,7 @@ export function mockCodePipelineStatus() {
   };
 }
 
+/** @public */
 export const mockEntityWithTags: Entity = {
   apiVersion: 'backstage.io/v1alpha1',
   kind: 'Component',
@@ -164,6 +167,7 @@ export const mockEntityWithTags: Entity = {
   },
 };
 
+/** @public */
 export const mockEntityWithArn: Entity = {
   apiVersion: 'backstage.io/v1alpha1',
   kind: 'Component',
@@ -182,6 +186,7 @@ export const mockEntityWithArn: Entity = {
   },
 };
 
+/** @public */
 export const mockEntityWithArnLegacy: Entity = {
   apiVersion: 'backstage.io/v1alpha1',
   kind: 'Component',
