@@ -11,4 +11,5 @@
  * limitations under the License.
  */
 
+/** @public */
 export const AWS_SDK_CUSTOM_USER_AGENT = 'backstage-plugins-for-aws';

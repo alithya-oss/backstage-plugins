@@ -17,6 +17,7 @@ import { Config } from '@backstage/config';
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 import { AwsResourceTaggingApiLocatorInstance } from './resource-tagging-api-instance';
 
+/** @public */
 export class AwsResourceTaggingApiLocator implements AwsResourceLocator {
   public constructor(
     private readonly instances: AwsResourceTaggingApiLocatorInstance[],

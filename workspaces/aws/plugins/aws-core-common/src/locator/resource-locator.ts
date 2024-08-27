@@ -11,6 +11,7 @@
  * limitations under the License.
  */
 
+/** @public */
 export interface AwsResourceLocator {
   getResourceArns({
     resourceType,

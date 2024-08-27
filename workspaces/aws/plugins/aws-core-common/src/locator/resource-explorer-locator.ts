@@ -25,6 +25,7 @@ import { Config } from '@backstage/config';
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 import { convertResourceTypeString, parseResourceLocatorTags } from './utils';
 
+/** @public */
 export class AwsResourceExplorerLocator implements AwsResourceLocator {
   public constructor(
     private readonly logger: Logger,

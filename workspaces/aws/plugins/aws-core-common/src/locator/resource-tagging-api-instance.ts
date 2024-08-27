@@ -21,6 +21,7 @@ import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 import { convertResourceTypeString, parseResourceLocatorTags } from './utils';
 import { AWS_SDK_CUSTOM_USER_AGENT } from '../constants';
 
+/** @public */
 export class AwsResourceTaggingApiLocatorInstance {
   public constructor(
     private readonly logger: Logger,

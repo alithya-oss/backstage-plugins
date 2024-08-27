@@ -16,3 +16,4 @@ export * from './resource-explorer-locator';
 export * from './resource-tagging-api-locator';
 export * from './aws-config-locator';
 export * from './resource-locator';
+export * from './resource-tagging-api-instance';

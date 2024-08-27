@@ -20,6 +20,7 @@ import {
 import { AwsResourceExplorerLocator } from './resource-explorer-locator';
 import { AwsConfigResourceLocator } from './aws-config-locator';
 
+/** @public */
 export class AwsResourceLocatorFactory {
   static async fromConfig(
     config: Config,

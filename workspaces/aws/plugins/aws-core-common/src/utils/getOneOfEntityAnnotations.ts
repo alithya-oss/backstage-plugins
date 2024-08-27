@@ -13,6 +13,7 @@
 
 import { Entity } from '@backstage/catalog-model';
 
+/** @public */
 export function getOneOfEntityAnnotations(
   entity: Entity,
   targetAnnotations: string[],

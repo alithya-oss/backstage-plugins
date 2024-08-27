@@ -28,6 +28,7 @@ import { Config } from '@backstage/config';
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 import { convertResourceTypeString, parseResourceLocatorTags } from './utils';
 
+/** @public */
 export class AwsConfigResourceLocator implements AwsResourceLocator {
   static readonly AWS_CONFIG_QUERY_TEMPLATE = 'SELECT arn';
 

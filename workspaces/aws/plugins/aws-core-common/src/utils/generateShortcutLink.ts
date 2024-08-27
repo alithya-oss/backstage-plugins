@@ -11,6 +11,7 @@
  * limitations under the License.
  */
 
+/** @public */
 export function generateShortcutLink(
   ssoSubdomain: string,
   accountId: string,
