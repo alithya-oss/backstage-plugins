@@ -4,12 +4,12 @@ This plugin provides an implementation of charts and statistics related to your 
 
 ## Dependencies
 
-- [time-saver-backend](https://github.com/backstage/community-plugins/tree/main/workspaces/time-saver/plugins/time-saver-backend)
-- [time-saver-common](https://github.com/backstage/community-plugins/tree/main/workspaces/time-saver/plugins/time-saver-common)
+- [time-saver-backend](https://github.com/alithya-oss/backstage-plugins/tree/main/workspaces/time-saver/plugins/time-saver-backend)
+- [time-saver-common](https://github.com/alithya-oss/backstage-plugins/tree/main/workspaces/time-saver/plugins/time-saver-common)
 
 ## Code
 
-<https://github.com/backstage/community-plugins.git>
+<https://github.com/alithya-oss/backstage-plugins.git>
 
 ## Screens
 
