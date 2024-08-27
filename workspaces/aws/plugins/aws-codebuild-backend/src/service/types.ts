@@ -15,6 +15,7 @@ import { CompoundEntityRef } from '@backstage/catalog-model';
 import { ProjectsResponse } from '@alithya-oss/plugin-aws-codebuild-common';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 
+/** @public */
 export interface AwsCodeBuildService {
   getProjectsByEntity(options: {
     entityRef: CompoundEntityRef;

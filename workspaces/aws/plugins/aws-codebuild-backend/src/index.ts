@@ -13,3 +13,4 @@
 
 export * from './service/router';
 export { awsCodebuildPlugin as default } from './plugin';
+export type { AwsCodeBuildService } from './service';

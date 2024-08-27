@@ -25,6 +25,7 @@ import {
   HttpAuthService,
 } from '@backstage/backend-plugin-api';
 
+/** @public */
 export interface RouterOptions {
   logger: Logger;
   awsCodeBuildApi: AwsCodeBuildService;
@@ -33,6 +34,7 @@ export interface RouterOptions {
   httpAuth?: HttpAuthService;
 }
 
+/** @public */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {

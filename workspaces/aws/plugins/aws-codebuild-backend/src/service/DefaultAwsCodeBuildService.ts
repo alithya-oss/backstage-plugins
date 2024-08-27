@@ -49,6 +49,7 @@ import {
 } from '@backstage/backend-plugin-api';
 import { createLegacyAuthAdapters } from '@backstage/backend-common';
 
+/** @public */
 export class DefaultAwsCodeBuildService implements AwsCodeBuildService {
   public constructor(
     private readonly logger: Logger,
