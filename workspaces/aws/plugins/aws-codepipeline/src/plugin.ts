@@ -22,6 +22,7 @@ import {
 import { AwsCodePipelineApiClient, awsCodePipelineApiRef } from './api';
 import { rootRouteRef } from './routes';
 
+/** @public */
 export const awsCodePipelinePlugin = createPlugin({
   id: 'aws-codepipeline',
   routes: {
@@ -37,6 +38,7 @@ export const awsCodePipelinePlugin = createPlugin({
   ],
 });
 
+/** @public */
 export const EntityAwsCodePipelineExecutionsContent =
   awsCodePipelinePlugin.provide(
     createRoutableExtension({
@@ -46,6 +48,7 @@ export const EntityAwsCodePipelineExecutionsContent =
     }),
   );
 
+/** @public */
 export const EntityAwsCodePipelineCard = awsCodePipelinePlugin.provide(
   createComponentExtension({
     name: 'EntityAwsCodePipelineCard',

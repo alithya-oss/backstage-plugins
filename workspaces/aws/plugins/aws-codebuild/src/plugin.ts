@@ -36,7 +36,7 @@ export const isAwsCodeBuildAvailable = (entity: Entity) =>
     AWS_CODEBUILD_ARN_ANNOTATION_LEGACY,
   ]) !== undefined;
 
-  /** @public */
+/** @public */
 export const awsCodeBuildPlugin = createPlugin({
   id: 'aws-codebuild',
   routes: {

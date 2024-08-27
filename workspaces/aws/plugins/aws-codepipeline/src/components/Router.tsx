@@ -26,6 +26,7 @@ import {
 } from '@alithya-oss/plugin-aws-codepipeline-common';
 import { CodePipelineExecutions } from './CodePipelineExecutions';
 
+/** @public */
 export const isAwsCodePipelineAvailable = (entity: Entity) =>
   getOneOfEntityAnnotations(entity, [
     AWS_CODEPIPELINE_ARN_ANNOTATION,
