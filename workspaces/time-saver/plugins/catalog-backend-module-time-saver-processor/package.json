@@ -24,7 +24,8 @@
       "@alithya-oss/plugin-time-saver-backend",
       "@alithya-oss/plugin-time-saver-common",
       "@alithya-oss/plugin-catalog-backend-module-time-saver-processor"
-    ]
+    ],
+    "pluginPackage": "@backstage/plugin-catalog-backend"
   },
   "scripts": {
     "start": "backstage-cli package start",
