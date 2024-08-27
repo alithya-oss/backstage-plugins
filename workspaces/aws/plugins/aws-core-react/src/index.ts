@@ -21,4 +21,4 @@
 
 export * from './api';
 export * from './components';
-export type { TabbedContent, TabbedContentProps } from './components';
+export type { TabbedContentProps } from './components';
