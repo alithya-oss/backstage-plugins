@@ -23,6 +23,7 @@ import { costInsightsApiRef } from '@backstage-community/plugin-cost-insights';
 import { CostExplorerClient } from './api';
 import { catalogApiRef } from '@backstage/plugin-catalog-react';
 
+/** @public */
 export const costInsightsAwsPlugin = createPlugin({
   id: 'cost-insights-aws',
   routes: {
