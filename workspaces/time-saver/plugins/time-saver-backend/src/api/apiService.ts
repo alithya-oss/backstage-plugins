@@ -17,7 +17,7 @@ import {
   AuthService,
   LoggerService,
   DiscoveryService,
-  RootConfigService
+  RootConfigService,
 } from '@backstage/backend-plugin-api';
 import { ScaffolderClient } from './scaffolderClient';
 import { ScaffolderStore } from '../database/ScaffolderDatabase';

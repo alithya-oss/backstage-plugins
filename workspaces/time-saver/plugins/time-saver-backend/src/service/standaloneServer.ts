@@ -43,7 +43,9 @@ export async function startStandaloneServer(
   const config = await loadBackendConfig({ logger, argv: process.argv });
   const discovery = HostDiscovery.fromConfig(config);
 
-  class PersistingSchedulerServiceTaskRunner implements SchedulerServiceTaskRunner {
+  class PersistingSchedulerServiceTaskRunner
+    implements SchedulerServiceTaskRunner
+  {
     private tasks: SchedulerServiceTaskInvocationDefinition[] = [];
 
     getTasks() {
@@ -56,9 +58,10 @@ export async function startStandaloneServer(
     }
   }
 
-  const SchedulerServiceTaskRunner = new PersistingSchedulerServiceTaskRunner();
+  const schedulerServiceTaskRunner = new PersistingSchedulerServiceTaskRunner();
   const scheduler = {
-    createScheduledSchedulerServiceTaskRunner: (_: unknown) => SchedulerServiceTaskRunner,
+    createScheduledSchedulerServiceTaskRunner: (_: unknown) =>
+      schedulerServiceTaskRunner,
   } as unknown as SchedulerService;
   //  TODO : Validate createScheduledSchedulerServiceTaskRunner type
 
