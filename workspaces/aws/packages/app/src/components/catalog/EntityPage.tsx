@@ -65,7 +65,7 @@ import {
   isAwsCodePipelineAvailable,
 } from '@alithya-oss/plugin-aws-codepipeline';
 import { EntityAwsCodePipelineCard } from '@alithya-oss/plugin-aws-codepipeline';
-import { EntityAwsCodeBuildCard } from '@alithya-oss/plugin-aws-codebuild';
+import { EntityAwsCodeBuildCard, isAwsCodeBuildAvailable } from '@alithya-oss/plugin-aws-codebuild';
 import { EntityCostInsightsContent } from '@backstage-community/plugin-cost-insights';
 
 
@@ -88,6 +88,12 @@ const cicdContent = (
         <EntityGithubActionsContent />
       </EntitySwitch.Case>
      */}
+        <EntitySwitch>
+          <EntitySwitch.Case if={isAwsCodePipelineAvailable}>
+            <EntityAwsCodePipelineExecutionsContent />
+          </EntitySwitch.Case>
+        </EntitySwitch>
+
 
     <EntitySwitch.Case>
       <EmptyState
@@ -146,6 +152,22 @@ const overviewContent = (
       <EntityCatalogGraphCard variant="gridItem" height={400} />
     </Grid>
 
+    <EntitySwitch>
+      <EntitySwitch.Case if={isAwsCodeBuildAvailable}>
+        <Grid item md={6}>
+          <EntityAwsCodeBuildCard />
+        </Grid>
+      </EntitySwitch.Case>
+    </EntitySwitch>
+
+    <EntitySwitch>
+      <EntitySwitch.Case if={isAwsCodePipelineAvailable}>
+        <Grid item md={6}>
+          <EntityAwsCodePipelineCard />
+        </Grid>
+      </EntitySwitch.Case>
+    </EntitySwitch>
+
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
     </Grid>
@@ -202,6 +224,11 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
+
+    <EntityLayout.Route path="/costs" title="Cost Insights">
+      <EntityCostInsightsContent />
+    </EntityLayout.Route>
+
   </EntityLayout>
 );
 
@@ -241,6 +268,11 @@ const websiteEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
+
+    <EntityLayout.Route path="/costs" title="Cost Insights">
+      <EntityCostInsightsContent />
+    </EntityLayout.Route>
+
   </EntityLayout>
 );
 
