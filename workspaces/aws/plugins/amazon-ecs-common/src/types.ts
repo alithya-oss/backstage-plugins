@@ -13,20 +13,26 @@
 
 import { Cluster, Service, Task } from '@aws-sdk/client-ecs';
 
+/** @public */
 export const AWS_ECS_SERVICE_ARN_ANNOTATION =
   'aws.amazon.com/amazon-ecs-service-arn';
+
+/** @public */
 export const AWS_ECS_SERVICE_TAGS_ANNOTATION =
   'aws.amazon.com/amazon-ecs-service-tags';
 
+/** @public */
 export interface ServicesResponse {
   clusters: Array<ClusterResponse>;
 }
 
+/** @public */
 export interface ClusterResponse {
   services: Array<ServiceResponse>;
   cluster: Cluster;
 }
 
+/** @public */
 export interface ServiceResponse {
   tasks: Array<Task>;
   service: Service;

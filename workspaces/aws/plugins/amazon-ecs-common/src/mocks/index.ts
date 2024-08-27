@@ -27,6 +27,7 @@ import {
   AWS_ECS_SERVICE_TAGS_ANNOTATION,
 } from '../types';
 
+/** @public */
 export function mockEcsCluster(cluster: string) {
   return {
     activeServicesCount: 1,
@@ -50,6 +51,7 @@ export function mockEcsCluster(cluster: string) {
   };
 }
 
+/** @public */
 export function mockEcsService(
   service: string,
   cluster: string,
@@ -152,6 +154,7 @@ export function mockEcsService(
   };
 }
 
+/** @public */
 export function mockEcsTask(service: string, cluster: string) {
   return {
     attachments: [
@@ -248,6 +251,7 @@ export function mockEcsTask(service: string, cluster: string) {
   };
 }
 
+/** @public */
 export const mockEntityWithTags: Entity = {
   apiVersion: 'backstage.io/v1alpha1',
   kind: 'Component',
@@ -265,6 +269,7 @@ export const mockEntityWithTags: Entity = {
   },
 };
 
+/** @public */
 export const mockEntityWithArn: Entity = {
   apiVersion: 'backstage.io/v1alpha1',
   kind: 'Component',
