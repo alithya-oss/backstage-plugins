@@ -15,7 +15,13 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "backend-plugin"
+    "role": "backend-plugin",
+    "pluginId": "amazon-ecs",
+    "pluginPackages": [
+      "@alithya-oss/plugin-amazon-ecs",
+      "@alithya-oss/plugin-amazon-ecs-backend",
+      "@alithya-oss/plugin-amazon-ecs-common"
+    ]
   },
   "scripts": {
     "start": "backstage-cli package start",

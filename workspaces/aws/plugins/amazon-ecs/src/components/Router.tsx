@@ -25,6 +25,7 @@ import {
 import { getOneOfEntityAnnotations } from '@alithya-oss/plugin-aws-core-common';
 import { EcsServices } from './EcsServices';
 
+/** @public */
 export const isAmazonEcsServiceAvailable = (entity: Entity) =>
   getOneOfEntityAnnotations(entity, [
     AWS_ECS_SERVICE_ARN_ANNOTATION,

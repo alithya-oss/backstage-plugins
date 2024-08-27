@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/scaffolder-backend-module-aws-core",
+  "name": "@alithya-oss/scaffolder-backend-module-aws-core-actions",
   "description": "Scaffolder actions related to the AWS core plugin for Backstage",
   "version": "0.2.6",
   "repository": {
@@ -16,7 +16,11 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "backend-plugin-module"
+    "pluginId": "aws-core",
+    "role": "backend-plugin-module",
+    "pluginPackage": [
+      "@backstage/plugin-saffolder-backend"
+    ]
   },
   "scripts": {
     "start": "backstage-cli package start",

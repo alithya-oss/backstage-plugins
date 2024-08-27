@@ -13,7 +13,7 @@ import {
 
 export const awsCoreScaffolderModule = createBackendModule({
   pluginId: 'scaffolder',
-  moduleId: 'aws-core',
+  moduleId: 'aws-core-actions',
   register({ registerInit }) {
     registerInit({
       deps: {

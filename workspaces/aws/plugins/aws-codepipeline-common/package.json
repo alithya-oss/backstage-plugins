@@ -17,7 +17,13 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "common-library"
+    "role": "common-library",
+    "pluginId": "aws-codepipeline",
+    "pluginPackages": [
+      "@alithya-oss/plugin-aws-codepipeline",
+      "@alithya-oss/plugin-aws-codepipeline-backend",
+      "@alithya-oss/plugin-aws-codepipeline-common"
+    ]
   },
   "sideEffects": false,
   "scripts": {

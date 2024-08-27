@@ -15,7 +15,13 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "frontend-plugin"
+    "role": "frontend-plugin",
+    "pluginId": "cost-insights-aws",
+    "pluginPackages": [
+      "@alithya-oss/plugin-cost-insights-aws",
+      "@alithya-oss/plugin-cost-insights-aws-backend",
+      "@alithya-oss/plugin-cost-insights-aws-common"
+    ]
   },
   "sideEffects": false,
   "scripts": {

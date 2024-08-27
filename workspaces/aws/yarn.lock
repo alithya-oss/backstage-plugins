@@ -381,9 +381,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/scaffolder-backend-module-aws-core@workspace:^, @alithya-oss/scaffolder-backend-module-aws-core@workspace:plugins/scaffolder-backend-module-aws-core-actions":
+"@alithya-oss/scaffolder-backend-module-aws-core-actions@workspace:^, @alithya-oss/scaffolder-backend-module-aws-core-actions@workspace:plugins/scaffolder-backend-module-aws-core-actions":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/scaffolder-backend-module-aws-core@workspace:plugins/scaffolder-backend-module-aws-core-actions"
+  resolution: "@alithya-oss/scaffolder-backend-module-aws-core-actions@workspace:plugins/scaffolder-backend-module-aws-core-actions"
   dependencies:
     "@alithya-oss/plugin-aws-core-common": "workspace:^"
     "@aws-sdk/client-cloudcontrol": ^3.511.0
@@ -16161,7 +16161,7 @@ __metadata:
     "@alithya-oss/plugin-aws-codebuild-backend": "workspace:^"
     "@alithya-oss/plugin-aws-codepipeline-backend": "workspace:^"
     "@alithya-oss/plugin-cost-insights-aws-backend": "workspace:^"
-    "@alithya-oss/scaffolder-backend-module-aws-core": "workspace:^"
+    "@alithya-oss/scaffolder-backend-module-aws-core-actions": "workspace:^"
     "@backstage/backend-common": ^0.24.1
     "@backstage/backend-defaults": ^0.4.4
     "@backstage/backend-tasks": ^0.6.1

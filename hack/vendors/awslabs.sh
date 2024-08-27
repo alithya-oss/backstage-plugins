@@ -82,7 +82,7 @@ function sync() {
 
 function rename() {
     changes=(
-        "s#@aws/aws-core-plugin-for-backstage-scaffolder-actions#@alithya-oss/scaffolder-backend-module-aws-core#g"
+        "s#@aws/aws-core-plugin-for-backstage-scaffolder-actions#@alithya-oss/scaffolder-backend-module-aws-core-actions#g"
         "s#@aws/amazon-ecs-plugin-for-backstage#@alithya-oss/plugin-amazon-ecs#g"
         "s#@aws/aws-codebuild-plugin-for-backstage#@alithya-oss/plugin-aws-codebuild#g"
         "s#@aws/aws-codepipeline-plugin-for-backstage#@alithya-oss/plugin-aws-codepipeline#g"

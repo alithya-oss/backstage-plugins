@@ -17,7 +17,13 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "common-library"
+    "role": "common-library",
+    "pluginId": "aws-codebuild",
+    "pluginPackages": [
+      "@alithya-oss/plugin-aws-codebuild",
+      "@alithya-oss/plugin-aws-codebuild-backend",
+      "@alithya-oss/plugin-aws-codebuild-common"
+    ]
   },
   "sideEffects": false,
   "scripts": {

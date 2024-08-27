@@ -15,7 +15,13 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "frontend-plugin"
+    "role": "frontend-plugin",
+    "pluginId": "amazon-ecs",
+    "pluginPackages": [
+      "@alithya-oss/plugin-amazon-ecs",
+      "@alithya-oss/plugin-amazon-ecs-backend",
+      "@alithya-oss/plugin-amazon-ecs-common"
+    ]
   },
   "sideEffects": false,
   "scripts": {

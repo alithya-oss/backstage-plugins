@@ -16,7 +16,12 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "web-library"
+    "role": "web-library",
+    "pluginId": "aws-core",
+    "pluginPackages": [
+      "@alithya-oss/plugin-aws-core-common",
+      "@alithya-oss/plugin-aws-core-react"
+    ]
   },
   "sideEffects": false,
   "scripts": {

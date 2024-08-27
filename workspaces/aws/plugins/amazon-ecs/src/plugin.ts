@@ -21,6 +21,7 @@ import {
 import { AmazonEcsApiClient, amazonEcsApiRef } from './api';
 import { rootRouteRef } from './routes';
 
+/** @public */
 export const amazonEcsPlugin = createPlugin({
   id: 'amazon-ecs',
   routes: {
@@ -36,6 +37,7 @@ export const amazonEcsPlugin = createPlugin({
   ],
 });
 
+/** @public */
 export const EntityAmazonEcsServicesContent = amazonEcsPlugin.provide(
   createRoutableExtension({
     name: 'EntityAmazonEcsServicesContent',
