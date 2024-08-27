@@ -28,6 +28,7 @@ import {
 import { AwsCodeBuildApiClient, awsCodeBuildApiRef } from './api';
 import { rootRouteRef } from './routes';
 
+/** @public */
 export const isAwsCodeBuildAvailable = (entity: Entity) =>
   getOneOfEntityAnnotations(entity, [
     AWS_CODEBUILD_ARN_ANNOTATION,
@@ -35,6 +36,7 @@ export const isAwsCodeBuildAvailable = (entity: Entity) =>
     AWS_CODEBUILD_ARN_ANNOTATION_LEGACY,
   ]) !== undefined;
 
+  /** @public */
 export const awsCodeBuildPlugin = createPlugin({
   id: 'aws-codebuild',
   routes: {
@@ -50,6 +52,7 @@ export const awsCodeBuildPlugin = createPlugin({
   ],
 });
 
+/** @public */
 export const EntityAwsCodeBuildCard = awsCodeBuildPlugin.provide(
   createComponentExtension({
     name: 'EntityAwsCodeBuildCard',
