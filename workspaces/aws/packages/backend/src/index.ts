@@ -64,6 +64,6 @@ backend.add(import('@alithya-oss/plugin-aws-codepipeline-backend'));
 backend.add(import('@alithya-oss/plugin-cost-insights-aws-backend'));
 
 // scaffolder
-backend.add(import('@alithya-oss/scaffolder-backend-module-aws-core'));
+backend.add(import('@alithya-oss/scaffolder-backend-module-aws-core-actions'));
 
 backend.start();
