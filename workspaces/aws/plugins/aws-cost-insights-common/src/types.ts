@@ -11,7 +11,10 @@
  * limitations under the License.
  */
 
+/** @public */
 export const COST_INSIGHTS_AWS_COST_CATEGORY_ANNOTATION =
   'aws.amazon.com/cost-insights-cost-categories';
+
+/** @public */
 export const COST_INSIGHTS_AWS_TAGS_ANNOTATION =
   'aws.amazon.com/cost-insights-tags';
