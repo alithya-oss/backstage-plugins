@@ -5,13 +5,9 @@
 ```ts
 import { BasicPermission } from '@backstage/plugin-permission-common';
 
-// Warning: (ae-missing-release-tag) "timeSaverPermission" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export const timeSaverPermission: BasicPermission;
 
-// Warning: (ae-missing-release-tag) "timeSaverPermissions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
 // @public (undocumented)
 export const timeSaverPermissions: BasicPermission[];
 ```

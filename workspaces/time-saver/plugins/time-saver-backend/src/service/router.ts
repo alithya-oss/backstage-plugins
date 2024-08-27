@@ -33,6 +33,10 @@ import express from 'express';
 import Router from 'express-promise-router';
 import { PluginInitializer } from './pluginInitializer';
 
+/**
+ *
+ * @public
+ */
 export interface RouterOptions {
   logger: LoggerService;
   config: RootConfigService;
@@ -50,6 +54,10 @@ function registerRouter() {
   return router;
 }
 
+/**
+ *
+ * @public
+ */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
@@ -70,6 +78,10 @@ export async function createRouter(
   return router;
 }
 
+/**
+ *
+ * @public
+ */
 export const timeSaverPlugin = createBackendPlugin({
   pluginId: 'time-saver',
   register(env) {

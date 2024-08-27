@@ -5,6 +5,10 @@ import {
 import { catalogProcessingExtensionPoint } from '@backstage/plugin-catalog-node/alpha';
 import { TimeSaverProcessor } from './processor/TimeSaverProcessor';
 
+/**
+ *
+ * @public
+ */
 export const catalogModuleTimeSaverProcessor = createBackendModule({
   pluginId: 'catalog',
   moduleId: 'time-saver-processor',
