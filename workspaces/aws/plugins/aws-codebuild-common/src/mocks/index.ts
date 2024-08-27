@@ -19,6 +19,7 @@ import {
   AWS_CODEBUILD_TAGS_ANNOTATION,
 } from '../types';
 
+/** @public */
 export function mockCodeBuildProjectBuild(project: string, id: string): Build {
   return {
     arn: `arn:aws:codebuild:us-west-2:1234567890:build/${project}:${id}`,
@@ -210,6 +211,7 @@ export function mockCodeBuildProjectBuild(project: string, id: string): Build {
   };
 }
 
+/** @public */
 export function mockCodeBuildProject(project: string): Project {
   return {
     name: project,
@@ -261,6 +263,7 @@ export function mockCodeBuildProject(project: string): Project {
   };
 }
 
+/** @public */
 export const mockEntityWithTags: Entity = {
   apiVersion: 'backstage.io/v1alpha1',
   kind: 'Component',
@@ -278,6 +281,7 @@ export const mockEntityWithTags: Entity = {
   },
 };
 
+/** @public */
 export const mockEntityWithArn: Entity = {
   apiVersion: 'backstage.io/v1alpha1',
   kind: 'Component',
@@ -296,6 +300,7 @@ export const mockEntityWithArn: Entity = {
   },
 };
 
+/** @public */
 export const mockEntityWithArnLegacy: Entity = {
   apiVersion: 'backstage.io/v1alpha1',
   kind: 'Component',

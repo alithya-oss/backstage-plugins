@@ -13,13 +13,19 @@
 
 import { Build, Project } from '@aws-sdk/client-codebuild';
 
+/** @public */
 export const AWS_CODEBUILD_ARN_ANNOTATION =
   'aws.amazon.com/aws-codebuild-project-arn';
+
+/** @public */
 export const AWS_CODEBUILD_TAGS_ANNOTATION =
   'aws.amazon.com/aws-codebuild-project-tags';
+
+/** @public */
 export const AWS_CODEBUILD_ARN_ANNOTATION_LEGACY =
   'aws.amazon.com/aws-codebuild-project';
 
+  /** @public */
 export interface ProjectResponse {
   project: Project;
   projectRegion: string;
@@ -28,6 +34,7 @@ export interface ProjectResponse {
   builds: Array<Build>;
 }
 
+/** @public */
 export interface ProjectsResponse {
   projects: Array<ProjectResponse>;
 }
