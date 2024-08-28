@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { AssociatedResources, ResourceBinding } from '@alithya-oss/plugin-aws-apps-common-for-backstage';
+import { AssociatedResources, ResourceBinding } from '@alithya-oss/plugin-aws-apps-common';
 import { CatalogApi } from '@backstage/plugin-catalog-react';
 import {
   Button,

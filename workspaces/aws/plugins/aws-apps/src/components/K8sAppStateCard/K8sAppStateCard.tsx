@@ -3,7 +3,7 @@
 
 import { InvokeCommandOutput } from '@aws-sdk/client-lambda';
 import { GetParameterCommandOutput } from '@aws-sdk/client-ssm';
-import { AWSComponent, AWSEKSAppDeploymentEnvironment, AppState, AppStateType, KeyValue, getGitCredentailsSecret } from '@alithya-oss/plugin-aws-apps-common-for-backstage';
+import { AWSComponent, AWSEKSAppDeploymentEnvironment, AppState, AppStateType, KeyValue, getGitCredentailsSecret } from '@alithya-oss/plugin-aws-apps-common';
 import { Entity } from '@backstage/catalog-model';
 import { EmptyState, InfoCard } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';

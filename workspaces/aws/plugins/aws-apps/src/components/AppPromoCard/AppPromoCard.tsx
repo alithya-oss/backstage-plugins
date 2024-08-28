@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { AWSComponent, AWSProviderParams, AwsDeploymentEnvironments, getGitCredentailsSecret } from '@alithya-oss/plugin-aws-apps-common-for-backstage';
+import { AWSComponent, AWSProviderParams, AwsDeploymentEnvironments, getGitCredentailsSecret } from '@alithya-oss/plugin-aws-apps-common';
 import { CompoundEntityRef, Entity, EntityRelation, parseEntityRef } from '@backstage/catalog-model';
 import { EmptyState, InfoCard, } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';

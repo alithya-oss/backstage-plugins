@@ -108,7 +108,7 @@ import {
 
 import { AwsCredentialIdentity } from '@aws-sdk/types';
 import { parse as parseArn } from '@aws-sdk/util-arn-parser';
-import { AWSServiceResources } from '@alithya-oss/plugin-aws-apps-common-for-backstage';
+import { AWSServiceResources } from '@alithya-oss/plugin-aws-apps-common';
 import { LoggerService } from '@backstage/backend-plugin-api';
 
 export type DynamoDBTableData = {

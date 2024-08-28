@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-aws-apps-for-backstage",
+  "name": "@alithya-oss/plugin-aws-apps",
   "description": "App Development for Backstage.io on AWS Frontend plugin",
   "version": "0.3.5",
   "main": "src/index.ts",
@@ -47,8 +47,8 @@
     "@aws-sdk/client-secrets-manager": "^3.623.0",
     "@aws-sdk/client-ssm": "^3.623.0",
     "@aws-sdk/util-arn-parser": "^3.568.0",
-    "@alithya-oss/plugin-aws-apps-common-for-backstage": "^0.3.4",
-    "@alithya-oss/backstage-plugin-catalog-backend-module-aws-apps-entities-processor": "^0.3.4",
+    "@alithya-oss/plugin-aws-apps-common": "^0.3.4",
+    "@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor": "^0.3.4",
     "@immobiliarelabs/backstage-plugin-gitlab": "^6.6.0",
     "@backstage/catalog-model": "^1.5.0",
     "@backstage/core-components": "^0.14.9",

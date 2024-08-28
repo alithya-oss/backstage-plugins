@@ -117,7 +117,7 @@ function sync_harmonix() {
         ./workspaces/aws/plugins/aws-apps-backend
     rsync -av \
         .tmp/harmonix/${VERSION/"/"/"-"}/backstage-plugins/plugins/aws-apps-common/* \
-        ./workspaces/aws/plugins/aws-apps-commont
+        ./workspaces/aws/plugins/aws-apps-common
     rsync -av \
         .tmp/harmonix/${VERSION/"/"/"-"}/backstage-plugins/plugins/aws-apps/* \
         ./workspaces/aws/plugins/aws-apps
@@ -131,7 +131,11 @@ function sync_harmonix() {
 
 function rename_harmonix() {
     changes=(
-        "s#@aws/#@alithya-oss/#g"
+        "s#@aws/plugin-aws-apps-for-backstage#@alithya-oss/plugin-aws-apps#g"
+        "s#@aws/plugin-aws-apps-backend-for-backstage#@alithya-oss/plugin-aws-apps-backend#g"
+        "s#@aws/plugin-aws-apps-common-for-backstage#@alithya-oss/plugin-aws-apps-common#g"
+        "s#@aws/backstage-plugin-catalog-backend-module-aws-apps-entities-processor#@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor#g"
+        "s#@aws/plugin-aws-apps-common-for-backstage#@alithya-oss/plugin-scaffolder-backend-aws-apps#g"
     )
 
     for item in "${changes[@]}"; do

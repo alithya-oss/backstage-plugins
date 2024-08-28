@@ -1,4 +1,4 @@
-# @alithya-oss/backstage-plugin-catalog-backend-module-aws-apps-entities-processor
+# @alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor
 
 The aws-apps-entities-processor backend module for the catalog plugin.
 

@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-aws-apps-backend-for-backstage",
+  "name": "@alithya-oss/plugin-aws-apps-backend",
   "description": "App Development for Backstage.io on AWS Backend plugin",
   "version": "0.3.4",
   "main": "src/index.ts",
@@ -51,7 +51,7 @@
     "@aws-sdk/credential-provider-node": "^3.623.0",
     "@aws-sdk/types": "^3.609.0",
     "@aws-sdk/util-arn-parser": "^3.568.0",
-    "@alithya-oss/plugin-aws-apps-common-for-backstage": "^0.3.4",
+    "@alithya-oss/plugin-aws-apps-common": "^0.3.4",
     "@backstage/backend-common": "^0.23.3",
     "@backstage/backend-defaults": "^0.4.0",
     "@backstage/backend-plugin-api": "^0.7.0",

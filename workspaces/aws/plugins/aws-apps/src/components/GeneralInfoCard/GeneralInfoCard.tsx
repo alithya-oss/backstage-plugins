@@ -10,7 +10,7 @@ import { Typography, CardContent, IconButton, Grid } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { SecretStringComponent } from '../common';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
-import { AWSECSAppDeploymentEnvironment, getRepoInfo, getRepoUrl } from '@alithya-oss/plugin-aws-apps-common-for-backstage';
+import { AWSECSAppDeploymentEnvironment, getRepoInfo, getRepoUrl } from '@alithya-oss/plugin-aws-apps-common';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 

@@ -15,7 +15,7 @@ This is the backend part of the OPA on AWS plugin.  Its key responsibilities:
 
 ```sh
 # From your Backstage root directory
-yarn add --cwd packages/backend @alithya-oss/plugin-aws-apps-backend-for-backstage@0.2.0
+yarn add --cwd packages/backend @alithya-oss/plugin-aws-apps-backend@0.2.0
 ```
 
 ## Configuration
@@ -29,7 +29,7 @@ Create a `awsApps.ts` file in the `packages/backend/src/plugins/`directory.  Thi
 ```ts
 // packages/backend/src/plugins/awsApps.ts
 
-import {createRouter} from '@alithya-oss/plugin-aws-apps-backend-for-backstage'
+import {createRouter} from '@alithya-oss/plugin-aws-apps-backend'
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 import {DefaultIdentityClient } from '@backstage/plugin-auth-node';
@@ -92,7 +92,7 @@ import { CatalogBuilder } from '@backstage/plugin-catalog-backend';
 import { ScaffolderEntitiesProcessor } from '@backstage/plugin-catalog-backend-module-scaffolder-entity-model';
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
-+ import { AWSEnvironmentEntitiesProcessor, AWSEnvironmentProviderEntitiesProcessor} from '@alithya-oss/plugin-aws-apps-backend-for-backstage';
++ import { AWSEnvironmentEntitiesProcessor, AWSEnvironmentProviderEntitiesProcessor} from '@alithya-oss/plugin-aws-apps-backend';
 
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -120,7 +120,7 @@ With the framework in place, you can leverage the `readOpaAppAuditPermission` pe
 ```ts
 // Example of policy decision in a policy
 
-import { readOpaAppAuditPermission } from '@alithya-oss/plugin-aws-apps-common-for-backstage';
+import { readOpaAppAuditPermission } from '@alithya-oss/plugin-aws-apps-common';
 ...
 
 export class permissionPolicy implements PermissionPolicy {

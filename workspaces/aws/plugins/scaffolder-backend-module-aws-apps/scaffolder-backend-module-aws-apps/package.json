@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-scaffolder-backend-aws-apps-for-backstage",
+  "name": "@aws/plugin-scaffolder-backend-aws-apps-for-backstage",
   "description": "App Development for Backstage.io on AWS - scaffolder actions",
   "version": "0.3.4",
   "main": "src/index.ts",
@@ -50,7 +50,7 @@
     "@backstage/integration": "^1.13.0",
     "@backstage/errors": "^1.2.4",
     "@backstage/types": "^1.1.1",
-    "@alithya-oss/plugin-aws-apps-backend-for-backstage": "^0.3.4",
+    "@alithya-oss/plugin-aws-apps-backend": "^0.3.4",
     "lodash": "^4.17.21",
     "winston": "^3.13.1",
     "yaml": "^2.5.0"

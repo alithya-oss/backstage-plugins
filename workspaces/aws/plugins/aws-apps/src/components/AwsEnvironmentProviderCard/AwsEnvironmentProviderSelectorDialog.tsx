@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { AWSEnvironmentProviderRecord } from '@alithya-oss/plugin-aws-apps-common-for-backstage';
+import { AWSEnvironmentProviderRecord } from '@alithya-oss/plugin-aws-apps-common';
 import {
   Button,
   Dialog,
