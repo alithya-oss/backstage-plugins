@@ -26,7 +26,7 @@
     "role": "backend-plugin",
     "pluginId": "aws-apps-backend",
     "pluginPackages": [
-      "@backstage/plugin-catalog"
+      "@alithya-oss/plugin-aws-apps-backend"
     ]
   },
   "scripts": {

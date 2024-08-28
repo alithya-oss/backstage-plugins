@@ -26,9 +26,10 @@
     "role": "frontend-plugin",
     "pluginId": "aws-apps",
     "pluginPackages": [
-      "@backstage/plugin-catalog"
+      "@alithya-oss/plugin-aws-apps"
     ]
   },
+  "sideEffects": false,
   "scripts": {
     "start": "backstage-cli package start",
     "build": "backstage-cli package build",
