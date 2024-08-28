@@ -57,6 +57,7 @@
     "@backstage/errors": "^1.2.4",
     "@backstage/plugin-catalog": "^1.21.1",
     "@backstage/plugin-catalog-react": "^1.12.2",
+    "@backstage/plugin-github-actions": "^0.6.16",
     "@backstage/plugin-permission-react": "^0.4.24",
     "@backstage/theme": "^0.5.6",
     "@emotion/react": "^11.13.0",
