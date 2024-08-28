@@ -14,11 +14,11 @@ import { Service, Task, TaskDefinition } from '@aws-sdk/client-ecs';
 import { HeadObjectCommandOutput } from '@aws-sdk/client-s3';
 import { DeleteSecretCommandOutput, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
 import { GetParameterCommandOutput } from '@aws-sdk/client-ssm';
-import { AWSProviderParams, AWSServiceResources, BackendParams, BindResourceParams, AWSEnvironmentProviderRecord } from '@aws/plugin-aws-apps-common-for-backstage';
+import { AWSProviderParams, AWSServiceResources, BackendParams, BindResourceParams, AWSEnvironmentProviderRecord } from '@alithya-oss/plugin-aws-apps-common';
 import { createApiRef } from '@backstage/core-plugin-api';
 import { ContainerDetailsType } from '../types';
 import { InvokeCommandOutput } from "@aws-sdk/client-lambda";
-import { IRepositoryInfo } from "@aws/plugin-aws-apps-common-for-backstage";
+import { IRepositoryInfo } from "@alithya-oss/plugin-aws-apps-common";
 
 export const opaApiRef = createApiRef<OPAApi>({
   id: 'plugin.opa.app',

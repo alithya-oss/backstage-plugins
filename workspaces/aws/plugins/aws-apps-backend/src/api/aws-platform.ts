@@ -24,7 +24,7 @@ import {
   ICommitChange, 
   IGitAPIResult, 
   IRepositoryInfo
-} from '@aws/plugin-aws-apps-common-for-backstage';
+} from '@alithya-oss/plugin-aws-apps-common';
 import YAML from 'yaml';
 import { GitAPI } from './git-api';
 import { LoggerService } from '@backstage/backend-plugin-api';

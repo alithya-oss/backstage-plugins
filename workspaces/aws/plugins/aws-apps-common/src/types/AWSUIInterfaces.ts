@@ -3,7 +3,7 @@
 
 import { AWSEnvironmentEntityV1,  } from "../entities/AWSEnvironmentEntityV1";
 import { AWSEnvironmentProviderEntityV1 } from "../entities/AWSEnvironmentProviderEntityV1"
-import { DeployStackStatus } from "@aws/plugin-aws-apps-for-backstage/src/helpers/constants";
+import { DeployStackStatus } from "@alithya-oss/plugin-aws-apps/src/helpers/constants";
 import { IRepositoryInfo } from "./SCMBackendAPI";
 
 /** 

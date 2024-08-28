@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { AwsAuthResponse } from '@aws/plugin-aws-apps-backend-for-backstage';
+import { AwsAuthResponse } from '@alithya-oss/plugin-aws-apps-backend';
 
 export type EnvironmentProviderConnection = {
   providerName: string;

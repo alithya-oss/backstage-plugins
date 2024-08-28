@@ -5,7 +5,7 @@ import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { AwsCredentialIdentity } from '@aws-sdk/types';
 import { Logger } from 'winston';
 import { UserEntity } from '@backstage/catalog-model';
-import { getAWScreds } from '@aws/plugin-aws-apps-backend-for-backstage';
+import { getAWScreds } from '@alithya-oss/plugin-aws-apps-backend';
 import { EnvironmentProvider, EnvironmentProviderConnection } from '../types';
 import { SecretsManagerClient, CreateSecretCommandInput, CreateSecretCommand, PutSecretValueCommand, PutSecretValueCommandInput } from '@aws-sdk/client-secrets-manager';
 

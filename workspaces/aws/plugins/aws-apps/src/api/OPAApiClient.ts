@@ -14,7 +14,7 @@ import { Service, Task, TaskDefinition } from '@aws-sdk/client-ecs';
 import { HeadObjectCommandOutput } from '@aws-sdk/client-s3';
 import { DeleteSecretCommandOutput, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
 import { GetParameterCommandOutput } from '@aws-sdk/client-ssm';
-import { AWSEnvironmentProviderRecord, AWSProviderParams, AWSServiceResources, BackendParams, BindResourceParams, IRepositoryInfo } from '@aws/plugin-aws-apps-common-for-backstage';
+import { AWSEnvironmentProviderRecord, AWSProviderParams, AWSServiceResources, BackendParams, BindResourceParams, IRepositoryInfo } from '@alithya-oss/plugin-aws-apps-common';
 import { ConfigApi, FetchApi } from '@backstage/core-plugin-api';
 import { ResponseError } from '@backstage/errors';
 import { OPAApi } from '.';

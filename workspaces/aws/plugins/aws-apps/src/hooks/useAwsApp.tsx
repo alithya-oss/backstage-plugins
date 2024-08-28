@@ -10,8 +10,8 @@ import {
 import useAsyncRetry from 'react-use/lib/useAsyncRetry';
 import { Entity, EntityRelation, parseEntityRef } from '@backstage/catalog-model';
 // TODO: consider moving AWSEnvironmentEntityV1 AWSEnvironmentProviderEntityV1 to common plugin
-import { AWSEnvironmentEntityV1, AWSEnvironmentProviderEntityV1 } from '@aws/plugin-aws-apps-common-for-backstage';
-import { AWSComponent, AWSComponentType, AWSDeploymentEnvironment, AWSECSAppDeploymentEnvironment, AWSEKSAppDeploymentEnvironment, AWSResourceDeploymentEnvironment, AWSServerlessAppDeploymentEnvironment, AwsDeploymentEnvironments, CloudFormationStack, ComponentStateType, GenericAWSEnvironment, IRepositoryInfo, getRepoInfo } from '@aws/plugin-aws-apps-common-for-backstage';
+import { AWSEnvironmentEntityV1, AWSEnvironmentProviderEntityV1 } from '@alithya-oss/plugin-aws-apps-common';
+import { AWSComponent, AWSComponentType, AWSDeploymentEnvironment, AWSECSAppDeploymentEnvironment, AWSEKSAppDeploymentEnvironment, AWSResourceDeploymentEnvironment, AWSServerlessAppDeploymentEnvironment, AwsDeploymentEnvironments, CloudFormationStack, ComponentStateType, GenericAWSEnvironment, IRepositoryInfo, getRepoInfo } from '@alithya-oss/plugin-aws-apps-common';
 import { ProviderType, ExtraStackDeployStatus, DeployStackStatus } from '../helpers/constants';
 import { opaApiRef } from '../api';
 import { formatWithTime } from '../helpers/date-utils';

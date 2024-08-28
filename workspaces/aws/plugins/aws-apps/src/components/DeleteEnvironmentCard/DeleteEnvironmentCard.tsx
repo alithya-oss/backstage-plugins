@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { OPAApi, opaApiRef } from '../../api';
 import { sleep } from "../../helpers/util";
-import { getGitCredentailsSecret, getRepoInfo } from "@aws/plugin-aws-apps-common-for-backstage";
+import { getGitCredentailsSecret, getRepoInfo } from "@alithya-oss/plugin-aws-apps-common";
 
 const DeleteEnvironmentPanel = ({
   input: { entity, catalogApi, api }

@@ -56,7 +56,7 @@ After the scaffolder configuration is updated, you can use the new actions in yo
 Documentation for common usage of the contributed scaffolder actions is included below.
 For full documentation of the scaffolder action inputs and outputs, see the https://<your backstage app>/create/actions page in your Backstage app.
 
-The scaffolder actions which create AWS resources will leverage the AWS Environments and Environments Provider model provided in the `@aws/plugin-aws-apps-backend-for-backstage` plugin.
+The scaffolder actions which create AWS resources will leverage the AWS Environments and Environments Provider model provided in the `@alithya-oss/plugin-aws-apps-backend` plugin.
 Reference the plugin documentation to understand how to create and surface AWS Environments for use in scaffolder actions and the UI.
 
 ### Get Environment Providers

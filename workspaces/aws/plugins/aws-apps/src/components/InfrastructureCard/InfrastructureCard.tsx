@@ -3,7 +3,7 @@
 
 import { InfoCard, EmptyState } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
-import { AWSComponent, AWSComponentType, AWSECSAppDeploymentEnvironment, AWSServiceResources, AWSResourceDeploymentEnvironment } from '@aws/plugin-aws-apps-common-for-backstage';
+import { AWSComponent, AWSComponentType, AWSECSAppDeploymentEnvironment, AWSServiceResources, AWSResourceDeploymentEnvironment } from '@alithya-oss/plugin-aws-apps-common';
 import { LinearProgress, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { opaApiRef } from '../../api';

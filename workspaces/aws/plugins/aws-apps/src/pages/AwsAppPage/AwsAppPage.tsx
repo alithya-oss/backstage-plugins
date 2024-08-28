@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { GenericAWSEnvironment, readOpaAppAuditPermission } from '@aws/plugin-aws-apps-common-for-backstage';
+import { GenericAWSEnvironment, readOpaAppAuditPermission } from '@alithya-oss/plugin-aws-apps-common';
 import { Entity } from '@backstage/catalog-model';
 import { EmptyState } from '@backstage/core-components';
 import { EntityLayout, EntitySwitch } from '@backstage/plugin-catalog';

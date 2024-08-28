@@ -10,7 +10,7 @@ import { Button, CardContent, Divider, Grid, IconButton, Typography } from '@mui
 import React, { useEffect, useState } from 'react';
 import { opaApiRef } from '../../api';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
-import { AWSComponent, AWSECSAppDeploymentEnvironment } from '@aws/plugin-aws-apps-common-for-backstage';
+import { AWSComponent, AWSECSAppDeploymentEnvironment } from '@alithya-oss/plugin-aws-apps-common';
 
 const OpaAppStateOverview = ({
   input: { cluster, serviceArn, taskDefArn }

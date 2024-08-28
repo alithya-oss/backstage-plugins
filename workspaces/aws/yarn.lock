@@ -96,6 +96,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-aws-apps-backend@workspace:plugins/aws-apps-backend"
   dependencies:
+    "@alithya-oss/plugin-aws-apps-common": "workspace:^"
     "@aws-sdk/client-cloudformation": ^3.623.0
     "@aws-sdk/client-cloudwatch-logs": ^3.623.0
     "@aws-sdk/client-dynamodb": ^3.623.0
@@ -110,7 +111,6 @@ __metadata:
     "@aws-sdk/credential-provider-node": ^3.623.0
     "@aws-sdk/types": ^3.609.0
     "@aws-sdk/util-arn-parser": ^3.568.0
-    "@aws/plugin-aws-apps-common-for-backstage": ^0.3.4
     "@backstage/backend-common": ^0.23.3
     "@backstage/backend-defaults": ^0.4.0
     "@backstage/backend-plugin-api": ^0.7.0
@@ -134,7 +134,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-apps-common@workspace:plugins/aws-apps-common":
+"@alithya-oss/plugin-aws-apps-common@workspace:^, @alithya-oss/plugin-aws-apps-common@workspace:plugins/aws-apps-common":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-aws-apps-common@workspace:plugins/aws-apps-common"
   dependencies:
@@ -146,6 +146,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-aws-apps@workspace:plugins/aws-apps"
   dependencies:
+    "@alithya-oss/plugin-aws-apps-common": "workspace:^"
     "@aws-sdk/client-cloudformation": ^3.623.0
     "@aws-sdk/client-cloudwatch-logs": ^3.623.0
     "@aws-sdk/client-dynamodb": ^3.623.0
@@ -156,8 +157,6 @@ __metadata:
     "@aws-sdk/client-secrets-manager": ^3.623.0
     "@aws-sdk/client-ssm": ^3.623.0
     "@aws-sdk/util-arn-parser": ^3.568.0
-    "@aws/backstage-plugin-catalog-backend-module-aws-apps-entities-processor": ^0.3.4
-    "@aws/plugin-aws-apps-common-for-backstage": ^0.3.4
     "@backstage/catalog-model": ^1.5.0
     "@backstage/cli": ^0.26.11
     "@backstage/core-app-api": ^1.14.1
@@ -2567,24 +2566,6 @@ __metadata:
     "@smithy/types": ^3.3.0
     tslib: ^2.6.2
   checksum: 0e9c8b7786737ff50a6cf39f7ca9a758897c2db364718364b5dad45f50a33e65bd7801348fd033af60768a5be64b454c3a7e65222e13c70d145e8df6211ca33c
-  languageName: node
-  linkType: hard
-
-"@aws/backstage-plugin-catalog-backend-module-aws-apps-entities-processor@npm:^0.3.4":
-  version: 0.3.4
-  resolution: "@aws/backstage-plugin-catalog-backend-module-aws-apps-entities-processor@npm:0.3.4"
-  dependencies:
-    "@aws/plugin-aws-apps-common-for-backstage": ^0.3.4
-    "@backstage/backend-common": ^0.23.3
-    "@backstage/backend-plugin-api": ^0.7.0
-  checksum: ae12bfc7a2e0fc989881fdc5ba6d726219da20dd702d973d235853b6d593f4bacfc9cae2c5450b95a342d13751b83d67f70546eeaf93a1628291fc7a19da2018
-  languageName: node
-  linkType: hard
-
-"@aws/plugin-aws-apps-common-for-backstage@npm:^0.3.4":
-  version: 0.3.4
-  resolution: "@aws/plugin-aws-apps-common-for-backstage@npm:0.3.4"
-  checksum: ff63bef6b98043d9314da39801b79f1a348fda3ccf747fac3824d3a6958d00fad13f8337ab6b29a85de42c9336f4468af06ba8a35b1020d8877c2328b93eec1f
   languageName: node
   linkType: hard
 

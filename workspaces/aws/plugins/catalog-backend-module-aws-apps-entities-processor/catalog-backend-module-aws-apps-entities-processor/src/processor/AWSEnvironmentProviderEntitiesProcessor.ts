@@ -10,7 +10,7 @@ import {
 } from '@backstage/catalog-model';
 import { CatalogProcessor, CatalogProcessorEmit, processingResult } from '@backstage/plugin-catalog-node';
 import { LocationSpec } from '@backstage/plugin-catalog-common';
-import { AWSEnvironmentProviderEntityV1, awsEnvironmentProviderEntityV1Validator } from '@aws/plugin-aws-apps-common-for-backstage';
+import { AWSEnvironmentProviderEntityV1, awsEnvironmentProviderEntityV1Validator } from '@alithya-oss/plugin-aws-apps-common';
 
 
 /** @public */

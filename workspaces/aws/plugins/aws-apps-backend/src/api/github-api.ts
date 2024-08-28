@@ -1,4 +1,4 @@
-import { IGitAPIResult, ICommitChange, IRepositoryInfo, ISCMBackendAPI } from "@aws/plugin-aws-apps-common-for-backstage/src/types/SCMBackendAPI";
+import { IGitAPIResult, ICommitChange, IRepositoryInfo, ISCMBackendAPI } from "@alithya-oss/plugin-aws-apps-common/src/types/SCMBackendAPI";
 import { Octokit } from "octokit";
 import { Buffer } from "buffer";
 import { LoggerService } from "@backstage/backend-plugin-api";
