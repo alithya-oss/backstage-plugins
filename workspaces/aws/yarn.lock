@@ -92,6 +92,108 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@alithya-oss/plugin-aws-apps-backend@workspace:plugins/aws-apps-backend":
+  version: 0.0.0-use.local
+  resolution: "@alithya-oss/plugin-aws-apps-backend@workspace:plugins/aws-apps-backend"
+  dependencies:
+    "@aws-sdk/client-cloudformation": ^3.623.0
+    "@aws-sdk/client-cloudwatch-logs": ^3.623.0
+    "@aws-sdk/client-dynamodb": ^3.623.0
+    "@aws-sdk/client-ecs": ^3.623.0
+    "@aws-sdk/client-eks": ^3.623.0
+    "@aws-sdk/client-lambda": ^3.623.0
+    "@aws-sdk/client-resource-groups": ^3.623.0
+    "@aws-sdk/client-s3": ^3.623.0
+    "@aws-sdk/client-secrets-manager": ^3.623.0
+    "@aws-sdk/client-ssm": ^3.623.0
+    "@aws-sdk/client-sts": ^3.623.0
+    "@aws-sdk/credential-provider-node": ^3.623.0
+    "@aws-sdk/types": ^3.609.0
+    "@aws-sdk/util-arn-parser": ^3.568.0
+    "@aws/plugin-aws-apps-common-for-backstage": ^0.3.4
+    "@backstage/backend-common": ^0.23.3
+    "@backstage/backend-defaults": ^0.4.0
+    "@backstage/backend-plugin-api": ^0.7.0
+    "@backstage/backend-test-utils": ^0.4.4
+    "@backstage/cli": ^0.26.11
+    "@backstage/config": ^1.2.0
+    "@backstage/plugin-auth-backend": ^0.22.9
+    "@backstage/plugin-auth-backend-module-guest-provider": ^0.1.8
+    "@types/express": "*"
+    "@types/supertest": ^2.0.12
+    express: ^4.17.1
+    express-promise-router: ^4.1.0
+    msw: ^2.3.1
+    node-fetch: ^2.6.7
+    octokit: ^3.1.2
+    octokit-commit-multiple-files: ^5.0.2
+    supertest: ^6.2.4
+    winston: ^3.2.1
+    yaml: ^2.0.0
+    yn: ^4.0.0
+  languageName: unknown
+  linkType: soft
+
+"@alithya-oss/plugin-aws-apps-common@workspace:plugins/aws-apps-common":
+  version: 0.0.0-use.local
+  resolution: "@alithya-oss/plugin-aws-apps-common@workspace:plugins/aws-apps-common"
+  dependencies:
+    "@backstage/cli": ^0.26.11
+  languageName: unknown
+  linkType: soft
+
+"@alithya-oss/plugin-aws-apps@workspace:plugins/aws-apps":
+  version: 0.0.0-use.local
+  resolution: "@alithya-oss/plugin-aws-apps@workspace:plugins/aws-apps"
+  dependencies:
+    "@aws-sdk/client-cloudformation": ^3.623.0
+    "@aws-sdk/client-cloudwatch-logs": ^3.623.0
+    "@aws-sdk/client-dynamodb": ^3.623.0
+    "@aws-sdk/client-ecs": ^3.623.0
+    "@aws-sdk/client-eks": ^3.623.0
+    "@aws-sdk/client-lambda": ^3.623.0
+    "@aws-sdk/client-s3": ^3.623.0
+    "@aws-sdk/client-secrets-manager": ^3.623.0
+    "@aws-sdk/client-ssm": ^3.623.0
+    "@aws-sdk/util-arn-parser": ^3.568.0
+    "@aws/backstage-plugin-catalog-backend-module-aws-apps-entities-processor": ^0.3.4
+    "@aws/plugin-aws-apps-common-for-backstage": ^0.3.4
+    "@backstage/catalog-model": ^1.5.0
+    "@backstage/cli": ^0.26.11
+    "@backstage/core-app-api": ^1.14.1
+    "@backstage/core-components": ^0.14.9
+    "@backstage/core-plugin-api": ^1.9.3
+    "@backstage/dev-utils": ^1.0.36
+    "@backstage/errors": ^1.2.4
+    "@backstage/plugin-catalog": ^1.21.1
+    "@backstage/plugin-catalog-react": ^1.12.2
+    "@backstage/plugin-permission-react": ^0.4.24
+    "@backstage/test-utils": ^1.5.9
+    "@backstage/theme": ^0.5.6
+    "@emotion/react": ^11.13.0
+    "@emotion/styled": ^11.13.0
+    "@immobiliarelabs/backstage-plugin-gitlab": ^6.6.0
+    "@kubernetes/client-node": ^0.21.0
+    "@material-ui/core": ^4.12.2
+    "@material-ui/icons": ^4.9.1
+    "@material-ui/lab": ^5.0.0-alpha.4
+    "@mui/icons-material": ^5.16.6
+    "@mui/material": ^5.16.6
+    "@mui/system": ^5.16.6
+    "@testing-library/jest-dom": ^6.4.8
+    "@testing-library/react": ^16.0.0
+    "@testing-library/user-event": ^14.5.2
+    "@types/file-saver": ^2.0.5
+    "@types/node": "*"
+    cross-fetch: ^4.0.0
+    file-saver: ^2.0.5
+    msw: ^2.3.5
+    react-use: ^17.5.1
+  peerDependencies:
+    react: ^18.0.2
+  languageName: unknown
+  linkType: soft
+
 "@alithya-oss/plugin-aws-codebuild-backend@workspace:^, @alithya-oss/plugin-aws-codebuild-backend@workspace:plugins/aws-codebuild-backend":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-aws-codebuild-backend@workspace:plugins/aws-codebuild-backend"
@@ -2479,107 +2581,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws/plugin-aws-apps-backend-for-backstage@workspace:plugins/aws-apps-backend":
-  version: 0.0.0-use.local
-  resolution: "@aws/plugin-aws-apps-backend-for-backstage@workspace:plugins/aws-apps-backend"
-  dependencies:
-    "@aws-sdk/client-cloudformation": ^3.623.0
-    "@aws-sdk/client-cloudwatch-logs": ^3.623.0
-    "@aws-sdk/client-dynamodb": ^3.623.0
-    "@aws-sdk/client-ecs": ^3.623.0
-    "@aws-sdk/client-eks": ^3.623.0
-    "@aws-sdk/client-lambda": ^3.623.0
-    "@aws-sdk/client-resource-groups": ^3.623.0
-    "@aws-sdk/client-s3": ^3.623.0
-    "@aws-sdk/client-secrets-manager": ^3.623.0
-    "@aws-sdk/client-ssm": ^3.623.0
-    "@aws-sdk/client-sts": ^3.623.0
-    "@aws-sdk/credential-provider-node": ^3.623.0
-    "@aws-sdk/types": ^3.609.0
-    "@aws-sdk/util-arn-parser": ^3.568.0
-    "@aws/plugin-aws-apps-common-for-backstage": ^0.3.4
-    "@backstage/backend-common": ^0.23.3
-    "@backstage/backend-defaults": ^0.4.0
-    "@backstage/backend-plugin-api": ^0.7.0
-    "@backstage/backend-test-utils": ^0.4.4
-    "@backstage/cli": ^0.26.11
-    "@backstage/config": ^1.2.0
-    "@backstage/plugin-auth-backend": ^0.22.9
-    "@backstage/plugin-auth-backend-module-guest-provider": ^0.1.8
-    "@types/express": "*"
-    "@types/supertest": ^2.0.12
-    express: ^4.17.1
-    express-promise-router: ^4.1.0
-    msw: ^2.3.1
-    node-fetch: ^2.6.7
-    octokit: ^3.1.2
-    octokit-commit-multiple-files: ^5.0.2
-    supertest: ^6.2.4
-    winston: ^3.2.1
-    yaml: ^2.0.0
-    yn: ^4.0.0
-  languageName: unknown
-  linkType: soft
-
-"@aws/plugin-aws-apps-common-for-backstage@^0.3.4, @aws/plugin-aws-apps-common-for-backstage@workspace:plugins/aws-apps-common":
-  version: 0.0.0-use.local
-  resolution: "@aws/plugin-aws-apps-common-for-backstage@workspace:plugins/aws-apps-common"
-  dependencies:
-    "@backstage/cli": ^0.26.11
-  languageName: unknown
-  linkType: soft
-
-"@aws/plugin-aws-apps-for-backstage@workspace:plugins/aws-apps":
-  version: 0.0.0-use.local
-  resolution: "@aws/plugin-aws-apps-for-backstage@workspace:plugins/aws-apps"
-  dependencies:
-    "@aws-sdk/client-cloudformation": ^3.623.0
-    "@aws-sdk/client-cloudwatch-logs": ^3.623.0
-    "@aws-sdk/client-dynamodb": ^3.623.0
-    "@aws-sdk/client-ecs": ^3.623.0
-    "@aws-sdk/client-eks": ^3.623.0
-    "@aws-sdk/client-lambda": ^3.623.0
-    "@aws-sdk/client-s3": ^3.623.0
-    "@aws-sdk/client-secrets-manager": ^3.623.0
-    "@aws-sdk/client-ssm": ^3.623.0
-    "@aws-sdk/util-arn-parser": ^3.568.0
-    "@aws/backstage-plugin-catalog-backend-module-aws-apps-entities-processor": ^0.3.4
-    "@aws/plugin-aws-apps-common-for-backstage": ^0.3.4
-    "@backstage/catalog-model": ^1.5.0
-    "@backstage/cli": ^0.26.11
-    "@backstage/core-app-api": ^1.14.1
-    "@backstage/core-components": ^0.14.9
-    "@backstage/core-plugin-api": ^1.9.3
-    "@backstage/dev-utils": ^1.0.36
-    "@backstage/errors": ^1.2.4
-    "@backstage/plugin-catalog": ^1.21.1
-    "@backstage/plugin-catalog-react": ^1.12.2
-    "@backstage/plugin-permission-react": ^0.4.24
-    "@backstage/test-utils": ^1.5.9
-    "@backstage/theme": ^0.5.6
-    "@emotion/react": ^11.13.0
-    "@emotion/styled": ^11.13.0
-    "@immobiliarelabs/backstage-plugin-gitlab": ^6.6.0
-    "@kubernetes/client-node": ^0.21.0
-    "@material-ui/core": ^4.12.2
-    "@material-ui/icons": ^4.9.1
-    "@material-ui/lab": ^5.0.0-alpha.4
-    "@mui/icons-material": ^5.16.6
-    "@mui/material": ^5.16.6
-    "@mui/system": ^5.16.6
-    "@testing-library/jest-dom": ^6.4.8
-    "@testing-library/react": ^16.0.0
-    "@testing-library/user-event": ^14.5.2
-    "@types/file-saver": ^2.0.5
-    "@types/node": "*"
-    cross-fetch: ^4.0.0
-    file-saver: ^2.0.5
-    msw: ^2.3.5
-    react-use: ^17.5.1
-  peerDependencies:
-    react: ^18.0.2
-  languageName: unknown
-  linkType: soft
+"@aws/plugin-aws-apps-common-for-backstage@npm:^0.3.4":
+  version: 0.3.4
+  resolution: "@aws/plugin-aws-apps-common-for-backstage@npm:0.3.4"
+  checksum: ff63bef6b98043d9314da39801b79f1a348fda3ccf747fac3824d3a6958d00fad13f8337ab6b29a85de42c9336f4468af06ba8a35b1020d8877c2328b93eec1f
+  languageName: node
+  linkType: hard
 
 "@azure/abort-controller@npm:^1.0.0":
   version: 1.1.0

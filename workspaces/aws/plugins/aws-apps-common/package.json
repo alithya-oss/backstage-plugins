@@ -1,5 +1,5 @@
 {
-  "name": "@aws/plugin-aws-apps-common-for-backstage",
+  "name": "@alithya-oss/plugin-aws-apps-common",
   "description": "Common functionalities for the aws-apps plugin",
   "version": "0.3.4",
   "main": "src/index.ts",
@@ -27,9 +27,10 @@
     "role": "common-library",
     "pluginId": "aws-apps-common",
     "pluginPackages": [
-      "@aws/plugin-aws-apps-common-for-backstage"
+      "@alithya-oss/plugin-aws-apps-common"
     ]
   },
+  "sideEffects": false,
   "scripts": {
     "build": "backstage-cli package build",
     "lint": "backstage-cli package lint",

@@ -1,5 +1,5 @@
 {
-  "name": "@aws/plugin-aws-apps-backend-for-backstage",
+  "name": "@alithya-oss/plugin-aws-apps-backend",
   "description": "App Development for Backstage.io on AWS Backend plugin",
   "version": "0.3.4",
   "main": "src/index.ts",
@@ -26,7 +26,7 @@
     "role": "backend-plugin",
     "pluginId": "aws-apps-backend",
     "pluginPackages": [
-      "@backstage/plugin-catalog"
+      "@alithya-oss/plugin-aws-apps-backend"
     ]
   },
   "scripts": {
