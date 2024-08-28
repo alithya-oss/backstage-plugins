@@ -3,7 +3,8 @@
 
 import { parse } from '@aws-sdk/util-arn-parser';
 
-const METADATA_ENDPOINT_V4 = process.env.ECS_CONTAINER_METADATA_URI_V4 as string;
+const METADATA_ENDPOINT_V4 = process.env
+  .ECS_CONTAINER_METADATA_URI_V4 as string;
 
 /**
  * Get a value from the ECS Container metadata endpoint for a given key

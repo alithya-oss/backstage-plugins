@@ -2,8 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { CatalogApi } from '@backstage/catalog-client';
-import { JsonArray, } from '@backstage/types';
-import { Entity, EntityRelation, RELATION_DEPENDS_ON } from '@backstage/catalog-model';
+import { JsonArray } from '@backstage/types';
+import {
+  Entity,
+  EntityRelation,
+  RELATION_DEPENDS_ON,
+} from '@backstage/catalog-model';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import yaml from 'yaml';
 import { getAWScreds } from '@alithya-oss/plugin-aws-apps-backend';
@@ -14,7 +18,8 @@ const ID = 'opa:get-env-providers';
 
 const examples = [
   {
-    description: 'Retreive AWS environment providers so that their configurations can be used by other template actions',
+    description:
+      'Retreive AWS environment providers so that their configurations can be used by other template actions',
     example: yaml.stringify({
       steps: [
         {
@@ -64,7 +69,8 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
           environmentRef: {
             type: 'string',
             title: 'Entity reference',
-            description: 'The entity reference identifier for an AWS Environment',
+            description:
+              'The entity reference identifier for an AWS Environment',
           },
         },
       },
@@ -91,7 +97,8 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
             type: 'string',
           },
           envDeployManualApproval: {
-            title: 'Whether manual approval is required for deploying to the environment',
+            title:
+              'Whether manual approval is required for deploying to the environment',
             type: 'boolean',
           },
           envProviders: {
@@ -108,7 +115,7 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
                 'vpcId',
                 'publicSubnets',
                 'privateSubnets',
-                'assumedRoleArn'
+                'assumedRoleArn',
               ],
               properties: {
                 envProviderName: {
@@ -120,7 +127,8 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
                   type: 'string',
                 },
                 account: {
-                  title: 'The AWS account where infrastructure will be deployed',
+                  title:
+                    'The AWS account where infrastructure will be deployed',
                   type: 'string',
                 },
                 region: {
@@ -128,7 +136,8 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
                   type: 'string',
                 },
                 vpcId: {
-                  title: 'The VPC identifier where infrastructure will be deployed',
+                  title:
+                    'The VPC identifier where infrastructure will be deployed',
                   type: 'string',
                 },
                 publicSubnets: {
@@ -140,25 +149,29 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
                   type: 'array',
                 },
                 clusterArn: {
-                  title: 'The Arn of the cluster where the service and task are deployed, if needed. A cluster could be ECS or EKS',
+                  title:
+                    'The Arn of the cluster where the service and task are deployed, if needed. A cluster could be ECS or EKS',
                   type: 'string',
                 },
                 assumedRoleArn: {
-                  title: 'The Arn of AWS IAM role that can be assumed to deploy resources to the environment provider',
+                  title:
+                    'The Arn of AWS IAM role that can be assumed to deploy resources to the environment provider',
                   type: 'string',
                 },
                 kubectlLambdaArn: {
-                  title: 'EKS Only - The Arn of the lambda function that that can execute kubectl commands against the provider\'s EKS cluster',
+                  title:
+                    "EKS Only - The Arn of the lambda function that that can execute kubectl commands against the provider's EKS cluster",
                   type: 'string',
                 },
                 kubectlLambdaRoleArn: {
-                  title: 'The Arn of the IAM role for the lambda function that that can execute kubectl commands against the provider\'s EKS cluster',
+                  title:
+                    "The Arn of the IAM role for the lambda function that that can execute kubectl commands against the provider's EKS cluster",
                   type: 'string',
                 },
-              }
-            }
+              },
+            },
           },
-        }
+        },
       },
     },
     async handler(ctx) {
@@ -171,71 +184,144 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
       if (ctx.user?.entity === undefined) {
         // Verify the automationKey value.  If it matches, set an automation user in the context
         if (ctx.secrets?.automationKey === process.env.AUTOMATION_KEY) {
-          console.log("Automation key provided to use automation user");
+          console.log('Automation key provided to use automation user');
           ctx.user = {
             entity: {
               apiVersion: 'backstage.io/v1alpha1',
               kind: 'User',
               metadata: { name: 'automation' },
-              spec: { profile: { displayName: "Automation User" } }
-            }
-          }
+              spec: { profile: { displayName: 'Automation User' } },
+            },
+          };
         } else {
           ctx.logger.info(`No user context provided for ${ID} action`);
           throw new Error(`No user context provided for ${ID} action`);
         }
       }
 
-      const awsEnvEntity = await catalogClient.getEntityByRef(environmentRef, { token });
+      const awsEnvEntity = await catalogClient.getEntityByRef(environmentRef, {
+        token,
+      });
       if (awsEnvEntity === undefined) {
-        throw new Error(`The environment entity "${environmentRef}" could not be located in the catalog.`);
+        throw new Error(
+          `The environment entity "${environmentRef}" could not be located in the catalog.`,
+        );
       }
 
       const envShortName = awsEnvEntity.metadata['shortName']?.toString() || '';
       ctx.output('envName', awsEnvEntity.metadata.name);
       ctx.output('envRef', environmentRef);
-      ctx.output('envDeployManualApproval', "true" === awsEnvEntity.metadata['deploymentRequiresApproval']?.toString() || '')
+      ctx.output(
+        'envDeployManualApproval',
+        'true' ===
+          awsEnvEntity.metadata['deploymentRequiresApproval']?.toString() || '',
+      );
       ctx.output('envShortName', envShortName);
 
-      const deploymentParametersArray = await getEnvDeploymentParameters(awsEnvEntity);
+      const deploymentParametersArray =
+        await getEnvDeploymentParameters(awsEnvEntity);
 
-      ctx.logger.debug(`envProviders info: ${JSON.stringify(deploymentParametersArray, null, 2)}`);
+      ctx.logger.debug(
+        `envProviders info: ${JSON.stringify(deploymentParametersArray, null, 2)}`,
+      );
 
       const envProviderOutputArray: JsonArray = [];
 
       // looping over all providers of the selected environment
       for (const params of deploymentParametersArray) {
-        const { accountId, region, ssmAssumeRoleArn, ssmPathVpc, ssmPublicSubnets, ssmPrivateSubnets, ssmPathCluster,
-          envProviderName, envProviderType, envProviderPrefix, kubectlLambdaArn, kubectlLambdaRoleArn } = params;
+        const {
+          accountId,
+          region,
+          ssmAssumeRoleArn,
+          ssmPathVpc,
+          ssmPublicSubnets,
+          ssmPrivateSubnets,
+          ssmPathCluster,
+          envProviderName,
+          envProviderType,
+          envProviderPrefix,
+          kubectlLambdaArn,
+          kubectlLambdaRoleArn,
+        } = params;
 
         if (!accountId) {
-          throw new Error(`accountId not configured for environment provider: ${envProviderName}. The provider IaC deployment may have failed.`);
+          throw new Error(
+            `accountId not configured for environment provider: ${envProviderName}. The provider IaC deployment may have failed.`,
+          );
         }
         if (!region) {
-          throw new Error(`region not configured for environment provider: ${envProviderName}. The provider IaC deployment may have failed.`);
+          throw new Error(
+            `region not configured for environment provider: ${envProviderName}. The provider IaC deployment may have failed.`,
+          );
         }
         if (!ssmAssumeRoleArn) {
-          throw new Error(`ssmAssumeRoleArn not configured for environment provider: ${envProviderName}. The provider IaC deployment may have failed.`);
+          throw new Error(
+            `ssmAssumeRoleArn not configured for environment provider: ${envProviderName}. The provider IaC deployment may have failed.`,
+          );
         }
         if (!ssmPathVpc) {
-          if ((envProviderType === 'ecs' || envProviderType === 'eks')) {
-            throw new Error(`ssmPathVpc not configured for environment provider: ${envProviderName}. The provider IaC deployment may have failed.`);
+          if (envProviderType === 'ecs' || envProviderType === 'eks') {
+            throw new Error(
+              `ssmPathVpc not configured for environment provider: ${envProviderName}. The provider IaC deployment may have failed.`,
+            );
           } else {
             ctx.logger.info('No VPC configured for the environment provider');
           }
         }
 
         // Get AWS credentials for the specific provider
-        ctx.logger.info(`Getting credentials for AWS deployment to account ${accountId} in ${region}`);
-        const response = await getAWScreds(accountId, region, envProviderPrefix, envProviderName, ctx.user!.entity!);
+        ctx.logger.info(
+          `Getting credentials for AWS deployment to account ${accountId} in ${region}`,
+        );
+        const response = await getAWScreds(
+          accountId,
+          region,
+          envProviderPrefix,
+          envProviderName,
+          ctx.user!.entity!,
+        );
         const { credentials } = response;
 
         try {
-          const vpcId = !!ssmPathVpc ? await getSSMParameterValue(region, credentials, ssmPathVpc, ctx.logger) : '';
-          const publicSubnets = !!ssmPathVpc ? await getSSMParameterValue(region, credentials, ssmPublicSubnets, ctx.logger): '';
-          const privateSubnets = !!ssmPathVpc ? await getSSMParameterValue(region, credentials, ssmPrivateSubnets, ctx.logger): '';
-          const clusterArn = (envProviderType === 'ecs' || envProviderType === 'eks') ? await getSSMParameterValue(region, credentials, ssmPathCluster, ctx.logger) : '';
-          const assumedRoleArn = await getSSMParameterValue(region, credentials, ssmAssumeRoleArn, ctx.logger);
+          const vpcId = !!ssmPathVpc
+            ? await getSSMParameterValue(
+                region,
+                credentials,
+                ssmPathVpc,
+                ctx.logger,
+              )
+            : '';
+          const publicSubnets = !!ssmPathVpc
+            ? await getSSMParameterValue(
+                region,
+                credentials,
+                ssmPublicSubnets,
+                ctx.logger,
+              )
+            : '';
+          const privateSubnets = !!ssmPathVpc
+            ? await getSSMParameterValue(
+                region,
+                credentials,
+                ssmPrivateSubnets,
+                ctx.logger,
+              )
+            : '';
+          const clusterArn =
+            envProviderType === 'ecs' || envProviderType === 'eks'
+              ? await getSSMParameterValue(
+                  region,
+                  credentials,
+                  ssmPathCluster,
+                  ctx.logger,
+                )
+              : '';
+          const assumedRoleArn = await getSSMParameterValue(
+            region,
+            credentials,
+            ssmAssumeRoleArn,
+            ctx.logger,
+          );
 
           const envProvider: EnvironmentProvider = {
             envProviderName,
@@ -259,64 +345,80 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
 
           envProviderOutputArray.push(envProvider);
         } catch (err: any) {
-          throw new Error(`Failed to populate environment provider ${envProviderName}. ${err.toString()}`)
+          throw new Error(
+            `Failed to populate environment provider ${envProviderName}. ${err.toString()}`,
+          );
         }
       }
 
-      ctx.logger.info(`Resolved environment providers: ${JSON.stringify(envProviderOutputArray, null, 2)}`);
+      ctx.logger.info(
+        `Resolved environment providers: ${JSON.stringify(envProviderOutputArray, null, 2)}`,
+      );
 
       ctx.output('envProviders', envProviderOutputArray);
 
       // For a given AWS Environment entity, get the defined attributes required for a deployment to AWS
-      async function getEnvDeploymentParameters(envEntity: Entity): Promise<DeploymentParameters[]> {
+      async function getEnvDeploymentParameters(
+        envEntity: Entity,
+      ): Promise<DeploymentParameters[]> {
         const entityRelations: EntityRelation[] = envEntity?.relations ?? [];
         const envProvRefs: string[] = entityRelations
           .filter(
             envProvRel =>
-              envProvRel.type === RELATION_DEPENDS_ON && envProvRel.targetRef.startsWith('awsenvironmentprovider'),
+              envProvRel.type === RELATION_DEPENDS_ON &&
+              envProvRel.targetRef.startsWith('awsenvironmentprovider'),
           )
           .map(envProvRel => envProvRel.targetRef);
 
-        const envProviderEntities = await catalogClient.getEntitiesByRefs({ entityRefs: envProvRefs }, { token });
+        const envProviderEntities = await catalogClient.getEntitiesByRefs(
+          { entityRefs: envProvRefs },
+          { token },
+        );
 
-        const deploymentParams: DeploymentParameters[] = envProviderEntities.items
-          .filter(
-            entity =>
-              entity &&
-              ['name', 'envType', 'awsAccount', 'awsRegion', 'vpc'].every(key => key in entity.metadata),
-          )
-          .map(entity => {
-            const { metadata } = entity!;
-            const vpc = metadata.vpc?.toString() || '';
+        const deploymentParams: DeploymentParameters[] =
+          envProviderEntities.items
+            .filter(
+              entity =>
+                entity &&
+                ['name', 'envType', 'awsAccount', 'awsRegion', 'vpc'].every(
+                  key => key in entity.metadata,
+                ),
+            )
+            .map(entity => {
+              const { metadata } = entity!;
+              const vpc = metadata.vpc?.toString() || '';
 
-            const deployParams: DeploymentParameters = {
-              envProviderPrefix: metadata['prefix']?.toString() || '',
-              envName: envEntity.metadata.name,
-              envProviderName: metadata.name,
-              envRef: environmentRef,
-              envProviderType: metadata['envType']?.toString().toLowerCase() || '',
-              accountId: metadata['awsAccount']?.toString() || '',
-              region: metadata['awsRegion']?.toString() || '',
-              ssmAssumeRoleArn: metadata['provisioningRole']?.toString() || '',
-              ssmPathVpc: vpc,
-              ssmPrivateSubnets: `${vpc}/private-subnets`,
-              ssmPublicSubnets: `${vpc}/public-subnets`,
-              ssmPathCluster: metadata['clusterName']?.toString() || '',
-            };
+              const deployParams: DeploymentParameters = {
+                envProviderPrefix: metadata['prefix']?.toString() || '',
+                envName: envEntity.metadata.name,
+                envProviderName: metadata.name,
+                envRef: environmentRef,
+                envProviderType:
+                  metadata['envType']?.toString().toLowerCase() || '',
+                accountId: metadata['awsAccount']?.toString() || '',
+                region: metadata['awsRegion']?.toString() || '',
+                ssmAssumeRoleArn:
+                  metadata['provisioningRole']?.toString() || '',
+                ssmPathVpc: vpc,
+                ssmPrivateSubnets: `${vpc}/private-subnets`,
+                ssmPublicSubnets: `${vpc}/public-subnets`,
+                ssmPathCluster: metadata['clusterName']?.toString() || '',
+              };
 
-            if (metadata['kubectlLambdaArn']) {
-              deployParams.kubectlLambdaArn = metadata['kubectlLambdaArn'].toString();
-            }
-            if (metadata['clusterAdminRole']) {
-              deployParams.kubectlLambdaRoleArn = metadata['clusterAdminRole'].toString();
-            }
+              if (metadata['kubectlLambdaArn']) {
+                deployParams.kubectlLambdaArn =
+                  metadata['kubectlLambdaArn'].toString();
+              }
+              if (metadata['clusterAdminRole']) {
+                deployParams.kubectlLambdaRoleArn =
+                  metadata['clusterAdminRole'].toString();
+              }
 
-            return deployParams;
-          });
+              return deployParams;
+            });
 
         return deploymentParams;
       }
     },
   });
-
 }

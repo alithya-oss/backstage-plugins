@@ -14,7 +14,7 @@ import {
   DescribeStacksCommandOutput,
   Parameter,
   UpdateStackCommand,
-  UpdateStackCommandOutput
+  UpdateStackCommandOutput,
 } from '@aws-sdk/client-cloudformation';
 import {
   CloudWatchLogsClient,
@@ -69,7 +69,7 @@ import {
   InvokeCommand,
   InvokeCommandInput,
   InvokeCommandOutput,
-  LambdaClient
+  LambdaClient,
 } from '@aws-sdk/client-lambda';
 import {
   ListGroupResourcesCommand,
@@ -112,23 +112,23 @@ import { AWSServiceResources } from '@alithya-oss/plugin-aws-apps-common';
 import { LoggerService } from '@backstage/backend-plugin-api';
 
 export type DynamoDBTableData = {
-  tableName: string
-  recordId: string
-  origin: string
-  prefix: string
-  appName:string
-  environmentProviderName: string
-  actionType: string
-  name: string
-  initiatedBy: string
-  owner: string
-  assumedRole: string
-  targetAccount: string
-  targetRegion: string
-  request: string
-  status: string
-  message: string
-}
+  tableName: string;
+  recordId: string;
+  origin: string;
+  prefix: string;
+  appName: string;
+  environmentProviderName: string;
+  actionType: string;
+  name: string;
+  initiatedBy: string;
+  owner: string;
+  assumedRole: string;
+  targetAccount: string;
+  targetRegion: string;
+  request: string;
+  status: string;
+  message: string;
+};
 
 export class AwsAppsApi {
   public constructor(
@@ -152,17 +152,20 @@ export class AwsAppsApi {
    * @returns The ListTasksCommandOutput object
    *
    */
-  public async getEcsServiceTask(clusterName: string, serviceName: string): Promise<ListTasksCommandOutput> {
+  public async getEcsServiceTask(
+    clusterName: string,
+    serviceName: string,
+  ): Promise<ListTasksCommandOutput> {
     this.logger.info('Calling getEcsServiceTask');
     // resolve ECS cluster param to value
-    const clusterRef = await this.getSSMParameter(clusterName)
+    const clusterRef = await this.getSSMParameter(clusterName);
 
     const client = new ECSClient({
       region: this.awsRegion,
       credentials: this.awsCredentials,
     });
     const params: ListTasksCommandInput = {
-      cluster: clusterRef.Parameter?.Value?.toString() || "",
+      cluster: clusterRef.Parameter?.Value?.toString() || '',
       serviceName: serviceName,
     };
     const command = new ListTasksCommand(params);
@@ -180,17 +183,20 @@ export class AwsAppsApi {
    * @returns The DescribeTasksCommand object
    *
    */
-  public async describeClusterTasks(clusterName: string, taskArns: string[]): Promise<DescribeTasksCommandOutput> {
+  public async describeClusterTasks(
+    clusterName: string,
+    taskArns: string[],
+  ): Promise<DescribeTasksCommandOutput> {
     this.logger.info('Calling describeClusterTasks');
-     // resolve ECS cluster param to value
-     const clusterRef = await this.getSSMParameter(clusterName);
+    // resolve ECS cluster param to value
+    const clusterRef = await this.getSSMParameter(clusterName);
 
     const client = new ECSClient({
       region: this.awsRegion,
       credentials: this.awsCredentials,
     });
     const params: DescribeTasksCommandInput = {
-      cluster: clusterRef.Parameter?.Value?.toString() || "",
+      cluster: clusterRef.Parameter?.Value?.toString() || '',
       tasks: taskArns,
     };
     const command = new DescribeTasksCommand(params);
@@ -218,14 +224,14 @@ export class AwsAppsApi {
   ): Promise<UpdateServiceCommandOutput> {
     this.logger.info('Calling updateServiceTask');
     // resolve ECS cluster param to value
-    const clusterRef = await this.getSSMParameter(clusterName)
+    const clusterRef = await this.getSSMParameter(clusterName);
 
     const client = new ECSClient({
       region: this.awsRegion,
       credentials: this.awsCredentials,
     });
     const params: UpdateServiceCommandInput = {
-      cluster: clusterRef.Parameter?.Value?.toString() || "",
+      cluster: clusterRef.Parameter?.Value?.toString() || '',
       service: serviceName,
       desiredCount: numberOfTasks,
       forceNewDeployment: restart,
@@ -245,7 +251,9 @@ export class AwsAppsApi {
    * @returns The GetSecretValueCommandOutput object
    *
    */
-  public async getSecretValue(secretArn: string): Promise<GetSecretValueCommandOutput> {
+  public async getSecretValue(
+    secretArn: string,
+  ): Promise<GetSecretValueCommandOutput> {
     this.logger.info('Calling getSecretValue');
     const client = new SecretsManagerClient({
       region: this.awsRegion,
@@ -268,7 +276,11 @@ export class AwsAppsApi {
    * @returns The CreateSecretCommandOutput object
    *
    */
-  public async createSecret(secretName: string, description: string, tags?: { Key: string, Value: string | number | boolean }[]): Promise<CreateSecretCommandOutput> {
+  public async createSecret(
+    secretName: string,
+    description: string,
+    tags?: { Key: string; Value: string | number | boolean }[],
+  ): Promise<CreateSecretCommandOutput> {
     this.logger.info('Calling create Secret');
 
     // convert tags to SecretsManager.Tag format
@@ -304,7 +316,10 @@ export class AwsAppsApi {
    * @returns The CreateSecretCommandOutput object
    *
    */
-  public async putSecretValue(secretArn: string, secretValue: string): Promise<PutSecretValueCommandOutput> {
+  public async putSecretValue(
+    secretArn: string,
+    secretValue: string,
+  ): Promise<PutSecretValueCommandOutput> {
     this.logger.info('Calling put Secret');
     const client = new SecretsManagerClient({
       region: this.awsRegion,
@@ -331,7 +346,10 @@ export class AwsAppsApi {
    * @returns The CreateBucketCommandOutput object
    *
    */
-  public async createS3Bucket(bucketName: string, tags?: { Key: string, Value: string | number | boolean }[]): Promise<CreateBucketCommandOutput> {
+  public async createS3Bucket(
+    bucketName: string,
+    tags?: { Key: string; Value: string | number | boolean }[],
+  ): Promise<CreateBucketCommandOutput> {
     this.logger.info('Calling create S3 bucket');
 
     const fullBucketName = `${bucketName}-${this.awsAccount}-${this.awsRegion}`;
@@ -353,7 +371,10 @@ export class AwsAppsApi {
     // See https://github.com/aws/aws-sdk-js/issues/3647
     if (this.awsRegion !== 'us-east-1') {
       createInput.CreateBucketConfiguration = {
-        LocationConstraint: BucketLocationConstraint[this.awsRegion as keyof typeof BucketLocationConstraint],
+        LocationConstraint:
+          BucketLocationConstraint[
+            this.awsRegion as keyof typeof BucketLocationConstraint
+          ],
       };
     }
 
@@ -361,10 +382,10 @@ export class AwsAppsApi {
     const response = await client.send(command);
 
     const tagInput = {
-      "Bucket": fullBucketName,
-      "Tagging": {
-        "TagSet": resourceTags
-      }
+      Bucket: fullBucketName,
+      Tagging: {
+        TagSet: resourceTags,
+      },
     };
 
     const tagCommand = new PutBucketTaggingCommand(tagInput);
@@ -382,7 +403,10 @@ export class AwsAppsApi {
    * @returns The HeadObjectCommandOutput object
    *
    */
-  public async doesS3FileExist(bucketName: string, fileName: string): Promise<HeadObjectCommandOutput> {
+  public async doesS3FileExist(
+    bucketName: string,
+    fileName: string,
+  ): Promise<HeadObjectCommandOutput> {
     this.logger.info('Calling doesS3FileExist');
 
     const client = new S3Client({
@@ -409,7 +433,9 @@ export class AwsAppsApi {
    * @returns The DescribeLogGroupsCommandOutput object
    *
    */
-  public async getLogGroups(logPrefix: string): Promise<DescribeLogGroupsCommandOutput> {
+  public async getLogGroups(
+    logPrefix: string,
+  ): Promise<DescribeLogGroupsCommandOutput> {
     this.logger.info('Calling getLogGroups');
     const client = new CloudWatchLogsClient({
       region: this.awsRegion,
@@ -432,7 +458,9 @@ export class AwsAppsApi {
    * @returns The DescribeLogStreamsCommandOutput object
    *
    */
-  public async getLogStreams(logGroupName: string): Promise<DescribeLogStreamsCommandOutput> {
+  public async getLogStreams(
+    logGroupName: string,
+  ): Promise<DescribeLogStreamsCommandOutput> {
     this.logger.info('Calling getLogStreams');
     const client = new CloudWatchLogsClient({
       region: this.awsRegion,
@@ -478,7 +506,9 @@ export class AwsAppsApi {
     const resp = client.send(command);
     return resp;
   }
-  public async getLogRecord(logRecordPointer: string): Promise<GetLogRecordCommandOutput> {
+  public async getLogRecord(
+    logRecordPointer: string,
+  ): Promise<GetLogRecordCommandOutput> {
     this.logger.info('Calling getLogRecord');
     const client = new CloudWatchLogsClient({
       region: this.awsRegion,
@@ -492,7 +522,11 @@ export class AwsAppsApi {
     return resp;
   }
 
-  public async getDynamodbTable(tableName: string, appName: string, timeFrame: number): Promise<ScanCommandOutput> {
+  public async getDynamodbTable(
+    tableName: string,
+    appName: string,
+    timeFrame: number,
+  ): Promise<ScanCommandOutput> {
     this.logger.info('Calling getDynamodbTable');
 
     const client = new DynamoDBClient({
@@ -517,11 +551,11 @@ export class AwsAppsApi {
     return resp;
   }
 
-
-
-  public async putDynamodbTableData(data: DynamoDBTableData): Promise<PutItemCommandOutput> {
+  public async putDynamodbTableData(
+    data: DynamoDBTableData,
+  ): Promise<PutItemCommandOutput> {
     this.logger.info('Calling getDynamodbTable');
- 
+
     const client = new DynamoDBClient({
       region: this.awsRegion,
       credentials: this.awsCredentials,
@@ -533,7 +567,7 @@ export class AwsAppsApi {
         createdAt: { S: new Date().toISOString() },
         createdDate: { S: new Date().toLocaleDateString() },
         origin: { S: data.origin },
-        appName: {S: data.appName},
+        appName: { S: data.appName },
         actionType: { S: data.actionType },
         actionName: { S: data.name },
         initiatedBy: { S: data.initiatedBy },
@@ -563,7 +597,9 @@ export class AwsAppsApi {
    * @returns The Resources Arn associated with this group
    *
    */
-  public async getResourceGroupResources(resourceGroupName: string): Promise<ListGroupResourcesCommandOutput> {
+  public async getResourceGroupResources(
+    resourceGroupName: string,
+  ): Promise<ListGroupResourcesCommandOutput> {
     this.logger.info('Calling getResourceGroupResources');
 
     const client = new ResourceGroupsClient({
@@ -588,45 +624,65 @@ export class AwsAppsApi {
    * @param resourceGroupName - The Resource Group name to get a list of resources from.  This can be a string representing an ARN or the name of the Resource Group
    * @returns A ServiceResources object containing the grouped services
    */
-  public async getCategorizedResources(resourceGroup: string): Promise<AWSServiceResources> {
+  public async getCategorizedResources(
+    resourceGroup: string,
+  ): Promise<AWSServiceResources> {
     const rawResults = await this.getResourceGroupResources(resourceGroup);
 
     const resourceIdentifiers = rawResults.Resources ?? [];
-    let categorizedResources = resourceIdentifiers.reduce<AWSServiceResources>((acc, item): any => {
-      const idObj = item.Identifier;
-      if (idObj?.ResourceType) {
-        const resourceTypeId = idObj.ResourceType;
-        const [_, serviceName, resourceTypeName] = resourceTypeId.split('::');
+    let categorizedResources = resourceIdentifiers.reduce<AWSServiceResources>(
+      (acc, item): any => {
+        const idObj = item.Identifier;
+        if (idObj?.ResourceType) {
+          const resourceTypeId = idObj.ResourceType;
+          const [_, serviceName, resourceTypeName] = resourceTypeId.split('::');
 
-        const resourceArn = idObj.ResourceArn ?? '';
-        try {
-          const { resource, service } = parseArn(resourceArn);
-          // Use a regex pattern to extract the resource name without the service resource type
-          // Most arns begin the resource name after a '/', but some (like CW logs) start after a ':'
-          const re = /.*?([:?\/])(.*)/;
-          const reMatches = resource.match(re);
-          let resourceName = reMatches ? reMatches[2] : resource;
-          // Handle the exception case for SSM Parameters where path-like values need to be prefixed with '/'
-          if (service == 'ssm' && resource.startsWith('parameter') && resourceName.indexOf('/') > 0) {
-            resourceName = `/${resourceName}`;
-          }
+          const resourceArn = idObj.ResourceArn ?? '';
+          try {
+            const { resource, service } = parseArn(resourceArn);
+            // Use a regex pattern to extract the resource name without the service resource type
+            // Most arns begin the resource name after a '/', but some (like CW logs) start after a ':'
+            const re = /.*?([:?\/])(.*)/;
+            const reMatches = resource.match(re);
+            let resourceName = reMatches ? reMatches[2] : resource;
+            // Handle the exception case for SSM Parameters where path-like values need to be prefixed with '/'
+            if (
+              service == 'ssm' &&
+              resource.startsWith('parameter') &&
+              resourceName.indexOf('/') > 0
+            ) {
+              resourceName = `/${resourceName}`;
+            }
 
-          if (acc[serviceName]) {
-            acc[serviceName] = [
-              ...acc[serviceName],
-              ...[{ resourceTypeId, resourceTypeName, resourceArn, resourceName }],
-            ];
-          } else {
-            acc[serviceName] = [{ resourceTypeId, resourceTypeName, resourceArn, resourceName }];
+            if (acc[serviceName]) {
+              acc[serviceName] = [
+                ...acc[serviceName],
+                ...[
+                  {
+                    resourceTypeId,
+                    resourceTypeName,
+                    resourceArn,
+                    resourceName,
+                  },
+                ],
+              ];
+            } else {
+              acc[serviceName] = [
+                { resourceTypeId, resourceTypeName, resourceArn, resourceName },
+              ];
+            }
+          } catch {
+            throw new Error(
+              `Invalid arn provided for ${serviceName} in resource group ${resourceGroup}`,
+            );
           }
-        } catch {
-          throw new Error(`Invalid arn provided for ${serviceName} in resource group ${resourceGroup}`);
+          return acc;
+        } else {
+          throw new Error('Could not parse resource group resources response');
         }
-        return acc;
-      } else {
-        throw new Error('Could not parse resource group resources response');
-      }
-    }, {});
+      },
+      {},
+    );
 
     return categorizedResources;
   }
@@ -641,7 +697,9 @@ export class AwsAppsApi {
    * @returns The the string value of the SSM Parameter.  If the SSM Parameter is a List, then it will be a comma-separated string
    *
    */
-  public async getSSMParameter(ssmParamName: string): Promise<GetParameterCommandOutput> {
+  public async getSSMParameter(
+    ssmParamName: string,
+  ): Promise<GetParameterCommandOutput> {
     this.logger.info(`Calling getSSMParameter - ${ssmParamName}`);
 
     const client = new SSMClient({
@@ -665,7 +723,9 @@ export class AwsAppsApi {
    * @returns The DescribeTaskDefinitionCommandOutput object
    *
    */
-  public async describeTaskDefinition(taskDefinitionArn: string): Promise<DescribeTaskDefinitionCommandOutput> {
+  public async describeTaskDefinition(
+    taskDefinitionArn: string,
+  ): Promise<DescribeTaskDefinitionCommandOutput> {
     this.logger.info('Calling Describe Task Definition');
     const client = new ECSClient({
       region: this.awsRegion,
@@ -687,7 +747,9 @@ export class AwsAppsApi {
    * @returns The DescribeTaskDefinitionCommandOutput object
    *
    */
-  public async registerTaskDefinition(taskDefinition: TaskDefinition): Promise<RegisterTaskDefinitionCommandOutput> {
+  public async registerTaskDefinition(
+    taskDefinition: TaskDefinition,
+  ): Promise<RegisterTaskDefinitionCommandOutput> {
     this.logger.info('Calling Register Task Definition');
     const client = new ECSClient({
       region: this.awsRegion,
@@ -721,7 +783,9 @@ export class AwsAppsApi {
    * @returns The DescribeTasksCommand object
    *
    */
-  public async describeStack(stackName: string): Promise<DescribeStacksCommandOutput> {
+  public async describeStack(
+    stackName: string,
+  ): Promise<DescribeStacksCommandOutput> {
     this.logger.info('Calling describeStack');
     const client = new CloudFormationClient({
       region: this.awsRegion,
@@ -749,7 +813,6 @@ export class AwsAppsApi {
   public async describeStackEvents(
     stackName: string,
   ): Promise<DescribeStackEventsCommandOutput> {
-
     this.logger.info('Calling describeStackEvents');
     const client = new CloudFormationClient({
       region: this.awsRegion,
@@ -776,7 +839,7 @@ export class AwsAppsApi {
    * @param cfFileName - the SAM/CloudFormation template file name
    * @param providerName - the environment provider name
    * @param parameters - CloudFormation stack input parameters or undefined
-   * 
+   *
    * @returns The UpdateStackCommandOutput object
    */
   public async updateStack(
@@ -787,7 +850,6 @@ export class AwsAppsApi {
     providerName: string,
     parameters?: Parameter[],
   ): Promise<UpdateStackCommandOutput> {
-
     this.logger.info('Calling updateStack');
 
     const client = new CloudFormationClient({
@@ -829,7 +891,7 @@ export class AwsAppsApi {
    * @param cfFileName - the SAM/CloudFormation template file name
    * @param providerName - the environment provider name
    * @param parameters - CloudFormation stack input parameters or undefined
-   * 
+   *
    * @returns The CreateStackCommandOutput object
    */
   public async createStack(
@@ -840,7 +902,6 @@ export class AwsAppsApi {
     providerName: string,
     parameters?: Parameter[],
   ): Promise<CreateStackCommandOutput> {
-
     this.logger.info('Calling createStack');
 
     const client = new CloudFormationClient({
@@ -882,7 +943,6 @@ export class AwsAppsApi {
   public async deleteStack(
     stackName: string,
   ): Promise<DeleteStackCommandOutput> {
-
     this.logger.info('Calling deleteStack');
 
     const client = new CloudFormationClient({
@@ -900,46 +960,49 @@ export class AwsAppsApi {
   }
 
   /**
- * Get EKS Cluster
- *
- * @remarks
- * Get information about an EKS Cluster.
- *
- * @param clusterName - The EKS Cluster name
- * @returns The DescribeClusterCommandOutput object
- *
- */
-public async getEksCluster(clusterName: string): Promise<DescribeClusterCommandOutput> {
-  this.logger.info('Calling getEksCluster');
-  const client = new EKSClient({
-    region: this.awsRegion,
-    credentials: this.awsCredentials,
-  });
-  const params: DescribeClusterCommandInput = {
-    name: clusterName,
-  };
-  const command = new DescribeClusterCommand(params);
-  const response = await client.send(command);
-  return response;
-}
+   * Get EKS Cluster
+   *
+   * @remarks
+   * Get information about an EKS Cluster.
+   *
+   * @param clusterName - The EKS Cluster name
+   * @returns The DescribeClusterCommandOutput object
+   *
+   */
+  public async getEksCluster(
+    clusterName: string,
+  ): Promise<DescribeClusterCommandOutput> {
+    this.logger.info('Calling getEksCluster');
+    const client = new EKSClient({
+      region: this.awsRegion,
+      credentials: this.awsCredentials,
+    });
+    const params: DescribeClusterCommandInput = {
+      name: clusterName,
+    };
+    const command = new DescribeClusterCommand(params);
+    const response = await client.send(command);
+    return response;
+  }
 
-public async callLambda(functionName: string, body: string) :Promise<InvokeCommandOutput>
-{
-  this.logger.info('Calling callLambda');
-  const client = new LambdaClient({
-    region: this.awsRegion,
-    credentials: this.awsCredentials,
-  });
+  public async callLambda(
+    functionName: string,
+    body: string,
+  ): Promise<InvokeCommandOutput> {
+    this.logger.info('Calling callLambda');
+    const client = new LambdaClient({
+      region: this.awsRegion,
+      credentials: this.awsCredentials,
+    });
 
-  const params: InvokeCommandInput = {
-    FunctionName: functionName,
-    LogType: 'Tail',
-    Payload: Buffer.from(body),
-    InvocationType:'RequestResponse'
-  };
-  const command = new InvokeCommand(params);
-  const response = await client.send(command);
-  return response;
-}
-
+    const params: InvokeCommandInput = {
+      FunctionName: functionName,
+      LogType: 'Tail',
+      Payload: Buffer.from(body),
+      InvocationType: 'RequestResponse',
+    };
+    const command = new InvokeCommand(params);
+    const response = await client.send(command);
+    return response;
+  }
 }

@@ -3,13 +3,13 @@
 
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 // import { getAWScreds, AwsAppsApi, createAuditRecord } from '@alithya-oss/plugin-aws-apps-backend';
-import { EnvironmentProvider, } from '../../types';
+import { EnvironmentProvider } from '../../types';
 
 export function createS3BucketAction() {
   return createTemplateAction<{
     bucketName: string;
     envProviders: EnvironmentProvider[];
-    tags?: { Key: string, Value: string | number | boolean }[];
+    tags?: { Key: string; Value: string | number | boolean }[];
   }>({
     id: 'opa:create-s3-bucket',
     description: 'Creates an S3 bucket',
@@ -25,12 +25,14 @@ export function createS3BucketAction() {
           },
           envProviders: {
             title: 'AWS Environment Providers',
-            description: 'The AWS environment providers containing account and region info',
+            description:
+              'The AWS environment providers containing account and region info',
             type: 'array',
           },
           tags: {
             title: 'AWS Tags',
-            description: 'key/value pairs to apply as tags to any created AWS resources',
+            description:
+              'key/value pairs to apply as tags to any created AWS resources',
             type: 'array',
             minProperties: 1,
             items: [
@@ -38,8 +40,8 @@ export function createS3BucketAction() {
                 type: 'object',
                 properties: {
                   Key: { type: 'string' },
-                  Value: { type: ['string', 'number', 'boolean'] }
-                }
+                  Value: { type: ['string', 'number', 'boolean'] },
+                },
               },
             ],
           },
@@ -47,9 +49,7 @@ export function createS3BucketAction() {
       },
       output: {
         type: 'object',
-        required: [
-          'awsBucketName',
-        ],
+        required: ['awsBucketName'],
         properties: {
           awsBucketName: {
             title: 'S3 Bucket Name',
@@ -59,24 +59,16 @@ export function createS3BucketAction() {
       },
     },
     async handler() {
-
       // We plan to remove/depricate this scaffolder action...
-
       // const { bucketName, tags, envProviders } = ctx.input;
-
       // // TODO add support for multiaccount/multiregion
       // const { accountId, region } = envProviders[0];
-
       // const creds = await getAWScreds(accountId, region, ctx.user!.entity!);
-
       // const apiClient = new AwsAppsApi(ctx.logger, creds.credentials, region, accountId);
-
       // ctx.logger.info(`Creating bucket with name: ${bucketName}-${accountId}-${region}`);
-
       // try {
       //   const response = await apiClient.createS3Bucket(bucketName, tags);
       //   ctx.output('awsBucketName', response.Location!.slice(1));
-
       //   const auditResponse = await createAuditRecord({
       //     actionType: 'Create S3 Bucket',
       //     actionName: response.Location!.slice(1),
@@ -90,7 +82,6 @@ export function createS3BucketAction() {
       //     owner: creds.owner || '',
       //     envProviderName: "FIXME", // FIXME createS3BucketAction pass envProviderName
       //     envProviderPrefix: "FIXME", // FIXME createS3BucketAction pass envProviderPrefix
-
       //   });
       //   if (auditResponse.status === 'FAILED') {
       //     throw Error;

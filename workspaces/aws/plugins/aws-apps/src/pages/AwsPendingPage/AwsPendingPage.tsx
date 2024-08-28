@@ -2,7 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Entity } from '@backstage/catalog-model';
-import { EntityAboutCard, EntityLayout, EntityLinksCard } from '@backstage/plugin-catalog';
+import {
+  EntityAboutCard,
+  EntityLayout,
+  EntityLinksCard,
+} from '@backstage/plugin-catalog';
 import { EntityCatalogGraphCard } from '@backstage/plugin-catalog-graph';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { isGithubActionsAvailable } from '@backstage/plugin-github-actions';
@@ -35,7 +39,11 @@ export function AwsPendingPage(_props: AwsPendingPageProps) {
               <EntityAboutCard variant="gridItem" />
             </Grid>
             <Grid item md={6} xs={12}>
-              <EntityCatalogGraphCard variant="gridItem" height={400} showArrowHeads />
+              <EntityCatalogGraphCard
+                variant="gridItem"
+                height={400}
+                showArrowHeads
+              />
             </Grid>
             <Grid item md={6} xs={12}>
               <EntityLinksCard />

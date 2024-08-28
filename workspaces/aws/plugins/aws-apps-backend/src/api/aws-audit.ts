@@ -7,7 +7,7 @@ import { AwsAppsApi } from './AwsAppsApi';
 export interface AwsAuditRequest {
   envProviderPrefix: string;
   envProviderName: string;
-  appName:string;
+  appName: string;
   apiClient: AwsAppsApi;
   roleArn: string;
   logger: LoggerService;
@@ -47,7 +47,9 @@ export async function createAuditRecord({
 
   let tableNameResponse;
   try {
-    tableNameResponse = await apiClient.getSSMParameter(`/${envProviderPrefix.toLowerCase()}/${envProviderName.toLowerCase()}/${envProviderName.toLowerCase()}-audit`);
+    tableNameResponse = await apiClient.getSSMParameter(
+      `/${envProviderPrefix.toLowerCase()}/${envProviderName.toLowerCase()}/${envProviderName.toLowerCase()}-audit`,
+    );
   } catch (err) {
     response.status = 'FAILED';
     response.message = `Audit failed - audit table name was set to FIXME. ${tableNameResponse}`;
@@ -61,7 +63,7 @@ export async function createAuditRecord({
       origin: 'Backstage-SDK',
       prefix: envProviderPrefix,
       environmentProviderName: envProviderName,
-      appName:appName,
+      appName: appName,
       actionType,
       name: actionName,
       initiatedBy: requester,
@@ -71,7 +73,7 @@ export async function createAuditRecord({
       targetRegion: awsRegion,
       request: requestArgs ?? '',
       status,
-      message: message ?? ''
+      message: message ?? '',
     });
 
     if (auditResponse.$metadata.httpStatusCode == 200) {

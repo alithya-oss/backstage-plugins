@@ -7,12 +7,20 @@ import { Logger } from 'winston';
 import { UserEntity } from '@backstage/catalog-model';
 import { getAWScreds } from '@alithya-oss/plugin-aws-apps-backend';
 import { EnvironmentProvider, EnvironmentProviderConnection } from '../types';
-import { SecretsManagerClient, CreateSecretCommandInput, CreateSecretCommand, PutSecretValueCommand, PutSecretValueCommandInput } from '@aws-sdk/client-secrets-manager';
+import {
+  SecretsManagerClient,
+  CreateSecretCommandInput,
+  CreateSecretCommand,
+  PutSecretValueCommand,
+  PutSecretValueCommandInput,
+} from '@aws-sdk/client-secrets-manager';
 
-export type EnvProviderConnectMap = { [key: string]: EnvironmentProviderConnection; }
+export type EnvProviderConnectMap = {
+  [key: string]: EnvironmentProviderConnection;
+};
 
 /**
- * Returns connection information (credentials, accountId, region) for each supplied 
+ * Returns connection information (credentials, accountId, region) for each supplied
  * environment provider.
  *
  * @param envProviders - List of environment providers
@@ -20,24 +28,38 @@ export type EnvProviderConnectMap = { [key: string]: EnvironmentProviderConnecti
  * @returns A map of connection information, keyed off of the environment provider name
  */
 export async function getEnvironmentProviderConnectInfo(
-  envProviders: EnvironmentProvider[], userEntity?: UserEntity)
-  : Promise<EnvProviderConnectMap> {
-
-  const envProviderConnectionsMap = (await Promise.all(
-    envProviders.map(async (envProvider: EnvironmentProvider): Promise<EnvironmentProviderConnection> => {
-      const { accountId, region, envProviderPrefix, envProviderName } = envProvider;
-      const awsAuthResponse = await getAWScreds(accountId, region, envProviderPrefix, envProviderName, userEntity);
-      return {
-        providerName: envProvider.envProviderName,
-        accountId,
-        region,
-        awsAuthResponse,
-      }
-    })
-  )).reduce((acc, envProviderConnection) => {
+  envProviders: EnvironmentProvider[],
+  userEntity?: UserEntity,
+): Promise<EnvProviderConnectMap> {
+  const envProviderConnectionsMap = (
+    await Promise.all(
+      envProviders.map(
+        async (
+          envProvider: EnvironmentProvider,
+        ): Promise<EnvironmentProviderConnection> => {
+          const { accountId, region, envProviderPrefix, envProviderName } =
+            envProvider;
+          const awsAuthResponse = await getAWScreds(
+            accountId,
+            region,
+            envProviderPrefix,
+            envProviderName,
+            userEntity,
+          );
+          return {
+            providerName: envProvider.envProviderName,
+            accountId,
+            region,
+            awsAuthResponse,
+          };
+        },
+      ),
+    )
+  ).reduce((acc, envProviderConnection) => {
     const typedAcc: EnvProviderConnectMap = acc;
     return {
-      ...typedAcc, [envProviderConnection.providerName]: envProviderConnection
+      ...typedAcc,
+      [envProviderConnection.providerName]: envProviderConnection,
     };
   }, {});
 
@@ -45,7 +67,12 @@ export async function getEnvironmentProviderConnectInfo(
 }
 
 // Get the value for a specified SSM Parameter Store path
-export async function getSSMParameterValue(region: string, creds: AwsCredentialIdentity, ssmPath: string, logger?: Logger): Promise<string> {
+export async function getSSMParameterValue(
+  region: string,
+  creds: AwsCredentialIdentity,
+  ssmPath: string,
+  logger?: Logger,
+): Promise<string> {
   const ssmClient = new SSMClient({
     region,
     customUserAgent: 'opa-plugin',
@@ -72,9 +99,12 @@ export async function getSSMParameterValue(region: string, creds: AwsCredentialI
   return ssmResponse.Parameter.Value;
 }
 
-
 // Get the value for a specified SSM Parameter Store path
-export async function getPlatformAccountSSMParameterValue(ssmPath: string, region?: string, logger?: Logger): Promise<string> {
+export async function getPlatformAccountSSMParameterValue(
+  ssmPath: string,
+  region?: string,
+  logger?: Logger,
+): Promise<string> {
   const ssmClient = new SSMClient({
     region,
     customUserAgent: 'opa-plugin',
@@ -95,9 +125,13 @@ export async function getPlatformAccountSSMParameterValue(ssmPath: string, regio
   return ssmResponse.Parameter.Value;
 }
 
-export async function createSecret(secretName: string, description: string, region?: string,
-  tags?: { Key: string, Value: string | number | boolean }[], logger?: Logger): Promise<string | undefined> {
-
+export async function createSecret(
+  secretName: string,
+  description: string,
+  region?: string,
+  tags?: { Key: string; Value: string | number | boolean }[],
+  logger?: Logger,
+): Promise<string | undefined> {
   if (logger) {
     logger.debug('Calling create Secret');
   }
@@ -108,7 +142,7 @@ export async function createSecret(secretName: string, description: string, regi
   });
 
   const client = new SecretsManagerClient({
-    region
+    region,
   });
   const params: CreateSecretCommandInput = {
     Name: secretName,
@@ -131,13 +165,12 @@ export async function putSecret(
   region?: string,
   logger?: Logger,
 ): Promise<void> {
-
   if (logger) {
     logger.debug(`Updating secret ${secretArn}`);
   }
 
   const client = new SecretsManagerClient({
-    region
+    region,
   });
   const params: PutSecretValueCommandInput = {
     SecretId: secretArn,

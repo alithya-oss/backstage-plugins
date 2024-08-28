@@ -9,7 +9,9 @@ export function useLabelsFromEntity(entity: Entity): Record<string, string> {
   return labels;
 }
 
-export function useAnnotationsFromEntity(entity: Entity): Record<string, string> {
+export function useAnnotationsFromEntity(
+  entity: Entity,
+): Record<string, string> {
   const annotations = entity?.metadata?.annotations ?? {};
 
   return annotations;

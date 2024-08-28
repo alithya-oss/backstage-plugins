@@ -14,7 +14,10 @@ const AuditTable = () => {
   const api = useApi(opaApiRef);
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<{ isError: boolean; errorMsg: string | null }>({ isError: false, errorMsg: null });
+  const [error, setError] = useState<{
+    isError: boolean;
+    errorMsg: string | null;
+  }>({ isError: false, errorMsg: null });
   const [items, setItems] = useState<AuditRecord[]>([]);
 
   useEffect(() => {
@@ -51,7 +54,10 @@ const AuditTable = () => {
       })
       .catch(err => {
         setLoading(false);
-        setError({ isError: true, errorMsg: `Unexpected error occurred while retrieving audit data: ${err}` });
+        setError({
+          isError: true,
+          errorMsg: `Unexpected error occurred while retrieving audit data: ${err}`,
+        });
       });
   }, []);
 
@@ -133,7 +139,13 @@ const AuditTable = () => {
 
   return (
     <div>
-      <Table options={{ paging: true }} data={items} columns={columns} title="Audit Table" isLoading={loading} />
+      <Table
+        options={{ paging: true }}
+        data={items}
+        columns={columns}
+        title="Audit Table"
+        isLoading={loading}
+      />
     </div>
   );
 };
@@ -149,6 +161,12 @@ export const AuditWidget = () => {
     // };
     return <AuditTable />;
   } else {
-    return <EmptyState missing="data" title="No audit data to show" description="Audit data would show here" />;
+    return (
+      <EmptyState
+        missing="data"
+        title="No audit data to show"
+        description="Audit data would show here"
+      />
+    );
   }
 };

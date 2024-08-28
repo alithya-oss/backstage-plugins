@@ -11,7 +11,6 @@ export interface AWSResource {
   resourceArn: string;
 }
 
-
 export interface AuditRecord {
   id: string;
   origin: string;
@@ -25,8 +24,8 @@ export interface AuditRecord {
   assumedRole: string;
   targetAccount: string;
   targetRegion: string;
-  prefix:string;
-  providerName:string;
+  prefix: string;
+  providerName: string;
   request: string;
   status: string;
   message: string;
@@ -38,8 +37,8 @@ export interface ResourceBinding {
   resourceName: string;
   provider: string;
   resourceArn: string;
-  associatedResources?: AssociatedResources[]
-  entityRef?:string;
+  associatedResources?: AssociatedResources[];
+  entityRef?: string;
 }
 
 export interface AssociatedResources {
@@ -48,18 +47,17 @@ export interface AssociatedResources {
   resourceArn: string;
 }
 
-
 export interface BindResourceParams {
   envName: string;
   providerName: string;
-  resourceName:string;
-  resourceEntityRef:string;
+  resourceName: string;
+  resourceEntityRef: string;
   policies: ResourcePolicy[];
   appName: string;
 }
 
 export interface ResourcePolicy {
-  policyFileName:string;
+  policyFileName: string;
   policyContent: string;
-  policyResource:string;
+  policyResource: string;
 }

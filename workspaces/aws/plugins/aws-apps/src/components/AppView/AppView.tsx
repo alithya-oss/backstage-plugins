@@ -25,46 +25,36 @@ export const AboutField = ({
   gridSizes?: Record<string, number>;
   children?: React.ReactNode;
 }) => {
-
   // Content is either children or a string prop `value`
   const content = React.Children.count(children) ? (
     children
   ) : (
-    <Typography variant="body2" >
-      {value || `unknown`}
-    </Typography>
+    <Typography variant="body2">{value || `unknown`}</Typography>
   );
   return (
     <Grid item {...gridSizes}>
-      <Typography variant="subtitle2" >
-        {label}
-      </Typography>
+      <Typography variant="subtitle2">{label}</Typography>
       {content}
     </Grid>
   );
 };
 
-export const AppView = ({
-  appData,
-}: {
-  appData: OPAAppData;
-}): JSX.Element => {
+export const AppView = ({ appData }: { appData: OPAAppData }): JSX.Element => {
   Object.keys(appData).forEach(key => {
-    const newkey = key.replace("opa/", "")
+    const newkey = key.replace('opa/', '');
     appData[newkey] = appData[key];
     delete appData[key];
   });
-  const details = appData
-  console.log(appData)
+  const details = appData;
+  console.log(appData);
 
   return (
     <div>
       {appData && (
         <>
           <Card>
-            <CardHeader
-              title={<Typography variant="h5">OPA App</Typography>}
-            /><Divider />
+            <CardHeader title={<Typography variant="h5">OPA App</Typography>} />
+            <Divider />
             <CardContent>
               <Grid container columnSpacing={2}>
                 <Grid item xs={4}>
@@ -102,7 +92,11 @@ export const AppView = ({
                         Public
                       </Typography>
                       <Typography
-                        sx={details?.public ? { color: 'Green' } : { color: 'Red' }}
+                        sx={
+                          details?.public
+                            ? { color: 'Green' }
+                            : { color: 'Red' }
+                        }
                       >
                         {details?.public ? 'Yes' : 'No'}
                       </Typography>
@@ -126,7 +120,9 @@ export const AppView = ({
                       <Typography sx={{ pt: 3, color: '#645B59' }}>
                         Template
                       </Typography>
-                      <Typography sx={{ mt: 1 }}>{details?.template}</Typography>
+                      <Typography sx={{ mt: 1 }}>
+                        {details?.template}
+                      </Typography>
                       <Typography sx={{ pt: 3, color: '#645B59' }}>
                         Account
                       </Typography>
@@ -149,7 +145,9 @@ export const AppView = ({
                       <Typography sx={{ pt: 3, color: '#645B59' }}>
                         Environment
                       </Typography>
-                      <Typography sx={{ mt: 1 }}>{details?.environment}</Typography>
+                      <Typography sx={{ mt: 1 }}>
+                        {details?.environment}
+                      </Typography>
                       <Typography sx={{ pt: 3, color: '#645B59' }}>
                         Owner
                       </Typography>
@@ -157,7 +155,6 @@ export const AppView = ({
                     </Grid>
                   </Grid>
                 </Grid>
-
               </Grid>
             </CardContent>
           </Card>

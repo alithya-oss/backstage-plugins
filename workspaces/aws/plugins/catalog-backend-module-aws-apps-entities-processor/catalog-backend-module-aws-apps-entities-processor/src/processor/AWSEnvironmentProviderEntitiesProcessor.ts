@@ -8,13 +8,21 @@ import {
   RELATION_OWNED_BY,
   RELATION_OWNER_OF,
 } from '@backstage/catalog-model';
-import { CatalogProcessor, CatalogProcessorEmit, processingResult } from '@backstage/plugin-catalog-node';
+import {
+  CatalogProcessor,
+  CatalogProcessorEmit,
+  processingResult,
+} from '@backstage/plugin-catalog-node';
 import { LocationSpec } from '@backstage/plugin-catalog-common';
-import { AWSEnvironmentProviderEntityV1, awsEnvironmentProviderEntityV1Validator } from '@alithya-oss/plugin-aws-apps-common';
-
+import {
+  AWSEnvironmentProviderEntityV1,
+  awsEnvironmentProviderEntityV1Validator,
+} from '@alithya-oss/plugin-aws-apps-common';
 
 /** @public */
-export class AWSEnvironmentProviderEntitiesProcessor implements CatalogProcessor {
+export class AWSEnvironmentProviderEntitiesProcessor
+  implements CatalogProcessor
+{
   getProcessorName(): string {
     return 'AWSEnvironmentProviderEntitiesProcessor';
   }
@@ -32,10 +40,17 @@ export class AWSEnvironmentProviderEntitiesProcessor implements CatalogProcessor
     return false;
   }
 
-  async postProcessEntity(entity: Entity, _location: LocationSpec, emit: CatalogProcessorEmit): Promise<Entity> {
+  async postProcessEntity(
+    entity: Entity,
+    _location: LocationSpec,
+    emit: CatalogProcessorEmit,
+  ): Promise<Entity> {
     const selfRef = getCompoundEntityRef(entity);
 
-    if (entity.apiVersion === 'aws.backstage.io/v1alpha' && entity.kind === 'AWSEnvironmentProvider') {
+    if (
+      entity.apiVersion === 'aws.backstage.io/v1alpha' &&
+      entity.kind === 'AWSEnvironmentProvider'
+    ) {
       const template = entity as AWSEnvironmentProviderEntityV1;
 
       const target = template.spec.owner;

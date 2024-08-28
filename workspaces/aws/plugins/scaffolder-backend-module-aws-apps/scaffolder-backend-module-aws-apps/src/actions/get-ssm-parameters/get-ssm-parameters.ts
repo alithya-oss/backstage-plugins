@@ -8,13 +8,17 @@ import {
   getEnvironmentProviderConnectInfo,
   getSSMParameterValue,
 } from '../../helpers/action-context';
-import { EnvironmentProvider, EnvironmentProviderConnection } from '../../types';
+import {
+  EnvironmentProvider,
+  EnvironmentProviderConnection,
+} from '../../types';
 
 const ID = 'opa:get-ssm-parameters';
 
 const examples = [
   {
-    description: 'Retreive AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
+    description:
+      'Retreive AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
     example: yaml.stringify({
       steps: [
         {
@@ -22,9 +26,9 @@ const examples = [
           id: 'opaGetSsmParams',
           name: 'Get parameter values',
           input: {
-            envProviders: "${{ steps['opaGetAwsEnvProviders'].output.envProviders }}",
-            paramKeys:
-              - '/my/ssm/parameter'
+            envProviders:
+              "${{ steps['opaGetAwsEnvProviders'].output.envProviders }}",
+            paramKeys: -'/my/ssm/parameter',
           },
         },
       ],
@@ -33,13 +37,13 @@ const examples = [
 ];
 
 export function getSsmParametersAction() {
-
   return createTemplateAction<{
     paramKeys: string[];
     envProviders: EnvironmentProvider[];
   }>({
     id: ID,
-    description: 'Retreive AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
+    description:
+      'Retreive AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
     examples,
     schema: {
       input: {
@@ -49,26 +53,26 @@ export function getSsmParametersAction() {
           paramKeys: {
             type: 'array',
             items: {
-              type: 'string'
+              type: 'string',
             },
             title: 'SSM parameter keys',
             description: 'The SSM parameter keys to look up',
           },
           envProviders: {
             title: 'AWS Environment Providers',
-            description: 'The AWS environment providers containing account and region info',
+            description:
+              'The AWS environment providers containing account and region info',
             type: 'array',
           },
         },
       },
       output: {
         type: 'object',
-        required: [
-          'params',
-        ],
+        required: ['params'],
         properties: {
           params: {
-            title: 'Map of SSM parameters, keyed off of the environment provider name',
+            title:
+              'Map of SSM parameters, keyed off of the environment provider name',
             type: 'object',
           },
         },
@@ -83,15 +87,15 @@ export function getSsmParametersAction() {
       if (ctx.user?.entity === undefined) {
         // Verify the automationKey value.  If it matches, set an automation user in the context
         if (ctx.secrets?.automationKey === process.env.AUTOMATION_KEY) {
-          console.log("Automation key provided to use automation user");
+          console.log('Automation key provided to use automation user');
           ctx.user = {
             entity: {
               apiVersion: 'backstage.io/v1alpha1',
               kind: 'User',
               metadata: { name: 'automation' },
-              spec: { profile: { displayName: "Automation User" } }
-            }
-          }
+              spec: { profile: { displayName: 'Automation User' } },
+            },
+          };
         } else {
           ctx.logger.info(`No user context provided for ${ID} action`);
           throw new Error(`No user context provided for ${ID} action`);
@@ -99,48 +103,66 @@ export function getSsmParametersAction() {
       }
 
       const providerConnect: EnvProviderConnectMap =
-        await getEnvironmentProviderConnectInfo(envProviders, ctx.user!.entity!);
+        await getEnvironmentProviderConnectInfo(
+          envProviders,
+          ctx.user!.entity!,
+        );
 
       // Get a key/value map of SSM parameters for the supplied environment provider connection
-      const getEnvProviderSsmParams = async (connection: EnvironmentProviderConnection)
-        : Promise<{ [key: string]: string; }> => {
-
-        const params = (await Promise.all(
-          paramKeys.map(async (paramKey): Promise<{ [key: string]: string; }> => {
-            const val = await getSSMParameterValue(
-              connection.region, connection.awsAuthResponse.credentials, paramKey, ctx.logger);
-            return {
-              [paramKey]: val
-            };
-          })
-        )).reduce((acc, paramKeyValMap) => {
-          const typedAcc: { [key: string]: string; } = acc;
+      const getEnvProviderSsmParams = async (
+        connection: EnvironmentProviderConnection,
+      ): Promise<{ [key: string]: string }> => {
+        const params = (
+          await Promise.all(
+            paramKeys.map(
+              async (paramKey): Promise<{ [key: string]: string }> => {
+                const val = await getSSMParameterValue(
+                  connection.region,
+                  connection.awsAuthResponse.credentials,
+                  paramKey,
+                  ctx.logger,
+                );
+                return {
+                  [paramKey]: val,
+                };
+              },
+            ),
+          )
+        ).reduce((acc, paramKeyValMap) => {
+          const typedAcc: { [key: string]: string } = acc;
           const key = Object.keys(paramKeyValMap)[0];
           return {
-            ...typedAcc, [key]: paramKeyValMap[key]
+            ...typedAcc,
+            [key]: paramKeyValMap[key],
           };
         }, {});
 
         return params;
-
       };
 
-      const paramsPerEnvProvider = (await Promise.all(
-        envProviders.map(async (envProvider: EnvironmentProvider)
-          : Promise<{ [key: string]: { [key: string]: string; }; }> => {
-
-          const { envProviderName } = envProvider;
-          const envProviderConnection = providerConnect[envProviderName];
-          const envParams = await getEnvProviderSsmParams(envProviderConnection);
-          return {
-            [envProviderName]: envParams
-          }
-        })
-      )).reduce((acc, envProviderNameToSsmParamsMap) => {
-        const typedAcc: { [key: string]: { [key: string]: string; }; } = acc;
+      const paramsPerEnvProvider = (
+        await Promise.all(
+          envProviders.map(
+            async (
+              envProvider: EnvironmentProvider,
+            ): Promise<{ [key: string]: { [key: string]: string } }> => {
+              const { envProviderName } = envProvider;
+              const envProviderConnection = providerConnect[envProviderName];
+              const envParams = await getEnvProviderSsmParams(
+                envProviderConnection,
+              );
+              return {
+                [envProviderName]: envParams,
+              };
+            },
+          ),
+        )
+      ).reduce((acc, envProviderNameToSsmParamsMap) => {
+        const typedAcc: { [key: string]: { [key: string]: string } } = acc;
         const key = Object.keys(envProviderNameToSsmParamsMap)[0];
         return {
-          ...typedAcc, [key]: envProviderNameToSsmParamsMap[key]
+          ...typedAcc,
+          [key]: envProviderNameToSsmParamsMap[key],
         };
       }, {});
 
@@ -149,17 +171,18 @@ export function getSsmParametersAction() {
         const envProviderParamsMap = maskedValues[providerName];
         Object.keys(envProviderParamsMap).forEach(ssmKey => {
           if (envProviderParamsMap[ssmKey]) {
-            envProviderParamsMap[ssmKey] = "masked";
+            envProviderParamsMap[ssmKey] = 'masked';
           } else {
-            envProviderParamsMap[ssmKey] = "blank or missing value";
+            envProviderParamsMap[ssmKey] = 'blank or missing value';
           }
-        })
-      })
+        });
+      });
 
-      ctx.logger.info(`masked params: ${JSON.stringify(maskedValues, null, 2)}`);
+      ctx.logger.info(
+        `masked params: ${JSON.stringify(maskedValues, null, 2)}`,
+      );
 
       ctx.output('params', paramsPerEnvProvider);
     },
   });
-
 }

@@ -13,12 +13,17 @@ export type RepoSpec = {
   project?: string;
 };
 
-export const parseRepoUrl = (repoUrl: string, integrations: ScmIntegrationRegistry): RepoSpec => {
+export const parseRepoUrl = (
+  repoUrl: string,
+  integrations: ScmIntegrationRegistry,
+): RepoSpec => {
   let parsed;
   try {
     parsed = new URL(`https://${repoUrl}`);
   } catch (error) {
-    throw new InputError(`Invalid repo URL passed to publisher, got ${repoUrl}, ${error}`);
+    throw new InputError(
+      `Invalid repo URL passed to publisher, got ${repoUrl}, ${error}`,
+    );
   }
   const host = parsed.host;
   const owner = parsed.searchParams.get('owner') ?? undefined;
@@ -77,7 +82,9 @@ export const parseRepoUrl = (repoUrl: string, integrations: ScmIntegrationRegist
 function checkRequiredParams(repoUrl: URL, ...params: string[]) {
   for (let param of params) {
     if (!repoUrl.searchParams.get(param)) {
-      throw new InputError(`Invalid repo URL passed to publisher: ${repoUrl.toString()}, missing ${param}`);
+      throw new InputError(
+        `Invalid repo URL passed to publisher: ${repoUrl.toString()}, missing ${param}`,
+      );
     }
   }
 }

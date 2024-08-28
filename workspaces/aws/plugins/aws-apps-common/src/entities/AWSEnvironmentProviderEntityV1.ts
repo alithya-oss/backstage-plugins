@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    Entity,
-    entityKindSchemaValidator,
-    KindValidator,
-  } from '@backstage/catalog-model';
+  Entity,
+  entityKindSchemaValidator,
+  KindValidator,
+} from '@backstage/catalog-model';
 import { JsonObject } from '@backstage/types';
 import schema from './AWSEnvironmentProviderEntityV1.schema.json';
 

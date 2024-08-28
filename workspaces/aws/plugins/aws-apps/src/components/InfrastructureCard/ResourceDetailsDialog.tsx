@@ -9,8 +9,12 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle, Grid,
-  IconButton, LinearProgress, makeStyles, Typography
+  DialogTitle,
+  Grid,
+  IconButton,
+  LinearProgress,
+  makeStyles,
+  Typography,
 } from '@material-ui/core';
 import { Close } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
@@ -39,7 +43,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
 /**
  * A Table component for showing AWS Resource details. The table can accommodate varying numbers of columns
  * with corresponding table data
@@ -62,7 +65,14 @@ const ResourceDetailsTable = ({
   return (
     <div className={classes.container}>
       <Table
-        options={{ paging: false, padding: 'dense', search: false, showTitle: true, header: false, toolbar: false }}
+        options={{
+          paging: false,
+          padding: 'dense',
+          search: false,
+          showTitle: true,
+          header: false,
+          toolbar: false,
+        }}
         data={tableData}
         columns={columns}
         title={resource.resourceName}
@@ -126,9 +136,10 @@ export const ResourceDetailsDialog = ({
 
   // Get the secret details
   async function getData() {
-
     if (resource.resourceTypeId == 'AWS::SecretsManager::Secret') {
-      const secretResponse = await api.getSecret({ secretName: resource.resourceArn });
+      const secretResponse = await api.getSecret({
+        secretName: resource.resourceArn,
+      });
       const rawSecret = secretResponse.SecretString ?? 'unknown';
 
       // Process the string differently depending on whether it's a JSON string or not
@@ -136,8 +147,12 @@ export const ResourceDetailsDialog = ({
         const parsedSecret = JSON.parse(rawSecret);
         setTableColumns(kvColumns);
         const jsonKeys = Object.keys(parsedSecret).sort((a, b) => {
-          if (a < b) { return -1; }
-          if (a > b) { return 1; }
+          if (a < b) {
+            return -1;
+          }
+          if (a > b) {
+            return 1;
+          }
           return 0;
         });
         const secretTableData = jsonKeys.map((key, i) => {
@@ -152,17 +167,24 @@ export const ResourceDetailsDialog = ({
       } catch {
         // not a JSON string, so just use the value as-is
         setTableColumns(singleColumn);
-        setTableData([{ value: <SecretStringComponent secret={rawSecret} />, id: '1' }]);
+        setTableData([
+          { value: <SecretStringComponent secret={rawSecret} />, id: '1' },
+        ]);
       }
     } else if (resource.resourceTypeId == 'AWS::SSM::Parameter') {
       const ssmParamResponse = await api.getSSMParameter({
-        ssmParamName: resource.resourceName
+        ssmParamName: resource.resourceName,
       });
       // SSM Parameters are single-value and will only be displayed in a single column table
       setTableColumns(singleColumn);
       const paramValue = ssmParamResponse.Parameter?.Value ?? 'unknown';
       const secretType = ssmParamResponse.Parameter?.Type;
-      const secret = secretType == 'SecureString' ? <SecretStringComponent secret={paramValue} /> : paramValue;
+      const secret =
+        secretType == 'SecureString' ? (
+          <SecretStringComponent secret={paramValue} />
+        ) : (
+          paramValue
+        );
       setTableData([{ value: secret, id: '1' }]);
     }
   }
@@ -182,10 +204,17 @@ export const ResourceDetailsDialog = ({
 
   // return the JSXElement for the details dialog box
   return (
-    <Dialog className={classes.container} open={isOpen} onClose={closeDialogHandler}>
+    <Dialog
+      className={classes.container}
+      open={isOpen}
+      onClose={closeDialogHandler}
+    >
       <DialogTitle id="dialog-title">
         Resource Details
-        <IconButton className={classes.closeButton} onClick={closeDialogHandler}>
+        <IconButton
+          className={classes.closeButton}
+          onClick={closeDialogHandler}
+        >
           <Close />
         </IconButton>
       </DialogTitle>
@@ -198,7 +227,11 @@ export const ResourceDetailsDialog = ({
             <Typography>{resource.resourceName}</Typography>
           </Grid>
         </Grid>
-        <ResourceDetailsTable resource={resource} columns={tableColumns} tableData={tableData} />
+        <ResourceDetailsTable
+          resource={resource}
+          columns={tableColumns}
+          tableData={tableData}
+        />
       </DialogContent>
       <DialogActions>
         <Button color="primary" onClick={closeDialogHandler}>
@@ -208,4 +241,3 @@ export const ResourceDetailsDialog = ({
     </Dialog>
   );
 };
-

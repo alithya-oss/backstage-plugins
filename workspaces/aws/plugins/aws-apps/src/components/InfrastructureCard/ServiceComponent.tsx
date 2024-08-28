@@ -2,7 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { SubvalueCell, Table, TableColumn } from '@backstage/core-components';
-import { AWSResource, AWSServiceResources } from '@alithya-oss/plugin-aws-apps-common';
+import {
+  AWSResource,
+  AWSServiceResources,
+} from '@alithya-oss/plugin-aws-apps-common';
 import { makeStyles, Typography } from '@material-ui/core';
 import { Link } from '@mui/material';
 import React, { useState, useCallback } from 'react';
@@ -38,7 +41,15 @@ const useStyles = makeStyles(theme => ({
  * @param resource The AWS resource type requiring a link to display its details.
  * @returns JSXElement
  */
-const CustomDetailsLink = ({ resource, prefix, providerName }: { resource: AWSResource, prefix: string, providerName: string }) => {
+const CustomDetailsLink = ({
+  resource,
+  prefix,
+  providerName,
+}: {
+  resource: AWSResource;
+  prefix: string;
+  providerName: string;
+}) => {
   const [open, setOpen] = useState(false);
 
   const openDialog = () => {
@@ -51,7 +62,13 @@ const CustomDetailsLink = ({ resource, prefix, providerName }: { resource: AWSRe
       <Link component="button" underline="hover" onClick={openDialog}>
         details
       </Link>
-      <ResourceDetailsDialog resource={resource} isOpen={open} closeDialogHandler={closeDialog} prefix={prefix} providerName={providerName} />
+      <ResourceDetailsDialog
+        resource={resource}
+        isOpen={open}
+        closeDialogHandler={closeDialog}
+        prefix={prefix}
+        providerName={providerName}
+      />
     </>
   );
 };
@@ -63,10 +80,25 @@ const CustomDetailsLink = ({ resource, prefix, providerName }: { resource: AWSRe
  * @param resources An array of AWS resource objects which below to the specified serviceName
  * @returns JSXElement rendering a table for an AWS service and its resources
  */
-export const DenseResourceTable = ({ serviceName, resources, prefix, providerName }: { serviceName?: string; resources: AWSResource[]; prefix: string; providerName: string; }) => {
+export const DenseResourceTable = ({
+  serviceName,
+  resources,
+  prefix,
+  providerName,
+}: {
+  serviceName?: string;
+  resources: AWSResource[];
+  prefix: string;
+  providerName: string;
+}) => {
   const classes = useStyles();
 
-  const preventRerender = useCallback((row: any): React.ReactNode => <SubvalueCell value={row.resourceName} subvalue={row.subvalue} />, []);
+  const preventRerender = useCallback(
+    (row: any): React.ReactNode => (
+      <SubvalueCell value={row.resourceName} subvalue={row.subvalue} />
+    ),
+    [],
+  );
 
   // Table column definition used for displaying key/value pairs of resource type and resource name
   const columns: TableColumn[] = [
@@ -92,7 +124,14 @@ export const DenseResourceTable = ({ serviceName, resources, prefix, providerNam
     const detailTypes = ['AWS::SecretsManager::Secret', 'AWS::SSM::Parameter'];
 
     // subvalue is a details link to be shown beneath a table cell value
-    const subvalue = detailTypes.includes(r.resourceTypeId) ? <CustomDetailsLink prefix={prefix} providerName={providerName} key={i} resource={r} /> : undefined;
+    const subvalue = detailTypes.includes(r.resourceTypeId) ? (
+      <CustomDetailsLink
+        prefix={prefix}
+        providerName={providerName}
+        key={i}
+        resource={r}
+      />
+    ) : undefined;
 
     return {
       id: i,
@@ -129,7 +168,17 @@ export const DenseResourceTable = ({ serviceName, resources, prefix, providerNam
  * @param serviceName A short string describing the AWS service.
  * @param resources An array of AWS resource objects which below to the specified serviceName
  */
-const Service = ({ serviceName, resources, prefix, providerName }: { serviceName: string; resources: AWSResource[], prefix: string, providerName: string }) => {
+const Service = ({
+  serviceName,
+  resources,
+  prefix,
+  providerName,
+}: {
+  serviceName: string;
+  resources: AWSResource[];
+  prefix: string;
+  providerName: string;
+}) => {
   const classes = useStyles();
 
   if (!resources || resources.length === 0) {
@@ -138,8 +187,14 @@ const Service = ({ serviceName, resources, prefix, providerName }: { serviceName
 
   return (
     <>
-      <Typography className={classes.serviceTableIdentifier}>{serviceName}</Typography>
-      <DenseResourceTable resources={resources} prefix={prefix} providerName={providerName} />
+      <Typography className={classes.serviceTableIdentifier}>
+        {serviceName}
+      </Typography>
+      <DenseResourceTable
+        resources={resources}
+        prefix={prefix}
+        providerName={providerName}
+      />
     </>
   );
 };
@@ -155,7 +210,7 @@ export const ServiceResourcesComponent = ({
   servicesObject,
   serviceFilter = [],
   prefix,
-  providerName
+  providerName,
 }: {
   servicesObject: AWSServiceResources;
   serviceFilter?: string[];
@@ -163,15 +218,32 @@ export const ServiceResourcesComponent = ({
   providerName: string;
 }) => {
   const svcKeys = Object.keys(servicesObject);
-  const filteredKeys = serviceFilter.length == 0 ? svcKeys : serviceFilter.filter(value => svcKeys.includes(value));
+  const filteredKeys =
+    serviceFilter.length == 0
+      ? svcKeys
+      : serviceFilter.filter(value => svcKeys.includes(value));
 
   filteredKeys.sort((a, b) => {
-    if (a < b) { return -1; }
-    if (a > b) { return 1; }
+    if (a < b) {
+      return -1;
+    }
+    if (a > b) {
+      return 1;
+    }
     return 0;
   });
   const serviceItems = filteredKeys.map((serviceName, i) => {
-    return <Service key={i} serviceName={serviceName} resources={servicesObject[serviceName].filter(resource => !resource.resourceName.includes('AutoDelete'))} prefix={prefix} providerName={providerName} />;
+    return (
+      <Service
+        key={i}
+        serviceName={serviceName}
+        resources={servicesObject[serviceName].filter(
+          resource => !resource.resourceName.includes('AutoDelete'),
+        )}
+        prefix={prefix}
+        providerName={providerName}
+      />
+    );
   });
 
   return <>{serviceItems}</>;

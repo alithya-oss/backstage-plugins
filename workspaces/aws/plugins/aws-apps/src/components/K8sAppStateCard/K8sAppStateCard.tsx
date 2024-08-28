@@ -3,12 +3,25 @@
 
 import { InvokeCommandOutput } from '@aws-sdk/client-lambda';
 import { GetParameterCommandOutput } from '@aws-sdk/client-ssm';
-import { AWSComponent, AWSEKSAppDeploymentEnvironment, AppState, AppStateType, KeyValue, getGitCredentailsSecret } from '@alithya-oss/plugin-aws-apps-common';
+import {
+  AWSComponent,
+  AWSEKSAppDeploymentEnvironment,
+  AppState,
+  AppStateType,
+  KeyValue,
+  getGitCredentailsSecret,
+} from '@alithya-oss/plugin-aws-apps-common';
 import { Entity } from '@backstage/catalog-model';
 import { EmptyState, InfoCard } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
 import { useEntity } from '@backstage/plugin-catalog-react';
-import { LinearProgress, Table, TableBody, TableCell, TableRow } from '@material-ui/core';
+import {
+  LinearProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@material-ui/core';
 import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -65,8 +78,9 @@ const StyledInput = styled('input')(
   color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
   background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
   border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-  box-shadow: 0px 2px 4px ${theme.palette.mode === 'dark' ? 'rgba(0,0,0, 0.5)' : 'rgba(0,0,0, 0.05)'
-    };
+  box-shadow: 0px 2px 4px ${
+    theme.palette.mode === 'dark' ? 'rgba(0,0,0, 0.5)' : 'rgba(0,0,0, 0.05)'
+  };
   border-radius: 8px;
   margin: 0 8px;
   padding: 10px 12px;
@@ -129,40 +143,49 @@ const StyledButton = styled('button')(
 );
 
 const OpaAppStateOverview = ({
-  input: { env, entity, awsComponent }
+  input: { env, entity, awsComponent },
 }: {
   input: {
-    env: AWSEKSAppDeploymentEnvironment,
-    entity: Entity,
-    awsComponent: AWSComponent
-  }
+    env: AWSEKSAppDeploymentEnvironment;
+    entity: Entity;
+    awsComponent: AWSComponent;
+  };
 }) => {
-
   const api = useApi(opaApiRef);
   const [appStateData, setAppStateData] = useState<AppState[]>([]);
   const [variablesJson, setVariablesJson] = useState<any>({});
   const [appStarted, setAppStarted] = useState(false);
   const [appStopped, setAppStopped] = useState(false);
-  const [clusterNameState, setClusterNameState] = useState<string>("");
+  const [clusterNameState, setClusterNameState] = useState<string>('');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<{ isError: boolean; errorMsg: string | null }>({ isError: false, errorMsg: null });
-  const { cancellablePromise } = useCancellablePromise({ rejectOnCancel: true });
+  const [error, setError] = useState<{
+    isError: boolean;
+    errorMsg: string | null;
+  }>({ isError: false, errorMsg: null });
+  const { cancellablePromise } = useCancellablePromise({
+    rejectOnCancel: true,
+  });
   const timerRef = useRef<any>(null);
   const repoInfo = awsComponent.getRepoInfo();
-  
+
   // Namespace-bound application admin role (not cluster admin role)
   const appAdminRoleArn = env.app.appAdminRoleArn;
 
-  const kubectlLambdaArn = env.entities.envProviderEntity?.metadata["kubectlLambdaArn"]?.toString() || "";
+  const kubectlLambdaArn =
+    env.entities.envProviderEntity?.metadata['kubectlLambdaArn']?.toString() ||
+    '';
   let clusterNameParam, clusterName: string;
 
   async function fetchAppConfig() {
     if (!clusterName) {
       // console.log(`getting cluster name`);
       clusterNameParam = await cancellablePromise<GetParameterCommandOutput>(
-        api.getSSMParameter({ ssmParamName: env.clusterName })
+        api.getSSMParameter({ ssmParamName: env.clusterName }),
       );
-      clusterName = clusterNameParam.Parameter?.Value?.toString().split('/')[1].toString() || "";
+      clusterName =
+        clusterNameParam.Parameter?.Value?.toString()
+          .split('/')[1]
+          .toString() || '';
     } else {
       // console.log(`clusterName was already cached when getting app config`);
     }
@@ -170,18 +193,18 @@ const OpaAppStateOverview = ({
     setClusterNameState(clusterName);
 
     const bodyParamVariables = {
-      RequestType: "Create",
-      ResourceType: "Custom::AWSCDK-EKS-KubernetesObjectValue",
+      RequestType: 'Create',
+      ResourceType: 'Custom::AWSCDK-EKS-KubernetesObjectValue',
       ResourceProperties: {
-        TimeoutSeconds: "5",
+        TimeoutSeconds: '5',
         ClusterName: clusterName,
         RoleArn: appAdminRoleArn,
         ObjectNamespace: env.app.namespace,
         InvocationType: 'RequestResponse',
-        ObjectType: "configmaps",
+        ObjectType: 'configmaps',
         ObjectLabels: `app.kubernetes.io/env=${env.environment.name},app.kubernetes.io/name=${entity.metadata.name}`,
-        JsonPath: "@"
-      }
+        JsonPath: '@',
+      },
     };
 
     // console.log(`calling lambda to get configs`);
@@ -189,14 +212,16 @@ const OpaAppStateOverview = ({
       api.invokeLambda({
         functionName: kubectlLambdaArn,
         actionDescription: `Fetch app configs for namespace ${env.app.namespace}`,
-        body: JSON.stringify(bodyParamVariables)
-      })
+        body: JSON.stringify(bodyParamVariables),
+      }),
     );
     // console.log(`got configs`);
 
     try {
       if (resultsVariables?.Payload) {
-        const payloadVariablesString = base64PayloadConvert(resultsVariables.Payload as Object);
+        const payloadVariablesString = base64PayloadConvert(
+          resultsVariables.Payload as Object,
+        );
         const payloadVariablesJson = JSON.parse(payloadVariablesString);
 
         if (payloadVariablesJson?.Data?.Value) {
@@ -206,41 +231,40 @@ const OpaAppStateOverview = ({
         } else {
           return {};
         }
-
       }
-
     } catch (err) {
       console.log(err);
       throw Error("Can't parse json response");
     }
-
   }
 
   async function fetchAppState() {
-
     if (!clusterName) {
       // console.log(`getting cluster name`);
       clusterNameParam = await cancellablePromise<GetParameterCommandOutput>(
-        api.getSSMParameter({ ssmParamName: env.clusterName })
+        api.getSSMParameter({ ssmParamName: env.clusterName }),
       );
       // console.log(`DONE getting cluster name`);
-      clusterName = clusterNameParam.Parameter?.Value?.toString().split('/')[1].toString() || "";
+      clusterName =
+        clusterNameParam.Parameter?.Value?.toString()
+          .split('/')[1]
+          .toString() || '';
       // console.log(`clusterName is ${clusterName}`);
     }
 
     const bodyParam = {
-      RequestType: "Create",
-      ResourceType: "Custom::AWSCDK-EKS-KubernetesObjectValue",
+      RequestType: 'Create',
+      ResourceType: 'Custom::AWSCDK-EKS-KubernetesObjectValue',
       ResourceProperties: {
-        TimeoutSeconds: "5",
+        TimeoutSeconds: '5',
         ClusterName: clusterName,
         RoleArn: appAdminRoleArn,
         ObjectNamespace: env.app.namespace,
         InvocationType: 'RequestResponse',
-        ObjectType: "deployments",
+        ObjectType: 'deployments',
         ObjectLabels: `app.kubernetes.io/env=${env.environment.name},app.kubernetes.io/name=${entity.metadata.name}`,
-        JsonPath: "@"
-      }
+        JsonPath: '@',
+      },
     };
 
     //  console.log(bodyParam)
@@ -249,8 +273,8 @@ const OpaAppStateOverview = ({
       api.invokeLambda({
         functionName: kubectlLambdaArn,
         actionDescription: `Fetch deployments for namespace ${env.app.namespace}`,
-        body: JSON.stringify(bodyParam)
-      })
+        body: JSON.stringify(bodyParam),
+      }),
     );
     // console.log(`got manifests`);
 
@@ -266,7 +290,6 @@ const OpaAppStateOverview = ({
           return {};
         }
       }
-
     } catch (err) {
       console.log(err);
       throw Error("Can't parse json response");
@@ -278,13 +301,18 @@ const OpaAppStateOverview = ({
       return [];
     }
 
-    const configMapName = appStateData.filter(appState => appState.appID === deploymentName)[0].stateObject.spec.template.spec.containers[0]?.envFrom?.[0]?.configMapRef?.name;
+    const configMapName = appStateData.filter(
+      appState => appState.appID === deploymentName,
+    )[0].stateObject.spec.template.spec.containers[0]?.envFrom?.[0]
+      ?.configMapRef?.name;
 
     if (!configMapName) {
       return [];
     }
 
-    const configMap = variablesJson.items.filter((candidateMap: any) => candidateMap.metadata.name === configMapName)?.[0];
+    const configMap = variablesJson.items.filter(
+      (candidateMap: any) => candidateMap.metadata.name === configMapName,
+    )?.[0];
 
     if (!configMap) {
       return [];
@@ -295,8 +323,8 @@ const OpaAppStateOverview = ({
       variables.push({
         id: `${index}`,
         key: key.toString(),
-        value: configMap.data[key].toString()
-      })
+        value: configMap.data[key].toString(),
+      });
     });
     return variables;
   };
@@ -304,14 +332,15 @@ const OpaAppStateOverview = ({
   const parseState = (deploymentsJson: any): AppState[] => {
     // parse response JSON
 
-    let deploymentsState: AppState[] = []
+    let deploymentsState: AppState[] = [];
     try {
-
       Object.keys(deploymentsJson).forEach(key => {
         const deploymentJson = deploymentsJson[key];
 
-        const updatedReplicas = Number.parseInt(deploymentJson.status.updatedReplicas) || 0;
-        const appRunning = Number.parseInt(deploymentJson.status.readyReplicas) || 0;
+        const updatedReplicas =
+          Number.parseInt(deploymentJson.status.updatedReplicas) || 0;
+        const appRunning =
+          Number.parseInt(deploymentJson.status.readyReplicas) || 0;
 
         const pending = Math.abs(appRunning - updatedReplicas);
 
@@ -319,7 +348,8 @@ const OpaAppStateOverview = ({
         if (pending) {
           appStateDescription = AppStateType.UPDATING;
         } else {
-          appStateDescription = appRunning > 0 ? AppStateType.RUNNING : AppStateType.STOPPED;
+          appStateDescription =
+            appRunning > 0 ? AppStateType.RUNNING : AppStateType.STOPPED;
         }
 
         const appState: AppState = {
@@ -329,21 +359,21 @@ const OpaAppStateOverview = ({
           desiredCount: Number.parseInt(deploymentJson.spec.replicas) || 0,
           pendingCount: pending,
           runningCount: appRunning,
-          lastStateTimestamp: new Date(deploymentJson.status.conditions[0].lastUpdateTime),
-          stateObject: deploymentJson
-        }
+          lastStateTimestamp: new Date(
+            deploymentJson.status.conditions[0].lastUpdateTime,
+          ),
+          stateObject: deploymentJson,
+        };
 
         deploymentsState.push(appState);
-      })
-
+      });
     } catch (err) {
       console.log(err);
     }
     return deploymentsState || [];
-  }
+  };
 
   async function getData(appStateResults?: any) {
-
     let isCanceled = false;
     let isError = false;
     let deploymentsJson;
@@ -353,8 +383,10 @@ const OpaAppStateOverview = ({
         // console.log(`reusing appStateResults`);
       }
 
-      deploymentsJson = appStateResults ? appStateResults : await fetchAppState();    // returns array of deployments
-      variablesJson = await fetchAppConfig();     // return the configMaps for the app
+      deploymentsJson = appStateResults
+        ? appStateResults
+        : await fetchAppState(); // returns array of deployments
+      variablesJson = await fetchAppConfig(); // return the configMaps for the app
     } catch (e) {
       if ((e as any).isCanceled) {
         isCanceled = true;
@@ -362,9 +394,11 @@ const OpaAppStateOverview = ({
       } else {
         isError = true;
         console.error(e);
-        setError({ isError: true, errorMsg: `Unexpected error occurred while retrieving event data: ${e}` });
+        setError({
+          isError: true,
+          errorMsg: `Unexpected error occurred while retrieving event data: ${e}`,
+        });
       }
-
     }
 
     if (!isCanceled && !isError) {
@@ -373,11 +407,10 @@ const OpaAppStateOverview = ({
       setAppStateData(states);
       setVariablesJson(variablesJson);
     }
-
   }
 
   useEffect(() => {
-    setAppStateData([]);                               // reset existing state
+    setAppStateData([]); // reset existing state
     getData()
       .then(() => {
         setLoading(false);
@@ -385,7 +418,10 @@ const OpaAppStateOverview = ({
       })
       .catch(e => {
         setLoading(false);
-        setError({ isError: true, errorMsg: `Unexpected error occurred while retrieving app data: ${e}` });
+        setError({
+          isError: true,
+          errorMsg: `Unexpected error occurred while retrieving app data: ${e}`,
+        });
       });
 
     return () => {
@@ -397,23 +433,20 @@ const OpaAppStateOverview = ({
         clearTimeout(timerRef.current);
         // console.log(`Clearing Timeout`);
       }
-
-    }
+    };
   }, []);
 
   function sleep(ms: number) {
     return new Promise(resolve => {
-
       const resolveHandler = () => {
         clearTimeout(timerRef.current);
         resolve(null);
-      }
+      };
       timerRef.current = setTimeout(resolveHandler, ms);
     });
   }
 
   const handleStartTask = async (appState: AppState) => {
-
     setLoading(true);
 
     // console.log(`calling lambda to set replicas to > 0, clusterNameState is ${clusterNameState}`);
@@ -425,13 +458,16 @@ const OpaAppStateOverview = ({
           actionDescription: `Starting app in environment ${env.environment.name}`,
           envName: env.environment.name,
           cluster: clusterNameState,
-          kubectlLambda: env.entities.envProviderEntity?.metadata["kubectlLambdaArn"]?.toString() || "",
+          kubectlLambda:
+            env.entities.envProviderEntity?.metadata[
+              'kubectlLambdaArn'
+            ]?.toString() || '',
           lambdaRoleArn: appAdminRoleArn,
           gitAdminSecret: getGitCredentailsSecret(repoInfo),
           updateKey: 'spec.replicas',
           updateValue: appState.desiredCount || 1,
           repoInfo,
-        })
+        }),
       );
       // console.log(`DONE setting replicas to > 0`);
     } catch (e) {
@@ -439,7 +475,10 @@ const OpaAppStateOverview = ({
         isCanceled = true;
       } else {
         console.error(e);
-        setError({ isError: true, errorMsg: `Unexpected error occurred while starting app: ${e}` });
+        setError({
+          isError: true,
+          errorMsg: `Unexpected error occurred while starting app: ${e}`,
+        });
         setLoading(false);
       }
     }
@@ -449,7 +488,6 @@ const OpaAppStateOverview = ({
     let localAppStarted = false;
     // console.log(`isCanceled is ${isCanceled} and localAppStarted is ${localAppStarted} and appStarted is ${appStarted}`);
     while (!isCanceled && !appStarted && !localAppStarted) {
-
       // console.log(`sleeping waiting for app to be started, localAppStarted is ${localAppStarted} and appStarted is ${appStarted}`);
       await sleep(5000);
       // console.log(`awake ${count}, will now check app state`);
@@ -463,7 +501,7 @@ const OpaAppStateOverview = ({
           const currState = deploymentsJson[key];
           if (currState.metadata.uid === appState.deploymentIdentifier) {
             if (Number.parseInt(currState.status.readyReplicas) > 0) {
-              setAppStateData([]);                               // reset existing state
+              setAppStateData([]); // reset existing state
               setAppStarted(true);
               localAppStarted = true;
               // console.log(`setting appStarted to true`);
@@ -477,13 +515,15 @@ const OpaAppStateOverview = ({
         } else {
           // console.log(`not breaking from while loop since appStarted is falsy`);
         }
-
       } catch (e) {
         if ((e as any).isCanceled) {
           isCanceled = true;
         } else {
           console.error(e);
-          setError({ isError: true, errorMsg: `Unexpected error occurred while retrieving app state: ${e}` });
+          setError({
+            isError: true,
+            errorMsg: `Unexpected error occurred while retrieving app state: ${e}`,
+          });
           setAppStarted(true);
           localAppStarted = true;
           // console.log(`setting appStarted to true`);
@@ -511,13 +551,16 @@ const OpaAppStateOverview = ({
           actionDescription: `Stopping app in environment ${env.environment.name}`,
           envName: env.environment.name,
           cluster: clusterNameState,
-          kubectlLambda: env.entities.envProviderEntity?.metadata["kubectlLambdaArn"]?.toString() || "",
+          kubectlLambda:
+            env.entities.envProviderEntity?.metadata[
+              'kubectlLambdaArn'
+            ]?.toString() || '',
           lambdaRoleArn: appAdminRoleArn,
           gitAdminSecret: getGitCredentailsSecret(repoInfo),
           updateKey: 'spec.replicas',
           updateValue: 0,
           repoInfo,
-        })
+        }),
       );
       // console.log(`DONE setting replicas to 0`);
     } catch (e) {
@@ -525,7 +568,10 @@ const OpaAppStateOverview = ({
         isCanceled = true;
       } else {
         console.error(e);
-        setError({ isError: true, errorMsg: `Unexpected error occurred while stopping app: ${e}` });
+        setError({
+          isError: true,
+          errorMsg: `Unexpected error occurred while stopping app: ${e}`,
+        });
         setLoading(false);
       }
     }
@@ -547,9 +593,12 @@ const OpaAppStateOverview = ({
         Object.keys(deploymentsJson).forEach(key => {
           const currState = deploymentsJson[key];
           if (currState.metadata.uid === appState.deploymentIdentifier) {
-            if (!currState.status.readyReplicas || Number.parseInt(currState.status.readyReplicas) === 0) {
-              appState.appState = AppStateType.STOPPED
-              appState.runningCount = 0
+            if (
+              !currState.status.readyReplicas ||
+              Number.parseInt(currState.status.readyReplicas) === 0
+            ) {
+              appState.appState = AppStateType.STOPPED;
+              appState.runningCount = 0;
               localAppStopped = true;
               setAppStopped(true);
               setLoading(false);
@@ -562,13 +611,15 @@ const OpaAppStateOverview = ({
           // console.log(`breaking from while loop since app was stopped`);
           break;
         }
-
       } catch (e) {
         if ((e as any).isCanceled) {
           isCanceled = true;
         } else {
           console.error(e);
-          setError({ isError: true, errorMsg: `Unexpected error occurred while retrieving app state: ${e}` });
+          setError({
+            isError: true,
+            errorMsg: `Unexpected error occurred while retrieving app state: ${e}`,
+          });
           setLoading(false);
           setAppStopped(true);
           localAppStopped = true;
@@ -576,20 +627,22 @@ const OpaAppStateOverview = ({
         }
         break;
       }
-
     }
   };
 
   const EnvVars = ({ appID }: { appID: string }) => {
-
     const envVarArr = getDeploymentEnvVars(appID);
 
     if (envVarArr && envVarArr.length) {
       return (
         <>
-          {envVarArr.map((envVar) => (
+          {envVarArr.map(envVar => (
             <TableRow key={envVar.id}>
-              <TableCell><Typography sx={{ fontWeight: 'bold' }}>{envVar.key}</Typography></TableCell>
+              <TableCell>
+                <Typography sx={{ fontWeight: 'bold' }}>
+                  {envVar.key}
+                </Typography>
+              </TableCell>
               <TableCell width="55%">{envVar.value}</TableCell>
             </TableRow>
           ))}
@@ -598,60 +651,117 @@ const OpaAppStateOverview = ({
     } else {
       return (
         <TableRow key="clusterName">
-          <TableCell id='noneConfigured' width="30%">None configured</TableCell>
-          <TableCell id='providerName'></TableCell>
+          <TableCell id="noneConfigured" width="30%">
+            None configured
+          </TableCell>
+          <TableCell id="providerName"></TableCell>
         </TableRow>
       );
     }
   };
 
-  const DeploymentCard = ({ deploymentState, index, total }: { deploymentState: AppState, index: number, total: number }) => {
-
+  const DeploymentCard = ({
+    deploymentState,
+    index,
+    total,
+  }: {
+    deploymentState: AppState;
+    index: number;
+    total: number;
+  }) => {
     return (
       <>
         <Grid container sx={{ marginBottom: 2 }}>
           <Grid item xs={6}>
-            <Typography sx={{ textTransform: 'uppercase', fontWeight: 'bold', paddingBottom: '10px' }}>Deployment {index > 1 ? index : ""}</Typography>
+            <Typography
+              sx={{
+                textTransform: 'uppercase',
+                fontWeight: 'bold',
+                paddingBottom: '10px',
+              }}
+            >
+              Deployment {index > 1 ? index : ''}
+            </Typography>
             <div>
-              {
-                deploymentState?.appState ?
-                  (
-                    <Grid container>
-                      <Grid item xs={1}></Grid>
-                      <Grid item xs={11}>
-                        <Table size='small' padding='none'>
-                          <TableBody>
-                            <TableRow key="deploymentName" >
-                              <TableCell id='name' width="30%"><Typography sx={{ fontWeight: 'bold' }}>Name</Typography></TableCell>
-                              <TableCell id='providerName'>{deploymentState.stateObject.metadata.name}</TableCell>
-                            </TableRow>
-                            <TableRow key="status" >
-                              <TableCell id='status' width="30%"><Typography sx={{ fontWeight: 'bold' }}>Status</Typography></TableCell>
-                              <TableCell id='appStatus'>{deploymentState?.appState ? deploymentState?.appState : 'Not Running'}</TableCell>
-                            </TableRow>
-                            <TableRow key="pods" >
-                              <TableCell id='id' width="30%"><Typography sx={{ fontWeight: 'bold' }}>Pods</Typography></TableCell>
-                              <TableCell id='providerName'>{deploymentState?.runningCount + "/" + deploymentState?.desiredCount}{deploymentState?.pendingCount ? ` (${deploymentState?.pendingCount} Pending)` : ''}</TableCell>
-                            </TableRow>
-                            <TableRow key="lastUpdated" >
-                              <TableCell id='id' width="30%"><Typography sx={{ fontWeight: 'bold' }}>Last Updated</Typography></TableCell>
-                              <TableCell id='providerName'>{deploymentState?.lastStateTimestamp ? deploymentState?.lastStateTimestamp.toString() : ''}</TableCell>
-                            </TableRow>
-                          </TableBody>
-                        </Table>
-                      </Grid>
-                    </Grid>
-                  ) : <></>
-              }
+              {deploymentState?.appState ? (
+                <Grid container>
+                  <Grid item xs={1}></Grid>
+                  <Grid item xs={11}>
+                    <Table size="small" padding="none">
+                      <TableBody>
+                        <TableRow key="deploymentName">
+                          <TableCell id="name" width="30%">
+                            <Typography sx={{ fontWeight: 'bold' }}>
+                              Name
+                            </Typography>
+                          </TableCell>
+                          <TableCell id="providerName">
+                            {deploymentState.stateObject.metadata.name}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow key="status">
+                          <TableCell id="status" width="30%">
+                            <Typography sx={{ fontWeight: 'bold' }}>
+                              Status
+                            </Typography>
+                          </TableCell>
+                          <TableCell id="appStatus">
+                            {deploymentState?.appState
+                              ? deploymentState?.appState
+                              : 'Not Running'}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow key="pods">
+                          <TableCell id="id" width="30%">
+                            <Typography sx={{ fontWeight: 'bold' }}>
+                              Pods
+                            </Typography>
+                          </TableCell>
+                          <TableCell id="providerName">
+                            {deploymentState?.runningCount +
+                              '/' +
+                              deploymentState?.desiredCount}
+                            {deploymentState?.pendingCount
+                              ? ` (${deploymentState?.pendingCount} Pending)`
+                              : ''}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow key="lastUpdated">
+                          <TableCell id="id" width="30%">
+                            <Typography sx={{ fontWeight: 'bold' }}>
+                              Last Updated
+                            </Typography>
+                          </TableCell>
+                          <TableCell id="providerName">
+                            {deploymentState?.lastStateTimestamp
+                              ? deploymentState?.lastStateTimestamp.toString()
+                              : ''}
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </Grid>
+                </Grid>
+              ) : (
+                <></>
+              )}
             </div>
           </Grid>
           <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }} />
           <Grid item zeroMinWidth xs={6} sx={{ pl: 1, pr: 1 }}>
-            <Typography sx={{ textTransform: 'uppercase', fontWeight: 'bold', paddingBottom: '10px' }}>Environment Variables</Typography>
+            <Typography
+              sx={{
+                textTransform: 'uppercase',
+                fontWeight: 'bold',
+                paddingBottom: '10px',
+              }}
+            >
+              Environment Variables
+            </Typography>
             <Grid container>
               <Grid item xs={1}></Grid>
               <Grid item xs={11}>
-                <Table size='small' padding='none'>
+                <Table size="small" padding="none">
                   <TableBody>
                     <EnvVars appID={deploymentState.appID as string} />
                   </TableBody>
@@ -662,71 +772,91 @@ const OpaAppStateOverview = ({
         </Grid>
         <Grid container>
           <Grid item xs={12}>
-            {
-              index === total && deploymentState?.appState === AppStateType.STOPPED ?
-                (
-                  <div style={{ float: 'left', marginRight: '10px' }}>
-                    <NumberInput
-                      placeholder="Number of pods"
-                      defaultValue={1}
-                      onChange={(_event, val) => deploymentState.desiredCount = val || 0}
-                      min={0}
-                      max={10}
-                      slots={{
-                        root: StyledInputRoot,
-                        input: StyledInput,
-                        incrementButton: StyledButton,
-                        decrementButton: StyledButton,
-                      }}
-                      slotProps={{
-                        incrementButton: {
-                          children: <AddIcon fontSize="small" />,
-                          className: 'increment',
-                        },
-                        decrementButton: {
-                          children: <RemoveIcon fontSize="small" />,
-                        },
-                      }}
-                    />
-                  </div>) :
-                <></>
-            }
-            {
-              index === total ?
-                (
-                  <>
-                    <Button
-                      sx={{ mr: 2 }}
-                      variant="outlined"
-                      size="small"
-                      disabled={deploymentState?.appState !== AppStateType.STOPPED ? true : false}
-                      onClick={() => handleStartTask(deploymentState)}
-                    >
-                      Start
-                    </Button>
-                    <Button
-                      sx={{ mr: 2 }}
-                      variant="outlined"
-                      size="small"
-                      disabled={(deploymentState?.appState === AppStateType.STOPPED ? true : false)}
-                      onClick={() => handleStopTask(deploymentState)}
-                    >
-                      Stop
-                    </Button>
-                    <Typography fontStyle={'italic'} fontSize={'12px'} sx={{ mt: 1 }}> **Changes to your application state will be applied directly to the cluster and not to the source code repository</Typography>
-                  </>) : <></>
-            }
+            {index === total &&
+            deploymentState?.appState === AppStateType.STOPPED ? (
+              <div style={{ float: 'left', marginRight: '10px' }}>
+                <NumberInput
+                  placeholder="Number of pods"
+                  defaultValue={1}
+                  onChange={(_event, val) =>
+                    (deploymentState.desiredCount = val || 0)
+                  }
+                  min={0}
+                  max={10}
+                  slots={{
+                    root: StyledInputRoot,
+                    input: StyledInput,
+                    incrementButton: StyledButton,
+                    decrementButton: StyledButton,
+                  }}
+                  slotProps={{
+                    incrementButton: {
+                      children: <AddIcon fontSize="small" />,
+                      className: 'increment',
+                    },
+                    decrementButton: {
+                      children: <RemoveIcon fontSize="small" />,
+                    },
+                  }}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+            {index === total ? (
+              <>
+                <Button
+                  sx={{ mr: 2 }}
+                  variant="outlined"
+                  size="small"
+                  disabled={
+                    deploymentState?.appState !== AppStateType.STOPPED
+                      ? true
+                      : false
+                  }
+                  onClick={() => handleStartTask(deploymentState)}
+                >
+                  Start
+                </Button>
+                <Button
+                  sx={{ mr: 2 }}
+                  variant="outlined"
+                  size="small"
+                  disabled={
+                    deploymentState?.appState === AppStateType.STOPPED
+                      ? true
+                      : false
+                  }
+                  onClick={() => handleStopTask(deploymentState)}
+                >
+                  Stop
+                </Button>
+                <Typography
+                  fontStyle={'italic'}
+                  fontSize={'12px'}
+                  sx={{ mt: 1 }}
+                >
+                  {' '}
+                  **Changes to your application state will be applied directly
+                  to the cluster and not to the source code repository
+                </Typography>
+              </>
+            ) : (
+              <></>
+            )}
           </Grid>
         </Grid>
       </>
-    )
-  }
+    );
+  };
 
   if (loading) {
     return (
       <InfoCard title="Application State">
         <LinearProgress />
-        <Typography sx={{ color: '#645B59', mt: 2 }}>Loading current state...</Typography>
+        <Typography sx={{ color: '#645B59', mt: 2 }}>
+          Loading current state...
+        </Typography>
       </InfoCard>
     );
   }
@@ -739,19 +869,39 @@ const OpaAppStateOverview = ({
       <CardContent>
         <Grid container>
           <Grid item xs={5}>
-            <Typography sx={{ textTransform: 'uppercase', fontWeight: 'bold', paddingBottom: '10px' }}>Cluster Info</Typography>
+            <Typography
+              sx={{
+                textTransform: 'uppercase',
+                fontWeight: 'bold',
+                paddingBottom: '10px',
+              }}
+            >
+              Cluster Info
+            </Typography>
             <Grid container>
               <Grid item xs={1}></Grid>
               <Grid item xs={11}>
-                <Table size='small' padding='none'>
+                <Table size="small" padding="none">
                   <TableBody>
-                    <TableRow key="clusterName" >
-                      <TableCell id='id' width="30%"><Typography sx={{ fontWeight: 'bold' }}>Cluster Name</Typography></TableCell>
-                      <TableCell id='providerName'>{clusterNameState}</TableCell>
+                    <TableRow key="clusterName">
+                      <TableCell id="id" width="30%">
+                        <Typography sx={{ fontWeight: 'bold' }}>
+                          Cluster Name
+                        </Typography>
+                      </TableCell>
+                      <TableCell id="providerName">
+                        {clusterNameState}
+                      </TableCell>
                     </TableRow>
-                    <TableRow key="namespace" >
-                      <TableCell id='id' width="30%"><Typography sx={{ fontWeight: 'bold' }}>Namespace</Typography></TableCell>
-                      <TableCell id='providerName'>{env.app.namespace}</TableCell>
+                    <TableRow key="namespace">
+                      <TableCell id="id" width="30%">
+                        <Typography sx={{ fontWeight: 'bold' }}>
+                          Namespace
+                        </Typography>
+                      </TableCell>
+                      <TableCell id="providerName">
+                        {env.app.namespace}
+                      </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -760,12 +910,20 @@ const OpaAppStateOverview = ({
           </Grid>
         </Grid>
         <Grid container direction="column" rowSpacing={2} sx={{ marginTop: 2 }}>
-          {
-            appStateData.length ?
-              appStateData.map((state, index, array) => {
-                return (<DeploymentCard key={state.deploymentIdentifier} deploymentState={state} index={++index} total={array.length} />)
-              }) : <>No Deployments Found</>
-          }
+          {appStateData.length ? (
+            appStateData.map((state, index, array) => {
+              return (
+                <DeploymentCard
+                  key={state.deploymentIdentifier}
+                  deploymentState={state}
+                  index={++index}
+                  total={array.length}
+                />
+              );
+            })
+          ) : (
+            <>No Deployments Found</>
+          )}
         </Grid>
       </CardContent>
     </InfoCard>
@@ -777,22 +935,34 @@ export const K8sAppStateCard = () => {
   const awsAppLoadingStatus = useAsyncAwsApp();
 
   if (awsAppLoadingStatus.loading) {
-    return <LinearProgress />
+    return <LinearProgress />;
   } else if (awsAppLoadingStatus.component) {
     let input;
-    if (awsAppLoadingStatus.component.componentSubType === "aws-eks") {
-      const env = awsAppLoadingStatus.component.currentEnvironment as AWSEKSAppDeploymentEnvironment;
+    if (awsAppLoadingStatus.component.componentSubType === 'aws-eks') {
+      const env = awsAppLoadingStatus.component
+        .currentEnvironment as AWSEKSAppDeploymentEnvironment;
       input = {
         env,
         entity,
-        awsComponent: awsAppLoadingStatus.component
+        awsComponent: awsAppLoadingStatus.component,
       };
-      return <OpaAppStateOverview input={input} />
+      return <OpaAppStateOverview input={input} />;
     } else {
-      return <EmptyState missing="data" title="Can't render EKS app state card" description="Missing supported spec.subType" />
+      return (
+        <EmptyState
+          missing="data"
+          title="Can't render EKS app state card"
+          description="Missing supported spec.subType"
+        />
+      );
     }
-
   } else {
-    return <EmptyState missing="data" title="No state data to show" description="State data would show here" />
+    return (
+      <EmptyState
+        missing="data"
+        title="No state data to show"
+        description="State data would show here"
+      />
+    );
   }
 };

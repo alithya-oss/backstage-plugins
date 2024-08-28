@@ -8,7 +8,7 @@ export type EnvironmentProviderConnection = {
   accountId: string;
   region: string;
   awsAuthResponse: AwsAuthResponse;
-}
+};
 
 export type EnvironmentProvider = {
   envProviderName: string;
@@ -23,4 +23,4 @@ export type EnvironmentProvider = {
   assumedRoleArn: string;
   kubectlLambdaArn?: string;
   kubectlLambdaRoleArn?: string;
-}
+};

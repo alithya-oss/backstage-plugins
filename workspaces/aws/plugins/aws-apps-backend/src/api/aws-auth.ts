@@ -25,7 +25,9 @@ function parseEntityref(ref: string, groups: string[]) {
 function getMemberGroupFromUserEntity(user: UserEntity | undefined) {
   if (user?.relations === undefined) {
     // if the user has no relations and isn't a member of any groups, then bail early
-    throw new Error('User is not a member of any groups and cannot get mapped AWS credentials');
+    throw new Error(
+      'User is not a member of any groups and cannot get mapped AWS credentials',
+    );
   }
   const memberGroups = user.relations.reduce((groups, relation) => {
     return parseEntityref(relation.targetRef, groups);
@@ -35,11 +37,16 @@ function getMemberGroupFromUserEntity(user: UserEntity | undefined) {
 function getMemberGroupFromUserIdentity(user: BackstageUserInfo | undefined) {
   if (user?.ownershipEntityRefs === undefined) {
     // if the user has no relations and isn't a member of any groups, then bail early
-    throw new Error('User is not a member of any groups and cannot get mapped AWS credentials');
+    throw new Error(
+      'User is not a member of any groups and cannot get mapped AWS credentials',
+    );
   }
-  const memberGroups = user.ownershipEntityRefs.reduce((groups, ownershipRefs) => {
-    return parseEntityref(ownershipRefs, groups);
-  }, new Array<string>());
+  const memberGroups = user.ownershipEntityRefs.reduce(
+    (groups, ownershipRefs) => {
+      return parseEntityref(ownershipRefs, groups);
+    },
+    new Array<string>(),
+  );
   return memberGroups;
 }
 async function fetchCreds(
@@ -48,13 +55,13 @@ async function fetchCreds(
   accountId: string,
   userName: string,
   prefix: string,
-  providerName: string
+  providerName: string,
 ): Promise<AwsAuthResponse> {
   const logger = getRootLogger();
   try {
-
     // TODO: remove this code once we reference memberGroups
-    if (memberGroups) { }
+    if (memberGroups) {
+    }
 
     // Get the SSM Parameter pointing to the DynamoDB security mapping table
     // const ssmClient = new SSMClient({ region });
@@ -90,7 +97,9 @@ async function fetchCreds(
     const roleArn = `arn:aws:iam::${accountId}:role/${prefix}-${providerName}-operations-role`;
     // Throw an error if we cycled through all groups and didn't find a matching roleArn
     if (roleArn === undefined) {
-      throw new Error(`Did not find a role mapping in the groups for user ${userName}`);
+      throw new Error(
+        `Did not find a role mapping in the groups for user ${userName}`,
+      );
     }
     // Assume the mapped role with the STS service and return the credentials
     logger.debug(`Fetching credentials for mapped role: ${roleArn}`);
@@ -150,29 +159,51 @@ export async function getAWScreds(
       const userName = parseEntityRef(userIdentity?.userEntityRef).name;
       logger.info(`Fetching credentials for user ${userName}`);
       memberGroups = getMemberGroupFromUserIdentity(userIdentity);
-      return fetchCreds(memberGroups, region, accountId, userName, prefix, providerName);
+      return fetchCreds(
+        memberGroups,
+        region,
+        accountId,
+        userName,
+        prefix,
+        providerName,
+      );
     } else {
       const userName = user?.metadata.name;
       logger.info(`Fetching credentials for user ${userName}`);
       memberGroups = getMemberGroupFromUserEntity(user);
-      return fetchCreds(memberGroups, region, accountId, userName!, prefix, providerName);
+      return fetchCreds(
+        memberGroups,
+        region,
+        accountId,
+        userName!,
+        prefix,
+        providerName,
+      );
     }
   }
 }
 
-export async function getAWSCredsWorkaround(accountId: string, region: string, prefix: string, providerName: string, user?: UserEntity) {
+export async function getAWSCredsWorkaround(
+  accountId: string,
+  region: string,
+  prefix: string,
+  providerName: string,
+  user?: UserEntity,
+) {
   const client = new STSClient({ region });
-  const userName = user?.metadata.name || "unknown";
+  const userName = user?.metadata.name || 'unknown';
 
   //assemble the arn format to the desire destination environment
   const roleArn = `arn:aws:iam::${accountId}:role/${prefix}-${providerName}-operations-role`;
-  console.log(roleArn)
+  console.log(roleArn);
 
-  const stsResult = await client.send(new AssumeRoleCommand({
-    RoleArn: roleArn,
-    RoleSessionName: `${userName}-backstage-session`,
-    DurationSeconds: 3600,
-  }));
+  const stsResult = await client.send(
+    new AssumeRoleCommand({
+      RoleArn: roleArn,
+      RoleSessionName: `${userName}-backstage-session`,
+      DurationSeconds: 3600,
+    }),
+  );
 
   return {
     roleArn,
@@ -184,5 +215,5 @@ export async function getAWSCredsWorkaround(accountId: string, region: string, p
     },
     account: accountId,
     region: region,
-  }
+  };
 }

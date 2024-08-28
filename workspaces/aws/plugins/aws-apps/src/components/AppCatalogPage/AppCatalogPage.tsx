@@ -9,7 +9,11 @@ import {
   SupportButton,
   TableColumn,
 } from '@backstage/core-components';
-import { CatalogTable, CatalogTableRow, DefaultCatalogPageProps } from '@backstage/plugin-catalog';
+import {
+  CatalogTable,
+  CatalogTableRow,
+  DefaultCatalogPageProps,
+} from '@backstage/plugin-catalog';
 import {
   CatalogFilterLayout,
   EntityKindPicker,
@@ -47,13 +51,23 @@ export function AppCatalogPage(props: AppCatalogPageProps) {
   let allowedTypesComponent = ['aws-app'];
   let allowedTypesResource = ['aws-rds', 'aws-s3'];
   let allowedTypesEnvironment = ['environment-provider', 'environment'];
-  let allowedKinds = ['Component', 'Resource', 'AWSEnvironment', 'AWSEnvironmentProvider'];
+  let allowedKinds = [
+    'Component',
+    'Resource',
+    'AWSEnvironment',
+    'AWSEnvironmentProvider',
+  ];
 
   if (kind === 'all') {
     allowedTypesComponent = ['aws-app'];
     allowedTypesResource = ['aws-rds', 'aws-s3'];
     allowedTypesEnvironment = ['environment-provider', 'environment'];
-    allowedKinds = ['Component', 'Resource', 'AWSEnvironment', 'AWSEnvironmentProvider'];
+    allowedKinds = [
+      'Component',
+      'Resource',
+      'AWSEnvironment',
+      'AWSEnvironmentProvider',
+    ];
     initialKind = 'component';
     initialType = 'aws-app';
   } else if (kind === 'awsenvironment') {
@@ -112,10 +126,9 @@ export function AppCatalogPage(props: AppCatalogPageProps) {
       columnFactories.createMetadataDescriptionColumn(),
       columnFactories.createTagsColumn(),
     ];
-    columns=awsAppsColumns
+    columns = awsAppsColumns;
     allowedKinds = ['Component'];
     initiallySelectedFilter = 'all';
-
   } else if (kind === 'resource') {
     const awsResourcesColumns: TableColumn<CatalogTableRow>[] = [
       columnFactories.createTitleColumn({ hidden: true }),
@@ -146,17 +159,26 @@ export function AppCatalogPage(props: AppCatalogPageProps) {
         <ContentHeader title="">
           <CreateButton
             title={'Create AWS Component'}
-            to={'/create?filters%5Bkind%5D=template&filters%5Buser%5D=all&filters%5Btags%5D=aws'}
+            to={
+              '/create?filters%5Bkind%5D=template&filters%5Buser%5D=all&filters%5Btags%5D=aws'
+            }
           />
           <SupportButton>All your AWS software catalog</SupportButton>
         </ContentHeader>
         <EntityListProvider>
           <CatalogFilterLayout>
             <CatalogFilterLayout.Filters>
-              <EntityKindPicker initialFilter={initialKind} allowedKinds={allowedKinds} />
+              <EntityKindPicker
+                initialFilter={initialKind}
+                allowedKinds={allowedKinds}
+              />
               <AdvancedEntityTypePicker
                 initialFilter={initialType}
-                allowedTypes={[...allowedTypesComponent, ...allowedTypesEnvironment, ...allowedTypesResource]}
+                allowedTypes={[
+                  ...allowedTypesComponent,
+                  ...allowedTypesEnvironment,
+                  ...allowedTypesResource,
+                ]}
               />
               <UserListPicker initialFilter={initiallySelectedFilter} />
               <EntityOwnerPicker />
