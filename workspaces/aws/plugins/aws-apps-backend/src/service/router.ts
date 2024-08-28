@@ -7,7 +7,7 @@ import {
   GitProviders,
   IRepositoryInfo,
   readOpaAppAuditPermission,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@aws/plugin-aws-apps-common-for-backstage';
 import { NotAllowedError } from '@backstage/errors';
 import {AuthService, HttpAuthService, LoggerService, PermissionsService, UserInfoService} from '@backstage/backend-plugin-api'
 import { AuthorizeResult } from '@backstage/plugin-permission-common';

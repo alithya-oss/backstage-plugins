@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { opaApiRef } from '../../api';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
 import { ContainerDetailsType } from '../../types';
-import { AWSComponent, AWSECSAppDeploymentEnvironment } from '@alithya-oss/plugin-aws-apps-common';
+import { AWSComponent, AWSECSAppDeploymentEnvironment } from '@aws/plugin-aws-apps-common-for-backstage';
 
 const AppConfigOverview = ({
   input: { awsComponent },

@@ -10,7 +10,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 
 import FormControl from '@mui/material/FormControl';
-import { AWSComponent } from '@alithya-oss/plugin-aws-apps-common';
+import { AWSComponent } from '@aws/plugin-aws-apps-common-for-backstage';
 
 const EnvironmentSelector = ({
   input: { awsComponent },

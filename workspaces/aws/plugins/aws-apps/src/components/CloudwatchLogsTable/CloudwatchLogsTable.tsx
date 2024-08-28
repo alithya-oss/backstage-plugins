@@ -25,7 +25,7 @@ import {
   isAWSECSAppDeploymentEnvironment,
   isAWSEKSAppDeploymentEnvironment,
   isAWSServerlessAppDeploymentEnvironment
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@aws/plugin-aws-apps-common-for-backstage';
 
 interface TableData {
   name: string;

@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useApi } from '@backstage/core-plugin-api';
 import { opaApiRef } from '../../api';
 import { Alert, AlertTitle, Typography } from '@mui/material';
-import { AWSEnvironmentProviderRecord, getGitCredentailsSecret, getRepoInfo } from '@alithya-oss/plugin-aws-apps-common';
+import { AWSEnvironmentProviderRecord, getGitCredentailsSecret, getRepoInfo } from '@aws/plugin-aws-apps-common-for-backstage';
 import { CompoundEntityRef, Entity, EntityRelation, parseEntityRef } from '@backstage/catalog-model';
 
 import { CatalogApi, EntityRefLink, catalogApiRef, useEntity } from '@backstage/plugin-catalog-react';

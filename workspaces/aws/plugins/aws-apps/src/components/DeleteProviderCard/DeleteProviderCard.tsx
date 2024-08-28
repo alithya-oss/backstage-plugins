@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { opaApiRef } from '../../api';
 import { sleep } from "../../helpers/util";
-import { getGitCredentailsSecret, getRepoInfo } from "@alithya-oss/plugin-aws-apps-common";
+import { getGitCredentailsSecret, getRepoInfo } from "@aws/plugin-aws-apps-common-for-backstage";
 
 const DeleteProviderPanel = ({
   input: { entity, catalogApi }

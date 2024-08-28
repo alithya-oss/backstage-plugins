@@ -135,7 +135,7 @@ function rename_harmonix() {
         "s#@aws/plugin-aws-apps-backend-for-backstage#@alithya-oss/plugin-aws-apps-backend#g"
         "s#@aws/plugin-aws-apps-common-for-backstage#@alithya-oss/plugin-aws-apps-common#g"
         "s#@aws/backstage-plugin-catalog-backend-module-aws-apps-entities-processor#@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor#g"
-        "s#@aws/plugin-aws-apps-common-for-backstage#@alithya-oss/plugin-scaffolder-backend-aws-apps#g"
+        "s#@aws/plugin-scaffolder-backend-aws-apps-for-backstage#@alithya-oss/plugin-scaffolder-backend-aws-apps#g"
     )
 
     for item in "${changes[@]}"; do

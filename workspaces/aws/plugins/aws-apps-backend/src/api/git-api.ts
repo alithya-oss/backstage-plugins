@@ -1,4 +1,4 @@
-import { GitProviders, ISCMBackendAPI } from '@alithya-oss/plugin-aws-apps-common';
+import { GitProviders, ISCMBackendAPI } from '@aws/plugin-aws-apps-common-for-backstage';
 import { GitLabAPI } from './gitlab-api';
 import { GitHubAPI } from './github-api';
 import { LoggerService } from '@backstage/backend-plugin-api';

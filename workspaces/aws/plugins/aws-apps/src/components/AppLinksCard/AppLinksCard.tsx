@@ -11,7 +11,7 @@ import { IconComponent, useApp } from '@backstage/core-plugin-api';
 import { EmptyState, InfoCard, InfoCardVariants } from '@backstage/core-components';
 import { LinearProgress } from '@material-ui/core';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
-import { AWSComponent } from '@alithya-oss/plugin-aws-apps-common';
+import { AWSComponent } from '@aws/plugin-aws-apps-common-for-backstage';
 
 /** @public */
 export interface AppLinksProps {

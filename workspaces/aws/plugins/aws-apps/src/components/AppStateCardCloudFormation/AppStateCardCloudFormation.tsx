@@ -11,7 +11,7 @@ import { opaApiRef } from '../../api';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
 import { formatWithTime } from '../../helpers/date-utils';
 import { useCancellablePromise } from '../../hooks/useCancellablePromise';
-import { AWSComponent, AWSServerlessAppDeploymentEnvironment, CloudFormationStack, getGitCredentailsSecret } from '@alithya-oss/plugin-aws-apps-common';
+import { AWSComponent, AWSServerlessAppDeploymentEnvironment, CloudFormationStack, getGitCredentailsSecret } from '@aws/plugin-aws-apps-common-for-backstage';
 
 type stackEvent = {
   action: string | undefined;

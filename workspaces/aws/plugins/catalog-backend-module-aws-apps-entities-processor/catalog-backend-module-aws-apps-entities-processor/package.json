@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor",
+  "name": "@aws/backstage-plugin-catalog-backend-module-aws-apps-entities-processor",
   "description": "The aws-apps-entities-processor backend module for the catalog plugin.",
   "version": "0.3.4",
   "main": "src/index.ts",
@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@backstage/backend-common": "^0.23.3",
-    "@alithya-oss/plugin-aws-apps-common": "^0.3.4",
+    "@aws/plugin-aws-apps-common-for-backstage": "^0.3.4",
     "@backstage/backend-plugin-api": "^0.7.0"
   },
   "devDependencies": {

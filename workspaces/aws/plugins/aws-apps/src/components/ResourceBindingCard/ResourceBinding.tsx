@@ -9,7 +9,7 @@ import { useApi } from '@backstage/core-plugin-api';
 import { opaApiRef } from '../../api';
 import { Alert, AlertTitle, Typography } from '@mui/material';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
-import { AWSComponent, AssociatedResources, BindResourceParams, ResourceBinding, ResourcePolicy, getGitCredentailsSecret } from '@alithya-oss/plugin-aws-apps-common';
+import { AWSComponent, AssociatedResources, BindResourceParams, ResourceBinding, ResourcePolicy, getGitCredentailsSecret } from '@aws/plugin-aws-apps-common-for-backstage';
 import { CompoundEntityRef, Entity, EntityRelation, parseEntityRef } from '@backstage/catalog-model';
 import { CatalogApi, EntityRefLink, catalogApiRef, useEntity } from '@backstage/plugin-catalog-react';
 import { ResourceSelectorDialog } from './ResourceSelectorDialog';
