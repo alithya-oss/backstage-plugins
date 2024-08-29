@@ -522,8 +522,9 @@ export async function createRouter(
     let serviceResult;
     let serviceResultErrorName: string | undefined;
     try {
-      serviceResult =
-        await apiClient.getCategorizedResources(resourceGroupName);
+      serviceResult = await apiClient.getCategorizedResources(
+        resourceGroupName,
+      );
     } catch (e) {
       serviceResultErrorName = (e as Error).name;
     }
@@ -641,8 +642,9 @@ export async function createRouter(
     const taskDefinition = req.body.taskDefinition?.toString();
     const envVar = req.body.envVar;
 
-    const oldTaskDefinition =
-      await apiClient.describeTaskDefinition(taskDefinition);
+    const oldTaskDefinition = await apiClient.describeTaskDefinition(
+      taskDefinition,
+    );
     const newCd = oldTaskDefinition.taskDefinition?.containerDefinitions?.map(
       (td, index) => {
         return {
@@ -674,8 +676,9 @@ export async function createRouter(
     logger.info('router entry: /ecs/describeTaskDefinition');
     const { apiClient } = await getApiClient(req);
     const taskDefinition = req.body.taskDefinition?.toString();
-    const taskDefinitionOutout =
-      await apiClient.describeTaskDefinition(taskDefinition);
+    const taskDefinitionOutout = await apiClient.describeTaskDefinition(
+      taskDefinition,
+    );
     res.status(200).json(taskDefinitionOutout.taskDefinition);
   });
 

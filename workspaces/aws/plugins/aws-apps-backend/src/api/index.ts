@@ -5,4 +5,4 @@ export { AwsAppsApi } from './AwsAppsApi';
 export { getAWScreds, type AwsAuthResponse } from './aws-auth';
 export { createAuditRecord } from './aws-audit';
 export type { DynamoDBTableData } from './AwsAppsApi.ts';
-export type { AwsAuditRequest, AwsAuditResponse } from './aws-audit'
+export type { AwsAuditRequest, AwsAuditResponse } from './aws-audit';

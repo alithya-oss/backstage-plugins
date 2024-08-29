@@ -92,9 +92,9 @@ export const ResourceDetailsDialog = ({
   isOpen,
   closeDialogHandler,
   resource,
-  // prefix,
-  // providerName
-}: {
+}: // prefix,
+// providerName
+{
   isOpen: boolean;
   closeDialogHandler: () => void;
   resource: AWSResource;

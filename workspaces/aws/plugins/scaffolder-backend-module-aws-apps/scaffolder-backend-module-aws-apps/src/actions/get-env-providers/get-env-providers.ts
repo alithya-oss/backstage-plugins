@@ -218,11 +218,16 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
       );
       ctx.output('envShortName', envShortName);
 
-      const deploymentParametersArray =
-        await getEnvDeploymentParameters(awsEnvEntity);
+      const deploymentParametersArray = await getEnvDeploymentParameters(
+        awsEnvEntity,
+      );
 
       ctx.logger.debug(
-        `envProviders info: ${JSON.stringify(deploymentParametersArray, null, 2)}`,
+        `envProviders info: ${JSON.stringify(
+          deploymentParametersArray,
+          null,
+          2,
+        )}`,
       );
 
       const envProviderOutputArray: JsonArray = [];
@@ -352,7 +357,11 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
       }
 
       ctx.logger.info(
-        `Resolved environment providers: ${JSON.stringify(envProviderOutputArray, null, 2)}`,
+        `Resolved environment providers: ${JSON.stringify(
+          envProviderOutputArray,
+          null,
+          2,
+        )}`,
       );
 
       ctx.output('envProviders', envProviderOutputArray);

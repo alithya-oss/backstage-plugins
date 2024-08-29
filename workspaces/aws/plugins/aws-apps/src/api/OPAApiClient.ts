@@ -820,7 +820,9 @@ export class OPAApiClient implements OPAApi {
     method = HTTP.GET,
     data?: any,
   ): Promise<T> {
-    const baseUrl = `${await this.configApi.getString('backend.baseUrl')}/api/aws-apps-backend`;
+    const baseUrl = `${await this.configApi.getString(
+      'backend.baseUrl',
+    )}/api/aws-apps-backend`;
     const url = baseUrl + path;
 
     let headers: { [k: string]: string } = {};
