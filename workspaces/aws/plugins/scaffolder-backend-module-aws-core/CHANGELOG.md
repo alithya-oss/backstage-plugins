@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.2.7
+
+### Patch Changes
+
+- 95c1ddb: Bump framework version 1.30.4 and aligned with `backstage/community-plugins` best practices
+
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 

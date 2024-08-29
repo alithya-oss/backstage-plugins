@@ -1,11 +1,9 @@
-# @aws/plugin-aws-apps-common-for-backstage
+# @alithya-oss/plugin-aws-apps
 
-## 0.3.5
+## 0.3.6
 
 ### Patch Changes
 
 - 95c1ddb: Bump framework version 1.30.4 and aligned with `backstage/community-plugins` best practices
-
-## 0.1.0
-
-Initial release
+- Updated dependencies [95c1ddb]
+  - @alithya-oss/plugin-aws-apps-common@0.3.5
