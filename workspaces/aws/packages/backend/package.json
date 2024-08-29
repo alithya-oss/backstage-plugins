@@ -25,7 +25,7 @@
     "@alithya-oss/plugin-aws-codebuild-backend": "workspace:^",
     "@alithya-oss/plugin-aws-codepipeline-backend": "workspace:^",
     "@alithya-oss/plugin-cost-insights-aws-backend": "workspace:^",
-    "@alithya-oss/scaffolder-backend-module-aws-core-actions": "workspace:^",
+    "@alithya-oss/plugin-scaffolder-backend-module-aws-core": "workspace:^",
     "@backstage/backend-common": "^0.24.1",
     "@backstage/backend-defaults": "^0.4.4",
     "@backstage/backend-tasks": "^0.6.1",

@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/scaffolder-backend-module-aws-core-actions",
+  "name": "@alithya-oss/plugin-scaffolder-backend-module-aws-core",
   "description": "Scaffolder actions related to the AWS core plugin for Backstage",
   "version": "0.2.6",
   "repository": {
