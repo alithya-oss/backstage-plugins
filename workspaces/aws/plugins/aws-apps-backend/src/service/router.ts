@@ -27,6 +27,7 @@ import { AwsAppsPlatformApi } from '../api/aws-platform';
 import { Config } from '@backstage/config';
 import { CatalogApi } from '@backstage/catalog-client';
 
+/** @public */
 export interface RouterOptions {
   config: Config;
   logger: LoggerService;
@@ -37,6 +38,7 @@ export interface RouterOptions {
   httpAuth: HttpAuthService;
 }
 
+/** @public */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {

@@ -1,6 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
+/** @public */
 export type AppPromoParams = {
   envName: string;
   envRequiresManualApproval: boolean;
@@ -8,6 +9,7 @@ export type AppPromoParams = {
   providers: AWSProviderParams[];
 };
 
+/** @public */
 export type AWSProviderParams = {
   awsAccount: string;
   awsRegion: string;

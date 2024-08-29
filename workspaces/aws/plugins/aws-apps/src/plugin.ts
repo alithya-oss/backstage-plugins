@@ -18,6 +18,7 @@ export const isAnnotationsAvailable = (entity: Entity) =>
   entity?.metadata?.annotations;
 export const isLabelsAvailable = (entity: Entity) => entity?.metadata?.labels;
 
+/** @public */
 export const opaPlugin = createPlugin({
   id: 'aws-apps',
   apis: [
@@ -33,6 +34,7 @@ export const opaPlugin = createPlugin({
   },
 });
 
+/** @public */
 export const EntityLabelTable = opaPlugin.provide(
   createComponentExtension({
     name: 'EntityLabelTable',
@@ -43,6 +45,7 @@ export const EntityLabelTable = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityAuditTable = opaPlugin.provide(
   createComponentExtension({
     name: 'EntityAuditTable',
@@ -53,6 +56,7 @@ export const EntityAuditTable = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityEnvironmentSelector = opaPlugin.provide(
   createComponentExtension({
     name: 'EnvironmentSelector',
@@ -65,6 +69,7 @@ export const EntityEnvironmentSelector = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityAnnotationTypeTable = opaPlugin.provide(
   createComponentExtension({
     name: 'EntityAnnotationTypeTable',
@@ -77,6 +82,7 @@ export const EntityAnnotationTypeTable = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityAppStateCard = opaPlugin.provide(
   createComponentExtension({
     name: 'AppStateCard',
@@ -89,6 +95,7 @@ export const EntityAppStateCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityK8sAppStateCard = opaPlugin.provide(
   createComponentExtension({
     name: 'K8sAppStateCard',
@@ -101,6 +108,7 @@ export const EntityK8sAppStateCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityAppStateCardCloudFormation = opaPlugin.provide(
   createComponentExtension({
     name: 'AppStateCardCloudFormation',
@@ -113,6 +121,7 @@ export const EntityAppStateCardCloudFormation = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityGeneralInfoCard = opaPlugin.provide(
   createComponentExtension({
     name: 'GeneralInfoCard',
@@ -125,6 +134,7 @@ export const EntityGeneralInfoCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityAppPromoCard = opaPlugin.provide(
   createComponentExtension({
     name: 'AppPromoCard',
@@ -137,6 +147,7 @@ export const EntityAppPromoCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityAppLinksCard = opaPlugin.provide(
   createComponentExtension({
     name: 'AppLinksCard',
@@ -149,6 +160,7 @@ export const EntityAppLinksCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const AppCatalogPage = opaPlugin.provide(
   createComponentExtension({
     name: 'AppCatalogPage',
@@ -161,6 +173,7 @@ export const AppCatalogPage = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityCloudwatchLogsTable = opaPlugin.provide(
   createComponentExtension({
     name: 'EntityCloudwatchLogsTable',
@@ -173,6 +186,7 @@ export const EntityCloudwatchLogsTable = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityInfrastructureInfoCard = opaPlugin.provide(
   createComponentExtension({
     name: 'InfrastructureInfoCard',
@@ -185,6 +199,7 @@ export const EntityInfrastructureInfoCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityProviderInfoCard = opaPlugin.provide(
   createComponentExtension({
     name: 'ProviderInfoCard',
@@ -197,6 +212,7 @@ export const EntityProviderInfoCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityEnvironmentInfoCard = opaPlugin.provide(
   createComponentExtension({
     name: 'EnvironmentInfoCard',
@@ -209,6 +225,7 @@ export const EntityEnvironmentInfoCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityAppConfigCard = opaPlugin.provide(
   createComponentExtension({
     name: 'AppConfigCard',
@@ -221,6 +238,7 @@ export const EntityAppConfigCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityDeleteAppCard = opaPlugin.provide(
   createComponentExtension({
     name: 'DeleteAppCard',
@@ -233,6 +251,7 @@ export const EntityDeleteAppCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityDeleteProviderCard = opaPlugin.provide(
   createComponentExtension({
     name: 'DeleteProviderCard',
@@ -245,6 +264,7 @@ export const EntityDeleteProviderCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityDeleteEnvironmentCard = opaPlugin.provide(
   createComponentExtension({
     name: 'DeleteEnvironmentCard',
@@ -257,6 +277,7 @@ export const EntityDeleteEnvironmentCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityResourceBindingCard = opaPlugin.provide(
   createComponentExtension({
     name: 'ResourceBindingCard',
@@ -269,6 +290,7 @@ export const EntityResourceBindingCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const EntityAwsEnvironmentProviderSelectorCard = opaPlugin.provide(
   createComponentExtension({
     name: 'AwsEnvironmentProviderSelectorCard',
@@ -281,6 +303,7 @@ export const EntityAwsEnvironmentProviderSelectorCard = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const AwsAppPage = opaPlugin.provide(
   createComponentExtension({
     name: 'AwsAppPage',
@@ -291,6 +314,7 @@ export const AwsAppPage = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const AwsComponentPage = opaPlugin.provide(
   createComponentExtension({
     name: 'AwsComponentPage',
@@ -303,6 +327,7 @@ export const AwsComponentPage = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const AwsEnvironmentPage = opaPlugin.provide(
   createComponentExtension({
     name: 'AwsEnvironmentPage',
@@ -315,6 +340,7 @@ export const AwsEnvironmentPage = opaPlugin.provide(
   }),
 );
 
+/** @public */
 export const AwsEnvironmentProviderPage = opaPlugin.provide(
   createComponentExtension({
     name: 'AwsEnvironmentProviderPage',

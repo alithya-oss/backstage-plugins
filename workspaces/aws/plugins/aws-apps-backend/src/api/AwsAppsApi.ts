@@ -111,6 +111,7 @@ import { parse as parseArn } from '@aws-sdk/util-arn-parser';
 import { AWSServiceResources } from '@alithya-oss/plugin-aws-apps-common';
 import { LoggerService } from '@backstage/backend-plugin-api';
 
+/** @public */
 export type DynamoDBTableData = {
   tableName: string;
   recordId: string;
@@ -130,6 +131,7 @@ export type DynamoDBTableData = {
   message: string;
 };
 
+/** @public */
 export class AwsAppsApi {
   public constructor(
     private readonly logger: LoggerService,
@@ -743,7 +745,7 @@ export class AwsAppsApi {
    * Register Task Definition
    *
    *
-   * @param TaskDefinition
+   * @param taskDefinition - TaskDefinition
    * @returns The DescribeTaskDefinitionCommandOutput object
    *
    */

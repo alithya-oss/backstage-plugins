@@ -1,6 +1,7 @@
 import { GitProviders, IRepositoryInfo } from '../types';
 import { Entity } from '@backstage/catalog-model';
 
+/** @public */
 export const getRepoUrl = (repoInfo: IRepositoryInfo): string => {
   console.log(repoInfo);
   let gitRepoClean;
@@ -41,6 +42,7 @@ export const getRepoUrl = (repoInfo: IRepositoryInfo): string => {
   }
 };
 
+/** @public */
 export const getRepoInfo = (entity: Entity): IRepositoryInfo => {
   // let gitProvider: GitProviders = GitProviders.GITLAB;
   let gitProvider = entity.metadata['gitProvider'] ?? GitProviders.GITLAB;
@@ -96,6 +98,7 @@ export const getRepoInfo = (entity: Entity): IRepositoryInfo => {
   }
 };
 
+/** @public */
 export const getGitCredentailsSecret = (repoInfo: IRepositoryInfo): string => {
   if (repoInfo.gitProvider === GitProviders.GITLAB) {
     return 'opa-admin-gitlab-secrets';

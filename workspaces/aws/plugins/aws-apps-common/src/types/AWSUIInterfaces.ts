@@ -19,6 +19,7 @@ export type BackendParams = {
 };
 
 // Create providers definition for the different providers types: eks, ecs, and serverless
+/** @public */
 export type GenericAWSEnvironment =
   | AWSDeploymentEnvironment
   | AWSECSAppDeploymentEnvironment
@@ -35,6 +36,7 @@ export type AwsDeploymentEnvironments = {
   [key: string]: GenericAWSEnvironment;
 };
 
+/** @public */
 export type AWSDeploymentEnvironmentComponent = {
   cloudFormationStackName: string;
   links: { title: string; url: string; icon?: string }[];
@@ -79,6 +81,7 @@ export type AWSDeploymentEnvironment = {
   resource: {};
 };
 
+/** @public */
 export function isAWSECSAppDeploymentEnvironment(
   variable: any,
 ): variable is AWSECSAppDeploymentEnvironment {
@@ -96,6 +99,7 @@ export function isAWSECSAppDeploymentEnvironment(
   );
 }
 
+/** @public */
 export type AWSECSAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   clusterName: string;
   app: AWSDeploymentEnvironmentComponent & {
@@ -108,6 +112,7 @@ export type AWSECSAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   };
 };
 
+/** @public */
 export function isAWSEKSAppDeploymentEnvironment(
   variable: any,
 ): variable is AWSEKSAppDeploymentEnvironment {
@@ -123,6 +128,7 @@ export function isAWSEKSAppDeploymentEnvironment(
   );
 }
 
+/** @public */
 export type AWSEKSAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   clusterName: string;
   app: AWSDeploymentEnvironmentComponent & {
@@ -145,6 +151,7 @@ export type CloudFormationStack = {
   lastUpdatedTime?: string;
 };
 
+/** @public */
 export function isAWSServerlessAppDeploymentEnvironment(
   variable: any,
 ): variable is AWSServerlessAppDeploymentEnvironment {
@@ -158,6 +165,7 @@ export function isAWSServerlessAppDeploymentEnvironment(
   );
 }
 
+/** @public */
 export type AWSServerlessAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   app: {
     appStack: CloudFormationStack; // non-IaC stack that defines serverless resources like lambdas
@@ -168,6 +176,7 @@ export type AWSServerlessAppDeploymentEnvironment = AWSDeploymentEnvironment & {
 };
 
 // capture an AWS resource withing a particular AWS Provider
+/** @public */
 export type AWSResourceDeploymentEnvironment = AWSDeploymentEnvironment & {
   resource: {
     arn: string;
@@ -178,12 +187,14 @@ export type AWSResourceDeploymentEnvironment = AWSDeploymentEnvironment & {
   };
 };
 
+/** @public */
 export enum ComponentStateType {
   CLOUDFORMATION = 'cloudformation',
   TERRAFORM_CLOUD = 'terraform-cloud',
   TERRAFORM_AWS = 'terraform-aws',
 }
 
+/** @public */
 export enum AWSComponentType {
   AWSApp = 'aws-app',
   AWSResource = 'aws-resource',
@@ -212,6 +223,7 @@ export type AWSComponent = {
   getRepoInfo: () => IRepositoryInfo;
 };
 
+/** @public */
 export type AWSEnvironmentProviderRecord = {
   id: string;
   name: string;
@@ -222,6 +234,7 @@ export type AWSEnvironmentProviderRecord = {
   region: string;
 };
 
+/** @public */
 export enum AppStateType {
   RUNNING = 'Running',
   STOPPED = 'Stopped',
@@ -229,6 +242,7 @@ export enum AppStateType {
   PROVISIONING = 'Provisioning',
 }
 
+/** @public */
 export type AppState = {
   appID?: string;
   appState?: AppStateType;
@@ -241,12 +255,14 @@ export type AppState = {
   additionalInfo?: KeyValue[];
 };
 
+/** @public */
 export interface KeyValue {
   id: string;
   key: string;
   value: string;
 }
 
+/** @public */
 export interface KeyValueDouble {
   id: string;
   key: string;

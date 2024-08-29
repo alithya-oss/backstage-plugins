@@ -4,6 +4,7 @@
 import { LoggerService } from '@backstage/backend-plugin-api';
 import { AwsAppsApi } from './AwsAppsApi';
 
+/** @public */
 export interface AwsAuditRequest {
   envProviderPrefix: string;
   envProviderName: string;
@@ -22,11 +23,13 @@ export interface AwsAuditRequest {
   message?: string;
 }
 
+/** @public */
 export interface AwsAuditResponse {
   status: string;
   message: string;
 }
 
+/** @public */
 export async function createAuditRecord({
   envProviderPrefix,
   envProviderName,

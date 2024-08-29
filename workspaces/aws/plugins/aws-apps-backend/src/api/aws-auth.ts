@@ -6,6 +6,8 @@ import { AwsCredentialIdentity } from '@aws-sdk/types';
 import { getRootLogger } from '@backstage/backend-common';
 import { BackstageUserInfo } from '@backstage/backend-plugin-api';
 import { parseEntityRef, UserEntity } from '@backstage/catalog-model';
+
+/** @public */
 export interface AwsAuthResponse {
   credentials: AwsCredentialIdentity;
   requester: string;
@@ -132,6 +134,7 @@ async function fetchCreds(
   }
 }
 
+/** @public */
 export async function getAWScreds(
   accountId: string,
   region: string,
