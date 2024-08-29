@@ -6,8 +6,8 @@ import request from 'supertest';
 import { createRouter } from './router';
 
 const mockCatalog: jest.Mocked<CatalogApi> = {
-    getEntityByRef: jest.fn(),
-  } as any as jest.Mocked<CatalogApi>;
+  getEntityByRef: jest.fn(),
+} as any as jest.Mocked<CatalogApi>;
 
 describe('createRouter', () => {
   let app: express.Express;
