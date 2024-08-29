@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-scaffolder-backend-aws-apps",
+  "name": "@alithya-oss/plugin-scaffolder-backend-module-aws-apps",
   "description": "App Development for Backstage.io on AWS - scaffolder actions",
   "version": "0.3.4",
   "main": "src/index.ts",
