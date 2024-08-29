@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.4.3
+
+### Patch Changes
+
+- fa17991: Bump framework version 1.30.4 and aligned plugin names with [community-plugins](https://github.com/backstage/community-plugins) naming convention
+- Updated dependencies [fa17991]
+  - @alithya-oss/plugin-aws-codebuild-common@0.3.1
+  - @alithya-oss/plugin-aws-core-common@0.4.2
+
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
