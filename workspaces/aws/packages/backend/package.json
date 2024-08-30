@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@alithya-oss/plugin-amazon-ecs-backend": "workspace:^",
+    "@alithya-oss/plugin-aws-apps-backend": "workspace:^",
     "@alithya-oss/plugin-aws-codebuild-backend": "workspace:^",
     "@alithya-oss/plugin-aws-codepipeline-backend": "workspace:^",
     "@alithya-oss/plugin-cost-insights-aws-backend": "workspace:^",

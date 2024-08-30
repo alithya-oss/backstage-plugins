@@ -4,8 +4,6 @@ import HomeIcon from '@material-ui/icons/Home';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import CreateComponentIcon from '@material-ui/icons/AddCircleOutline';
-import LogoFull from './LogoFull';
-import LogoIcon from './LogoIcon';
 import {
   Settings as SidebarSettings,
   UserSettingsSignInAvatar,
@@ -20,6 +18,8 @@ import {
   SidebarPage,
   SidebarScrollWrapper,
   SidebarSpace,
+  SidebarSubmenu,
+  SidebarSubmenuItem,
   useSidebarOpenState,
   Link,
 } from '@backstage/core-components';
@@ -29,7 +29,8 @@ import { MyGroupsSidebarItem } from '@backstage/plugin-org';
 import GroupIcon from '@material-ui/icons/People';
 
 import MoneyIcon from '@material-ui/icons/MonetizationOn';
-
+import CloudIcon from '@material-ui/icons/Cloud';
+import { AWSLogoFull, AWSLogoIcon } from '@aws/plugin-aws-apps-demo-for-backstage';
 const useSidebarLogoStyles = makeStyles({
   root: {
     width: sidebarConfig.drawerWidthClosed,
@@ -52,7 +53,7 @@ const SidebarLogo = () => {
   return (
     <div className={classes.root}>
       <Link to="/" underline="none" className={classes.link} aria-label="Home">
-        {isOpen ? <LogoFull /> : <LogoIcon />}
+        {isOpen ? <AWSLogoFull /> : <AWSLogoIcon />}
       </Link>
     </div>
   );
@@ -74,6 +75,33 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
           pluralTitle="My Groups"
           icon={GroupIcon}
         />
+       <SidebarDivider />
+       <SidebarGroup label="AWS" icon={<MenuIcon />}>
+         <SidebarItem icon={CloudIcon} text="AWS">
+           <SidebarSubmenu title="AWS Catalog">
+             <SidebarSubmenuItem
+               title="Environments"
+               to="aws-apps-search-page/environments?filters[kind]=awsenvironment"
+               icon={ExtensionIcon}
+             />
+             <SidebarSubmenuItem
+               title="Providers"
+               to="aws-apps-search-page/providers?filters[kind]=awsenvironmentprovider"
+               icon={ExtensionIcon}
+             />
+             <SidebarSubmenuItem
+               title="Apps"
+               to="aws-apps-search-page/apps?filters[kind]=component"
+               icon={ExtensionIcon}
+             />
+             <SidebarSubmenuItem
+               title="Resources"
+               to="aws-apps-search-page/resources?filters[kind]=resource"
+               icon={ExtensionIcon}
+             />
+           </SidebarSubmenu>
+         </SidebarItem>
+       </SidebarGroup>        
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
