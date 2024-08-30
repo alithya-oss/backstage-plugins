@@ -73,7 +73,6 @@ const app = createApp({
         </ThemeProvider>
       ),
     },
-      
   ],
   components: {
     SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
@@ -115,20 +114,29 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/aws-apps-search-page" element={<CatalogIndexPage />}>
-     <AppCatalogPage kind="all" />
-   </Route>
-   <Route path="/aws-apps-search-page/environments" element={<CatalogIndexPage />}>
-     <AppCatalogPage kind="awsenvironment" />
-   </Route>
-   <Route path="/aws-apps-search-page/providers" element={<CatalogIndexPage />}>
-     <AppCatalogPage kind="awsenvironmentprovider" />
-   </Route>
-   <Route path="/aws-apps-search-page/apps" element={<CatalogIndexPage />}>
-     <AppCatalogPage kind="component" />
-   </Route>
-   <Route path="/aws-apps-search-page/resources" element={<CatalogIndexPage />}>
-     <AppCatalogPage kind="resource" />
-   </Route>
+      <AppCatalogPage kind="all" />
+    </Route>
+    <Route
+      path="/aws-apps-search-page/environments"
+      element={<CatalogIndexPage />}
+    >
+      <AppCatalogPage kind="awsenvironment" />
+    </Route>
+    <Route
+      path="/aws-apps-search-page/providers"
+      element={<CatalogIndexPage />}
+    >
+      <AppCatalogPage kind="awsenvironmentprovider" />
+    </Route>
+    <Route path="/aws-apps-search-page/apps" element={<CatalogIndexPage />}>
+      <AppCatalogPage kind="component" />
+    </Route>
+    <Route
+      path="/aws-apps-search-page/resources"
+      element={<CatalogIndexPage />}
+    >
+      <AppCatalogPage kind="resource" />
+    </Route>
   </FlatRoutes>
 );
 
