@@ -1,0 +1,33 @@
+---
+# https://backstage.io/docs/features/software-catalog/descriptor-format/#kind-location
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: opa-aws-software-templates
+  description: Scaffolders OPA AWS pour Backstage
+spec:
+  targets:
+        # OPA APPS
+        - example-nodejs/template.yaml
+        - example-springboot/template.yaml
+        - example-springboot-eks/template.yaml
+        - example-serverless-rest-api/template.yaml
+        - example-nodejs-rds/template.yaml
+        - example-eks-nodejs-rds-kustomize/template.yaml
+        - example-eks-nodejs-rds-helm/template.yaml
+        - example-nodejs-microservice/template.yaml
+        - example-python-flask/template.yaml
+        - example-python-flask-eks/template.yaml
+        - example-tf-nodejs/template.yaml
+        - aws-gen-ai-rag/template.yaml
+        # OPA Environments
+        - aws-environment/template.yaml
+        - aws-ecs-environment-provider/template.yaml
+        - aws-ecs-ec2-environment-provider/template.yaml
+        - aws-eks-environment-provider/template.yaml
+        - aws-eks-environment-existing-cluster-provider/template.yaml
+        - aws-serverless-environment-provider/template.yaml
+        - aws-gen-ai-environment-provider/template.yaml
+        # OPA AWS Resources
+        - aws-rds-resource/template.yaml
+        - aws-s3-resource/template.yaml
