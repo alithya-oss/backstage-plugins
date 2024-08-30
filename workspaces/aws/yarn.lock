@@ -92,7 +92,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-apps-backend@workspace:plugins/aws-apps-backend":
+"@alithya-oss/plugin-aws-apps-backend@workspace:^, @alithya-oss/plugin-aws-apps-backend@workspace:plugins/aws-apps-backend":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-aws-apps-backend@workspace:plugins/aws-apps-backend"
   dependencies:
@@ -142,7 +142,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-apps@workspace:plugins/aws-apps":
+"@alithya-oss/plugin-aws-apps@workspace:^, @alithya-oss/plugin-aws-apps@workspace:plugins/aws-apps":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-aws-apps@workspace:plugins/aws-apps"
   dependencies:
@@ -16633,6 +16633,7 @@ __metadata:
   resolution: "app@workspace:packages/app"
   dependencies:
     "@alithya-oss/plugin-amazon-ecs": "workspace:^"
+    "@alithya-oss/plugin-aws-apps": "workspace:^"
     "@alithya-oss/plugin-aws-codebuild": "workspace:^"
     "@alithya-oss/plugin-aws-codepipeline": "workspace:^"
     "@alithya-oss/plugin-cost-insights-aws": "workspace:^"
@@ -17385,6 +17386,7 @@ __metadata:
   resolution: "backend@workspace:packages/backend"
   dependencies:
     "@alithya-oss/plugin-amazon-ecs-backend": "workspace:^"
+    "@alithya-oss/plugin-aws-apps-backend": "workspace:^"
     "@alithya-oss/plugin-aws-codebuild-backend": "workspace:^"
     "@alithya-oss/plugin-aws-codepipeline-backend": "workspace:^"
     "@alithya-oss/plugin-cost-insights-aws-backend": "workspace:^"
