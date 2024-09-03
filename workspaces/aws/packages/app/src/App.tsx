@@ -38,7 +38,10 @@ import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 
 import { costInsightsAwsPlugin } from '@alithya-oss/plugin-cost-insights-aws';
-
+import { AppCatalogPage } from '@alithya-oss/plugin-aws-apps';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { awsTheme } from '@aws/plugin-aws-apps-demo-for-backstage';
+import { ThemeProvider } from '@material-ui/core';
 const app = createApp({
   apis,
   plugins: [costInsightsAwsPlugin],
@@ -59,6 +62,18 @@ const app = createApp({
       catalogIndex: catalogPlugin.routes.catalogIndex,
     });
   },
+  themes: [
+    {
+      id: 'awsTheme',
+      title: 'aws',
+      variant: 'light',
+      Provider: ({ children }) => (
+        <ThemeProvider theme={awsTheme}>
+          <CssBaseline>{children}</CssBaseline>
+        </ThemeProvider>
+      ),
+    },
+  ],
   components: {
     SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
   },
@@ -98,6 +113,30 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/aws-apps-search-page" element={<CatalogIndexPage />}>
+      <AppCatalogPage kind="all" />
+    </Route>
+    <Route
+      path="/aws-apps-search-page/environments"
+      element={<CatalogIndexPage />}
+    >
+      <AppCatalogPage kind="awsenvironment" />
+    </Route>
+    <Route
+      path="/aws-apps-search-page/providers"
+      element={<CatalogIndexPage />}
+    >
+      <AppCatalogPage kind="awsenvironmentprovider" />
+    </Route>
+    <Route path="/aws-apps-search-page/apps" element={<CatalogIndexPage />}>
+      <AppCatalogPage kind="component" />
+    </Route>
+    <Route
+      path="/aws-apps-search-page/resources"
+      element={<CatalogIndexPage />}
+    >
+      <AppCatalogPage kind="resource" />
+    </Route>
   </FlatRoutes>
 );
 

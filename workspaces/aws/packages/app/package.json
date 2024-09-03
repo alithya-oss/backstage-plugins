@@ -20,9 +20,11 @@
   },
   "dependencies": {
     "@alithya-oss/plugin-amazon-ecs": "workspace:^",
+    "@alithya-oss/plugin-aws-apps": "workspace:^",
     "@alithya-oss/plugin-aws-codebuild": "workspace:^",
     "@alithya-oss/plugin-aws-codepipeline": "workspace:^",
     "@alithya-oss/plugin-cost-insights-aws": "workspace:^",
+    "@aws/plugin-aws-apps-demo-for-backstage": "^0.3.1",
     "@backstage-community/plugin-cost-insights": "^0.12.27",
     "@backstage/app-defaults": "^1.5.10",
     "@backstage/catalog-model": "^1.6.0",
