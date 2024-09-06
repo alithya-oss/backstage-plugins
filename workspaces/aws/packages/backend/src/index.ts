@@ -68,6 +68,7 @@ backend.add(import('@alithya-oss/plugin-scaffolder-backend-module-aws-core'));
 
 // awsapps
 backend.add(import('@alithya-oss/plugin-aws-apps-backend'));
+backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
 
 backend.add(import('./extensions/scaffolderActions'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
