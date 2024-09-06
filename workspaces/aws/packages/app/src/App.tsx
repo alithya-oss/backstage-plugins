@@ -25,6 +25,7 @@ import { apis } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
+import { githubAuthApiRef } from '@backstage/core-plugin-api';
 
 import {
   AlertDisplay,
@@ -42,11 +43,6 @@ import { AppCatalogPage } from '@alithya-oss/plugin-aws-apps';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { awsTheme } from '@aws/plugin-aws-apps-demo-for-backstage';
 import { ThemeProvider } from '@material-ui/core';
-
-import { githubAuthApiRef } from
-'@backstage/core-plugin-api'
-;
-
 const app = createApp({
   apis,
   plugins: [costInsightsAwsPlugin],
