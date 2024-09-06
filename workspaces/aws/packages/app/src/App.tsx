@@ -42,6 +42,11 @@ import { AppCatalogPage } from '@alithya-oss/plugin-aws-apps';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { awsTheme } from '@aws/plugin-aws-apps-demo-for-backstage';
 import { ThemeProvider } from '@material-ui/core';
+
+import { githubAuthApiRef } from
+'@backstage/core-plugin-api'
+;
+
 const app = createApp({
   apis,
   plugins: [costInsightsAwsPlugin],
@@ -75,7 +80,21 @@ const app = createApp({
     },
   ],
   components: {
-    SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
+    SignInPage: props => (
+      <SignInPage
+        {...props}
+        auto
+        providers={[
+           'guest',
+          {
+            id: 'github-auth-provider',
+            title: 'GitHub',
+            message: 'Sign in using GitHub',
+            apiRef: githubAuthApiRef,
+          }
+        ]}
+      />
+    ),
   },
 });
 
