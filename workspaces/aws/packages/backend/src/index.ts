@@ -72,4 +72,6 @@ backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
 
 backend.add(import('./extensions/scaffolderActions'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
+backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
+backend.add(import('@backstage/plugin-catalog-backend-module-github-org'));
 backend.start();

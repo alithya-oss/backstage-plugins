@@ -6305,6 +6305,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@backstage/plugin-catalog-backend-module-github-org@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "@backstage/plugin-catalog-backend-module-github-org@npm:0.2.2"
+  dependencies:
+    "@backstage/backend-plugin-api": ^0.8.1
+    "@backstage/config": ^1.2.0
+    "@backstage/plugin-catalog-backend-module-github": ^0.7.2
+    "@backstage/plugin-catalog-node": ^1.12.6
+    "@backstage/plugin-events-node": ^0.3.10
+  checksum: d6fa832400ac99f3d5f03b3e88e66a1dc95d4d6949bedd7e61b0a8db21ba725f72eaf440862ac7f7aeee1551bbccb3975c64c8c683146731ddb2f0be52de182f
+  languageName: node
+  linkType: hard
+
 "@backstage/plugin-catalog-backend-module-github@npm:^0.7.2":
   version: 0.7.2
   resolution: "@backstage/plugin-catalog-backend-module-github@npm:0.7.2"
@@ -18378,6 +18391,7 @@ __metadata:
     "@backstage/plugin-catalog-backend": ^1.25.2
     "@backstage/plugin-catalog-backend-module-aws": ^0.3.15
     "@backstage/plugin-catalog-backend-module-github": ^0.7.2
+    "@backstage/plugin-catalog-backend-module-github-org": ^0.2.2
     "@backstage/plugin-catalog-backend-module-logs": ^0.0.4
     "@backstage/plugin-catalog-backend-module-scaffolder-entity-model": ^0.1.22
     "@backstage/plugin-kubernetes-backend": ^0.18.5
