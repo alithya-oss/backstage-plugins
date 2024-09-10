@@ -11,7 +11,6 @@
  * limitations under the License.
  */
 
-import { Logger } from 'winston';
 import {
   ECSClient,
   DescribeServicesCommand,
@@ -25,6 +24,8 @@ import { CatalogApi } from '@backstage/catalog-client';
 import {
   AwsResourceLocatorFactory,
   AwsResourceLocator,
+} from '@alithya-oss/plugin-aws-core-node';
+import {
   getOneOfEntityAnnotations,
   AWS_SDK_CUSTOM_USER_AGENT,
 } from '@alithya-oss/plugin-aws-core-common';
@@ -46,15 +47,20 @@ import { Config } from '@backstage/config';
 import {
   AuthService,
   BackstageCredentials,
+  coreServices,
+  createServiceFactory,
+  createServiceRef,
   DiscoveryService,
   HttpAuthService,
+  LoggerService,
 } from '@backstage/backend-plugin-api';
 import { createLegacyAuthAdapters } from '@backstage/backend-common';
+import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
 
 /** @public */
 export class DefaultAmazonEcsService implements AmazonECSService {
   public constructor(
-    private readonly logger: Logger,
+    private readonly logger: LoggerService,
     private readonly auth: AuthService,
     private readonly catalogApi: CatalogApi,
     private readonly resourceLocator: AwsResourceLocator,
@@ -68,7 +74,7 @@ export class DefaultAmazonEcsService implements AmazonECSService {
       discovery: DiscoveryService;
       auth?: AuthService;
       httpAuth?: HttpAuthService;
-      logger: Logger;
+      logger: LoggerService;
       resourceLocator?: AwsResourceLocator;
     },
   ) {
@@ -264,3 +270,31 @@ export class DefaultAmazonEcsService implements AmazonECSService {
     return serviceNames;
   }
 }
+
+/** @public */
+export const amazonEcsServiceRef = createServiceRef<AmazonECSService>({
+  id: 'amazon-ecs.api',
+  defaultFactory: async service =>
+    createServiceFactory({
+      service,
+      deps: {
+        logger: coreServices.logger,
+        config: coreServices.rootConfig,
+        catalogApi: catalogServiceRef,
+        auth: coreServices.auth,
+        discovery: coreServices.discovery,
+        httpAuth: coreServices.httpAuth,
+      },
+      async factory({ logger, config, catalogApi, auth, httpAuth, discovery }) {
+        const impl = await DefaultAmazonEcsService.fromConfig(config, {
+          catalogApi,
+          auth,
+          httpAuth,
+          discovery,
+          logger,
+        });
+
+        return impl;
+      },
+    }),
+});
