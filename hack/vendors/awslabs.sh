@@ -45,11 +45,14 @@ function sync_aws_core() {
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/core/common/* \
         ./workspaces/aws/plugins/aws-core-common
     rsync -av \
+        .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/core/node/* \
+        ./workspaces/aws/plugins/aws-core-node
+    rsync -av \
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/core/react/* \
         ./workspaces/aws/plugins/aws-core-react
     rsync -av \
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/core/scaffolder-actions/* \
-        ./workspaces/aws/plugins/plugin-scaffolder-backend-module-aws-core
+        ./workspaces/aws/plugins/scaffolder-backend-module-aws-core
 
     # cost-insights
     rsync -av \
@@ -151,10 +154,10 @@ function rename_harmonix() {
     done
 }
 
-# sync_aws_core
-sync_harmonix
+sync_aws_core
+# sync_harmonix
 cd ./workspaces/aws/
-# rename_aws_core
-rename_harmonix
-# yarn install
-# yarn backstage-cli versions:bump --release 1.30.2
+rename_aws_core
+# rename_harmonix
+yarn install
+yarn backstage-cli versions:bump --release 1.30.4
