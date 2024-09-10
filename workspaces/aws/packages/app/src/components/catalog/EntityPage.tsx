@@ -27,6 +27,7 @@ import {
   isOrphan,
   hasRelationWarnings,
   EntityRelationWarning,
+  isResourceType,
 } from '@backstage/plugin-catalog';
 import {
   EntityUserProfileCard,
@@ -73,7 +74,11 @@ import {
   isAwsCodeBuildAvailable,
 } from '@alithya-oss/plugin-aws-codebuild';
 import { EntityCostInsightsContent } from '@backstage-community/plugin-cost-insights';
-
+import {
+  AwsEnvironmentPage,
+  AwsEnvironmentProviderPage,
+  AwsComponentPage,
+} from '@alithya-oss/plugin-aws-apps';
 const techdocsContent = (
   <EntityTechdocsContent>
     <TechDocsAddons>
@@ -318,7 +323,26 @@ const componentPage = (
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
   </EntitySwitch>
 );
+ {/* AWS Modifications */ }
 
+ const awsEnvironmentProviderEntityPage = (
+  <AwsEnvironmentProviderPage />
+);
+
+const awsEnvironmentEntityPage = (
+  <AwsEnvironmentPage />
+);
+
+const resourceEntityPage = (
+<EntitySwitch>
+<EntitySwitch.Case if={isResourceType('aws-resource')}>
+   <AwsComponentPage componentType='aws-resource'/>
+</EntitySwitch.Case>
+<EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
+</EntitySwitch>
+);
+
+{/* End of AWS Modifications */ }
 const apiPage = (
   <EntityLayout>
     <EntityLayout.Route path="/" title="Overview">
@@ -461,6 +485,11 @@ const domainPage = (
 export const entityPage = (
   <EntitySwitch>
     <EntitySwitch.Case if={isKind('component')} children={componentPage} />
+    {/* AWS Modifications */ }
+    <EntitySwitch.Case if={isKind('resource')} children={resourceEntityPage} />
+    <EntitySwitch.Case if={isKind('awsenvironment')} children={awsEnvironmentEntityPage} />
+    <EntitySwitch.Case if={isKind('awsenvironmentprovider')} children={awsEnvironmentProviderEntityPage} />
+    {/* End AWS Modifications */ }        
     <EntitySwitch.Case if={isKind('api')} children={apiPage} />
     <EntitySwitch.Case if={isKind('group')} children={groupPage} />
     <EntitySwitch.Case if={isKind('user')} children={userPage} />
