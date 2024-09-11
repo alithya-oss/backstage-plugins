@@ -1,5 +1,6 @@
 ---
 '@alithya-oss/plugin-scaffolder-backend-module-aws-core': patch
+'@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor' patch
 '@alithya-oss/plugin-cost-insights-aws-backend': patch
 '@alithya-oss/plugin-aws-codepipeline-backend': patch
 '@alithya-oss/plugin-cost-insights-aws-common': patch
@@ -15,6 +16,7 @@
 '@alithya-oss/plugin-aws-core-react': patch
 '@alithya-oss/plugin-aws-codebuild': patch
 '@alithya-oss/plugin-amazon-ecs': patch
+'@alithya-oss/plugin-scaffolder-backend-module-aws-apps': patch
 ---
 
 Bump framework version 1.30.4 and aligned plugin names with [community-plugins](https://github.com/backstage/community-plugins) naming convention
