@@ -9,6 +9,7 @@ import { validate as validateArn } from '@aws-sdk/util-arn-parser';
 import { putSecret } from '../../helpers/action-context';
 import { Config } from '@backstage/config';
 
+/** @public */
 export function createRepoAccessTokenAction(options: {
   integrations: ScmIntegrationRegistry;
   envConfig: Config;

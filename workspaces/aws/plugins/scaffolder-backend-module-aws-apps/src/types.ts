@@ -3,6 +3,7 @@
 
 import { AwsAuthResponse } from '@alithya-oss/plugin-aws-apps-backend';
 
+/** @public */
 export type EnvironmentProviderConnection = {
   providerName: string;
   accountId: string;
@@ -10,6 +11,7 @@ export type EnvironmentProviderConnection = {
   awsAuthResponse: AwsAuthResponse;
 };
 
+/** @public */
 export type EnvironmentProvider = {
   envProviderName: string;
   envProviderType: string;

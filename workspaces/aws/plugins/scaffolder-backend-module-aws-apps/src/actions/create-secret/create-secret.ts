@@ -5,6 +5,7 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { createSecret } from '../../helpers/action-context';
 import { Config } from '@backstage/config';
 
+/** @public */
 export function createSecretAction(options: { envConfig: Config }) {
   const { envConfig } = options;
   return createTemplateAction<{

@@ -5,6 +5,7 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 // import { getAWScreds, AwsAppsApi, createAuditRecord } from '@alithya-oss/plugin-aws-apps-backend';
 import { EnvironmentProvider } from '../../types';
 
+/** @public */
 export function createS3BucketAction() {
   return createTemplateAction<{
     bucketName: string;

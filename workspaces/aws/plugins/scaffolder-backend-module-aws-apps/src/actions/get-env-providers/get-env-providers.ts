@@ -52,6 +52,7 @@ interface DeploymentParameters {
   kubectlLambdaRoleArn?: string;
 }
 
+/** @public */
 export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
   const { catalogClient } = options;
 

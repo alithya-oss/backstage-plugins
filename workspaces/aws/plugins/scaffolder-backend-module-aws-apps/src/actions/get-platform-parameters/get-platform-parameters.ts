@@ -27,6 +27,7 @@ const examples = [
   },
 ];
 
+/** @public */
 export function getPlatformParametersAction(options: { envConfig: Config }) {
   const { envConfig } = options;
   return createTemplateAction<{

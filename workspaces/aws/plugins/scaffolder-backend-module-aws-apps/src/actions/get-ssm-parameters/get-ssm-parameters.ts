@@ -36,6 +36,7 @@ const examples = [
   },
 ];
 
+/** @public */
 export function getSsmParametersAction() {
   return createTemplateAction<{
     paramKeys: string[];
