@@ -42,6 +42,7 @@ import { AppCatalogPage } from '@alithya-oss/plugin-aws-apps';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { awsTheme } from '@aws/plugin-aws-apps-demo-for-backstage';
 import { ThemeProvider } from '@material-ui/core';
+
 const app = createApp({
   apis,
   plugins: [costInsightsAwsPlugin],

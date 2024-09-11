@@ -209,13 +209,13 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
         );
       }
 
-      const envShortName = awsEnvEntity.metadata['shortName']?.toString() || '';
+      const envShortName = awsEnvEntity.metadata.shortName?.toString() || '';
       ctx.output('envName', awsEnvEntity.metadata.name);
       ctx.output('envRef', environmentRef);
       ctx.output(
         'envDeployManualApproval',
-        'true' ===
-          awsEnvEntity.metadata['deploymentRequiresApproval']?.toString() || '',
+        awsEnvEntity.metadata.deploymentRequiresApproval?.toString() ===
+          'true' || '',
       );
       ctx.output('envShortName', envShortName);
 
@@ -399,29 +399,29 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
               const vpc = metadata.vpc?.toString() || '';
 
               const deployParams: DeploymentParameters = {
-                envProviderPrefix: metadata['prefix']?.toString() || '',
+                envProviderPrefix: metadata.prefix?.toString() || '',
                 envName: envEntity.metadata.name,
                 envProviderName: metadata.name,
                 envRef: environmentRef,
                 envProviderType:
-                  metadata['envType']?.toString().toLowerCase() || '',
-                accountId: metadata['awsAccount']?.toString() || '',
-                region: metadata['awsRegion']?.toString() || '',
+                  metadata.envType?.toString().toLowerCase() || '',
+                accountId: metadata.awsAccount?.toString() || '',
+                region: metadata.awsRegion?.toString() || '',
                 ssmAssumeRoleArn:
-                  metadata['provisioningRole']?.toString() || '',
+                  metadata.provisioningRole?.toString() || '',
                 ssmPathVpc: vpc,
                 ssmPrivateSubnets: `${vpc}/private-subnets`,
                 ssmPublicSubnets: `${vpc}/public-subnets`,
-                ssmPathCluster: metadata['clusterName']?.toString() || '',
+                ssmPathCluster: metadata.clusterName?.toString() || '',
               };
 
-              if (metadata['kubectlLambdaArn']) {
+              if (metadata.kubectlLambdaArn) {
                 deployParams.kubectlLambdaArn =
-                  metadata['kubectlLambdaArn'].toString();
+                  metadata.kubectlLambdaArn.toString();
               }
-              if (metadata['clusterAdminRole']) {
+              if (metadata.clusterAdminRole) {
                 deployParams.kubectlLambdaRoleArn =
-                  metadata['clusterAdminRole'].toString();
+                  metadata.clusterAdminRole.toString();
               }
 
               return deployParams;

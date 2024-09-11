@@ -5,6 +5,7 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import yaml from 'yaml';
 import { getPlatformAccountSSMParameterValue } from '../../helpers/action-context';
 import { Config } from '@backstage/config';
+
 const ID = 'opa:get-platform-parameters';
 
 const examples = [

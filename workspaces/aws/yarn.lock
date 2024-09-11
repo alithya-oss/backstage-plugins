@@ -360,8 +360,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-aws-core-common@workspace:plugins/aws-core-common"
   dependencies:
+    "@aws-sdk/client-config-service": ^3.649.0
+    "@aws-sdk/client-resource-explorer-2": ^3.649.0
+    "@aws-sdk/client-resource-groups-tagging-api": ^3.511.0
+    "@aws-sdk/types": ^3.609.0
+    "@backstage/backend-common": ^0.24.1
     "@backstage/catalog-model": ^1.6.0
     "@backstage/config": ^1.2.0
+    "@backstage/integration-aws-node": ^0.1.12
+    aws-sdk-client-mock: ^4.0.0
+    winston: ^3.2.1
   languageName: unknown
   linkType: soft
 
@@ -411,7 +419,10 @@ __metadata:
     "@backstage/backend-common": ^0.23.3
     "@backstage/backend-plugin-api": ^0.7.0
     "@backstage/backend-test-utils": ^0.4.4
+    "@backstage/catalog-model": ^1.6.0
     "@backstage/cli": ^0.26.11
+    "@backstage/plugin-catalog-common": ^1.0.26
+    "@backstage/plugin-catalog-node": ^1.12.6
   languageName: unknown
   linkType: soft
 
@@ -1213,7 +1224,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-config-service@npm:^3.511.0":
+"@aws-sdk/client-config-service@npm:^3.511.0, @aws-sdk/client-config-service@npm:^3.649.0":
   version: 3.649.0
   resolution: "@aws-sdk/client-config-service@npm:3.649.0"
   dependencies:
@@ -1569,7 +1580,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-resource-explorer-2@npm:^3.511.0":
+"@aws-sdk/client-resource-explorer-2@npm:^3.511.0, @aws-sdk/client-resource-explorer-2@npm:^3.649.0":
   version: 3.649.0
   resolution: "@aws-sdk/client-resource-explorer-2@npm:3.649.0"
   dependencies:

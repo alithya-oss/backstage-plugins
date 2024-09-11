@@ -34,6 +34,7 @@ import {
   AWSLogoFull,
   AWSLogoIcon,
 } from '@aws/plugin-aws-apps-demo-for-backstage';
+
 const useSidebarLogoStyles = makeStyles({
   root: {
     width: sidebarConfig.drawerWidthClosed,

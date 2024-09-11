@@ -77,7 +77,7 @@ export function createRepoAccessTokenAction(options: {
         const token = integrationConfig.config.token!;
 
         // get the apiBaseUrl
-        let apiBaseUrl =
+        const apiBaseUrl =
           integrationConfig.config.apiBaseUrl ?? `https://${host}/api/v4`;
 
         if (!validateArn(secretArn)) {
@@ -113,11 +113,11 @@ export function createRepoAccessTokenAction(options: {
           // We have a successful response, so return the token from the response data
           const data = await res.json();
           return data.token as string;
-        } else {
+        } 
           const message = `Failed to create repo access token: ${res.status}: ${res.statusText}`;
           ctx.logger.info(message);
           throw new Error(message);
-        }
+        
       }
 
       /**
