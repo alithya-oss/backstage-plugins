@@ -390,7 +390,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@workspace:^, @alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@workspace:plugins/catalog-backend-module-aws-apps-entities-processor":
+"@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@workspace:plugins/catalog-backend-module-aws-apps-entities-processor":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@workspace:plugins/catalog-backend-module-aws-apps-entities-processor"
   dependencies:
@@ -495,7 +495,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-scaffolder-backend-module-aws-apps@workspace:^, @alithya-oss/plugin-scaffolder-backend-module-aws-apps@workspace:plugins/scaffolder-backend-module-aws-apps":
+"@alithya-oss/plugin-scaffolder-backend-module-aws-apps@workspace:plugins/scaffolder-backend-module-aws-apps":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-scaffolder-backend-module-aws-apps@workspace:plugins/scaffolder-backend-module-aws-apps"
   dependencies:
