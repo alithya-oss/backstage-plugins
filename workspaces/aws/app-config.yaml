@@ -1,6 +1,6 @@
 app:
   title: Scaffolded Backstage App
-  baseUrl: http://localhost:3000
+  baseUrl: http://15.157.122.190:3000
 
 organization:
   name: My Company
@@ -12,7 +12,7 @@ backend:
   # auth:
   #   keys:
   #     - secret: ${BACKEND_SECRET}
-  baseUrl: http://localhost:7007
+  baseUrl: http://15.157.122.190:7007
   listen:
     port: 7007
     # Uncomment the following host directive to bind to specific interfaces
@@ -22,7 +22,7 @@ backend:
     # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
     # Default Helmet Content-Security-Policy values can be removed by setting the key to false
   cors:
-    origin: http://localhost:3000
+    origin: http://15.157.122.190:3000
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
   # This is for local development only, it is not recommended to use this in production
@@ -31,12 +31,17 @@ backend:
     client: better-sqlite3
     connection: ':memory:'
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
-  platformRegion: ca-central-1
+
 integrations:
   github:
     - host: github.com
-      token: ${TOKEN_GITHUB}
-
+      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
+      # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
+      token: ${GITHUB_TOKEN}
+    ### Example for how to add your GitHub Enterprise instance using the API:
+    # - host: ghe.example.net
+    #   apiBaseUrl: https://ghe.example.net/api/v3
+    #   token: ${GHE_TOKEN}
 
 proxy:
   ### Example for how to add a proxy endpoint for the frontend.
@@ -95,7 +100,7 @@ catalog:
 
     ## Uncomment these lines to add an example org
     - type: url
-      target: https://github.com/harmonix-generated-environments/harmonix/blob/integrate-github-ref/backstage-reference/templates/all-templates.yaml
+      target: https://github.com/awslabs/harmonix/blob/main/backstage-reference/templates/all-templates.yaml
       rules:
         - allow: [Template]
 
