@@ -390,7 +390,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@workspace:plugins/catalog-backend-module-aws-apps-entities-processor":
+"@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@workspace:^, @alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@workspace:plugins/catalog-backend-module-aws-apps-entities-processor":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@workspace:plugins/catalog-backend-module-aws-apps-entities-processor"
   dependencies:
@@ -18777,6 +18777,7 @@ __metadata:
     "@alithya-oss/plugin-aws-apps-backend": "workspace:^"
     "@alithya-oss/plugin-aws-codebuild-backend": "workspace:^"
     "@alithya-oss/plugin-aws-codepipeline-backend": "workspace:^"
+    "@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor": "workspace:^"
     "@alithya-oss/plugin-cost-insights-aws-backend": "workspace:^"
     "@alithya-oss/plugin-scaffolder-backend-module-aws-core": "workspace:^"
     "@aws/plugin-scaffolder-backend-aws-apps-for-backstage": ^0.3.2
