@@ -11,12 +11,13 @@
  * limitations under the License.
  */
 
-import { Logger } from 'winston';
 import { parse } from '@aws-sdk/util-arn-parser';
 import { CatalogApi } from '@backstage/catalog-client';
 import {
   AwsResourceLocatorFactory,
   AwsResourceLocator,
+} from '@alithya-oss/plugin-aws-core-node';
+import {
   getOneOfEntityAnnotations,
   AWS_SDK_CUSTOM_USER_AGENT,
 } from '@alithya-oss/plugin-aws-core-common';
@@ -44,17 +45,22 @@ import {
 import {
   AuthService,
   BackstageCredentials,
+  coreServices,
+  createServiceFactory,
+  createServiceRef,
   DiscoveryService,
   HttpAuthService,
+  LoggerService,
 } from '@backstage/backend-plugin-api';
 import { createLegacyAuthAdapters } from '@backstage/backend-common';
+import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
 
 const DEFAULT_EXECUTIONS_LIMIT = 100;
 
 /** @public */
 export class DefaultAwsCodePipelineService implements AwsCodePipelineService {
   public constructor(
-    private readonly logger: Logger,
+    private readonly logger: LoggerService,
     private readonly auth: AuthService,
     private readonly catalogApi: CatalogApi,
     private readonly resourceLocator: AwsResourceLocator,
@@ -68,7 +74,7 @@ export class DefaultAwsCodePipelineService implements AwsCodePipelineService {
       discovery: DiscoveryService;
       auth?: AuthService;
       httpAuth?: HttpAuthService;
-      logger: Logger;
+      logger: LoggerService;
       resourceLocator?: AwsResourceLocator;
     },
   ) {
@@ -249,3 +255,39 @@ export class DefaultAwsCodePipelineService implements AwsCodePipelineService {
     });
   }
 }
+
+/** @public */
+export const awsCodePipelineServiceRef =
+  createServiceRef<AwsCodePipelineService>({
+    id: 'aws-codepipeline.api',
+    defaultFactory: async service =>
+      createServiceFactory({
+        service,
+        deps: {
+          logger: coreServices.logger,
+          config: coreServices.rootConfig,
+          catalogApi: catalogServiceRef,
+          auth: coreServices.auth,
+          discovery: coreServices.discovery,
+          httpAuth: coreServices.httpAuth,
+        },
+        async factory({
+          logger,
+          config,
+          catalogApi,
+          auth,
+          httpAuth,
+          discovery,
+        }) {
+          const impl = await DefaultAwsCodePipelineService.fromConfig(config, {
+            catalogApi,
+            auth,
+            httpAuth,
+            discovery,
+            logger,
+          });
+
+          return impl;
+        },
+      }),
+  });
