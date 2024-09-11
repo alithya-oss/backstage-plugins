@@ -6,6 +6,7 @@ import { catalogProcessingExtensionPoint } from '@backstage/plugin-catalog-node/
 import { AWSEnvironmentEntitiesProcessor } from './processor/AWSEnvironmentEntitiesProcessor';
 import { AWSEnvironmentProviderEntitiesProcessor } from './processor/AWSEnvironmentProviderEntitiesProcessor';
 
+/** @public */
 export const catalogModuleAwsAppsEntitiesProcessor = createBackendModule({
   pluginId: 'catalog',
   moduleId: 'aws-apps-entities-processor',
