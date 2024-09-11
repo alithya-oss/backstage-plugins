@@ -1,13 +1,23 @@
 # Change Log
 
-## 0.4.1
-
-### Patch Changes
-
-- fa17991: Bump framework version 1.30.4 and aligned plugin names with [community-plugins](https://github.com/backstage/community-plugins) naming convention
-
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.5.0](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/aws-core-plugin-for-backstage-react@0.4.2...@aws/aws-core-plugin-for-backstage-react@0.5.0) (2024-08-29)
+
+### Features
+
+- Split out core node package ([#237](https://github.com/awslabs/backstage-plugins-for-aws/issues/237)) ([69462e0](https://github.com/awslabs/backstage-plugins-for-aws/commit/69462e0fe77cbb729c5d34339086b523c1753b39))
+
+## [0.4.2](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/aws-core-plugin-for-backstage-react@0.4.1...@aws/aws-core-plugin-for-backstage-react@0.4.2) (2024-08-29)
+
+### Bug Fixes
+
+- Added package metadata for publishing ([c674b9f](https://github.com/awslabs/backstage-plugins-for-aws/commit/c674b9fee77bd91567615f8adc4c1688da93ee3f))
+
+## [0.4.1](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/aws-core-plugin-for-backstage-react@0.4.0...@aws/aws-core-plugin-for-backstage-react@0.4.1) (2024-08-29)
+
+**Note:** Version bump only for package @aws/aws-core-plugin-for-backstage-react
 
 # [0.4.0](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/aws-core-plugin-for-backstage-react@0.3.0...@aws/aws-core-plugin-for-backstage-react@0.4.0) (2024-04-26)
 
