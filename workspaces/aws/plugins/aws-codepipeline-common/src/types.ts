@@ -24,7 +24,7 @@ export const AWS_CODEPIPELINE_ARN_ANNOTATION =
 export const AWS_CODEPIPELINE_TAGS_ANNOTATION =
   'aws.amazon.com/aws-codepipeline-tags';
 
-/** @public */
+  /** @public */
 export const AWS_CODEPIPELINE_ARN_ANNOTATION_LEGACY =
   'aws.amazon.com/aws-codepipeline';
 
