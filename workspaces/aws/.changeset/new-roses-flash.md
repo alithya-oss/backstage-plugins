@@ -1,6 +1,6 @@
 ---
 '@alithya-oss/plugin-scaffolder-backend-module-aws-core': patch
-'@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor' patch
+'@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor': patch
 '@alithya-oss/plugin-cost-insights-aws-backend': patch
 '@alithya-oss/plugin-aws-codepipeline-backend': patch
 '@alithya-oss/plugin-cost-insights-aws-common': patch
