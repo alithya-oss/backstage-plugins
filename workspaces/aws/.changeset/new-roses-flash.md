@@ -11,6 +11,7 @@
 '@alithya-oss/plugin-cost-insights-aws': patch
 '@alithya-oss/plugin-aws-codepipeline': patch
 '@alithya-oss/plugin-aws-core-common': patch
+'@alithya-oss/plugin-aws-core-node': patch
 '@alithya-oss/plugin-aws-core-react': patch
 '@alithya-oss/plugin-aws-codebuild': patch
 '@alithya-oss/plugin-amazon-ecs': patch
