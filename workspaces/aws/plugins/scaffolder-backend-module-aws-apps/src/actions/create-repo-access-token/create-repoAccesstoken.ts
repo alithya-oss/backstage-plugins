@@ -113,11 +113,10 @@ export function createRepoAccessTokenAction(options: {
           // We have a successful response, so return the token from the response data
           const data = await res.json();
           return data.token as string;
-        } 
-          const message = `Failed to create repo access token: ${res.status}: ${res.statusText}`;
-          ctx.logger.info(message);
-          throw new Error(message);
-        
+        }
+        const message = `Failed to create repo access token: ${res.status}: ${res.statusText}`;
+        ctx.logger.info(message);
+        throw new Error(message);
       }
 
       /**

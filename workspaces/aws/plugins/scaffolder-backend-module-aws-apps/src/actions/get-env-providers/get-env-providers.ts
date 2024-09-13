@@ -407,8 +407,7 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
                   metadata.envType?.toString().toLowerCase() || '',
                 accountId: metadata.awsAccount?.toString() || '',
                 region: metadata.awsRegion?.toString() || '',
-                ssmAssumeRoleArn:
-                  metadata.provisioningRole?.toString() || '',
+                ssmAssumeRoleArn: metadata.provisioningRole?.toString() || '',
                 ssmPathVpc: vpc,
                 ssmPrivateSubnets: `${vpc}/private-subnets`,
                 ssmPublicSubnets: `${vpc}/public-subnets`,
