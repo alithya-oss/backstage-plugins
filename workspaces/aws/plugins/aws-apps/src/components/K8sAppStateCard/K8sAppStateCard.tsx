@@ -22,7 +22,7 @@ import {
   TableCell,
   TableRow,
 } from '@material-ui/core';
-import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
+import { Unstable_NumberInput as NumberInput } from '@mui/base';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Button, CardContent, Divider, Grid, Typography } from '@mui/material';
@@ -174,9 +174,9 @@ const OpaAppStateOverview = ({
   const appAdminRoleArn = env.app.appAdminRoleArn;
 
   const kubectlLambdaArn =
-    env.entities.envProviderEntity?.metadata['kubectlLambdaArn']?.toString() ||
+    env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() ||
     '';
-  let clusterNameParam, clusterName: string;
+  let clusterNameParam; let clusterName: string;
 
   async function fetchAppConfig() {
     if (!clusterName) {
@@ -230,9 +230,9 @@ const OpaAppStateOverview = ({
           const variablesJson = JSON.parse(payloadVariablesJson.Data.Value);
           // console.log(variablesJson);
           return variablesJson;
-        } else {
+        } 
           return {};
-        }
+        
       }
     } catch (err) {
       console.log(err);
@@ -288,9 +288,9 @@ const OpaAppStateOverview = ({
           const deploymentJson = JSON.parse(payloadJson.Data.Value).items;
           // console.log(deploymentJson);
           return deploymentJson;
-        } else {
+        } 
           return {};
-        }
+        
       }
     } catch (err) {
       console.log(err);
@@ -334,7 +334,7 @@ const OpaAppStateOverview = ({
   const parseState = (deploymentsJson: any): AppState[] => {
     // parse response JSON
 
-    let deploymentsState: AppState[] = [];
+    const deploymentsState: AppState[] = [];
     try {
       Object.keys(deploymentsJson).forEach(key => {
         const deploymentJson = deploymentsJson[key];
@@ -461,9 +461,7 @@ const OpaAppStateOverview = ({
           envName: env.environment.name,
           cluster: clusterNameState,
           kubectlLambda:
-            env.entities.envProviderEntity?.metadata[
-              'kubectlLambdaArn'
-            ]?.toString() || '',
+            env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() || '',
           lambdaRoleArn: appAdminRoleArn,
           gitAdminSecret: getGitCredentailsSecret(repoInfo),
           updateKey: 'spec.replicas',
@@ -554,9 +552,7 @@ const OpaAppStateOverview = ({
           envName: env.environment.name,
           cluster: clusterNameState,
           kubectlLambda:
-            env.entities.envProviderEntity?.metadata[
-              'kubectlLambdaArn'
-            ]?.toString() || '',
+            env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() || '',
           lambdaRoleArn: appAdminRoleArn,
           gitAdminSecret: getGitCredentailsSecret(repoInfo),
           updateKey: 'spec.replicas',
@@ -650,16 +646,16 @@ const OpaAppStateOverview = ({
           ))}
         </>
       );
-    } else {
+    } 
       return (
         <TableRow key="clusterName">
           <TableCell id="noneConfigured" width="30%">
             None configured
           </TableCell>
-          <TableCell id="providerName"></TableCell>
+          <TableCell id="providerName" />
         </TableRow>
       );
-    }
+    
   };
 
   const DeploymentCard = ({
@@ -687,7 +683,7 @@ const OpaAppStateOverview = ({
             <div>
               {deploymentState?.appState ? (
                 <Grid container>
-                  <Grid item xs={1}></Grid>
+                  <Grid item xs={1} />
                   <Grid item xs={11}>
                     <Table size="small" padding="none">
                       <TableBody>
@@ -720,9 +716,9 @@ const OpaAppStateOverview = ({
                             </Typography>
                           </TableCell>
                           <TableCell id="providerName">
-                            {deploymentState?.runningCount +
-                              '/' +
-                              deploymentState?.desiredCount}
+                            {`${deploymentState?.runningCount 
+                              }/${ 
+                              deploymentState?.desiredCount}`}
                             {deploymentState?.pendingCount
                               ? ` (${deploymentState?.pendingCount} Pending)`
                               : ''}
@@ -761,7 +757,7 @@ const OpaAppStateOverview = ({
               Environment Variables
             </Typography>
             <Grid container>
-              <Grid item xs={1}></Grid>
+              <Grid item xs={1} />
               <Grid item xs={11}>
                 <Table size="small" padding="none">
                   <TableBody>
@@ -834,8 +830,8 @@ const OpaAppStateOverview = ({
                   Stop
                 </Button>
                 <Typography
-                  fontStyle={'italic'}
-                  fontSize={'12px'}
+                  fontStyle="italic"
+                  fontSize="12px"
                   sx={{ mt: 1 }}
                 >
                   {' '}
@@ -881,7 +877,7 @@ const OpaAppStateOverview = ({
               Cluster Info
             </Typography>
             <Grid container>
-              <Grid item xs={1}></Grid>
+              <Grid item xs={1} />
               <Grid item xs={11}>
                 <Table size="small" padding="none">
                   <TableBody>
@@ -949,7 +945,7 @@ export const K8sAppStateCard = () => {
         awsComponent: awsAppLoadingStatus.component,
       };
       return <OpaAppStateOverview input={input} />;
-    } else {
+    } 
       return (
         <EmptyState
           missing="data"
@@ -957,8 +953,8 @@ export const K8sAppStateCard = () => {
           description="Missing supported spec.subType"
         />
       );
-    }
-  } else {
+    
+  } 
     return (
       <EmptyState
         missing="data"
@@ -966,5 +962,5 @@ export const K8sAppStateCard = () => {
         description="State data would show here"
       />
     );
-  }
+  
 };

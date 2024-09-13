@@ -166,7 +166,7 @@ const OpaAppStateOverview = ({
               </Typography>
               <Typography noWrap sx={{ mt: 1 }}>
                 <IconButton sx={{ p: 0 }}>
-                  <ContentCopyIcon></ContentCopyIcon>
+                  <ContentCopyIcon />
                 </IconButton>
 
                 {taskData?.taskArn ? taskData?.taskArn : 'No Task Running'}
@@ -231,7 +231,7 @@ export const AppStateCard = () => {
       awsComponent: awsAppLoadingStatus.component,
     };
     return <OpaAppStateOverview input={input} />;
-  } else {
+  } 
     return (
       <EmptyState
         missing="data"
@@ -239,5 +239,5 @@ export const AppStateCard = () => {
         description="State data would show here"
       />
     );
-  }
+  
 };

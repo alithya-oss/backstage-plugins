@@ -67,9 +67,9 @@ export class OPAApiClient implements OPAApi {
   ): BackendParams {
     if (backendParamsOverrides) {
       return backendParamsOverrides!;
-    } else {
+    } 
       return this.backendParams;
-    }
+    
   }
 
   async getTaskDetails({
@@ -200,7 +200,7 @@ export class OPAApiClient implements OPAApi {
     return logStreamData;
   }
 
-  //TODO: Move platform calls to separate backend endpoints - interface does not require provider information
+  // TODO: Move platform calls to separate backend endpoints - interface does not require provider information
   async getPlatformSecret({
     secretName,
   }: {
@@ -730,7 +730,7 @@ export class OPAApiClient implements OPAApi {
     };
 
     // console.log(postBody)
-    let configResult = await this.fetch<any>(
+    const configResult = await this.fetch<any>(
       '/platform/fetch-eks-config',
       HTTP.POST,
       postBody,
@@ -763,7 +763,7 @@ export class OPAApiClient implements OPAApi {
     repoInfo: IRepositoryInfo;
     backendParamsOverrides?: BackendParams;
   }): Promise<any> {
-    let configResult = await this.getEKSAppManifests({
+    const configResult = await this.getEKSAppManifests({
       envName,
       gitAdminSecret,
       repoInfo,
@@ -792,7 +792,7 @@ export class OPAApiClient implements OPAApi {
     });
     // console.log(configResult)
 
-    //make changes to config
+    // make changes to config
     const manifest = JSON.stringify(configResult);
     const bodyParam = {
       RequestType: 'Update',
@@ -825,9 +825,9 @@ export class OPAApiClient implements OPAApi {
     )}/api/aws-apps-backend`;
     const url = baseUrl + path;
 
-    let headers: { [k: string]: string } = {};
+    const headers: { [k: string]: string } = {};
 
-    let requestOptions: RequestInit = {
+    const requestOptions: RequestInit = {
       method,
       headers,
     };
@@ -842,12 +842,12 @@ export class OPAApiClient implements OPAApi {
       throw await ResponseError.fromResponse(response);
     }
 
-    let responseType = response.headers.get('Content-Type');
+    const responseType = response.headers.get('Content-Type');
 
     if (responseType && responseType.indexOf('application/json') >= 0) {
       return response.json() as Promise<T>;
-    } else {
+    } 
       return response.text() as unknown as Promise<T>;
-    }
+    
   }
 }

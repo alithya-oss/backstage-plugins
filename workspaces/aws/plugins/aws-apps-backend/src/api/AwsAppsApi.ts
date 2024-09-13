@@ -545,7 +545,7 @@ export class AwsAppsApi {
         '#appName': 'appName',
       },
       FilterExpression: '#appName = :appName',
-      //TODO: Add Query to fetch record by user for a giving time frame , use secondary index for time. need to calculate time backward
+      // TODO: Add Query to fetch record by user for a giving time frame , use secondary index for time. need to calculate time backward
       // appName -> search critera , timeframe.
     };
     const command = new ScanCommand(params);
@@ -632,7 +632,7 @@ export class AwsAppsApi {
     const rawResults = await this.getResourceGroupResources(resourceGroup);
 
     const resourceIdentifiers = rawResults.Resources ?? [];
-    let categorizedResources = resourceIdentifiers.reduce<AWSServiceResources>(
+    const categorizedResources = resourceIdentifiers.reduce<AWSServiceResources>(
       (acc, item): any => {
         const idObj = item.Identifier;
         if (idObj?.ResourceType) {
@@ -679,9 +679,9 @@ export class AwsAppsApi {
             );
           }
           return acc;
-        } else {
+        } 
           throw new Error('Could not parse resource group resources response');
-        }
+        
       },
       {},
     );

@@ -63,6 +63,7 @@ async function fetchCreds(
   try {
     // TODO: remove this code once we reference memberGroups
     if (memberGroups) {
+      logger.debug(memberGroups)
     }
 
     // Get the SSM Parameter pointing to the DynamoDB security mapping table
@@ -157,7 +158,7 @@ export async function getAWScreds(
   const WORKAROUND = true;
   if (WORKAROUND) {
     return getAWSCredsWorkaround(accountId, region, prefix, providerName, user);
-  } else {
+  } 
     if (user === undefined && userIdentity !== undefined) {
       const userName = parseEntityRef(userIdentity?.userEntityRef).name;
       logger.info(`Fetching credentials for user ${userName}`);
@@ -170,7 +171,7 @@ export async function getAWScreds(
         prefix,
         providerName,
       );
-    } else {
+    } 
       const userName = user?.metadata.name;
       logger.info(`Fetching credentials for user ${userName}`);
       memberGroups = getMemberGroupFromUserEntity(user);
@@ -182,8 +183,8 @@ export async function getAWScreds(
         prefix,
         providerName,
       );
-    }
-  }
+    
+  
 }
 
 export async function getAWSCredsWorkaround(
@@ -196,7 +197,7 @@ export async function getAWSCredsWorkaround(
   const client = new STSClient({ region });
   const userName = user?.metadata.name || 'unknown';
 
-  //assemble the arn format to the desire destination environment
+  // assemble the arn format to the desire destination environment
   const roleArn = `arn:aws:iam::${accountId}:role/${prefix}-${providerName}-operations-role`;
   console.log(roleArn);
 

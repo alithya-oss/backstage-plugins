@@ -32,10 +32,10 @@ const DeleteProviderPanel = ({
   const [deleteResultMessage, setDeleteResultMessage] = useState('');
   const api = useApi(opaApiRef);
   const navigate = useNavigate();
-  const stackName = entity.metadata['stackName']?.toString() || '';
-  const prefix = entity.metadata['prefix']?.toString() || '';
-  const awsAccount = entity.metadata['awsAccount']?.toString() || '';
-  const awsRegion = entity.metadata['awsRegion']?.toString() || '';
+  const stackName = entity.metadata.stackName?.toString() || '';
+  const prefix = entity.metadata.prefix?.toString() || '';
+  const awsAccount = entity.metadata.awsAccount?.toString() || '';
+  const awsRegion = entity.metadata.awsRegion?.toString() || '';
   const backendParamsOverrides = {
     appName: '',
     awsAccount: awsAccount,
@@ -49,7 +49,7 @@ const DeleteProviderPanel = ({
   };
 
   const [disabled, setDisabled] = useState(false);
-  let repoInfo = getRepoInfo(entity);
+  const repoInfo = getRepoInfo(entity);
   repoInfo.gitProjectGroup = 'aws-providers';
 
   const deleteRepo = () => {
@@ -106,8 +106,8 @@ const DeleteProviderPanel = ({
         setIsDeleteSuccessful(false);
         setSpinning(false);
         return;
-      } else {
-        const iacType = entity.metadata['iacType']?.toString() || '';
+      } 
+        const iacType = entity.metadata.iacType?.toString() || '';
         setSpinning(true);
         if (iacType === 'cloudformation' || iacType === 'cdk') {
           api
@@ -153,7 +153,7 @@ const DeleteProviderPanel = ({
               setIsDeleteSuccessful(true);
               setDeleteResultMessage('Cloud Formation stack delete initiated.');
               await sleep(2000);
-              //deleteRepo();
+              // deleteRepo();
               deleteFromCatalog();
               setSpinning(false);
               await sleep(2000);
@@ -170,9 +170,9 @@ const DeleteProviderPanel = ({
         } else {
           throw new Error("Can't delete Unknown IAC type");
         }
-      }
+      
     } else {
-      //Are you sure you want to delete this provider? == no
+      // Are you sure you want to delete this provider? == no
       // Do nothing!
     }
   };

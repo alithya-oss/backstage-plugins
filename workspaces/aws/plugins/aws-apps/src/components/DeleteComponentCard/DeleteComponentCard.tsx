@@ -46,8 +46,8 @@ const DeleteAppPanel = ({
   const [deleteResultMessage, setDeleteResultMessage] = useState('');
   const navigate = useNavigate();
 
-  const appIACType = entity.metadata['iacType']?.toString();
-  const appSubtype = entity.spec?.['subType']?.toString() || 'undefinedSubtype';
+  const appIACType = entity.metadata.iacType?.toString();
+  const appSubtype = entity.spec?.subType?.toString() || 'undefinedSubtype';
   // console.log(appIACType);
   const repoInfo = awsComponent.getRepoInfo();
 
@@ -133,9 +133,7 @@ const DeleteAppPanel = ({
     }
 
     const kubectlLambdaArn =
-      env.entities.envProviderEntity?.metadata[
-        'kubectlLambdaArn'
-      ]?.toString() || '';
+      env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() || '';
     const kubectlLambdaRoleArn = env.app.appAdminRoleArn;
 
     const clusterNameParam = await api.getSSMParameter({
@@ -240,9 +238,9 @@ const DeleteAppPanel = ({
       };
       const results = api.deleteTFProvider(params);
       return results;
-    } else {
+    } 
       throw Error("Error: Can't delete component, Unsupported State.");
-    }
+    
   };
 
   const deleteSecret = (secretName: string) => {
@@ -279,7 +277,7 @@ const DeleteAppPanel = ({
           setSpinning(false);
           setIsDeleteSuccessful(true);
           setDeleteResultMessage('App delete initiated.');
-          //now update repo to remove environment
+          // now update repo to remove environment
           // api.InitiateGitDelete
           await sleep(2000);
           // awsComponent.currentEnvironment.providerData.name
@@ -329,7 +327,7 @@ const DeleteAppPanel = ({
         deleteRepo(repoInfo);
         await sleep(2000);
         if (awsComponent.componentType === AWSComponentType.AWSApp) {
-          deleteSecret(entity.metadata['repoSecretArn']?.toString() || '');
+          deleteSecret(entity.metadata.repoSecretArn?.toString() || '');
         }
         deleteFromCatalog();
         setSpinning(false);
@@ -462,7 +460,7 @@ export const DeleteComponentCard = () => {
       api,
     };
     return <DeleteAppPanel input={input} />;
-  } else {
+  } 
     return (
       <EmptyState
         missing="data"
@@ -470,5 +468,5 @@ export const DeleteComponentCard = () => {
         description="State data would show here"
       />
     );
-  }
+  
 };

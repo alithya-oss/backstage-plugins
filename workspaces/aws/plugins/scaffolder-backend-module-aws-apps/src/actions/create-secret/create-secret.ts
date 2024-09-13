@@ -66,7 +66,9 @@ export function createSecretAction(options: { envConfig: Config }) {
       },
     },
     async handler(ctx) {
-      let { secretName, description, region, tags } = ctx.input;
+      const{ secretName, description, tags } = ctx.input;
+      let { region } = ctx.input;
+
       if (!region) {
         region = envConfig.getString('backend.platformRegion');
       }

@@ -22,13 +22,13 @@ export function AwsComponentPage({ componentType }: AwsComponentPageProps) {
 
   const isApp = componentType === 'aws-app';
   const isResource = componentType === 'aws-resource';
-  const isComponentReady = entity.metadata['appData'] !== undefined;
+  const isComponentReady = entity.metadata.appData !== undefined;
 
   return (
     <AsyncAwsAppProvider {...useAwsComponentFromContext()}>
       {
-        //Before loading page - check if context exist - or AWS provisioning has not yet complete.
-        //if it's not ready - load an alternate pending page which only has general info and repo information
+        // Before loading page - check if context exist - or AWS provisioning has not yet complete.
+        // if it's not ready - load an alternate pending page which only has general info and repo information
         isComponentReady ? (
           isApp ? (
             <AwsAppPage>

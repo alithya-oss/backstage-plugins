@@ -50,7 +50,9 @@ export function createRepoAccessTokenAction(options: {
       },
     },
     async handler(ctx) {
-      let { repoUrl, projectId, secretArn, region } = ctx.input;
+      const { repoUrl, projectId, secretArn } = ctx.input;
+      let { region } = ctx.input;
+
       if (!region) {
         region = envConfig.getString('backend.platformRegion');
       }

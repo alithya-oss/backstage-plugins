@@ -348,7 +348,7 @@ const AppConfigOverview = ({
                     {containerDetails.env?.length != 0 ? (
                       <Grid
                         container
-                        direction={'row'}
+                        direction="row"
                         sx={{ mt: 1 }}
                         spacing={1}
                       >
@@ -386,7 +386,7 @@ const AppConfigOverview = ({
                       <Grid
                         container
                         key={`${containerDetails.containerName}${envVarIndex}`}
-                        direction={'row'}
+                        direction="row"
                         sx={{ mt: 1 }}
                         spacing={1}
                       >
@@ -411,7 +411,7 @@ const AppConfigOverview = ({
                             helperText={
                               nameAndValue.name ? '' : 'Cannot be Empty'
                             }
-                          ></TextField>
+                           />
                         </Grid>
                         <Grid item xs={6}>
                           <TextField
@@ -434,7 +434,7 @@ const AppConfigOverview = ({
                             helperText={
                               nameAndValue.value ? '' : 'Cannot be Empty'
                             }
-                          ></TextField>
+                           />
                         </Grid>
                         {edit && (
                           <Grid item xs={1}>
@@ -481,7 +481,7 @@ export const AppConfigCard = () => {
     };
 
     return <AppConfigOverview input={input} />;
-  } else {
+  } 
     return (
       <EmptyState
         missing="data"
@@ -489,5 +489,5 @@ export const AppConfigCard = () => {
         description="Config data would show here"
       />
     );
-  }
+  
 };

@@ -158,7 +158,7 @@ export const AwsEksEnvPromoDialog = ({
           <FormControl fullWidth sx={{ m: 2 }}>
             <InputLabel id="lbl-namespace-entry">K8s Namespace</InputLabel>
             <TextField
-              id={`namespace-entry`}
+              id="namespace-entry"
               size="medium"
               fullWidth
               value={namespace}
@@ -171,7 +171,7 @@ export const AwsEksEnvPromoDialog = ({
               placeholder={namespaceDefault}
               required
               autoFocus
-            ></TextField>
+             />
           </FormControl>
         </Grid>
         <Grid container>
@@ -205,7 +205,7 @@ export const AwsEksEnvPromoDialog = ({
             <FormControl fullWidth sx={{ m: 2 }}>
               <InputLabel id="lbl-iam-role-arn-entry">IAM Role</InputLabel>
               <TextField
-                id={`iam-role-arn-entry`}
+                id="iam-role-arn-entry"
                 size="medium"
                 fullWidth
                 value={iamRoleArn}
@@ -217,7 +217,7 @@ export const AwsEksEnvPromoDialog = ({
                 helperText={iamRoleArnDescription}
                 placeholder={iamRoleArnDefault}
                 required
-              ></TextField>
+               />
             </FormControl>
           </Grid>
         )}

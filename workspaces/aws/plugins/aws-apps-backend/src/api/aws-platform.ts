@@ -177,12 +177,12 @@ export class AwsAppsPlatformApi {
         message = result.value || '';
       }
       return { status: 'FAILURE', message };
-    } else {
+    } 
       return {
         status: 'SUCCESS',
         message: `Destroy will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
       };
-    }
+    
   }
 
   public async deleteRepository(
@@ -201,7 +201,7 @@ export class AwsAppsPlatformApi {
   private async getGitToken(gitSecretName: string): Promise<string> {
     const gitAdminSecret = await this.getPlatformSecretValue(gitSecretName);
     const gitAdminSecretObj = JSON.parse(gitAdminSecret.SecretString || '');
-    return gitAdminSecretObj['apiToken'];
+    return gitAdminSecretObj.apiToken;
   }
 
   public async getFileContentsFromGit(
@@ -283,12 +283,12 @@ export class AwsAppsPlatformApi {
         message = resultBody.message || '';
       }
       return { status: 'FAILURE', message };
-    } else {
+    } 
       return {
         status: 'SUCCESS',
         message: `The app will not be ready to run until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
       };
-    }
+    
   }
 
   public async bindResource(
@@ -340,12 +340,12 @@ export class AwsAppsPlatformApi {
         message = resultBody.message || '';
       }
       return { status: 'FAILURE', message };
-    } else {
+    } 
       return {
         status: 'SUCCESS',
         message: `Binding will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
       };
-    }
+    
   }
 
   public async unBindResource(
@@ -398,12 +398,12 @@ export class AwsAppsPlatformApi {
         message = resultBody.message || '';
       }
       return { status: 'FAILURE', message };
-    } else {
+    } 
       return {
         status: 'SUCCESS',
         message: `Unbinding will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
       };
-    }
+    
   }
 
   public async updateProvider(
@@ -416,7 +416,7 @@ export class AwsAppsPlatformApi {
   ): Promise<{ status: string; message?: string }> {
     const gitToken = await this.getGitToken(gitSecretName);
 
-    let actions = [];
+    const actions = [];
     if (action === 'add') {
       console.log(entityCatalog);
       const newDependencies = entityCatalog.spec.dependsOn as Array<string>;
@@ -435,7 +435,7 @@ export class AwsAppsPlatformApi {
     } else if (action === 'remove') {
       console.log(entityCatalog);
       const dependencies = entityCatalog.spec.dependsOn as Array<string>;
-      let newDependencies = Array<string>();
+      const newDependencies = Array<string>();
       dependencies.forEach(p => {
         const providerToRemove = `awsenvironmentprovider:default/${provider.name.toLowerCase()}`;
         if (p != providerToRemove) {
@@ -486,11 +486,11 @@ export class AwsAppsPlatformApi {
         message = resultBody.message || '';
       }
       return { status: 'FAILURE', message };
-    } else {
+    } 
       return {
         status: 'SUCCESS',
         message: `Update Provider for ${envName} will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
       };
-    }
+    
   }
 }

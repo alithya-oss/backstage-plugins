@@ -91,16 +91,16 @@ const AppPromoCard = ({
     return catalogEntities
       .filter(en => {
         return (
-          en.metadata['environmentType'] === envType &&
+          en.metadata.environmentType === envType &&
           !currentEnvKeys.includes(en.metadata.name) &&
-          Number.parseInt(en.metadata['level']?.toString()!) >=
+          Number.parseInt(en.metadata.level?.toString()!) >=
             lowestEnvironmentLevel
         );
       })
       .sort(
         (a, b) =>
-          Number.parseInt(a.metadata['level']?.toString()!) -
-          Number.parseInt(b.metadata['level']?.toString()!),
+          Number.parseInt(a.metadata.level?.toString()!) -
+          Number.parseInt(b.metadata.level?.toString()!),
       );
   }
 
@@ -136,17 +136,17 @@ const AppPromoCard = ({
   async function getParameters(
     envProviderEntity: Entity,
   ): Promise<{ [key: string]: string }> {
-    //For the current provider - set the API to the appropriate provider target
+    // For the current provider - set the API to the appropriate provider target
 
     const backendParamsOverrides = {
       appName: awsComponent.componentName,
-      awsAccount: envProviderEntity.metadata['awsAccount']?.toString() || '',
-      awsRegion: envProviderEntity.metadata['awsRegion']?.toString() || '',
-      prefix: envProviderEntity.metadata['prefix']?.toString() || '',
+      awsAccount: envProviderEntity.metadata.awsAccount?.toString() || '',
+      awsRegion: envProviderEntity.metadata.awsRegion?.toString() || '',
+      prefix: envProviderEntity.metadata.prefix?.toString() || '',
       providerName: envProviderEntity.metadata.name,
     };
 
-    const envType = envProviderEntity.metadata['envType']
+    const envType = envProviderEntity.metadata.envType
       ?.toString()
       .toLowerCase();
     if (envType === ProviderType.ECS) {
@@ -170,7 +170,7 @@ const AppPromoCard = ({
         }),
       );
 
-      let parametersMap = {
+      const parametersMap = {
         TARGET_VPCID: ssmValues[metadataKeys.indexOf(metaVpc)],
         TARGET_ECS_CLUSTER_ARN: ssmValues[metadataKeys.indexOf(metaCluster)],
         ENV_ROLE_ARN: ssmValues[metadataKeys.indexOf(metaRole)],
@@ -198,7 +198,7 @@ const AppPromoCard = ({
         }),
       );
 
-      let parametersMap = {
+      const parametersMap = {
         TARGET_VPCID: ssmValues[metadataKeys.indexOf(metaVpc)],
         TARGET_EKS_CLUSTER_ARN: ssmValues[metadataKeys.indexOf(metaCluster)],
         ENV_ROLE_ARN: ssmValues[metadataKeys.indexOf(metaRole)],
@@ -231,7 +231,7 @@ const AppPromoCard = ({
         }),
       );
 
-      let parametersMap = {
+      const parametersMap = {
         TARGET_VPCID: ssmValues[metadataKeys.indexOf(metaVpc)],
         ENV_ROLE_ARN: ssmValues[metadataKeys.indexOf(metaRole)],
         TARGET_PRIVATE_SUBNETS: ssmValues[metadataKeys.indexOf(metaPrivNet)],
@@ -239,9 +239,9 @@ const AppPromoCard = ({
         // TARGET_ENV_AUDIT: auditTable
       };
       return parametersMap;
-    } else {
+    } 
       throw new Error(`UNKNOWN PROVIDER TYPE" ${envType}`);
-    }
+    
   }
 
   type EnvironmentProviders = {
@@ -249,7 +249,7 @@ const AppPromoCard = ({
   };
 
   async function getEnvProviders(): Promise<EnvironmentProviders> {
-    let envProviders: EnvironmentProviders = { providers: [] };
+    const envProviders: EnvironmentProviders = { providers: [] };
 
     const selectedEnv = await catalogApi.getEntities({
       filter: { kind: 'awsenvironment', 'metadata.name': selectedItem },
@@ -257,7 +257,7 @@ const AppPromoCard = ({
     const envEntity = selectedEnv.items[0];
 
     const envRequiresManualApproval =
-      !!envEntity.metadata['deploymentRequiresApproval'];
+      !!envEntity.metadata.deploymentRequiresApproval;
 
     const envProviderRefs: EntityRelation[] | undefined =
       envEntity.relations?.filter(
@@ -281,10 +281,10 @@ const AppPromoCard = ({
           environmentName: envEntity.metadata.name,
           envRequiresManualApproval,
           providerName: et?.metadata.name || '',
-          awsAccount: et?.metadata['awsAccount']?.toString() || '',
-          awsRegion: et?.metadata['awsRegion']?.toString() || '',
-          prefix: et?.metadata['prefix']?.toString() || '',
-          assumedRoleArn: et?.metadata['provisioningRole']?.toString() || '',
+          awsAccount: et?.metadata.awsAccount?.toString() || '',
+          awsRegion: et?.metadata.awsRegion?.toString() || '',
+          prefix: et?.metadata.prefix?.toString() || '',
+          assumedRoleArn: et?.metadata.provisioningRole?.toString() || '',
           parameters: providerResolvedData,
         });
       }),
@@ -319,7 +319,7 @@ const AppPromoCard = ({
     setPromotedEnvName('');
 
     // Build a list of environment variables required to invoke a job to promote the app
-    let repoInfo = awsComponent.getRepoInfo();
+    const repoInfo = awsComponent.getRepoInfo();
     repoInfo.gitJobID = 'create-subsequent-environment-ci-config';
     getEnvProviders().then(envProviders => {
       const promoBody = {
@@ -481,7 +481,7 @@ const AppPromoCard = ({
                   {envChoices.map(entity => {
                     const env = entity.metadata.name;
                     return (
-                      <MenuItem key={'ID' + env} value={env}>
+                      <MenuItem key={`ID${  env}`} value={env}>
                         {env}
                       </MenuItem>
                     );
@@ -505,7 +505,7 @@ const AppPromoCard = ({
             </Grid>
           </Grid>
         </Grid>
-        <Typography margin={'10px'}>
+        <Typography margin="10px">
           <AwsEksEnvPromoDialog
             isOpen={openEksDialog}
             submitHandler={submitNewEksEnvironmentHandler}
@@ -542,7 +542,7 @@ export const AppPromoWidget = () => {
     };
 
     return <AppPromoCard input={input} />;
-  } else {
+  } 
     return (
       <EmptyState
         missing="data"
@@ -550,5 +550,5 @@ export const AppPromoWidget = () => {
         description="Can't fetch data"
       />
     );
-  }
+  
 };

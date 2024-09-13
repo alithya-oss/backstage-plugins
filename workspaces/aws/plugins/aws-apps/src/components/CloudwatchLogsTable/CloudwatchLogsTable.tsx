@@ -162,9 +162,9 @@ const CloudwatchLogsTable = ({
         }
       }
       return `Lambda - ${title}`;
-    } else {
+    } 
       return `Logs - ${logGroupName}`;
-    }
+    
   };
 
   const handleClickOpen = (streamName: string, logGroupName: string) => {
@@ -314,7 +314,7 @@ export const CloudwatchLogsWidget = () => {
     }
 
     if (logGroupNames && logGroupNames.length > 0) {
-      const stackName = ''; //env.app.cloudFormation!
+      const stackName = ''; // env.app.cloudFormation!
       return (
         <CloudwatchLogsTable
           input={{
@@ -324,7 +324,7 @@ export const CloudwatchLogsWidget = () => {
           }}
         />
       );
-    } else {
+    } 
       return (
         <EmptyState
           missing="data"
@@ -332,8 +332,8 @@ export const CloudwatchLogsWidget = () => {
           description="Logs would show here"
         />
       );
-    }
-  } else {
+    
+  } 
     return (
       <EmptyState
         missing="data"
@@ -341,5 +341,5 @@ export const CloudwatchLogsWidget = () => {
         description="Logs would show here"
       />
     );
-  }
+  
 };

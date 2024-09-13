@@ -148,7 +148,7 @@ export const InfrastructureCard = () => {
       throw new Error('Infrastructure Card Not yet implemented!');
     }
     return <OpaAppInfraInfo input={input} />;
-  } else {
+  } 
     return (
       <EmptyState
         missing="data"
@@ -156,5 +156,5 @@ export const InfrastructureCard = () => {
         description="Infrastructure data would show here"
       />
     );
-  }
+  
 };

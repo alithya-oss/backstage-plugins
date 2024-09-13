@@ -47,11 +47,11 @@ export class GitLabAPI implements ISCMBackendAPI {
 
     if (project && project.id) {
       return project.id;
-    } else {
+    } 
       throw new Error(
         `Failed to get git project ID for group '${gitProjectGroup}' and repo '${gitRepoName}'`,
       );
-    }
+    
   }
 
   public async createRepository(
@@ -65,7 +65,7 @@ export class GitLabAPI implements ISCMBackendAPI {
       name: repo.gitRepoName,
       description: repo.description || '',
       path: repo.gitProjectGroup
-        ? repo.gitProjectGroup + '/' + repo.gitRepoName
+        ? `${repo.gitProjectGroup  }/${  repo.gitRepoName}`
         : repo.gitRepoName,
       initialize_with_readme: 'true',
     };
@@ -87,14 +87,14 @@ export class GitLabAPI implements ISCMBackendAPI {
         httpResponse: createRepoResults.status,
         value: 'FAILURE',
       };
-    } else {
+    } 
       return {
         isSuccuess: true,
         message: `Repository created successfully`,
         httpResponse: createRepoResults.status,
         value: 'SUCCESS',
       };
-    }
+    
   }
 
   public async deleteRepository(
@@ -132,14 +132,14 @@ export class GitLabAPI implements ISCMBackendAPI {
         httpResponse: deleteRepoResults.status,
         value: 'FAILURE',
       };
-    } else {
+    } 
       return {
         isSuccuess: true,
         message: `Repository deleted successfully`,
         httpResponse: deleteRepoResults.status,
         value: 'SUCCESS',
       };
-    }
+    
   }
 
   public async getFileContent(
@@ -180,14 +180,14 @@ export class GitLabAPI implements ISCMBackendAPI {
         httpResponse: result.status,
         value: 'FAILURE',
       };
-    } else {
+    } 
       return {
         isSuccuess: true,
         message: `Retrieved file content successfully`,
         httpResponse: result.status,
         value: resultBody.content,
       };
-    }
+    
   }
 
   public async commitContent(
@@ -236,13 +236,13 @@ export class GitLabAPI implements ISCMBackendAPI {
         httpResponse: result.status,
         value: resultBody.message || 'FAILURE',
       };
-    } else {
+    } 
       return {
         isSuccuess: true,
         message: `Commit submitted successfully`,
         httpResponse: result.status,
         value: resultBody,
       };
-    }
+    
   }
 }

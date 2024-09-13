@@ -79,7 +79,7 @@ export function createS3BucketAction() {
       //     awsRegion: region,
       //     logger: ctx.logger,
       //     requester: ctx.user!.entity!.metadata.name,
-      //     status: response.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED',
+      //     status: response.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED',
       //     owner: creds.owner || '',
       //     envProviderName: "FIXME", // FIXME createS3BucketAction pass envProviderName
       //     envProviderPrefix: "FIXME", // FIXME createS3BucketAction pass envProviderPrefix

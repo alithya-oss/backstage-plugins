@@ -138,7 +138,7 @@ export const columnFactories = Object.freeze({
         minWidth: '150px',
       },
       render: ({ entity }) => (
-        <>{entity.metadata['awsAccount']?.toString() || ''}</>
+        <>{entity.metadata.awsAccount?.toString() || ''}</>
       ),
       width: 'auto',
     };
@@ -151,7 +151,7 @@ export const columnFactories = Object.freeze({
         padding: '0px 16px 0px 20px',
       },
       render: ({ entity }) => (
-        <>{entity.metadata['awsRegion']?.toString() || ''}</>
+        <>{entity.metadata.awsRegion?.toString() || ''}</>
       ),
       width: 'auto',
     };
@@ -164,7 +164,7 @@ export const columnFactories = Object.freeze({
         padding: '0px 16px 0px 20px',
       },
       render: ({ entity }) => (
-        <>{entity.metadata['prefix']?.toString() || ''}</>
+        <>{entity.metadata.prefix?.toString() || ''}</>
       ),
       width: 'auto',
     };
@@ -178,9 +178,9 @@ export const columnFactories = Object.freeze({
         minWidth: '30px',
       },
       render: ({ entity }) => (
-        <>{entity.metadata['resourceType']?.toString() || ''}</>
+        <>{entity.metadata.resourceType?.toString() || ''}</>
       ),
-      //width: 'auto',
+      // width: 'auto',
     };
   },
   createIACColumn(): TableColumn<CatalogTableRow> {
@@ -191,7 +191,7 @@ export const columnFactories = Object.freeze({
         padding: '0px 16px 0px 20px',
       },
       render: ({ entity }) => (
-        <>{entity.metadata['iacType']?.toString() || ''}</>
+        <>{entity.metadata.iacType?.toString() || ''}</>
       ),
       width: 'auto',
     };
@@ -204,7 +204,7 @@ export const columnFactories = Object.freeze({
         padding: '0px 16px 0px 20px',
       },
       render: ({ entity }) => (
-        <>{entity.metadata['environmentType']?.toString() || ''}</>
+        <>{entity.metadata.environmentType?.toString() || ''}</>
       ),
       width: 'auto',
     };
@@ -216,7 +216,7 @@ export const columnFactories = Object.freeze({
       cellStyle: {
         padding: '0px 16px 0px 20px',
       },
-      render: ({ entity }) => <>{entity.spec?.['system']?.toString() || ''}</>,
+      render: ({ entity }) => <>{entity.spec?.system?.toString() || ''}</>,
       width: 'auto',
     };
   },
@@ -228,7 +228,7 @@ export const columnFactories = Object.freeze({
         padding: '0px 16px 0px 20px',
       },
       render: ({ entity }) => (
-        <>{entity.metadata['category']?.toString() || ''}</>
+        <>{entity.metadata.category?.toString() || ''}</>
       ),
       width: 'auto',
     };
@@ -241,7 +241,7 @@ export const columnFactories = Object.freeze({
         padding: '0px 16px 0px 20px',
       },
       render: ({ entity }) => (
-        <>{entity.metadata['classification']?.toString() || ''}</>
+        <>{entity.metadata.classification?.toString() || ''}</>
       ),
       width: 'auto',
     };
@@ -253,7 +253,7 @@ export const columnFactories = Object.freeze({
       cellStyle: {
         padding: '0px 16px 0px 20px',
       },
-      render: ({ entity }) => <>{entity.metadata['level']?.toString() || ''}</>,
+      render: ({ entity }) => <>{entity.metadata.level?.toString() || ''}</>,
       width: 'auto',
     };
   },
@@ -265,7 +265,7 @@ export const columnFactories = Object.freeze({
         padding: '0px 16px 0px 20px',
       },
       render: ({ entity }) => (
-        <>{entity.metadata['envTypeAccount']?.toString() || ''}</>
+        <>{entity.metadata.envTypeAccount?.toString() || ''}</>
       ),
       width: 'auto',
     };
@@ -278,7 +278,7 @@ export const columnFactories = Object.freeze({
         padding: '0px 16px 0px 20px',
       },
       render: ({ entity }) => (
-        <>{entity.metadata['envTypeRegion']?.toString() || ''}</>
+        <>{entity.metadata.envTypeRegion?.toString() || ''}</>
       ),
       width: 'auto',
     };
@@ -291,7 +291,7 @@ export const columnFactories = Object.freeze({
         padding: '0px 16px 0px 20px',
       },
       render: ({ entity }) => (
-        <>{entity.metadata['envType']?.toString() || ''}</>
+        <>{entity.metadata.envType?.toString() || ''}</>
       ),
       width: 'auto',
     };

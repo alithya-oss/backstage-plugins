@@ -20,7 +20,7 @@ export function isProviderType(
 ): (entity: Entity) => boolean {
   return (): boolean => {
     return (
-      entity.metadata['envType']?.toString().toLowerCase() === providerType
+      entity.metadata.envType?.toString().toLowerCase() === providerType
     );
   };
 }
@@ -47,7 +47,7 @@ export function AwsEnvironmentProviderPage(/* {children}: AwsEnvironmentProvider
       </EntitySwitch.Case>
       <EntitySwitch.Case>
         <h1>
-          Environment Provider Type "{entity.metadata['envType']?.toString()}"
+          Environment Provider Type "{entity.metadata.envType?.toString()}"
           Is Not Supported At This Time
         </h1>
       </EntitySwitch.Case>

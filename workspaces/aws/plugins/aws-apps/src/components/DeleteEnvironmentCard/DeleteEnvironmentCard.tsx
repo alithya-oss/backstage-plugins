@@ -38,7 +38,7 @@ const DeleteEnvironmentPanel = ({
   };
 
   const [disabled, setDisabled] = useState(false);
-  let repoInfo = getRepoInfo(entity);
+  const repoInfo = getRepoInfo(entity);
   repoInfo.gitProjectGroup = 'aws-environments';
 
   const deleteRepo = () => {
@@ -100,7 +100,7 @@ const DeleteEnvironmentPanel = ({
         setIsDeleteSuccessful(false);
         setSpinning(false);
         return;
-      } else {
+      } 
         // Delete the repo
         setIsDeleteSuccessful(true);
         setDeleteResultMessage('Deleting Repository ....');
@@ -114,7 +114,7 @@ const DeleteEnvironmentPanel = ({
         navigate('/');
         setIsDeleteSuccessful(true);
         setDisabled(false);
-      }
+      
     } else {
       // Do nothing!
     }

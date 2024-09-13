@@ -82,22 +82,22 @@ const AwsEnvironmentProviderCard = ({
       ),
     );
 
-    let providers: AWSEnvironmentProviderRecord[] = [];
+    const providers: AWSEnvironmentProviderRecord[] = [];
 
     providerEntities.forEach((et, index) => {
       providers.push({
         id: index.toString(),
         name: et?.metadata.name || '',
-        prefix: et?.metadata['prefix']?.toString() || '',
-        providerType: et?.metadata['envType']?.toString() || '',
-        description: et?.metadata['description']?.toString() || '',
-        accountNumber: et?.metadata['awsAccount']?.toString() || '',
-        region: et?.metadata['awsRegion']?.toString() || '',
+        prefix: et?.metadata.prefix?.toString() || '',
+        providerType: et?.metadata.envType?.toString() || '',
+        description: et?.metadata.description?.toString() || '',
+        accountNumber: et?.metadata.awsAccount?.toString() || '',
+        region: et?.metadata.awsRegion?.toString() || '',
       });
     });
     setItems(providers);
 
-    let potentialProviders: AWSEnvironmentProviderRecord[] = [];
+    const potentialProviders: AWSEnvironmentProviderRecord[] = [];
     let index = 0;
     const envRuntimeType = entity.metadata.environmentType?.toString() || '';
 
@@ -114,7 +114,7 @@ const AwsEnvironmentProviderCard = ({
             providers.forEach(existingP => {
               if (
                 et.metadata.name === existingP.name &&
-                et.metadata['prefix']?.toString() === existingP.prefix
+                et.metadata.prefix?.toString() === existingP.prefix
               ) {
                 // skip existing provider
               } else {
@@ -122,11 +122,11 @@ const AwsEnvironmentProviderCard = ({
                 potentialProviders.push({
                   id: index.toString(),
                   name: et?.metadata.name || '',
-                  prefix: et?.metadata['prefix']?.toString() || '',
-                  providerType: et?.metadata['envType']?.toString() || '',
-                  description: et?.metadata['description']?.toString() || '',
-                  accountNumber: et?.metadata['awsAccount']?.toString() || '',
-                  region: et?.metadata['awsRegion']?.toString() || '',
+                  prefix: et?.metadata.prefix?.toString() || '',
+                  providerType: et?.metadata.envType?.toString() || '',
+                  description: et?.metadata.description?.toString() || '',
+                  accountNumber: et?.metadata.awsAccount?.toString() || '',
+                  region: et?.metadata.awsRegion?.toString() || '',
                 });
               }
             });
@@ -135,11 +135,11 @@ const AwsEnvironmentProviderCard = ({
             potentialProviders.push({
               id: index.toString(),
               name: et?.metadata.name || '',
-              prefix: et?.metadata['prefix']?.toString() || '',
-              providerType: et?.metadata['envType']?.toString() || '',
-              description: et?.metadata['description']?.toString() || '',
-              accountNumber: et?.metadata['awsAccount']?.toString() || '',
-              region: et?.metadata['awsRegion']?.toString() || '',
+              prefix: et?.metadata.prefix?.toString() || '',
+              providerType: et?.metadata.envType?.toString() || '',
+              description: et?.metadata.description?.toString() || '',
+              accountNumber: et?.metadata.awsAccount?.toString() || '',
+              region: et?.metadata.awsRegion?.toString() || '',
             });
           }
         });
@@ -159,7 +159,7 @@ const AwsEnvironmentProviderCard = ({
       providerName: item.name.toLowerCase(),
     };
 
-    let repoInfo = getRepoInfo(entity);
+    const repoInfo = getRepoInfo(entity);
     repoInfo.gitProjectGroup = 'aws-environments';
 
     const params = {
@@ -217,7 +217,7 @@ const AwsEnvironmentProviderCard = ({
           setAddProviderMessage(results);
           setIsAddProviderSuccessful(true);
           setSpinning(false);
-          //remove from table
+          // remove from table
           const providersData = items.slice();
           providersData.splice(index, 1);
           setItems(providersData);
@@ -322,7 +322,7 @@ const AwsEnvironmentProviderCard = ({
             </Alert>
           )}
         </Grid>
-        <Typography margin={'10px'}>
+        <Typography margin="10px">
           <Button variant="contained" onClick={handleClickAdd}>
             Add
           </Button>

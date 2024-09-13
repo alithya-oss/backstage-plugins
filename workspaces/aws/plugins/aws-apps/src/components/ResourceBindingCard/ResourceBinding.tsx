@@ -101,46 +101,46 @@ const ResourceBindingCard = ({
       ),
     );
 
-    //select view for only current environment
+    // select view for only current environment
     const currentEnvironment = awsComponent.currentEnvironment.environment.name;
 
     const matchedResources = resourcesEntities.filter(entity => {
-      const appData = entity!.metadata['appData'] as any;
+      const appData = entity!.metadata.appData as any;
       return appData && appData[currentEnvironment];
     });
 
-    let resources: ResourceBinding[] = [];
+    const resources: ResourceBinding[] = [];
 
     matchedResources.forEach(et => {
-      const appData = et!.metadata['appData'] as any;
+      const appData = et!.metadata.appData as any;
       const envAppData = appData[currentEnvironment] as any;
       const providers = Object.keys(envAppData);
       providers.forEach(p => {
         const providerAppData = envAppData[p] as any;
-        if (et!.metadata['resourceType'] === 'aws-rds') {
+        if (et!.metadata.resourceType === 'aws-rds') {
           const associatedRDSResources: AssociatedResources = {
-            resourceArn: providerAppData['DbAdminSecretArn'],
+            resourceArn: providerAppData.DbAdminSecretArn,
             resourceType: 'aws-db-secret',
             resourceName: `${et!.metadata.name}-secret`,
           };
 
           resources.push({
             resourceName: et!.metadata.name,
-            resourceType: et!.metadata['resourceType']?.toString() || '',
+            resourceType: et!.metadata.resourceType?.toString() || '',
             provider: p,
-            resourceArn: providerAppData['Arn'],
-            id: providerAppData['Arn'],
-            entityRef: 'resource:default/' + et!.metadata.name,
+            resourceArn: providerAppData.Arn,
+            id: providerAppData.Arn,
+            entityRef: `resource:default/${  et!.metadata.name}`,
             associatedResources: [associatedRDSResources],
           });
         } else {
           resources.push({
             resourceName: et!.metadata.name,
-            resourceType: et!.metadata['resourceType']?.toString() || '',
+            resourceType: et!.metadata.resourceType?.toString() || '',
             provider: p,
-            resourceArn: providerAppData['Arn'],
-            id: providerAppData['Arn'],
-            entityRef: 'resource:default/' + et!.metadata.name,
+            resourceArn: providerAppData.Arn,
+            id: providerAppData.Arn,
+            entityRef: `resource:default/${  et!.metadata.name}`,
           });
         }
       });
@@ -150,7 +150,7 @@ const ResourceBindingCard = ({
   }
 
   async function bindResource(item: ResourceBinding): Promise<any> {
-    let policies: ResourcePolicy[] = [];
+    const policies: ResourcePolicy[] = [];
 
     if (item.resourceType === 'aws-rds') {
       const rdsPolicy = RDS_POLICY.replace(
@@ -226,7 +226,7 @@ const ResourceBindingCard = ({
   }
 
   async function removeResource(item: ResourceBinding): Promise<any> {
-    let policies: ResourcePolicy[] = [];
+    const policies: ResourcePolicy[] = [];
 
     if (item.resourceType === 'aws-rds') {
       policies.push({
@@ -302,7 +302,7 @@ const ResourceBindingCard = ({
         setBindResourceMessage(results.message);
         setIsBindSuccessful(true);
 
-        //remove from table
+        // remove from table
         const resourceData = items.slice();
         resourceData.splice(index, 1);
         setItems(resourceData);
@@ -398,7 +398,7 @@ const ResourceBindingCard = ({
             </Alert>
           )}
         </Grid>
-        <Typography margin={'10px'}>
+        <Typography margin="10px">
           <Button variant="contained" onClick={handleClickAdd}>
             Add
           </Button>
@@ -438,7 +438,7 @@ export const ResourceBindingCardWidget = () => {
       catalog: catalogApi,
     };
     return <ResourceBindingCard input={input} />;
-  } else {
+  } 
     return (
       <EmptyState
         missing="data"
@@ -446,5 +446,5 @@ export const ResourceBindingCardWidget = () => {
         description="Resource binding data would show here"
       />
     );
-  }
+  
 };

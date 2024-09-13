@@ -102,9 +102,9 @@ export const AwsEnvironmentProviderSelectorDialog = ({
   const getSelectedProvider = () => {
     if (selectedProvider) {
       return `${selectedProvider?.prefix}:${selectedProvider?.name}`;
-    } else {
+    } 
       return;
-    }
+    
   };
 
   useEffect(() => {}, []);

@@ -171,9 +171,9 @@ const OpaAppStateOverview = ({
   const handleStartDeployment = async () => {
     if (stack.stackDeployStatus.includes('STAGED')) {
       return handleCreateDeployment();
-    } else {
+    } 
       return handleUpdateDeployment();
-    }
+    
   };
 
   const handleUpdateDeployment = async () => {
@@ -420,7 +420,7 @@ export const AppStateCard = () => {
     };
 
     return <OpaAppStateOverview input={input} />;
-  } else {
+  } 
     return (
       <EmptyState
         missing="data"
@@ -428,5 +428,5 @@ export const AppStateCard = () => {
         description="State data would show here"
       />
     );
-  }
+  
 };

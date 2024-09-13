@@ -62,7 +62,7 @@ export const AppLinksCard = () => {
     return <LinearProgress />;
   } else if (awsAppLoadingStatus.component) {
     return <AppLinks awsComponent={awsAppLoadingStatus.component} />;
-  } else {
+  } 
     return (
       <EmptyState
         missing="data"
@@ -70,5 +70,5 @@ export const AppLinksCard = () => {
         description="Can't fetch data"
       />
     );
-  }
+  
 };

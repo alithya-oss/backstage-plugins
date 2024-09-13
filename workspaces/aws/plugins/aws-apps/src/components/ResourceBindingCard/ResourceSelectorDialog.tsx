@@ -62,7 +62,7 @@ const ResourceSelectorTable = ({
   tableData: ResourceBinding[];
   selectedRowCallback: (item: ResourceBinding) => void;
 }) => {
-  /*const classes = */ useStyles();
+  /* const classes = */ useStyles();
   const [selectedRadio, setSelectedRadio] = useState<number>();
 
   const selectedRow = (item: ResourceBinding, index: number) => {
@@ -166,7 +166,7 @@ export const ResourceSelectorDialog = ({
       filter: { kind: 'resource', 'spec.type': 'aws-resource' },
     });
     const matchedResources = allResources.items.filter(entity => {
-      const appData = entity.metadata['appData'] as any;
+      const appData = entity.metadata.appData as any;
       return appData && appData[currentEnvironment] && entity.metadata.name;
     });
 
@@ -175,46 +175,46 @@ export const ResourceSelectorDialog = ({
       const etName = et.metadata.name;
       const id = `resource:${etNamespace}/${etName}`;
 
-      const appData = et.metadata['appData'] as any;
+      const appData = et.metadata.appData as any;
       const envAppData = appData[currentEnvironment] as any;
       // find all providers - for multi providers
       const providers = Object.keys(envAppData);
       providers.forEach(p => {
         const providerAppData = envAppData[p] as any;
         if (
-          isResourceAlreadyBind(providerAppData['Arn'], associatedResources)
+          isResourceAlreadyBind(providerAppData.Arn, associatedResources)
         ) {
           return;
         }
-        if (et.metadata['resourceType'] === 'aws-rds') {
-          //Handler for aws-rds with associated resources
+        if (et.metadata.resourceType === 'aws-rds') {
+          // Handler for aws-rds with associated resources
           const associatedRDSResources: AssociatedResources = {
-            resourceArn: providerAppData['DbAdminSecretArn'],
+            resourceArn: providerAppData.DbAdminSecretArn,
             resourceType: 'aws-db-secret',
             resourceName: `${etName}-secret`,
           };
 
           tableData.push({
             resourceName: etName,
-            resourceType: et.metadata['resourceType']?.toString() || '',
+            resourceType: et.metadata.resourceType?.toString() || '',
             provider: p,
-            resourceArn: providerAppData['Arn'],
+            resourceArn: providerAppData.Arn,
             id,
             associatedResources: [associatedRDSResources],
           });
-        } else if (et.metadata['resourceType'] === 'aws-s3') {
+        } else if (et.metadata.resourceType === 'aws-s3') {
           // Custom S3 bucket resource handler - add resource policy
           const associatedS3Resources: AssociatedResources = {
-            resourceArn: providerAppData['Arn'],
+            resourceArn: providerAppData.Arn,
             resourceType: 'aws-s3',
             resourceName: `${etName}-secret`,
           };
 
           tableData.push({
             resourceName: etName,
-            resourceType: et.metadata['resourceType']?.toString() || '',
+            resourceType: et.metadata.resourceType?.toString() || '',
             provider: p,
-            resourceArn: providerAppData['Arn'],
+            resourceArn: providerAppData.Arn,
             id,
             associatedResources: [associatedS3Resources],
           });
@@ -222,9 +222,9 @@ export const ResourceSelectorDialog = ({
           // General AWS resource handler
           tableData.push({
             resourceName: etName,
-            resourceType: et.metadata['resourceType']?.toString() || '',
+            resourceType: et.metadata.resourceType?.toString() || '',
             provider: p,
-            resourceArn: providerAppData['Arn'],
+            resourceArn: providerAppData.Arn,
             id,
           });
         }

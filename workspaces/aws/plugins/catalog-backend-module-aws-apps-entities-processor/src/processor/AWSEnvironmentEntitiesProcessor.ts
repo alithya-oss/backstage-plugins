@@ -88,7 +88,7 @@ export class AWSEnvironmentEntitiesProcessor implements CatalogProcessor {
             defaultKind: 'awsenvironmentprovider',
             defaultNamespace: selfRef.namespace,
           });
-          if (targetRef.kind == 'awsenvironmentprovider') {
+          if (targetRef.kind === 'awsenvironmentprovider') {
             emit(
               processingResult.relation({
                 source: selfRef,

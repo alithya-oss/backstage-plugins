@@ -41,7 +41,7 @@ export function isAppType(
   appType: string,
   env: GenericAWSEnvironment,
 ): (entity: Entity) => boolean {
-  return (/*entity: Entity*/): boolean => {
+  return (/* entity: Entity*/): boolean => {
     // ecs or eks or serverless
     return env.providerData.providerType === appType;
   };
@@ -205,7 +205,7 @@ export function AwsAppPage(_props: AwsAppPageProps) {
         </EntitySwitch.Case>
       </EntitySwitch>
     );
-  } else {
+  } 
     if (awsAppLoadingStatus.error) {
       console.log(awsAppLoadingStatus.error);
     }
@@ -217,5 +217,5 @@ export function AwsAppPage(_props: AwsAppPageProps) {
         description="An error occurred when trying to load entity environment data. See the environment entity yaml file definitions to troubleshoot."
       />
     );
-  }
+  
 }

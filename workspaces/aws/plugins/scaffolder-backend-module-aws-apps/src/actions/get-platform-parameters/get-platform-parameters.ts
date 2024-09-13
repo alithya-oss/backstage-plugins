@@ -72,7 +72,9 @@ export function getPlatformParametersAction(options: { envConfig: Config }) {
       },
     },
     async handler(ctx) {
-      let { paramKeys, region } = ctx.input;
+      const { paramKeys } = ctx.input;
+      let { region } = ctx.input;
+
       if (!region) {
         region = envConfig.getString('backend.platformRegion');
       }

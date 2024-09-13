@@ -79,7 +79,7 @@ export async function createAuditRecord({
       message: message ?? '',
     });
 
-    if (auditResponse.$metadata.httpStatusCode == 200) {
+    if (auditResponse.$metadata.httpStatusCode === 200) {
       response.status = 'Success';
     } else {
       response.status = 'FAILED';

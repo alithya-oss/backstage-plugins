@@ -27,23 +27,23 @@ const AuditTable = () => {
         if (results.Count! > 0 && results.Items) {
           const items = results.Items.map(item => {
             const auditRecord: AuditRecord = {
-              id: item['id'].S || '',
-              origin: item['origin'].S || '',
-              actionType: item['actionType'].S || '',
-              actionName: item['actionName'].S || '',
-              appName: item['appName'].S || '',
-              createdDate: item['createdDate'].S || '',
-              createdAt: item['createdAt'].S || '',
-              initiatedBy: item['initiatedBy'].S || '',
-              owner: item['owner'].S || '',
-              assumedRole: item['assumedRole'].S || '',
-              targetAccount: item['targetAccount'].S || '',
-              targetRegion: item['targetRegion'].S || '',
-              prefix: item['prefix'].S || '',
-              providerName: item['providerName'].S || '',
-              request: item['request'].S || '',
-              status: item['status'].S || '',
-              message: item['message'].S || '',
+              id: item.id.S || '',
+              origin: item.origin.S || '',
+              actionType: item.actionType.S || '',
+              actionName: item.actionName.S || '',
+              appName: item.appName.S || '',
+              createdDate: item.createdDate.S || '',
+              createdAt: item.createdAt.S || '',
+              initiatedBy: item.initiatedBy.S || '',
+              owner: item.owner.S || '',
+              assumedRole: item.assumedRole.S || '',
+              targetAccount: item.targetAccount.S || '',
+              targetRegion: item.targetRegion.S || '',
+              prefix: item.prefix.S || '',
+              providerName: item.providerName.S || '',
+              request: item.request.S || '',
+              status: item.status.S || '',
+              message: item.message.S || '',
             };
 
             return auditRecord;
@@ -160,7 +160,7 @@ export const AuditWidget = () => {
     //   awsComponent: awsAppLoadingStatus.component
     // };
     return <AuditTable />;
-  } else {
+  } 
     return (
       <EmptyState
         missing="data"
@@ -168,5 +168,5 @@ export const AuditWidget = () => {
         description="Audit data would show here"
       />
     );
-  }
+  
 };

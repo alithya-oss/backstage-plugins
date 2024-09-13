@@ -154,14 +154,12 @@ export function AppCatalogPage(props: AppCatalogPageProps) {
   }
 
   return (
-    <PageWithHeader title={'AWS Software Catalog'} themeId="home">
+    <PageWithHeader title="AWS Software Catalog" themeId="home">
       <Content>
         <ContentHeader title="">
           <CreateButton
-            title={'Create AWS Component'}
-            to={
-              '/create?filters%5Bkind%5D=template&filters%5Buser%5D=all&filters%5Btags%5D=aws'
-            }
+            title="Create AWS Component"
+            to="/create?filters%5Bkind%5D=template&filters%5Buser%5D=all&filters%5Btags%5D=aws"
           />
           <SupportButton>All your AWS software catalog</SupportButton>
         </ContentHeader>

@@ -185,10 +185,10 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
           ...typedAcc,
           [envProviderEntity.envName]: [envProviderEntity.entity],
         };
-      } else {
+      } 
         typedAcc[envProviderEntity.envName].push(envProviderEntity.entity!);
         return typedAcc;
-      }
+      
     }, {});
 
     // set values into cache
@@ -199,7 +199,7 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
   }
 
   function getProviderAppData(deployEnv: AWSDeploymentEnvironment): any {
-    const appData = entity.metadata['appData'] as any;
+    const appData = entity.metadata.appData as any;
     const envAppData = appData[deployEnv.environment.name] as any;
     return envAppData[deployEnv.providerData.name] as any;
   }
@@ -209,7 +209,7 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
   ): Promise<void> {
     let defaultDeployStatus = ExtraStackDeployStatus.UNSTAGED;
     const providerAppData = getProviderAppData(svAppDeployEnv);
-    const bucketName = providerAppData['BuildBucketName'];
+    const bucketName = providerAppData.BuildBucketName;
 
     try {
       await api.doesS3FileExist({ bucketName, fileName: 'packaged.yaml' });
@@ -221,14 +221,14 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
     }
 
     const appStack: CloudFormationStack = {
-      stackName: providerAppData['AppStackName'] || '',
+      stackName: providerAppData.AppStackName || '',
       stackDeployStatus: defaultDeployStatus,
     };
 
     svAppDeployEnv.app = {
       logGroupNames: [],
-      resourceGroupArn: providerAppData['AppResourceGroup'] || '',
-      cloudFormationStackName: providerAppData['StackName'] || '',
+      resourceGroupArn: providerAppData.AppResourceGroup || '',
+      cloudFormationStackName: providerAppData.StackName || '',
       appStack,
       s3BucketName: bucketName,
       links: [],
@@ -290,22 +290,22 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
     providerEntity: Entity,
   ): void {
     ecsAppDeployEnv.clusterName =
-      providerEntity.metadata['clusterName']?.toString() || '';
+      providerEntity.metadata.clusterName?.toString() || '';
 
     const providerAppData = getProviderAppData(ecsAppDeployEnv);
 
     ecsAppDeployEnv.app = {
-      ecrArn: providerAppData['EcrRepositoryArn'] || '',
-      logGroupName: providerAppData['TaskLogGroup'] || '',
-      resourceGroupArn: providerAppData['AppResourceGroup'] || '',
-      serviceArn: providerAppData['EcsServiceArn'] || '',
-      taskDefArn: providerAppData['EcsTaskDefinitionArn'] || '',
-      cloudFormationStackName: providerAppData['StackName'] || '',
-      taskExecutionRoleArn: providerAppData['TaskExecutionRoleArn'] || '',
+      ecrArn: providerAppData.EcrRepositoryArn || '',
+      logGroupName: providerAppData.TaskLogGroup || '',
+      resourceGroupArn: providerAppData.AppResourceGroup || '',
+      serviceArn: providerAppData.EcsServiceArn || '',
+      taskDefArn: providerAppData.EcsTaskDefinitionArn || '',
+      cloudFormationStackName: providerAppData.StackName || '',
+      taskExecutionRoleArn: providerAppData.TaskExecutionRoleArn || '',
       links: [
         {
           title: 'Go to app',
-          url: providerAppData['AlbEndpoint'] || '',
+          url: providerAppData.AlbEndpoint || '',
           // icon: 'kind:api'
         },
       ],
@@ -317,29 +317,29 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
     providerEntity: Entity,
   ): void {
     eksAppDeployEnv.clusterName =
-      providerEntity.metadata['clusterName']?.toString() || '';
+      providerEntity.metadata.clusterName?.toString() || '';
 
     const providerAppData = getProviderAppData(eksAppDeployEnv);
 
     eksAppDeployEnv.app = {
-      appAdminRoleArn: (providerAppData['AppAdminRoleArn'] as string) || '',
-      ecrArn: (providerAppData['EcrRepositoryArn'] as string) || '',
-      namespace: (providerAppData['Namespace'] as string) || '',
+      appAdminRoleArn: (providerAppData.AppAdminRoleArn as string) || '',
+      ecrArn: (providerAppData.EcrRepositoryArn as string) || '',
+      namespace: (providerAppData.Namespace as string) || '',
 
       // Must match Fluent Bit configurations. See "log_group_template" setting in the EKS provider IaC.
       logGroupName:
-        providerAppData['LogGroup'] ||
-        `/aws/apps/${eksAppDeployEnv.providerData.prefix}-${eksAppDeployEnv.providerData.name}/${providerAppData['Namespace']}`,
+        providerAppData.LogGroup ||
+        `/aws/apps/${eksAppDeployEnv.providerData.prefix}-${eksAppDeployEnv.providerData.name}/${providerAppData.Namespace}`,
 
-      resourceGroupArn: providerAppData['AppResourceGroup'] || '',
-      cloudFormationStackName: providerAppData['StackName'] || '',
+      resourceGroupArn: providerAppData.AppResourceGroup || '',
+      cloudFormationStackName: providerAppData.StackName || '',
       links: [],
     };
 
-    if (providerAppData['AlbEndpoint']) {
+    if (providerAppData.AlbEndpoint) {
       eksAppDeployEnv.app.links.push({
         title: 'Go to app',
-        url: providerAppData['AlbEndpoint'] || '',
+        url: providerAppData.AlbEndpoint || '',
         // icon: 'kind:api'
       });
     }
@@ -352,11 +352,11 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
 
     const providerAppData = getProviderAppData(resourceDeployEnv);
 
-    resourceDeployEnv.resource.arn = providerAppData['Arn']?.toString() || '';
+    resourceDeployEnv.resource.arn = providerAppData.Arn?.toString() || '';
     resourceDeployEnv.resource.resourceGroupArn =
-      providerAppData['ResourceGroup']?.toString() || '';
+      providerAppData.ResourceGroup?.toString() || '';
     resourceDeployEnv.resource.cloudFormationStackName =
-      providerAppData['StackName']?.toString() || '';
+      providerAppData.StackName?.toString() || '';
   }
 
   // Retrieve AWS App Deployment data from the back end
@@ -366,8 +366,8 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
     // We do NOT load catalog data again if we only want to switch the current
     // environment provider
 
-    //TODO: Feature optimization to cache app related data - make sure the key of the app matches. multi -app-> multi-env->multi-providers..
-    //if (!_envEntities) {
+    // TODO: Feature optimization to cache app related data - make sure the key of the app matches. multi -app-> multi-env->multi-providers..
+    // if (!_envEntities) {
     await getCatalogData();
     //    }
 
@@ -400,44 +400,44 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
         const awsDeploymentEnvironment: AWSDeploymentEnvironment = {
           environment: {
             accountType:
-              envEntity.entity?.metadata['envTypeAccount']?.toString() || '',
-            category: envEntity.entity?.metadata['category']?.toString() || '',
+              envEntity.entity?.metadata.envTypeAccount?.toString() || '',
+            category: envEntity.entity?.metadata.category?.toString() || '',
             classification:
-              envEntity.entity?.metadata['classification']?.toString() || '',
+              envEntity.entity?.metadata.classification?.toString() || '',
             description:
-              envEntity.entity?.metadata['description']?.toString() || '',
+              envEntity.entity?.metadata.description?.toString() || '',
             envType:
-              envEntity.entity?.metadata['environmentType']?.toString() || '',
+              envEntity.entity?.metadata.environmentType?.toString() || '',
             level: parseInt(
-              envEntity.entity?.metadata['level']?.toString() || '0',
+              envEntity.entity?.metadata.level?.toString() || '0',
               10,
             ),
-            name: envEntity.entity?.metadata['name'].toString() || '',
+            name: envEntity.entity?.metadata.name.toString() || '',
             regionType:
-              envEntity.entity?.metadata['envTypeRegion']?.toString() || '',
+              envEntity.entity?.metadata.envTypeRegion?.toString() || '',
           },
           providerData: {
-            accountNumber: envProvider.metadata['awsAccount']?.toString() || '',
-            region: envProvider.metadata['awsRegion']?.toString() || '',
-            prefix: envProvider.metadata['prefix']?.toString() || '',
-            auditTable: envProvider.metadata['auditTable']?.toString() || '',
-            description: envProvider.metadata['description']?.toString() || '',
-            name: envProvider.metadata['name'],
+            accountNumber: envProvider.metadata.awsAccount?.toString() || '',
+            region: envProvider.metadata.awsRegion?.toString() || '',
+            prefix: envProvider.metadata.prefix?.toString() || '',
+            auditTable: envProvider.metadata.auditTable?.toString() || '',
+            description: envProvider.metadata.description?.toString() || '',
+            name: envProvider.metadata.name,
             operationRoleSsmKey:
-              envProvider.metadata['operationRole']?.toString() || '',
+              envProvider.metadata.operationRole?.toString() || '',
             provisioningRoleSsmKey:
-              envProvider.metadata['provisioningRole']?.toString() || '',
+              envProvider.metadata.provisioningRole?.toString() || '',
             providerType:
-              envProvider.metadata['envType']?.toString().toLowerCase() || '',
-            vpcSsmKey: envProvider.metadata['vpc']?.toString() || '',
+              envProvider.metadata.envType?.toString().toLowerCase() || '',
+            vpcSsmKey: envProvider.metadata.vpc?.toString() || '',
             cloudFormationStackName:
-              envProvider.metadata['StackName']?.toString() || '',
+              envProvider.metadata.StackName?.toString() || '',
             terraformWorkspace:
-              envProvider.metadata['TerraformWorkspace']?.toString() || '',
+              envProvider.metadata.TerraformWorkspace?.toString() || '',
             terraformStateBucket:
-              envProvider.metadata['TerraformStateBucket']?.toString() || '',
+              envProvider.metadata.TerraformStateBucket?.toString() || '',
             terraformStateTable:
-              envProvider.metadata['TerraformStateTable']?.toString() || '',
+              envProvider.metadata.TerraformStateTable?.toString() || '',
           },
           entities: {
             envEntity: envEntity.entity as AWSEnvironmentEntityV1,
@@ -452,7 +452,7 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
 
         // now adjust more specific provider data types
         const providerType =
-          envEntity.entity?.metadata['environmentType']
+          envEntity.entity?.metadata.environmentType
             ?.toString()
             .toLowerCase() || 'N/A';
 
@@ -484,7 +484,7 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
           populateResourceState(
             awsDeploymentEnvironment as AWSResourceDeploymentEnvironment,
           );
-          if (entity.metadata['resourceType'] === 'aws-rds') {
+          if (entity.metadata.resourceType === 'aws-rds') {
             (
               awsDeploymentEnvironment as AWSResourceDeploymentEnvironment
             ).resource.resourceType = 'database';
@@ -506,16 +506,16 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
       } else if (entity.kind === 'AWSEnvironmentProvider') {
         return AWSComponentType.AWSProvider;
       }
-      let componentType: string = entity.spec?.type?.toString() || '';
+      const componentType: string = entity.spec?.type?.toString() || '';
       if (componentType === 'aws-resource') {
         return AWSComponentType.AWSResource;
       } else if (componentType === 'aws-app') {
         return AWSComponentType.AWSApp;
       } else if (componentType === 'aws-organization') {
         return AWSComponentType.AWSOrganization;
-      } else {
+      } 
         return AWSComponentType.Default;
-      }
+      
     }
 
     function getLowerEnvironment(
@@ -533,13 +533,13 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
     };
 
     const getComponentStateType = (): ComponentStateType => {
-      if (entity.metadata['componentState'] === undefined) {
+      if (entity.metadata.componentState === undefined) {
         throw Error(
           'Error: Entity of type Component must have componentState in metadata.',
         );
       }
       const componentState =
-        entity.metadata['componentState']?.toString() || '';
+        entity.metadata.componentState?.toString() || '';
       switch (componentState) {
         case 'cloudformation':
           return ComponentStateType.CLOUDFORMATION;
@@ -553,12 +553,12 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
     };
 
     const awsComponent: AWSComponent = {
-      componentName: entity.metadata['name'],
+      componentName: entity.metadata.name,
       componentType,
       componentState: getComponentStateType(),
-      componentSubType: entity.spec ? entity.spec['subType']!.toString() : '',
-      iacType: entity.metadata['iacType']?.toString() || '',
-      repoSecretArn: entity.metadata['repoSecretArn']?.toString() || '',
+      componentSubType: entity.spec ? entity.spec.subType!.toString() : '',
+      iacType: entity.metadata.iacType?.toString() || '',
+      repoSecretArn: entity.metadata.repoSecretArn?.toString() || '',
       getRepoInfo: getRepoInfoImpl,
       platformRegion: config.getString('backend.platformRegion'),
       environments: deployEnvs,

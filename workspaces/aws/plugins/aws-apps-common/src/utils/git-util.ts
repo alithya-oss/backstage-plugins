@@ -3,7 +3,7 @@ import { Entity } from '@backstage/catalog-model';
 
 /** @public */
 export const getRepoUrl = (repoInfo: IRepositoryInfo): string => {
-  console.log(repoInfo);
+  // console.log(repoInfo);
   let gitRepoClean;
   if (repoInfo.gitRepoName.includes('/')) {
     gitRepoClean = repoInfo.gitRepoName.split('/')[1];
@@ -14,38 +14,38 @@ export const getRepoUrl = (repoInfo: IRepositoryInfo): string => {
   if (repoInfo.gitProvider === GitProviders.GITLAB) {
     if (repoInfo.gitProjectGroup) {
       return (
-        repoInfo.gitHost +
-        '/' +
-        repoInfo.gitProjectGroup +
-        '/' +
-        gitRepoClean +
-        '.git'
+        `${repoInfo.gitHost 
+        }/${ 
+        repoInfo.gitProjectGroup 
+        }/${ 
+        gitRepoClean 
+        }.git`
       );
-    } else {
-      return repoInfo.gitHost + '/' + repoInfo.gitRepoName + '.git';
-    }
+    } 
+      return `${repoInfo.gitHost  }/${  repoInfo.gitRepoName  }.git`;
+    
   } else if (repoInfo.gitProvider === GitProviders.GITHUB) {
     if (repoInfo.gitOrganization) {
       return (
-        repoInfo.gitHost +
-        '/' +
-        repoInfo.gitOrganization +
-        '/' +
-        gitRepoClean +
-        '.git'
+        `${repoInfo.gitHost 
+        }/${ 
+        repoInfo.gitOrganization 
+        }/${ 
+        gitRepoClean 
+        }.git`
       );
-    } else {
-      return repoInfo.gitHost + '/' + repoInfo.gitRepoName + '.git';
-    }
-  } else {
-    throw Error('Unsupported git provider ' + repoInfo.gitProvider);
-  }
+    } 
+      return `${repoInfo.gitHost  }/${  repoInfo.gitRepoName  }.git`;
+    
+  } 
+    throw Error(`Unsupported git provider ${  repoInfo.gitProvider}`);
+  
 };
 
 /** @public */
 export const getRepoInfo = (entity: Entity): IRepositoryInfo => {
   // let gitProvider: GitProviders = GitProviders.GITLAB;
-  let gitProvider = entity.metadata['gitProvider'] ?? GitProviders.GITLAB;
+  const gitProvider = entity.metadata.gitProvider ?? GitProviders.GITLAB;
 
   // switch (entity.metadata["gitProvider"]){
   //   case "github":
@@ -93,7 +93,7 @@ export const getRepoInfo = (entity: Entity): IRepositoryInfo => {
       };
     default:
       throw Error(
-        'Unsupported git provider: ' + entity.metadata['gitProvider'],
+        `Unsupported git provider: ${  entity.metadata.gitProvider}`,
       );
   }
 };
@@ -104,7 +104,7 @@ export const getGitCredentailsSecret = (repoInfo: IRepositoryInfo): string => {
     return 'opa-admin-gitlab-secrets';
   } else if (repoInfo.gitProvider === GitProviders.GITHUB) {
     return 'opa-admin-github-secrets';
-  } else {
-    throw Error('Unsupported git provider ' + repoInfo.gitProvider);
-  }
+  } 
+    throw Error(`Unsupported git provider ${  repoInfo.gitProvider}`);
+  
 };

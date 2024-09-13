@@ -37,7 +37,7 @@ const OpaAppGeneralInfo = ({
 
   const [secretData, setSecretData] = useState('');
 
-  let repoInfo = getRepoInfo(entity);
+  const repoInfo = getRepoInfo(entity);
   const gitRepoUrl = getRepoUrl(repoInfo);
 
   // const getGitAppUrl = () => {
@@ -52,7 +52,7 @@ const OpaAppGeneralInfo = ({
       baseUrl = 'git clone https://';
       cloneUrl = baseUrl + gitRepoUrl;
     } else {
-      cloneUrl = baseUrl + secretData + '@' + gitRepoUrl;
+      cloneUrl = `${baseUrl + secretData  }@${  gitRepoUrl}`;
     }
     navigator.clipboard.writeText(cloneUrl);
   };
@@ -114,7 +114,7 @@ const OpaAppGeneralInfo = ({
                   </Typography>
                   <Typography noWrap>
                     <IconButton sx={{ p: 0 }} onClick={HandleCopySecret}>
-                      <ContentCopyIcon></ContentCopyIcon>
+                      <ContentCopyIcon />
                     </IconButton>
                     <SecretStringComponent secret={secretData ?? ''} />
                   </Typography>
@@ -129,19 +129,19 @@ const OpaAppGeneralInfo = ({
               >
                 Clone url
               </Typography>
-              <Typography component={'span'} noWrap>
+              <Typography component="span" noWrap>
                 <table>
                   <tbody>
                     <tr>
                       <td>
                         <IconButton sx={{ p: 0 }} onClick={HandleCopyGitClone}>
-                          <ContentCopyIcon></ContentCopyIcon>
+                          <ContentCopyIcon />
                         </IconButton>
                       </td>
                       <td>
                         <CodeSnippet
                           language="text"
-                          text={'git clone https://' + gitRepoUrl}
+                          text={`git clone https://${  gitRepoUrl}`}
                         />
                       </td>
                     </tr>
@@ -165,11 +165,11 @@ export const GeneralInfoCard = ({ appPending }: { appPending: boolean }) => {
       account: '',
       region: '',
       entity: entity,
-      repoSecretArn: entity.metadata['repoSecretArn']?.toString() || '',
+      repoSecretArn: entity.metadata.repoSecretArn?.toString() || '',
       api,
     };
     return <OpaAppGeneralInfo input={input} />;
-  } else {
+  } 
     if (awsAppLoadingStatus.loading) {
       return <LinearProgress />;
     } else if (awsAppLoadingStatus.component) {
@@ -184,7 +184,7 @@ export const GeneralInfoCard = ({ appPending }: { appPending: boolean }) => {
         api,
       };
       return <OpaAppGeneralInfo input={input} />;
-    } else {
+    } 
       return (
         <EmptyState
           missing="data"
@@ -192,6 +192,6 @@ export const GeneralInfoCard = ({ appPending }: { appPending: boolean }) => {
           description="Info data would show here"
         />
       );
-    }
-  }
+    
+  
 };
