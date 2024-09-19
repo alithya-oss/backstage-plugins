@@ -1,108 +1,98 @@
 app:
-  title: Scaffolded Backstage App
-  baseUrl: http://localhost:3000
-
+  title: 'Scaffolded Backstage App'
+  baseUrl: ${APP_BASE_URL}
+  listen:
+    port: 3000
+    host: 0.0.0.0
 organization:
-  name: My Company
+  name: ${ORGANIZATION_NAME}
 
 backend:
-  # Used for enabling authentication, secret is shared by all backend plugins
-  # See https://backstage.io/docs/auth/service-to-service-auth for
-  # information on the format
-  # auth:
-  #   keys:
-  #     - secret: ${BACKEND_SECRET}
-  baseUrl: http://localhost:7007
+  baseUrl: ${BACKEND_BASE_URL}
   listen:
-    port: 7007
-    # Uncomment the following host directive to bind to specific interfaces
-    # host: 127.0.0.1
+    host: 0.0.0.0
+    port: ${BACKEND_PORT}
   csp:
     connect-src: ["'self'", 'http:', 'https:']
-    # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
-    # Default Helmet Content-Security-Policy values can be removed by setting the key to false
   cors:
-    origin: http://localhost:3000
+    origin: ${BACKEND_CORS_ORIGIN}
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
-  # This is for local development only, it is not recommended to use this in production
-  # The production database configuration is stored in app-config.production.yaml
   database:
-    client: better-sqlite3
-    connection: ':memory:'
-  # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
-
+    client: ${BACKEND_DATABASE_CLIENT}
+    connection: ${BACKEND_DATABASE_CONNECTION}
+  platformRegion: ${BACKEND_PLATFORM_REGION}
 integrations:
   github:
     - host: github.com
-      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-      # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
-      token: ${GITHUB_TOKEN}
-    ### Example for how to add your GitHub Enterprise instance using the API:
-    # - host: ghe.example.net
-    #   apiBaseUrl: https://ghe.example.net/api/v3
-    #   token: ${GHE_TOKEN}
+      apps:
+        - appId: ${GITHUB_APP_ID}
+          clientId: ${GITHUB_CLIENT_ID}
+          clientSecret: ${GITHUB_CLIENT_SECRET}
+          webhookSecret: ${GITHUB_WEBHOOK_SECRET}
+          privateKey: ${GITHUB_PRIVATE_KEY}
 
 proxy:
-  ### Example for how to add a proxy endpoint for the frontend.
-  ### A typical reason to do this is to handle HTTPS and CORS for internal services.
-  # endpoints:
-  #   '/test':
-  #     target: 'https://example.com'
-  #     changeOrigin: true
-
-# Reference documentation http://backstage.io/docs/features/techdocs/configuration
-# Note: After experimenting with basic setup, use CI/CD to generate docs
-# and an external cloud storage when deploying TechDocs for production use-case.
-# https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
 techdocs:
-  builder: 'local' # Alternatives - 'external'
+  builder: ${TECHDOCS_BUILDER}
   generator:
-    runIn: 'docker' # Alternatives - 'local'
+    runIn: ${TECHDOCS_GENERATOR_RUN_IN}
   publisher:
-    type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+    type: ${TECHDOCS_PUBLISHER_TYPE} #
 
 auth:
-  # see https://backstage.io/docs/auth/ to learn about auth providers
+  environment: ${AUTH_ENVIRONMENT}
   providers:
-    # See https://backstage.io/docs/auth/guest/provider
-    guest: {}
+    guest:
+      dangerouslyAllowOutsideDevelopment: ${AUTH_PROVIDERS_GUEST_DANGEROUSLY_ALLOW_OUTSIDE_DEVELOPMENT}
+    github:
+      development:
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
 
 scaffolder:
-  # see https://backstage.io/docs/features/software-templates/configuration for software template options
-
 catalog:
+  rules:
+    - allow:
+        [
+          Domain,
+          Component,
+          System,
+          API,
+          Resource,
+          Location,
+          Template,
+          AWSEnvironment,
+          AWSEnvironmentProvider,
+        ]
+  providers:
+    githubOrg:
+      - id: default
+        githubUrl: https://github.com
+        orgs:
+          - harmonix-generated-environments
+        schedule:
+          frequency: PT30M
+          timeout: PT1M
+  orphanStrategy: delete
+  processingInterval:
+    minutes: 10
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
-  rules:
-    - allow: [Component, System, API, Resource, Location]
   locations:
-    # Local example data, file locations are relative to the backend process, typically `packages/backend`
-    - type: file
-      target: ../../examples/entities.yaml
-
-    # Local example template
-    - type: file
-      target: ../../examples/template/template.yaml
-      rules:
-        - allow: [Template]
-
-    # Local example organizational data
-    - type: file
-      target: ../../examples/org.yaml
-      rules:
-        - allow: [User, Group]
-
-    ## Uncomment these lines to add more example data
-    # - type: url
-    #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
-
-    ## Uncomment these lines to add an example org
     - type: url
-      target: https://github.com/awslabs/harmonix/blob/main/backstage-reference/templates/all-templates.yaml
+      target: https://github.com/harmonix-generated-environments/harmonix/blob/integrate-github-ref/backstage-reference/templates/all-templates.yaml
       rules:
         - allow: [Template]
+
+    - type: file
+      target: ../../examples/landing-zone-accelerator/*
+      rules:
+        - allow: [Component, System]
 
 kubernetes:
   # see https://backstage.io/docs/features/kubernetes/configuration for kubernetes configuration options
@@ -110,46 +100,45 @@ kubernetes:
 # see https://backstage.io/docs/permissions/getting-started for more on the permission framework
 permission:
   # setting this to `false` will disable permissions
-  enabled: true
+  enabled: ${PERMISSION_ENABLED}
 
 aws:
   accountDefaults:
-    roleName: BackstageIntegration
-    partition: aws
-    region: us-east-1
+    roleName: ${AWS_ACCOUNT_DEFAULTS_ROLE_NAME}
+    partition: ${AWS_ACCOUNT_DEFAULTS_PARTITION}
+    region: ${AWS_ACCOUNT_DEFAULTS_REGION}
   mainAccount:
-    accessKeyId: ${AWS_ACCESS_KEY_ID}
-    secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
-    region: us-east-1
+    accessKeyId: ${AWS_MAIN_ACCOUNT_ACCESS_KEY_ID}
+    secretAccessKey: ${AWS_MAIN_ACCOUNT_SECRET_ACCESS_KEY}
+    region: ${AWS_MAIN_ACCOUNT_REGION}
   accounts:
-    - accountId: '012345678901'
-      roleName: BillingReadOnly
+    - accountId: '957201034306'
+      roleName: ${AWS_BILLING_ACCOUNT_ROLE_NAME}
   locator:
     resourceTaggingApi:
       accounts:
         - '012345678901'
       regions:
         - us-east-1
-  # Identity Manager subdomain
-  # sso:
-  #   subdomain: example
+  sso:
+    subdomain: ${AWS_SSO_SUBDOMAIN}
   costInsights:
     costExplorer:
-      accountId: '012345678901'
-      region: us-east-1
+      accountId: '${AWS_COST_EXPLORER_ACCOUNT_ID}'
+      region: ${AWS_COST_EXPLORER_REGION}
     cache:
-      enabled: true
-      defaultTtl: 1000
-      readTime: 1000
+      enabled: ${COST_INSIGHTS_CACHE_ENABLED}
+      defaultTtl: ${COST_INSIGHTS_CACHE_DEFAULT_TTL}
+      readTime: ${COST_INSIGHTS_CACHE_READ_TIME}
     entityGroups:
       - kind: Component
         groups:
           - name: service
             type: DIMENSION
             key: SERVICE
-          - name: environment
+          - name: landing-zone-accelerator-cccs
             type: TAG
-            key: Environment
+            key: Accelerator
 
 costInsights:
-  engineerCost: 20000
+  engineerCost: ${COST_INSIGHTS_ENGINEER_COST}
