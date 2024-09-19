@@ -81,13 +81,13 @@ const app = createApp({
         {...props}
         auto
         providers={[
-           'guest',
+          'guest',
           {
             id: 'github-auth-provider',
             title: 'GitHub',
             message: 'Sign in using GitHub',
             apiRef: githubAuthApiRef,
-          }
+          },
         ]}
       />
     ),
