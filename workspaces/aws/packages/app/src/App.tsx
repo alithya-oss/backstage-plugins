@@ -25,7 +25,7 @@ import { apis } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
-import { githubAuthApiRef } from '@backstage/core-plugin-api';
+import { githubAuthApiRef, gitlabAuthApiRef} from '@backstage/core-plugin-api';
 
 import {
   AlertDisplay,
@@ -88,6 +88,12 @@ const app = createApp({
             message: 'Sign in using GitHub',
             apiRef: githubAuthApiRef,
           },
+          {
+            id: 'gilab-auth-provider',
+            title: 'Gitlab',
+            message: 'Sign in using Gitlab',
+            apiRef: gitlabAuthApiRef,
+          },          
         ]}
       />
     ),

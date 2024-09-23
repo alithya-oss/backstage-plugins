@@ -7,6 +7,7 @@
  */
 
 import { createBackend } from '@backstage/backend-defaults';
+import GitLabScaffolder  from '@backstage/plugin-scaffolder-backend-module-gitlab';
 
 const backend = createBackend();
 
@@ -69,11 +70,13 @@ backend.add(import('@alithya-oss/plugin-scaffolder-backend-module-aws-core'));
 // awsapps
 backend.add(import('@alithya-oss/plugin-aws-apps-backend'));
 backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
-
+backend.add(GitLabScaffolder());
 backend.add(import('./extensions/scaffolderActions'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
 backend.add(import('@backstage/plugin-catalog-backend-module-github-org'));
+backend.add(import('@backstage/plugin-auth-backend-module-gitlab-provider'));
+backend.add(import('@backstage/plugin-catalog-backend-module-gitlab/alpha'));
 backend.add(
   import(
     '@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor'
