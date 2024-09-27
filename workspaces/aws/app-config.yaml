@@ -19,8 +19,12 @@ backend:
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
   database:
-    client: ${BACKEND_DATABASE_CLIENT}
-    connection: ${BACKEND_DATABASE_CONNECTION}
+    client: pg
+    connection:
+      host: ${BACKEND_DATABASE_POSTGRES_HOST}
+      port: ${BACKEND_DATABASE_POSTGRES_PORT}
+      user: ${BACKEND_DATABASE_POSTGRES_USER}
+      password: ${BACKEND_DATABASE_POSTGRES_PASSWORD}
   platformRegion: ${BACKEND_PLATFORM_REGION}
 integrations:
   github:
