@@ -27,6 +27,7 @@ import {
   isOrphan,
   hasRelationWarnings,
   EntityRelationWarning,
+  isResourceType,
 } from '@backstage/plugin-catalog';
 import {
   EntityUserProfileCard,
@@ -41,6 +42,7 @@ import {
   EntityCatalogGraphCard,
 } from '@backstage/plugin-catalog-graph';
 import {
+  Entity,
   RELATION_API_CONSUMED_BY,
   RELATION_API_PROVIDED_BY,
   RELATION_CONSUMES_API,
@@ -73,6 +75,25 @@ import {
   isAwsCodeBuildAvailable,
 } from '@alithya-oss/plugin-aws-codebuild';
 import { EntityCostInsightsContent } from '@backstage-community/plugin-cost-insights';
+import {
+  AwsEnvironmentPage,
+  AwsEnvironmentProviderPage,
+  AwsComponentPage,
+} from '@alithya-oss/plugin-aws-apps';
+
+import { isGitlabAvailable, EntityGitlabContent } from '@immobiliarelabs/backstage-plugin-gitlab';
+import {isGithubActionsAvailable} from '@backstage/plugin-github-actions';
+const isCicdApplicable = (entity: Entity) => {
+  return isGitlabAvailable(entity) || isGithubActionsAvailable(entity);
+};
+const awsEnvironmentProviderEntityPage = (
+  <AwsEnvironmentProviderPage />
+);
+
+const awsEnvironmentEntityPage = (
+  <AwsEnvironmentPage />
+);
+
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -93,6 +114,10 @@ const cicdContent = (
         <EntityGithubActionsContent />
       </EntitySwitch.Case>
      */}
+// Add this to the switch statement in the cicdContent variable
+    <EntitySwitch.Case if={isGitlabAvailable}>
+      <EntityGitlabContent />
+    </EntitySwitch.Case>     
     <EntitySwitch>
       <EntitySwitch.Case if={isAwsCodePipelineAvailable}>
         <EntityAwsCodePipelineExecutionsContent />
@@ -302,9 +327,19 @@ const defaultEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
+    <EntityLayout.Route path="/ci-cd" title="CI/CD" if={isCicdApplicable}>
+      {cicdContent}
+    </EntityLayout.Route>    
   </EntityLayout>
 );
-
+const resourceEntityPage = (
+  <EntitySwitch>
+  <EntitySwitch.Case if={isResourceType('aws-resource')}>
+     <AwsComponentPage componentType='aws-resource'/>
+  </EntitySwitch.Case>
+  <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
+  </EntitySwitch>
+  );
 const componentPage = (
   <EntitySwitch>
     <EntitySwitch.Case if={isComponentType('service')}>
@@ -313,6 +348,10 @@ const componentPage = (
 
     <EntitySwitch.Case if={isComponentType('website')}>
       {websiteEntityPage}
+    </EntitySwitch.Case>
+    
+    <EntitySwitch.Case if={isComponentType('aws-app')}>
+      <AwsComponentPage componentType='aws-app'/>
     </EntitySwitch.Case>
 
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
@@ -466,7 +505,9 @@ export const entityPage = (
     <EntitySwitch.Case if={isKind('user')} children={userPage} />
     <EntitySwitch.Case if={isKind('system')} children={systemPage} />
     <EntitySwitch.Case if={isKind('domain')} children={domainPage} />
-
+    <EntitySwitch.Case if={isKind('resource')} children={resourceEntityPage} />
+    <EntitySwitch.Case if={isKind('awsenvironment')} children={awsEnvironmentEntityPage} />
+    <EntitySwitch.Case if={isKind('awsenvironmentprovider')} children={awsEnvironmentProviderEntityPage} />
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
   </EntitySwitch>
 );

@@ -41,6 +41,14 @@ integrations:
       baseUrl: https://${GITLAB_HOSTNAME}
       token: ${GITLAB_TOKEN}
 proxy:
+  /gitlab/api:
+    target: https://gitlab.com/api/v4
+    allowedHeaders:
+      - Authorization
+      - Content-Type
+    headers:
+      Accept: application/json
+      Content-Type: application/json
 techdocs:
   builder: ${TECHDOCS_BUILDER}
   generator:
@@ -79,6 +87,8 @@ catalog:
           Resource,
           Location,
           Template,
+          User,
+          Group,
           AWSEnvironment,
           AWSEnvironmentProvider,
         ]
@@ -127,23 +137,9 @@ catalog:
               - System
               - Location
               - Template
-      scaffolderDefault:
-        host: gitlab.com
-        branch: main
-        fallBackBranch: master
-        skipForkedRepos: true
-        group: alithya-csna
-        entityFilename: catalog-info.yaml
-        projectPattern: '[\s\S]*software\-templates'
-        schedule:
-          frequency:
-            minutes: 30
-          timeout:
-            minutes: 3
-        rules:
-          - allow:
-              - Template
-              - Location          
+              - Group
+              - User              
+
   orphanStrategy: delete
   processingInterval:
     minutes: 10
