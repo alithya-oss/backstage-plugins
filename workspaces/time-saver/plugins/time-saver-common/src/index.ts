@@ -20,4 +20,6 @@
  * @packageDocumentation
  */
 
+export * from './types';
+export * from './typesUtils';
 export * from './permissions/permissions';
