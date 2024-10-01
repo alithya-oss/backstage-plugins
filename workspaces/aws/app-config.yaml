@@ -19,8 +19,12 @@ backend:
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
   database:
-    client: ${BACKEND_DATABASE_CLIENT}
-    connection: ${BACKEND_DATABASE_CONNECTION}
+    client: pg
+    connection:
+      host: ${BACKEND_DATABASE_POSTGRES_HOST}
+      port: ${BACKEND_DATABASE_POSTGRES_PORT}
+      user: ${BACKEND_DATABASE_POSTGRES_USER}
+      password: ${BACKEND_DATABASE_POSTGRES_PASSWORD}
   platformRegion: ${BACKEND_PLATFORM_REGION}
 integrations:
   github:
@@ -31,8 +35,20 @@ integrations:
           clientSecret: ${GITHUB_CLIENT_SECRET}
           webhookSecret: ${GITHUB_WEBHOOK_SECRET}
           privateKey: ${GITHUB_PRIVATE_KEY}
-
+  gitlab:
+    - host: ${GITLAB_HOSTNAME}
+      apiBaseUrl: https://${GITLAB_HOSTNAME}/api/v4
+      baseUrl: https://${GITLAB_HOSTNAME}
+      token: ${GITLAB_TOKEN}
 proxy:
+  /gitlab/api:
+    target: https://gitlab.com/api/v4
+    allowedHeaders:
+      - Authorization
+      - Content-Type
+    headers:
+      Accept: application/json
+      Content-Type: application/json
 techdocs:
   builder: ${TECHDOCS_BUILDER}
   generator:
@@ -52,7 +68,13 @@ auth:
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
-
+    gitlab:
+      development:
+        clientId: ${GITLAB_CLIENT_ID}
+        clientSecret: ${GITLAB_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName  
 scaffolder:
 catalog:
   rules:
@@ -65,6 +87,8 @@ catalog:
           Resource,
           Location,
           Template,
+          User,
+          Group,
           AWSEnvironment,
           AWSEnvironmentProvider,
         ]
@@ -77,6 +101,45 @@ catalog:
         schedule:
           frequency: PT30M
           timeout: PT1M
+    gitlab:
+      orgDefault:
+        host: gitlab.com
+        orgEnabled: true
+        group: alithya-csna
+        groupPattern: '[\s\S]*'
+        schedule:
+          frequency:
+            minutes: 30
+          timeout:
+            minutes: 3
+        rules:
+          - allow:
+              - Group
+              - User
+      default:
+        host: gitlab.com
+        branch: main
+        fallBackBranch: master
+        skipForkedRepos: true
+        group: alithya-csna
+        entityFilename: catalog-info.yaml
+        projectPattern: '[\s\S]*'
+        schedule:
+          frequency:
+            minutes: 30
+          timeout:
+            minutes: 3
+        rules:
+          - allow:
+              - Resource
+              - Component
+              - API
+              - System
+              - Location
+              - Template
+              - Group
+              - User              
+
   orphanStrategy: delete
   processingInterval:
     minutes: 10
@@ -85,10 +148,20 @@ catalog:
     pullRequestBranchName: backstage-integration
   locations:
     - type: url
-      target: https://github.com/harmonix-generated-environments/harmonix/blob/integrate-github-ref/backstage-reference/templates/all-templates.yaml
+      target: ${CATALOG_TEMPLATE_URL}
       rules:
-        - allow: [Template]
-
+        - allow:
+            [
+              Domain,
+              Component,
+              System,
+              API,
+              Resource,
+              Location,
+              Template,
+              AWSEnvironment,
+              AWSEnvironmentProvider,
+            ]
     - type: file
       target: ../../examples/landing-zone-accelerator/*
       rules:
