@@ -12,14 +12,14 @@ import { SecretStringComponent } from '../common';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
 import {
   AWSECSAppDeploymentEnvironment,
-  getRepoInfo,
-  getRepoUrl,
+  // getRepoInfo,
+  // getRepoUrl,
 } from '@alithya-oss/plugin-aws-apps-common';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 
 const OpaAppGeneralInfo = ({
-  input: { entity, repoSecretArn, api },
+  input: {  repoSecretArn, api },
 }: {
   input: {
     account: string;
@@ -37,13 +37,8 @@ const OpaAppGeneralInfo = ({
 
   const [secretData, setSecretData] = useState('');
 
-  let repoInfo = getRepoInfo(entity);
-  const gitRepoUrl = getRepoUrl(repoInfo);
-
-  // const getGitAppUrl = () => {
-  //     const gitAppUrl = gitHost + "/" + gitApp + ".git"
-  //     return gitAppUrl
-  //   }
+  // let repoInfo = getRepoInfo(entity);
+  const gitRepoUrl = "https://gitlab.com/alithya-csna/cloud/toolbox/harmonix-generated-environments/sample-app7-repo.git"
 
   const HandleCopyGitClone = () => {
     let baseUrl = 'git clone https://oauth2:';
@@ -113,7 +108,7 @@ const OpaAppGeneralInfo = ({
                     Repository Access Token
                   </Typography>
                   <Typography noWrap>
-                    <IconButton sx={{ p: 0 }} onClick={HandleCopySecret}>
+                    <IconButton sx={{ p: 0 }} >
                       <ContentCopyIcon></ContentCopyIcon>
                     </IconButton>
                     <SecretStringComponent secret={secretData ?? ''} />
@@ -134,7 +129,7 @@ const OpaAppGeneralInfo = ({
                   <tbody>
                     <tr>
                       <td>
-                        <IconButton sx={{ p: 0 }} onClick={HandleCopyGitClone}>
+                        <IconButton sx={{ p: 0 }} >
                           <ContentCopyIcon></ContentCopyIcon>
                         </IconButton>
                       </td>
