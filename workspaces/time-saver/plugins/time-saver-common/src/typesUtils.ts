@@ -6,6 +6,9 @@ import {
   TimeSavedStatisticsDbRow,
 } from './types';
 
+/**
+ * @public
+ */
 export function isTemplateTaskResponse(
   templateTasksResponse: GetAllTemplateTasksResponse | DatabaseErrorResponse,
 ): templateTasksResponse is GetAllTemplateTasksResponse {
@@ -15,6 +18,9 @@ export function isTemplateTaskResponse(
   );
 }
 
+/**
+ * @public
+ */
 export function isTimeSavedStatisticsPerTeamDbRow(
   timeSavedStatistics: Partial<TimeSavedStatisticsDbRow>,
 ): timeSavedStatistics is TimeSavedStatisticsByTeamNameDbRow {
@@ -24,6 +30,9 @@ export function isTimeSavedStatisticsPerTeamDbRow(
   );
 }
 
+/**
+ * @public
+ */
 export function isTimeSavedStatisticsPerTemplateNameDbRow(
   timeSavedStatistics: Partial<TimeSavedStatisticsDbRow>,
 ): timeSavedStatistics is TimeSavedStatisticsByTemplateNameDbRow {
@@ -33,6 +42,9 @@ export function isTimeSavedStatisticsPerTemplateNameDbRow(
   );
 }
 
+/**
+ * @public
+ */
 export function isTimeSavedStatisticsDbRow(
   timeSavedStatistics: Partial<TimeSavedStatisticsDbRow>,
 ): timeSavedStatistics is TimeSavedStatisticsDbRow {
