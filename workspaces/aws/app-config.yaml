@@ -74,7 +74,7 @@ auth:
         clientSecret: ${GITLAB_CLIENT_SECRET}
         signIn:
           resolvers:
-            - resolver: emailLocalPartMatchingUserEntityName  
+            - resolver: usernameMatchingUserEntityName  
 scaffolder:
 catalog:
   rules:
