@@ -26,6 +26,12 @@ backend:
       user: ${BACKEND_DATABASE_POSTGRES_USER}
       password: ${BACKEND_DATABASE_POSTGRES_PASSWORD}
   platformRegion: ${BACKEND_PLATFORM_REGION}
+  reading:
+    allow:
+      - host: ${APP_BASE_URL}
+      - host: github.com
+      - host: docs.github.com
+      - host: gitlab.com
 integrations:
   github:
     - host: github.com
