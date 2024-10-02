@@ -41,21 +41,21 @@ const OpaAppGeneralInfo = ({
   const gitRepoUrl =
     'https://gitlab.com/alithya-csna/cloud/toolbox/harmonix-generated-environments/sample-app7-repo.git';
 
-  const HandleCopyGitClone = () => {
-    let baseUrl = 'git clone https://oauth2:';
-    let cloneUrl = '';
-    if (!repoSecretArn) {
-      baseUrl = 'git clone https://';
-      cloneUrl = baseUrl + gitRepoUrl;
-    } else {
-      cloneUrl = baseUrl + secretData + '@' + gitRepoUrl;
-    }
-    navigator.clipboard.writeText(cloneUrl);
-  };
+  // const HandleCopyGitClone = () => {
+  //   let baseUrl = 'git clone https://oauth2:';
+  //   let cloneUrl = '';
+  //   if (!repoSecretArn) {
+  //     baseUrl = 'git clone https://';
+  //     cloneUrl = baseUrl + gitRepoUrl;
+  //   } else {
+  //     cloneUrl = baseUrl + secretData + '@' + gitRepoUrl;
+  //   }
+  //   navigator.clipboard.writeText(cloneUrl);
+  // };
 
-  const HandleCopySecret = () => {
-    navigator.clipboard.writeText(secretData || '');
-  };
+  // const HandleCopySecret = () => {
+  //   navigator.clipboard.writeText(secretData || '');
+  // };
 
   async function getData() {
     if (!repoSecretArn) {
