@@ -7,7 +7,7 @@
  */
 
 import { createBackend } from '@backstage/backend-defaults';
-import GitLabScaffolder  from '@backstage/plugin-scaffolder-backend-module-gitlab';
+import GitLabScaffolder from '@backstage/plugin-scaffolder-backend-module-gitlab';
 
 const backend = createBackend();
 
