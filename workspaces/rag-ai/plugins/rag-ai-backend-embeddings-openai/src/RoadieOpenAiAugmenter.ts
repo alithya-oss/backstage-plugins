@@ -40,8 +40,7 @@ export class RoadieOpenAiAugmenter extends DefaultVectorAugmentationIndexer {
   ) {
     const embeddings = new OpenAIEmbeddings({
       configuration: {
-        baseURL: config.config.baseUrl,
-        apiKey: config.config.openAiApiKey ?? config.config.apiKey, // In Node.js defaults to process.env.OPENAI_API_KEY
+        baseURL: config.config.baseUrl ? config.config.baseUrl : 'https://api.openai.com/v1',
       },
       openAIApiKey: config.config.openAiApiKey ?? config.config.apiKey, // In Node.js defaults to process.env.OPENAI_API_KEY
       batchSize: config.config.batchSize, // Default value if omitted is 512. Max is 2048
