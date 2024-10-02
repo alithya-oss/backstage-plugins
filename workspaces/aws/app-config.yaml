@@ -137,8 +137,6 @@ catalog:
               - System
               - Location
               - Template
-              - Group
-              - User
 
   orphanStrategy: delete
   processingInterval:
