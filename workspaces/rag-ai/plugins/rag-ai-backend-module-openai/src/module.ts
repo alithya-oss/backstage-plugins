@@ -73,13 +73,12 @@ export const ragAiModuleOpenAI = createBackendModule({
         model.setBaseLLM(
           new OpenAI({
             configuration: {
-              apiKey:
-                config.getOptionalString('ai.query.openapi.apiKey') ??
-                config.getOptionalString('ai.query.openapi.openAIApiKey'),
+              baseURL: config.getOptionalString('ai.query.openai.baseURL') ??
+                'https://api.openai.com/v1',
             },
             apiKey:
-              config.getOptionalString('ai.query.openapi.apiKey') ??
-              config.getOptionalString('ai.query.openapi.openAIApiKey'),
+              config.getOptionalString('ai.query.openai.apiKey') ??
+              config.getOptionalString('ai.query.openai.openAIApiKey'),
             modelName:
               config.getOptionalString('ai.query.openai.modelName') ??
               'gpt-4o-mini',
