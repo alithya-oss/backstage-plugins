@@ -73,7 +73,8 @@ export const ragAiModuleOpenAI = createBackendModule({
         model.setBaseLLM(
           new OpenAI({
             configuration: {
-              baseURL: config.getOptionalString('ai.query.openai.baseURL') ??
+              baseURL:
+                config.getOptionalString('ai.query.openai.baseURL') ??
                 'https://api.openai.com/v1',
             },
             apiKey:
