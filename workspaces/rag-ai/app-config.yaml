@@ -149,9 +149,11 @@ ai:
       # aws bedrock list-foundation-models --query 'modelSummaries[?contains(outputModalities,`EMBEDDING`)].modelId'
       modelName: amazon.titan-embed-text-v2:0
       region: us-east-1
-    openAi:
+    openai:
+      # baseURL: ${OPENAI_BASE_URL}
+      # apiKey: ${OPENAI_API_KEY}
       # Generate token from https://platform.openai.com/api-keys
-      openAIApiKey: ${OPENAPI_API_KEY}
+      openAIApiKey: ${OPENAI_API_KEY}
       modelName: text-embedding-3-small
   query:
     bedrock:
@@ -161,6 +163,8 @@ ai:
       region: us-east-1
       maxToken: 4096
     openai:
-      # Command to list models supporting Text as output
-      # aws bedrock list-foundation-models --query 'modelSummaries[?contains(outputModalities,`TEXT`)].modelId'
+      # baseURL: ${OPENAI_BASE_URL}
+      # apiKey: ${OPENAI_API_KEY}
+      # Generate token from https://platform.openai.com/api-keys
+      openAIApiKey: ${OPENAI_API_KEY}
       modelName: gpt-4o-mini
