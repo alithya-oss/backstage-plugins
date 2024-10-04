@@ -100,21 +100,20 @@ const DeleteEnvironmentPanel = ({
         setIsDeleteSuccessful(false);
         setSpinning(false);
         return;
-      } 
-        // Delete the repo
-        setIsDeleteSuccessful(true);
-        setDeleteResultMessage('Deleting Repository ....');
-        deleteRepo();
-        await sleep(3000);
-        setDeleteResultMessage('Deleting from catalog ....');
-        await sleep(3000);
-        deleteFromCatalog();
-        setSpinning(false);
-        setDeleteResultMessage('Redirect to home ....');
-        navigate('/');
-        setIsDeleteSuccessful(true);
-        setDisabled(false);
-      
+      }
+      // Delete the repo
+      setIsDeleteSuccessful(true);
+      setDeleteResultMessage('Deleting Repository ....');
+      deleteRepo();
+      await sleep(3000);
+      setDeleteResultMessage('Deleting from catalog ....');
+      await sleep(3000);
+      deleteFromCatalog();
+      setSpinning(false);
+      setDeleteResultMessage('Redirect to home ....');
+      navigate('/');
+      setIsDeleteSuccessful(true);
+      setDisabled(false);
     } else {
       // Do nothing!
     }

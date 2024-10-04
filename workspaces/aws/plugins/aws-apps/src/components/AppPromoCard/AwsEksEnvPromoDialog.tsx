@@ -171,7 +171,7 @@ export const AwsEksEnvPromoDialog = ({
               placeholder={namespaceDefault}
               required
               autoFocus
-             />
+            />
           </FormControl>
         </Grid>
         <Grid container>
@@ -217,7 +217,7 @@ export const AwsEksEnvPromoDialog = ({
                 helperText={iamRoleArnDescription}
                 placeholder={iamRoleArnDefault}
                 required
-               />
+              />
             </FormControl>
           </Grid>
         )}

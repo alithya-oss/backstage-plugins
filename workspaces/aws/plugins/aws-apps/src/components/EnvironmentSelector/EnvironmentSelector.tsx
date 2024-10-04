@@ -30,7 +30,7 @@ const EnvironmentSelector = ({
     // if (awsComponent.environments[env].providerData.length>1) TODO: Pretty name for single provider environments
     const title = envName; // - awsComponent.environments[env].providerData.name;
     return (
-      <MenuItem key={`ID-${  key}`} value={key}>
+      <MenuItem key={`ID-${key}`} value={key}>
         {title}
       </MenuItem>
     );
@@ -71,13 +71,12 @@ export const EnvironmentSelectorWidget = () => {
       awsComponent: awsAppLoadingStatus.component,
     };
     return <EnvironmentSelector input={input} />;
-  } 
-    return (
-      <EmptyState
-        missing="data"
-        title="No environment data to show"
-        description="Environments data would show here"
-      />
-    );
-  
+  }
+  return (
+    <EmptyState
+      missing="data"
+      title="No environment data to show"
+      description="Environments data would show here"
+    />
+  );
 };

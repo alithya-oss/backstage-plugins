@@ -239,9 +239,8 @@ const AppPromoCard = ({
         // TARGET_ENV_AUDIT: auditTable
       };
       return parametersMap;
-    } 
-      throw new Error(`UNKNOWN PROVIDER TYPE" ${envType}`);
-    
+    }
+    throw new Error(`UNKNOWN PROVIDER TYPE" ${envType}`);
   }
 
   type EnvironmentProviders = {
@@ -481,7 +480,7 @@ const AppPromoCard = ({
                   {envChoices.map(entity => {
                     const env = entity.metadata.name;
                     return (
-                      <MenuItem key={`ID${  env}`} value={env}>
+                      <MenuItem key={`ID${env}`} value={env}>
                         {env}
                       </MenuItem>
                     );
@@ -542,13 +541,12 @@ export const AppPromoWidget = () => {
     };
 
     return <AppPromoCard input={input} />;
-  } 
-    return (
-      <EmptyState
-        missing="data"
-        title="Failed to load App Promo Card"
-        description="Can't fetch data"
-      />
-    );
-  
+  }
+  return (
+    <EmptyState
+      missing="data"
+      title="Failed to load App Promo Card"
+      description="Can't fetch data"
+    />
+  );
 };

@@ -52,7 +52,7 @@ const OpaAppGeneralInfo = ({
       baseUrl = 'git clone https://';
       cloneUrl = baseUrl + gitRepoUrl;
     } else {
-      cloneUrl = `${baseUrl + secretData  }@${  gitRepoUrl}`;
+      cloneUrl = `${baseUrl + secretData}@${gitRepoUrl}`;
     }
     navigator.clipboard.writeText(cloneUrl);
   };
@@ -141,7 +141,7 @@ const OpaAppGeneralInfo = ({
                       <td>
                         <CodeSnippet
                           language="text"
-                          text={`git clone https://${  gitRepoUrl}`}
+                          text={`git clone https://${gitRepoUrl}`}
                         />
                       </td>
                     </tr>
@@ -169,29 +169,27 @@ export const GeneralInfoCard = ({ appPending }: { appPending: boolean }) => {
       api,
     };
     return <OpaAppGeneralInfo input={input} />;
-  } 
-    if (awsAppLoadingStatus.loading) {
-      return <LinearProgress />;
-    } else if (awsAppLoadingStatus.component) {
-      const env = awsAppLoadingStatus.component
-        .currentEnvironment as AWSECSAppDeploymentEnvironment;
+  }
+  if (awsAppLoadingStatus.loading) {
+    return <LinearProgress />;
+  } else if (awsAppLoadingStatus.component) {
+    const env = awsAppLoadingStatus.component
+      .currentEnvironment as AWSECSAppDeploymentEnvironment;
 
-      const input = {
-        account: env.providerData.accountNumber,
-        region: env.providerData.region,
-        entity: entity,
-        repoSecretArn: awsAppLoadingStatus.component.repoSecretArn,
-        api,
-      };
-      return <OpaAppGeneralInfo input={input} />;
-    } 
-      return (
-        <EmptyState
-          missing="data"
-          title="No info data to show"
-          description="Info data would show here"
-        />
-      );
-    
-  
+    const input = {
+      account: env.providerData.accountNumber,
+      region: env.providerData.region,
+      entity: entity,
+      repoSecretArn: awsAppLoadingStatus.component.repoSecretArn,
+      api,
+    };
+    return <OpaAppGeneralInfo input={input} />;
+  }
+  return (
+    <EmptyState
+      missing="data"
+      title="No info data to show"
+      description="Info data would show here"
+    />
+  );
 };

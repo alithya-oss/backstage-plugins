@@ -185,6 +185,6 @@ export async function putSecret(
       logger.error(error);
       logger.error('Error updating secret value');
     }
-  };
+  }
   return Promise.reject(new Error('Error updating secret value'));
 }

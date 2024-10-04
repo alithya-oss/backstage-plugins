@@ -63,7 +63,7 @@ async function fetchCreds(
   try {
     // TODO: remove this code once we reference memberGroups
     if (memberGroups) {
-      logger.debug(memberGroups)
+      logger.debug(memberGroups);
     }
 
     // Get the SSM Parameter pointing to the DynamoDB security mapping table
@@ -158,33 +158,31 @@ export async function getAWScreds(
   const WORKAROUND = true;
   if (WORKAROUND) {
     return getAWSCredsWorkaround(accountId, region, prefix, providerName, user);
-  } 
-    if (user === undefined && userIdentity !== undefined) {
-      const userName = parseEntityRef(userIdentity?.userEntityRef).name;
-      logger.info(`Fetching credentials for user ${userName}`);
-      memberGroups = getMemberGroupFromUserIdentity(userIdentity);
-      return fetchCreds(
-        memberGroups,
-        region,
-        accountId,
-        userName,
-        prefix,
-        providerName,
-      );
-    } 
-      const userName = user?.metadata.name;
-      logger.info(`Fetching credentials for user ${userName}`);
-      memberGroups = getMemberGroupFromUserEntity(user);
-      return fetchCreds(
-        memberGroups,
-        region,
-        accountId,
-        userName!,
-        prefix,
-        providerName,
-      );
-    
-  
+  }
+  if (user === undefined && userIdentity !== undefined) {
+    const userName = parseEntityRef(userIdentity?.userEntityRef).name;
+    logger.info(`Fetching credentials for user ${userName}`);
+    memberGroups = getMemberGroupFromUserIdentity(userIdentity);
+    return fetchCreds(
+      memberGroups,
+      region,
+      accountId,
+      userName,
+      prefix,
+      providerName,
+    );
+  }
+  const userName = user?.metadata.name;
+  logger.info(`Fetching credentials for user ${userName}`);
+  memberGroups = getMemberGroupFromUserEntity(user);
+  return fetchCreds(
+    memberGroups,
+    region,
+    accountId,
+    userName!,
+    prefix,
+    providerName,
+  );
 }
 
 export async function getAWSCredsWorkaround(

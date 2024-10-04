@@ -39,14 +39,13 @@ export class GitHubAPI implements ISCMBackendAPI {
         httpResponse: createRepoResults.status,
         value: 'FAILURE',
       };
-    } 
-      return {
-        isSuccuess: true,
-        message: `Repository created successfully`,
-        httpResponse: createRepoResults.status,
-        value: 'SUCCESS',
-      };
-    
+    }
+    return {
+      isSuccuess: true,
+      message: `Repository created successfully`,
+      httpResponse: createRepoResults.status,
+      value: 'SUCCESS',
+    };
   }
 
   public async deleteRepository(
@@ -71,14 +70,13 @@ export class GitHubAPI implements ISCMBackendAPI {
         httpResponse: deleteRepoResults.status,
         value: 'FAILURE',
       };
-    } 
-      return {
-        isSuccuess: true,
-        message: `Repository deleted successfully`,
-        httpResponse: deleteRepoResults.status,
-        value: 'SUCCESS',
-      };
-    
+    }
+    return {
+      isSuccuess: true,
+      message: `Repository deleted successfully`,
+      httpResponse: deleteRepoResults.status,
+      value: 'SUCCESS',
+    };
   }
 
   public async getFileContent(
@@ -106,23 +104,22 @@ export class GitHubAPI implements ISCMBackendAPI {
         httpResponse: result.status,
         value: 'FAILURE',
       };
-    } 
-      // console.log(result.data)
-      // console.log(result.data.content)
-      // const fileDataProcessed = Buffer.from(result.data.content, 'base64').toString('binary')
-      const dataContent = result.data;
-      // console.log(dataContent)
-      const contentB64 = dataContent as any; // cast internal type base 64 string
-      // console.log(contentB64.content)
-      const content = Buffer.from(contentB64.content, 'base64').toString();
+    }
+    // console.log(result.data)
+    // console.log(result.data.content)
+    // const fileDataProcessed = Buffer.from(result.data.content, 'base64').toString('binary')
+    const dataContent = result.data;
+    // console.log(dataContent)
+    const contentB64 = dataContent as any; // cast internal type base 64 string
+    // console.log(contentB64.content)
+    const content = Buffer.from(contentB64.content, 'base64').toString();
 
-      return {
-        isSuccuess: true,
-        message: `Retrieve file content successfully`,
-        httpResponse: result.status,
-        value: content,
-      };
-    
+    return {
+      isSuccuess: true,
+      message: `Retrieve file content successfully`,
+      httpResponse: result.status,
+      value: content,
+    };
   }
 
   public async commitContent(

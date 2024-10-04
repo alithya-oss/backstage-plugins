@@ -174,9 +174,9 @@ const OpaAppStateOverview = ({
   const appAdminRoleArn = env.app.appAdminRoleArn;
 
   const kubectlLambdaArn =
-    env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() ||
-    '';
-  let clusterNameParam; let clusterName: string;
+    env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() || '';
+  let clusterNameParam;
+  let clusterName: string;
 
   async function fetchAppConfig() {
     if (!clusterName) {
@@ -230,9 +230,8 @@ const OpaAppStateOverview = ({
           const variablesJson = JSON.parse(payloadVariablesJson.Data.Value);
           // console.log(variablesJson);
           return variablesJson;
-        } 
-          return {};
-        
+        }
+        return {};
       }
     } catch (err) {
       console.log(err);
@@ -288,9 +287,8 @@ const OpaAppStateOverview = ({
           const deploymentJson = JSON.parse(payloadJson.Data.Value).items;
           // console.log(deploymentJson);
           return deploymentJson;
-        } 
-          return {};
-        
+        }
+        return {};
       }
     } catch (err) {
       console.log(err);
@@ -461,7 +459,8 @@ const OpaAppStateOverview = ({
           envName: env.environment.name,
           cluster: clusterNameState,
           kubectlLambda:
-            env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() || '',
+            env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() ||
+            '',
           lambdaRoleArn: appAdminRoleArn,
           gitAdminSecret: getGitCredentailsSecret(repoInfo),
           updateKey: 'spec.replicas',
@@ -552,7 +551,8 @@ const OpaAppStateOverview = ({
           envName: env.environment.name,
           cluster: clusterNameState,
           kubectlLambda:
-            env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() || '',
+            env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() ||
+            '',
           lambdaRoleArn: appAdminRoleArn,
           gitAdminSecret: getGitCredentailsSecret(repoInfo),
           updateKey: 'spec.replicas',
@@ -646,16 +646,15 @@ const OpaAppStateOverview = ({
           ))}
         </>
       );
-    } 
-      return (
-        <TableRow key="clusterName">
-          <TableCell id="noneConfigured" width="30%">
-            None configured
-          </TableCell>
-          <TableCell id="providerName" />
-        </TableRow>
-      );
-    
+    }
+    return (
+      <TableRow key="clusterName">
+        <TableCell id="noneConfigured" width="30%">
+          None configured
+        </TableCell>
+        <TableCell id="providerName" />
+      </TableRow>
+    );
   };
 
   const DeploymentCard = ({
@@ -716,9 +715,7 @@ const OpaAppStateOverview = ({
                             </Typography>
                           </TableCell>
                           <TableCell id="providerName">
-                            {`${deploymentState?.runningCount 
-                              }/${ 
-                              deploymentState?.desiredCount}`}
+                            {`${deploymentState?.runningCount}/${deploymentState?.desiredCount}`}
                             {deploymentState?.pendingCount
                               ? ` (${deploymentState?.pendingCount} Pending)`
                               : ''}
@@ -829,11 +826,7 @@ const OpaAppStateOverview = ({
                 >
                   Stop
                 </Button>
-                <Typography
-                  fontStyle="italic"
-                  fontSize="12px"
-                  sx={{ mt: 1 }}
-                >
+                <Typography fontStyle="italic" fontSize="12px" sx={{ mt: 1 }}>
                   {' '}
                   **Changes to your application state will be applied directly
                   to the cluster and not to the source code repository
@@ -945,22 +938,20 @@ export const K8sAppStateCard = () => {
         awsComponent: awsAppLoadingStatus.component,
       };
       return <OpaAppStateOverview input={input} />;
-    } 
-      return (
-        <EmptyState
-          missing="data"
-          title="Can't render EKS app state card"
-          description="Missing supported spec.subType"
-        />
-      );
-    
-  } 
+    }
     return (
       <EmptyState
         missing="data"
-        title="No state data to show"
-        description="State data would show here"
+        title="Can't render EKS app state card"
+        description="Missing supported spec.subType"
       />
     );
-  
+  }
+  return (
+    <EmptyState
+      missing="data"
+      title="No state data to show"
+      description="State data would show here"
+    />
+  );
 };

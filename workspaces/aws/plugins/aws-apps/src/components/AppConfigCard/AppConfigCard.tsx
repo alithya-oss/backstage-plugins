@@ -411,7 +411,7 @@ const AppConfigOverview = ({
                             helperText={
                               nameAndValue.name ? '' : 'Cannot be Empty'
                             }
-                           />
+                          />
                         </Grid>
                         <Grid item xs={6}>
                           <TextField
@@ -434,7 +434,7 @@ const AppConfigOverview = ({
                             helperText={
                               nameAndValue.value ? '' : 'Cannot be Empty'
                             }
-                           />
+                          />
                         </Grid>
                         {edit && (
                           <Grid item xs={1}>
@@ -481,13 +481,12 @@ export const AppConfigCard = () => {
     };
 
     return <AppConfigOverview input={input} />;
-  } 
-    return (
-      <EmptyState
-        missing="data"
-        title="No config data to show"
-        description="Config data would show here"
-      />
-    );
-  
+  }
+  return (
+    <EmptyState
+      missing="data"
+      title="No config data to show"
+      description="Config data would show here"
+    />
+  );
 };

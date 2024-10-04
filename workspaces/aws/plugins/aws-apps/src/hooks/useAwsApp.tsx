@@ -185,10 +185,9 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
           ...typedAcc,
           [envProviderEntity.envName]: [envProviderEntity.entity],
         };
-      } 
-        typedAcc[envProviderEntity.envName].push(envProviderEntity.entity!);
-        return typedAcc;
-      
+      }
+      typedAcc[envProviderEntity.envName].push(envProviderEntity.entity!);
+      return typedAcc;
     }, {});
 
     // set values into cache
@@ -513,9 +512,8 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
         return AWSComponentType.AWSApp;
       } else if (componentType === 'aws-organization') {
         return AWSComponentType.AWSOrganization;
-      } 
-        return AWSComponentType.Default;
-      
+      }
+      return AWSComponentType.Default;
     }
 
     function getLowerEnvironment(
@@ -538,8 +536,7 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
           'Error: Entity of type Component must have componentState in metadata.',
         );
       }
-      const componentState =
-        entity.metadata.componentState?.toString() || '';
+      const componentState = entity.metadata.componentState?.toString() || '';
       switch (componentState) {
         case 'cloudformation':
           return ComponentStateType.CLOUDFORMATION;

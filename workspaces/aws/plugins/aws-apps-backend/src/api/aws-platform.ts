@@ -177,12 +177,11 @@ export class AwsAppsPlatformApi {
         message = result.value || '';
       }
       return { status: 'FAILURE', message };
-    } 
-      return {
-        status: 'SUCCESS',
-        message: `Destroy will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
-      };
-    
+    }
+    return {
+      status: 'SUCCESS',
+      message: `Destroy will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
+    };
   }
 
   public async deleteRepository(
@@ -283,12 +282,11 @@ export class AwsAppsPlatformApi {
         message = resultBody.message || '';
       }
       return { status: 'FAILURE', message };
-    } 
-      return {
-        status: 'SUCCESS',
-        message: `The app will not be ready to run until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
-      };
-    
+    }
+    return {
+      status: 'SUCCESS',
+      message: `The app will not be ready to run until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
+    };
   }
 
   public async bindResource(
@@ -340,12 +338,11 @@ export class AwsAppsPlatformApi {
         message = resultBody.message || '';
       }
       return { status: 'FAILURE', message };
-    } 
-      return {
-        status: 'SUCCESS',
-        message: `Binding will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
-      };
-    
+    }
+    return {
+      status: 'SUCCESS',
+      message: `Binding will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
+    };
   }
 
   public async unBindResource(
@@ -398,12 +395,11 @@ export class AwsAppsPlatformApi {
         message = resultBody.message || '';
       }
       return { status: 'FAILURE', message };
-    } 
-      return {
-        status: 'SUCCESS',
-        message: `Unbinding will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
-      };
-    
+    }
+    return {
+      status: 'SUCCESS',
+      message: `Unbinding will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
+    };
   }
 
   public async updateProvider(
@@ -486,11 +482,10 @@ export class AwsAppsPlatformApi {
         message = resultBody.message || '';
       }
       return { status: 'FAILURE', message };
-    } 
-      return {
-        status: 'SUCCESS',
-        message: `Update Provider for ${envName} will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
-      };
-    
+    }
+    return {
+      status: 'SUCCESS',
+      message: `Update Provider for ${envName} will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
+    };
   }
 }

@@ -632,8 +632,8 @@ export class AwsAppsApi {
     const rawResults = await this.getResourceGroupResources(resourceGroup);
 
     const resourceIdentifiers = rawResults.Resources ?? [];
-    const categorizedResources = resourceIdentifiers.reduce<AWSServiceResources>(
-      (acc, item): any => {
+    const categorizedResources =
+      resourceIdentifiers.reduce<AWSServiceResources>((acc, item): any => {
         const idObj = item.Identifier;
         if (idObj?.ResourceType) {
           const resourceTypeId = idObj.ResourceType;
@@ -679,12 +679,9 @@ export class AwsAppsApi {
             );
           }
           return acc;
-        } 
-          throw new Error('Could not parse resource group resources response');
-        
-      },
-      {},
-    );
+        }
+        throw new Error('Could not parse resource group resources response');
+      }, {});
 
     return categorizedResources;
   }

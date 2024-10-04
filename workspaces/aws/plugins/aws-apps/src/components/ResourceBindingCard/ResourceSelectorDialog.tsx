@@ -181,9 +181,7 @@ export const ResourceSelectorDialog = ({
       const providers = Object.keys(envAppData);
       providers.forEach(p => {
         const providerAppData = envAppData[p] as any;
-        if (
-          isResourceAlreadyBind(providerAppData.Arn, associatedResources)
-        ) {
+        if (isResourceAlreadyBind(providerAppData.Arn, associatedResources)) {
           return;
         }
         if (et.metadata.resourceType === 'aws-rds') {

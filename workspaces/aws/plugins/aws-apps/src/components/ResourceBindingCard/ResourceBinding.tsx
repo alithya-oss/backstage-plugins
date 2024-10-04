@@ -130,7 +130,7 @@ const ResourceBindingCard = ({
             provider: p,
             resourceArn: providerAppData.Arn,
             id: providerAppData.Arn,
-            entityRef: `resource:default/${  et!.metadata.name}`,
+            entityRef: `resource:default/${et!.metadata.name}`,
             associatedResources: [associatedRDSResources],
           });
         } else {
@@ -140,7 +140,7 @@ const ResourceBindingCard = ({
             provider: p,
             resourceArn: providerAppData.Arn,
             id: providerAppData.Arn,
-            entityRef: `resource:default/${  et!.metadata.name}`,
+            entityRef: `resource:default/${et!.metadata.name}`,
           });
         }
       });
@@ -438,13 +438,12 @@ export const ResourceBindingCardWidget = () => {
       catalog: catalogApi,
     };
     return <ResourceBindingCard input={input} />;
-  } 
-    return (
-      <EmptyState
-        missing="data"
-        title="No resource binding data to show"
-        description="Resource binding data would show here"
-      />
-    );
-  
+  }
+  return (
+    <EmptyState
+      missing="data"
+      title="No resource binding data to show"
+      description="Resource binding data would show here"
+    />
+  );
 };

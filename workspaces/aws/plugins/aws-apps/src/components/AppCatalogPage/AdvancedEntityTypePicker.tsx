@@ -39,10 +39,13 @@ function filterTypes(
     }
     return 0;
   });
-  const typesMap = availableTypes.reduce((acc, kind) => {
-    acc[kind.toLocaleLowerCase('en-US')] = kind;
-    return acc;
-  }, {} as Record<string, string>);
+  const typesMap = availableTypes.reduce(
+    (acc, kind) => {
+      acc[kind.toLocaleLowerCase('en-US')] = kind;
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
 
   return typesMap;
 }

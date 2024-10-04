@@ -133,7 +133,8 @@ const DeleteAppPanel = ({
     }
 
     const kubectlLambdaArn =
-      env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() || '';
+      env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() ||
+      '';
     const kubectlLambdaRoleArn = env.app.appAdminRoleArn;
 
     const clusterNameParam = await api.getSSMParameter({
@@ -238,9 +239,8 @@ const DeleteAppPanel = ({
       };
       const results = api.deleteTFProvider(params);
       return results;
-    } 
-      throw Error("Error: Can't delete component, Unsupported State.");
-    
+    }
+    throw Error("Error: Can't delete component, Unsupported State.");
   };
 
   const deleteSecret = (secretName: string) => {
@@ -460,13 +460,12 @@ export const DeleteComponentCard = () => {
       api,
     };
     return <DeleteAppPanel input={input} />;
-  } 
-    return (
-      <EmptyState
-        missing="data"
-        title="No state data to show"
-        description="State data would show here"
-      />
-    );
-  
+  }
+  return (
+    <EmptyState
+      missing="data"
+      title="No state data to show"
+      description="State data would show here"
+    />
+  );
 };

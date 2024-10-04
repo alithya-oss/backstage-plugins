@@ -162,9 +162,8 @@ const CloudwatchLogsTable = ({
         }
       }
       return `Lambda - ${title}`;
-    } 
-      return `Logs - ${logGroupName}`;
-    
+    }
+    return `Logs - ${logGroupName}`;
   };
 
   const handleClickOpen = (streamName: string, logGroupName: string) => {
@@ -324,16 +323,7 @@ export const CloudwatchLogsWidget = () => {
           }}
         />
       );
-    } 
-      return (
-        <EmptyState
-          missing="data"
-          title="Application Logs"
-          description="Logs would show here"
-        />
-      );
-    
-  } 
+    }
     return (
       <EmptyState
         missing="data"
@@ -341,5 +331,12 @@ export const CloudwatchLogsWidget = () => {
         description="Logs would show here"
       />
     );
-  
+  }
+  return (
+    <EmptyState
+      missing="data"
+      title="Application Logs"
+      description="Logs would show here"
+    />
+  );
 };

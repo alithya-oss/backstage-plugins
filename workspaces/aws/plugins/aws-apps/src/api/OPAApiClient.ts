@@ -67,9 +67,8 @@ export class OPAApiClient implements OPAApi {
   ): BackendParams {
     if (backendParamsOverrides) {
       return backendParamsOverrides!;
-    } 
-      return this.backendParams;
-    
+    }
+    return this.backendParams;
   }
 
   async getTaskDetails({
@@ -846,8 +845,7 @@ export class OPAApiClient implements OPAApi {
 
     if (responseType && responseType.indexOf('application/json') >= 0) {
       return response.json() as Promise<T>;
-    } 
-      return response.text() as unknown as Promise<T>;
-    
+    }
+    return response.text() as unknown as Promise<T>;
   }
 }

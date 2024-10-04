@@ -219,9 +219,8 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
       );
       ctx.output('envShortName', envShortName);
 
-      const deploymentParametersArray = await getEnvDeploymentParameters(
-        awsEnvEntity,
-      );
+      const deploymentParametersArray =
+        await getEnvDeploymentParameters(awsEnvEntity);
 
       ctx.logger.debug(
         `envProviders info: ${JSON.stringify(

@@ -163,9 +163,7 @@ export const columnFactories = Object.freeze({
       cellStyle: {
         padding: '0px 16px 0px 20px',
       },
-      render: ({ entity }) => (
-        <>{entity.metadata.prefix?.toString() || ''}</>
-      ),
+      render: ({ entity }) => <>{entity.metadata.prefix?.toString() || ''}</>,
       width: 'auto',
     };
   },
@@ -190,9 +188,7 @@ export const columnFactories = Object.freeze({
       cellStyle: {
         padding: '0px 16px 0px 20px',
       },
-      render: ({ entity }) => (
-        <>{entity.metadata.iacType?.toString() || ''}</>
-      ),
+      render: ({ entity }) => <>{entity.metadata.iacType?.toString() || ''}</>,
       width: 'auto',
     };
   },
@@ -227,9 +223,7 @@ export const columnFactories = Object.freeze({
       cellStyle: {
         padding: '0px 16px 0px 20px',
       },
-      render: ({ entity }) => (
-        <>{entity.metadata.category?.toString() || ''}</>
-      ),
+      render: ({ entity }) => <>{entity.metadata.category?.toString() || ''}</>,
       width: 'auto',
     };
   },
@@ -290,9 +284,7 @@ export const columnFactories = Object.freeze({
       cellStyle: {
         padding: '0px 16px 0px 20px',
       },
-      render: ({ entity }) => (
-        <>{entity.metadata.envType?.toString() || ''}</>
-      ),
+      render: ({ entity }) => <>{entity.metadata.envType?.toString() || ''}</>,
       width: 'auto',
     };
   },

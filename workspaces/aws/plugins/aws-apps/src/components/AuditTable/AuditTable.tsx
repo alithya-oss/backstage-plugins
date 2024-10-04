@@ -160,13 +160,12 @@ export const AuditWidget = () => {
     //   awsComponent: awsAppLoadingStatus.component
     // };
     return <AuditTable />;
-  } 
-    return (
-      <EmptyState
-        missing="data"
-        title="No audit data to show"
-        description="Audit data would show here"
-      />
-    );
-  
+  }
+  return (
+    <EmptyState
+      missing="data"
+      title="No audit data to show"
+      description="Audit data would show here"
+    />
+  );
 };

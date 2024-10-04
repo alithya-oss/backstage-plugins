@@ -231,13 +231,12 @@ export const AppStateCard = () => {
       awsComponent: awsAppLoadingStatus.component,
     };
     return <OpaAppStateOverview input={input} />;
-  } 
-    return (
-      <EmptyState
-        missing="data"
-        title="No state data to show"
-        description="State data would show here"
-      />
-    );
-  
+  }
+  return (
+    <EmptyState
+      missing="data"
+      title="No state data to show"
+      description="State data would show here"
+    />
+  );
 };

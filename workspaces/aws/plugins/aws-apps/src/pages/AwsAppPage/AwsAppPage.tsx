@@ -205,17 +205,16 @@ export function AwsAppPage(_props: AwsAppPageProps) {
         </EntitySwitch.Case>
       </EntitySwitch>
     );
-  } 
-    if (awsAppLoadingStatus.error) {
-      console.log(awsAppLoadingStatus.error);
-    }
+  }
+  if (awsAppLoadingStatus.error) {
+    console.log(awsAppLoadingStatus.error);
+  }
 
-    return (
-      <EmptyState
-        missing="data"
-        title="Failed to load environment entity data"
-        description="An error occurred when trying to load entity environment data. See the environment entity yaml file definitions to troubleshoot."
-      />
-    );
-  
+  return (
+    <EmptyState
+      missing="data"
+      title="Failed to load environment entity data"
+      description="An error occurred when trying to load entity environment data. See the environment entity yaml file definitions to troubleshoot."
+    />
+  );
 }
