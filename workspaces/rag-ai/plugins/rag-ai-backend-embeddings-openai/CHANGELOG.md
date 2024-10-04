@@ -1,5 +1,11 @@
 # @roadiehq/rag-ai-backend-embeddings-openai
 
+## 1.1.0
+
+### Minor Changes
+
+- 4348385: Fixed typos in configuration refering to openapi instead of openai
+
 ## 1.0.0
 
 ### Major Changes
