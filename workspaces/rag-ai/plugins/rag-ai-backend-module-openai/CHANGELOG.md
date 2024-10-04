@@ -1,5 +1,16 @@
 # @alithya-oss/plugin-rag-ai-backend-module-openai
 
+## 0.2.0
+
+### Minor Changes
+
+- 4348385: Fixed typos in configuration refering to openapi instead of openai
+
+### Patch Changes
+
+- Updated dependencies [4348385]
+  - @alithya-oss/plugin-rag-ai-backend-embeddings-openai@1.1.0
+
 ## 0.1.0
 
 ### Minor Changes
