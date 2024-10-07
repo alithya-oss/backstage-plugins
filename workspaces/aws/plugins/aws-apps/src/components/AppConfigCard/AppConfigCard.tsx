@@ -3,13 +3,11 @@
 import { InfoCard, EmptyState } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
 import { IconButton, LinearProgress, Tooltip } from '@material-ui/core';
-import {
-  Button,
-  CardContent,
-  Grid,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import CardContent from '@mui/material/CardContent';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useEffect, useState } from 'react';
 import { opaApiRef } from '../../api';
@@ -48,25 +46,24 @@ const AppConfigOverview = ({
     env.app.taskDefArn.lastIndexOf(':'),
   );
 
-  async function getData() {
-    const taskDefinition = await api.describeTaskDefinition({
-      taskDefinitionArn: latestTaskDef,
-    });
-
-    const containerDetails = taskDefinition.containerDefinitions?.map(
-      containerDef => {
-        return {
-          containerName: containerDef?.name,
-          env: containerDef?.environment,
-        };
-      },
-    );
-
-    setSavedEnvVariables(containerDetails!);
-    setEnvVariables(containerDetails!);
-  }
-
   useEffect(() => {
+    async function getData () {
+      const taskDefinition = await api.describeTaskDefinition({
+        taskDefinitionArn: latestTaskDef,
+      });
+
+      const containerDetails = taskDefinition.containerDefinitions?.map(
+        containerDef => {
+          return {
+            containerName: containerDef?.name,
+            env: containerDef?.environment,
+          }
+        },
+      );
+
+      setSavedEnvVariables(containerDetails!)
+      setEnvVariables(containerDetails!)
+    }
     getData()
       .then(() => {
         setLoading(false);
@@ -79,7 +76,7 @@ const AppConfigOverview = ({
         });
         setLoading(false);
       });
-  }, []);
+  }, [api, latestTaskDef]);
 
   const onEdit = (containerName: string) => {
     // don't allow switching out of edit mode if any environment variables are empty
@@ -110,9 +107,9 @@ const AppConfigOverview = ({
   const onSave = () => {
     setLoading(true);
     let emptyVar = false;
-    const env =
+    const currentEnvironment =
       awsComponent.currentEnvironment as AWSECSAppDeploymentEnvironment;
-    envVariables.map(containerDef => {
+    envVariables.forEach(containerDef => {
       for (const i in containerDef.env) {
         if (
           containerDef.env[Number(i)].name === '' ||
@@ -148,9 +145,9 @@ const AppConfigOverview = ({
 
         api
           .updateService({
-            cluster: env.clusterName,
-            service: env.app.serviceArn,
-            taskDefinition: env.app.taskDefArn,
+            cluster: currentEnvironment.clusterName,
+            service: currentEnvironment.app.serviceArn,
+            taskDefinition: currentEnvironment.app.taskDefArn,
             restart: true,
             desiredCount: undefined,
             // prefix,
@@ -171,7 +168,7 @@ const AppConfigOverview = ({
   };
 
   // Returns a new object reference that is a shallow clone of envVariables, except for the
-  // specific containerName, which will be deep cloned.
+  // specific containerName, which will be deep-cloned.
   const getEnvVarsPartialDeepClone = (
     containerName: string,
   ): ContainerDetailsType[] => {
@@ -206,7 +203,7 @@ const AppConfigOverview = ({
       details => details.containerName === containerName,
     )[0];
     const details = newDetails.filter(
-      details => details.containerName === containerName,
+      detail => detail.containerName === containerName,
     )[0];
 
     if (savedDetails.env?.length !== details.env?.length) {
@@ -285,7 +282,7 @@ const AppConfigOverview = ({
   if (loading) {
     return (
       <InfoCard title="Application Configuration">
-        <LinearProgress />
+        <LinearProgress/>
       </InfoCard>
     );
   }
@@ -306,7 +303,7 @@ const AppConfigOverview = ({
                 <Grid
                   key={`${containerDetails.containerName!}Grid`}
                   container
-                  sx={index == 0 ? { mt: 0 } : { mt: 5 }}
+                  sx={index === 0 ? { mt: 0 } : { mt: 5 }}
                 >
                   <Grid item xs={12}>
                     <Typography sx={{ fontWeight: 'bold' }}>
@@ -329,9 +326,7 @@ const AppConfigOverview = ({
                       size="small"
                       id={index.toString()}
                       onClick={() => onEdit(containerDetails.containerName!)}
-                      disabled={
-                        !containerDetails.env || !containerDetails.env.length
-                      }
+                      disabled={ containerDetails?.env?.length === 0 }
                     >
                       Edit
                     </Button>
@@ -345,7 +340,7 @@ const AppConfigOverview = ({
                     >
                       Save
                     </Button>
-                    {containerDetails.env?.length != 0 ? (
+                    {containerDetails.env?.length !== 0 ? (
                       <Grid
                         container
                         direction="row"
@@ -474,13 +469,13 @@ export const AppConfigCard = () => {
   const awsAppLoadingStatus = useAsyncAwsApp();
 
   if (awsAppLoadingStatus.loading) {
-    return <LinearProgress />;
+    return <LinearProgress/>;
   } else if (awsAppLoadingStatus.component) {
     const input = {
       awsComponent: awsAppLoadingStatus.component,
     };
 
-    return <AppConfigOverview input={input} />;
+    return <AppConfigOverview input={input}/>;
   }
   return (
     <EmptyState
