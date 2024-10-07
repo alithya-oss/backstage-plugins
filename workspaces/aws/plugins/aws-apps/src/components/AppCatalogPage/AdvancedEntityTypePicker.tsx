@@ -7,10 +7,7 @@ import { Box } from '@material-ui/core';
 
 import { alertApiRef, useApi } from '@backstage/core-plugin-api';
 import { Select } from '@backstage/core-components';
-import {
-  EntityTypePickerProps,
-  useEntityTypeFilter,
-} from '@backstage/plugin-catalog-react';
+import { EntityTypePickerProps, useEntityTypeFilter } from '@backstage/plugin-catalog-react'
 
 function filterTypes(
   allTypes: string[],
@@ -39,15 +36,13 @@ function filterTypes(
     }
     return 0;
   });
-  const typesMap = availableTypes.reduce(
+  return availableTypes.reduce(
     (acc, kind) => {
       acc[kind.toLocaleLowerCase('en-US')] = kind;
       return acc;
     },
     {} as Record<string, string>,
   );
-
-  return typesMap;
 }
 
 /**
