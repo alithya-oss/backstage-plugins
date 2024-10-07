@@ -40,8 +40,6 @@ export class AmazonEcsApiClient extends AwsApiClient implements AmazonEcsApi {
       entity.name,
     )}/services`;
 
-    const services = await this.get<ServicesResponse>(urlSegment);
-
-    return services;
+    return await this.get<ServicesResponse>(urlSegment);
   }
 }
