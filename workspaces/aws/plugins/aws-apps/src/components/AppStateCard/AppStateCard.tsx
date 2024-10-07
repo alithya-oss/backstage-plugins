@@ -6,14 +6,12 @@ import { InfoCard, EmptyState } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
 import { LinearProgress } from '@material-ui/core';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import {
-  Button,
-  CardContent,
-  Divider,
-  Grid,
-  IconButton,
-  Typography,
-} from '@mui/material';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import React, { useEffect, useState } from 'react';
 import { opaApiRef } from '../../api';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
@@ -79,7 +77,7 @@ const OpaAppStateOverview = ({
           errorMsg: `Unexpected error occurred while retrieving task data: ${e}`,
         });
       });
-  }, []);
+  }, [getData]);
 
   function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -103,7 +101,7 @@ const OpaAppStateOverview = ({
     setLoading(false);
     setTaskData(getTaskResult);
 
-    while (getTaskResult.lastStatus != 'RUNNING') {
+    while (getTaskResult.lastStatus !== 'RUNNING') {
       getTaskResult = await getTaskDetails();
       setTaskData(getTaskResult);
     }
@@ -191,7 +189,7 @@ const OpaAppStateOverview = ({
               sx={{ mr: 2 }}
               variant="outlined"
               size="small"
-              disabled={taskData.taskArn ? true : false}
+              disabled={!!taskData.taskArn}
               onClick={handleStartTask}
             >
               Start Task
