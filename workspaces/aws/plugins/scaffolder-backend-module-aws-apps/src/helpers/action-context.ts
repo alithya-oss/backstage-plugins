@@ -8,11 +8,11 @@ import { UserEntity } from '@backstage/catalog-model';
 import { getAWScreds } from '@alithya-oss/plugin-aws-apps-backend';
 import { EnvironmentProvider, EnvironmentProviderConnection } from '../types';
 import {
-  SecretsManagerClient,
-  CreateSecretCommandInput,
   CreateSecretCommand,
+  CreateSecretCommandInput,
   PutSecretValueCommand,
   PutSecretValueCommandInput,
+  SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
 
 export type EnvProviderConnectMap = {
@@ -31,7 +31,7 @@ export async function getEnvironmentProviderConnectInfo(
   envProviders: EnvironmentProvider[],
   userEntity?: UserEntity,
 ): Promise<EnvProviderConnectMap> {
-  const envProviderConnectionsMap = (
+  return (
     await Promise.all(
       envProviders.map(
         async (
@@ -62,8 +62,6 @@ export async function getEnvironmentProviderConnectInfo(
       [envProviderConnection.providerName]: envProviderConnection,
     };
   }, {});
-
-  return envProviderConnectionsMap;
 }
 
 // Get the value for a specified SSM Parameter Store path
