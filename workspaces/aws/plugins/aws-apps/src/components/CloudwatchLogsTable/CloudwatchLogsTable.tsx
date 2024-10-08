@@ -212,6 +212,15 @@ const CloudwatchLogsTable = ({
     return <Typography sx={{ color: 'red' }}>{error.errorMsg}</Typography>;
   }
 
+  const getDialogContent = () => {
+    if (dialogLoading) {
+      return <LinearProgress />;
+    } else if (dialogError.isError) {
+      return <Typography sx={{ color: 'red' }}>{dialogError.errorMsg}</Typography>;
+    }
+    return <LogViewer text={logs} />;
+  };
+
   return (
     <>
       {logGroupNames.map((logGroupName, index) => (
@@ -220,15 +229,7 @@ const CloudwatchLogsTable = ({
             <DialogTitle>{logStreamName}</DialogTitle>
             <DialogContent>
               <div style={{ height: '70vh' }}>
-                {dialogLoading ? (
-                  <LinearProgress/>
-                ) : dialogError.isError ? (
-                  <Typography sx={{ color: 'red' }}>
-                    {dialogError.errorMsg}
-                  </Typography>
-                ) : (
-                  <LogViewer text={logs}/>
-                )}
+                {getDialogContent()}
               </div>
             </DialogContent>
             <DialogActions>
