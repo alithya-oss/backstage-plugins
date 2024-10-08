@@ -21,8 +21,7 @@ import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-
 import express from 'express';
 import Router from 'express-promise-router';
 import YAML from 'yaml';
-import { AwsAppsApi, getAWScreds } from '../api';
-import { AwsAuditResponse, createAuditRecord } from '../api/aws-audit';
+import { AwsAppsApi, AwsAuditResponse, createAuditRecord, getAWScreds } from '../api';
 import { AwsAppsPlatformApi } from '../api/aws-platform';
 import { Config } from '@backstage/config';
 import { CatalogApi } from '@backstage/catalog-client';
@@ -119,7 +118,7 @@ export async function createRouter(
     const awsAccount = req.body.awsAccount?.toString();
 
     const platformRegion =
-      process.env.AWS_REGION || config.getString('backend.platformRegion');
+      process.env.AWS_REGION ?? config.getString('backend.platformRegion');
     const repoInfo: IRepositoryInfo = req.body.repoInfo;
     if (awsRegion === undefined || awsAccount === undefined) {
       throw new Error(
@@ -169,7 +168,7 @@ export async function createRouter(
     status: string;
     apiClientConfig: ApiClientConfig;
   }): Promise<AwsAuditResponse> {
-    const auditResponse = await createAuditRecord({
+    return createAuditRecord({
       actionType,
       actionName,
       appName: apiClientConfig.appName,
@@ -184,8 +183,6 @@ export async function createRouter(
       envProviderName: apiClientConfig.providerName,
       envProviderPrefix: apiClientConfig.prefix,
     });
-
-    return auditResponse;
   }
 
   router.use(express.json());
@@ -235,7 +232,7 @@ export async function createRouter(
     if (req.body.desiredCount === undefined) {
       desiredCount = undefined;
     } else {
-      desiredCount = parseInt(req.body.desiredCount.toString());
+      desiredCount = parseInt(req.body.desiredCount.toString(), 10);
     }
     const service = await apiClient.updateServiceTask(
       clusterName,
@@ -256,7 +253,7 @@ export async function createRouter(
     res.status(200).json(service.service);
   });
 
-  // Route for getting secret value from secretsmanager
+  // Route for getting secret value from secrets manager
   router.post('/secrets', async (req, res) => {
     logger.info('router entry: /secrets');
     const { apiClient, apiClientConfig } = await getApiClient(req);
@@ -357,7 +354,7 @@ export async function createRouter(
     res.status(200).json(service);
   });
 
-  // Route to promote app to git job
+  // Route to promote app to a git job
   router.post('/git/promote', async (req, res) => {
     logger.info('router entry: git/promote');
     const apiPlatformClient = getAwsAppsPlatformApi(req);
@@ -386,7 +383,7 @@ export async function createRouter(
     res.status(200).json(results);
   });
 
-  // Route to Bind app to resource using git job
+  // Route to Bind app to resource using a git job
   router.post('/platform/bind-resource', async (req, res) => {
     logger.info('router entry: /platform/bind-resource');
     const apiPlatformClient = getAwsAppsPlatformApi(req);
@@ -418,7 +415,7 @@ export async function createRouter(
     res.status(200).json(results);
   });
 
-  // Route to unBind app to resource using git job
+  // Route to unBind app to resource using a git job
   router.post('/platform/unbind-resource', async (req, res) => {
     logger.info('router entry: /platform/unbind-resource');
     const apiPlatformClient = getAwsAppsPlatformApi(req);
@@ -560,7 +557,7 @@ export async function createRouter(
     const { apiClient, apiClientConfig } = await getApiClient(req);
     const ssmParamName = req.body.ssmParamName?.toString();
     const serviceResult = await apiClient.getSSMParameter(ssmParamName);
-    let status = '';
+    let status: string;
 
     if (serviceResult.$metadata.httpStatusCode === 200) {
       status = 'SUCCESS';
@@ -635,7 +632,7 @@ export async function createRouter(
     res.status(200).set('Content-Type', 'text/plain').send(text);
   });
 
-  // Route for updating a ECS taskdefinition
+  // Route for updating an ECS task definition
   router.post('/ecs/updateTaskDefinition', async (req, res) => {
     logger.info('router entry: /ecs/updateTaskDefinition');
     const { apiClient, apiClientConfig } = await getApiClient(req);
@@ -670,14 +667,14 @@ export async function createRouter(
     res.status(200).json(output.taskDefinition);
   });
 
-  // Route for getting ECS taskdefinition details
+  // Route for getting ECS task definition details
   router.post('/ecs/describeTaskDefinition', async (req, res) => {
     logger.info('router entry: /ecs/describeTaskDefinition');
     const { apiClient } = await getApiClient(req);
     const taskDefinition = req.body.taskDefinition?.toString();
-    const taskDefinitionOutout =
+    const taskDefinitionOutput =
       await apiClient.describeTaskDefinition(taskDefinition);
-    res.status(200).json(taskDefinitionOutout.taskDefinition);
+    res.status(200).json(taskDefinitionOutput.taskDefinition);
   });
 
   // Route for getting Audit table entries
@@ -749,7 +746,7 @@ export async function createRouter(
     }
   });
 
-  // Route for quering a dynamoDB table
+  // Route for querying a dynamoDB table
   router.post('/dynamo-db/query', async (req, res) => {
     logger.info('router entry: /dynamo-db/query');
     const { apiClient, apiClientConfig } = await getApiClient(req);
