@@ -17,8 +17,8 @@ import {
   SSMClient,
 } from '@aws-sdk/client-ssm';
 import {
-  AWSEnvironmentProviderRecord,
   AppPromoParams,
+  AWSEnvironmentProviderRecord,
   BindResourceParams,
   GitProviders,
   ICommitChange,
@@ -85,8 +85,7 @@ export class AwsAppsPlatformApi {
       SecretId: secretArn,
     };
     const command = new GetSecretValueCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   /**
@@ -112,8 +111,7 @@ export class AwsAppsPlatformApi {
       WithDecryption: true,
     };
     const command = new GetParameterCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   public async deletePlatformSecret(
@@ -131,8 +129,7 @@ export class AwsAppsPlatformApi {
       ForceDeleteWithoutRecovery: true,
     };
     const command = new DeleteSecretCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   public async deleteTFProvider(
@@ -170,7 +167,7 @@ export class AwsAppsPlatformApi {
 
     if (!result.isSuccuess) {
       console.error(`ERROR: Failed to Destroy ${envName}. Response: ${result}`);
-      let message = '';
+      let message: string;
       if (result.value?.includes('A file with this name already exists')) {
         message = `${envName} has already been scheduled for destruction. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`;
       } else {
@@ -199,7 +196,7 @@ export class AwsAppsPlatformApi {
 
   private async getGitToken(gitSecretName: string): Promise<string> {
     const gitAdminSecret = await this.getPlatformSecretValue(gitSecretName);
-    const gitAdminSecretObj = JSON.parse(gitAdminSecret.SecretString || '');
+    const gitAdminSecretObj = JSON.parse(gitAdminSecret.SecretString ?? '');
     return gitAdminSecretObj.apiToken;
   }
 
@@ -273,7 +270,7 @@ export class AwsAppsPlatformApi {
       console.error(
         `ERROR: Failed to schedule deployment for ${input.envName}. Response: ${result}`,
       );
-      let message = '';
+      let message: string;
       if (
         resultBody.message?.includes('A file with this name already exists')
       ) {
@@ -329,7 +326,7 @@ export class AwsAppsPlatformApi {
       console.error(
         `ERROR: Failed to bind ${input.envName}. Response: ${result}`,
       );
-      let message = '';
+      let message: string;
       if (
         resultBody.message?.includes('A file with this name already exists')
       ) {
@@ -386,7 +383,7 @@ export class AwsAppsPlatformApi {
       console.error(
         `ERROR: Failed to unbind ${input.envName}. Response: ${result}`,
       );
-      let message = '';
+      let message: string;
       if (
         resultBody.message?.includes('A file with this name already exists')
       ) {
@@ -434,7 +431,7 @@ export class AwsAppsPlatformApi {
       const newDependencies = Array<string>();
       dependencies.forEach(p => {
         const providerToRemove = `awsenvironmentprovider:default/${provider.name.toLowerCase()}`;
-        if (p != providerToRemove) {
+        if (p !== providerToRemove) {
           newDependencies.push(p);
         }
       });
@@ -473,7 +470,7 @@ export class AwsAppsPlatformApi {
       console.error(
         `ERROR: Failed to Update provider ${provider.name}. Response: ${result}`,
       );
-      let message = '';
+      let message: string;
       if (
         resultBody.message?.includes('A file with this name already exists')
       ) {
