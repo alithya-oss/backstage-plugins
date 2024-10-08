@@ -104,7 +104,7 @@ export function getPlatformParametersAction(options: { envConfig: Config }) {
       const getEnvProviderSsmParams = async (): Promise<{
         [key: string]: string;
       }> => {
-        const params = (
+        return (
           await Promise.all(
             paramKeys.map(
               async (paramKey): Promise<{ [key: string]: string }> => {
@@ -127,8 +127,6 @@ export function getPlatformParametersAction(options: { envConfig: Config }) {
             [key]: paramKeyValMap[key],
           };
         }, {});
-
-        return params;
       };
       const envParams = await getEnvProviderSsmParams();
       ctx.logger.info(JSON.stringify(envParams));
