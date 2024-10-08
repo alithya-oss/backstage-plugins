@@ -10,7 +10,9 @@ import {
   useEntity,
 } from '@backstage/plugin-catalog-react';
 import { Button, CardContent, Grid } from '@material-ui/core';
-import { Alert, AlertTitle, Typography } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Typography from '@mui/material/Typography';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useState } from 'react';
@@ -47,13 +49,11 @@ const DeleteEnvironmentPanel = ({
         repoInfo,
         gitAdminSecret: getGitCredentailsSecret(repoInfo),
       })
-      .then(results => {
-        console.log(results);
+      .then(() => {
         setDeleteResultMessage('Gitlab Repository deleted.');
         setIsDeleteSuccessful(true);
       })
       .catch(error => {
-        console.log(error);
         setDeleteResultMessage(`Error deleting Repository ${error}.`);
         setSpinning(false);
         setIsDeleteSuccessful(false);
@@ -61,7 +61,6 @@ const DeleteEnvironmentPanel = ({
   };
 
   const deleteFromCatalog = async () => {
-    console.log('Deleting entity from backstage catalog');
     setDeleteResultMessage('Deleting entity from backstage catalog');
     // The entity will be removed from the catalog along with the auto-generated Location kind entity
     // which references the catalog entity
@@ -71,9 +70,9 @@ const DeleteEnvironmentPanel = ({
       entityAnnotations['backstage.io/managed-by-location'] || '';
     const entityLocationRef = await catalogApi.getLocationByRef(entityLocation);
     if (entityLocationRef) {
-      catalogApi.removeLocationById(entityLocationRef.id);
+      await catalogApi.removeLocationById(entityLocationRef.id);
     }
-    catalogApi.removeEntityByUid(uid);
+    await catalogApi.removeEntityByUid(uid);
   };
 
   const isExistingComponents = () => {
@@ -91,7 +90,7 @@ const DeleteEnvironmentPanel = ({
   };
 
   const handleClickDelete = async () => {
-    if (confirm('Are you sure you want to delete this environment?')) {
+    // TODO - Replace this with a Modal -> if (confirm('Are you sure you want to delete this environment?')) {
       setSpinning(true);
       if (isExistingComponents()) {
         setDeleteResultMessage(
@@ -108,15 +107,12 @@ const DeleteEnvironmentPanel = ({
       await sleep(3000);
       setDeleteResultMessage('Deleting from catalog ....');
       await sleep(3000);
-      deleteFromCatalog();
+      await deleteFromCatalog();
       setSpinning(false);
       setDeleteResultMessage('Redirect to home ....');
       navigate('/');
       setIsDeleteSuccessful(true);
       setDisabled(false);
-    } else {
-      // Do nothing!
-    }
   };
 
   return (
