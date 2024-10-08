@@ -52,19 +52,18 @@ const OpaAppStateOverview = ({
     });
   }
 
-  /*
-  gets cluster, account, region from 
-  entity and also task Data
-  */
-  async function getData() {
-    const tasks = await api.getTaskDetails({
-      cluster,
-      service: serviceArn,
-    });
-    setTaskData(tasks);
-  }
+
 
   useEffect(() => {
+    /* gets cluster, account, region from entity and also task Data */
+    async function getData() {
+      const tasks = await api.getTaskDetails({
+        cluster,
+        service: serviceArn,
+      });
+      setTaskData(tasks);
+    }
+
     getData()
       .then(() => {
         setLoading(false);
@@ -77,7 +76,7 @@ const OpaAppStateOverview = ({
           errorMsg: `Unexpected error occurred while retrieving task data: ${e}`,
         });
       });
-  }, [getData]);
+  }, [api, cluster, serviceArn]);
 
   function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
