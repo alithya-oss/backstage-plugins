@@ -13,27 +13,17 @@
 
 import { parse } from '@aws-sdk/util-arn-parser';
 import { CatalogApi } from '@backstage/catalog-client';
-import {
-  AwsResourceLocatorFactory,
-  AwsResourceLocator,
-} from '@alithya-oss/plugin-aws-core-node';
-import {
-  getOneOfEntityAnnotations,
-  AWS_SDK_CUSTOM_USER_AGENT,
-} from '@alithya-oss/plugin-aws-core-common';
-import { AwsCredentialsManager } from '@backstage/integration-aws-node';
-import {
-  CompoundEntityRef,
-  stringifyEntityRef,
-} from '@backstage/catalog-model';
+import { AwsResourceLocator, AwsResourceLocatorFactory, } from '@alithya-oss/plugin-aws-core-node';
+import { AWS_SDK_CUSTOM_USER_AGENT, getOneOfEntityAnnotations, } from '@alithya-oss/plugin-aws-core-common';
+import { AwsCredentialsManager, DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
+import { CompoundEntityRef, stringifyEntityRef, } from '@backstage/catalog-model';
 import { AwsCodePipelineService } from './types';
-import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 import { Config } from '@backstage/config';
 import {
   CodePipelineClient,
   GetPipelineStateCommand,
-  PipelineExecutionSummary,
   paginateListPipelineExecutions,
+  PipelineExecutionSummary,
 } from '@aws-sdk/client-codepipeline';
 import {
   AWS_CODEPIPELINE_ARN_ANNOTATION,
@@ -279,15 +269,13 @@ export const awsCodePipelineServiceRef =
           httpAuth,
           discovery,
         }) {
-          const impl = await DefaultAwsCodePipelineService.fromConfig(config, {
+          return await DefaultAwsCodePipelineService.fromConfig(config, {
             catalogApi,
             auth,
             httpAuth,
             discovery,
             logger,
           });
-
-          return impl;
         },
       }),
   });
