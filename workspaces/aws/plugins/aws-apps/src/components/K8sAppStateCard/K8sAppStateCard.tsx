@@ -1,37 +1,35 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { InvokeCommandOutput } from '@aws-sdk/client-lambda';
-import { GetParameterCommandOutput } from '@aws-sdk/client-ssm';
+import { InvokeCommandOutput } from '@aws-sdk/client-lambda'
+import { GetParameterCommandOutput } from '@aws-sdk/client-ssm'
 import {
-  AWSComponent,
-  AWSEKSAppDeploymentEnvironment,
   AppState,
   AppStateType,
-  KeyValue,
+  AWSComponent,
+  AWSEKSAppDeploymentEnvironment,
   getGitCredentailsSecret,
-} from '@alithya-oss/plugin-aws-apps-common';
-import { Entity } from '@backstage/catalog-model';
-import { EmptyState, InfoCard } from '@backstage/core-components';
-import { useApi } from '@backstage/core-plugin-api';
-import { useEntity } from '@backstage/plugin-catalog-react';
-import {
-  LinearProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from '@material-ui/core';
-import { Unstable_NumberInput as NumberInput } from '@mui/base';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import { Button, CardContent, Divider, Grid, Typography } from '@mui/material';
-import { styled } from '@mui/system';
-import React, { useEffect, useRef, useState } from 'react';
-import { opaApiRef } from '../../api';
-import { base64PayloadConvert } from '../../helpers/util';
-import { useAsyncAwsApp } from '../../hooks/useAwsApp';
-import { useCancellablePromise } from '../../hooks/useCancellablePromise';
+  KeyValue,
+} from '@alithya-oss/plugin-aws-apps-common'
+import { Entity } from '@backstage/catalog-model'
+import { EmptyState, InfoCard } from '@backstage/core-components'
+import { useApi } from '@backstage/core-plugin-api'
+import { useEntity } from '@backstage/plugin-catalog-react'
+import { LinearProgress, Table, TableBody, TableCell, TableRow, } from '@material-ui/core'
+import { Unstable_NumberInput as NumberInput } from '@mui/base'
+import AddIcon from '@mui/icons-material/Add'
+import RemoveIcon from '@mui/icons-material/Remove'
+import Button from '@mui/material/Button'
+import CardContent from '@mui/material/CardContent'
+import Divider from '@mui/material/Divider'
+import Grid from '@mui/material/Grid'
+import Typography from '@mui/material/Typography'
+import { styled } from '@mui/system'
+import React, { useEffect, useRef, useState } from 'react'
+import { opaApiRef } from '../../api'
+import { base64PayloadConvert } from '../../helpers/util'
+import { useAsyncAwsApp } from '../../hooks/useAwsApp'
+import { useCancellablePromise } from '../../hooks/useCancellablePromise'
 
 const blue = {
   100: '#daecff',
@@ -96,8 +94,8 @@ const StyledInput = styled('input')(
   &:focus {
     border-color: ${blue[400]};
     box-shadow: 0 0 0 3px ${
-      theme.palette.mode === 'dark' ? blue[700] : blue[200]
-    };
+    theme.palette.mode === 'dark' ? blue[700] : blue[200]
+  };
   }
 
   &:focus-visible {
@@ -178,7 +176,7 @@ const OpaAppStateOverview = ({
   let clusterNameParam;
   let clusterName: string;
 
-  async function fetchAppConfig() {
+  async function fetchAppConfig () {
     if (!clusterName) {
       // console.log(`getting cluster name`);
       clusterNameParam = await cancellablePromise<GetParameterCommandOutput>(
@@ -217,7 +215,6 @@ const OpaAppStateOverview = ({
         body: JSON.stringify(bodyParamVariables),
       }),
     );
-    // console.log(`got configs`);
 
     try {
       if (resultsVariables?.Payload) {
@@ -227,30 +224,26 @@ const OpaAppStateOverview = ({
         const payloadVariablesJson = JSON.parse(payloadVariablesString);
 
         if (payloadVariablesJson?.Data?.Value) {
-          const variablesJson = JSON.parse(payloadVariablesJson.Data.Value);
-          // console.log(variablesJson);
-          return variablesJson;
+          return JSON.parse(payloadVariablesJson.Data.Value);
         }
         return {};
       }
+      return null;
     } catch (err) {
-      console.log(err);
-      throw Error("Can't parse json response");
+      throw Error('Can\'t parse json response');
     }
   }
 
-  async function fetchAppState() {
+  async function fetchAppState ():Promise<any> {
     if (!clusterName) {
       // console.log(`getting cluster name`);
       clusterNameParam = await cancellablePromise<GetParameterCommandOutput>(
         api.getSSMParameter({ ssmParamName: env.clusterName }),
       );
-      // console.log(`DONE getting cluster name`);
       clusterName =
         clusterNameParam.Parameter?.Value?.toString()
           .split('/')[1]
           .toString() || '';
-      // console.log(`clusterName is ${clusterName}`);
     }
 
     const bodyParam = {
@@ -268,8 +261,6 @@ const OpaAppStateOverview = ({
       },
     };
 
-    //  console.log(bodyParam)
-    // console.log(`calling lambda to get manifests`);
     const results = await cancellablePromise<InvokeCommandOutput>(
       api.invokeLambda({
         functionName: kubectlLambdaArn,
@@ -277,22 +268,19 @@ const OpaAppStateOverview = ({
         body: JSON.stringify(bodyParam),
       }),
     );
-    // console.log(`got manifests`);
 
     try {
       if (results?.Payload) {
         const payloadString = base64PayloadConvert(results.Payload as Object);
         const payloadJson = JSON.parse(payloadString);
         if (payloadJson?.Data?.Value) {
-          const deploymentJson = JSON.parse(payloadJson.Data.Value).items;
-          // console.log(deploymentJson);
-          return deploymentJson;
+          return JSON.parse(payloadJson.Data.Value).items;
         }
         return {};
       }
+      return null;
     } catch (err) {
-      console.log(err);
-      throw Error("Can't parse json response");
+      throw Error('Can\'t parse json response');
     }
   }
 
@@ -338,9 +326,9 @@ const OpaAppStateOverview = ({
         const deploymentJson = deploymentsJson[key];
 
         const updatedReplicas =
-          Number.parseInt(deploymentJson.status.updatedReplicas) || 0;
+          Number.parseInt(deploymentJson.status.updatedReplicas, 10) || 0;
         const appRunning =
-          Number.parseInt(deploymentJson.status.readyReplicas) || 0;
+          Number.parseInt(deploymentJson.status.readyReplicas, 10) || 0;
 
         const pending = Math.abs(appRunning - updatedReplicas);
 
@@ -356,7 +344,7 @@ const OpaAppStateOverview = ({
           appID: deploymentJson.metadata.name,
           appState: appStateDescription,
           deploymentIdentifier: deploymentJson.metadata.uid,
-          desiredCount: Number.parseInt(deploymentJson.spec.replicas) || 0,
+          desiredCount: Number.parseInt(deploymentJson.spec.replicas, 10) || 0,
           pendingCount: pending,
           runningCount: appRunning,
           lastStateTimestamp: new Date(
@@ -368,16 +356,16 @@ const OpaAppStateOverview = ({
         deploymentsState.push(appState);
       });
     } catch (err) {
-      console.log(err);
+      // console.log(err)
     }
     return deploymentsState || [];
   };
 
-  async function getData(appStateResults?: any) {
+  async function getData (appStateResults?: any) {
     let isCanceled = false;
     let isError = false;
     let deploymentsJson;
-    let variablesJson;
+    let appConfig;
     try {
       if (appStateResults) {
         // console.log(`reusing appStateResults`);
@@ -386,14 +374,13 @@ const OpaAppStateOverview = ({
       deploymentsJson = appStateResults
         ? appStateResults
         : await fetchAppState(); // returns array of deployments
-      variablesJson = await fetchAppConfig(); // return the configMaps for the app
+      appConfig = await fetchAppConfig(); // return the configMaps for the app
     } catch (e) {
       if ((e as any).isCanceled) {
         isCanceled = true;
         // console.log(`got cancellation in getData`);
       } else {
         isError = true;
-        console.error(e);
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while retrieving event data: ${e}`,
@@ -405,7 +392,7 @@ const OpaAppStateOverview = ({
       const states = parseState(deploymentsJson);
 
       setAppStateData(states);
-      setVariablesJson(variablesJson);
+      setVariablesJson(appConfig);
     }
   }
 
@@ -434,9 +421,9 @@ const OpaAppStateOverview = ({
         // console.log(`Clearing Timeout`);
       }
     };
-  }, []);
+  }, [getData]);
 
-  function sleep(ms: number) {
+  function sleep (ms: number) {
     return new Promise(resolve => {
       const resolveHandler = () => {
         clearTimeout(timerRef.current);
@@ -473,7 +460,6 @@ const OpaAppStateOverview = ({
       if ((e as any).isCanceled) {
         isCanceled = true;
       } else {
-        console.error(e);
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while starting app: ${e}`,
@@ -499,33 +485,28 @@ const OpaAppStateOverview = ({
         Object.keys(deploymentsJson).forEach(key => {
           const currState = deploymentsJson[key];
           if (currState.metadata.uid === appState.deploymentIdentifier) {
-            if (Number.parseInt(currState.status.readyReplicas) > 0) {
+            if (Number.parseInt(currState.status.readyReplicas, 10) > 0) {
               setAppStateData([]); // reset existing state
               setAppStarted(true);
               localAppStarted = true;
-              // console.log(`setting appStarted to true`);
             }
           }
         });
 
         if (localAppStarted || appStarted) {
-          // console.log(`breaking from while loop since app was started`);
+          // Breaking from while loop since the app has started.
           break;
-        } else {
-          // console.log(`not breaking from while loop since appStarted is falsy`);
         }
       } catch (e) {
         if ((e as any).isCanceled) {
           isCanceled = true;
         } else {
-          console.error(e);
           setError({
             isError: true,
             errorMsg: `Unexpected error occurred while retrieving app state: ${e}`,
           });
           setAppStarted(true);
           localAppStarted = true;
-          // console.log(`setting appStarted to true`);
           setLoading(false);
         }
         break;
@@ -560,12 +541,10 @@ const OpaAppStateOverview = ({
           repoInfo,
         }),
       );
-      // console.log(`DONE setting replicas to 0`);
     } catch (e) {
       if ((e as any).isCanceled) {
         isCanceled = true;
       } else {
-        console.error(e);
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while stopping app: ${e}`,
@@ -576,24 +555,20 @@ const OpaAppStateOverview = ({
 
     let count = 0;
     let localAppStopped = false;
-    // console.log(`isCanceled is ${isCanceled} and localAppStopped is ${localAppStopped} and appStoped is ${appStopped}`);
+
     while (!isCanceled && !appStopped && !localAppStopped) {
-      // console.log(`sleeping ${count} - waiting for app to be stopped, localAppStopped is ${localAppStopped} and appStoped is ${appStopped}`);
       await sleep(7000);
-      // console.log(`DONE sleeping - app is stopped`);
       count++;
 
       try {
-        // console.log("fetching app state");
         const deploymentsJson = await fetchAppState();
-        // console.log("DONE - fetching app state");
 
         Object.keys(deploymentsJson).forEach(key => {
           const currState = deploymentsJson[key];
           if (currState.metadata.uid === appState.deploymentIdentifier) {
             if (
               !currState.status.readyReplicas ||
-              Number.parseInt(currState.status.readyReplicas) === 0
+              Number.parseInt(currState.status.readyReplicas, 10) === 0
             ) {
               appState.appState = AppStateType.STOPPED;
               appState.runningCount = 0;
@@ -613,7 +588,6 @@ const OpaAppStateOverview = ({
         if ((e as any).isCanceled) {
           isCanceled = true;
         } else {
-          console.error(e);
           setError({
             isError: true,
             errorMsg: `Unexpected error occurred while retrieving app state: ${e}`,
@@ -652,7 +626,7 @@ const OpaAppStateOverview = ({
         <TableCell id="noneConfigured" width="30%">
           None configured
         </TableCell>
-        <TableCell id="providerName" />
+        <TableCell id="providerName"/>
       </TableRow>
     );
   };
@@ -682,7 +656,7 @@ const OpaAppStateOverview = ({
             <div>
               {deploymentState?.appState ? (
                 <Grid container>
-                  <Grid item xs={1} />
+                  <Grid item xs={1}/>
                   <Grid item xs={11}>
                     <Table size="small" padding="none">
                       <TableBody>
@@ -742,7 +716,7 @@ const OpaAppStateOverview = ({
               )}
             </div>
           </Grid>
-          <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }} />
+          <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }}/>
           <Grid item zeroMinWidth xs={6} sx={{ pl: 1, pr: 1 }}>
             <Typography
               sx={{
@@ -754,11 +728,11 @@ const OpaAppStateOverview = ({
               Environment Variables
             </Typography>
             <Grid container>
-              <Grid item xs={1} />
+              <Grid item xs={1}/>
               <Grid item xs={11}>
                 <Table size="small" padding="none">
                   <TableBody>
-                    <EnvVars appID={deploymentState.appID as string} />
+                    <EnvVars appID={deploymentState.appID as string}/>
                   </TableBody>
                 </Table>
               </Grid>
@@ -786,11 +760,11 @@ const OpaAppStateOverview = ({
                   }}
                   slotProps={{
                     incrementButton: {
-                      children: <AddIcon fontSize="small" />,
+                      children: <AddIcon fontSize="small"/>,
                       className: 'increment',
                     },
                     decrementButton: {
-                      children: <RemoveIcon fontSize="small" />,
+                      children: <RemoveIcon fontSize="small"/>,
                     },
                   }}
                 />
@@ -804,11 +778,7 @@ const OpaAppStateOverview = ({
                   sx={{ mr: 2 }}
                   variant="outlined"
                   size="small"
-                  disabled={
-                    deploymentState?.appState !== AppStateType.STOPPED
-                      ? true
-                      : false
-                  }
+                  disabled={ deploymentState?.appState !== AppStateType.STOPPED }
                   onClick={() => handleStartTask(deploymentState)}
                 >
                   Start
@@ -817,11 +787,7 @@ const OpaAppStateOverview = ({
                   sx={{ mr: 2 }}
                   variant="outlined"
                   size="small"
-                  disabled={
-                    deploymentState?.appState === AppStateType.STOPPED
-                      ? true
-                      : false
-                  }
+                  disabled={ deploymentState?.appState === AppStateType.STOPPED }
                   onClick={() => handleStopTask(deploymentState)}
                 >
                   Stop
@@ -844,7 +810,7 @@ const OpaAppStateOverview = ({
   if (loading) {
     return (
       <InfoCard title="Application State">
-        <LinearProgress />
+        <LinearProgress/>
         <Typography sx={{ color: '#645B59', mt: 2 }}>
           Loading current state...
         </Typography>
@@ -870,7 +836,7 @@ const OpaAppStateOverview = ({
               Cluster Info
             </Typography>
             <Grid container>
-              <Grid item xs={1} />
+              <Grid item xs={1}/>
               <Grid item xs={11}>
                 <Table size="small" padding="none">
                   <TableBody>
@@ -926,7 +892,7 @@ export const K8sAppStateCard = () => {
   const awsAppLoadingStatus = useAsyncAwsApp();
 
   if (awsAppLoadingStatus.loading) {
-    return <LinearProgress />;
+    return <LinearProgress/>
   } else if (awsAppLoadingStatus.component) {
     let input;
     if (awsAppLoadingStatus.component.componentSubType === 'aws-eks') {
@@ -937,7 +903,7 @@ export const K8sAppStateCard = () => {
         entity,
         awsComponent: awsAppLoadingStatus.component,
       };
-      return <OpaAppStateOverview input={input} />;
+      return <OpaAppStateOverview input={input}/>;
     }
     return (
       <EmptyState
