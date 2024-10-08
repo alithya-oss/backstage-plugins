@@ -7,7 +7,7 @@ import {
   AWSServiceResources,
 } from '@alithya-oss/plugin-aws-apps-common';
 import { makeStyles, Typography } from '@material-ui/core';
-import { Link } from '@mui/material';
+import Link from '@mui/material/Link'
 import React, { useState, useCallback } from 'react';
 import { ResourceDetailsDialog } from './ResourceDetailsDialog';
 
@@ -39,6 +39,8 @@ const useStyles = makeStyles(theme => ({
  * will open a dialog displaying details for the associated AWS Resource
  *
  * @param resource The AWS resource type requiring a link to display its details.
+ * @param prefix
+ * @param providerName
  * @returns JSXElement
  */
 const CustomDetailsLink = ({
@@ -74,10 +76,12 @@ const CustomDetailsLink = ({
 };
 
 /**
- * A UI component to display an AWS service and a table of it's resources.
+ * A UI component to display an AWS service and a table of its resources.
  *
  * @param serviceName An optional short string describing the AWS service.  If the serviceName is provided, then it will be used in the header of the table; otherwise, it will not be displayed.
  * @param resources An array of AWS resource objects which below to the specified serviceName
+ * @param prefix
+ * @param providerName
  * @returns JSXElement rendering a table for an AWS service and its resources
  */
 export const DenseResourceTable = ({
@@ -118,12 +122,12 @@ export const DenseResourceTable = ({
   ];
 
   const resourceItems = resources.map((r, i) => {
-    // Array of resource types which should include a 'details' subvalue
+    // Array of resource types which should include a 'details' sub-value
     // for the user to request details about the resource
     // TODO: this should be redesigned to make the specification of "detail" resources more dynamic.
     const detailTypes = ['AWS::SecretsManager::Secret', 'AWS::SSM::Parameter'];
 
-    // subvalue is a details link to be shown beneath a table cell value
+    // sub-value is a details link to be shown beneath a table cell value
     const subvalue = detailTypes.includes(r.resourceTypeId) ? (
       <CustomDetailsLink
         prefix={prefix}
@@ -167,6 +171,8 @@ export const DenseResourceTable = ({
  *
  * @param serviceName A short string describing the AWS service.
  * @param resources An array of AWS resource objects which below to the specified serviceName
+ * @param prefix
+ * @param providerName
  */
 const Service = ({
   serviceName,
@@ -204,6 +210,8 @@ const Service = ({
  *
  * @param servicesObject an AWSServiceResources type providing a set of services and associated AWS resources to display
  * @param serviceFilter an optional array of service identifier strings which should be displayed.  Service strings should match the service name used in AWS Cloudformation syntax (e.g. "AWS::ServiceName::ResourceType"). If an empty array is provided or the parameter is not provided, then all available services will be displayed.
+ * @param prefix
+ * @param providerName
  * @returns
  */
 export const ServiceResourcesComponent = ({
@@ -219,7 +227,7 @@ export const ServiceResourcesComponent = ({
 }) => {
   const svcKeys = Object.keys(servicesObject);
   const filteredKeys =
-    serviceFilter.length == 0
+    serviceFilter.length === 0
       ? svcKeys
       : serviceFilter.filter(value => svcKeys.includes(value));
 
