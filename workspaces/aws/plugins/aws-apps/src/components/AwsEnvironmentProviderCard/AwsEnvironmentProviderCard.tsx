@@ -1,41 +1,33 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useEffect, useState } from 'react';
-import { InfoCard } from '@backstage/core-components';
+import React, { useEffect, useState } from 'react'
+import { InfoCard } from '@backstage/core-components'
 import {
   Button,
-  IconButton,
-  TableBody,
-  TableCell,
-  TableRow,
-  Table,
-  TableHead,
   CardContent,
   Grid,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
 } from '@material-ui/core';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useApi } from '@backstage/core-plugin-api';
 import { opaApiRef } from '../../api';
-import { Alert, AlertTitle, Typography } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Typography from '@mui/material/Typography';
 import {
   AWSEnvironmentProviderRecord,
   getGitCredentailsSecret,
   getRepoInfo,
 } from '@alithya-oss/plugin-aws-apps-common';
-import {
-  CompoundEntityRef,
-  Entity,
-  EntityRelation,
-  parseEntityRef,
-} from '@backstage/catalog-model';
+import { CompoundEntityRef, Entity, EntityRelation, parseEntityRef, } from '@backstage/catalog-model';
 
-import {
-  CatalogApi,
-  EntityRefLink,
-  catalogApiRef,
-  useEntity,
-} from '@backstage/plugin-catalog-react';
+import { CatalogApi, catalogApiRef, EntityRefLink, useEntity, } from '@backstage/plugin-catalog-react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { AwsEnvironmentProviderSelectorDialog } from './AwsEnvironmentProviderSelectorDialog';
@@ -64,20 +56,19 @@ const AwsEnvironmentProviderCard = ({
 
   useEffect(() => {
     getProviderDetails();
-  }, []);
+  }, [getProviderDetails]);
 
-  async function getProviderDetails() {
+  async function getProviderDetails () {
     // find existing resource relationships
     const providerRefs: EntityRelation[] | undefined = entity.relations?.filter(
       relation =>
         parseEntityRef(relation?.targetRef).kind === 'awsenvironmentprovider',
-    )!;
+    );
 
     const providerEntities = await Promise.all(
       providerRefs.map(
         async (entityRef: { targetRef: string | CompoundEntityRef }) => {
-          const entity = await catalog.getEntityByRef(entityRef.targetRef);
-          return entity;
+          return catalog.getEntityByRef(entityRef.targetRef);
         },
       ),
     );
@@ -87,19 +78,19 @@ const AwsEnvironmentProviderCard = ({
     providerEntities.forEach((et, index) => {
       providers.push({
         id: index.toString(),
-        name: et?.metadata.name || '',
-        prefix: et?.metadata.prefix?.toString() || '',
-        providerType: et?.metadata.envType?.toString() || '',
-        description: et?.metadata.description?.toString() || '',
-        accountNumber: et?.metadata.awsAccount?.toString() || '',
-        region: et?.metadata.awsRegion?.toString() || '',
+        name: et?.metadata.name ?? '',
+        prefix: et?.metadata.prefix?.toString() ?? '',
+        providerType: et?.metadata.envType?.toString() ?? '',
+        description: et?.metadata.description?.toString() ?? '',
+        accountNumber: et?.metadata.awsAccount?.toString() ?? '',
+        region: et?.metadata.awsRegion?.toString() ?? '',
       });
     });
-    setItems(providers);
+    setItems(providers)
 
     const potentialProviders: AWSEnvironmentProviderRecord[] = [];
     let index = 0;
-    const envRuntimeType = entity.metadata.environmentType?.toString() || '';
+    const envRuntimeType = entity.metadata.environmentType?.toString() ?? '';
 
     catalog
       .getEntities({
@@ -121,12 +112,12 @@ const AwsEnvironmentProviderCard = ({
                 index++;
                 potentialProviders.push({
                   id: index.toString(),
-                  name: et?.metadata.name || '',
-                  prefix: et?.metadata.prefix?.toString() || '',
-                  providerType: et?.metadata.envType?.toString() || '',
-                  description: et?.metadata.description?.toString() || '',
-                  accountNumber: et?.metadata.awsAccount?.toString() || '',
-                  region: et?.metadata.awsRegion?.toString() || '',
+                  name: et?.metadata.name ?? '',
+                  prefix: et?.metadata.prefix?.toString() ?? '',
+                  providerType: et?.metadata.envType?.toString() ?? '',
+                  description: et?.metadata.description?.toString() ?? '',
+                  accountNumber: et?.metadata.awsAccount?.toString() ?? '',
+                  region: et?.metadata.awsRegion?.toString() ?? '',
                 });
               }
             });
@@ -134,12 +125,12 @@ const AwsEnvironmentProviderCard = ({
             index++;
             potentialProviders.push({
               id: index.toString(),
-              name: et?.metadata.name || '',
-              prefix: et?.metadata.prefix?.toString() || '',
-              providerType: et?.metadata.envType?.toString() || '',
-              description: et?.metadata.description?.toString() || '',
-              accountNumber: et?.metadata.awsAccount?.toString() || '',
-              region: et?.metadata.awsRegion?.toString() || '',
+              name: et?.metadata.name ?? '',
+              prefix: et?.metadata.prefix?.toString() ?? '',
+              providerType: et?.metadata.envType?.toString() ?? '',
+              description: et?.metadata.description?.toString() ?? '',
+              accountNumber: et?.metadata.awsAccount?.toString() ?? '',
+              region: et?.metadata.awsRegion?.toString() ?? '',
             });
           }
         });
@@ -147,7 +138,7 @@ const AwsEnvironmentProviderCard = ({
     setAvailableProviders(potentialProviders);
   }
 
-  async function updateProvider(
+  async function updateProvider (
     item: AWSEnvironmentProviderRecord,
     action: string,
   ): Promise<any> {
@@ -198,7 +189,6 @@ const AwsEnvironmentProviderCard = ({
       .catch(err => {
         setIsAddProviderSuccessful(false);
         setAddProviderMessage(err);
-        console.log(err);
         setError(err);
         setSpinning(false);
       });
@@ -221,7 +211,7 @@ const AwsEnvironmentProviderCard = ({
           const providersData = items.slice();
           providersData.splice(index, 1);
           setItems(providersData);
-          setProviderRequest(deletedItem!);
+          setProviderRequest(deletedItem);
           await catalog.refreshEntity(
             `awsenvironment:default/${entity.metadata.name}`,
           );
@@ -232,7 +222,6 @@ const AwsEnvironmentProviderCard = ({
         .catch(err => {
           setIsAddProviderSuccessful(false);
           setAddProviderMessage(err);
-          console.log(err);
           setError(err);
           setSpinning(false);
         });
@@ -245,12 +234,12 @@ const AwsEnvironmentProviderCard = ({
 
   const deleteIcon = (index: number) => (
     <IconButton onClick={() => deleteClick(index)}>
-      <DeleteIcon color="primary" />
+      <DeleteIcon color="primary"/>
     </IconButton>
   );
 
   if (error.isError) {
-    return <Typography sx={{ color: 'red' }}>{error.errorMsg}</Typography>;
+    return <Typography sx={{ color: 'red' }}>{error.errorMsg}</Typography>
   }
 
   return (
@@ -301,8 +290,8 @@ const AwsEnvironmentProviderCard = ({
               successfully!
               {!!addProviderMessage && (
                 <>
-                  <br />
-                  <br />
+                  <br/>
+                  <br/>
                   {addProviderMessage}
                 </>
               )}
@@ -314,8 +303,8 @@ const AwsEnvironmentProviderCard = ({
               Failed to Update provider <strong>{providerRequest?.name}</strong>
               {!!addProviderMessage && (
                 <>
-                  <br />
-                  <br />
+                  <br/>
+                  <br/>
                   {addProviderMessage}
                 </>
               )}
@@ -337,7 +326,7 @@ const AwsEnvironmentProviderCard = ({
           sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
           open={spinning}
         >
-          <CircularProgress color="inherit" />
+          <CircularProgress color="inherit"/>
         </Backdrop>
       </CardContent>
     </InfoCard>
@@ -352,5 +341,5 @@ export const AwsEnvironmentProviderCardWidget = () => {
     entity,
     catalog: catalogApi,
   };
-  return <AwsEnvironmentProviderCard input={input} />;
+  return <AwsEnvironmentProviderCard input={input}/>;
 };
