@@ -5,41 +5,33 @@ import React, { useEffect, useState } from 'react';
 import { EmptyState, InfoCard } from '@backstage/core-components';
 import {
   Button,
-  IconButton,
-  LinearProgress,
-  TableBody,
-  TableCell,
-  TableRow,
-  Table,
-  TableHead,
   CardContent,
   Grid,
+  IconButton,
+  LinearProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
 } from '@material-ui/core';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useApi } from '@backstage/core-plugin-api';
 import { opaApiRef } from '../../api';
-import { Alert, AlertTitle, Typography } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Typography from '@mui/material/Typography';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
 import {
-  AWSComponent,
   AssociatedResources,
+  AWSComponent,
   BindResourceParams,
+  getGitCredentailsSecret,
   ResourceBinding,
   ResourcePolicy,
-  getGitCredentailsSecret,
 } from '@alithya-oss/plugin-aws-apps-common';
-import {
-  CompoundEntityRef,
-  Entity,
-  EntityRelation,
-  parseEntityRef,
-} from '@backstage/catalog-model';
-import {
-  CatalogApi,
-  EntityRefLink,
-  catalogApiRef,
-  useEntity,
-} from '@backstage/plugin-catalog-react';
+import { CompoundEntityRef, Entity, EntityRelation, parseEntityRef, } from '@backstage/catalog-model';
+import { CatalogApi, catalogApiRef, EntityRefLink, useEntity, } from '@backstage/plugin-catalog-react';
 import { ResourceSelectorDialog } from './ResourceSelectorDialog';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -82,72 +74,72 @@ const ResourceBindingCard = ({
   const [bindResourceRequest, setBindResourceRequest] =
     useState<ResourceBinding>();
   const repoInfo = awsComponent.getRepoInfo();
+
   useEffect(() => {
-    getBindingDetails();
-  }, []);
+    async function getBindingDetails() {
+      // find existing resource relationships
+      const resourceRefs: EntityRelation[] | undefined = entity.relations?.filter(
+        relation => parseEntityRef(relation?.targetRef).kind === 'resource',
+      )!;
 
-  async function getBindingDetails() {
-    // find existing resource relationships
-    const resourceRefs: EntityRelation[] | undefined = entity.relations?.filter(
-      relation => parseEntityRef(relation?.targetRef).kind === 'resource',
-    )!;
+      const resourcesEntities = await Promise.all(
+        resourceRefs.map(
+          async (entityRef: { targetRef: string | CompoundEntityRef }) => {
+            return await catalog.getEntityByRef(entityRef.targetRef);
+          },
+        ),
+      );
 
-    const resourcesEntities = await Promise.all(
-      resourceRefs.map(
-        async (entityRef: { targetRef: string | CompoundEntityRef }) => {
-          const entity = await catalog.getEntityByRef(entityRef.targetRef);
-          return entity;
-        },
-      ),
-    );
+      // select view for only current environment
+      const currentEnvironment = awsComponent.currentEnvironment.environment.name;
 
-    // select view for only current environment
-    const currentEnvironment = awsComponent.currentEnvironment.environment.name;
-
-    const matchedResources = resourcesEntities.filter(entity => {
-      const appData = entity!.metadata.appData as any;
-      return appData && appData[currentEnvironment];
-    });
-
-    const resources: ResourceBinding[] = [];
-
-    matchedResources.forEach(et => {
-      const appData = et!.metadata.appData as any;
-      const envAppData = appData[currentEnvironment] as any;
-      const providers = Object.keys(envAppData);
-      providers.forEach(p => {
-        const providerAppData = envAppData[p] as any;
-        if (et!.metadata.resourceType === 'aws-rds') {
-          const associatedRDSResources: AssociatedResources = {
-            resourceArn: providerAppData.DbAdminSecretArn,
-            resourceType: 'aws-db-secret',
-            resourceName: `${et!.metadata.name}-secret`,
-          };
-
-          resources.push({
-            resourceName: et!.metadata.name,
-            resourceType: et!.metadata.resourceType?.toString() || '',
-            provider: p,
-            resourceArn: providerAppData.Arn,
-            id: providerAppData.Arn,
-            entityRef: `resource:default/${et!.metadata.name}`,
-            associatedResources: [associatedRDSResources],
-          });
-        } else {
-          resources.push({
-            resourceName: et!.metadata.name,
-            resourceType: et!.metadata.resourceType?.toString() || '',
-            provider: p,
-            resourceArn: providerAppData.Arn,
-            id: providerAppData.Arn,
-            entityRef: `resource:default/${et!.metadata.name}`,
-          });
-        }
+      const matchedResources = resourcesEntities.filter(resourceEntity => {
+        const appData = resourceEntity!.metadata.appData as any;
+        return appData && appData[currentEnvironment];
       });
-    });
-    // console.log(resources)
-    setItems(resources);
-  }
+
+      const resources: ResourceBinding[] = [];
+
+      matchedResources.forEach(et => {
+        const appData = et!.metadata.appData as any;
+        const envAppData = appData[currentEnvironment] as any;
+        const providers = Object.keys(envAppData);
+        providers.forEach(p => {
+          const providerAppData = envAppData[p] as any;
+          if (et!.metadata.resourceType === 'aws-rds') {
+            const associatedRDSResources: AssociatedResources = {
+              resourceArn: providerAppData.DbAdminSecretArn,
+              resourceType: 'aws-db-secret',
+              resourceName: `${et!.metadata.name}-secret`,
+            };
+
+            resources.push({
+              resourceName: et!.metadata.name,
+              resourceType: et!.metadata.resourceType?.toString() || '',
+              provider: p,
+              resourceArn: providerAppData.Arn,
+              id: providerAppData.Arn,
+              entityRef: `resource:default/${et!.metadata.name}`,
+              associatedResources: [associatedRDSResources],
+            });
+          } else {
+            resources.push({
+              resourceName: et!.metadata.name,
+              resourceType: et!.metadata.resourceType?.toString() || '',
+              provider: p,
+              resourceArn: providerAppData.Arn,
+              id: providerAppData.Arn,
+              entityRef: `resource:default/${et!.metadata.name}`,
+            });
+          }
+        });
+      });
+      // console.log(resources)
+      setItems(resources);
+    }
+
+    getBindingDetails();
+  }, [awsComponent.currentEnvironment.environment.name, catalog, entity.relations]);
 
   async function bindResource(item: ResourceBinding): Promise<any> {
     const policies: ResourcePolicy[] = [];
@@ -288,7 +280,6 @@ const ResourceBindingCard = ({
       .catch(err => {
         setIsBindSuccessful(false);
         setBindResourceMessage(err);
-        console.log(err);
         setError(err);
         setSpinning(false);
       });
@@ -311,7 +302,6 @@ const ResourceBindingCard = ({
       .catch(err => {
         setIsBindSuccessful(false);
         setBindResourceMessage(err);
-        console.log(err);
         setError(err);
         setSpinning(false);
       });
