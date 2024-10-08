@@ -3,11 +3,7 @@
 
 import { CatalogApi } from '@backstage/catalog-client';
 import { JsonArray } from '@backstage/types';
-import {
-  Entity,
-  EntityRelation,
-  RELATION_DEPENDS_ON,
-} from '@backstage/catalog-model';
+import { Entity, EntityRelation, RELATION_DEPENDS_ON } from '@backstage/catalog-model';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import yaml from 'yaml';
 import { getAWScreds } from '@alithya-oss/plugin-aws-apps-backend';
@@ -19,7 +15,7 @@ const ID = 'opa:get-env-providers';
 const examples = [
   {
     description:
-      'Retreive AWS environment providers so that their configurations can be used by other template actions',
+      'Retrieve AWS environment providers so that their configurations can be used by other template actions',
     example: yaml.stringify({
       steps: [
         {
@@ -384,48 +380,45 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
           { token },
         );
 
-        const deploymentParams: DeploymentParameters[] =
-          envProviderEntities.items
-            .filter(
-              entity =>
-                entity &&
-                ['name', 'envType', 'awsAccount', 'awsRegion', 'vpc'].every(
-                  key => key in entity.metadata,
-                ),
-            )
-            .map(entity => {
-              const { metadata } = entity!;
-              const vpc = metadata.vpc?.toString() || '';
+        return envProviderEntities.items
+          .filter(
+            entity =>
+              entity &&
+              ['name', 'envType', 'awsAccount', 'awsRegion', 'vpc'].every(
+                key => key in entity.metadata,
+              ),
+          )
+          .map(entity => {
+            const { metadata } = entity!;
+            const vpc = metadata.vpc?.toString() || '';
 
-              const deployParams: DeploymentParameters = {
-                envProviderPrefix: metadata.prefix?.toString() || '',
-                envName: envEntity.metadata.name,
-                envProviderName: metadata.name,
-                envRef: environmentRef,
-                envProviderType:
-                  metadata.envType?.toString().toLowerCase() || '',
-                accountId: metadata.awsAccount?.toString() || '',
-                region: metadata.awsRegion?.toString() || '',
-                ssmAssumeRoleArn: metadata.provisioningRole?.toString() || '',
-                ssmPathVpc: vpc,
-                ssmPrivateSubnets: `${vpc}/private-subnets`,
-                ssmPublicSubnets: `${vpc}/public-subnets`,
-                ssmPathCluster: metadata.clusterName?.toString() || '',
-              };
+            const deployParams: DeploymentParameters = {
+              envProviderPrefix: metadata.prefix?.toString() || '',
+              envName: envEntity.metadata.name,
+              envProviderName: metadata.name,
+              envRef: environmentRef,
+              envProviderType:
+                metadata.envType?.toString().toLowerCase() || '',
+              accountId: metadata.awsAccount?.toString() || '',
+              region: metadata.awsRegion?.toString() || '',
+              ssmAssumeRoleArn: metadata.provisioningRole?.toString() || '',
+              ssmPathVpc: vpc,
+              ssmPrivateSubnets: `${vpc}/private-subnets`,
+              ssmPublicSubnets: `${vpc}/public-subnets`,
+              ssmPathCluster: metadata.clusterName?.toString() || '',
+            };
 
-              if (metadata.kubectlLambdaArn) {
-                deployParams.kubectlLambdaArn =
-                  metadata.kubectlLambdaArn.toString();
-              }
-              if (metadata.clusterAdminRole) {
-                deployParams.kubectlLambdaRoleArn =
-                  metadata.clusterAdminRole.toString();
-              }
+            if (metadata.kubectlLambdaArn) {
+              deployParams.kubectlLambdaArn =
+                metadata.kubectlLambdaArn.toString();
+            }
+            if (metadata.clusterAdminRole) {
+              deployParams.kubectlLambdaRoleArn =
+                metadata.clusterAdminRole.toString();
+            }
 
-              return deployParams;
-            });
-
-        return deploymentParams;
+            return deployParams;
+          });
       }
     },
   });
