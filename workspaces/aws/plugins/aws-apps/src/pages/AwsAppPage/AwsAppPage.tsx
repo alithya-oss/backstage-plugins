@@ -206,9 +206,9 @@ export function AwsAppPage(_props: AwsAppPageProps) {
       </EntitySwitch>
     );
   }
-  if (awsAppLoadingStatus.error) {
-    console.log(awsAppLoadingStatus.error);
-  }
+  // if (awsAppLoadingStatus.error) {
+  //    console.log(awsAppLoadingStatus.error);
+  // }
 
   return (
     <EmptyState
