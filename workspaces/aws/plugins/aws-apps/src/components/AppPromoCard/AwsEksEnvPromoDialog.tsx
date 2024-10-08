@@ -46,7 +46,9 @@ const useStyles = makeStyles(theme => ({
  * @param isOpen Boolean describing whether the dialog is displayed (open) or not (closed)
  * @param closeDialogHandler the handler callback when the dialog is dismissed/cancelled
  * @param submitHandler the handler callback when the dialog is submitted
- * @param environmentName the name of the environment that will be added to the app's CICD pipeline
+ * @param environmentName the name of the environment that will be added to the app's CI/CD pipeline
+ * @param namespaceDefault
+ * @param iamRoleArnDefault
  * @namespaceDefault suggestions on what the user could enter for a namespace
  * @iamRoleArnDefault suggestions on what the user could enter for the IAM role ARN
  * @returns
@@ -88,6 +90,18 @@ export const AwsEksEnvPromoDialog = ({
     'create_new_k8s_namespace_admin_iam_role',
   );
 
+  const checkIamRoleArn = () => {
+    if (!iamRoleArn) {
+      setIamRoleArnDescription('Cannot be Empty');
+      setIamRoleArnIsInvalid(true);
+    } else {
+      setIamRoleArnDescription(
+        'Existing IAM role to grant namespace privileges to',
+      );
+      setIamRoleArnIsInvalid(false);
+    }
+  };
+
   const submitNewEnvironmentHandler = () => {
     if (
       roleBehavior === 'existing_new_k8s_namespace_admin_iam_role' &&
@@ -105,9 +119,9 @@ export const AwsEksEnvPromoDialog = ({
     }
     closeDialogHandler();
     submitHandler(
-      namespace as string,
-      iamRoleArn as string,
-      roleBehavior as string,
+      namespace,
+      iamRoleArn,
+      roleBehavior,
     );
   };
 
@@ -120,18 +134,6 @@ export const AwsEksEnvPromoDialog = ({
         `The k8s namespace to assign to application resources for the ${environmentName} environment`,
       );
       setNamespaceIsInvalid(false);
-    }
-  };
-
-  const checkIamRoleArn = () => {
-    if (!iamRoleArn) {
-      setIamRoleArnDescription('Cannot be Empty');
-      setIamRoleArnIsInvalid(true);
-    } else {
-      setIamRoleArnDescription(
-        'Existing IAM role to grant namespace privileges to',
-      );
-      setIamRoleArnIsInvalid(false);
     }
   };
 
@@ -170,7 +172,6 @@ export const AwsEksEnvPromoDialog = ({
               helperText={namespaceDescription}
               placeholder={namespaceDefault}
               required
-              autoFocus
             />
           </FormControl>
         </Grid>
