@@ -13,10 +13,7 @@
 
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 
-import {
-  PipelineExecutionsResponse,
-  PipelineStateResponse,
-} from '@alithya-oss/plugin-aws-codepipeline-common';
+import { PipelineExecutionsResponse, PipelineStateResponse } from '@alithya-oss/plugin-aws-codepipeline-common'
 import { AwsApiClient } from '@alithya-oss/plugin-aws-core-react';
 import type { CompoundEntityRef } from '@backstage/catalog-model';
 import { AwsCodePipelineApi } from '.';
@@ -46,9 +43,7 @@ export class AwsCodePipelineApiClient
       entity.name,
     )}/executions`;
 
-    const services = await this.get<PipelineExecutionsResponse>(urlSegment);
-
-    return services;
+    return this.get<PipelineExecutionsResponse>(urlSegment);
   }
 
   public async getPipelineStateByEntity({
@@ -62,8 +57,6 @@ export class AwsCodePipelineApiClient
       entity.name,
     )}/state`;
 
-    const services = await this.get<PipelineStateResponse>(urlSegment);
-
-    return services;
+    return this.get<PipelineStateResponse>(urlSegment);
   }
 }
