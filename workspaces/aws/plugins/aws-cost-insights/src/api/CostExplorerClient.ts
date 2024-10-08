@@ -11,18 +11,8 @@
  * limitations under the License.
  */
 
-import {
-  CostInsightsApi,
-  ProductInsightsOptions,
-  Alert,
-} from '@backstage-community/plugin-cost-insights';
-import {
-  Cost,
-  Entity,
-  Group,
-  MetricData,
-  Project,
-} from '@backstage-community/plugin-cost-insights-common';
+import { Alert, CostInsightsApi, ProductInsightsOptions, } from '@backstage-community/plugin-cost-insights';
+import { Cost, Entity, Group, MetricData, Project, } from '@backstage-community/plugin-cost-insights-common';
 import dateFormat from 'dateformat';
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { ResponseError } from '@backstage/errors';
@@ -96,7 +86,6 @@ export class CostExplorerClient implements CostInsightsApi {
     throw new Error('Not implemented');
   }
 
-  // @ts-ignore
   async getCatalogEntityDailyCost(
     catalogEntityRef: string,
     intervals: string,
@@ -106,9 +95,7 @@ export class CostExplorerClient implements CostInsightsApi {
       entityRef.name
     }/${encodeURIComponent(intervals)}`;
 
-    const service = await this.get<Cost>(urlSegment);
-
-    return service;
+    return this.get<Cost>(urlSegment);
   }
 
   async getProductInsights(_: ProductInsightsOptions): Promise<Entity> {
