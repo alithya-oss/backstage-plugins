@@ -254,7 +254,7 @@ const DeleteAppPanel = ({
   // }
 
   const handleClickDelete = async () => {
-    if (confirm('Are you sure you want to delete this app?')) {
+    // TODO - Replace with Modal => if (confirm('Are you sure you want to delete this app?')) {
       setSpinning(true);
       deleteAppFromSingleProvider(
         awsComponent.componentName,
@@ -276,11 +276,11 @@ const DeleteAppPanel = ({
           setDeleteResultMessage(error.toString());
           return;
         });
-    }
+
   };
 
   const handleClickDeleteAll = async () => {
-    if (confirm('Are you sure you want to delete this app?')) {
+   // TODO: Replace with Modal =>  if (confirm('Are you sure you want to delete this app?')) {
       const deployedEnvironments = Object.keys(awsComponent.environments);
       deployedEnvironments.forEach(env => {
         const environmentToRemove: GenericAWSEnvironment =
@@ -327,9 +327,6 @@ const DeleteAppPanel = ({
           'Once the pipeline finish executing you may click Delete Repository',
         );
       }
-    } else {
-      // Do nothing!
-    }
   };
 
   return (
