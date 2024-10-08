@@ -127,10 +127,10 @@ export class GitHubAPI implements ISCMBackendAPI {
     repo: IRepositoryInfo,
     accessToken: string,
   ): Promise<IGitAPIResult> {
-    const octokitPlugin = Octokit.plugin(
+    const OctokitCommitMultipleFiles = Octokit.plugin(
       require('octokit-commit-multiple-files'),
     );
-    const octokit = new octokitPlugin({ auth: accessToken });
+    const octokit = new OctokitCommitMultipleFiles({ auth: accessToken });
 
     const url = `https://${repo.gitHost}`;
     console.log(url);
