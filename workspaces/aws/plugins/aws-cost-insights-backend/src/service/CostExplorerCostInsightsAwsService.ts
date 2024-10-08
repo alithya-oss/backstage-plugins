@@ -23,26 +23,12 @@ import {
   COST_INSIGHTS_AWS_COST_CATEGORY_ANNOTATION,
   COST_INSIGHTS_AWS_TAGS_ANNOTATION,
 } from '@alithya-oss/plugin-cost-insights-aws-common';
-import {
-  ChangeStatistic,
-  Cost,
-  DateAggregation,
-  Trendline,
-} from '@backstage-community/plugin-cost-insights-common';
+import { ChangeStatistic, Cost, DateAggregation, Trendline } from '@backstage-community/plugin-cost-insights-common';
 import { CatalogApi } from '@backstage/catalog-client';
-import {
-  AWS_SDK_CUSTOM_USER_AGENT,
-  getOneOfEntityAnnotations,
-} from '@alithya-oss/plugin-aws-core-common';
-import {
-  CompoundEntityRef,
-  stringifyEntityRef,
-} from '@backstage/catalog-model';
+import { AWS_SDK_CUSTOM_USER_AGENT, getOneOfEntityAnnotations } from '@alithya-oss/plugin-aws-core-common';
+import { CompoundEntityRef, stringifyEntityRef, } from '@backstage/catalog-model';
 import { CostInsightsAwsService } from './types';
-import {
-  AwsCredentialsManager,
-  DefaultAwsCredentialsManager,
-} from '@backstage/integration-aws-node';
+import { AwsCredentialsManager, DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 import {
   AuthService,
   BackstageCredentials,
@@ -56,10 +42,9 @@ import {
 import { createLegacyAuthAdapters } from '@backstage/backend-common';
 import { AwsCredentialIdentityProvider } from '@aws-sdk/types';
 import regression, { DataPoint } from 'regression';
-import { CostInsightsAwsConfig } from '../config';
+import { CostInsightsAwsConfig, readCostInsightsAwsConfig } from '../config';
 import { DateTime, Duration as LuxonDuration } from 'luxon';
 import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
-import { readCostInsightsAwsConfig } from '../config';
 
 /** @public */
 export class CostExplorerCostInsightsAwsService
@@ -330,7 +315,7 @@ export class CostExplorerCostInsightsAwsService
     }
 
     const regex = /R(\d+)/;
-    const match = parts[0].match(regex);
+    const match = RegExp(regex).exec(parts[0]);
 
     if (!match || !match[1]) {
       throw new Error(`Failed to parse repeating interval ${parts[0]}`);
@@ -405,7 +390,7 @@ export const costInsightsAwsServiceRef =
         }) {
           const pluginConfig = readCostInsightsAwsConfig(config);
 
-          const impl = await CostExplorerCostInsightsAwsService.fromConfig(
+          return CostExplorerCostInsightsAwsService.fromConfig(
             pluginConfig,
             {
               catalogApi,
@@ -417,8 +402,6 @@ export const costInsightsAwsServiceRef =
                 DefaultAwsCredentialsManager.fromConfig(config),
             },
           );
-
-          return impl;
         },
       }),
   });
