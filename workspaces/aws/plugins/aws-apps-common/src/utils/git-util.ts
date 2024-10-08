@@ -67,11 +67,16 @@ export const getRepoInfo = (entity: Entity): IRepositoryInfo => {
           : '',
         gitRepoName: entity.metadata.annotations
           ? entity.metadata.annotations['gitlab.com/project-slug']?.toString()
+          .slice(entity.metadata.annotations['gitlab.com/project-slug']
+            ?.toString()
+            .lastIndexOf('/') + 1)
           : '',
         gitProjectGroup: entity.metadata.annotations
           ? entity.metadata.annotations['gitlab.com/project-slug']
               ?.toString()
-              .split('/')[0]
+              .slice(0, entity.metadata.annotations['gitlab.com/project-slug']
+                ?.toString()
+                .lastIndexOf('/'))
           : '',
         isPrivate: true,
       };

@@ -12,14 +12,14 @@ import { SecretStringComponent } from '../common';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
 import {
   AWSECSAppDeploymentEnvironment,
-  // getRepoInfo,
-  // getRepoUrl,
+  getRepoInfo,
+  getRepoUrl,
 } from '@alithya-oss/plugin-aws-apps-common';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 
 const OpaAppGeneralInfo = ({
-  input: { repoSecretArn, api },
+  input: { entity, repoSecretArn, api },
 }: {
   input: {
     account: string;
@@ -37,25 +37,29 @@ const OpaAppGeneralInfo = ({
 
   const [secretData, setSecretData] = useState('');
 
-  // let repoInfo = getRepoInfo(entity);
-  const gitRepoUrl =
-    'https://gitlab.com/alithya-csna/cloud/toolbox/harmonix-generated-environments/sample-app7-repo.git';
+  let repoInfo = getRepoInfo(entity);
+  const gitRepoUrl = getRepoUrl(repoInfo);
 
-  // const HandleCopyGitClone = () => {
-  //   let baseUrl = 'git clone https://oauth2:';
-  //   let cloneUrl = '';
-  //   if (!repoSecretArn) {
-  //     baseUrl = 'git clone https://';
-  //     cloneUrl = baseUrl + gitRepoUrl;
-  //   } else {
-  //     cloneUrl = baseUrl + secretData + '@' + gitRepoUrl;
+    // const getGitAppUrl = () => {
+  //     const gitAppUrl = gitHost + "/" + gitApp + ".git"
+  //     return gitAppUrl
   //   }
-  //   navigator.clipboard.writeText(cloneUrl);
-  // };
+  
+  const HandleCopyGitClone = () => {
+    let baseUrl = 'git clone https://oauth2:';
+    let cloneUrl = '';
+    if (!repoSecretArn) {
+      baseUrl = 'git clone https://';
+      cloneUrl = baseUrl + gitRepoUrl;
+    } else {
+      cloneUrl = baseUrl + secretData + '@' + gitRepoUrl;
+    }
+    navigator.clipboard.writeText(cloneUrl);
+  };
 
-  // const HandleCopySecret = () => {
-  //   navigator.clipboard.writeText(secretData || '');
-  // };
+  const HandleCopySecret = () => {
+    navigator.clipboard.writeText(secretData || '');
+  };
 
   async function getData() {
     if (!repoSecretArn) {
@@ -109,7 +113,7 @@ const OpaAppGeneralInfo = ({
                     Repository Access Token
                   </Typography>
                   <Typography noWrap>
-                    <IconButton sx={{ p: 0 }}>
+                  <IconButton sx={{ p: 0 }} onClick={HandleCopySecret}>
                       <ContentCopyIcon></ContentCopyIcon>
                     </IconButton>
                     <SecretStringComponent secret={secretData ?? ''} />
@@ -130,7 +134,7 @@ const OpaAppGeneralInfo = ({
                   <tbody>
                     <tr>
                       <td>
-                        <IconButton sx={{ p: 0 }}>
+                      <IconButton sx={{ p: 0 }} onClick={HandleCopyGitClone}>
                           <ContentCopyIcon></ContentCopyIcon>
                         </IconButton>
                       </td>

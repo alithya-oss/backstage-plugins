@@ -18,13 +18,10 @@ export class GitLabAPI implements ISCMBackendAPI {
     accessToken: string,
   ): Promise<string> {
     let repoName;
-    let groupName;
 
     if (gitRepoName.includes('/')) {
-      groupName = gitRepoName.split('/')[0];
       repoName = gitRepoName.split('/')[1];
     } else {
-      groupName = '';
       repoName = gitRepoName;
     }
     const url = `https://${gitHost}/api/v4/projects?search=${repoName}`;
@@ -41,7 +38,7 @@ export class GitLabAPI implements ISCMBackendAPI {
     let project = null;
     if (gitProjectsJson) {
       project = gitProjectsJson.filter(
-        project => project.path_with_namespace === `${groupName}/${repoName}`,
+        project => project.path_with_namespace === `${gitProjectGroup}/${repoName}`,
       )[0];
     }
 
@@ -170,6 +167,8 @@ export class GitLabAPI implements ISCMBackendAPI {
     });
 
     const resultBody = await result.json();
+    const decodedContent = Buffer.from(resultBody.content, 'base64').toString('utf-8');
+    console.log(decodedContent);
     if (result.status > 299) {
       this.logger.error(
         `ERROR: Failed to retrieve ${filePath} for ${repo.gitRepoName}. Response code: ${result.status} - ${resultBody}`,
@@ -185,7 +184,7 @@ export class GitLabAPI implements ISCMBackendAPI {
         isSuccuess: true,
         message: `Retrieved file content successfully`,
         httpResponse: result.status,
-        value: resultBody.content,
+        value: decodedContent,
       };
     }
   }
