@@ -8,19 +8,17 @@ import {
   AWSResourceDeploymentEnvironment,
   ComponentStateType,
   GenericAWSEnvironment,
-  IRepositoryInfo,
   getGitCredentailsSecret,
+  IRepositoryInfo,
 } from '@alithya-oss/plugin-aws-apps-common';
 import { Entity } from '@backstage/catalog-model';
 import { EmptyState, InfoCard } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
-import {
-  CatalogApi,
-  catalogApiRef,
-  useEntity,
-} from '@backstage/plugin-catalog-react';
+import { CatalogApi, catalogApiRef, useEntity, } from '@backstage/plugin-catalog-react';
 import { Button, CardContent, Grid, LinearProgress } from '@material-ui/core';
-import { Alert, AlertTitle, Typography } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Typography from '@mui/material/Typography';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useState } from 'react';
@@ -47,7 +45,7 @@ const DeleteAppPanel = ({
   const navigate = useNavigate();
 
   const appIACType = entity.metadata.iacType?.toString();
-  const appSubtype = entity.spec?.subType?.toString() || 'undefinedSubtype';
+  const appSubtype = entity.spec?.subType?.toString() ?? 'undefinedSubtype';
   // console.log(appIACType);
   const repoInfo = awsComponent.getRepoInfo();
 
@@ -55,11 +53,11 @@ const DeleteAppPanel = ({
     setDeleteResultMessage('');
   };
 
-  const deleteRepo = (repoInfo: IRepositoryInfo) => {
+  const deleteRepo = (repositoryInfo: IRepositoryInfo) => {
     api
       .deleteRepository({
-        repoInfo,
-        gitAdminSecret: getGitCredentailsSecret(repoInfo),
+        repoInfo: repositoryInfo,
+        gitAdminSecret: getGitCredentailsSecret(repositoryInfo),
       })
       .then(_results => {
         // console.log(_results);
@@ -67,7 +65,6 @@ const DeleteAppPanel = ({
         setIsDeleteSuccessful(true);
       })
       .catch(error => {
-        console.log(error);
         setDeleteResultMessage(`Error deleting Repository ${error}.`);
         setSpinning(false);
         setIsDeleteSuccessful(false);
@@ -79,15 +76,15 @@ const DeleteAppPanel = ({
     setDeleteResultMessage('Deleting entity from backstage catalog');
     // The entity will be removed from the catalog along with the auto-generated Location kind entity
     // which references the catalog entity
-    const uid = entity.metadata.uid || '';
+    const uid = entity.metadata.uid ?? '';
     const entityAnnotations = entity.metadata.annotations || {};
     const entityLocation =
       entityAnnotations['backstage.io/managed-by-location'] || '';
     const entityLocationRef = await catalogApi.getLocationByRef(entityLocation);
     if (entityLocationRef) {
-      catalogApi.removeLocationById(entityLocationRef.id);
+      await catalogApi.removeLocationById(entityLocationRef.id);
     }
-    catalogApi.removeEntityByUid(uid);
+    await catalogApi.removeEntityByUid(uid);
   };
 
   // Ensure that k8s objects are deleted in an appropriate order
@@ -132,17 +129,13 @@ const DeleteAppPanel = ({
       return;
     }
 
-    const kubectlLambdaArn =
-      env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() ||
-      '';
+    const kubectlLambdaArn = env.entities.envProviderEntity?.metadata.kubectlLambdaArn?.toString() ?? '';
     const kubectlLambdaRoleArn = env.app.appAdminRoleArn;
 
     const clusterNameParam = await api.getSSMParameter({
       ssmParamName: env.clusterName,
     });
-    const clusterName =
-      clusterNameParam.Parameter?.Value?.toString().split('/')[1].toString() ||
-      '';
+    const clusterName = clusterNameParam.Parameter?.Value?.toString().split('/')[1].toString() ?? '';
 
     const bodyParamVariables = {
       RequestType: 'Delete',
@@ -163,8 +156,6 @@ const DeleteAppPanel = ({
     if (invokeLambdaResponse.FunctionError) {
       throw new Error('Failed to delete app from Kubernetes cluster.');
     }
-
-    return invokeLambdaResponse;
   };
 
   const deleteAppFromSingleProvider = async (
@@ -195,31 +186,29 @@ const DeleteAppPanel = ({
         );
       }
 
-      const results = api.deleteStack({
+      return api.deleteStack({
         componentName: awsComponent.componentName,
         stackName,
         backendParamsOverrides,
       });
-      return results;
     } else if (
       awsComponent.componentState === ComponentStateType.TERRAFORM_CLOUD
     ) {
-      // Use the workspace directy to invoke delete if provisioning happens in TF Cloud
+      // Use the workspace directly to invoke delete if provisioning happens in TF Cloud
       // awsComponent.currentEnvironment.providerData.terraformWorkspace
 
-      const repoInfo = awsComponent.getRepoInfo();
+      const repositoryInfo = awsComponent.getRepoInfo()
       const params = {
         backendParamsOverrides,
-        repoInfo,
-        gitAdminSecret: getGitCredentailsSecret(repoInfo),
+        repoInfo: repositoryInfo,
+        gitAdminSecret: getGitCredentailsSecret(repositoryInfo),
         envName: env.environment.name,
-      };
-      const results = api.deleteTFProvider(params);
-      return results;
+      }
+      return api.deleteTFProvider(params);
     } else if (
       awsComponent.componentState === ComponentStateType.TERRAFORM_AWS
     ) {
-      // rely on pipeline to remove the terraform IAC based on bucket and table - can be resloved from the repo.
+      // rely on the pipeline to remove the terraform IAC based on bucket and table - can be resolved from the repo.
       // awsComponent.currentEnvironment.providerData.terraformStateBucket
       // awsComponent.currentEnvironment.providerData.terraformStateTable
 
@@ -227,21 +216,20 @@ const DeleteAppPanel = ({
       if (APP_SUBTYPE.EKS === appSubtype) {
         await deleteK8sApp(
           awsComponent.currentEnvironment as AWSEKSAppDeploymentEnvironment,
-        );
+        )
       }
 
-      const repoInfo = awsComponent.getRepoInfo();
+      const repositoryInfo = awsComponent.getRepoInfo()
       const params = {
         backendParamsOverrides,
-        repoInfo,
-        gitAdminSecret: getGitCredentailsSecret(repoInfo),
+        repoInfo: repositoryInfo,
+        gitAdminSecret: getGitCredentailsSecret(repositoryInfo),
         envName: env.environment.name,
-      };
-      const results = api.deleteTFProvider(params);
-      return results;
+      }
+      return api.deleteTFProvider(params)
     }
-    throw Error("Error: Can't delete component, Unsupported State.");
-  };
+    throw Error('Error: Can\'t delete component, Unsupported State.')
+  }
 
   const deleteSecret = (secretName: string) => {
     api
@@ -283,14 +271,11 @@ const DeleteAppPanel = ({
           // awsComponent.currentEnvironment.providerData.name
         })
         .catch(error => {
-          console.log(error);
           setSpinning(false);
           setIsDeleteSuccessful(false);
           setDeleteResultMessage(error.toString());
           return;
         });
-    } else {
-      // Do nothing!
     }
   };
 
@@ -314,7 +299,6 @@ const DeleteAppPanel = ({
             await sleep(2000);
           })
           .catch(error => {
-            console.log(error);
             setSpinning(false);
             setIsDeleteSuccessful(false);
             setDeleteResultMessage(error.toString());
@@ -327,9 +311,9 @@ const DeleteAppPanel = ({
         deleteRepo(repoInfo);
         await sleep(2000);
         if (awsComponent.componentType === AWSComponentType.AWSApp) {
-          deleteSecret(entity.metadata.repoSecretArn?.toString() || '');
+          deleteSecret(entity.metadata.repoSecretArn?.toString() ?? '');
         }
-        deleteFromCatalog();
+        await deleteFromCatalog();
         setSpinning(false);
         await sleep(2000);
         setDeleteResultMessage('Redirect to home ....');
@@ -405,8 +389,8 @@ const DeleteAppPanel = ({
                 deleted!
                 {!!deleteResultMessage && (
                   <>
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
                     {deleteResultMessage}
                   </>
                 )}
@@ -423,8 +407,8 @@ const DeleteAppPanel = ({
                 Failed to delete <strong>{entity.metadata.name}</strong> .
                 {!!deleteResultMessage && (
                   <>
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
                     {deleteResultMessage}
                   </>
                 )}
@@ -436,7 +420,7 @@ const DeleteAppPanel = ({
           sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
           open={spinning}
         >
-          <CircularProgress color="inherit" />
+          <CircularProgress color="inherit"/>
         </Backdrop>
       </CardContent>
     </InfoCard>
@@ -450,7 +434,7 @@ export const DeleteComponentCard = () => {
   const api = useApi(opaApiRef);
 
   if (awsAppLoadingStatus.loading) {
-    return <LinearProgress />;
+    return <LinearProgress/>;
   } else if (awsAppLoadingStatus.component) {
     // console.log(awsAppLoadingStatus.component)
     const input = {
@@ -459,7 +443,7 @@ export const DeleteComponentCard = () => {
       catalogApi,
       api,
     };
-    return <DeleteAppPanel input={input} />;
+    return <DeleteAppPanel input={input}/>;
   }
   return (
     <EmptyState
