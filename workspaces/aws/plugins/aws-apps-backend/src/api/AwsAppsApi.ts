@@ -65,12 +65,7 @@ import {
   DescribeClusterCommandOutput,
   EKSClient,
 } from '@aws-sdk/client-eks';
-import {
-  InvokeCommand,
-  InvokeCommandInput,
-  InvokeCommandOutput,
-  LambdaClient,
-} from '@aws-sdk/client-lambda';
+import { InvokeCommand, InvokeCommandInput, InvokeCommandOutput, LambdaClient, } from '@aws-sdk/client-lambda';
 import {
   ListGroupResourcesCommand,
   ListGroupResourcesCommandInput,
@@ -167,12 +162,11 @@ export class AwsAppsApi {
       credentials: this.awsCredentials,
     });
     const params: ListTasksCommandInput = {
-      cluster: clusterRef.Parameter?.Value?.toString() || '',
+      cluster: clusterRef.Parameter?.Value?.toString() ?? '',
       serviceName: serviceName,
     };
     const command = new ListTasksCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Describes tasks of an ECS Service
@@ -181,7 +175,7 @@ export class AwsAppsApi {
    * Describe the active running tasks of a giving cluster
    *
    * @param clusterName - The ECS Cluster name
-   * @param taskArns - List of Task arns
+   * @param taskArns - List of Task ARNs
    * @returns The DescribeTasksCommand object
    *
    */
@@ -198,12 +192,11 @@ export class AwsAppsApi {
       credentials: this.awsCredentials,
     });
     const params: DescribeTasksCommandInput = {
-      cluster: clusterRef.Parameter?.Value?.toString() || '',
+      cluster: clusterRef.Parameter?.Value?.toString() ?? '',
       tasks: taskArns,
     };
     const command = new DescribeTasksCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Update an ECS Service with desire task number.
@@ -213,6 +206,8 @@ export class AwsAppsApi {
    *
    * @param clusterName - The ECS Cluster name
    * @param serviceName - The ECS Service name
+   * @param taskDefinition
+   * @param restart
    * @param numberOfTasks - The number of tasks desired - use 0 or 1 to reset
    * @returns The UpdateServiceCommandOutput object
    *
@@ -233,15 +228,14 @@ export class AwsAppsApi {
       credentials: this.awsCredentials,
     });
     const params: UpdateServiceCommandInput = {
-      cluster: clusterRef.Parameter?.Value?.toString() || '',
+      cluster: clusterRef.Parameter?.Value?.toString() ?? '',
       service: serviceName,
       desiredCount: numberOfTasks,
       forceNewDeployment: restart,
       taskDefinition: taskDefinition,
     };
     const command = new UpdateServiceCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Get SecretsManager Secret value.
@@ -249,7 +243,7 @@ export class AwsAppsApi {
    * @remarks
    * Get SecretsManager Secret value.
    *
-   * @param secretArn - The Arn of the secret to retrive
+   * @param secretArn - The Arn of the secret to retrieve
    * @returns The GetSecretValueCommandOutput object
    *
    */
@@ -265,8 +259,7 @@ export class AwsAppsApi {
       SecretId: secretArn,
     };
     const command = new GetSecretValueCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   /**
@@ -275,6 +268,8 @@ export class AwsAppsApi {
    * create SecretsManager Secret.
    *
    * @param secretName - The name of the secret
+   * @param description
+   * @param tags
    * @returns The CreateSecretCommandOutput object
    *
    */
@@ -302,8 +297,7 @@ export class AwsAppsApi {
     };
     const command = new CreateSecretCommand(params);
     try {
-      const response = await client.send(command);
-      return response;
+      return await client.send(command);
     } catch (error: any) {
       throw Error(`Error creating Secret - ${error.toString()}`);
     }
@@ -333,8 +327,7 @@ export class AwsAppsApi {
     };
     const command = new PutSecretValueCommand(params);
     try {
-      const response = await client.send(command);
-      return response;
+      return await client.send(command);
     } catch (error) {
       throw Error('Error updating secret value');
     }
@@ -345,6 +338,7 @@ export class AwsAppsApi {
    * create an S3 bucket.
    *
    * @param bucketName - The name of the bucket
+   * @param tags
    * @returns The CreateBucketCommandOutput object
    *
    */
@@ -421,9 +415,7 @@ export class AwsAppsApi {
       Key: fileName,
     };
     const command = new HeadObjectCommand(input);
-    const response = await client.send(command);
-
-    return response;
+    return client.send(command);
   }
   /**
    * Get CloudWatch log groups metadata array based on the supplied logPrefix.
@@ -447,8 +439,7 @@ export class AwsAppsApi {
       logGroupNamePrefix: logPrefix,
     };
     const command = new DescribeLogGroupsCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Get the metadata of the CloudWatch log group streams.
@@ -474,8 +465,7 @@ export class AwsAppsApi {
       descending: true,
     };
     const command = new DescribeLogStreamsCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Get CloudWatch log group streams content.
@@ -505,8 +495,7 @@ export class AwsAppsApi {
       startFromHead,
     };
     const command = new GetLogEventsCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   public async getLogRecord(
     logRecordPointer: string,
@@ -520,8 +509,7 @@ export class AwsAppsApi {
       logRecordPointer: logRecordPointer,
     };
     const command = new GetLogRecordCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   public async getDynamodbTable(
@@ -546,11 +534,10 @@ export class AwsAppsApi {
       },
       FilterExpression: '#appName = :appName',
       // TODO: Add Query to fetch record by user for a giving time frame , use secondary index for time. need to calculate time backward
-      // appName -> search critera , timeframe.
+      // appName -> search criteria , timeframe.
     };
     const command = new ScanCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   public async putDynamodbTableData(
@@ -585,8 +572,7 @@ export class AwsAppsApi {
       },
     };
     const command = new PutItemCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   /**
@@ -612,8 +598,7 @@ export class AwsAppsApi {
       Group: resourceGroupName,
     };
     const command = new ListGroupResourcesCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   /**
@@ -623,8 +608,8 @@ export class AwsAppsApi {
    * Get resources from a named Resource Group, parses them to destructure the ResourceType, and
    * categorizes the resources by service identifier
    *
-   * @param resourceGroupName - The Resource Group name to get a list of resources from.  This can be a string representing an ARN or the name of the Resource Group
    * @returns A ServiceResources object containing the grouped services
+   * @param resourceGroup
    */
   public async getCategorizedResources(
     resourceGroup: string,
@@ -632,58 +617,55 @@ export class AwsAppsApi {
     const rawResults = await this.getResourceGroupResources(resourceGroup);
 
     const resourceIdentifiers = rawResults.Resources ?? [];
-    const categorizedResources =
-      resourceIdentifiers.reduce<AWSServiceResources>((acc, item): any => {
-        const idObj = item.Identifier;
-        if (idObj?.ResourceType) {
-          const resourceTypeId = idObj.ResourceType;
-          const [_, serviceName, resourceTypeName] = resourceTypeId.split('::');
+    return resourceIdentifiers.reduce<AWSServiceResources>((acc, item): any => {
+      const idObj = item.Identifier;
+      if (idObj?.ResourceType) {
+        const resourceTypeId = idObj.ResourceType;
+        const [_, serviceName, resourceTypeName] = resourceTypeId.split('::');
 
-          const resourceArn = idObj.ResourceArn ?? '';
-          try {
-            const { resource, service } = parseArn(resourceArn);
-            // Use a regex pattern to extract the resource name without the service resource type
-            // Most arns begin the resource name after a '/', but some (like CW logs) start after a ':'
-            const re = /.*?([:?\/])(.*)/;
-            const reMatches = resource.match(re);
-            let resourceName = reMatches ? reMatches[2] : resource;
-            // Handle the exception case for SSM Parameters where path-like values need to be prefixed with '/'
-            if (
-              service == 'ssm' &&
-              resource.startsWith('parameter') &&
-              resourceName.indexOf('/') > 0
-            ) {
-              resourceName = `/${resourceName}`;
-            }
-
-            if (acc[serviceName]) {
-              acc[serviceName] = [
-                ...acc[serviceName],
-                ...[
-                  {
-                    resourceTypeId,
-                    resourceTypeName,
-                    resourceArn,
-                    resourceName,
-                  },
-                ],
-              ];
-            } else {
-              acc[serviceName] = [
-                { resourceTypeId, resourceTypeName, resourceArn, resourceName },
-              ];
-            }
-          } catch {
-            throw new Error(
-              `Invalid arn provided for ${serviceName} in resource group ${resourceGroup}`,
-            );
+        const resourceArn = idObj.ResourceArn ?? '';
+        try {
+          const { resource, service } = parseArn(resourceArn);
+          // Use a regex pattern to extract the resource name without the service resource type
+          // Most ARNs begin the resource name after a '/', but some (like CW logs) start after a ':'
+          const re = /.*?([:?/])(.*)/;
+          const reMatches = RegExp(re).exec(resource);
+          let resourceName = reMatches ? reMatches[2] : resource;
+          // Handle the exception case for SSM Parameters where path-like values need to be prefixed with '/'
+          if (
+            service === 'ssm' &&
+            resource.startsWith('parameter') &&
+            resourceName.indexOf('/') > 0
+          ) {
+            resourceName = `/${resourceName}`;
           }
-          return acc;
-        }
-        throw new Error('Could not parse resource group resources response');
-      }, {});
 
-    return categorizedResources;
+          if (acc[serviceName]) {
+            acc[serviceName] = [
+              ...acc[serviceName],
+              ...[
+                {
+                  resourceTypeId,
+                  resourceTypeName,
+                  resourceArn,
+                  resourceName,
+                },
+              ],
+            ];
+          } else {
+            acc[serviceName] = [
+              { resourceTypeId, resourceTypeName, resourceArn, resourceName },
+            ];
+          }
+        } catch {
+          throw new Error(
+            `Invalid arn provided for ${serviceName} in resource group ${resourceGroup}`,
+          );
+        }
+        return acc;
+      }
+      throw new Error('Could not parse resource group resources response');
+    }, {});
   }
 
   /**
@@ -711,8 +693,7 @@ export class AwsAppsApi {
       WithDecryption: true,
     };
     const command = new GetParameterCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Describe Task definition
@@ -735,8 +716,7 @@ export class AwsAppsApi {
     };
 
     const command = new DescribeTaskDefinitionCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Register Task Definition
@@ -767,9 +747,7 @@ export class AwsAppsApi {
 
     const registerCommand = new RegisterTaskDefinitionCommand(registerTdParams);
 
-    const resp = client.send(registerCommand);
-
-    return resp;
+    return client.send(registerCommand);
   }
 
   /**
@@ -794,9 +772,7 @@ export class AwsAppsApi {
       StackName: stackName,
     };
     const command = new DescribeStacksCommand(input);
-    const response = await client.send(command);
-
-    return response;
+    return client.send(command);
   }
 
   /**
@@ -821,9 +797,7 @@ export class AwsAppsApi {
       StackName: stackName,
     };
     const command = new DescribeStackEventsCommand(input);
-    const response = await client.send(command);
-
-    return response;
+    return client.send(command);
   }
 
   /**
@@ -873,9 +847,7 @@ export class AwsAppsApi {
       ],
     };
     const command = new UpdateStackCommand(input);
-    const response = await client.send(command);
-
-    return response;
+    return client.send(command);
   }
 
   /**
@@ -924,9 +896,7 @@ export class AwsAppsApi {
       ],
     };
     const command = new CreateStackCommand(input);
-    const response = await client.send(command);
-
-    return response;
+    return client.send(command);
   }
 
   /**
@@ -953,9 +923,7 @@ export class AwsAppsApi {
       StackName: stackName,
     };
     const command = new DeleteStackCommand(input);
-    const response = await client.send(command);
-
-    return response;
+    return client.send(command);
   }
 
   /**
@@ -980,8 +948,7 @@ export class AwsAppsApi {
       name: clusterName,
     };
     const command = new DescribeClusterCommand(params);
-    const response = await client.send(command);
-    return response;
+    return client.send(command);
   }
 
   public async callLambda(
@@ -1001,7 +968,6 @@ export class AwsAppsApi {
       InvocationType: 'RequestResponse',
     };
     const command = new InvokeCommand(params);
-    const response = await client.send(command);
-    return response;
+    return client.send(command);
   }
 }
