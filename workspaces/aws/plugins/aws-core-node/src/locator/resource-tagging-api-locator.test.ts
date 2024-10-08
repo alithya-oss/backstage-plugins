@@ -13,7 +13,7 @@
 
 import { ConfigReader } from '@backstage/config';
 import { mockClient } from 'aws-sdk-client-mock';
-import { getVoidLogger } from '@backstage/backend-common';
+
 import {
   DefaultAwsCredentialsManager,
   AwsCredentialProvider,
@@ -25,6 +25,7 @@ import {
   TagFilter,
 } from '@aws-sdk/client-resource-groups-tagging-api';
 import { AwsResourceTaggingApiLocator } from './resource-tagging-api-locator';
+import { mockServices } from '@backstage/backend-test-utils'
 
 function getMockCredentialProvider(): Promise<AwsCredentialProvider> {
   return Promise.resolve({
@@ -43,7 +44,7 @@ const getCredProviderMock = jest.spyOn(
 
 const resourceTaggingMock = mockClient(ResourceGroupsTaggingAPIClient);
 
-const logger = getVoidLogger();
+const logger = mockServices.logger.mock()
 
 describe('Resource Explorer locator', () => {
   beforeAll(async () => {});
