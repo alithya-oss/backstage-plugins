@@ -165,7 +165,7 @@ export class AwsAppsPlatformApi {
       .getGitProvider()
       .commitContent(change, repo, gitToken);
 
-    if (!result.isSuccuess) {
+    if (!result.isSuccess) {
       console.error(`ERROR: Failed to Destroy ${envName}. Response: ${result}`);
       let message: string;
       if (result.value?.includes('A file with this name already exists')) {
@@ -212,7 +212,7 @@ export class AwsAppsPlatformApi {
       .getFileContent(filePath, repo, gitToken);
 
     const resultBody = await result.value;
-    if (!result.isSuccuess) {
+    if (!result.isSuccess) {
       console.error(
         `ERROR: Failed to retrieve ${filePath} for ${repo.gitRepoName}. Response: ${result}`,
       );
@@ -266,7 +266,7 @@ export class AwsAppsPlatformApi {
       .commitContent(change, repo, gitToken);
 
     const resultBody = result.value;
-    if (!result.isSuccuess) {
+    if (!result.isSuccess) {
       console.error(
         `ERROR: Failed to schedule deployment for ${input.envName}. Response: ${result}`,
       );
@@ -322,7 +322,7 @@ export class AwsAppsPlatformApi {
       .getGitProvider()
       .commitContent(change, repo, gitToken);
     const resultBody = result.value;
-    if (!result.isSuccuess) {
+    if (!result.isSuccess) {
       console.error(
         `ERROR: Failed to bind ${input.envName}. Response: ${result}`,
       );
@@ -379,7 +379,7 @@ export class AwsAppsPlatformApi {
       .commitContent(change, repo, gitToken);
 
     const resultBody = await result.value.json();
-    if (!result.isSuccuess) {
+    if (!result.isSuccess) {
       console.error(
         `ERROR: Failed to unbind ${input.envName}. Response: ${result}`,
       );
@@ -466,7 +466,7 @@ export class AwsAppsPlatformApi {
       resultBody = result.message;
     }
 
-    if (!result.isSuccuess) {
+    if (!result.isSuccess) {
       console.error(
         `ERROR: Failed to Update provider ${provider.name}. Response: ${result}`,
       );

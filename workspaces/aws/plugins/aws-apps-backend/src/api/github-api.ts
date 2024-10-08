@@ -34,14 +34,14 @@ export class GitHubAPI implements ISCMBackendAPI {
     if (createRepoResults.status > 299) {
       this.logger.error('ERROR: Repository failed to create');
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `Repository failed to create`,
         httpResponse: createRepoResults.status,
         value: 'FAILURE',
       };
     }
     return {
-      isSuccuess: true,
+      isSuccess: true,
       message: `Repository created successfully`,
       httpResponse: createRepoResults.status,
       value: 'SUCCESS',
@@ -65,14 +65,14 @@ export class GitHubAPI implements ISCMBackendAPI {
     if (deleteRepoResults.status > 299) {
       this.logger.error('ERROR: Repository failed to delete');
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `Repository failed to delete`,
         httpResponse: deleteRepoResults.status,
         value: 'FAILURE',
       };
     }
     return {
-      isSuccuess: true,
+      isSuccess: true,
       message: `Repository deleted successfully`,
       httpResponse: deleteRepoResults.status,
       value: 'SUCCESS',
@@ -99,7 +99,7 @@ export class GitHubAPI implements ISCMBackendAPI {
         `ERROR: Failed to retrieve ${filePath} for ${repo.gitRepoName}. Response code: ${result.status} - ${result}`,
       );
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `ERROR: Failed to retrieve ${filePath} for ${repo.gitRepoName}. Response code: ${result.status} - ${result}`,
         httpResponse: result.status,
         value: 'FAILURE',
@@ -115,7 +115,7 @@ export class GitHubAPI implements ISCMBackendAPI {
     const content = Buffer.from(contentB64.content, 'base64').toString();
 
     return {
-      isSuccuess: true,
+      isSuccess: true,
       message: `Retrieve file content successfully`,
       httpResponse: result.status,
       value: content,
@@ -158,7 +158,7 @@ export class GitHubAPI implements ISCMBackendAPI {
       console.log(result);
 
       return {
-        isSuccuess: true,
+        isSuccess: true,
         message: `Commit submitted successfully`,
         httpResponse: 200,
         value: result,
@@ -169,7 +169,7 @@ export class GitHubAPI implements ISCMBackendAPI {
       );
       this.logger.error(JSON.stringify(error));
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `ERROR: Failed to submit commit to ${repo.gitRepoName}`,
         httpResponse: 500,
         value: error || 'FAILURE',

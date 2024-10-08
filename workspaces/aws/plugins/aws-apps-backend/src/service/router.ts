@@ -346,7 +346,7 @@ export async function createRouter(
       gitAdminSecret,
     );
     console.log(service);
-    const status = service.isSuccuess ? 'SUCCESS' : 'FAILED';
+    const status = service.isSuccess ? 'SUCCESS' : 'FAILED';
     if (status === 'FAILED')
       res
         .status(500)

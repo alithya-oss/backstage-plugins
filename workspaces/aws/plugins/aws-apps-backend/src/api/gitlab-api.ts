@@ -17,8 +17,8 @@ export class GitLabAPI implements ISCMBackendAPI {
     gitRepoName: string,
     accessToken: string,
   ): Promise<string> {
-    let repoName;
-    let groupName;
+    let repoName: string;
+    let groupName: string;
 
     if (gitRepoName.includes('/')) {
       groupName = gitRepoName.split('/')[0];
@@ -41,7 +41,7 @@ export class GitLabAPI implements ISCMBackendAPI {
     let project = null;
     if (gitProjectsJson) {
       project = gitProjectsJson.filter(
-        project => project.path_with_namespace === `${groupName}/${repoName}`,
+        p => p.path_with_namespace === `${groupName}/${repoName}`,
       )[0];
     }
 
@@ -81,14 +81,14 @@ export class GitLabAPI implements ISCMBackendAPI {
     if (createRepoResults.status > 299) {
       this.logger.error('ERROR: Repository failed to create');
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `Repository failed to create`,
         httpResponse: createRepoResults.status,
         value: 'FAILURE',
       };
     }
     return {
-      isSuccuess: true,
+      isSuccess: true,
       message: `Repository created successfully`,
       httpResponse: createRepoResults.status,
       value: 'SUCCESS',
@@ -125,14 +125,14 @@ export class GitLabAPI implements ISCMBackendAPI {
     if (deleteRepoResults.status > 299) {
       this.logger.error('ERROR: Repository failed to delete');
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `Repository failed to delete`,
         httpResponse: deleteRepoResults.status,
         value: 'FAILURE',
       };
     }
     return {
-      isSuccuess: true,
+      isSuccess: true,
       message: `Repository deleted successfully`,
       httpResponse: deleteRepoResults.status,
       value: 'SUCCESS',
@@ -172,14 +172,14 @@ export class GitLabAPI implements ISCMBackendAPI {
         `ERROR: Failed to retrieve ${filePath} for ${repo.gitRepoName}. Response code: ${result.status} - ${resultBody}`,
       );
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `ERROR: Failed to retrieve ${filePath} for ${repo.gitRepoName}. Response code: ${result.status} - ${resultBody}`,
         httpResponse: result.status,
         value: 'FAILURE',
       };
     }
     return {
-      isSuccuess: true,
+      isSuccess: true,
       message: `Retrieved file content successfully`,
       httpResponse: result.status,
       value: resultBody.content,
@@ -227,14 +227,14 @@ export class GitLabAPI implements ISCMBackendAPI {
         `ERROR: Failed to submit commit to ${repo.gitRepoName}`,
       );
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `ERROR: Failed to submit commit to ${repo.gitRepoName}`,
         httpResponse: result.status,
         value: resultBody.message || 'FAILURE',
       };
     }
     return {
-      isSuccuess: true,
+      isSuccess: true,
       message: `Commit submitted successfully`,
       httpResponse: result.status,
       value: resultBody,
