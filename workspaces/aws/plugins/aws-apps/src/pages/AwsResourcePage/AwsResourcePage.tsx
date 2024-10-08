@@ -24,7 +24,7 @@ export function isResourceType(
     let subType = 'N/A';
     if (entity?.metadata?.resourceType)
       subType = entity?.metadata?.resourceType.toString();
-    return subType == resourceType;
+    return subType === resourceType;
   };
 }
 
