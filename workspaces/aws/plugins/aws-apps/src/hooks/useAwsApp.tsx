@@ -92,7 +92,7 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
     entity.metadata.name,
     config.getString('backend.platformRegion'),
   );
-  if (entity.metadata.name != _app_name) {
+  if (entity.metadata.name !== _app_name) {
     // switched app reset references of drop down env selector
     _envProviderEntityMap = null;
     _change_to_env_name = null;
@@ -133,7 +133,7 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
     const envProviderRefs = envEntities
       .filter(envLookupResponse => !!envLookupResponse.entity?.relations)
       .map(envLookupResponse => {
-        const envProviderRefs: EntityRelation[] | undefined =
+        const entityRelations: EntityRelation[] | undefined =
           envLookupResponse.entity?.relations?.filter(
             relation =>
               parseEntityRef(relation?.targetRef).kind ===
@@ -141,8 +141,8 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
           );
         return {
           envName: envLookupResponse.envName,
-          targetRefs: envProviderRefs
-            ? envProviderRefs.map(ref => ref.targetRef)
+          targetRefs: entityRelations
+            ? entityRelations.map(ref => ref.targetRef)
             : [],
         };
       })
@@ -213,10 +213,9 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
     try {
       await api.doesS3FileExist({ bucketName, fileName: 'packaged.yaml' });
       defaultDeployStatus = ExtraStackDeployStatus.STAGED;
-      // console.log('S3 HEAD response');
-      // console.log(JSON.stringify(templateFileExistsResponse, null, 2));
     } catch (e) {
-      console.error(e);
+      // TODO: Replace this:
+      //  console.error(e);
     }
 
     const appStack: CloudFormationStack = {
@@ -277,10 +276,11 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
         }
       }
     } catch (e) {
-      console.log(
-        'Failed to get stack. This is expected if the stack has not yet been deployed',
-      );
-      console.error(e);
+      // TODO: Replace this:
+      // console.log(
+      //   'Failed to get stack. This is expected if the stack has not yet been deployed',
+      // );
+      // console.error(e);
     }
   }
 
@@ -387,9 +387,10 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
           )[0];
 
           if (!envProvider) {
-            console.error(
-              `Could not filter based on env name ${_change_to_env_name} and provider name ${_change_to_env_provider_name}`,
-            );
+            // TODO: Replace this:
+            // console.error(
+            //   `Could not filter based on env name ${_change_to_env_name} and provider name ${_change_to_env_provider_name}`,
+            // );
             envProvider = envProviders[0];
           }
         } else {
@@ -499,18 +500,18 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
     );
 
     // now build an AWS component matching the app and the deployed environment
-    function getComponentType(entity: Entity): AWSComponentType {
-      if (entity.kind === 'AWSEnvironment') {
+    function getComponentType(e: Entity): AWSComponentType {
+      if (e.kind === 'AWSEnvironment') {
         return AWSComponentType.AWSEnvironment;
-      } else if (entity.kind === 'AWSEnvironmentProvider') {
+      } else if (e.kind === 'AWSEnvironmentProvider') {
         return AWSComponentType.AWSProvider;
       }
-      const componentType: string = entity.spec?.type?.toString() || '';
-      if (componentType === 'aws-resource') {
+      const type: string = e.spec?.type?.toString() || '';
+      if (type === 'aws-resource') {
         return AWSComponentType.AWSResource;
-      } else if (componentType === 'aws-app') {
+      } else if (type === 'aws-app') {
         return AWSComponentType.AWSApp;
-      } else if (componentType === 'aws-organization') {
+      } else if (type === 'aws-organization') {
         return AWSComponentType.AWSOrganization;
       }
       return AWSComponentType.Default;
@@ -569,12 +570,9 @@ export const useAwsComponentFromContext = (): AwsComponentHookLoadingStatus => {
 
     if (!awsComponent.currentEnvironment) {
       if (_change_to_env_name) {
-        console.log(
-          `Attempting to set current environment to ${_change_to_env_name}`,
-        );
+        // TODO Replace or remove this:
+        // console.log(`Attempting to set current environment to ${_change_to_env_name}`,);
       }
-      console.log(`Failed to retrieve currentEnvironment from data set:`);
-      console.log(deployEnvs);
     }
 
     api.setBackendParams({
