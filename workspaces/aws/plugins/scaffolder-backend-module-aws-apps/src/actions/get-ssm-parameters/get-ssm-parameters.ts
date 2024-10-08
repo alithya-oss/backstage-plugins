@@ -8,17 +8,14 @@ import {
   getEnvironmentProviderConnectInfo,
   getSSMParameterValue,
 } from '../../helpers/action-context';
-import {
-  EnvironmentProvider,
-  EnvironmentProviderConnection,
-} from '../../types';
+import { EnvironmentProvider, EnvironmentProviderConnection } from '../../types';
 
 const ID = 'opa:get-ssm-parameters';
 
 const examples = [
   {
     description:
-      'Retreive AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
+      'Retrieve AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
     example: yaml.stringify({
       steps: [
         {
@@ -44,7 +41,7 @@ export function getSsmParametersAction() {
   }>({
     id: ID,
     description:
-      'Retreive AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
+      'Retrieve AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
     examples,
     schema: {
       input: {
@@ -113,7 +110,7 @@ export function getSsmParametersAction() {
       const getEnvProviderSsmParams = async (
         connection: EnvironmentProviderConnection,
       ): Promise<{ [key: string]: string }> => {
-        const params = (
+        return (
           await Promise.all(
             paramKeys.map(
               async (paramKey): Promise<{ [key: string]: string }> => {
@@ -137,8 +134,6 @@ export function getSsmParametersAction() {
             [key]: paramKeyValMap[key],
           };
         }, {});
-
-        return params;
       };
 
       const paramsPerEnvProvider = (
