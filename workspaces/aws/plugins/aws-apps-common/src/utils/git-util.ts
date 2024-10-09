@@ -46,6 +46,8 @@ export const getRepoUrl = (repoInfo: IRepositoryInfo): string => {
 export const getRepoInfo = (entity: Entity): IRepositoryInfo => {
   // let gitProvider: GitProviders = GitProviders.GITLAB;
   let gitProvider = entity.metadata['gitProvider'] ?? GitProviders.GITLAB;
+  let repoUrl = entity.metadata['repoUrl']?? GitProviders.GITLAB;
+  const repoInfo = extractRepoInfo(repoUrl.toString());
 
   // switch (entity.metadata["gitProvider"]){
   //   case "github":
@@ -62,22 +64,9 @@ export const getRepoInfo = (entity: Entity): IRepositoryInfo => {
     case GitProviders.GITLAB:
       return {
         gitProvider,
-        gitHost: entity.metadata.annotations
-          ? entity.metadata.annotations['gitlab.com/instance']?.toString()
-          : '',
-        gitRepoName: entity.metadata.annotations
-          ? entity.metadata.annotations['gitlab.com/project-slug']?.toString()
-          .slice(entity.metadata.annotations['gitlab.com/project-slug']
-            ?.toString()
-            .lastIndexOf('/') + 1)
-          : '',
-        gitProjectGroup: entity.metadata.annotations
-          ? entity.metadata.annotations['gitlab.com/project-slug']
-              ?.toString()
-              .slice(0, entity.metadata.annotations['gitlab.com/project-slug']
-                ?.toString()
-                .lastIndexOf('/'))
-          : '',
+        gitHost: repoInfo.host,
+        gitRepoName: repoInfo.repo,
+        gitProjectGroup: repoInfo.owner,
         isPrivate: true,
       };
     case GitProviders.GITHUB:
@@ -113,3 +102,19 @@ export const getGitCredentailsSecret = (repoInfo: IRepositoryInfo): string => {
     throw Error('Unsupported git provider ' + repoInfo.gitProvider);
   }
 };
+function extractRepoInfo(repoUrl: string) {
+  // Extract the base host (e.g., gitlab.com) and query parameters
+  const [host, queryParams] = repoUrl.split('?');
+  
+  // Parse the query parameters
+  const urlSearchParams = new URLSearchParams(queryParams);
+  const owner = urlSearchParams.get('owner'); // Extract owner parameter
+  const repo = urlSearchParams.get('repo');   // Extract repo parameter
+  
+  // Return the extracted values
+  return {
+    host: host,
+    owner: owner ? decodeURIComponent(owner) : '',
+    repo: repo ? repo : '',
+  };
+}
