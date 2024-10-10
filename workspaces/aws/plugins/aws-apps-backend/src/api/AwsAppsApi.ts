@@ -211,8 +211,8 @@ export class AwsAppsApi {
    *
    * @param clusterName - The ECS Cluster name
    * @param serviceName - The ECS Service name
-   * @param taskDefinition
-   * @param restart
+   * @param taskDefinition - The name of the ECS task definition
+   * @param restart - Enable/disable task restart on new deployment
    * @param numberOfTasks - The number of tasks desired - use 0 or 1 to reset
    * @returns The UpdateServiceCommandOutput object
    *
@@ -273,8 +273,8 @@ export class AwsAppsApi {
    * create SecretsManager Secret.
    *
    * @param secretName - The name of the secret
-   * @param description
-   * @param tags
+   * @param description - The description of the secret
+   * @param tags - The tags allocated to the secret
    * @returns The CreateSecretCommandOutput object
    *
    */
@@ -343,7 +343,7 @@ export class AwsAppsApi {
    * create an S3 bucket.
    *
    * @param bucketName - The name of the bucket
-   * @param tags
+   * @param tags - tags allocated to the bucket
    * @returns The CreateBucketCommandOutput object
    *
    */
@@ -614,7 +614,7 @@ export class AwsAppsApi {
    * categorizes the resources by service identifier
    *
    * @returns A ServiceResources object containing the grouped services
-   * @param resourceGroup
+   * @param resourceGroup - the name of the resource group
    */
   public async getCategorizedResources(
     resourceGroup: string,
