@@ -331,7 +331,7 @@ export class CostExplorerCostInsightsAwsService
     const regex = /R(\d+)/;
     const match = RegExp(regex).exec(parts[0]);
 
-    if (!match || !match[1]) {
+    if (!match?.[1]) {
       throw new Error(`Failed to parse repeating interval ${parts[0]}`);
     }
 
