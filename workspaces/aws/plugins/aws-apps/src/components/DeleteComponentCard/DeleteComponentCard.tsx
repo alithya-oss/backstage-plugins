@@ -282,7 +282,6 @@ const DeleteAppPanel = ({
         setSpinning(false);
         setIsDeleteSuccessful(false);
         setDeleteResultMessage(error.toString());
-        return;
       });
   };
 
@@ -309,7 +308,6 @@ const DeleteAppPanel = ({
           setSpinning(false);
           setIsDeleteSuccessful(false);
           setDeleteResultMessage(error.toString());
-          return;
         });
     });
     if (appIACType === 'cdk') {
