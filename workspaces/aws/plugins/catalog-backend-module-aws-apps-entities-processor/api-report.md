@@ -7,8 +7,7 @@ import { BackendFeatureCompat } from '@backstage/backend-plugin-api';
 import { CatalogProcessor } from '@backstage/plugin-catalog-node';
 import { CatalogProcessorEmit } from '@backstage/plugin-catalog-node';
 import { Entity } from '@backstage/catalog-model';
-import { LocationSpec } from '@backstage/plugin-catalog-node';
-import { LocationSpec as LocationSpec_2 } from '@backstage/plugin-catalog-common';
+import { LocationSpec } from '@backstage/plugin-catalog-common';
 
 // @public (undocumented)
 export class AWSEnvironmentEntitiesProcessor implements CatalogProcessor {
@@ -33,7 +32,7 @@ export class AWSEnvironmentProviderEntitiesProcessor
   // (undocumented)
   postProcessEntity(
     entity: Entity,
-    _location: LocationSpec_2,
+    _location: LocationSpec,
     emit: CatalogProcessorEmit,
   ): Promise<Entity>;
   // (undocumented)

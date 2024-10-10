@@ -4,10 +4,10 @@
 
 ```ts
 import { BasicPermission } from '@backstage/plugin-permission-common';
-import { DeployStackStatus } from '@alithya-oss/plugin-aws-apps/src/helpers/constants';
 import { Entity } from '@backstage/catalog-model';
 import { JsonObject } from '@backstage/types';
 import { KindValidator } from '@backstage/catalog-model';
+import { StackStatus } from '@aws-sdk/client-cloudformation';
 
 // @public (undocumented)
 export type AppPromoParams = {
@@ -403,7 +403,7 @@ export interface IGitAPIResult {
   // (undocumented)
   httpResponse: number;
   // (undocumented)
-  isSuccuess: boolean;
+  isSuccess: boolean;
   // (undocumented)
   message: string;
   // (undocumented)
@@ -534,4 +534,8 @@ export interface ResourcePolicy {
   // (undocumented)
   policyResource: string;
 }
+
+// Warnings were encountered during analysis:
+//
+// src/types/AWSUIInterfaces.d.ts:104:5 - (ae-forgotten-export) The symbol "DeployStackStatus" needs to be exported by the entry point index.d.ts
 ```
