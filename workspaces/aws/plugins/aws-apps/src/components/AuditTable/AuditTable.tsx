@@ -6,7 +6,7 @@ import { EmptyState, Table, TableColumn } from '@backstage/core-components';
 import { LinearProgress } from '@material-ui/core';
 import { useApi } from '@backstage/core-plugin-api';
 import { opaApiRef } from '../../api';
-import  Typography  from '@mui/material/Typography';
+import Typography from '@mui/material/Typography';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
 import { AuditRecord } from '@alithya-oss/plugin-aws-apps-common';
 

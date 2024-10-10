@@ -47,7 +47,7 @@ const AppConfigOverview = ({
   );
 
   useEffect(() => {
-    async function getData () {
+    async function getData() {
       const taskDefinition = await api.describeTaskDefinition({
         taskDefinitionArn: latestTaskDef,
       });
@@ -57,12 +57,12 @@ const AppConfigOverview = ({
           return {
             containerName: containerDef?.name,
             env: containerDef?.environment,
-          }
+          };
         },
       );
 
-      setSavedEnvVariables(containerDetails!)
-      setEnvVariables(containerDetails!)
+      setSavedEnvVariables(containerDetails!);
+      setEnvVariables(containerDetails!);
     }
     getData()
       .then(() => {
@@ -282,7 +282,7 @@ const AppConfigOverview = ({
   if (loading) {
     return (
       <InfoCard title="Application Configuration">
-        <LinearProgress/>
+        <LinearProgress />
       </InfoCard>
     );
   }
@@ -326,7 +326,7 @@ const AppConfigOverview = ({
                       size="small"
                       id={index.toString()}
                       onClick={() => onEdit(containerDetails.containerName!)}
-                      disabled={ containerDetails?.env?.length === 0 }
+                      disabled={containerDetails?.env?.length === 0}
                     >
                       Edit
                     </Button>
@@ -469,13 +469,13 @@ export const AppConfigCard = () => {
   const awsAppLoadingStatus = useAsyncAwsApp();
 
   if (awsAppLoadingStatus.loading) {
-    return <LinearProgress/>;
+    return <LinearProgress />;
   } else if (awsAppLoadingStatus.component) {
     const input = {
       awsComponent: awsAppLoadingStatus.component,
     };
 
-    return <AppConfigOverview input={input}/>;
+    return <AppConfigOverview input={input} />;
   }
   return (
     <EmptyState

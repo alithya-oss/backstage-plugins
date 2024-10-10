@@ -21,8 +21,14 @@ import {
 } from '@aws-sdk/client-ecs';
 import { parse } from '@aws-sdk/util-arn-parser';
 import { CatalogApi } from '@backstage/catalog-client';
-import { AwsResourceLocator, AwsResourceLocatorFactory, } from '@alithya-oss/plugin-aws-core-node';
-import { AWS_SDK_CUSTOM_USER_AGENT, getOneOfEntityAnnotations, } from '@alithya-oss/plugin-aws-core-common';
+import {
+  AwsResourceLocator,
+  AwsResourceLocatorFactory,
+} from '@alithya-oss/plugin-aws-core-node';
+import {
+  AWS_SDK_CUSTOM_USER_AGENT,
+  getOneOfEntityAnnotations,
+} from '@alithya-oss/plugin-aws-core-common';
 import {
   AWS_ECS_SERVICE_ARN_ANNOTATION,
   AWS_ECS_SERVICE_TAGS_ANNOTATION,
@@ -30,8 +36,14 @@ import {
   ServiceResponse,
   ServicesResponse,
 } from '@alithya-oss/plugin-amazon-ecs-common';
-import { AwsCredentialsManager, DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
-import { CompoundEntityRef, stringifyEntityRef } from '@backstage/catalog-model';
+import {
+  AwsCredentialsManager,
+  DefaultAwsCredentialsManager,
+} from '@backstage/integration-aws-node';
+import {
+  CompoundEntityRef,
+  stringifyEntityRef,
+} from '@backstage/catalog-model';
 import { AmazonECSService } from './types';
 import { Config } from '@backstage/config';
 import {

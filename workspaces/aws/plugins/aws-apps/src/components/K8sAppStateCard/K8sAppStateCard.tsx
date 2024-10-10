@@ -1,8 +1,8 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { InvokeCommandOutput } from '@aws-sdk/client-lambda'
-import { GetParameterCommandOutput } from '@aws-sdk/client-ssm'
+import { InvokeCommandOutput } from '@aws-sdk/client-lambda';
+import { GetParameterCommandOutput } from '@aws-sdk/client-ssm';
 import {
   AppState,
   AppStateType,
@@ -10,26 +10,32 @@ import {
   AWSEKSAppDeploymentEnvironment,
   getGitCredentailsSecret,
   KeyValue,
-} from '@alithya-oss/plugin-aws-apps-common'
-import { Entity } from '@backstage/catalog-model'
-import { EmptyState, InfoCard } from '@backstage/core-components'
-import { useApi } from '@backstage/core-plugin-api'
-import { useEntity } from '@backstage/plugin-catalog-react'
-import { LinearProgress, Table, TableBody, TableCell, TableRow, } from '@material-ui/core'
+} from '@alithya-oss/plugin-aws-apps-common';
+import { Entity } from '@backstage/catalog-model';
+import { EmptyState, InfoCard } from '@backstage/core-components';
+import { useApi } from '@backstage/core-plugin-api';
+import { useEntity } from '@backstage/plugin-catalog-react';
+import {
+  LinearProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@material-ui/core';
 import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
-import AddIcon from '@mui/icons-material/Add'
-import RemoveIcon from '@mui/icons-material/Remove'
-import Button from '@mui/material/Button'
-import CardContent from '@mui/material/CardContent'
-import Divider from '@mui/material/Divider'
-import Grid from '@mui/material/Grid'
-import Typography from '@mui/material/Typography'
-import { styled } from '@mui/system'
-import React, { useEffect, useRef, useState } from 'react'
-import { opaApiRef } from '../../api'
-import { base64PayloadConvert } from '../../helpers/util'
-import { useAsyncAwsApp } from '../../hooks/useAwsApp'
-import { useCancellablePromise } from '../../hooks/useCancellablePromise'
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/system';
+import React, { useEffect, useRef, useState } from 'react';
+import { opaApiRef } from '../../api';
+import { base64PayloadConvert } from '../../helpers/util';
+import { useAsyncAwsApp } from '../../hooks/useAwsApp';
+import { useCancellablePromise } from '../../hooks/useCancellablePromise';
 
 const blue = {
   100: '#daecff',
@@ -94,8 +100,8 @@ const StyledInput = styled('input')(
   &:focus {
     border-color: ${blue[400]};
     box-shadow: 0 0 0 3px ${
-    theme.palette.mode === 'dark' ? blue[700] : blue[200]
-  };
+      theme.palette.mode === 'dark' ? blue[700] : blue[200]
+    };
   }
 
   &:focus-visible {
@@ -176,7 +182,7 @@ const OpaAppStateOverview = ({
   let clusterNameParam;
   let clusterName: string;
 
-  async function fetchAppConfig () {
+  async function fetchAppConfig() {
     if (!clusterName) {
       // console.log(`getting cluster name`);
       clusterNameParam = await cancellablePromise<GetParameterCommandOutput>(
@@ -230,11 +236,11 @@ const OpaAppStateOverview = ({
       }
       return null;
     } catch (err) {
-      throw Error('Can\'t parse json response');
+      throw Error("Can't parse json response");
     }
   }
 
-  async function fetchAppState ():Promise<any> {
+  async function fetchAppState(): Promise<any> {
     if (!clusterName) {
       // console.log(`getting cluster name`);
       clusterNameParam = await cancellablePromise<GetParameterCommandOutput>(
@@ -280,7 +286,7 @@ const OpaAppStateOverview = ({
       }
       return null;
     } catch (err) {
-      throw Error('Can\'t parse json response');
+      throw Error("Can't parse json response");
     }
   }
 
@@ -362,7 +368,7 @@ const OpaAppStateOverview = ({
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  async function getData (appStateResults?: any) {
+  async function getData(appStateResults?: any) {
     let isCanceled = false;
     let isError = false;
     let deploymentsJson;
@@ -424,7 +430,7 @@ const OpaAppStateOverview = ({
     };
   }, [getData]);
 
-  function sleep (ms: number) {
+  function sleep(ms: number) {
     return new Promise(resolve => {
       const resolveHandler = () => {
         clearTimeout(timerRef.current);
@@ -487,7 +493,7 @@ const OpaAppStateOverview = ({
 
         Object.keys(appStateJson).forEach(key => {
           const currState = appStateJson[key];
-          
+
           if (currState.metadata.uid === appState.deploymentIdentifier) {
             if (Number.parseInt(currState.status.readyReplicas, 10) > 0) {
               setAppStateData([]); // reset existing state
@@ -499,7 +505,6 @@ const OpaAppStateOverview = ({
 
         localAppStarted = isStarted;
         deploymentsJson = appStateJson;
-        
 
         if (localAppStarted || appStarted) {
           // Breaking from while loop since the app has started.
@@ -635,7 +640,7 @@ const OpaAppStateOverview = ({
         <TableCell id="noneConfigured" width="30%">
           None configured
         </TableCell>
-        <TableCell id="providerName"/>
+        <TableCell id="providerName" />
       </TableRow>
     );
   };
@@ -665,7 +670,7 @@ const OpaAppStateOverview = ({
             <div>
               {deploymentState?.appState ? (
                 <Grid container>
-                  <Grid item xs={1}/>
+                  <Grid item xs={1} />
                   <Grid item xs={11}>
                     <Table size="small" padding="none">
                       <TableBody>
@@ -725,7 +730,7 @@ const OpaAppStateOverview = ({
               )}
             </div>
           </Grid>
-          <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }}/>
+          <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }} />
           <Grid item zeroMinWidth xs={6} sx={{ pl: 1, pr: 1 }}>
             <Typography
               sx={{
@@ -737,11 +742,11 @@ const OpaAppStateOverview = ({
               Environment Variables
             </Typography>
             <Grid container>
-              <Grid item xs={1}/>
+              <Grid item xs={1} />
               <Grid item xs={11}>
                 <Table size="small" padding="none">
                   <TableBody>
-                    <EnvVars appID={deploymentState.appID as string}/>
+                    <EnvVars appID={deploymentState.appID as string} />
                   </TableBody>
                 </Table>
               </Grid>
@@ -769,11 +774,11 @@ const OpaAppStateOverview = ({
                   }}
                   slotProps={{
                     incrementButton: {
-                      children: <AddIcon fontSize="small"/>,
+                      children: <AddIcon fontSize="small" />,
                       className: 'increment',
                     },
                     decrementButton: {
-                      children: <RemoveIcon fontSize="small"/>,
+                      children: <RemoveIcon fontSize="small" />,
                     },
                   }}
                 />
@@ -787,7 +792,7 @@ const OpaAppStateOverview = ({
                   sx={{ mr: 2 }}
                   variant="outlined"
                   size="small"
-                  disabled={ deploymentState?.appState !== AppStateType.STOPPED }
+                  disabled={deploymentState?.appState !== AppStateType.STOPPED}
                   onClick={() => handleStartTask(deploymentState)}
                 >
                   Start
@@ -796,7 +801,7 @@ const OpaAppStateOverview = ({
                   sx={{ mr: 2 }}
                   variant="outlined"
                   size="small"
-                  disabled={ deploymentState?.appState === AppStateType.STOPPED }
+                  disabled={deploymentState?.appState === AppStateType.STOPPED}
                   onClick={() => handleStopTask(deploymentState)}
                 >
                   Stop
@@ -819,7 +824,7 @@ const OpaAppStateOverview = ({
   if (loading) {
     return (
       <InfoCard title="Application State">
-        <LinearProgress/>
+        <LinearProgress />
         <Typography sx={{ color: '#645B59', mt: 2 }}>
           Loading current state...
         </Typography>
@@ -845,7 +850,7 @@ const OpaAppStateOverview = ({
               Cluster Info
             </Typography>
             <Grid container>
-              <Grid item xs={1}/>
+              <Grid item xs={1} />
               <Grid item xs={11}>
                 <Table size="small" padding="none">
                   <TableBody>
@@ -882,7 +887,7 @@ const OpaAppStateOverview = ({
                 <DeploymentCard
                   key={state.deploymentIdentifier}
                   deploymentState={state}
-                  index={index +1}
+                  index={index + 1}
                   total={array.length}
                 />
               );
@@ -901,7 +906,7 @@ export const K8sAppStateCard = () => {
   const awsAppLoadingStatus = useAsyncAwsApp();
 
   if (awsAppLoadingStatus.loading) {
-    return <LinearProgress/>
+    return <LinearProgress />;
   } else if (awsAppLoadingStatus.component) {
     let input;
     if (awsAppLoadingStatus.component.componentSubType === 'aws-eks') {
@@ -912,7 +917,7 @@ export const K8sAppStateCard = () => {
         entity,
         awsComponent: awsAppLoadingStatus.component,
       };
-      return <OpaAppStateOverview input={input}/>;
+      return <OpaAppStateOverview input={input} />;
     }
     return (
       <EmptyState

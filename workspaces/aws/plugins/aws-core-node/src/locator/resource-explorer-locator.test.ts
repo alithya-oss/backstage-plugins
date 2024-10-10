@@ -23,7 +23,7 @@ import {
   AwsCredentialProviderOptions,
 } from '@backstage/integration-aws-node';
 import { AwsResourceExplorerLocator } from './resource-explorer-locator';
-import { mockServices } from '@backstage/backend-test-utils'
+import { mockServices } from '@backstage/backend-test-utils';
 
 function getMockCredentialProvider(): Promise<AwsCredentialProvider> {
   return Promise.resolve({
@@ -42,7 +42,7 @@ const getCredProviderMock = jest.spyOn(
 
 const resourceExplorerMock = mockClient(ResourceExplorer2Client);
 
-const logger = mockServices.logger.mock()
+const logger = mockServices.logger.mock();
 
 describe('Resource Explorer locator', () => {
   beforeAll(async () => {});

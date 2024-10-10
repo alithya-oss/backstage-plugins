@@ -12,7 +12,10 @@ import { LogStream } from '@aws-sdk/client-cloudwatch-logs';
 import { ScanCommandOutput } from '@aws-sdk/client-dynamodb';
 import { Service, Task, TaskDefinition } from '@aws-sdk/client-ecs';
 import { HeadObjectCommandOutput } from '@aws-sdk/client-s3';
-import { DeleteSecretCommandOutput, GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager'
+import {
+  DeleteSecretCommandOutput,
+  GetSecretValueCommandOutput,
+} from '@aws-sdk/client-secrets-manager';
 import { GetParameterCommandOutput } from '@aws-sdk/client-ssm';
 import {
   AWSEnvironmentProviderRecord,
@@ -123,11 +126,7 @@ export class OPAApiClient implements OPAApi {
       desiredCount: desiredCount,
     };
 
-    return this.fetch<Service>(
-      '/ecs/updateService',
-      HTTP.POST,
-      postBody,
-    );
+    return this.fetch<Service>('/ecs/updateService', HTTP.POST, postBody);
   }
 
   async getSecret({
@@ -196,7 +195,11 @@ export class OPAApiClient implements OPAApi {
       secretArn: secretName,
     };
 
-    return this.fetch<GetSecretValueCommandOutput>('/platform/secrets', HTTP.POST, postBody);
+    return this.fetch<GetSecretValueCommandOutput>(
+      '/platform/secrets',
+      HTTP.POST,
+      postBody,
+    );
   }
 
   async getPlatformSSMParam({
@@ -265,11 +268,7 @@ export class OPAApiClient implements OPAApi {
       resourceEntityRef: params.resourceEntityRef,
     };
 
-    return this.fetch<any>(
-      '/platform/unbind-resource',
-      HTTP.POST,
-      postBody,
-    );
+    return this.fetch<any>('/platform/unbind-resource', HTTP.POST, postBody);
   }
 
   async updateProviderToEnvironment({
@@ -297,11 +296,7 @@ export class OPAApiClient implements OPAApi {
       action,
     };
 
-    return this.fetch<any>(
-      '/platform/update-provider',
-      HTTP.POST,
-      postBody,
-    );
+    return this.fetch<any>('/platform/update-provider', HTTP.POST, postBody);
   }
 
   deleteTFProvider({
@@ -323,11 +318,7 @@ export class OPAApiClient implements OPAApi {
       envName,
     };
 
-    return this.fetch<any>(
-      '/platform/delete-tf-provider',
-      HTTP.POST,
-      postBody,
-    );
+    return this.fetch<any>('/platform/delete-tf-provider', HTTP.POST, postBody);
   }
 
   async deletePlatformSecret({
@@ -366,11 +357,7 @@ export class OPAApiClient implements OPAApi {
       repoInfo,
       gitAdminSecret,
     };
-    return this.fetch<any>(
-      '/platform/delete-repository',
-      HTTP.POST,
-      postBody,
-    );
+    return this.fetch<any>('/platform/delete-repository', HTTP.POST, postBody);
   }
 
   async getStackDetails({
@@ -399,14 +386,10 @@ export class OPAApiClient implements OPAApi {
     const beParams = this.getAppliedBackendParams(backendParamsOverrides);
     const path = '/cloudformation/describeStackEvents';
 
-    return this.fetch<DescribeStackEventsCommandOutput>(
-      path,
-      HTTP.POST,
-      {
-        ...beParams,
-        stackName,
-      },
-    );
+    return this.fetch<DescribeStackEventsCommandOutput>(path, HTTP.POST, {
+      ...beParams,
+      stackName,
+    });
   }
 
   async updateStack({
@@ -508,7 +491,11 @@ export class OPAApiClient implements OPAApi {
     const beParams = this.getAppliedBackendParams(backendParamsOverrides);
     const path = '/s3/doesFileExist';
 
-    return this.fetch<HeadObjectCommandOutput>(path, HTTP.POST, { ...beParams, bucketName, fileName, });
+    return this.fetch<HeadObjectCommandOutput>(path, HTTP.POST, {
+      ...beParams,
+      bucketName,
+      fileName,
+    });
   }
 
   async getResourceGroupResources({
@@ -524,7 +511,11 @@ export class OPAApiClient implements OPAApi {
       resourceGroupName: rscGroupArn,
     };
 
-    return this.fetch<AWSServiceResources>('/resource-group', HTTP.POST, postBody);
+    return this.fetch<AWSServiceResources>(
+      '/resource-group',
+      HTTP.POST,
+      postBody,
+    );
   }
 
   async getSSMParameter({
@@ -540,7 +531,11 @@ export class OPAApiClient implements OPAApi {
       ssmParamName,
     };
 
-    return this.fetch<GetParameterCommandOutput>('/ssm-parameter', HTTP.POST, postBody);
+    return this.fetch<GetParameterCommandOutput>(
+      '/ssm-parameter',
+      HTTP.POST,
+      postBody,
+    );
   }
 
   async describeTaskDefinition({
@@ -555,7 +550,11 @@ export class OPAApiClient implements OPAApi {
       ...beParams,
       taskDefinition: taskDefinitionArn,
     };
-    return this.fetch<TaskDefinition>('/ecs/describeTaskDefinition', HTTP.POST, postBody);
+    return this.fetch<TaskDefinition>(
+      '/ecs/describeTaskDefinition',
+      HTTP.POST,
+      postBody,
+    );
   }
 
   async updateTaskDefinition({
@@ -574,7 +573,11 @@ export class OPAApiClient implements OPAApi {
       envVar: envVar,
     };
 
-    return this.fetch<TaskDefinition>('/ecs/updateTaskDefinition', HTTP.POST, postBody);
+    return this.fetch<TaskDefinition>(
+      '/ecs/updateTaskDefinition',
+      HTTP.POST,
+      postBody,
+    );
   }
 
   async promoteApp({
@@ -622,7 +625,11 @@ export class OPAApiClient implements OPAApi {
       body,
     };
 
-    return await this.fetch<InvokeCommandOutput>('/lambda/invoke', HTTP.POST, postBody);
+    return await this.fetch<InvokeCommandOutput>(
+      '/lambda/invoke',
+      HTTP.POST,
+      postBody,
+    );
   }
 
   async getEKSAppManifests({
@@ -645,7 +652,11 @@ export class OPAApiClient implements OPAApi {
       repoInfo,
     };
 
-    return await this.fetch<any>('/platform/fetch-eks-config', HTTP.POST, postBody);
+    return await this.fetch<any>(
+      '/platform/fetch-eks-config',
+      HTTP.POST,
+      postBody,
+    );
   }
 
   async updateEKSApp({
@@ -746,8 +757,8 @@ export class OPAApiClient implements OPAApi {
     const responseType = response.headers.get('Content-Type');
 
     if (responseType && responseType.indexOf('application/json') >= 0) {
-      return await response.json() as Promise<T>;
+      return (await response.json()) as Promise<T>;
     }
-    return await response.text() as unknown as Promise<T>;
+    return (await response.text()) as unknown as Promise<T>;
   }
 }

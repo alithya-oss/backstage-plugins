@@ -98,73 +98,73 @@ const DeleteProviderPanel = ({
 
   const handleClickDelete = () => {
     // TODO - Replace with Modal => if (confirm('Are you sure you want to delete this provider?')) {
-      if (isExistingComponents()) {
-        setDeleteResultMessage(
-          'There are Environments associated with this provider, Please disassociate the provider from the environment page and try again.',
-        );
-        setIsDeleteSuccessful(false);
-        setSpinning(false);
-        return;
-      }
-      const iacType = entity.metadata.iacType?.toString() || '';
-      setSpinning(true);
-      if (iacType === 'cloudformation' || iacType === 'cdk') {
-        api
-          .deleteStack({
-            componentName: entity.metadata.name,
-            stackName,
-            backendParamsOverrides,
-          })
-          .then(async () => {
-            setIsDeleteSuccessful(true);
-            setDeleteResultMessage('Cloud Formation stack delete initiated.');
-            await sleep(2000);
-            // Delete the repo now.
-            deleteRepo();
-            await sleep(2000);
-            await deleteFromCatalog();
-            setSpinning(false);
-            await sleep(2000);
-            setDeleteResultMessage('Redirect to home ....');
-            setDisabled(false);
-            navigate('/');
-          })
-          .catch(error => {
-            setSpinning(false);
-            setIsDeleteSuccessful(false);
-            setDeleteResultMessage(error.toString());
-            setDisabled(false);
-          });
-      } else if (iacType === 'terraform') {
-        const terraRepoInfo = getRepoInfo(entity);
-        const params = {
+    if (isExistingComponents()) {
+      setDeleteResultMessage(
+        'There are Environments associated with this provider, Please disassociate the provider from the environment page and try again.',
+      );
+      setIsDeleteSuccessful(false);
+      setSpinning(false);
+      return;
+    }
+    const iacType = entity.metadata.iacType?.toString() || '';
+    setSpinning(true);
+    if (iacType === 'cloudformation' || iacType === 'cdk') {
+      api
+        .deleteStack({
+          componentName: entity.metadata.name,
+          stackName,
           backendParamsOverrides,
-          repoInfo: terraRepoInfo,
-          gitAdminSecret: getGitCredentailsSecret(terraRepoInfo),
-          envName: '', // no env - provider needs to be detached.
-        };
-        api
-          .deleteTFProvider(params)
-          .then(async () => {
-            setIsDeleteSuccessful(true);
-            setDeleteResultMessage('Cloud Formation stack delete initiated.');
-            await sleep(2000);
-            // deleteRepo();
-            await deleteFromCatalog();
-            setSpinning(false);
-            await sleep(2000);
-            setDeleteResultMessage('Redirect to home ....');
-            setDisabled(false);
-          })
-          .catch(error => {
-            setSpinning(false);
-            setIsDeleteSuccessful(false);
-            setDeleteResultMessage(error.toString());
-            setDisabled(false);
-          });
-      } else {
-        throw new Error("Can't delete Unknown IAC type");
-      }
+        })
+        .then(async () => {
+          setIsDeleteSuccessful(true);
+          setDeleteResultMessage('Cloud Formation stack delete initiated.');
+          await sleep(2000);
+          // Delete the repo now.
+          deleteRepo();
+          await sleep(2000);
+          await deleteFromCatalog();
+          setSpinning(false);
+          await sleep(2000);
+          setDeleteResultMessage('Redirect to home ....');
+          setDisabled(false);
+          navigate('/');
+        })
+        .catch(error => {
+          setSpinning(false);
+          setIsDeleteSuccessful(false);
+          setDeleteResultMessage(error.toString());
+          setDisabled(false);
+        });
+    } else if (iacType === 'terraform') {
+      const terraRepoInfo = getRepoInfo(entity);
+      const params = {
+        backendParamsOverrides,
+        repoInfo: terraRepoInfo,
+        gitAdminSecret: getGitCredentailsSecret(terraRepoInfo),
+        envName: '', // no env - provider needs to be detached.
+      };
+      api
+        .deleteTFProvider(params)
+        .then(async () => {
+          setIsDeleteSuccessful(true);
+          setDeleteResultMessage('Cloud Formation stack delete initiated.');
+          await sleep(2000);
+          // deleteRepo();
+          await deleteFromCatalog();
+          setSpinning(false);
+          await sleep(2000);
+          setDeleteResultMessage('Redirect to home ....');
+          setDisabled(false);
+        })
+        .catch(error => {
+          setSpinning(false);
+          setIsDeleteSuccessful(false);
+          setDeleteResultMessage(error.toString());
+          setDisabled(false);
+        });
+    } else {
+      throw new Error("Can't delete Unknown IAC type");
+    }
   };
 
   return (

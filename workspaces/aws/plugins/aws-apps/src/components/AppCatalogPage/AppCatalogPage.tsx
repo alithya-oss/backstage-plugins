@@ -7,8 +7,11 @@ import {
   CreateButton,
   PageWithHeader,
   SupportButton,
-} from '@backstage/core-components'
-import { CatalogTable, DefaultCatalogPageProps, } from '@backstage/plugin-catalog'
+} from '@backstage/core-components';
+import {
+  CatalogTable,
+  DefaultCatalogPageProps,
+} from '@backstage/plugin-catalog';
 import {
   CatalogFilterLayout,
   EntityKindPicker,
@@ -16,10 +19,10 @@ import {
   EntityOwnerPicker,
   EntityTagPicker,
   UserListPicker,
-} from '@backstage/plugin-catalog-react'
-import React from 'react'
-import { AdvancedEntityTypePicker } from './AdvancedEntityTypePicker'
-import { columnFactories } from './awsColumns'
+} from '@backstage/plugin-catalog-react';
+import React from 'react';
+import { AdvancedEntityTypePicker } from './AdvancedEntityTypePicker';
+import { columnFactories } from './awsColumns';
 
 /**
  * Props for root catalog pages.
@@ -31,43 +34,38 @@ export interface AppCatalogPageProps extends DefaultCatalogPageProps {
   kind: string;
 }
 
-export function AppCatalogPage (props: AppCatalogPageProps) {
-  const {
-    actions,
-    tableOptions = {},
-    emptyContent,
-    kind,
-  } = props
+export function AppCatalogPage(props: AppCatalogPageProps) {
+  const { actions, tableOptions = {}, emptyContent, kind } = props;
 
   let {
     columns,
     initiallySelectedFilter = 'owned',
     initialKind = 'component',
     initialType = 'aws-app',
-  } = props
+  } = props;
 
-  let allowedTypesComponent = ['aws-app']
-  let allowedTypesResource = ['aws-rds', 'aws-s3']
-  let allowedTypesEnvironment = ['environment-provider', 'environment']
+  let allowedTypesComponent = ['aws-app'];
+  let allowedTypesResource = ['aws-rds', 'aws-s3'];
+  let allowedTypesEnvironment = ['environment-provider', 'environment'];
   let allowedKinds = [
     'Component',
     'Resource',
     'AWSEnvironment',
     'AWSEnvironmentProvider',
-  ]
+  ];
 
   if (kind === 'all') {
-    allowedTypesComponent = ['aws-app']
-    allowedTypesResource = ['aws-rds', 'aws-s3']
-    allowedTypesEnvironment = ['environment-provider', 'environment']
+    allowedTypesComponent = ['aws-app'];
+    allowedTypesResource = ['aws-rds', 'aws-s3'];
+    allowedTypesEnvironment = ['environment-provider', 'environment'];
     allowedKinds = [
       'Component',
       'Resource',
       'AWSEnvironment',
       'AWSEnvironmentProvider',
-    ]
-    initialKind = 'component'
-    initialType = 'aws-app'
+    ];
+    initialKind = 'component';
+    initialType = 'aws-app';
   } else if (kind === 'awsenvironment') {
     // AWS Environment Columns
     columns = [
@@ -84,14 +82,14 @@ export function AppCatalogPage (props: AppCatalogPageProps) {
       columnFactories.createEnvironmentRegionTypeColumn(),
       columnFactories.createEnvironmentLevelColumn(),
       columnFactories.createTagsColumn(),
-    ]
-    allowedTypesResource = []
-    allowedTypesEnvironment = ['environment']
-    initialType = 'environment'
-    allowedKinds = ['AWSEnvironment']
-    initialKind = 'awsenvironment'
-    allowedTypesComponent = []
-    initiallySelectedFilter = 'all'
+    ];
+    allowedTypesResource = [];
+    allowedTypesEnvironment = ['environment'];
+    initialType = 'environment';
+    allowedKinds = ['AWSEnvironment'];
+    initialKind = 'awsenvironment';
+    allowedTypesComponent = [];
+    initiallySelectedFilter = 'all';
   } else if (kind === 'awsenvironmentprovider') {
     // AWS Provider Columns
     columns = [
@@ -105,14 +103,14 @@ export function AppCatalogPage (props: AppCatalogPageProps) {
       columnFactories.createProviderAccountColumn(),
       columnFactories.createProviderRegionColumn(),
       columnFactories.createTagsColumn(),
-    ]
-    allowedKinds = ['AWSEnvironmentProvider']
-    allowedTypesResource = []
-    allowedTypesEnvironment = ['environment-provider']
-    initialType = 'environment-provider'
-    initialKind = 'awsenvironmentprovider'
-    allowedTypesComponent = []
-    initiallySelectedFilter = 'all'
+    ];
+    allowedKinds = ['AWSEnvironmentProvider'];
+    allowedTypesResource = [];
+    allowedTypesEnvironment = ['environment-provider'];
+    initialType = 'environment-provider';
+    initialKind = 'awsenvironmentprovider';
+    allowedTypesComponent = [];
+    initiallySelectedFilter = 'all';
   } else if (kind === 'component' && initialType === 'aws-app') {
     // AWS Apps Columns
     columns = [
@@ -124,9 +122,9 @@ export function AppCatalogPage (props: AppCatalogPageProps) {
       columnFactories.createSpecLifecycleColumn(),
       columnFactories.createMetadataDescriptionColumn(),
       columnFactories.createTagsColumn(),
-    ]
-    allowedKinds = ['Component']
-    initiallySelectedFilter = 'all'
+    ];
+    allowedKinds = ['Component'];
+    initiallySelectedFilter = 'all';
   } else if (kind === 'resource') {
     // AWS Resources Columns
     columns = [
@@ -138,17 +136,17 @@ export function AppCatalogPage (props: AppCatalogPageProps) {
       columnFactories.createMetadataDescriptionColumn(),
       columnFactories.createIACColumn(),
       columnFactories.createTagsColumn(),
-    ]
-    allowedKinds = ['Resource']
-    allowedTypesResource = ['aws-resource']
-    allowedTypesEnvironment = []
-    initialType = 'aws-resource'
-    initialKind = 'resource'
-    allowedTypesComponent = []
-    initiallySelectedFilter = 'all'
+    ];
+    allowedKinds = ['Resource'];
+    allowedTypesResource = ['aws-resource'];
+    allowedTypesEnvironment = [];
+    initialType = 'aws-resource';
+    initialKind = 'resource';
+    allowedTypesComponent = [];
+    initiallySelectedFilter = 'all';
   } else {
     // console.error(`catalog not yet implemented for kind ${kind}`);
-    columns = []
+    columns = [];
   }
 
   return (
@@ -176,9 +174,9 @@ export function AppCatalogPage (props: AppCatalogPageProps) {
                   ...allowedTypesResource,
                 ]}
               />
-              <UserListPicker initialFilter={initiallySelectedFilter}/>
-              <EntityOwnerPicker/>
-              <EntityTagPicker/>
+              <UserListPicker initialFilter={initiallySelectedFilter} />
+              <EntityOwnerPicker />
+              <EntityTagPicker />
             </CatalogFilterLayout.Filters>
             <CatalogFilterLayout.Content>
               <CatalogTable
@@ -192,5 +190,5 @@ export function AppCatalogPage (props: AppCatalogPageProps) {
         </EntityListProvider>
       </Content>
     </PageWithHeader>
-  )
+  );
 }

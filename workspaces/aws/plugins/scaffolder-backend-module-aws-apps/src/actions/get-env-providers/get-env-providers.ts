@@ -3,7 +3,11 @@
 
 import { CatalogApi } from '@backstage/catalog-client';
 import { JsonArray } from '@backstage/types';
-import { Entity, EntityRelation, RELATION_DEPENDS_ON } from '@backstage/catalog-model';
+import {
+  Entity,
+  EntityRelation,
+  RELATION_DEPENDS_ON,
+} from '@backstage/catalog-model';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import yaml from 'yaml';
 import { getAWScreds } from '@alithya-oss/plugin-aws-apps-backend';
@@ -215,8 +219,9 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
       );
       ctx.output('envShortName', envShortName);
 
-      const deploymentParametersArray =
-        await getEnvDeploymentParameters(awsEnvEntity);
+      const deploymentParametersArray = await getEnvDeploymentParameters(
+        awsEnvEntity,
+      );
 
       ctx.logger.debug(
         `envProviders info: ${JSON.stringify(
@@ -397,8 +402,7 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
               envName: envEntity.metadata.name,
               envProviderName: metadata.name,
               envRef: environmentRef,
-              envProviderType:
-                metadata.envType?.toString().toLowerCase() || '',
+              envProviderType: metadata.envType?.toString().toLowerCase() || '',
               accountId: metadata.awsAccount?.toString() || '',
               region: metadata.awsRegion?.toString() || '',
               ssmAssumeRoleArn: metadata.provisioningRole?.toString() || '',

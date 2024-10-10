@@ -11,8 +11,18 @@
  * limitations under the License.
  */
 
-import { Alert, CostInsightsApi, ProductInsightsOptions, } from '@backstage-community/plugin-cost-insights';
-import { Cost, Entity, Group, MetricData, Project, } from '@backstage-community/plugin-cost-insights-common';
+import {
+  Alert,
+  CostInsightsApi,
+  ProductInsightsOptions,
+} from '@backstage-community/plugin-cost-insights';
+import {
+  Cost,
+  Entity,
+  Group,
+  MetricData,
+  Project,
+} from '@backstage-community/plugin-cost-insights-common';
 import dateFormat from 'dateformat';
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import { ResponseError } from '@backstage/errors';

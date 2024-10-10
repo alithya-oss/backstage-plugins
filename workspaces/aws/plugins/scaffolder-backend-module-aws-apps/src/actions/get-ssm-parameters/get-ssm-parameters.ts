@@ -8,7 +8,10 @@ import {
   getEnvironmentProviderConnectInfo,
   getSSMParameterValue,
 } from '../../helpers/action-context';
-import { EnvironmentProvider, EnvironmentProviderConnection } from '../../types';
+import {
+  EnvironmentProvider,
+  EnvironmentProviderConnection,
+} from '../../types';
 
 const ID = 'opa:get-ssm-parameters';
 

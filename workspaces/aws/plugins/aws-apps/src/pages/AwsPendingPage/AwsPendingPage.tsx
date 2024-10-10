@@ -2,7 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Entity } from '@backstage/catalog-model';
-import { EntityAboutCard, EntityLayout, EntityLinksCard, } from '@backstage/plugin-catalog';
+import {
+  EntityAboutCard,
+  EntityLayout,
+  EntityLinksCard,
+} from '@backstage/plugin-catalog';
 import { EntityCatalogGraphCard } from '@backstage/plugin-catalog-graph';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { isGithubActionsAvailable } from '@backstage-community/plugin-github-actions';
@@ -32,7 +36,7 @@ export function AwsPendingPage(_props: AwsPendingPageProps) {
         <EntityLayout.Route path="/" title="Overview">
           <Grid container spacing={3} alignItems="stretch">
             <Grid item md={6}>
-              <EntityAboutCard variant="gridItem"/>
+              <EntityAboutCard variant="gridItem" />
             </Grid>
             <Grid item md={6} xs={12}>
               <EntityCatalogGraphCard
@@ -42,15 +46,15 @@ export function AwsPendingPage(_props: AwsPendingPageProps) {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <EntityLinksCard/>
+              <EntityLinksCard />
             </Grid>
             <Grid item md={6} xs={12}>
-              {!isResource ? <EntityGeneralInfoCard appPending/> : <></>}
+              {!isResource ? <EntityGeneralInfoCard appPending /> : <></>}
             </Grid>
           </Grid>
         </EntityLayout.Route>
         <EntityLayout.Route path="/ci-cd" title="CI/CD" if={isCicdApplicable}>
-          <CICDContent/>
+          <CICDContent />
         </EntityLayout.Route>
       </EntityLayout>
     </>

@@ -13,7 +13,7 @@ import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
  */
 export const awsAppsPlugin = createBackendPlugin({
   pluginId: 'aws-apps-backend',
-  register (env: BackendPluginRegistrationPoints): void {
+  register(env: BackendPluginRegistrationPoints): void {
     env.registerInit({
       deps: {
         config: coreServices.rootConfig,

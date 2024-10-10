@@ -65,7 +65,12 @@ import {
   DescribeClusterCommandOutput,
   EKSClient,
 } from '@aws-sdk/client-eks';
-import { InvokeCommand, InvokeCommandInput, InvokeCommandOutput, LambdaClient, } from '@aws-sdk/client-lambda';
+import {
+  InvokeCommand,
+  InvokeCommandInput,
+  InvokeCommandOutput,
+  LambdaClient,
+} from '@aws-sdk/client-lambda';
 import {
   ListGroupResourcesCommand,
   ListGroupResourcesCommandInput,

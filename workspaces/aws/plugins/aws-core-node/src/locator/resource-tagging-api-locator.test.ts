@@ -25,7 +25,7 @@ import {
   TagFilter,
 } from '@aws-sdk/client-resource-groups-tagging-api';
 import { AwsResourceTaggingApiLocator } from './resource-tagging-api-locator';
-import { mockServices } from '@backstage/backend-test-utils'
+import { mockServices } from '@backstage/backend-test-utils';
 
 function getMockCredentialProvider(): Promise<AwsCredentialProvider> {
   return Promise.resolve({
@@ -44,7 +44,7 @@ const getCredProviderMock = jest.spyOn(
 
 const resourceTaggingMock = mockClient(ResourceGroupsTaggingAPIClient);
 
-const logger = mockServices.logger.mock()
+const logger = mockServices.logger.mock();
 
 describe('Resource Explorer locator', () => {
   beforeAll(async () => {});

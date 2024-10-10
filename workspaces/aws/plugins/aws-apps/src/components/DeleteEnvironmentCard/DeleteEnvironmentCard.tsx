@@ -91,28 +91,28 @@ const DeleteEnvironmentPanel = ({
 
   const handleClickDelete = async () => {
     // TODO - Replace this with a Modal -> if (confirm('Are you sure you want to delete this environment?')) {
-      setSpinning(true);
-      if (isExistingComponents()) {
-        setDeleteResultMessage(
-          'There are providers, apps, or resources associated with this environment.  Delete them first and then retry deleting this environment',
-        );
-        setIsDeleteSuccessful(false);
-        setSpinning(false);
-        return;
-      }
-      // Delete the repo
-      setIsDeleteSuccessful(true);
-      setDeleteResultMessage('Deleting Repository ....');
-      deleteRepo();
-      await sleep(3000);
-      setDeleteResultMessage('Deleting from catalog ....');
-      await sleep(3000);
-      await deleteFromCatalog();
+    setSpinning(true);
+    if (isExistingComponents()) {
+      setDeleteResultMessage(
+        'There are providers, apps, or resources associated with this environment.  Delete them first and then retry deleting this environment',
+      );
+      setIsDeleteSuccessful(false);
       setSpinning(false);
-      setDeleteResultMessage('Redirect to home ....');
-      navigate('/');
-      setIsDeleteSuccessful(true);
-      setDisabled(false);
+      return;
+    }
+    // Delete the repo
+    setIsDeleteSuccessful(true);
+    setDeleteResultMessage('Deleting Repository ....');
+    deleteRepo();
+    await sleep(3000);
+    setDeleteResultMessage('Deleting from catalog ....');
+    await sleep(3000);
+    await deleteFromCatalog();
+    setSpinning(false);
+    setDeleteResultMessage('Redirect to home ....');
+    navigate('/');
+    setIsDeleteSuccessful(true);
+    setDisabled(false);
   };
 
   return (

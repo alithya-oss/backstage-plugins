@@ -52,8 +52,6 @@ const OpaAppStateOverview = ({
     });
   }
 
-
-
   useEffect(() => {
     /* gets cluster, account, region from entity and also task Data */
     async function getData() {

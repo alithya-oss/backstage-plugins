@@ -7,7 +7,7 @@ import { LinearProgress } from '@material-ui/core';
 import { useApi } from '@backstage/core-plugin-api';
 import { OPAApi, opaApiRef } from '../../api';
 import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -63,7 +63,6 @@ const OpaAppGeneralInfo = ({
   const HandleCopySecret = () => {
     navigator.clipboard.writeText(secretData || '');
   };
-
 
   useEffect(() => {
     async function getData() {

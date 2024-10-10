@@ -1,8 +1,8 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useEffect, useState } from 'react'
-import { InfoCard } from '@backstage/core-components'
+import React, { useEffect, useState } from 'react';
+import { InfoCard } from '@backstage/core-components';
 import {
   Button,
   CardContent,
@@ -13,65 +13,77 @@ import {
   TableCell,
   TableHead,
   TableRow,
-} from '@material-ui/core'
-import DeleteIcon from '@mui/icons-material/Delete'
-import { useApi } from '@backstage/core-plugin-api'
-import { opaApiRef } from '../../api'
-import Alert from '@mui/material/Alert'
-import AlertTitle from '@mui/material/AlertTitle'
-import Typography from '@mui/material/Typography'
+} from '@material-ui/core';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useApi } from '@backstage/core-plugin-api';
+import { opaApiRef } from '../../api';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Typography from '@mui/material/Typography';
 import {
   AWSEnvironmentProviderRecord,
   getGitCredentailsSecret,
   getRepoInfo,
-} from '@alithya-oss/plugin-aws-apps-common'
-import { CompoundEntityRef, Entity, EntityRelation, parseEntityRef, } from '@backstage/catalog-model'
+} from '@alithya-oss/plugin-aws-apps-common';
+import {
+  CompoundEntityRef,
+  Entity,
+  EntityRelation,
+  parseEntityRef,
+} from '@backstage/catalog-model';
 
-import { CatalogApi, catalogApiRef, EntityRefLink, useEntity, } from '@backstage/plugin-catalog-react'
-import Backdrop from '@mui/material/Backdrop'
-import CircularProgress from '@mui/material/CircularProgress'
-import { AwsEnvironmentProviderSelectorDialog } from './AwsEnvironmentProviderSelectorDialog'
+import {
+  CatalogApi,
+  catalogApiRef,
+  EntityRefLink,
+  useEntity,
+} from '@backstage/plugin-catalog-react';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import { AwsEnvironmentProviderSelectorDialog } from './AwsEnvironmentProviderSelectorDialog';
 
 const AwsEnvironmentProviderCard = ({
   input: { entity, catalog },
 }: {
   input: { entity: Entity; catalog: CatalogApi };
 }) => {
-  const api = useApi(opaApiRef)
+  const api = useApi(opaApiRef);
 
   const [error, setError] = useState<{
     isError: boolean;
     errorMsg: string | null;
-  }>({ isError: false, errorMsg: null })
-  const [items, setItems] = useState<AWSEnvironmentProviderRecord[]>([])
-  const [openDialog, setOpenDialog] = useState(false)
-  const [spinning, setSpinning] = useState(false)
-  const [isAddProviderSuccessful, setIsAddProviderSuccessful] = useState(false)
-  const [addProviderMessage, setAddProviderMessage] = useState('')
+  }>({ isError: false, errorMsg: null });
+  const [items, setItems] = useState<AWSEnvironmentProviderRecord[]>([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [spinning, setSpinning] = useState(false);
+  const [isAddProviderSuccessful, setIsAddProviderSuccessful] = useState(false);
+  const [addProviderMessage, setAddProviderMessage] = useState('');
   const [providerRequest, setProviderRequest] =
-    useState<AWSEnvironmentProviderRecord>()
+    useState<AWSEnvironmentProviderRecord>();
   const [availableProviders, setAvailableProviders] = useState<
     AWSEnvironmentProviderRecord[]
-  >([])
+  >([]);
 
   useEffect(() => {
-    async function getProviderDetails () {
+    async function getProviderDetails() {
       // find existing resource relationships
-      const providerRefs: EntityRelation[] | undefined = entity.relations?.filter(
-        relation =>
-          parseEntityRef(relation?.targetRef).kind === 'awsenvironmentprovider',
-      )
+      const providerRefs: EntityRelation[] | undefined =
+        entity.relations?.filter(
+          relation =>
+            parseEntityRef(relation?.targetRef).kind ===
+            'awsenvironmentprovider',
+        );
 
-      const providers: AWSEnvironmentProviderRecord[] = []
+      const providers: AWSEnvironmentProviderRecord[] = [];
 
       if (providerRefs) {
         const providerEntities = await Promise.all(
           providerRefs.map(
             async (entityRef: { targetRef: string | CompoundEntityRef }) => {
-              return catalog.getEntityByRef(entityRef.targetRef)
+              return catalog.getEntityByRef(entityRef.targetRef);
             },
           ),
-        )
+        );
 
         providerEntities.forEach((et, index) => {
           providers.push({
@@ -82,14 +94,14 @@ const AwsEnvironmentProviderCard = ({
             description: et?.metadata.description?.toString() ?? '',
             accountNumber: et?.metadata.awsAccount?.toString() ?? '',
             region: et?.metadata.awsRegion?.toString() ?? '',
-          })
-        })
-        setItems(providers)
+          });
+        });
+        setItems(providers);
       }
 
-      const potentialProviders: AWSEnvironmentProviderRecord[] = []
-      let index = 0
-      const envRuntimeType = entity.metadata.environmentType?.toString() ?? ''
+      const potentialProviders: AWSEnvironmentProviderRecord[] = [];
+      let index = 0;
+      const envRuntimeType = entity.metadata.environmentType?.toString() ?? '';
 
       catalog
         .getEntities({
@@ -108,7 +120,7 @@ const AwsEnvironmentProviderCard = ({
                 ) {
                   // skip existing provider
                 } else {
-                  index++
+                  index++;
                   potentialProviders.push({
                     id: index.toString(),
                     name: et?.metadata.name ?? '',
@@ -117,11 +129,11 @@ const AwsEnvironmentProviderCard = ({
                     description: et?.metadata.description?.toString() ?? '',
                     accountNumber: et?.metadata.awsAccount?.toString() ?? '',
                     region: et?.metadata.awsRegion?.toString() ?? '',
-                  })
+                  });
                 }
-              })
+              });
             } else {
-              index++
+              index++;
               potentialProviders.push({
                 id: index.toString(),
                 name: et?.metadata.name ?? '',
@@ -130,17 +142,17 @@ const AwsEnvironmentProviderCard = ({
                 description: et?.metadata.description?.toString() ?? '',
                 accountNumber: et?.metadata.awsAccount?.toString() ?? '',
                 region: et?.metadata.awsRegion?.toString() ?? '',
-              })
+              });
             }
-          })
-        })
-      setAvailableProviders(potentialProviders)
+          });
+        });
+      setAvailableProviders(potentialProviders);
     }
 
-    getProviderDetails()
-  }, [catalog, entity.metadata.environmentType, entity.relations])
+    getProviderDetails();
+  }, [catalog, entity.metadata.environmentType, entity.relations]);
 
-  async function updateProvider (
+  async function updateProvider(
     item: AWSEnvironmentProviderRecord,
     action: string,
   ): Promise<any> {
@@ -150,10 +162,10 @@ const AwsEnvironmentProviderCard = ({
       awsRegion: item.region,
       prefix: item.prefix,
       providerName: item.name.toLowerCase(),
-    }
+    };
 
-    const repoInfo = getRepoInfo(entity)
-    repoInfo.gitProjectGroup = 'aws-environments'
+    const repoInfo = getRepoInfo(entity);
+    repoInfo.gitProjectGroup = 'aws-environments';
 
     const params = {
       repoInfo,
@@ -162,84 +174,84 @@ const AwsEnvironmentProviderCard = ({
       envName: entity.metadata.name.toLowerCase(),
       action,
       backendParamsOverrides,
-    }
-    return api.updateProviderToEnvironment(params)
+    };
+    return api.updateProviderToEnvironment(params);
   }
 
   const handleClickAdd = async () => {
-    setOpenDialog(true)
-  }
+    setOpenDialog(true);
+  };
 
-  const closeDialog = () => setOpenDialog(false)
+  const closeDialog = () => setOpenDialog(false);
 
   const selectProviderHandler = (item: AWSEnvironmentProviderRecord) => {
-    setSpinning(true)
+    setSpinning(true);
     updateProvider(item, 'add')
       .then(async results => {
-        setAddProviderMessage(results)
-        setIsAddProviderSuccessful(true)
-        setSpinning(false)
-        let newList: AWSEnvironmentProviderRecord[] = []
-        newList = newList.concat(items)
-        newList.push(item)
-        setItems(newList)
-        setProviderRequest(item)
+        setAddProviderMessage(results);
+        setIsAddProviderSuccessful(true);
+        setSpinning(false);
+        let newList: AWSEnvironmentProviderRecord[] = [];
+        newList = newList.concat(items);
+        newList.push(item);
+        setItems(newList);
+        setProviderRequest(item);
         await catalog.refreshEntity(
           `awsenvironment:default/${entity.metadata.name}`,
-        )
+        );
       })
       .catch(err => {
-        setIsAddProviderSuccessful(false)
-        setAddProviderMessage(err)
-        setError(err)
-        setSpinning(false)
-      })
-  }
+        setIsAddProviderSuccessful(false);
+        setAddProviderMessage(err);
+        setError(err);
+        setSpinning(false);
+      });
+  };
 
   const deleteClick = async (index: number) => {
-    const deletedItem = items.at(index)
+    const deletedItem = items.at(index);
     // TODO Use a Modal instead - Linter is angry
     // if (
     //   confirm('Are you sure you want to remove this environment provider from this environment?')
     // ) {
-    setSpinning(true)
+    setSpinning(true);
     updateProvider(deletedItem!, 'remove')
       .then(async results => {
-        setAddProviderMessage(results)
-        setIsAddProviderSuccessful(true)
-        setSpinning(false)
+        setAddProviderMessage(results);
+        setIsAddProviderSuccessful(true);
+        setSpinning(false);
         // remove from table
-        const providersData = items.slice()
-        providersData.splice(index, 1)
-        setItems(providersData)
-        setProviderRequest(deletedItem)
+        const providersData = items.slice();
+        providersData.splice(index, 1);
+        setItems(providersData);
+        setProviderRequest(deletedItem);
         await catalog.refreshEntity(
           `awsenvironment:default/${entity.metadata.name}`,
-        )
+        );
         await catalog.refreshEntity(
           `awsenvironmentprovider:default/${deletedItem?.name}`,
-        )
+        );
       })
       .catch(err => {
-        setIsAddProviderSuccessful(false)
-        setAddProviderMessage(err)
-        setError(err)
-        setSpinning(false)
-      })
-  }
+        setIsAddProviderSuccessful(false);
+        setAddProviderMessage(err);
+        setError(err);
+        setSpinning(false);
+      });
+  };
 
   const handleCloseAlert = () => {
-    setAddProviderMessage('')
-  }
+    setAddProviderMessage('');
+  };
 
   const deleteIcon = (index: number) => (
     <IconButton onClick={() => deleteClick(index)}>
-      <DeleteIcon color="primary"/>
+      <DeleteIcon color="primary" />
     </IconButton>
-  )
+  );
 
   if (error.isError) {
-    return <Typography sx={{ color: 'red' }}>{error.errorMsg}</Typography>
+    return <Typography sx={{ color: 'red' }}>{error.errorMsg}</Typography>;
   }
 
   return (
@@ -278,7 +290,7 @@ const AwsEnvironmentProviderCard = ({
                   <TableCell id="providerRegion">{record.region}</TableCell>
                   <TableCell id="action"> {deleteIcon(index)}</TableCell>
                 </TableRow>
-              )
+              );
             })}
           </TableBody>
         </Table>
@@ -290,8 +302,8 @@ const AwsEnvironmentProviderCard = ({
               successfully!
               {!!addProviderMessage && (
                 <>
-                  <br/>
-                  <br/>
+                  <br />
+                  <br />
                   {addProviderMessage}
                 </>
               )}
@@ -303,8 +315,8 @@ const AwsEnvironmentProviderCard = ({
               Failed to Update provider <strong>{providerRequest?.name}</strong>
               {!!addProviderMessage && (
                 <>
-                  <br/>
-                  <br/>
+                  <br />
+                  <br />
                   {addProviderMessage}
                 </>
               )}
@@ -326,20 +338,20 @@ const AwsEnvironmentProviderCard = ({
           sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
           open={spinning}
         >
-          <CircularProgress color="inherit"/>
+          <CircularProgress color="inherit" />
         </Backdrop>
       </CardContent>
     </InfoCard>
-  )
-}
+  );
+};
 
 export const AwsEnvironmentProviderCardWidget = () => {
-  const catalogApi = useApi(catalogApiRef)
-  const { entity } = useEntity()
+  const catalogApi = useApi(catalogApiRef);
+  const { entity } = useEntity();
 
   const input = {
     entity,
     catalog: catalogApi,
-  }
-  return <AwsEnvironmentProviderCard input={input}/>
-}
+  };
+  return <AwsEnvironmentProviderCard input={input} />;
+};

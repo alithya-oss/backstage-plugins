@@ -23,12 +23,26 @@ import {
   COST_INSIGHTS_AWS_COST_CATEGORY_ANNOTATION,
   COST_INSIGHTS_AWS_TAGS_ANNOTATION,
 } from '@alithya-oss/plugin-cost-insights-aws-common';
-import { ChangeStatistic, Cost, DateAggregation, Trendline } from '@backstage-community/plugin-cost-insights-common';
+import {
+  ChangeStatistic,
+  Cost,
+  DateAggregation,
+  Trendline,
+} from '@backstage-community/plugin-cost-insights-common';
 import { CatalogApi } from '@backstage/catalog-client';
-import { AWS_SDK_CUSTOM_USER_AGENT, getOneOfEntityAnnotations } from '@alithya-oss/plugin-aws-core-common';
-import { CompoundEntityRef, stringifyEntityRef, } from '@backstage/catalog-model';
+import {
+  AWS_SDK_CUSTOM_USER_AGENT,
+  getOneOfEntityAnnotations,
+} from '@alithya-oss/plugin-aws-core-common';
+import {
+  CompoundEntityRef,
+  stringifyEntityRef,
+} from '@backstage/catalog-model';
 import { CostInsightsAwsService } from './types';
-import { AwsCredentialsManager, DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
+import {
+  AwsCredentialsManager,
+  DefaultAwsCredentialsManager,
+} from '@backstage/integration-aws-node';
 import {
   AuthService,
   BackstageCredentials,
@@ -390,18 +404,14 @@ export const costInsightsAwsServiceRef =
         }) {
           const pluginConfig = readCostInsightsAwsConfig(config);
 
-          return CostExplorerCostInsightsAwsService.fromConfig(
-            pluginConfig,
-            {
-              catalogApi,
-              auth,
-              httpAuth,
-              discovery,
-              logger,
-              credentialsManager:
-                DefaultAwsCredentialsManager.fromConfig(config),
-            },
-          );
+          return CostExplorerCostInsightsAwsService.fromConfig(pluginConfig, {
+            catalogApi,
+            auth,
+            httpAuth,
+            discovery,
+            logger,
+            credentialsManager: DefaultAwsCredentialsManager.fromConfig(config),
+          });
         },
       }),
   });

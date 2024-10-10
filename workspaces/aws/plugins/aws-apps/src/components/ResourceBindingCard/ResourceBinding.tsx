@@ -30,8 +30,18 @@ import {
   ResourceBinding,
   ResourcePolicy,
 } from '@alithya-oss/plugin-aws-apps-common';
-import { CompoundEntityRef, Entity, EntityRelation, parseEntityRef, } from '@backstage/catalog-model';
-import { CatalogApi, catalogApiRef, EntityRefLink, useEntity, } from '@backstage/plugin-catalog-react';
+import {
+  CompoundEntityRef,
+  Entity,
+  EntityRelation,
+  parseEntityRef,
+} from '@backstage/catalog-model';
+import {
+  CatalogApi,
+  catalogApiRef,
+  EntityRefLink,
+  useEntity,
+} from '@backstage/plugin-catalog-react';
 import { ResourceSelectorDialog } from './ResourceSelectorDialog';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -78,9 +88,10 @@ const ResourceBindingCard = ({
   useEffect(() => {
     async function getBindingDetails() {
       // find existing resource relationships
-      const resourceRefs: EntityRelation[] | undefined = entity.relations?.filter(
-        relation => parseEntityRef(relation?.targetRef).kind === 'resource',
-      )!;
+      const resourceRefs: EntityRelation[] | undefined =
+        entity.relations?.filter(
+          relation => parseEntityRef(relation?.targetRef).kind === 'resource',
+        )!;
 
       const resourcesEntities = await Promise.all(
         resourceRefs.map(
@@ -91,7 +102,8 @@ const ResourceBindingCard = ({
       );
 
       // select view for only current environment
-      const currentEnvironment = awsComponent.currentEnvironment.environment.name;
+      const currentEnvironment =
+        awsComponent.currentEnvironment.environment.name;
 
       const matchedResources = resourcesEntities.filter(resourceEntity => {
         const appData = resourceEntity!.metadata.appData as any;
@@ -139,7 +151,11 @@ const ResourceBindingCard = ({
     }
 
     getBindingDetails();
-  }, [awsComponent.currentEnvironment.environment.name, catalog, entity.relations]);
+  }, [
+    awsComponent.currentEnvironment.environment.name,
+    catalog,
+    entity.relations,
+  ]);
 
   async function bindResource(item: ResourceBinding): Promise<any> {
     const policies: ResourcePolicy[] = [];

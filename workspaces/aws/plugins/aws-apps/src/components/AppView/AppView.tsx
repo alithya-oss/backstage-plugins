@@ -50,8 +50,8 @@ export const AppView = ({ appData }: { appData: OPAAppData }): ReactElement => {
       {appData && (
         <>
           <Card>
-            <CardHeader title={<Typography variant="h5">OPA App</Typography>}/>
-            <Divider/>
+            <CardHeader title={<Typography variant="h5">OPA App</Typography>} />
+            <Divider />
             <CardContent>
               <Grid container columnSpacing={2}>
                 <Grid item xs={4}>
@@ -72,7 +72,7 @@ export const AppView = ({ appData }: { appData: OPAAppData }): ReactElement => {
                       </Typography>
                       <Typography>
                         <IconButton>
-                          <ContentCopyIcon/>
+                          <ContentCopyIcon />
                         </IconButton>
                         {details?.repourl}
                       </Typography>
@@ -81,7 +81,7 @@ export const AppView = ({ appData }: { appData: OPAAppData }): ReactElement => {
                       </Typography>
                       <Typography>
                         <IconButton>
-                          <ContentCopyIcon/>
+                          <ContentCopyIcon />
                         </IconButton>
                         {details?.repotoken}
                       </Typography>
@@ -125,7 +125,7 @@ export const AppView = ({ appData }: { appData: OPAAppData }): ReactElement => {
                       </Typography>
                       <Typography>
                         <IconButton>
-                          <ContentCopyIcon/>
+                          <ContentCopyIcon />
                         </IconButton>
                         {details?.account}
                       </Typography>

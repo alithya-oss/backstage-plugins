@@ -10,7 +10,7 @@ import {
   RELATION_DEPENDS_ON,
   RELATION_DEPENDENCY_OF,
 } from '@backstage/catalog-model';
-import {LocationSpec} from '@backstage/plugin-catalog-common';
+import { LocationSpec } from '@backstage/plugin-catalog-common';
 import {
   CatalogProcessor,
   CatalogProcessorEmit,

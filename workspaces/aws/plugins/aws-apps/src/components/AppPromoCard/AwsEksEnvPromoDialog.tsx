@@ -118,11 +118,7 @@ export const AwsEksEnvPromoDialog = ({
       return;
     }
     closeDialogHandler();
-    submitHandler(
-      namespace,
-      iamRoleArn,
-      roleBehavior,
-    );
+    submitHandler(namespace, iamRoleArn, roleBehavior);
   };
 
   const checkNamespace = () => {

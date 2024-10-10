@@ -95,12 +95,14 @@ const CloudwatchLogsTable = ({
     Promise.all(
       logGroupNames.map(
         async (logGroupName: string): Promise<LogGroupStreams> => {
-          return api.getLogStreamNames({ logGroupName }).then(logStreamsList => {
-            return {
-              logGroupName,
-              logStreamsList: logStreamsList,
-            } as LogGroupStreams;
-          });
+          return api
+            .getLogStreamNames({ logGroupName })
+            .then(logStreamsList => {
+              return {
+                logGroupName,
+                logStreamsList: logStreamsList,
+              } as LogGroupStreams;
+            });
         },
       ),
     )
@@ -216,7 +218,9 @@ const CloudwatchLogsTable = ({
     if (dialogLoading) {
       return <LinearProgress />;
     } else if (dialogError.isError) {
-      return <Typography sx={{ color: 'red' }}>{dialogError.errorMsg}</Typography>;
+      return (
+        <Typography sx={{ color: 'red' }}>{dialogError.errorMsg}</Typography>
+      );
     }
     return <LogViewer text={logs} />;
   };
@@ -228,9 +232,7 @@ const CloudwatchLogsTable = ({
           <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xl">
             <DialogTitle>{logStreamName}</DialogTitle>
             <DialogContent>
-              <div style={{ height: '70vh' }}>
-                {getDialogContent()}
-              </div>
+              <div style={{ height: '70vh' }}>{getDialogContent()}</div>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Close</Button>
@@ -262,7 +264,7 @@ const CloudwatchLogsTable = ({
             emptyContent={<div className={classes.empty}>No data</div>}
             actions={[
               {
-                icon: () => <FileDownload/>,
+                icon: () => <FileDownload />,
                 tooltip: 'Download',
                 onClick: (_, rowData) => {
                   const clickedStreamName = (rowData as TableData).name;
@@ -290,30 +292,30 @@ const CloudwatchLogsTable = ({
         </div>
       ))}
     </>
-  )
-}
+  );
+};
 
 export const CloudwatchLogsWidget = () => {
-  const awsAppLoadingStatus = useAsyncAwsApp()
+  const awsAppLoadingStatus = useAsyncAwsApp();
 
   if (awsAppLoadingStatus.loading) {
-    return <LinearProgress/>
+    return <LinearProgress />;
   } else if (awsAppLoadingStatus.component) {
-    const env = awsAppLoadingStatus.component.currentEnvironment
+    const env = awsAppLoadingStatus.component.currentEnvironment;
 
-    let logGroupNames: string[]
+    let logGroupNames: string[];
     if (isAWSServerlessAppDeploymentEnvironment(env)) {
-      logGroupNames = env.app.logGroupNames
+      logGroupNames = env.app.logGroupNames;
     } else if (isAWSECSAppDeploymentEnvironment(env)) {
-      logGroupNames = [env.app.logGroupName]
+      logGroupNames = [env.app.logGroupName];
     } else if (isAWSEKSAppDeploymentEnvironment(env)) {
-      logGroupNames = [env.app.logGroupName]
+      logGroupNames = [env.app.logGroupName];
     } else {
-      logGroupNames = []
+      logGroupNames = [];
     }
 
     if (logGroupNames && logGroupNames.length > 0) {
-      const stackName = '' // env.app.cloudFormation!
+      const stackName = ''; // env.app.cloudFormation!
       return (
         <CloudwatchLogsTable
           input={{
@@ -322,7 +324,7 @@ export const CloudwatchLogsWidget = () => {
             awsComponent: awsAppLoadingStatus.component,
           }}
         />
-      )
+      );
     }
     return (
       <EmptyState
@@ -330,7 +332,7 @@ export const CloudwatchLogsWidget = () => {
         title="Application Logs"
         description="Logs would show here"
       />
-    )
+    );
   }
   return (
     <EmptyState
@@ -338,5 +340,5 @@ export const CloudwatchLogsWidget = () => {
       title="Application Logs"
       description="Logs would show here"
     />
-  )
-}
+  );
+};

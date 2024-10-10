@@ -65,9 +65,7 @@ export const AwsEnvironmentProviderSelectorDialog = ({
   const handleChangeSelectedProvider = (event: SelectChangeEvent) => {
     const newProvider = event.target.value as string;
     const matchingProviders = providersInput.filter(providerRecord => {
-      return (
-        newProvider === `${providerRecord.prefix}:${providerRecord.name}`
-      );
+      return newProvider === `${providerRecord.prefix}:${providerRecord.name}`;
     });
 
     if (matchingProviders.length !== 1) {

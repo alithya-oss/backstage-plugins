@@ -42,12 +42,9 @@ function getMemberGroupFromUserIdentity(user: BackstageUserInfo | undefined) {
       'User is not a member of any groups and cannot get mapped AWS credentials',
     );
   }
-  return user.ownershipEntityRefs.reduce(
-    (groups, ownershipRefs) => {
-      return parseEntityref(ownershipRefs, groups);
-    },
-    new Array<string>(),
-  );
+  return user.ownershipEntityRefs.reduce((groups, ownershipRefs) => {
+    return parseEntityref(ownershipRefs, groups);
+  }, new Array<string>());
 }
 async function fetchCreds(
   memberGroups: string[],

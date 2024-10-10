@@ -60,11 +60,11 @@ const OpaAppStateOverview = ({
   });
   const repoInfo = awsComponent.getRepoInfo();
 
-/*
+  /*
   Gets the stack event details
   */
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  async function getStackEvents () {
+  async function getStackEvents() {
     setPolling(true);
 
     let isCanceled = false;
@@ -131,7 +131,7 @@ const OpaAppStateOverview = ({
 
         setEvents(visibleEvents);
       } catch (e) {
-        if ((e).isCanceled) {
+        if (e.isCanceled) {
           isCanceled = true;
         } else {
           setError({
@@ -159,7 +159,7 @@ const OpaAppStateOverview = ({
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
-    }
+    };
   }, [getStackEvents, pollingEnabled, stack.stackDeployStatus]);
 
   function sleep(ms: number) {
@@ -191,7 +191,7 @@ const OpaAppStateOverview = ({
 
       await getStackEvents();
     } catch (e) {
-      if (!(e).isCanceled) {
+      if (!e.isCanceled) {
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while updating the deployment: ${e}`,
@@ -219,7 +219,7 @@ const OpaAppStateOverview = ({
 
       await getStackEvents();
     } catch (e) {
-      if (!(e).isCanceled) {
+      if (!e.isCanceled) {
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while creating the deployment: ${e}`,
@@ -230,10 +230,10 @@ const OpaAppStateOverview = ({
 
   const handleStartDeployment = async () => {
     if (stack.stackDeployStatus.includes('STAGED')) {
-      return handleCreateDeployment()
+      return handleCreateDeployment();
     }
-    return handleUpdateDeployment()
-  }
+    return handleUpdateDeployment();
+  };
 
   const handleStopApp = async () => {
     setEvents([]);
@@ -249,7 +249,7 @@ const OpaAppStateOverview = ({
 
       await getStackEvents();
     } catch (e) {
-      if (!(e).isCanceled) {
+      if (!e.isCanceled) {
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while deleting the deployment: ${e}`,
@@ -289,35 +289,35 @@ const OpaAppStateOverview = ({
             {events.length > 0 && (
               <>
                 Latest events as of {formatWithTime(new Date())}...
-                <br/>
-                <br/>
+                <br />
+                <br />
                 <table>
                   <tbody>
-                  <tr>
-                    <td style={eventStyle}>
-                      <b>Action</b>
-                    </td>
-                    <td style={eventStyle}>
-                      <b>Resource Type</b>
-                    </td>
-                    <td>
-                      <b>Resource ID</b>
-                    </td>
-                  </tr>
-                  {events.map((stackEvent, i) => (
-                    <tr key={i}>
-                      <td style={eventStyle}>{stackEvent.action}</td>
-                      <td style={eventStyle}>{stackEvent.resourceType}</td>
-                      <td>{stackEvent.logicalResourceId}</td>
+                    <tr>
+                      <td style={eventStyle}>
+                        <b>Action</b>
+                      </td>
+                      <td style={eventStyle}>
+                        <b>Resource Type</b>
+                      </td>
+                      <td>
+                        <b>Resource ID</b>
+                      </td>
                     </tr>
-                  ))}
+                    {events.map((stackEvent, i) => (
+                      <tr key={i}>
+                        <td style={eventStyle}>{stackEvent.action}</td>
+                        <td style={eventStyle}>{stackEvent.resourceType}</td>
+                        <td>{stackEvent.logicalResourceId}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
-                <br/>
+                <br />
               </>
             )}
             <>Polling for updates...</>
-            <br/>
+            <br />
             <Button
               sx={{ mr: 2 }}
               variant="outlined"
@@ -342,7 +342,7 @@ const OpaAppStateOverview = ({
                   {getStatus(stack.stackDeployStatus)}
                 </Typography>
               </Grid>
-              <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }}/>
+              <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }} />
               <Grid item zeroMinWidth xs={4} sx={{ pl: 1, pr: 1 }}>
                 <Typography
                   sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}
@@ -353,7 +353,7 @@ const OpaAppStateOverview = ({
                   {stack.creationTime ?? ''}
                 </Typography>
               </Grid>
-              <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }}/>
+              <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }} />
               <Grid item xs={4} sx={{ pl: 1 }}>
                 <Typography
                   sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}
@@ -408,7 +408,7 @@ export const AppStateCard = () => {
   const awsAppLoadingStatus = useAsyncAwsApp();
 
   if (awsAppLoadingStatus.loading) {
-    return <LinearProgress/>;
+    return <LinearProgress />;
   } else if (awsAppLoadingStatus.component) {
     const env = awsAppLoadingStatus.component
       .currentEnvironment as AWSServerlessAppDeploymentEnvironment;
@@ -419,7 +419,7 @@ export const AppStateCard = () => {
       refresh: awsAppLoadingStatus.refresh!,
     };
 
-    return <OpaAppStateOverview input={input}/>;
+    return <OpaAppStateOverview input={input} />;
   }
   return (
     <EmptyState

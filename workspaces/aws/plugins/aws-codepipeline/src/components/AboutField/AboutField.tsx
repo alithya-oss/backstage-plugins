@@ -11,10 +11,10 @@
  * limitations under the License.
  */
 
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
-import React, { ReactElement } from 'react'
+import React, { ReactElement } from 'react';
 
 const useStyles = makeStyles(theme => ({
   links: {
