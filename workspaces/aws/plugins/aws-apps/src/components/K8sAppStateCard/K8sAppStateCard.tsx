@@ -16,7 +16,7 @@ import { EmptyState, InfoCard } from '@backstage/core-components'
 import { useApi } from '@backstage/core-plugin-api'
 import { useEntity } from '@backstage/plugin-catalog-react'
 import { LinearProgress, Table, TableBody, TableCell, TableRow, } from '@material-ui/core'
-import { Unstable_NumberInput as NumberInput } from '@mui/base'
+import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import Button from '@mui/material/Button'
