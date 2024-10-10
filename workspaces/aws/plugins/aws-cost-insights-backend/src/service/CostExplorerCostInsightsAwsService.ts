@@ -15,6 +15,7 @@ import {
   CostExplorerClient,
   Expression,
   GetCostAndUsageCommand,
+  GetCostAndUsageCommandOutput,
   Granularity,
   GroupDefinition,
   GroupDefinitionType,
@@ -152,7 +153,7 @@ export class CostExplorerCostInsightsAwsService
 
     if (annotation.name === COST_INSIGHTS_AWS_TAGS_ANNOTATION) {
       const tagFilters = annotation.value.split(',').map(e => {
-        const parts = e.split('=');
+        const parts: string[] = e.split('=');
 
         return {
           Tags: {
@@ -233,17 +234,18 @@ export class CostExplorerCostInsightsAwsService
     startDate: Date,
     endDate: Date,
   ): Promise<Cost> {
-    const response = await this.costExplorerClient.send(
-      new GetCostAndUsageCommand({
-        TimePeriod: {
-          Start: this.formatDate(endDate),
-          End: this.formatDate(startDate),
-        },
-        Granularity: Granularity.DAILY,
-        Metrics: ['UnblendedCost'],
-        Filter: filter,
-      }),
-    );
+    const response: GetCostAndUsageCommandOutput =
+      await this.costExplorerClient.send(
+        new GetCostAndUsageCommand({
+          TimePeriod: {
+            Start: this.formatDate(endDate),
+            End: this.formatDate(startDate),
+          },
+          Granularity: Granularity.DAILY,
+          Metrics: ['UnblendedCost'],
+          Filter: filter,
+        }),
+      );
 
     const aggregation = response.ResultsByTime!.map(result => {
       return {
@@ -266,18 +268,19 @@ export class CostExplorerCostInsightsAwsService
     startDate: Date,
     endDate: Date,
   ): Promise<Cost[]> {
-    const response = await this.costExplorerClient.send(
-      new GetCostAndUsageCommand({
-        TimePeriod: {
-          Start: this.formatDate(endDate),
-          End: this.formatDate(startDate),
-        },
-        Granularity: Granularity.DAILY,
-        Metrics: ['UnblendedCost'],
-        Filter: filter,
-        GroupBy: groupBy,
-      }),
-    );
+    const response: GetCostAndUsageCommandOutput =
+      await this.costExplorerClient.send(
+        new GetCostAndUsageCommand({
+          TimePeriod: {
+            Start: this.formatDate(endDate),
+            End: this.formatDate(startDate),
+          },
+          Granularity: Granularity.DAILY,
+          Metrics: ['UnblendedCost'],
+          Filter: filter,
+          GroupBy: groupBy,
+        }),
+      );
 
     const aggregations: Record<string, DateAggregation[]> = {};
 
