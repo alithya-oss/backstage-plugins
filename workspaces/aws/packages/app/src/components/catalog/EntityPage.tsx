@@ -64,10 +64,10 @@ import {
   EntityAmazonEcsServicesContent,
 } from '@alithya-oss/plugin-amazon-ecs';
 import {
+  EntityAwsCodePipelineCard,
   EntityAwsCodePipelineExecutionsContent,
   isAwsCodePipelineAvailable,
 } from '@alithya-oss/plugin-aws-codepipeline';
-import { EntityAwsCodePipelineCard } from '@alithya-oss/plugin-aws-codepipeline';
 import {
   EntityAwsCodeBuildCard,
   isAwsCodeBuildAvailable,
