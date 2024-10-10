@@ -67,9 +67,8 @@ export class OPAApiClient implements OPAApi {
   ): BackendParams {
     if (backendParamsOverrides) {
       return backendParamsOverrides!;
-    } else {
-      return this.backendParams;
     }
+    return this.backendParams;
   }
 
   async getTaskDetails({
@@ -89,9 +88,7 @@ export class OPAApiClient implements OPAApi {
       clusterName: cluster,
     };
 
-    const task = this.fetch<Task>('/ecs', HTTP.POST, postBody);
-
-    return task;
+    return this.fetch<Task>('/ecs', HTTP.POST, postBody);
   }
 
   async getAuditDetails(
@@ -100,8 +97,7 @@ export class OPAApiClient implements OPAApi {
     const body = this.getAppliedBackendParams(backendParamsOverrides);
 
     const path = `/audit-entries`;
-    const results = this.fetch<ScanCommandOutput>(path, HTTP.POST, body);
-    return results;
+    return this.fetch<ScanCommandOutput>(path, HTTP.POST, body);
   }
 
   async updateService({
@@ -130,13 +126,7 @@ export class OPAApiClient implements OPAApi {
       desiredCount: desiredCount,
     };
 
-    const serviceDetails = this.fetch<Service>(
-      '/ecs/updateService',
-      HTTP.POST,
-      postBody,
-    );
-
-    return serviceDetails;
+    return this.fetch<Service>('/ecs/updateService', HTTP.POST, postBody);
   }
 
   async getSecret({
@@ -152,13 +142,11 @@ export class OPAApiClient implements OPAApi {
       ...beParams,
       secretArn: secretName,
     };
-    const secretDetails = this.fetch<GetSecretValueCommandOutput>(
+    return this.fetch<GetSecretValueCommandOutput>(
       '/secrets',
       HTTP.POST,
       postBody,
     );
-
-    return secretDetails;
   }
 
   async getLogStreamNames({
@@ -171,12 +159,10 @@ export class OPAApiClient implements OPAApi {
     const beParams = this.getAppliedBackendParams(backendParamsOverrides);
     const path = '/logs/stream';
 
-    const logStreams = this.fetch<LogStream[]>(path, HTTP.POST, {
+    return this.fetch<LogStream[]>(path, HTTP.POST, {
       ...beParams,
       logGroupName,
     });
-
-    return logStreams;
   }
 
   async getLogStreamData({
@@ -191,16 +177,14 @@ export class OPAApiClient implements OPAApi {
     const beParams = this.getAppliedBackendParams(backendParamsOverrides);
     const path = '/logs/stream-events';
 
-    const logStreamData = this.fetch<string>(path, HTTP.POST, {
+    return this.fetch<string>(path, HTTP.POST, {
       ...beParams,
       logGroupName,
       logStreamName,
     });
-
-    return logStreamData;
   }
 
-  //TODO: Move platform calls to separate backend endpoints - interface does not require provider information
+  // TODO: Move platform calls to separate backend endpoints - interface does not require provider information
   async getPlatformSecret({
     secretName,
   }: {
@@ -211,13 +195,11 @@ export class OPAApiClient implements OPAApi {
       secretArn: secretName,
     };
 
-    const secretDetails = this.fetch<GetSecretValueCommandOutput>(
+    return this.fetch<GetSecretValueCommandOutput>(
       '/platform/secrets',
       HTTP.POST,
       postBody,
     );
-
-    return secretDetails;
   }
 
   async getPlatformSSMParam({
@@ -230,13 +212,11 @@ export class OPAApiClient implements OPAApi {
       paramName,
     };
 
-    const paramDetails = this.fetch<GetParameterCommandOutput>(
+    return this.fetch<GetParameterCommandOutput>(
       '/platform/ssm',
       HTTP.POST,
       postBody,
     );
-
-    return paramDetails;
   }
 
   async bindResource({
@@ -260,13 +240,7 @@ export class OPAApiClient implements OPAApi {
       resourceEntityRef: params.resourceEntityRef,
     };
 
-    const bindResponse = this.fetch<any>(
-      '/platform/bind-resource',
-      HTTP.POST,
-      postBody,
-    );
-
-    return bindResponse;
+    return this.fetch<any>('/platform/bind-resource', HTTP.POST, postBody);
   }
 
   async unBindResource({
@@ -294,13 +268,7 @@ export class OPAApiClient implements OPAApi {
       resourceEntityRef: params.resourceEntityRef,
     };
 
-    const unBindResponse = this.fetch<any>(
-      '/platform/unbind-resource',
-      HTTP.POST,
-      postBody,
-    );
-
-    return unBindResponse;
+    return this.fetch<any>('/platform/unbind-resource', HTTP.POST, postBody);
   }
 
   async updateProviderToEnvironment({
@@ -328,12 +296,7 @@ export class OPAApiClient implements OPAApi {
       action,
     };
 
-    const addProviderResponse = this.fetch<any>(
-      '/platform/update-provider',
-      HTTP.POST,
-      postBody,
-    );
-    return addProviderResponse;
+    return this.fetch<any>('/platform/update-provider', HTTP.POST, postBody);
   }
 
   deleteTFProvider({
@@ -355,13 +318,7 @@ export class OPAApiClient implements OPAApi {
       envName,
     };
 
-    const deleteResponse = this.fetch<any>(
-      '/platform/delete-tf-provider',
-      HTTP.POST,
-      postBody,
-    );
-
-    return deleteResponse;
+    return this.fetch<any>('/platform/delete-tf-provider', HTTP.POST, postBody);
   }
 
   async deletePlatformSecret({
@@ -378,13 +335,11 @@ export class OPAApiClient implements OPAApi {
       secretName,
     };
 
-    const deleteResponse = this.fetch<DeleteSecretCommandOutput>(
+    return this.fetch<DeleteSecretCommandOutput>(
       '/platform/delete-secret',
       HTTP.POST,
       postBody,
     );
-
-    return deleteResponse;
   }
 
   async deleteRepository({
@@ -402,12 +357,7 @@ export class OPAApiClient implements OPAApi {
       repoInfo,
       gitAdminSecret,
     };
-    const deleteResponse = this.fetch<any>(
-      '/platform/delete-repository',
-      HTTP.POST,
-      postBody,
-    );
-    return deleteResponse;
+    return this.fetch<any>('/platform/delete-repository', HTTP.POST, postBody);
   }
 
   async getStackDetails({
@@ -420,12 +370,10 @@ export class OPAApiClient implements OPAApi {
     const beParams = this.getAppliedBackendParams(backendParamsOverrides);
     const path = '/cloudformation/describeStack';
 
-    const stack = this.fetch<Stack>(path, HTTP.POST, {
+    return this.fetch<Stack>(path, HTTP.POST, {
       ...beParams,
       stackName,
     });
-
-    return stack;
   }
 
   async getStackEvents({
@@ -438,16 +386,10 @@ export class OPAApiClient implements OPAApi {
     const beParams = this.getAppliedBackendParams(backendParamsOverrides);
     const path = '/cloudformation/describeStackEvents';
 
-    const stack = this.fetch<DescribeStackEventsCommandOutput>(
-      path,
-      HTTP.POST,
-      {
-        ...beParams,
-        stackName,
-      },
-    );
-
-    return stack;
+    return this.fetch<DescribeStackEventsCommandOutput>(path, HTTP.POST, {
+      ...beParams,
+      stackName,
+    });
   }
 
   async updateStack({
@@ -472,7 +414,7 @@ export class OPAApiClient implements OPAApi {
     const beParams = this.getAppliedBackendParams(backendParamsOverrides);
     const path = '/cloudformation/updateStack';
 
-    const stack = this.fetch<UpdateStackCommandOutput>(path, HTTP.POST, {
+    return this.fetch<UpdateStackCommandOutput>(path, HTTP.POST, {
       ...beParams,
       componentName,
       stackName,
@@ -482,8 +424,6 @@ export class OPAApiClient implements OPAApi {
       gitAdminSecret,
       environmentName,
     });
-
-    return stack;
   }
 
   async createStack({
@@ -508,7 +448,7 @@ export class OPAApiClient implements OPAApi {
     const beParams = this.getAppliedBackendParams(backendParamsOverrides);
     const path = '/cloudformation/createStack';
 
-    const stack = this.fetch<CreateStackCommandOutput>(path, HTTP.POST, {
+    return this.fetch<CreateStackCommandOutput>(path, HTTP.POST, {
       ...beParams,
       componentName,
       stackName,
@@ -518,8 +458,6 @@ export class OPAApiClient implements OPAApi {
       gitAdminSecret,
       environmentName,
     });
-
-    return stack;
   }
 
   async deleteStack({
@@ -534,13 +472,11 @@ export class OPAApiClient implements OPAApi {
     const beParams = this.getAppliedBackendParams(backendParamsOverrides);
     const path = '/cloudformation/deleteStack';
 
-    const stack = this.fetch<DeleteStackCommandOutput>(path, HTTP.POST, {
+    return this.fetch<DeleteStackCommandOutput>(path, HTTP.POST, {
       ...beParams,
       componentName,
       stackName,
     });
-
-    return stack;
   }
 
   doesS3FileExist({
@@ -555,17 +491,11 @@ export class OPAApiClient implements OPAApi {
     const beParams = this.getAppliedBackendParams(backendParamsOverrides);
     const path = '/s3/doesFileExist';
 
-    const fileExistsOutput = this.fetch<HeadObjectCommandOutput>(
-      path,
-      HTTP.POST,
-      {
-        ...beParams,
-        bucketName,
-        fileName,
-      },
-    );
-
-    return fileExistsOutput;
+    return this.fetch<HeadObjectCommandOutput>(path, HTTP.POST, {
+      ...beParams,
+      bucketName,
+      fileName,
+    });
   }
 
   async getResourceGroupResources({
@@ -581,12 +511,11 @@ export class OPAApiClient implements OPAApi {
       resourceGroupName: rscGroupArn,
     };
 
-    const rscGroupDetails = this.fetch<AWSServiceResources>(
+    return this.fetch<AWSServiceResources>(
       '/resource-group',
       HTTP.POST,
       postBody,
     );
-    return rscGroupDetails;
   }
 
   async getSSMParameter({
@@ -602,12 +531,11 @@ export class OPAApiClient implements OPAApi {
       ssmParamName,
     };
 
-    const ssmParamDetails = this.fetch<GetParameterCommandOutput>(
+    return this.fetch<GetParameterCommandOutput>(
       '/ssm-parameter',
       HTTP.POST,
       postBody,
     );
-    return ssmParamDetails;
   }
 
   async describeTaskDefinition({
@@ -622,13 +550,11 @@ export class OPAApiClient implements OPAApi {
       ...beParams,
       taskDefinition: taskDefinitionArn,
     };
-    const taskD = this.fetch<TaskDefinition>(
+    return this.fetch<TaskDefinition>(
       '/ecs/describeTaskDefinition',
       HTTP.POST,
       postBody,
     );
-
-    return taskD;
   }
 
   async updateTaskDefinition({
@@ -647,12 +573,11 @@ export class OPAApiClient implements OPAApi {
       envVar: envVar,
     };
 
-    const taskD = this.fetch<TaskDefinition>(
+    return this.fetch<TaskDefinition>(
       '/ecs/updateTaskDefinition',
       HTTP.POST,
       postBody,
     );
-    return taskD;
   }
 
   async promoteApp({
@@ -678,8 +603,7 @@ export class OPAApiClient implements OPAApi {
       gitAdminSecret,
       providers: providersData,
     };
-    const results = this.fetch<any>('/git/promote', HTTP.POST, postBody);
-    return results;
+    return this.fetch<any>('/git/promote', HTTP.POST, postBody);
   }
 
   async invokeLambda({
@@ -700,13 +624,12 @@ export class OPAApiClient implements OPAApi {
       actionDescription,
       body,
     };
-    // console.log(postBody)
-    const lambdaResult = await this.fetch<InvokeCommandOutput>(
+
+    return await this.fetch<InvokeCommandOutput>(
       '/lambda/invoke',
       HTTP.POST,
       postBody,
     );
-    return lambdaResult;
   }
 
   async getEKSAppManifests({
@@ -729,15 +652,11 @@ export class OPAApiClient implements OPAApi {
       repoInfo,
     };
 
-    // console.log(postBody)
-    let configResult = await this.fetch<any>(
+    return await this.fetch<any>(
       '/platform/fetch-eks-config',
       HTTP.POST,
       postBody,
     );
-    // console.log(configResult);
-
-    return configResult;
   }
 
   async updateEKSApp({
@@ -763,7 +682,7 @@ export class OPAApiClient implements OPAApi {
     repoInfo: IRepositoryInfo;
     backendParamsOverrides?: BackendParams;
   }): Promise<any> {
-    let configResult = await this.getEKSAppManifests({
+    const configResult = await this.getEKSAppManifests({
       envName,
       gitAdminSecret,
       repoInfo,
@@ -776,12 +695,8 @@ export class OPAApiClient implements OPAApi {
       for (let i = 0; i < updateKeyArray.length; i++) {
         const currKey = updateKeyArray[i];
         if (currObj.hasOwnProperty(currKey)) {
-          // console.log(currKey)
-          // console.log(currObj)
           if (i === updateKeyArray.length - 1) {
-            // console.log(`key ${currKey} found , current value ${currObj[currKey]}`)
             currObj[currKey] = updateValue;
-            // console.log(`Updating key ${currKey} found , current value ${currObj[currKey]}`)
           } else {
             currObj = currObj[currKey];
           }
@@ -790,9 +705,8 @@ export class OPAApiClient implements OPAApi {
         }
       }
     });
-    // console.log(configResult)
 
-    //make changes to config
+    // make changes to config
     const manifest = JSON.stringify(configResult);
     const bodyParam = {
       RequestType: 'Update',
@@ -806,13 +720,11 @@ export class OPAApiClient implements OPAApi {
       },
     };
 
-    const configUpdateResult = await this.invokeLambda({
+    return await this.invokeLambda({
       functionName: kubectlLambda,
       actionDescription,
       body: JSON.stringify(bodyParam),
     });
-
-    return configUpdateResult;
   }
 
   private async fetch<T>(
@@ -820,14 +732,14 @@ export class OPAApiClient implements OPAApi {
     method = HTTP.GET,
     data?: any,
   ): Promise<T> {
-    const baseUrl = `${await this.configApi.getString(
+    const baseUrl = `${this.configApi.getString(
       'backend.baseUrl',
     )}/api/aws-apps-backend`;
     const url = baseUrl + path;
 
-    let headers: { [k: string]: string } = {};
+    const headers: { [k: string]: string } = {};
 
-    let requestOptions: RequestInit = {
+    const requestOptions: RequestInit = {
       method,
       headers,
     };
@@ -842,12 +754,11 @@ export class OPAApiClient implements OPAApi {
       throw await ResponseError.fromResponse(response);
     }
 
-    let responseType = response.headers.get('Content-Type');
+    const responseType = response.headers.get('Content-Type');
 
     if (responseType && responseType.indexOf('application/json') >= 0) {
-      return response.json() as Promise<T>;
-    } else {
-      return response.text() as unknown as Promise<T>;
+      return (await response.json()) as Promise<T>;
     }
+    return (await response.text()) as unknown as Promise<T>;
   }
 }

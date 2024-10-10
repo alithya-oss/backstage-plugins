@@ -40,7 +40,7 @@ export function AwsECSAppPage(_props: AwsECSAppPageProps) {
         <EntityAppStateCard />
       </Grid>
       <Grid item md={6} xs={12}>
-        <EntityAppConfigCard></EntityAppConfigCard>
+        <EntityAppConfigCard />
       </Grid>
       <Grid item md={12} xs={12}>
         <EntityInfrastructureInfoCard />

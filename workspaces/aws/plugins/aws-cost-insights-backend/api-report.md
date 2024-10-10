@@ -15,14 +15,15 @@ import { CostExplorerClient } from '@aws-sdk/client-cost-explorer';
 import { DiscoveryService } from '@backstage/backend-plugin-api';
 import express from 'express';
 import { HttpAuthService } from '@backstage/backend-plugin-api';
-import { Logger } from 'winston';
+import { LoggerService } from '@backstage/backend-plugin-api';
+import { ServiceRef } from '@backstage/backend-plugin-api';
 
 // @public (undocumented)
 export class CostExplorerCostInsightsAwsService
   implements CostInsightsAwsService
 {
   constructor(
-    logger: Logger,
+    logger: LoggerService,
     auth: AuthService,
     catalogApi: CatalogApi,
     costExplorerClient: CostExplorerClient,
@@ -36,7 +37,7 @@ export class CostExplorerCostInsightsAwsService
       discovery: DiscoveryService;
       auth?: AuthService;
       httpAuth?: HttpAuthService;
-      logger: Logger;
+      logger: LoggerService;
       credentialsManager: AwsCredentialsManager;
     },
   ): Promise<CostExplorerCostInsightsAwsService>;
@@ -96,6 +97,13 @@ export interface CostInsightsAwsService {
 }
 
 // @public (undocumented)
+export const costInsightsAwsServiceRef: ServiceRef<
+  CostInsightsAwsService,
+  'plugin',
+  'singleton'
+>;
+
+// @public (undocumented)
 export function createRouter(options: RouterOptions): Promise<express.Router>;
 
 // @public (undocumented)
@@ -113,7 +121,7 @@ export interface RouterOptions {
   // (undocumented)
   httpAuth?: HttpAuthService;
   // (undocumented)
-  logger: Logger;
+  logger: LoggerService;
 }
 
 // (No @packageDocumentation comment for this package)

@@ -5,7 +5,7 @@
 ```ts
 import { AuthService } from '@backstage/backend-plugin-api';
 import { AwsCredentialsManager } from '@backstage/integration-aws-node';
-import { AwsResourceLocator } from '@alithya-oss/plugin-aws-core-common';
+import { AwsResourceLocator } from '@alithya-oss/plugin-aws-core-node';
 import { BackendFeatureCompat } from '@backstage/backend-plugin-api';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 import { CatalogApi } from '@backstage/catalog-client';
@@ -14,9 +14,10 @@ import { Config } from '@backstage/config';
 import { DiscoveryService } from '@backstage/backend-plugin-api';
 import express from 'express';
 import { HttpAuthService } from '@backstage/backend-plugin-api';
-import { Logger } from 'winston';
+import { LoggerService } from '@backstage/backend-plugin-api';
 import { PipelineExecutionsResponse } from '@alithya-oss/plugin-aws-codepipeline-common';
 import { PipelineStateResponse } from '@alithya-oss/plugin-aws-codepipeline-common';
+import { ServiceRef } from '@backstage/backend-plugin-api';
 
 // @public (undocumented)
 export interface AwsCodePipelineService {
@@ -33,6 +34,13 @@ export interface AwsCodePipelineService {
 }
 
 // @public (undocumented)
+export const awsCodePipelineServiceRef: ServiceRef<
+  AwsCodePipelineService,
+  'plugin',
+  'singleton'
+>;
+
+// @public (undocumented)
 const awsCodePiplinePlugin: BackendFeatureCompat;
 export default awsCodePiplinePlugin;
 
@@ -42,7 +50,7 @@ export function createRouter(options: RouterOptions): Promise<express.Router>;
 // @public (undocumented)
 export class DefaultAwsCodePipelineService implements AwsCodePipelineService {
   constructor(
-    logger: Logger,
+    logger: LoggerService,
     auth: AuthService,
     catalogApi: CatalogApi,
     resourceLocator: AwsResourceLocator,
@@ -56,7 +64,7 @@ export class DefaultAwsCodePipelineService implements AwsCodePipelineService {
       discovery: DiscoveryService;
       auth?: AuthService;
       httpAuth?: HttpAuthService;
-      logger: Logger;
+      logger: LoggerService;
       resourceLocator?: AwsResourceLocator;
     },
   ): Promise<DefaultAwsCodePipelineService>;
@@ -83,7 +91,7 @@ export interface RouterOptions {
   // (undocumented)
   httpAuth?: HttpAuthService;
   // (undocumented)
-  logger: Logger;
+  logger: LoggerService;
 }
 
 // (No @packageDocumentation comment for this package)

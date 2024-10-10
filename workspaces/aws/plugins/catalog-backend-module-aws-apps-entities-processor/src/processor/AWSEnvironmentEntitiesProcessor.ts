@@ -10,10 +10,10 @@ import {
   RELATION_DEPENDS_ON,
   RELATION_DEPENDENCY_OF,
 } from '@backstage/catalog-model';
+import { LocationSpec } from '@backstage/plugin-catalog-common';
 import {
   CatalogProcessor,
   CatalogProcessorEmit,
-  LocationSpec,
   processingResult,
 } from '@backstage/plugin-catalog-node';
 import {
@@ -88,7 +88,7 @@ export class AWSEnvironmentEntitiesProcessor implements CatalogProcessor {
             defaultKind: 'awsenvironmentprovider',
             defaultNamespace: selfRef.namespace,
           });
-          if (targetRef.kind == 'awsenvironmentprovider') {
+          if (targetRef.kind === 'awsenvironmentprovider') {
             emit(
               processingResult.relation({
                 source: selfRef,

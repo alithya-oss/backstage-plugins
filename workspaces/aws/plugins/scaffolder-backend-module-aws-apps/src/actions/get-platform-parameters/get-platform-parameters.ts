@@ -5,6 +5,7 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import yaml from 'yaml';
 import { getPlatformAccountSSMParameterValue } from '../../helpers/action-context';
 import { Config } from '@backstage/config';
+
 const ID = 'opa:get-platform-parameters';
 
 const examples = [
@@ -27,6 +28,7 @@ const examples = [
   },
 ];
 
+/** @public */
 export function getPlatformParametersAction(options: { envConfig: Config }) {
   const { envConfig } = options;
   return createTemplateAction<{
@@ -70,7 +72,9 @@ export function getPlatformParametersAction(options: { envConfig: Config }) {
       },
     },
     async handler(ctx) {
-      let { paramKeys, region } = ctx.input;
+      const { paramKeys } = ctx.input;
+      let { region } = ctx.input;
+
       if (!region) {
         region = envConfig.getString('backend.platformRegion');
       }
@@ -100,7 +104,7 @@ export function getPlatformParametersAction(options: { envConfig: Config }) {
       const getEnvProviderSsmParams = async (): Promise<{
         [key: string]: string;
       }> => {
-        const params = (
+        return (
           await Promise.all(
             paramKeys.map(
               async (paramKey): Promise<{ [key: string]: string }> => {
@@ -123,8 +127,6 @@ export function getPlatformParametersAction(options: { envConfig: Config }) {
             [key]: paramKeyValMap[key],
           };
         }, {});
-
-        return params;
       };
       const envParams = await getEnvProviderSsmParams();
       ctx.logger.info(JSON.stringify(envParams));

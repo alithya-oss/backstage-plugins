@@ -12,9 +12,9 @@
  */
 
 import {
+  Alert,
   CostInsightsApi,
   ProductInsightsOptions,
-  Alert,
 } from '@backstage-community/plugin-cost-insights';
 import {
   Cost,
@@ -96,7 +96,6 @@ export class CostExplorerClient implements CostInsightsApi {
     throw new Error('Not implemented');
   }
 
-  // @ts-ignore
   async getCatalogEntityDailyCost(
     catalogEntityRef: string,
     intervals: string,
@@ -106,9 +105,7 @@ export class CostExplorerClient implements CostInsightsApi {
       entityRef.name
     }/${encodeURIComponent(intervals)}`;
 
-    const service = await this.get<Cost>(urlSegment);
-
-    return service;
+    return this.get<Cost>(urlSegment);
   }
 
   async getProductInsights(_: ProductInsightsOptions): Promise<Entity> {

@@ -25,6 +25,7 @@ const examples = [
   },
 ];
 
+/** @public */
 export function getComponentInfoAction() {
   return createTemplateAction<{
     componentName: string;

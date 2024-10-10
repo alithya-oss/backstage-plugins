@@ -3,7 +3,7 @@ import {
   ICommitChange,
   IRepositoryInfo,
   ISCMBackendAPI,
-} from '@alithya-oss/plugin-aws-apps-common/src/types/SCMBackendAPI';
+} from '@alithya-oss/plugin-aws-apps-common';
 import { LoggerService } from '@backstage/backend-plugin-api';
 
 export class GitLabAPI implements ISCMBackendAPI {
@@ -17,8 +17,8 @@ export class GitLabAPI implements ISCMBackendAPI {
     gitRepoName: string,
     accessToken: string,
   ): Promise<string> {
-    let repoName;
-    let groupName;
+    let repoName: string;
+    let groupName: string;
 
     if (gitRepoName.includes('/')) {
       groupName = gitRepoName.split('/')[0];
@@ -41,17 +41,16 @@ export class GitLabAPI implements ISCMBackendAPI {
     let project = null;
     if (gitProjectsJson) {
       project = gitProjectsJson.filter(
-        project => project.path_with_namespace === `${groupName}/${repoName}`,
+        p => p.path_with_namespace === `${groupName}/${repoName}`,
       )[0];
     }
 
     if (project && project.id) {
       return project.id;
-    } else {
-      throw new Error(
-        `Failed to get git project ID for group '${gitProjectGroup}' and repo '${gitRepoName}'`,
-      );
     }
+    throw new Error(
+      `Failed to get git project ID for group '${gitProjectGroup}' and repo '${gitRepoName}'`,
+    );
   }
 
   public async createRepository(
@@ -65,7 +64,7 @@ export class GitLabAPI implements ISCMBackendAPI {
       name: repo.gitRepoName,
       description: repo.description || '',
       path: repo.gitProjectGroup
-        ? repo.gitProjectGroup + '/' + repo.gitRepoName
+        ? `${repo.gitProjectGroup}/${repo.gitRepoName}`
         : repo.gitRepoName,
       initialize_with_readme: 'true',
     };
@@ -82,19 +81,18 @@ export class GitLabAPI implements ISCMBackendAPI {
     if (createRepoResults.status > 299) {
       this.logger.error('ERROR: Repository failed to create');
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `Repository failed to create`,
         httpResponse: createRepoResults.status,
         value: 'FAILURE',
       };
-    } else {
-      return {
-        isSuccuess: true,
-        message: `Repository created successfully`,
-        httpResponse: createRepoResults.status,
-        value: 'SUCCESS',
-      };
     }
+    return {
+      isSuccess: true,
+      message: `Repository created successfully`,
+      httpResponse: createRepoResults.status,
+      value: 'SUCCESS',
+    };
   }
 
   public async deleteRepository(
@@ -127,19 +125,18 @@ export class GitLabAPI implements ISCMBackendAPI {
     if (deleteRepoResults.status > 299) {
       this.logger.error('ERROR: Repository failed to delete');
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `Repository failed to delete`,
         httpResponse: deleteRepoResults.status,
         value: 'FAILURE',
       };
-    } else {
-      return {
-        isSuccuess: true,
-        message: `Repository deleted successfully`,
-        httpResponse: deleteRepoResults.status,
-        value: 'SUCCESS',
-      };
     }
+    return {
+      isSuccess: true,
+      message: `Repository deleted successfully`,
+      httpResponse: deleteRepoResults.status,
+      value: 'SUCCESS',
+    };
   }
 
   public async getFileContent(
@@ -175,19 +172,18 @@ export class GitLabAPI implements ISCMBackendAPI {
         `ERROR: Failed to retrieve ${filePath} for ${repo.gitRepoName}. Response code: ${result.status} - ${resultBody}`,
       );
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `ERROR: Failed to retrieve ${filePath} for ${repo.gitRepoName}. Response code: ${result.status} - ${resultBody}`,
         httpResponse: result.status,
         value: 'FAILURE',
       };
-    } else {
-      return {
-        isSuccuess: true,
-        message: `Retrieved file content successfully`,
-        httpResponse: result.status,
-        value: resultBody.content,
-      };
     }
+    return {
+      isSuccess: true,
+      message: `Retrieved file content successfully`,
+      httpResponse: result.status,
+      value: resultBody.content,
+    };
   }
 
   public async commitContent(
@@ -231,18 +227,17 @@ export class GitLabAPI implements ISCMBackendAPI {
         `ERROR: Failed to submit commit to ${repo.gitRepoName}`,
       );
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `ERROR: Failed to submit commit to ${repo.gitRepoName}`,
         httpResponse: result.status,
         value: resultBody.message || 'FAILURE',
       };
-    } else {
-      return {
-        isSuccuess: true,
-        message: `Commit submitted successfully`,
-        httpResponse: result.status,
-        value: resultBody,
-      };
     }
+    return {
+      isSuccess: true,
+      message: `Commit submitted successfully`,
+      httpResponse: result.status,
+      value: resultBody,
+    };
   }
 }

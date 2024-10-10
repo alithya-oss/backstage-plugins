@@ -17,8 +17,8 @@ import {
   SSMClient,
 } from '@aws-sdk/client-ssm';
 import {
-  AWSEnvironmentProviderRecord,
   AppPromoParams,
+  AWSEnvironmentProviderRecord,
   BindResourceParams,
   GitProviders,
   ICommitChange,
@@ -85,8 +85,7 @@ export class AwsAppsPlatformApi {
       SecretId: secretArn,
     };
     const command = new GetSecretValueCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   /**
@@ -112,8 +111,7 @@ export class AwsAppsPlatformApi {
       WithDecryption: true,
     };
     const command = new GetParameterCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   public async deletePlatformSecret(
@@ -131,8 +129,7 @@ export class AwsAppsPlatformApi {
       ForceDeleteWithoutRecovery: true,
     };
     const command = new DeleteSecretCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   public async deleteTFProvider(
@@ -168,21 +165,20 @@ export class AwsAppsPlatformApi {
       .getGitProvider()
       .commitContent(change, repo, gitToken);
 
-    if (!result.isSuccuess) {
+    if (!result.isSuccess) {
       console.error(`ERROR: Failed to Destroy ${envName}. Response: ${result}`);
-      let message = '';
+      let message: string;
       if (result.value?.includes('A file with this name already exists')) {
         message = `${envName} has already been scheduled for destruction. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`;
       } else {
         message = result.value || '';
       }
       return { status: 'FAILURE', message };
-    } else {
-      return {
-        status: 'SUCCESS',
-        message: `Destroy will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
-      };
     }
+    return {
+      status: 'SUCCESS',
+      message: `Destroy will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
+    };
   }
 
   public async deleteRepository(
@@ -200,8 +196,8 @@ export class AwsAppsPlatformApi {
 
   private async getGitToken(gitSecretName: string): Promise<string> {
     const gitAdminSecret = await this.getPlatformSecretValue(gitSecretName);
-    const gitAdminSecretObj = JSON.parse(gitAdminSecret.SecretString || '');
-    return gitAdminSecretObj['apiToken'];
+    const gitAdminSecretObj = JSON.parse(gitAdminSecret.SecretString ?? '');
+    return gitAdminSecretObj.apiToken;
   }
 
   public async getFileContentsFromGit(
@@ -216,7 +212,7 @@ export class AwsAppsPlatformApi {
       .getFileContent(filePath, repo, gitToken);
 
     const resultBody = await result.value;
-    if (!result.isSuccuess) {
+    if (!result.isSuccess) {
       console.error(
         `ERROR: Failed to retrieve ${filePath} for ${repo.gitRepoName}. Response: ${result}`,
       );
@@ -270,11 +266,11 @@ export class AwsAppsPlatformApi {
       .commitContent(change, repo, gitToken);
 
     const resultBody = result.value;
-    if (!result.isSuccuess) {
+    if (!result.isSuccess) {
       console.error(
         `ERROR: Failed to schedule deployment for ${input.envName}. Response: ${result}`,
       );
-      let message = '';
+      let message: string;
       if (
         resultBody.message?.includes('A file with this name already exists')
       ) {
@@ -283,12 +279,11 @@ export class AwsAppsPlatformApi {
         message = resultBody.message || '';
       }
       return { status: 'FAILURE', message };
-    } else {
-      return {
-        status: 'SUCCESS',
-        message: `The app will not be ready to run until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
-      };
     }
+    return {
+      status: 'SUCCESS',
+      message: `The app will not be ready to run until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
+    };
   }
 
   public async bindResource(
@@ -327,11 +322,11 @@ export class AwsAppsPlatformApi {
       .getGitProvider()
       .commitContent(change, repo, gitToken);
     const resultBody = result.value;
-    if (!result.isSuccuess) {
+    if (!result.isSuccess) {
       console.error(
         `ERROR: Failed to bind ${input.envName}. Response: ${result}`,
       );
-      let message = '';
+      let message: string;
       if (
         resultBody.message?.includes('A file with this name already exists')
       ) {
@@ -340,12 +335,11 @@ export class AwsAppsPlatformApi {
         message = resultBody.message || '';
       }
       return { status: 'FAILURE', message };
-    } else {
-      return {
-        status: 'SUCCESS',
-        message: `Binding will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
-      };
     }
+    return {
+      status: 'SUCCESS',
+      message: `Binding will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
+    };
   }
 
   public async unBindResource(
@@ -385,11 +379,11 @@ export class AwsAppsPlatformApi {
       .commitContent(change, repo, gitToken);
 
     const resultBody = await result.value.json();
-    if (!result.isSuccuess) {
+    if (!result.isSuccess) {
       console.error(
         `ERROR: Failed to unbind ${input.envName}. Response: ${result}`,
       );
-      let message = '';
+      let message: string;
       if (
         resultBody.message?.includes('A file with this name already exists')
       ) {
@@ -398,12 +392,11 @@ export class AwsAppsPlatformApi {
         message = resultBody.message || '';
       }
       return { status: 'FAILURE', message };
-    } else {
-      return {
-        status: 'SUCCESS',
-        message: `Unbinding will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
-      };
     }
+    return {
+      status: 'SUCCESS',
+      message: `Unbinding will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
+    };
   }
 
   public async updateProvider(
@@ -416,7 +409,7 @@ export class AwsAppsPlatformApi {
   ): Promise<{ status: string; message?: string }> {
     const gitToken = await this.getGitToken(gitSecretName);
 
-    let actions = [];
+    const actions = [];
     if (action === 'add') {
       console.log(entityCatalog);
       const newDependencies = entityCatalog.spec.dependsOn as Array<string>;
@@ -435,10 +428,10 @@ export class AwsAppsPlatformApi {
     } else if (action === 'remove') {
       console.log(entityCatalog);
       const dependencies = entityCatalog.spec.dependsOn as Array<string>;
-      let newDependencies = Array<string>();
+      const newDependencies = Array<string>();
       dependencies.forEach(p => {
         const providerToRemove = `awsenvironmentprovider:default/${provider.name.toLowerCase()}`;
-        if (p != providerToRemove) {
+        if (p !== providerToRemove) {
           newDependencies.push(p);
         }
       });
@@ -473,11 +466,11 @@ export class AwsAppsPlatformApi {
       resultBody = result.message;
     }
 
-    if (!result.isSuccuess) {
+    if (!result.isSuccess) {
       console.error(
         `ERROR: Failed to Update provider ${provider.name}. Response: ${result}`,
       );
-      let message = '';
+      let message: string;
       if (
         resultBody.message?.includes('A file with this name already exists')
       ) {
@@ -486,11 +479,10 @@ export class AwsAppsPlatformApi {
         message = resultBody.message || '';
       }
       return { status: 'FAILURE', message };
-    } else {
-      return {
-        status: 'SUCCESS',
-        message: `Update Provider for ${envName} will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
-      };
     }
+    return {
+      status: 'SUCCESS',
+      message: `Update Provider for ${envName} will not be complete until deployment succeeds. Check the CICD pipeline for the most up-to-date information. UI status may take a few minutes to update.`,
+    };
   }
 }

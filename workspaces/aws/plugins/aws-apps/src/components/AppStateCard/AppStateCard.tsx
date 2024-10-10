@@ -6,14 +6,12 @@ import { InfoCard, EmptyState } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
 import { LinearProgress } from '@material-ui/core';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import {
-  Button,
-  CardContent,
-  Divider,
-  Grid,
-  IconButton,
-  Typography,
-} from '@mui/material';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import React, { useEffect, useState } from 'react';
 import { opaApiRef } from '../../api';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
@@ -54,19 +52,16 @@ const OpaAppStateOverview = ({
     });
   }
 
-  /*
-  gets cluster, account, region from 
-  entity and also task Data
-  */
-  async function getData() {
-    const tasks = await api.getTaskDetails({
-      cluster,
-      service: serviceArn,
-    });
-    setTaskData(tasks);
-  }
-
   useEffect(() => {
+    /* gets cluster, account, region from entity and also task Data */
+    async function getData() {
+      const tasks = await api.getTaskDetails({
+        cluster,
+        service: serviceArn,
+      });
+      setTaskData(tasks);
+    }
+
     getData()
       .then(() => {
         setLoading(false);
@@ -79,7 +74,7 @@ const OpaAppStateOverview = ({
           errorMsg: `Unexpected error occurred while retrieving task data: ${e}`,
         });
       });
-  }, []);
+  }, [api, cluster, serviceArn]);
 
   function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -103,7 +98,7 @@ const OpaAppStateOverview = ({
     setLoading(false);
     setTaskData(getTaskResult);
 
-    while (getTaskResult.lastStatus != 'RUNNING') {
+    while (getTaskResult.lastStatus !== 'RUNNING') {
       getTaskResult = await getTaskDetails();
       setTaskData(getTaskResult);
     }
@@ -166,7 +161,7 @@ const OpaAppStateOverview = ({
               </Typography>
               <Typography noWrap sx={{ mt: 1 }}>
                 <IconButton sx={{ p: 0 }}>
-                  <ContentCopyIcon></ContentCopyIcon>
+                  <ContentCopyIcon />
                 </IconButton>
 
                 {taskData?.taskArn ? taskData?.taskArn : 'No Task Running'}
@@ -191,7 +186,7 @@ const OpaAppStateOverview = ({
               sx={{ mr: 2 }}
               variant="outlined"
               size="small"
-              disabled={taskData.taskArn ? true : false}
+              disabled={!!taskData.taskArn}
               onClick={handleStartTask}
             >
               Start Task
@@ -231,13 +226,12 @@ export const AppStateCard = () => {
       awsComponent: awsAppLoadingStatus.component,
     };
     return <OpaAppStateOverview input={input} />;
-  } else {
-    return (
-      <EmptyState
-        missing="data"
-        title="No state data to show"
-        description="State data would show here"
-      />
-    );
   }
+  return (
+    <EmptyState
+      missing="data"
+      title="No state data to show"
+      description="State data would show here"
+    />
+  );
 };

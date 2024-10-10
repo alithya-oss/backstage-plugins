@@ -5,7 +5,7 @@
 ```ts
 import { AuthService } from '@backstage/backend-plugin-api';
 import { AwsCredentialsManager } from '@backstage/integration-aws-node';
-import { AwsResourceLocator } from '@alithya-oss/plugin-aws-core-common';
+import { AwsResourceLocator } from '@alithya-oss/plugin-aws-core-node';
 import { BackendFeatureCompat } from '@backstage/backend-plugin-api';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 import { CatalogApi } from '@backstage/catalog-client';
@@ -14,8 +14,9 @@ import { Config } from '@backstage/config';
 import { DiscoveryService } from '@backstage/backend-plugin-api';
 import express from 'express';
 import { HttpAuthService } from '@backstage/backend-plugin-api';
-import { Logger } from 'winston';
+import { LoggerService } from '@backstage/backend-plugin-api';
 import { ProjectsResponse } from '@alithya-oss/plugin-aws-codebuild-common';
+import { ServiceRef } from '@backstage/backend-plugin-api';
 
 // @public (undocumented)
 const awsCodebuildPlugin: BackendFeatureCompat;
@@ -31,12 +32,19 @@ export interface AwsCodeBuildService {
 }
 
 // @public (undocumented)
+export const awsCodeBuildServiceRef: ServiceRef<
+  AwsCodeBuildService,
+  'plugin',
+  'singleton'
+>;
+
+// @public (undocumented)
 export function createRouter(options: RouterOptions): Promise<express.Router>;
 
 // @public (undocumented)
 export class DefaultAwsCodeBuildService implements AwsCodeBuildService {
   constructor(
-    logger: Logger,
+    logger: LoggerService,
     auth: AuthService,
     catalogApi: CatalogApi,
     resourceLocator: AwsResourceLocator,
@@ -50,7 +58,7 @@ export class DefaultAwsCodeBuildService implements AwsCodeBuildService {
       discovery: DiscoveryService;
       auth?: AuthService;
       httpAuth?: HttpAuthService;
-      logger: Logger;
+      logger: LoggerService;
       resourceLocator?: AwsResourceLocator;
     },
   ): Promise<DefaultAwsCodeBuildService>;
@@ -72,7 +80,7 @@ export interface RouterOptions {
   // (undocumented)
   httpAuth?: HttpAuthService;
   // (undocumented)
-  logger: Logger;
+  logger: LoggerService;
 }
 
 // (No @packageDocumentation comment for this package)

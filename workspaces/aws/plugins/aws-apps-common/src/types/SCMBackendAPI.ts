@@ -2,7 +2,7 @@ import { GitProviders } from './git-providers';
 
 /** @public */
 export interface IGitAPIResult {
-  isSuccuess: boolean;
+  isSuccess: boolean;
   message: string;
   httpResponse: number;
   value: any;

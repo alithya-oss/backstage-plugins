@@ -43,8 +43,6 @@ export class AwsCodeBuildApiClient
       entity.name,
     )}/projects`;
 
-    const services = await this.get<ProjectsResponse>(urlSegment);
-
-    return services;
+    return this.get<ProjectsResponse>(urlSegment);
   }
 }

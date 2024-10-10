@@ -46,9 +46,7 @@ export class AwsCodePipelineApiClient
       entity.name,
     )}/executions`;
 
-    const services = await this.get<PipelineExecutionsResponse>(urlSegment);
-
-    return services;
+    return this.get<PipelineExecutionsResponse>(urlSegment);
   }
 
   public async getPipelineStateByEntity({
@@ -62,8 +60,6 @@ export class AwsCodePipelineApiClient
       entity.name,
     )}/state`;
 
-    const services = await this.get<PipelineStateResponse>(urlSegment);
-
-    return services;
+    return this.get<PipelineStateResponse>(urlSegment);
   }
 }

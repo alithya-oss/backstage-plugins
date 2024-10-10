@@ -17,7 +17,7 @@ import { ConfigReader } from '@backstage/config';
 import { mockClient } from 'aws-sdk-client-mock';
 import { getVoidLogger } from '@backstage/backend-common';
 import { DefaultAwsCodeBuildService } from './DefaultAwsCodeBuildService';
-import { AwsResourceLocator } from '@alithya-oss/plugin-aws-core-common';
+import { AwsResourceLocator } from '@alithya-oss/plugin-aws-core-node';
 import {
   DefaultAwsCredentialsManager,
   AwsCredentialProvider,

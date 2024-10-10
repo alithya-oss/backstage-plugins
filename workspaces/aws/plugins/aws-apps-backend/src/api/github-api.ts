@@ -3,7 +3,7 @@ import {
   ICommitChange,
   IRepositoryInfo,
   ISCMBackendAPI,
-} from '@alithya-oss/plugin-aws-apps-common/src/types/SCMBackendAPI';
+} from '@alithya-oss/plugin-aws-apps-common';
 import { Octokit } from 'octokit';
 import { Buffer } from 'buffer';
 import { LoggerService } from '@backstage/backend-plugin-api';
@@ -34,19 +34,18 @@ export class GitHubAPI implements ISCMBackendAPI {
     if (createRepoResults.status > 299) {
       this.logger.error('ERROR: Repository failed to create');
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `Repository failed to create`,
         httpResponse: createRepoResults.status,
         value: 'FAILURE',
       };
-    } else {
-      return {
-        isSuccuess: true,
-        message: `Repository created successfully`,
-        httpResponse: createRepoResults.status,
-        value: 'SUCCESS',
-      };
     }
+    return {
+      isSuccess: true,
+      message: `Repository created successfully`,
+      httpResponse: createRepoResults.status,
+      value: 'SUCCESS',
+    };
   }
 
   public async deleteRepository(
@@ -66,19 +65,18 @@ export class GitHubAPI implements ISCMBackendAPI {
     if (deleteRepoResults.status > 299) {
       this.logger.error('ERROR: Repository failed to delete');
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `Repository failed to delete`,
         httpResponse: deleteRepoResults.status,
         value: 'FAILURE',
       };
-    } else {
-      return {
-        isSuccuess: true,
-        message: `Repository deleted successfully`,
-        httpResponse: deleteRepoResults.status,
-        value: 'SUCCESS',
-      };
     }
+    return {
+      isSuccess: true,
+      message: `Repository deleted successfully`,
+      httpResponse: deleteRepoResults.status,
+      value: 'SUCCESS',
+    };
   }
 
   public async getFileContent(
@@ -101,28 +99,27 @@ export class GitHubAPI implements ISCMBackendAPI {
         `ERROR: Failed to retrieve ${filePath} for ${repo.gitRepoName}. Response code: ${result.status} - ${result}`,
       );
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `ERROR: Failed to retrieve ${filePath} for ${repo.gitRepoName}. Response code: ${result.status} - ${result}`,
         httpResponse: result.status,
         value: 'FAILURE',
       };
-    } else {
-      // console.log(result.data)
-      // console.log(result.data.content)
-      // const fileDataProcessed = Buffer.from(result.data.content, 'base64').toString('binary')
-      const dataContent = result.data;
-      //console.log(dataContent)
-      const contentB64 = dataContent as any; //cast internal type base 64 string
-      //console.log(contentB64.content)
-      const content = Buffer.from(contentB64.content, 'base64').toString();
-
-      return {
-        isSuccuess: true,
-        message: `Retrieve file content successfully`,
-        httpResponse: result.status,
-        value: content,
-      };
     }
+    // console.log(result.data)
+    // console.log(result.data.content)
+    // const fileDataProcessed = Buffer.from(result.data.content, 'base64').toString('binary')
+    const dataContent = result.data;
+    // console.log(dataContent)
+    const contentB64 = dataContent as any; // cast internal type base 64 string
+    // console.log(contentB64.content)
+    const content = Buffer.from(contentB64.content, 'base64').toString();
+
+    return {
+      isSuccess: true,
+      message: `Retrieve file content successfully`,
+      httpResponse: result.status,
+      value: content,
+    };
   }
 
   public async commitContent(
@@ -130,10 +127,10 @@ export class GitHubAPI implements ISCMBackendAPI {
     repo: IRepositoryInfo,
     accessToken: string,
   ): Promise<IGitAPIResult> {
-    const octokitPlugin = Octokit.plugin(
+    const OctokitCommitMultipleFiles = Octokit.plugin(
       require('octokit-commit-multiple-files'),
     );
-    const octokit = new octokitPlugin({ auth: accessToken });
+    const octokit = new OctokitCommitMultipleFiles({ auth: accessToken });
 
     const url = `https://${repo.gitHost}`;
     console.log(url);
@@ -161,7 +158,7 @@ export class GitHubAPI implements ISCMBackendAPI {
       console.log(result);
 
       return {
-        isSuccuess: true,
+        isSuccess: true,
         message: `Commit submitted successfully`,
         httpResponse: 200,
         value: result,
@@ -172,7 +169,7 @@ export class GitHubAPI implements ISCMBackendAPI {
       );
       this.logger.error(JSON.stringify(error));
       return {
-        isSuccuess: false,
+        isSuccess: false,
         message: `ERROR: Failed to submit commit to ${repo.gitRepoName}`,
         httpResponse: 500,
         value: error || 'FAILURE',
