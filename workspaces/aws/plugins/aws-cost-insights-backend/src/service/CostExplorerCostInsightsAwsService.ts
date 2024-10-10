@@ -121,7 +121,7 @@ export class CostExplorerCostInsightsAwsService
     intervals: string;
     credentials?: BackstageCredentials;
   }): Promise<Cost> {
-    this.logger.debug(`Fetch daily costs for ${options.entityRef}`);
+    this.logger.debug(`Fetch daily costs for ${options.entityRef.name}`);
 
     const entity = await this.catalogApi.getEntityByRef(
       options.entityRef,
@@ -284,23 +284,24 @@ export class CostExplorerCostInsightsAwsService
 
     const aggregations: Record<string, DateAggregation[]> = {};
 
-    for (let i = 0; i < response.ResultsByTime!.length; i++) {
-      const result = response.ResultsByTime![i];
-      const resultDate = result.TimePeriod!.Start!.replaceAll('-', '/');
+    if (response.ResultsByTime) {
+      for (const result of response.ResultsByTime) {
+        const resultDate = result.TimePeriod!.Start!.replaceAll('-', '/');
 
-      for (let j = 0; j < result.Groups!.length; j++) {
-        const groupResult = result.Groups![j];
+        if (result.Groups) {
+          for (const groupResult of result.Groups) {
+            const key = groupResult.Keys![0];
 
-        const key = groupResult.Keys![0];
+            if (!aggregations[key]) {
+              aggregations[key] = [];
+            }
 
-        if (!aggregations[key]) {
-          aggregations[key] = [];
+            aggregations[key].push({
+              date: resultDate,
+              amount: parseFloat(groupResult.Metrics!.UnblendedCost.Amount!),
+            });
+          }
         }
-
-        aggregations[key].push({
-          date: resultDate,
-          amount: parseFloat(groupResult.Metrics!.UnblendedCost.Amount!),
-        });
       }
     }
 
