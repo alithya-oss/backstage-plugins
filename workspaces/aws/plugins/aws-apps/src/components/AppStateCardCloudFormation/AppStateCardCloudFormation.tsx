@@ -60,97 +60,98 @@ const OpaAppStateOverview = ({
   });
   const repoInfo = awsComponent.getRepoInfo();
 
-  useEffect(() => {
+/*
+  Gets the stack event details
+  */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  async function getStackEvents () {
+    setPolling(true);
 
-    /*
-      Gets the stack event details
-      */
-    async function getStackEvents() {
-      setPolling(true);
+    let isCanceled = false;
+    let count = 0;
+    while (pollingEnabled && count < 720) {
+      if (count > 0) {
+        await sleep(5000);
+      }
+      count++;
+      try {
+        const stackEvents =
+          await cancellablePromise<DescribeStackEventsCommandOutput>(
+            api.getStackEvents({
+              stackName: stack.stackName,
+            }),
+          );
 
-      let isCanceled = false;
-      let count = 0;
-      while (pollingEnabled && count < 720) {
-        if (count > 0) {
-          await sleep(5000);
-        }
-        count++;
-        try {
-          const stackEvents =
-            await cancellablePromise<DescribeStackEventsCommandOutput>(
-              api.getStackEvents({
-                stackName: stack.stackName,
-              }),
-            );
-
-          if (!stackEvents.StackEvents) {
-            break;
-          }
-
-          const mostRecentEvent = stackEvents.StackEvents[0];
-          const isDone =
-            mostRecentEvent.ResourceType === 'AWS::CloudFormation::Stack' &&
-            !!mostRecentEvent.ResourceStatus &&
-            (mostRecentEvent.ResourceStatus.endsWith('COMPLETE') ||
-              mostRecentEvent.ResourceStatus.endsWith('FAILED'));
-
-          if (isDone) {
-            break;
-          }
-
-          if (stack.lastUpdatedTime && stackEvents.StackEvents[0].Timestamp) {
-            let eventsLastUpdated = formatWithTime(
-              new Date(stackEvents.StackEvents[0].Timestamp),
-            );
-            eventsLastUpdated = eventsLastUpdated.substring(
-              0,
-              eventsLastUpdated.indexOf('('),
-            );
-            let stackLastUpdated = stack.lastUpdatedTime;
-            stackLastUpdated = stackLastUpdated.substring(
-              0,
-              stackLastUpdated.indexOf('('),
-            );
-          }
-
-          let maxEventsShown = 5;
-          if (stackEvents.StackEvents.length < maxEventsShown) {
-            maxEventsShown = stackEvents.StackEvents.length;
-          }
-
-          // truncate the events list using slice and only show the most recent events
-          const visibleEvents: stackEvent[] = stackEvents.StackEvents.slice(
-            0,
-            maxEventsShown,
-          ).map(ev => {
-            return {
-              action: ev.ResourceStatus,
-              resourceType: ev.ResourceType,
-              logicalResourceId: ev.LogicalResourceId,
-            };
-          });
-
-          setEvents(visibleEvents);
-        } catch (e) {
-          if ((e).isCanceled) {
-            isCanceled = true;
-          } else {
-            setError({
-              isError: true,
-              errorMsg: `Unexpected error occurred while retrieving event data: ${e}`,
-            });
-          }
+        if (!stackEvents.StackEvents) {
           break;
         }
-      }
 
-      if (!isCanceled) {
-        setPolling(false);
-        refresh();
+        const mostRecentEvent = stackEvents.StackEvents[0];
+        const isDone =
+          mostRecentEvent.ResourceType === 'AWS::CloudFormation::Stack' &&
+          !!mostRecentEvent.ResourceStatus &&
+          (mostRecentEvent.ResourceStatus.endsWith('COMPLETE') ||
+            mostRecentEvent.ResourceStatus.endsWith('FAILED'));
+
+        if (isDone) {
+          break;
+        }
+
+        if (stack.lastUpdatedTime && stackEvents.StackEvents[0].Timestamp) {
+          let eventsLastUpdated = formatWithTime(
+            new Date(stackEvents.StackEvents[0].Timestamp),
+          );
+          eventsLastUpdated = eventsLastUpdated.substring(
+            0,
+            eventsLastUpdated.indexOf('('),
+          );
+          let stackLastUpdated = stack.lastUpdatedTime;
+          stackLastUpdated = stackLastUpdated.substring(
+            0,
+            stackLastUpdated.indexOf('('),
+          );
+        }
+
+        let maxEventsShown = 5;
+        if (stackEvents.StackEvents.length < maxEventsShown) {
+          maxEventsShown = stackEvents.StackEvents.length;
+        }
+
+        // truncate the events list using slice and only show the most recent events
+        const visibleEvents: stackEvent[] = stackEvents.StackEvents.slice(
+          0,
+          maxEventsShown,
+        ).map(ev => {
+          return {
+            action: ev.ResourceStatus,
+            resourceType: ev.ResourceType,
+            logicalResourceId: ev.LogicalResourceId,
+          };
+        });
+
+        setEvents(visibleEvents);
+      } catch (e) {
+        if ((e).isCanceled) {
+          isCanceled = true;
+        } else {
+          setError({
+            isError: true,
+            errorMsg: `Unexpected error occurred while retrieving event data: ${e}`,
+          });
+        }
+        break;
       }
     }
+
+    if (!isCanceled) {
+      setPolling(false);
+      refresh();
+    }
+  }
+
+  useEffect(() => {
     if (pollingEnabled && stack.stackDeployStatus.endsWith('PROGRESS')) {
-      getStackEvents().then(_ => { });
+      getStackEvents().then(_ => {});
     }
 
     return () => {
@@ -159,7 +160,7 @@ const OpaAppStateOverview = ({
         clearTimeout(timerRef.current);
       }
     }
-  }, [api, cancellablePromise, pollingEnabled, refresh, stack.lastUpdatedTime, stack.stackDeployStatus, stack.stackName]);
+  }, [getStackEvents, pollingEnabled, stack.stackDeployStatus]);
 
   function sleep(ms: number) {
     return new Promise(resolve => {
@@ -288,35 +289,35 @@ const OpaAppStateOverview = ({
             {events.length > 0 && (
               <>
                 Latest events as of {formatWithTime(new Date())}...
-                <br />
-                <br />
+                <br/>
+                <br/>
                 <table>
                   <tbody>
-                    <tr>
-                      <td style={eventStyle}>
-                        <b>Action</b>
-                      </td>
-                      <td style={eventStyle}>
-                        <b>Resource Type</b>
-                      </td>
-                      <td>
-                        <b>Resource ID</b>
-                      </td>
+                  <tr>
+                    <td style={eventStyle}>
+                      <b>Action</b>
+                    </td>
+                    <td style={eventStyle}>
+                      <b>Resource Type</b>
+                    </td>
+                    <td>
+                      <b>Resource ID</b>
+                    </td>
+                  </tr>
+                  {events.map((stackEvent, i) => (
+                    <tr key={i}>
+                      <td style={eventStyle}>{stackEvent.action}</td>
+                      <td style={eventStyle}>{stackEvent.resourceType}</td>
+                      <td>{stackEvent.logicalResourceId}</td>
                     </tr>
-                    {events.map((stackEvent, i) => (
-                      <tr key={i}>
-                        <td style={eventStyle}>{stackEvent.action}</td>
-                        <td style={eventStyle}>{stackEvent.resourceType}</td>
-                        <td>{stackEvent.logicalResourceId}</td>
-                      </tr>
-                    ))}
+                  ))}
                   </tbody>
                 </table>
-                <br />
+                <br/>
               </>
             )}
             <>Polling for updates...</>
-            <br />
+            <br/>
             <Button
               sx={{ mr: 2 }}
               variant="outlined"
@@ -341,7 +342,7 @@ const OpaAppStateOverview = ({
                   {getStatus(stack.stackDeployStatus)}
                 </Typography>
               </Grid>
-              <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }} />
+              <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }}/>
               <Grid item zeroMinWidth xs={4} sx={{ pl: 1, pr: 1 }}>
                 <Typography
                   sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}
@@ -352,7 +353,7 @@ const OpaAppStateOverview = ({
                   {stack.creationTime ?? ''}
                 </Typography>
               </Grid>
-              <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }} />
+              <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }}/>
               <Grid item xs={4} sx={{ pl: 1 }}>
                 <Typography
                   sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}
@@ -407,7 +408,7 @@ export const AppStateCard = () => {
   const awsAppLoadingStatus = useAsyncAwsApp();
 
   if (awsAppLoadingStatus.loading) {
-    return <LinearProgress />;
+    return <LinearProgress/>;
   } else if (awsAppLoadingStatus.component) {
     const env = awsAppLoadingStatus.component
       .currentEnvironment as AWSServerlessAppDeploymentEnvironment;
@@ -418,7 +419,7 @@ export const AppStateCard = () => {
       refresh: awsAppLoadingStatus.refresh!,
     };
 
-    return <OpaAppStateOverview input={input} />;
+    return <OpaAppStateOverview input={input}/>;
   }
   return (
     <EmptyState

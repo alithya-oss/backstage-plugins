@@ -361,6 +361,7 @@ const OpaAppStateOverview = ({
     return deploymentsState || [];
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   async function getData (appStateResults?: any) {
     let isCanceled = false;
     let isError = false;
@@ -480,18 +481,25 @@ const OpaAppStateOverview = ({
 
       try {
         // console.log("start fetching app state");
-        deploymentsJson = await fetchAppState();
+        const appStateJson = await fetchAppState();
         // console.log("DONE fetching app state");
-        Object.keys(deploymentsJson).forEach(key => {
-          const currState = deploymentsJson[key];
+        let isStarted = false;
+
+        Object.keys(appStateJson).forEach(key => {
+          const currState = appStateJson[key];
+          
           if (currState.metadata.uid === appState.deploymentIdentifier) {
             if (Number.parseInt(currState.status.readyReplicas, 10) > 0) {
               setAppStateData([]); // reset existing state
               setAppStarted(true);
-              localAppStarted = true;
+              isStarted = true;
             }
           }
         });
+
+        localAppStarted = isStarted;
+        deploymentsJson = appStateJson;
+        
 
         if (localAppStarted || appStarted) {
           // Breaking from while loop since the app has started.
@@ -563,6 +571,7 @@ const OpaAppStateOverview = ({
       try {
         const deploymentsJson = await fetchAppState();
 
+        // eslint-disable-next-line no-loop-func
         Object.keys(deploymentsJson).forEach(key => {
           const currState = deploymentsJson[key];
           if (currState.metadata.uid === appState.deploymentIdentifier) {
@@ -873,7 +882,7 @@ const OpaAppStateOverview = ({
                 <DeploymentCard
                   key={state.deploymentIdentifier}
                   deploymentState={state}
-                  index={++index}
+                  index={index +1}
                   total={array.length}
                 />
               );
