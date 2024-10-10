@@ -93,11 +93,9 @@ const cicdContent = (
         <EntityGithubActionsContent />
       </EntitySwitch.Case>
      */}
-    <EntitySwitch>
-      <EntitySwitch.Case if={isAwsCodePipelineAvailable}>
-        <EntityAwsCodePipelineExecutionsContent />
-      </EntitySwitch.Case>
-    </EntitySwitch>
+    <EntitySwitch.Case if={isAwsCodePipelineAvailable}>
+      <EntityAwsCodePipelineExecutionsContent />
+    </EntitySwitch.Case>
 
     <EntitySwitch.Case>
       <EmptyState
