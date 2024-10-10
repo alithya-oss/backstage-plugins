@@ -17,7 +17,7 @@ import { Button } from '@material-ui/core';
 export function CICDContent() {
   return (
     // This is an example of how you can implement your company's logic in entity page.
-    // You can for example enforce that all components of type 'service' should use GitHubActions
+    // You can, for example, enforce that all components of type 'service' should use GitHubActions
     <EntitySwitch>
       <EntitySwitch.Case if={isGithubActionsAvailable}>
         <EntityGithubActionsContent />
