@@ -3,9 +3,11 @@
 
 import { StackStatus } from '@aws-sdk/client-cloudformation';
 
+/** @public */
 export enum ExtraStackDeployStatus {
   STAGED = 'STAGED',
   UNSTAGED = 'UNSTAGED',
 }
 
+/** @public */
 export type DeployStackStatus = StackStatus | ExtraStackDeployStatus;

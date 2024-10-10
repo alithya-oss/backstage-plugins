@@ -344,6 +344,17 @@ export enum ComponentStateType {
 }
 
 // @public (undocumented)
+export type DeployStackStatus = StackStatus | ExtraStackDeployStatus;
+
+// @public (undocumented)
+export enum ExtraStackDeployStatus {
+  // (undocumented)
+  STAGED = 'STAGED',
+  // (undocumented)
+  UNSTAGED = 'UNSTAGED',
+}
+
+// @public (undocumented)
 export type GenericAWSEnvironment =
   | AWSDeploymentEnvironment
   | AWSECSAppDeploymentEnvironment
@@ -534,8 +545,4 @@ export interface ResourcePolicy {
   // (undocumented)
   policyResource: string;
 }
-
-// Warnings were encountered during analysis:
-//
-// src/types/AWSUIInterfaces.d.ts:104:5 - (ae-forgotten-export) The symbol "DeployStackStatus" needs to be exported by the entry point index.d.ts
 ```
