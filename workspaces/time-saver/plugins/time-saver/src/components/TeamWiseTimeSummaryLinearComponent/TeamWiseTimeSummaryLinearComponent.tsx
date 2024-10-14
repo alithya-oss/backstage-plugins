@@ -27,18 +27,14 @@ import {
 import { Line } from 'react-chartjs-2';
 import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import { getRandomColor } from '../utils';
+import {
+  GetTimeSavedSummaryByTeamResponse,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 ChartJS.register(LineElement, PointElement, Title, Tooltip, Legend);
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useTheme } from '@material-ui/core';
-
-type TeamWiseTimeSummaryLinearResponse = {
-  stats: {
-    date: string;
-    team: string;
-    total_time_saved: number;
-  }[];
-};
 
 interface TeamWiseTimeSummaryLinearProps {
   team?: string;
@@ -50,7 +46,7 @@ export function TeamWiseTimeSummaryLinearChart({
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
 
-  const [data, setData] = useState<TeamWiseTimeSummaryLinearResponse | null>(
+  const [data, setData] = useState<GetTimeSavedSummaryByTeamResponse | null>(
     null,
   );
   const theme = useTheme();
@@ -63,12 +59,14 @@ export function TeamWiseTimeSummaryLinearChart({
       )
       .then(response => response.json())
       .then(dt => {
-        dt.stats.sort(
-          (
-            a: { date: string | number | Date },
-            b: { date: string | number | Date },
-          ) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-        );
+        if (dt.stats) {
+          dt.stats.sort(
+            (
+              a: { date: string | number | Date },
+              b: { date: string | number | Date },
+            ) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+          );
+        }
         setData(dt);
       })
       .catch();
@@ -78,7 +76,11 @@ export function TeamWiseTimeSummaryLinearChart({
     return <CircularProgress />;
   }
 
-  let filteredData: TeamWiseTimeSummaryLinearResponse;
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
+  }
+
+  let filteredData: GetTimeSavedSummaryByTeamResponse;
   if (team) {
     filteredData = {
       stats: data.stats.filter(stat => stat.team === team),
@@ -138,7 +140,7 @@ export function TeamWiseTimeSummaryLinearChart({
     datasets: uniqueTeams.map(tm => {
       const templateData = filteredData.stats
         .filter(stat => stat.team === tm)
-        .map(stat => ({ x: stat.date, y: stat.total_time_saved }));
+        .map(stat => ({ x: stat.date, y: stat.totalTimeSaved }));
 
       return {
         label: tm,
