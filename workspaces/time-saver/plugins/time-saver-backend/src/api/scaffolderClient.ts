@@ -18,19 +18,18 @@ import {
   LoggerService,
   DiscoveryService,
 } from '@backstage/backend-plugin-api';
-import fetch from 'node-fetch';
 
 export class ScaffolderClient {
   constructor(
-    private readonly logger: LoggerService,
     private readonly auth: AuthService,
+    private readonly logger: LoggerService,
     private readonly discovery: DiscoveryService,
   ) {}
 
   async fetchTemplatesFromScaffolder() {
-    const url = await this.discovery.getBaseUrl('scaffolder');
-    const path = '/v2/tasks';
-    const callUrl = `${url}${path}`;
+    const baseUrl = await this.discovery.getBaseUrl('scaffolder');
+    const scaffolderUri = '/v2/tasks';
+    const callUrl = `${baseUrl}${scaffolderUri}`;
 
     const { token } = await this.auth.getPluginRequestToken({
       onBehalfOf: await this.auth.getOwnServiceCredentials(),
