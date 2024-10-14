@@ -28,17 +28,9 @@ import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import { getRandomColor } from '../utils';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useTheme } from '@material-ui/core';
+import { GetStatsByTemplateTaskIdResponse, isTimeSaverApiError } from '@alithya-oss/plugin-time-saver-common';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
-
-type SingleTemplateChartResponse = {
-  templateTaskId: string;
-  templateName: string;
-  stats: {
-    sum: number;
-    team: string;
-  }[];
-};
 
 interface BarChartProps {
   templateTaskId: string;
@@ -50,7 +42,9 @@ export function BarChart({
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
 
-  const [data, setData] = useState<SingleTemplateChartResponse | null>(null);
+  const [data, setData] = useState<GetStatsByTemplateTaskIdResponse | null>(
+    null,
+  );
 
   const theme = useTheme();
 
@@ -68,6 +62,10 @@ export function BarChart({
 
   if (!data) {
     return <CircularProgress />;
+  }
+
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
   }
 
   const options: ChartOptions<'bar'> = {
@@ -114,7 +112,7 @@ export function BarChart({
   };
 
   const labels = Array.from(new Set(data.stats.map(stat => stat.team)));
-  const datasets = data.stats.map(stat => stat.sum);
+  const datasets = data.stats.map(stat => stat.timeSaved);
 
   const backgroundColors = Array.from({ length: datasets.length }, () =>
     getRandomColor(),
