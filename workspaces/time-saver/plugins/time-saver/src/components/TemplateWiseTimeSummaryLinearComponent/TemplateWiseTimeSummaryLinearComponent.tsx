@@ -28,16 +28,12 @@ import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import { getRandomColor } from '../utils';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useTheme } from '@material-ui/core';
+import {
+  GetTimeSavedSummaryByTemplateResponse,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 ChartJS.register(LineElement, PointElement, Title, Tooltip, Legend);
-
-type TemplateWiseTimeSummaryLinearResponse = {
-  stats: {
-    date: string;
-    template_name: string;
-    total_time_saved: number;
-  }[];
-};
 
 interface TemplateWiseTimeSummaryLinearProps {
   template_name?: string;
@@ -49,7 +45,7 @@ export function TemplateWiseTimeSummaryLinearChart({
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
   const [data, setData] =
-    useState<TemplateWiseTimeSummaryLinearResponse | null>(null);
+    useState<GetTimeSavedSummaryByTemplateResponse | null>(null);
   const theme = useTheme();
   useEffect(() => {
     const url = `${configApi.getString(
@@ -72,24 +68,21 @@ export function TemplateWiseTimeSummaryLinearChart({
     return <CircularProgress />;
   }
 
-  let filteredData: TemplateWiseTimeSummaryLinearResponse;
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
+  }
+
+  let filteredData: GetTimeSavedSummaryByTemplateResponse;
   if (template_name) {
     filteredData = {
-      stats: data.stats.filter(
-        (stat: { template_name: string }) =>
-          stat.template_name === template_name,
-      ),
+      stats: data.stats.filter(stat => stat.templateName === template_name),
     };
   } else {
     filteredData = data;
   }
 
   const uniqueTemplates = Array.from(
-    new Set(
-      filteredData.stats.map(
-        (stat: { template_name: string }) => stat.template_name,
-      ),
-    ),
+    new Set(filteredData.stats.map(stat => stat.templateName)),
   );
 
   const options: ChartOptions<'line'> = {
@@ -138,20 +131,14 @@ export function TemplateWiseTimeSummaryLinearChart({
     labels: uniqueDates,
     datasets: uniqueTemplates.map(tn => {
       const templateData = filteredData.stats
-        .filter((stat: { template_name: string }) => stat.template_name === tn)
-        .map(
-          (stat: {
-            date: string | undefined;
-            total_time_saved: number | undefined;
-          }) => ({
-            x: stat.date,
-            y: stat.total_time_saved,
-          }),
-        );
-      // TODO : verify that date and total_time_saved types.
+        .filter(stat => stat.templateName === tn)
+        .map(stat => ({
+          x: stat.date,
+          y: stat.totalTimeSaved,
+        }));
 
       return {
-        label: tn, // Fix: use tn instead of template_name
+        label: tn,
         data: templateData,
         fill: false,
         borderColor: getRandomColor(),
