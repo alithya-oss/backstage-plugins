@@ -17,15 +17,12 @@ import React, { useEffect, useState } from 'react';
 import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Gauge from './Gauge';
-
-type TemplateTaskCountResponse = {
-  templateTasks: number;
-};
+import { GetTemplateCountResponse, isTimeSaverApiError } from '@alithya-oss/plugin-time-saver-common';
 
 export function TemplateCountGauge(): React.ReactElement {
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
-  const [data, setData] = useState<TemplateTaskCountResponse | null>(null);
+  const [data, setData] = useState<GetTemplateCountResponse | null>(null);
 
   useEffect(() => {
     const url = `${configApi.getString(
@@ -43,5 +40,9 @@ export function TemplateCountGauge(): React.ReactElement {
     return <CircularProgress />;
   }
 
-  return <Gauge number={data.templateTasks} heading="Template executions" />;
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
+  }
+
+  return <Gauge number={data.count} heading="Template executions" />;
 }
