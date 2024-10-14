@@ -28,16 +28,9 @@ import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import { getRandomColor } from '../utils';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useTheme } from '@material-ui/core';
+import { GetStatsByTemplateResponse, isTimeSaverApiError } from '@alithya-oss/plugin-time-saver-common';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
-
-type TemplateChartResponse = {
-  template_name: string;
-  stats: {
-    sum: number;
-    team: string;
-  }[];
-};
 
 interface ByTemplateBarChartProps {
   template_name: string;
@@ -48,7 +41,7 @@ export function ByTemplateBarChart({
 }: ByTemplateBarChartProps): React.ReactElement {
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
-  const [data, setData] = useState<TemplateChartResponse | null>(null);
+  const [data, setData] = useState<GetStatsByTemplateResponse | null>(null);
   const theme = useTheme();
 
   useEffect(() => {
@@ -67,11 +60,15 @@ export function ByTemplateBarChart({
     return <CircularProgress />;
   }
 
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
+  }
+
   const options: ChartOptions<'bar'> = {
     plugins: {
       title: {
         display: true,
-        text: data.template_name || '',
+        text: data.templateName || '',
         color: theme.palette.text.primary,
       },
       legend: {
@@ -109,7 +106,7 @@ export function ByTemplateBarChart({
   };
 
   const labels = Array.from(new Set(data.stats.map(stat => stat.team)));
-  const datasets = data.stats.map(stat => stat.sum);
+  const datasets = data.stats.map(stat => stat.timeSaved);
 
   const backgroundColors = Array.from({ length: datasets.length }, () =>
     getRandomColor(),
