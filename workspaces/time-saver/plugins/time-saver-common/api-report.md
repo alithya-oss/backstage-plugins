@@ -119,6 +119,11 @@ export function isTimeSavedStatisticsPerTemplateNameDbRow(
 ): timeSavedStatistics is TimeSavedStatisticsByTemplateNameDbRow;
 
 // @public (undocumented)
+export function isTimeSaverApiError(
+  apiResponse: any,
+): apiResponse is TimeSaverApiErrorResponse;
+
+// @public (undocumented)
 export type TemplateCountDbRow = {
   count: number;
 };
@@ -188,6 +193,11 @@ export type TimeSavedStatisticsDbRow = {
   team: string;
   template_name: string;
   time_saved: string | undefined;
+};
+
+// @public (undocumented)
+export type TimeSaverApiErrorResponse = {
+  errorMessage: string;
 };
 
 // @public (undocumented)
