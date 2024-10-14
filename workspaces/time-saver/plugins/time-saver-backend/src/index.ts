@@ -13,6 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 export * from './service/router';
 export { timeSaverPlugin as default } from './service/router';
