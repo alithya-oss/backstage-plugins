@@ -4,6 +4,7 @@ import {
   TimeSavedStatisticsByTeamNameDbRow,
   TimeSavedStatisticsByTemplateNameDbRow,
   TimeSavedStatisticsDbRow,
+  TimeSaverApiErrorResponse,
 } from './types';
 
 /**
@@ -53,4 +54,13 @@ export function isTimeSavedStatisticsDbRow(
     (timeSavedStatistics as TimeSavedStatisticsDbRow).template_name !==
       undefined
   );
+}
+
+/**
+ * @public
+ */
+export function isTimeSaverApiError(
+  apiResponse: any,
+): apiResponse is TimeSaverApiErrorResponse {
+  return (apiResponse as TimeSaverApiErrorResponse).errorMessage !== undefined;
 }
