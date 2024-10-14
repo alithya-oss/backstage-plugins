@@ -267,3 +267,10 @@ export type GetTemplateCountResponse = {
 export type GetTimeSavedSumResponse = {
   timeSaved: number;
 };
+
+/**
+ * @public
+ */
+export type TimeSaverApiErrorResponse = {
+  errorMessage: string;
+};
