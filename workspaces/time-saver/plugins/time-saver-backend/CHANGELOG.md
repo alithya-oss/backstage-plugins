@@ -1,20 +1,11 @@
 # @alithya-oss/plugin-time-saver-backend
 
-## 3.0.0
-
-### Major Changes
-
-- Upgraded time saver DB client to use knex functions to build queries. Previously, raw queries were used that were only compatible with PostgreSQL. Users are now able to use other databases and even deploy locally using sqlite.
-
-### Minor Changes
-
-- Migrated time-saver workspace plugins to Alithya's Backstage community plugins repository
-
 ## 2.5.0
 
 ### Minor Changes
 
 - Replaced native date functions for luxon.
+- Migrated time-saver workspace plugins to Alithya's Backstage community plugins repository.
 
 ## 2.4.0
 
