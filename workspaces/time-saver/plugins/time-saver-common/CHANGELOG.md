@@ -1,13 +1,13 @@
 # @alithya-oss/plugin-time-saver-common
 
-## 1.3.0
+## 0.4.0
 
 ### Minor Changes
 
 - Provided dependencies upgrade to match Backstage 1.29 version
-- Migrated time-saver workspace plugins to Backstage community plugins repository
+- Migrated time-saver workspace plugins to Alithya's Backstage community plugins repository
 
-## 1.2.0
+## 0.3.0
 
 ### Minor Changes
 
@@ -17,7 +17,7 @@
 
 - Fixed incompatible or missing types definitions in components.
 
-## 1.1.0
+## 0.2.0
 
 ### Minor Changes
 
