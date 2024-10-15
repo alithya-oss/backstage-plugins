@@ -1,0 +1,4 @@
+yarn prettier:check
+yarn lint:all
+yarn tsc:full
+yarn build:api-reports:only
