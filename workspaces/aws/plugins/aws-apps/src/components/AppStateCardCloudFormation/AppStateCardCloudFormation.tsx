@@ -4,7 +4,11 @@
 import { InfoCard, EmptyState } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
 import { LinearProgress } from '@material-ui/core';
-import { Button, CardContent, Divider, Grid, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import React, { useState, useEffect, useRef } from 'react';
 import {
   DescribeStackEventsCommandOutput,
@@ -56,22 +60,10 @@ const OpaAppStateOverview = ({
   });
   const repoInfo = awsComponent.getRepoInfo();
 
-  useEffect(() => {
-    if (pollingEnabled && stack.stackDeployStatus.endsWith('PROGRESS')) {
-      getStackEvents().then(_ => {});
-    }
-
-    return () => {
-      setPollingEnabled(false);
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, []);
-
   /*
   Gets the stack event details
   */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   async function getStackEvents() {
     setPolling(true);
 
@@ -98,8 +90,8 @@ const OpaAppStateOverview = ({
         const isDone =
           mostRecentEvent.ResourceType === 'AWS::CloudFormation::Stack' &&
           !!mostRecentEvent.ResourceStatus &&
-          (mostRecentEvent.ResourceStatus!.endsWith('COMPLETE') ||
-            mostRecentEvent.ResourceStatus!.endsWith('FAILED'));
+          (mostRecentEvent.ResourceStatus.endsWith('COMPLETE') ||
+            mostRecentEvent.ResourceStatus.endsWith('FAILED'));
 
         if (isDone) {
           break;
@@ -139,10 +131,9 @@ const OpaAppStateOverview = ({
 
         setEvents(visibleEvents);
       } catch (e) {
-        if ((e as any).isCanceled) {
+        if (e.isCanceled) {
           isCanceled = true;
         } else {
-          console.error(e);
           setError({
             isError: true,
             errorMsg: `Unexpected error occurred while retrieving event data: ${e}`,
@@ -158,6 +149,19 @@ const OpaAppStateOverview = ({
     }
   }
 
+  useEffect(() => {
+    if (pollingEnabled && stack.stackDeployStatus.endsWith('PROGRESS')) {
+      getStackEvents().then(_ => {});
+    }
+
+    return () => {
+      setPollingEnabled(false);
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [getStackEvents, pollingEnabled, stack.stackDeployStatus]);
+
   function sleep(ms: number) {
     return new Promise(resolve => {
       const resolveHandler = () => {
@@ -167,14 +171,6 @@ const OpaAppStateOverview = ({
       timerRef.current = setTimeout(resolveHandler, ms);
     });
   }
-
-  const handleStartDeployment = async () => {
-    if (stack.stackDeployStatus.includes('STAGED')) {
-      return handleCreateDeployment();
-    } else {
-      return handleUpdateDeployment();
-    }
-  };
 
   const handleUpdateDeployment = async () => {
     setEvents([]);
@@ -193,10 +189,9 @@ const OpaAppStateOverview = ({
         }),
       );
 
-      getStackEvents();
+      await getStackEvents();
     } catch (e) {
-      if (!(e as any).isCanceled) {
-        console.error(e);
+      if (!e.isCanceled) {
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while updating the deployment: ${e}`,
@@ -222,16 +217,22 @@ const OpaAppStateOverview = ({
         }),
       );
 
-      getStackEvents();
+      await getStackEvents();
     } catch (e) {
-      if (!(e as any).isCanceled) {
-        console.error(e);
+      if (!e.isCanceled) {
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while creating the deployment: ${e}`,
         });
       }
     }
+  };
+
+  const handleStartDeployment = async () => {
+    if (stack.stackDeployStatus.includes('STAGED')) {
+      return handleCreateDeployment();
+    }
+    return handleUpdateDeployment();
   };
 
   const handleStopApp = async () => {
@@ -246,10 +247,9 @@ const OpaAppStateOverview = ({
         }),
       );
 
-      getStackEvents();
+      await getStackEvents();
     } catch (e) {
-      if (!(e as any).isCanceled) {
-        console.error(e);
+      if (!e.isCanceled) {
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while deleting the deployment: ${e}`,
@@ -350,7 +350,7 @@ const OpaAppStateOverview = ({
                   Created At
                 </Typography>
                 <Typography sx={{ mt: 1 }}>
-                  {stack.creationTime || ''}
+                  {stack.creationTime ?? ''}
                 </Typography>
               </Grid>
               <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }} />
@@ -361,7 +361,7 @@ const OpaAppStateOverview = ({
                   Last Updated
                 </Typography>
                 <Typography sx={{ mt: 1 }}>
-                  {stack.lastUpdatedTime || ''}
+                  {stack.lastUpdatedTime ?? ''}
                 </Typography>
               </Grid>
             </Grid>
@@ -420,13 +420,12 @@ export const AppStateCard = () => {
     };
 
     return <OpaAppStateOverview input={input} />;
-  } else {
-    return (
-      <EmptyState
-        missing="data"
-        title="No state data to show"
-        description="State data would show here"
-      />
-    );
   }
+  return (
+    <EmptyState
+      missing="data"
+      title="No state data to show"
+      description="State data would show here"
+    />
+  );
 };

@@ -5,7 +5,7 @@
 ```ts
 import { AuthService } from '@backstage/backend-plugin-api';
 import { AwsCredentialsManager } from '@backstage/integration-aws-node';
-import { AwsResourceLocator } from '@alithya-oss/plugin-aws-core-common';
+import { AwsResourceLocator } from '@alithya-oss/plugin-aws-core-node';
 import { BackendFeatureCompat } from '@backstage/backend-plugin-api';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 import { CatalogApi } from '@backstage/catalog-client';
@@ -15,7 +15,8 @@ import { Config } from '@backstage/config';
 import { DiscoveryService } from '@backstage/backend-plugin-api';
 import express from 'express';
 import { HttpAuthService } from '@backstage/backend-plugin-api';
-import { Logger } from 'winston';
+import { LoggerService } from '@backstage/backend-plugin-api';
+import { ServiceRef } from '@backstage/backend-plugin-api';
 import { ServicesResponse } from '@alithya-oss/plugin-amazon-ecs-common';
 
 // @public (undocumented)
@@ -32,12 +33,19 @@ export interface AmazonECSService {
 }
 
 // @public (undocumented)
+export const amazonEcsServiceRef: ServiceRef<
+  AmazonECSService,
+  'plugin',
+  'singleton'
+>;
+
+// @public (undocumented)
 export function createRouter(options: RouterOptions): Promise<express.Router>;
 
 // @public (undocumented)
 export class DefaultAmazonEcsService implements AmazonECSService {
   constructor(
-    logger: Logger,
+    logger: LoggerService,
     auth: AuthService,
     catalogApi: CatalogApi,
     resourceLocator: AwsResourceLocator,
@@ -51,7 +59,7 @@ export class DefaultAmazonEcsService implements AmazonECSService {
       discovery: DiscoveryService;
       auth?: AuthService;
       httpAuth?: HttpAuthService;
-      logger: Logger;
+      logger: LoggerService;
       resourceLocator?: AwsResourceLocator;
     },
   ): Promise<DefaultAmazonEcsService>;
@@ -79,7 +87,7 @@ export interface RouterOptions {
   // (undocumented)
   httpAuth?: HttpAuthService;
   // (undocumented)
-  logger: Logger;
+  logger: LoggerService;
 }
 
 // (No @packageDocumentation comment for this package)

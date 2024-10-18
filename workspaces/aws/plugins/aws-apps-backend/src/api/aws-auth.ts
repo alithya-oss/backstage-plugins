@@ -31,10 +31,9 @@ function getMemberGroupFromUserEntity(user: UserEntity | undefined) {
       'User is not a member of any groups and cannot get mapped AWS credentials',
     );
   }
-  const memberGroups = user.relations.reduce((groups, relation) => {
+  return user.relations.reduce((groups, relation) => {
     return parseEntityref(relation.targetRef, groups);
   }, new Array<string>());
-  return memberGroups;
 }
 function getMemberGroupFromUserIdentity(user: BackstageUserInfo | undefined) {
   if (user?.ownershipEntityRefs === undefined) {
@@ -43,13 +42,9 @@ function getMemberGroupFromUserIdentity(user: BackstageUserInfo | undefined) {
       'User is not a member of any groups and cannot get mapped AWS credentials',
     );
   }
-  const memberGroups = user.ownershipEntityRefs.reduce(
-    (groups, ownershipRefs) => {
-      return parseEntityref(ownershipRefs, groups);
-    },
-    new Array<string>(),
-  );
-  return memberGroups;
+  return user.ownershipEntityRefs.reduce((groups, ownershipRefs) => {
+    return parseEntityref(ownershipRefs, groups);
+  }, new Array<string>());
 }
 async function fetchCreds(
   memberGroups: string[],
@@ -63,6 +58,7 @@ async function fetchCreds(
   try {
     // TODO: remove this code once we reference memberGroups
     if (memberGroups) {
+      logger.debug(memberGroups);
     }
 
     // Get the SSM Parameter pointing to the DynamoDB security mapping table
@@ -157,33 +153,31 @@ export async function getAWScreds(
   const WORKAROUND = true;
   if (WORKAROUND) {
     return getAWSCredsWorkaround(accountId, region, prefix, providerName, user);
-  } else {
-    if (user === undefined && userIdentity !== undefined) {
-      const userName = parseEntityRef(userIdentity?.userEntityRef).name;
-      logger.info(`Fetching credentials for user ${userName}`);
-      memberGroups = getMemberGroupFromUserIdentity(userIdentity);
-      return fetchCreds(
-        memberGroups,
-        region,
-        accountId,
-        userName,
-        prefix,
-        providerName,
-      );
-    } else {
-      const userName = user?.metadata.name;
-      logger.info(`Fetching credentials for user ${userName}`);
-      memberGroups = getMemberGroupFromUserEntity(user);
-      return fetchCreds(
-        memberGroups,
-        region,
-        accountId,
-        userName!,
-        prefix,
-        providerName,
-      );
-    }
   }
+  if (user === undefined && userIdentity !== undefined) {
+    const userName = parseEntityRef(userIdentity?.userEntityRef).name;
+    logger.info(`Fetching credentials for user ${userName}`);
+    memberGroups = getMemberGroupFromUserIdentity(userIdentity);
+    return fetchCreds(
+      memberGroups,
+      region,
+      accountId,
+      userName,
+      prefix,
+      providerName,
+    );
+  }
+  const userName = user?.metadata.name;
+  logger.info(`Fetching credentials for user ${userName}`);
+  memberGroups = getMemberGroupFromUserEntity(user);
+  return fetchCreds(
+    memberGroups,
+    region,
+    accountId,
+    userName!,
+    prefix,
+    providerName,
+  );
 }
 
 export async function getAWSCredsWorkaround(
@@ -194,9 +188,9 @@ export async function getAWSCredsWorkaround(
   user?: UserEntity,
 ) {
   const client = new STSClient({ region });
-  const userName = user?.metadata.name || 'unknown';
+  const userName = user?.metadata.name ?? 'unknown';
 
-  //assemble the arn format to the desire destination environment
+  // assemble the arn format to the desire destination environment
   const roleArn = `arn:aws:iam::${accountId}:role/${prefix}-${providerName}-operations-role`;
   console.log(roleArn);
 
@@ -212,9 +206,9 @@ export async function getAWSCredsWorkaround(
     roleArn,
     requester: userName,
     credentials: {
-      accessKeyId: stsResult!.Credentials!.AccessKeyId!,
-      secretAccessKey: stsResult!.Credentials!.SecretAccessKey!,
-      sessionToken: stsResult!.Credentials!.SessionToken,
+      accessKeyId: stsResult.Credentials!.AccessKeyId!,
+      secretAccessKey: stsResult.Credentials!.SecretAccessKey!,
+      sessionToken: stsResult.Credentials!.SessionToken,
     },
     account: accountId,
     region: region,

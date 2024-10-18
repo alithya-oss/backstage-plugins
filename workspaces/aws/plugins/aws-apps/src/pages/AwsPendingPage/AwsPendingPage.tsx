@@ -30,7 +30,7 @@ export function AwsPendingPage(_props: AwsPendingPageProps) {
     isResource = entity.spec.type === 'aws-resource';
   }
 
-  const AwsPendingEntityPage = (
+  return (
     <>
       <EntityLayout>
         <EntityLayout.Route path="/" title="Overview">
@@ -59,6 +59,4 @@ export function AwsPendingPage(_props: AwsPendingPageProps) {
       </EntityLayout>
     </>
   );
-
-  return AwsPendingEntityPage;
 }

@@ -38,8 +38,6 @@ export function getOneOfEntityAnnotations(
         value: entity.metadata.annotations[match],
       };
     }
-
-    return undefined;
   }
 
   return undefined;

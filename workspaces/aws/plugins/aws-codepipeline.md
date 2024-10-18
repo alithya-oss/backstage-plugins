@@ -7,7 +7,7 @@ This is the AWS CodePipeline plugin for backstage.io.
 It provides:
 
 1. Entity content that displays the AWS CodePipeline executions related to that specific entity
-1. Entity card that displays the status of the AWS CodePipeline stages related to that specific entity
+2. Entity card that displays the status of the AWS CodePipeline stages related to that specific entity
 
 The plugin consists of the following packages:
 
@@ -122,7 +122,7 @@ yarn workspace app add @alithya-oss/plugin-aws-codepipeline
 
 Edit `packages/app/src/components/catalog/EntityPage.tsx` to add AWS CodePipeline content to the CI/CD tab of the entity page:
 
-```typescript
+```tsx
 import {
   EntityAwsCodePipelineExecutionsContent,
   isAwsCodePipelineAvailable,
@@ -131,14 +131,14 @@ import {
 // For example in the CI/CD section
 const cicdContent = (
   <EntitySwitch>
-    <EntitySwitch.Case if= {isAwsCodePipelineAvailable} >
-      <EntityAwsCodePipelineExecutionsContent / >
+    <EntitySwitch.Case if= {isAwsCodePipelineAvailable}>
+      <EntityAwsCodePipelineExecutionsContent/>
     </EntitySwitch.Case>
 ```
 
 Edit the same file to add the AWS CodePipeline card to the entity page:
 
-```typescript
+```tsx
 import { EntityAwsCodePipelineCard } from '@alithya-oss/plugin-aws-codepipeline';
 
 // For example in the overview section

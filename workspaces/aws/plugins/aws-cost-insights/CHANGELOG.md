@@ -1,17 +1,21 @@
 # Change Log
 
-## 0.1.1
-
-### Patch Changes
-
-- fa17991: Bump framework version 1.30.4 and aligned plugin names with [community-plugins](https://github.com/backstage/community-plugins) naming convention
-- Updated dependencies [fa17991]
-  - @alithya-oss/plugin-amazon-ecs-common@0.2.1
-  - @alithya-oss/plugin-aws-core-common@0.4.2
-  - @alithya-oss/plugin-aws-core-react@0.4.1
-
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [0.1.3](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/cost-insights-plugin-for-backstage@0.1.2...@aws/cost-insights-plugin-for-backstage@0.1.3) (2024-08-29)
+
+**Note:** Version bump only for package @aws/cost-insights-plugin-for-backstage
+
+## [0.1.2](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/cost-insights-plugin-for-backstage@0.1.1...@aws/cost-insights-plugin-for-backstage@0.1.2) (2024-08-29)
+
+### Bug Fixes
+
+- Added package metadata for publishing ([c674b9f](https://github.com/awslabs/backstage-plugins-for-aws/commit/c674b9fee77bd91567615f8adc4c1688da93ee3f))
+
+## [0.1.1](https://github.com/awslabs/backstage-plugins-for-aws/compare/@aws/cost-insights-plugin-for-backstage@0.1.0...@aws/cost-insights-plugin-for-backstage@0.1.1) (2024-08-29)
+
+**Note:** Version bump only for package @aws/cost-insights-plugin-for-backstage
 
 # 0.1.0 (2024-08-01)
 

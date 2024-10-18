@@ -12,19 +12,16 @@
  */
 
 import { Config } from '@backstage/config';
-import { Logger } from 'winston';
-import {
-  AwsResourceLocator,
-  AwsResourceTaggingApiLocator,
-} from '@alithya-oss/plugin-aws-core-common';
+import { AwsResourceLocator, AwsResourceTaggingApiLocator } from '.';
 import { AwsResourceExplorerLocator } from './resource-explorer-locator';
 import { AwsConfigResourceLocator } from './aws-config-locator';
+import { LoggerService } from '@backstage/backend-plugin-api';
 
 /** @public */
 export class AwsResourceLocatorFactory {
   static async fromConfig(
     config: Config,
-    logger: Logger,
+    logger: LoggerService,
   ): Promise<AwsResourceLocator> {
     const conf = config.getOptionalConfig('aws.locator');
 

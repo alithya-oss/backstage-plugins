@@ -54,22 +54,22 @@ const OpaAppInfraInfo = ({
     defaultServiceFilter.push('ECR');
   }
 
-  async function getData() {
-    // Validate the resource group annotation and extract the resource group name
-    // so that we can build a deepLink to the resource group page in the AWS console
-    if (!resourceGroupArn) {
-      throw new Error('Missing resource group arn');
+  useEffect(() => {
+    async function getData() {
+      // Validate the resource group annotation and extract the resource group name
+      // so that we can build a deepLink to the resource group page in the AWS console
+      if (!resourceGroupArn) {
+        throw new Error('Missing resource group arn');
+      }
+
+      const rscGroupResources = await api.getResourceGroupResources({
+        rscGroupArn: resourceGroupArn,
+      });
+
+      const data = rscGroupResources ?? {};
+      setRscGroupData(data);
     }
 
-    const rscGroupResources = await api.getResourceGroupResources({
-      rscGroupArn: resourceGroupArn,
-    });
-
-    const data = rscGroupResources ?? {};
-    setRscGroupData(data);
-  }
-
-  useEffect(() => {
     getData()
       .then(() => {
         setLoading(false);
@@ -84,7 +84,7 @@ const OpaAppInfraInfo = ({
         setError({ isError: true, errorMsg });
         setLoading(false);
       });
-  }, []);
+  }, [api, resourceGroupArn]);
 
   const title = 'AWS Infrastructure Resources';
   if (loading) {
@@ -148,13 +148,12 @@ export const InfrastructureCard = () => {
       throw new Error('Infrastructure Card Not yet implemented!');
     }
     return <OpaAppInfraInfo input={input} />;
-  } else {
-    return (
-      <EmptyState
-        missing="data"
-        title="No infrastructure data to show"
-        description="Infrastructure data would show here"
-      />
-    );
   }
+  return (
+    <EmptyState
+      missing="data"
+      title="No infrastructure data to show"
+      description="Infrastructure data would show here"
+    />
+  );
 };

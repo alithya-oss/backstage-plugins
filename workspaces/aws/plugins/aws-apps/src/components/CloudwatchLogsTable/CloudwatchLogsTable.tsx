@@ -95,12 +95,14 @@ const CloudwatchLogsTable = ({
     Promise.all(
       logGroupNames.map(
         async (logGroupName: string): Promise<LogGroupStreams> => {
-          return api.getLogStreamNames({ logGroupName }).then(logStreams => {
-            return {
-              logGroupName,
-              logStreamsList: logStreams,
-            } as LogGroupStreams;
-          });
+          return api
+            .getLogStreamNames({ logGroupName })
+            .then(logStreamsList => {
+              return {
+                logGroupName,
+                logStreamsList: logStreamsList,
+              } as LogGroupStreams;
+            });
         },
       ),
     )
@@ -132,14 +134,13 @@ const CloudwatchLogsTable = ({
         setError({ isError: false, errorMsg: '' });
       })
       .catch(e => {
-        console.log(e); // rejectReason of any first rejected promise
         setLoading(false);
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while retrieving log streams: ${e}`,
         });
       });
-  }, []);
+  }, [api, logGroupNames]);
 
   const getLogGroupName = (logGroupName: string) => {
     if (logGroupName.startsWith('API-Gateway')) {
@@ -162,9 +163,8 @@ const CloudwatchLogsTable = ({
         }
       }
       return `Lambda - ${title}`;
-    } else {
-      return `Logs - ${logGroupName}`;
     }
+    return `Logs - ${logGroupName}`;
   };
 
   const handleClickOpen = (streamName: string, logGroupName: string) => {
@@ -214,6 +214,17 @@ const CloudwatchLogsTable = ({
     return <Typography sx={{ color: 'red' }}>{error.errorMsg}</Typography>;
   }
 
+  const getDialogContent = () => {
+    if (dialogLoading) {
+      return <LinearProgress />;
+    } else if (dialogError.isError) {
+      return (
+        <Typography sx={{ color: 'red' }}>{dialogError.errorMsg}</Typography>
+      );
+    }
+    return <LogViewer text={logs} />;
+  };
+
   return (
     <>
       {logGroupNames.map((logGroupName, index) => (
@@ -221,17 +232,7 @@ const CloudwatchLogsTable = ({
           <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xl">
             <DialogTitle>{logStreamName}</DialogTitle>
             <DialogContent>
-              <div style={{ height: '70vh' }}>
-                {dialogLoading ? (
-                  <LinearProgress />
-                ) : dialogError.isError ? (
-                  <Typography sx={{ color: 'red' }}>
-                    {dialogError.errorMsg}
-                  </Typography>
-                ) : (
-                  <LogViewer text={logs} />
-                )}
-              </div>
+              <div style={{ height: '70vh' }}>{getDialogContent()}</div>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Close</Button>
@@ -314,7 +315,7 @@ export const CloudwatchLogsWidget = () => {
     }
 
     if (logGroupNames && logGroupNames.length > 0) {
-      const stackName = ''; //env.app.cloudFormation!
+      const stackName = ''; // env.app.cloudFormation!
       return (
         <CloudwatchLogsTable
           input={{
@@ -324,16 +325,7 @@ export const CloudwatchLogsWidget = () => {
           }}
         />
       );
-    } else {
-      return (
-        <EmptyState
-          missing="data"
-          title="Application Logs"
-          description="Logs would show here"
-        />
-      );
     }
-  } else {
     return (
       <EmptyState
         missing="data"
@@ -342,4 +334,11 @@ export const CloudwatchLogsWidget = () => {
       />
     );
   }
+  return (
+    <EmptyState
+      missing="data"
+      title="Application Logs"
+      description="Logs would show here"
+    />
+  );
 };

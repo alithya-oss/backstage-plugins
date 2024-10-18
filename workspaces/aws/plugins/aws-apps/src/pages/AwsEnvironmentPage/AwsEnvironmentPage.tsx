@@ -23,7 +23,7 @@ import {
 } from '../../plugin';
 
 /** @public */
-export function AwsEnvironmentPage(/*{children}: AwsEnvironmentPageProps */) {
+export function AwsEnvironmentPage(/* {children}: AwsEnvironmentPageProps */) {
   const managementContent = (
     <Grid container spacing={1} alignItems="stretch">
       <Grid item md={6} xs={6}>

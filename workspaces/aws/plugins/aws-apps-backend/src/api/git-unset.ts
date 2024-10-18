@@ -3,7 +3,7 @@ import {
   ICommitChange,
   IRepositoryInfo,
   ISCMBackendAPI,
-} from '@alithya-oss/plugin-aws-apps-common/src/types/SCMBackendAPI';
+} from '@alithya-oss/plugin-aws-apps-common';
 import { Logger } from 'winston';
 
 export class GitUnset implements ISCMBackendAPI {
