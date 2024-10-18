@@ -2,8 +2,11 @@ import React, { PropsWithChildren } from 'react';
 import { makeStyles } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import ExtensionIcon from '@material-ui/icons/Extension';
+import MapIcon from '@material-ui/icons/MyLocation';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import CreateComponentIcon from '@material-ui/icons/AddCircleOutline';
+import LogoFull from './LogoFull';
+import LogoIcon from './LogoIcon';
 import {
   Settings as SidebarSettings,
   UserSettingsSignInAvatar,
@@ -30,10 +33,8 @@ import GroupIcon from '@material-ui/icons/People';
 
 import MoneyIcon from '@material-ui/icons/MonetizationOn';
 import CloudIcon from '@material-ui/icons/Cloud';
-import {
-  AWSLogoFull,
-  AWSLogoIcon,
-} from '@aws/plugin-aws-apps-demo-for-backstage';
+import { AWSLogoFull, AWSLogoIcon, CustomerLogoIcon, CustomerLogoFullLight } from '@aws/plugin-aws-apps-demo-for-backstage';
+import { useApi, useApp, appThemeApiRef } from '@backstage/core-plugin-api';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -50,14 +51,29 @@ const useSidebarLogoStyles = makeStyles({
   },
 });
 
+function getLogo(themeId: string) {
+  switch (themeId) {
+    case 'opaTheme':
+      return [<AWSLogoFull />, <AWSLogoIcon />];
+    case 'customerTheme':
+      return [<CustomerLogoFullLight />, <CustomerLogoIcon />];
+    default:
+      return [<LogoFull />, <LogoIcon />];
+  }
+}
+
 const SidebarLogo = () => {
+  const appThemeApi = useApi(appThemeApiRef);
+  const themeId = appThemeApi.getActiveThemeId();
   const classes = useSidebarLogoStyles();
   const { isOpen } = useSidebarOpenState();
+
+  const [fullLogo, iconLogo] = getLogo(themeId ?? '');
 
   return (
     <div className={classes.root}>
       <Link to="/" underline="none" className={classes.link} aria-label="Home">
-        {isOpen ? <AWSLogoFull /> : <AWSLogoIcon />}
+        {isOpen ? fullLogo : iconLogo}
       </Link>
     </div>
   );
@@ -86,26 +102,27 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
               <SidebarSubmenuItem
                 title="Environments"
                 to="aws-apps-search-page/environments?filters[kind]=awsenvironment"
-                icon={ExtensionIcon}
+                icon={useApp().getSystemIcon('kind:domain')}
               />
               <SidebarSubmenuItem
                 title="Providers"
                 to="aws-apps-search-page/providers?filters[kind]=awsenvironmentprovider"
-                icon={ExtensionIcon}
+                icon={useApp().getSystemIcon('kind:system')}
               />
               <SidebarSubmenuItem
                 title="Apps"
                 to="aws-apps-search-page/apps?filters[kind]=component"
-                icon={ExtensionIcon}
+                icon={useApp().getSystemIcon('kind:component')}
               />
               <SidebarSubmenuItem
                 title="Resources"
                 to="aws-apps-search-page/resources?filters[kind]=resource"
-                icon={ExtensionIcon}
+                icon={useApp().getSystemIcon('kind:resource')}
               />
             </SidebarSubmenu>
           </SidebarItem>
         </SidebarGroup>
+        <SidebarDivider />
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
@@ -113,6 +130,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarDivider />
         <SidebarScrollWrapper>
           {/* Items in this group will be scrollable if they run out of space */}
+          <SidebarItem icon={MapIcon} to="tech-radar" text="Tech Radar" />
           <SidebarItem
             icon={MoneyIcon}
             to="cost-insights"
