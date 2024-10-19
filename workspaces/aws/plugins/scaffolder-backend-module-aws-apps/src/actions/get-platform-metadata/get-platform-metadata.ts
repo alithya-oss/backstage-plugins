@@ -22,6 +22,7 @@ const examples = [
   },
 ];
 
+/** @public */
 export function getPlatformMetadataAction(options: { envConfig: Config }) {
   const { envConfig } = options;
 

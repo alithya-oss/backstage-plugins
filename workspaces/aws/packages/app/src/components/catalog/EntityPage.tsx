@@ -22,12 +22,17 @@ import {
   EntityOrphanWarning,
   EntityProcessingErrorsPanel,
   isComponentType,
+  isResourceType,
   isKind,
   hasCatalogProcessingErrors,
   isOrphan,
   hasRelationWarnings,
   EntityRelationWarning,
 } from '@backstage/plugin-catalog';
+import {
+  isGithubActionsAvailable,
+  EntityGithubActionsContent,
+} from '@backstage-community/plugin-github-actions';
 import {
   EntityUserProfileCard,
   EntityGroupProfileCard,
@@ -41,6 +46,7 @@ import {
   EntityCatalogGraphCard,
 } from '@backstage/plugin-catalog-graph';
 import {
+  Entity,
   RELATION_API_CONSUMED_BY,
   RELATION_API_PROVIDED_BY,
   RELATION_CONSUMES_API,
@@ -64,15 +70,34 @@ import {
   EntityAmazonEcsServicesContent,
 } from '@alithya-oss/plugin-amazon-ecs';
 import {
+  EntityAwsCodePipelineCard,
   EntityAwsCodePipelineExecutionsContent,
   isAwsCodePipelineAvailable,
 } from '@alithya-oss/plugin-aws-codepipeline';
-import { EntityAwsCodePipelineCard } from '@alithya-oss/plugin-aws-codepipeline';
 import {
   EntityAwsCodeBuildCard,
   isAwsCodeBuildAvailable,
 } from '@alithya-oss/plugin-aws-codebuild';
 import { EntityCostInsightsContent } from '@backstage-community/plugin-cost-insights';
+
+import {
+  AwsEnvironmentPage,
+  AwsEnvironmentProviderPage,
+  AwsComponentPage,
+} from '@alithya-oss/plugin-aws-apps';
+
+import {
+  isGitlabAvailable,
+  EntityGitlabContent,
+} from '@immobiliarelabs/backstage-plugin-gitlab';
+
+const isCicdApplicable = (entity: Entity) => {
+  return (
+    isGitlabAvailable(entity) ||
+    isAwsCodePipelineAvailable(entity) ||
+    isGithubActionsAvailable(entity)
+  );
+};
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -93,11 +118,25 @@ const cicdContent = (
         <EntityGithubActionsContent />
       </EntitySwitch.Case>
      */}
-    <EntitySwitch>
-      <EntitySwitch.Case if={isAwsCodePipelineAvailable}>
-        <EntityAwsCodePipelineExecutionsContent />
-      </EntitySwitch.Case>
-    </EntitySwitch>
+    <EntitySwitch.Case if={isCicdApplicable}>
+      <EntitySwitch>
+        <EntitySwitch.Case if={isGitlabAvailable}>
+          <EntityGitlabContent />
+        </EntitySwitch.Case>
+      </EntitySwitch>
+
+      <EntitySwitch>
+        <EntitySwitch.Case if={isAwsCodePipelineAvailable}>
+          <EntityAwsCodePipelineExecutionsContent />
+        </EntitySwitch.Case>
+      </EntitySwitch>
+
+      <EntitySwitch>
+        <EntitySwitch.Case if={isGithubActionsAvailable}>
+          <EntityGithubActionsContent />
+        </EntitySwitch.Case>
+      </EntitySwitch>
+    </EntitySwitch.Case>
 
     <EntitySwitch.Case>
       <EmptyState
@@ -153,7 +192,7 @@ const overviewContent = (
       <EntityAboutCard variant="gridItem" />
     </Grid>
     <Grid item md={6} xs={12}>
-      <EntityCatalogGraphCard variant="gridItem" height={400} />
+      <EntityCatalogGraphCard variant="gridItem" height={400} showArrowHeads />
     </Grid>
 
     <EntitySwitch>
@@ -187,7 +226,7 @@ const serviceEntityPage = (
       {overviewContent}
     </EntityLayout.Route>
 
-    <EntityLayout.Route path="/ci-cd" title="CI/CD">
+    <EntityLayout.Route path="/ci-cd" title="CI/CD" if={isCicdApplicable}>
       {cicdContent}
     </EntityLayout.Route>
 
@@ -299,10 +338,23 @@ const defaultEntityPage = (
       {overviewContent}
     </EntityLayout.Route>
 
+    <EntityLayout.Route path="/ci-cd" title="CI/CD" if={isCicdApplicable}>
+      {cicdContent}
+    </EntityLayout.Route>
+
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
   </EntityLayout>
+);
+
+const resourceEntityPage = (
+  <EntitySwitch>
+    <EntitySwitch.Case if={isResourceType('aws-resource')}>
+      <AwsComponentPage componentType="aws-resource" />
+    </EntitySwitch.Case>
+    <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
+  </EntitySwitch>
 );
 
 const componentPage = (
@@ -313,6 +365,10 @@ const componentPage = (
 
     <EntitySwitch.Case if={isComponentType('website')}>
       {websiteEntityPage}
+    </EntitySwitch.Case>
+
+    <EntitySwitch.Case if={isComponentType('aws-app')}>
+      <AwsComponentPage componentType="aws-app" />
     </EntitySwitch.Case>
 
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
@@ -458,15 +514,29 @@ const domainPage = (
   </EntityLayout>
 );
 
+const awsEnvironmentProviderEntityPage = <AwsEnvironmentProviderPage />;
+
+const awsEnvironmentEntityPage = <AwsEnvironmentPage />;
+
 export const entityPage = (
   <EntitySwitch>
-    <EntitySwitch.Case if={isKind('component')} children={componentPage} />
-    <EntitySwitch.Case if={isKind('api')} children={apiPage} />
-    <EntitySwitch.Case if={isKind('group')} children={groupPage} />
-    <EntitySwitch.Case if={isKind('user')} children={userPage} />
-    <EntitySwitch.Case if={isKind('system')} children={systemPage} />
-    <EntitySwitch.Case if={isKind('domain')} children={domainPage} />
-
+    <EntitySwitch.Case if={isKind('component')}>
+      {componentPage}
+    </EntitySwitch.Case>
+    <EntitySwitch.Case if={isKind('api')}>{apiPage}</EntitySwitch.Case>
+    <EntitySwitch.Case if={isKind('group')}>{groupPage}</EntitySwitch.Case>
+    <EntitySwitch.Case if={isKind('user')}>{userPage}</EntitySwitch.Case>
+    <EntitySwitch.Case if={isKind('system')}>{systemPage}</EntitySwitch.Case>
+    <EntitySwitch.Case if={isKind('domain')}>{domainPage}</EntitySwitch.Case>
+    <EntitySwitch.Case if={isKind('resource')} children={resourceEntityPage} />
+    <EntitySwitch.Case
+      if={isKind('awsenvironment')}
+      children={awsEnvironmentEntityPage}
+    />
+    <EntitySwitch.Case
+      if={isKind('awsenvironmentprovider')}
+      children={awsEnvironmentProviderEntityPage}
+    />
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
   </EntitySwitch>
 );

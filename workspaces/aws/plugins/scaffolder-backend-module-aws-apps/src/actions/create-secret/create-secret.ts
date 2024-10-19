@@ -5,6 +5,7 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { createSecret } from '../../helpers/action-context';
 import { Config } from '@backstage/config';
 
+/** @public */
 export function createSecretAction(options: { envConfig: Config }) {
   const { envConfig } = options;
   return createTemplateAction<{
@@ -65,7 +66,9 @@ export function createSecretAction(options: { envConfig: Config }) {
       },
     },
     async handler(ctx) {
-      let { secretName, description, region, tags } = ctx.input;
+      const { secretName, description, tags } = ctx.input;
+      let { region } = ctx.input;
+
       if (!region) {
         region = envConfig.getString('backend.platformRegion');
       }
