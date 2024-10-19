@@ -1,0 +1,27 @@
+apiVersion: aws.backstage.io/v1alpha
+kind: AWSEnvironment
+metadata:
+  name: ${{ values.name | dump }}
+  title: ${{ values.title | dump }}
+  shortName: ${{values.short_name | dump}}
+  {%- if values.description %}
+  environmentType: ${{values.environment_type | dump}}
+  description: ${{values.description | dump}}
+  {%- endif %}
+  envTypeAccount: ${{values.account_type | dump}}
+  envTypeRegion: ${{values.region_type | dump}}
+  category: ${{values.category | dump}}
+  classification: ${{values.classification | dump}}
+  level: ${{values.level}}
+  repoUrl: ${{values.repoUrl}}
+  deploymentRequiresApproval: ${{values.deploymentRequiresApproval}}
+  tags:
+    - aws
+    - aws-environment
+    - environment
+spec:
+  type: environment
+  lifecycle: experimental
+  owner: ${{values.owner | dump}}
+  system: ${{values.system}}
+  dependsOn: [${{values.providers | dump}}]
