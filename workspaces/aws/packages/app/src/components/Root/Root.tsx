@@ -33,7 +33,12 @@ import GroupIcon from '@material-ui/icons/People';
 
 import MoneyIcon from '@material-ui/icons/MonetizationOn';
 import CloudIcon from '@material-ui/icons/Cloud';
-import { AWSLogoFull, AWSLogoIcon, CustomerLogoIcon, CustomerLogoFullLight } from '@aws/plugin-aws-apps-demo-for-backstage';
+import {
+  AWSLogoFull,
+  AWSLogoIcon,
+  CustomerLogoIcon,
+  CustomerLogoFullLight,
+} from '@aws/plugin-aws-apps-demo-for-backstage';
 import { useApi, useApp, appThemeApiRef } from '@backstage/core-plugin-api';
 
 const useSidebarLogoStyles = makeStyles({

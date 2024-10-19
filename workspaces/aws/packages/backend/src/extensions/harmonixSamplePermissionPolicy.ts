@@ -1,20 +1,49 @@
 import { policyExtensionPoint } from '@backstage/plugin-permission-node/alpha';
 import { createBackendModule } from '@backstage/backend-plugin-api';
 import { readOpaAppAuditPermission } from '@alithya-oss/plugin-aws-apps-common';
-import { DEFAULT_NAMESPACE, stringifyEntityRef } from '@backstage/catalog-model';
+import {
+  DEFAULT_NAMESPACE,
+  stringifyEntityRef,
+} from '@backstage/catalog-model';
 import { BackstageIdentityResponse } from '@backstage/plugin-auth-node';
-import { catalogConditions, createCatalogConditionalDecision } from '@backstage/plugin-catalog-backend/alpha';
-import { RESOURCE_TYPE_CATALOG_ENTITY, catalogEntityDeletePermission, catalogEntityReadPermission } from '@backstage/plugin-catalog-common/alpha';
-import { AuthorizeResult, PolicyDecision, isPermission, isResourcePermission } from '@backstage/plugin-permission-common';
-import { PermissionPolicy, PolicyQuery } from '@backstage/plugin-permission-node';
-
+import {
+  catalogConditions,
+  createCatalogConditionalDecision,
+} from '@backstage/plugin-catalog-backend/alpha';
+import {
+  RESOURCE_TYPE_CATALOG_ENTITY,
+  catalogEntityDeletePermission,
+  catalogEntityReadPermission,
+} from '@backstage/plugin-catalog-common/alpha';
+import {
+  AuthorizeResult,
+  PolicyDecision,
+  isPermission,
+  isResourcePermission,
+} from '@backstage/plugin-permission-common';
+import {
+  PermissionPolicy,
+  PolicyQuery,
+} from '@backstage/plugin-permission-node';
 
 // The Group entity ref constants below are based on group identifiers created from the auth IdP or manually created
 // Update the entity ref identifiers as appropriate to match your Backstage installation
-const ADMINS_GROUP = stringifyEntityRef({ kind: 'Group', namespace: DEFAULT_NAMESPACE, name: "admins" });
-const DEVOPS_GROUP = stringifyEntityRef({ kind: 'Group', namespace: DEFAULT_NAMESPACE, name: "dev-ops" });
+const ADMINS_GROUP = stringifyEntityRef({
+  kind: 'Group',
+  namespace: DEFAULT_NAMESPACE,
+  name: 'admins',
+});
+const DEVOPS_GROUP = stringifyEntityRef({
+  kind: 'Group',
+  namespace: DEFAULT_NAMESPACE,
+  name: 'dev-ops',
+});
 // const QA_GROUP = stringifyEntityRef({ kind: 'Group', namespace: DEFAULT_NAMESPACE, name: "qa" });
-const DEVELOPERS_GROUP = stringifyEntityRef({ kind: 'Group', namespace: DEFAULT_NAMESPACE, name: "developers" });
+const DEVELOPERS_GROUP = stringifyEntityRef({
+  kind: 'Group',
+  namespace: DEFAULT_NAMESPACE,
+  name: 'developers',
+});
 // const EVERYONE_GROUP = stringifyEntityRef({ kind: 'Group', namespace: DEFAULT_NAMESPACE, name: "everyone" });
 
 // class OpaSampleAllowAllPolicy implements PermissionPolicy {
@@ -25,12 +54,10 @@ const DEVELOPERS_GROUP = stringifyEntityRef({ kind: 'Group', namespace: DEFAULT_
 // }
 
 class OpaSamplePermissionPolicy implements PermissionPolicy {
-
   async handle(
-    request: PolicyQuery, 
-    user?: BackstageIdentityResponse
+    request: PolicyQuery,
+    user?: BackstageIdentityResponse,
   ): Promise<PolicyDecision> {
-
     // The example permission decision checks follow a "first found" strategy.
     // The order of the checks is very important!!
 
@@ -44,18 +71,22 @@ class OpaSamplePermissionPolicy implements PermissionPolicy {
       return { result: AuthorizeResult.ALLOW };
     }
 
-    // Example permission decision: 
+    // Example permission decision:
     //   DENY audit read access unless the user is a member of Admin or DevOps
     //   The implementation below assumes that prior checks have returned an
     //   'allow' policy decision for groups other than 'developer'
-    if (isPermission(request.permission, readOpaAppAuditPermission) && ownershipGroups.includes(DEVELOPERS_GROUP)) {
+    if (
+      isPermission(request.permission, readOpaAppAuditPermission) &&
+      ownershipGroups.includes(DEVELOPERS_GROUP)
+    ) {
       return { result: AuthorizeResult.DENY };
     }
 
     // Example permission decision:
     //   Multiple groups of permission decisions are nested under the first check to see if we're working with catalog entities
-    if (isResourcePermission(request.permission, RESOURCE_TYPE_CATALOG_ENTITY)) {
-
+    if (
+      isResourcePermission(request.permission, RESOURCE_TYPE_CATALOG_ENTITY)
+    ) {
       // Example permission decision:
       //   DENY catalog entity delete permission (Unregister entity) to users
       //   if they cannot claim ownership of the entity
@@ -77,8 +108,14 @@ class OpaSamplePermissionPolicy implements PermissionPolicy {
               catalogConditions.isEntityKind({ kinds: ['template'] }),
               {
                 anyOf: [
-                  catalogConditions.hasSpec({ key: 'type', value: 'aws-environment' }),
-                  catalogConditions.hasSpec({ key: 'type', value: 'aws-environment-provider' }),
+                  catalogConditions.hasSpec({
+                    key: 'type',
+                    value: 'aws-environment',
+                  }),
+                  catalogConditions.hasSpec({
+                    key: 'type',
+                    value: 'aws-environment-provider',
+                  }),
                 ],
               },
             ],

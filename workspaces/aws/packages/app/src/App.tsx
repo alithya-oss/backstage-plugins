@@ -10,7 +10,11 @@ import {
   CatalogImportPage,
   catalogImportPlugin,
 } from '@backstage/plugin-catalog-import';
-import { RouterProps, ScaffolderPage, scaffolderPlugin } from '@backstage/plugin-scaffolder';
+import {
+  RouterProps,
+  ScaffolderPage,
+  scaffolderPlugin,
+} from '@backstage/plugin-scaffolder';
 import { orgPlugin } from '@backstage/plugin-org';
 import { SearchPage } from '@backstage/plugin-search';
 import {
@@ -49,10 +53,14 @@ import Brightness2Icon from '@material-ui/icons/Brightness2';
 
 import { costInsightsAwsPlugin } from '@alithya-oss/plugin-cost-insights-aws';
 import { AppCatalogPage } from '@alithya-oss/plugin-aws-apps';
-import { OPAHomePage, customerTheme, awsTheme, opaTheme } from '@aws/plugin-aws-apps-demo-for-backstage';
+import {
+  OPAHomePage,
+  customerTheme,
+  awsTheme,
+  opaTheme,
+} from '@aws/plugin-aws-apps-demo-for-backstage';
 import { UnifiedThemeProvider, themes } from '@backstage/theme';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
-
 
 const renderSignInPage = (props: any) => {
   let providers: Array<Object> = [
@@ -83,12 +91,14 @@ const renderSignInPage = (props: any) => {
 const scaffolderPageOptions: RouterProps = {
   groups: [
     {
-      title: "AWS Environments and Environment Providers",
+      title: 'AWS Environments and Environment Providers',
       filter: entity =>
-        (entity?.metadata?.tags?.includes('environment-provider') || entity?.metadata?.tags?.includes('aws-environment')) ?? false,
+        (entity?.metadata?.tags?.includes('environment-provider') ||
+          entity?.metadata?.tags?.includes('aws-environment')) ??
+        false,
     },
     {
-      title: "AWS Resources",
+      title: 'AWS Resources',
       filter: entity =>
         entity?.metadata?.tags?.includes('aws-resource') ?? false,
     },
@@ -190,7 +200,7 @@ const app = createApp({
         </ThemeProvider>
       ),
     },
-  ]
+  ],
 });
 
 const routes = (
@@ -213,7 +223,10 @@ const routes = (
         <ReportIssue />
       </TechDocsAddons>
     </Route>
-    <Route path="/create" element={<ScaffolderPage {...scaffolderPageOptions} />} />
+    <Route
+      path="/create"
+      element={<ScaffolderPage {...scaffolderPageOptions} />}
+    />
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route
       path="/catalog-import"

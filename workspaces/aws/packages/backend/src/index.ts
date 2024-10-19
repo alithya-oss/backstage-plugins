@@ -7,7 +7,10 @@
  */
 
 import { createBackend } from '@backstage/backend-defaults';
-import { gitlabPlugin,  catalogPluginGitlabFillerProcessorModule,} from '@immobiliarelabs/backstage-plugin-gitlab-backend'
+import {
+  gitlabPlugin,
+  catalogPluginGitlabFillerProcessorModule,
+} from '@immobiliarelabs/backstage-plugin-gitlab-backend';
 
 const backend = createBackend();
 
@@ -29,7 +32,7 @@ backend.add(
 );
 backend.add(import('@backstage/plugin-catalog-backend-module-gitlab/alpha'));
 backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
-backend.add(import('./extensions/catalogAnnotateScmSlugEntityProcessor'))
+backend.add(import('./extensions/catalogAnnotateScmSlugEntityProcessor'));
 
 // See https://backstage.io/docs/features/software-catalog/configuration#subscribing-to-catalog-errors
 backend.add(import('@backstage/plugin-catalog-backend-module-logs'));
@@ -73,8 +76,12 @@ backend.add(import('@alithya-oss/plugin-scaffolder-backend-module-aws-core'));
 
 // awsapps
 backend.add(import('@alithya-oss/plugin-aws-apps-backend'));
-backend.add(import('@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor'));
-backend.add(import('@alithya-oss/plugin-scaffolder-backend-module-aws-apps'))
+backend.add(
+  import(
+    '@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor'
+  ),
+);
+backend.add(import('@alithya-oss/plugin-scaffolder-backend-module-aws-apps'));
 
 // scaffolder addons
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));

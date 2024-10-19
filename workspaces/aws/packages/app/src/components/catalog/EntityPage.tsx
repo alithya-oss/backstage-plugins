@@ -86,7 +86,10 @@ import {
   AwsComponentPage,
 } from '@alithya-oss/plugin-aws-apps';
 
-import { isGitlabAvailable, EntityGitlabContent } from '@immobiliarelabs/backstage-plugin-gitlab';
+import {
+  isGitlabAvailable,
+  EntityGitlabContent,
+} from '@immobiliarelabs/backstage-plugin-gitlab';
 
 const isCicdApplicable = (entity: Entity) => {
   return (
@@ -95,7 +98,6 @@ const isCicdApplicable = (entity: Entity) => {
     isGithubActionsAvailable(entity)
   );
 };
-
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -349,7 +351,7 @@ const defaultEntityPage = (
 const resourceEntityPage = (
   <EntitySwitch>
     <EntitySwitch.Case if={isResourceType('aws-resource')}>
-      <AwsComponentPage componentType='aws-resource' />
+      <AwsComponentPage componentType="aws-resource" />
     </EntitySwitch.Case>
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
   </EntitySwitch>
@@ -366,7 +368,7 @@ const componentPage = (
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isComponentType('aws-app')}>
-      <AwsComponentPage componentType='aws-app' />
+      <AwsComponentPage componentType="aws-app" />
     </EntitySwitch.Case>
 
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
@@ -512,13 +514,9 @@ const domainPage = (
   </EntityLayout>
 );
 
-const awsEnvironmentProviderEntityPage = (
-  <AwsEnvironmentProviderPage />
-);
+const awsEnvironmentProviderEntityPage = <AwsEnvironmentProviderPage />;
 
-const awsEnvironmentEntityPage = (
-  <AwsEnvironmentPage />
-);
+const awsEnvironmentEntityPage = <AwsEnvironmentPage />;
 
 export const entityPage = (
   <EntitySwitch>
@@ -531,8 +529,14 @@ export const entityPage = (
     <EntitySwitch.Case if={isKind('system')}>{systemPage}</EntitySwitch.Case>
     <EntitySwitch.Case if={isKind('domain')}>{domainPage}</EntitySwitch.Case>
     <EntitySwitch.Case if={isKind('resource')} children={resourceEntityPage} />
-    <EntitySwitch.Case if={isKind('awsenvironment')} children={awsEnvironmentEntityPage} />
-    <EntitySwitch.Case if={isKind('awsenvironmentprovider')} children={awsEnvironmentProviderEntityPage} />
+    <EntitySwitch.Case
+      if={isKind('awsenvironment')}
+      children={awsEnvironmentEntityPage}
+    />
+    <EntitySwitch.Case
+      if={isKind('awsenvironmentprovider')}
+      children={awsEnvironmentProviderEntityPage}
+    />
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
   </EntitySwitch>
 );

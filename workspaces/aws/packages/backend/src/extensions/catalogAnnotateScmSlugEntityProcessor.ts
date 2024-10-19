@@ -11,10 +11,9 @@ export default createBackendModule({
       deps: {
         catalog: catalogProcessingExtensionPoint,
         config: coreServices.rootConfig,
-     
       },
       async init({ catalog, config }) {
-        catalog.addProcessor(AnnotateScmSlugEntityProcessor.fromConfig(config))
+        catalog.addProcessor(AnnotateScmSlugEntityProcessor.fromConfig(config));
       },
     });
   },
