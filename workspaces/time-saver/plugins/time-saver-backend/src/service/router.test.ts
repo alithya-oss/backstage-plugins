@@ -85,7 +85,6 @@ describe('createRouter', () => {
   //  TODO : validate createScheduledTaskRunner parameters types.
 
   beforeAll(async () => {
-
     const router = await createRouter({
       config: config,
       logger: mockServices.logger.mock(),

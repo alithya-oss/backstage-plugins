@@ -17,7 +17,10 @@ import React, { useEffect, useState } from 'react';
 import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Gauge from './Gauge';
-import { GetTemplateCountResponse, isTimeSaverApiError } from '@alithya-oss/plugin-time-saver-common';
+import {
+  GetTemplateCountResponse,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 export function TemplateCountGauge(): React.ReactElement {
   const configApi = useApi(configApiRef);

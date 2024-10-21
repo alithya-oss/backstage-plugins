@@ -28,7 +28,10 @@ import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import { getRandomColor } from '../utils';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useTheme } from '@material-ui/core';
-import { GetStatsByTeamResponse, isTimeSaverApiError } from '@alithya-oss/plugin-time-saver-common';
+import {
+  GetStatsByTeamResponse,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
