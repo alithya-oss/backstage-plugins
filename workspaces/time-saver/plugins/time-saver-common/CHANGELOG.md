@@ -1,5 +1,11 @@
 # @alithya-oss/plugin-time-saver-common
 
+## 0.5.0
+
+### Minor Changes
+
+- cc89fa6: Extracted all types for them to be exported from the common plugin
+
 ## 0.4.0
 
 ### Minor Changes

@@ -1,5 +1,21 @@
 # @alithya-oss/plugin-time-saver-backend
 
+## 3.0.0
+
+### Major Changes
+
+- cc89fa6: Upgraded time saver DB client to use knex functions to build queries. Previously, raw queries were used that were only compatible with PostgreSQL. Users are now able to use other databases and even deploy locally using sqlite.
+
+### Minor Changes
+
+- cc89fa6: Deleted deprecated files created for legacy backend plugins
+- cc89fa6: Updated all plugin classes to use Discovery Service and Lifecycle Service as requested by the Backstage Community
+
+### Patch Changes
+
+- Updated dependencies [cc89fa6]
+  - @alithya-oss/plugin-time-saver-common@0.5.0
+
 ## 2.5.0
 
 ### Minor Changes
