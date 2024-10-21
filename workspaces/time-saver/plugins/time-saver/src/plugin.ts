@@ -17,23 +17,13 @@ import {
   createPlugin,
   createRoutableExtension,
 } from '@backstage/core-plugin-api';
+
 import { rootRouteRef } from './routes';
 
-import { BackstagePlugin } from '@backstage/core-plugin-api';
-import { JSX as JSX_2 } from 'react';
-import { RouteRef } from '@backstage/core-plugin-api';
-
 /**
- *
  * @public
  */
-export const TimeSaverPlugin: BackstagePlugin<
-  {
-    root: RouteRef<undefined>;
-  },
-  {},
-  {}
-> = createPlugin({
+export const TimeSaverPlugin = createPlugin({
   id: 'time-saver',
   routes: {
     root: rootRouteRef,
@@ -41,10 +31,9 @@ export const TimeSaverPlugin: BackstagePlugin<
 });
 
 /**
- *
  * @public
  */
-export const TimeSaverPage: () => JSX_2.Element = TimeSaverPlugin.provide(
+export const TimeSaverPage = TimeSaverPlugin.provide(
   createRoutableExtension({
     name: 'TimeSaverPage',
     component: () =>

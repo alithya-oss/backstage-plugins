@@ -19,9 +19,10 @@ import {
   DatabaseService,
   RootConfigService,
   DiscoveryService,
+  LifecycleService,
 } from '@backstage/backend-plugin-api';
 import { TimeSaverHandler } from '../timeSaver/handler';
-import { TsApi } from '../api/apiService';
+import { TimeSaverApi } from '../api/timeSaverApi';
 import { ScaffolderDatabase } from '../database/ScaffolderDatabase';
 import { TimeSaverDatabase } from '../database/TimeSaverDatabase';
 import { TsScheduler } from '../timeSaver/scheduler';
@@ -30,12 +31,13 @@ import { Router } from 'express';
 import { PluginTaskScheduler } from '@backstage/backend-tasks';
 
 interface PluginDependencies {
+  auth: AuthService;
   router: Router;
   logger: LoggerService;
-  discovery: DiscoveryService;
   config: RootConfigService;
-  auth: AuthService;
   database: DatabaseService;
+  discovery: DiscoveryService;
+  lifecycle: LifecycleService;
   scheduler: PluginTaskScheduler;
 }
 
@@ -52,51 +54,56 @@ const TS_PLUGIN_DEFAULT_SCHEDULE = {
 };
 
 export class PluginInitializer {
-  private logger!: LoggerService;
-  private discovery!: DiscoveryService;
-  private config!: RootConfigService;
   private auth!: AuthService;
-  private scheduler!: PluginTaskScheduler;
-  private database!: DatabaseService;
-  private tsHandler!: TimeSaverHandler;
-  private apiHandler!: TsApi;
-  private tsScheduler!: TsScheduler;
   private router!: Router;
+  private logger!: LoggerService;
+  private config!: RootConfigService;
+  private database!: DatabaseService;
+  private discovery!: DiscoveryService;
+  private lifecycle!: LifecycleService;
+  private scheduler!: PluginTaskScheduler;
+  private tsHandler!: TimeSaverHandler;
+  private apiHandler!: TimeSaverApi;
+  private tsScheduler!: TsScheduler;
 
   private constructor(
+    auth: AuthService,
     router: Router,
     logger: LoggerService,
-    discovery: DiscoveryService,
     config: RootConfigService,
-    auth: AuthService,
     database: DatabaseService,
+    discovery: DiscoveryService,
+    lifecycle: LifecycleService,
     scheduler: PluginTaskScheduler,
   ) {
+    this.auth = auth;
     this.router = router;
     this.logger = logger;
-    this.discovery = discovery;
     this.config = config;
-    this.auth = auth;
     this.database = database;
+    this.discovery = discovery;
+    this.lifecycle = lifecycle;
     this.scheduler = scheduler;
   }
 
   static async builder(
+    auth: AuthService,
     router: Router,
     logger: LoggerService,
-    discovery: DiscoveryService,
     config: RootConfigService,
-    auth: AuthService,
     database: DatabaseService,
+    discovery: DiscoveryService,
+    lifecycle: LifecycleService,
     scheduler: PluginTaskScheduler,
   ): Promise<PluginInitializer> {
     const instance = new PluginInitializer(
+      auth,
       router,
       logger,
-      discovery,
       config,
-      auth,
       database,
+      discovery,
+      lifecycle,
       scheduler,
     );
     await instance.initialize();
@@ -105,10 +112,12 @@ export class PluginInitializer {
 
   private async initialize() {
     // Initialize logger, config, database and scheduler
+    this.auth = this.dependencies.auth;
     this.logger = this.dependencies.logger;
     this.config = this.dependencies.config;
-    this.auth = this.dependencies.auth;
     this.database = this.dependencies.database;
+    this.discovery = this.dependencies.discovery;
+    this.lifecycle = this.dependencies.lifecycle;
     this.scheduler = this.dependencies.scheduler;
 
     // Initialize TsDatabase and run migrations
@@ -120,27 +129,28 @@ export class PluginInitializer {
     const scaffolderDbInstance = await ScaffolderDatabase.create(
       this.config,
       this.logger,
+      this.lifecycle,
     );
 
     // Initialize handlers
     this.tsHandler = new TimeSaverHandler(
+      this.auth,
       this.logger,
       this.discovery,
-      this.auth,
       timeSaverDbInstance,
     );
-    this.apiHandler = new TsApi(
+    this.apiHandler = new TimeSaverApi(
+      this.auth,
       this.logger,
       this.config,
       this.discovery,
-      this.auth,
       timeSaverDbInstance,
       scaffolderDbInstance,
     );
     this.tsScheduler = new TsScheduler(
+      this.auth,
       this.logger,
       this.discovery,
-      this.auth,
       timeSaverDbInstance,
     );
 
@@ -161,22 +171,25 @@ export class PluginInitializer {
 
   private get dependencies(): PluginDependencies {
     if (
+      !this.auth ||
       !this.router ||
       !this.logger ||
       !this.config ||
-      !this.auth ||
       !this.database ||
+      !this.discovery ||
+      !this.lifecycle ||
       !this.scheduler
     ) {
       throw new Error('PluginInitializer not properly initialized');
     }
     return {
+      auth: this.auth,
       router: this.router,
       logger: this.logger,
-      discovery: this.discovery,
       config: this.config,
-      auth: this.auth,
       database: this.database,
+      discovery: this.discovery,
+      lifecycle: this.lifecycle,
       scheduler: this.scheduler,
     };
   }
@@ -185,7 +198,7 @@ export class PluginInitializer {
     return this.tsHandler;
   }
 
-  get tsApi(): TsApi {
+  get tsApi(): TimeSaverApi {
     return this.apiHandler;
   }
 

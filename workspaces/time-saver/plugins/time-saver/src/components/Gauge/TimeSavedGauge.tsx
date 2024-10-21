@@ -17,10 +17,10 @@ import React, { useEffect, useState } from 'react';
 import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Gauge from './Gauge';
-
-type TimeSavedResponse = {
-  timeSaved: number;
-};
+import {
+  GetTimeSavedSumResponse,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 interface TimeSavedGaugeProps {
   number?: number;
@@ -33,7 +33,7 @@ export function TimeSavedGauge({
 }: TimeSavedGaugeProps): React.ReactElement {
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
-  const [data, setData] = useState<TimeSavedResponse | null>(null);
+  const [data, setData] = useState<GetTimeSavedSumResponse | null>(null);
 
   useEffect(() => {
     let url = `${configApi.getString(
@@ -53,6 +53,11 @@ export function TimeSavedGauge({
   if (!data) {
     return <CircularProgress />;
   }
+
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
+  }
+
   const roundedData = Math.round(data.timeSaved);
 
   return <Gauge number={roundedData} heading={heading} />;

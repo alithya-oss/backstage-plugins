@@ -29,16 +29,13 @@ import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import { getRandomColor } from '../utils';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useTheme } from '@material-ui/core';
+import {
+  GetDailyTimeSummariesByTeamResponse,
+  TimeSummaryByTeamName,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 ChartJS.register(LineElement, PointElement, Title, Tooltip, Legend);
-
-type DailyTimeSummaryResponse = {
-  stats: {
-    date: string;
-    team: string;
-    total_time_saved: number;
-  }[];
-};
 
 interface DailyTimeSummaryLineProps {
   team?: string;
@@ -50,7 +47,9 @@ export function DailyTimeSummaryLineChartTeamWise({
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
 
-  const [data, setData] = useState<DailyTimeSummaryResponse | null>(null);
+  const [data, setData] = useState<GetDailyTimeSummariesByTeamResponse | null>(
+    null,
+  );
   const theme = useTheme();
   useEffect(() => {
     fetchApi
@@ -61,12 +60,14 @@ export function DailyTimeSummaryLineChartTeamWise({
       )
       .then(response => response.json())
       .then(dt => {
-        dt.stats.sort(
-          (
-            a: { date: string | number | Date },
-            b: { date: string | number | Date },
-          ) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-        );
+        if (dt.stats) {
+          dt.stats.sort(
+            (
+              a: { date: string | number | Date },
+              b: { date: string | number | Date },
+            ) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+          );
+        }
         setData(dt);
       })
       .catch();
@@ -75,7 +76,12 @@ export function DailyTimeSummaryLineChartTeamWise({
   if (!data) {
     return <CircularProgress />;
   }
-  let filteredData: DailyTimeSummaryResponse;
+
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
+  }
+
+  let filteredData: GetDailyTimeSummariesByTeamResponse;
   if (team) {
     filteredData = {
       stats: data.stats.filter(stat => stat.team === team),
@@ -133,15 +139,10 @@ export function DailyTimeSummaryLineChartTeamWise({
     datasets: uniqueTeams.map(tm => {
       const templateData = filteredData.stats
         .filter((stat: { team: string | undefined }) => stat.team === tm)
-        .map(
-          (stat: {
-            date: string | undefined;
-            total_time_saved: number | undefined;
-          }) => ({
-            x: stat.date,
-            y: stat.total_time_saved,
-          }),
-        );
+        .map((stat: TimeSummaryByTeamName) => ({
+          x: stat.date,
+          y: stat.totalTimeSaved,
+        }));
 
       return {
         label: tm,

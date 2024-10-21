@@ -24,15 +24,12 @@ import {
   InputLabel,
   MenuItem,
 } from '@material-ui/core';
+import { GetAllGroupsResponse } from '@alithya-oss/plugin-time-saver-common';
 
 interface TeamSelectorProps {
   onTeamChange: (team: string) => void;
   onClearButtonClick?: () => void;
 }
-
-type GroupsResponse = {
-  groups: string[];
-};
 
 export default function TeamSelector({
   onTeamChange,
@@ -56,7 +53,7 @@ export default function TeamSelector({
     onClearButtonClick?.();
   };
 
-  const [data, setData] = useState<GroupsResponse | null>(null);
+  const [data, setData] = useState<GetAllGroupsResponse | null>(null);
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
 

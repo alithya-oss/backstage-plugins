@@ -35,7 +35,7 @@ import { TemplateWiseTimeSummaryLinearChart } from '../TemplateWiseTimeSummaryLi
 import TemplateAutocomplete from '../TemplateAutocompleteComponent/TemplateAutocompleteComponent';
 import { ByTemplateBarChart } from '../ByTemplateBarCharComponent/ByTemplateBarChartComponent';
 import StatsTable from '../Table/StatsTable';
-import { TemplateCountGauge } from '../Gauge/TemplatesTaskCountGauge';
+import { TemplateCountGauge } from '../Gauge/TemplateCountGauge';
 import { TimeSavedGauge } from '../Gauge/TimeSavedGauge';
 import { TeamsGauge } from '../Gauge/TeamsGauge';
 import { TemplatesGauge } from '../Gauge/TemplatesGauge';

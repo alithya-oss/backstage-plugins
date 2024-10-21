@@ -19,17 +19,18 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import { DataGrid, GridColDef, GridSortModel } from '@mui/x-data-grid';
 import { useTheme, Paper } from '@material-ui/core';
+import {
+  GetAllStatsResponse,
+  TimeSaverApiErrorResponse,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 type Stat = {
   id: string;
-  sum: number;
   team: string;
-  template_name: string;
+  timeSaved: number;
+  templateName: string;
   [key: string]: string | number;
-};
-
-type AllStatsChartResponse = {
-  stats: Stat[];
 };
 
 interface StatsTableProps {
@@ -38,9 +39,11 @@ interface StatsTableProps {
 }
 
 const StatsTable: React.FC<StatsTableProps> = ({ team, template_name }) => {
-  const [data, setData] = useState<Stat[] | null>(null);
+  const [data, setData] = useState<Stat[] | TimeSaverApiErrorResponse | null>(
+    null,
+  );
   const [sortModel, setSortModel] = useState<GridSortModel>([
-    { field: 'sum', sort: 'asc' },
+    { field: 'timeSaved', sort: 'asc' },
   ]);
 
   const configApi = useApi(configApiRef);
@@ -61,13 +64,15 @@ const StatsTable: React.FC<StatsTableProps> = ({ team, template_name }) => {
     fetchApi
       .fetch(url)
       .then(response => response.json())
-      .then((dt: AllStatsChartResponse) => {
-        const statsWithIds = dt.stats.map((stat, index) => ({
-          ...stat,
-          id: index.toString(),
-        }));
+      .then((dt: GetAllStatsResponse | TimeSaverApiErrorResponse) => {
+        const statsWithIds = !isTimeSaverApiError(dt)
+          ? dt.stats.map((stat, index) => ({
+              ...stat,
+              id: index.toString(),
+            }))
+          : dt;
         setData(statsWithIds);
-        setSortModel([{ field: 'sum', sort: 'desc' }]);
+        setSortModel([{ field: 'timeSaved', sort: 'desc' }]);
       })
       .catch();
   }, [configApi, team, template_name, fetchApi]);
@@ -76,15 +81,24 @@ const StatsTable: React.FC<StatsTableProps> = ({ team, template_name }) => {
     return <CircularProgress />;
   }
 
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
+  }
+
   const columns: GridColDef[] = [
-    { field: 'team', headerName: 'Team', flex: 1, sortable: true },
     {
-      field: 'template_name',
+      field: 'team',
+      headerName: 'Team',
+      flex: 1,
+      sortable: true,
+    },
+    {
+      field: 'templateName',
       headerName: 'Template Name',
       flex: 1,
       sortable: true,
     },
-    { field: 'sum', headerName: 'Sum', flex: 1, sortable: true },
+    { field: 'timeSaved', headerName: 'Sum', flex: 1, sortable: true },
   ].filter(col => data.some(row => !!row[col.field]));
 
   return (

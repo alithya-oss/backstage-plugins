@@ -23,6 +23,7 @@ import {
   UrlReaderService,
   HttpAuthService,
   DatabaseService,
+  LifecycleService,
 } from '@backstage/backend-plugin-api';
 import {
   errorHandler,
@@ -34,17 +35,17 @@ import Router from 'express-promise-router';
 import { PluginInitializer } from './pluginInitializer';
 
 /**
- *
  * @public
  */
 export interface RouterOptions {
+  auth?: AuthService;
   logger: LoggerService;
   config: RootConfigService;
-  discovery: DiscoveryService;
   database: DatabaseService;
+  discovery: DiscoveryService;
+  lifecycle: LifecycleService;
   scheduler: PluginTaskScheduler;
   urlReader: UrlReaderService;
-  auth?: AuthService;
   httpAuth?: HttpAuthService;
 }
 
@@ -55,22 +56,22 @@ function registerRouter() {
 }
 
 /**
- *
  * @public
  */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { logger, discovery, config, database, scheduler } = options;
+  const { logger, config, database, discovery, scheduler, lifecycle } = options;
   const baseRouter = registerRouter();
   const { auth } = createLegacyAuthAdapters(options);
   const plugin = await PluginInitializer.builder(
+    auth,
     baseRouter,
     logger,
-    discovery,
     config,
-    auth,
     database,
+    discovery,
+    lifecycle,
     scheduler,
   );
   const router = plugin.timeSaverRouter;
@@ -79,7 +80,6 @@ export async function createRouter(
 }
 
 /**
- *
  * @public
  */
 export const timeSaverPlugin = createBackendPlugin({
@@ -87,12 +87,13 @@ export const timeSaverPlugin = createBackendPlugin({
   register(env) {
     env.registerInit({
       deps: {
-        logger: coreServices.logger,
-        discovery: coreServices.discovery,
-        config: coreServices.rootConfig,
         auth: coreServices.auth,
-        scheduler: coreServices.scheduler,
+        logger: coreServices.logger,
+        config: coreServices.rootConfig,
         database: coreServices.database,
+        discovery: coreServices.discovery,
+        lifecycle: coreServices.lifecycle,
+        scheduler: coreServices.scheduler,
         http: coreServices.httpRouter,
         httpRouter: coreServices.httpRouter,
         urlReader: coreServices.urlReader,
@@ -100,21 +101,23 @@ export const timeSaverPlugin = createBackendPlugin({
       async init({
         auth,
         config,
-        discovery,
         logger,
-        scheduler,
         database,
+        discovery,
+        lifecycle,
+        scheduler,
         http,
         httpRouter,
       }) {
         const baseRouter = registerRouter();
         const plugin = await PluginInitializer.builder(
+          auth,
           baseRouter,
           logger,
-          discovery,
           config,
-          auth,
           database,
+          discovery,
+          lifecycle,
           scheduler,
         );
         const router = plugin.timeSaverRouter;

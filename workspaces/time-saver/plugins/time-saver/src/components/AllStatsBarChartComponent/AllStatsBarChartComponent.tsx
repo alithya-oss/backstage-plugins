@@ -28,22 +28,18 @@ import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import { getRandomColor } from '../utils';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useTheme } from '@material-ui/core';
+import {
+  GetAllStatsResponse,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
-
-type AllStatsChartResponse = {
-  stats: {
-    sum: number;
-    team: string;
-    template_name: string;
-  }[];
-};
 
 export function AllStatsBarChart(): React.ReactElement {
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
 
-  const [data, setData] = useState<AllStatsChartResponse | null>(null);
+  const [data, setData] = useState<GetAllStatsResponse | null>(null);
   const theme = useTheme();
 
   useEffect(() => {
@@ -58,6 +54,10 @@ export function AllStatsBarChart(): React.ReactElement {
 
   if (!data) {
     return <CircularProgress />;
+  }
+
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
   }
 
   const options: ChartOptions<'bar'> = {
@@ -103,7 +103,7 @@ export function AllStatsBarChart(): React.ReactElement {
 
   const labels = Array.from(new Set(data.stats.map(stat => stat.team)));
   const datasets = Array.from(
-    new Set(data.stats.map(stat => stat.template_name)),
+    new Set(data.stats.map(stat => stat.templateName)),
   );
 
   const backgroundColors = datasets.map(() => getRandomColor());
@@ -115,9 +115,9 @@ export function AllStatsBarChart(): React.ReactElement {
       data: labels.map(team =>
         data.stats
           .filter(
-            stat => stat.team === team && stat.template_name === templateName,
+            stat => stat.team === team && stat.templateName === templateName,
           )
-          .reduce((sum, stat) => sum + stat.sum, 0),
+          .reduce((sum, stat) => sum + stat.timeSaved, 0),
       ),
       backgroundColor: backgroundColors[index],
     })),

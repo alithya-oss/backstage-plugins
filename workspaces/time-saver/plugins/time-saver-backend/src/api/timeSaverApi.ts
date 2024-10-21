@@ -22,6 +22,29 @@ import {
 import { ScaffolderClient } from './scaffolderClient';
 import { ScaffolderStore } from '../database/ScaffolderDatabase';
 import { TimeSaverStore } from '../database/TimeSaverDatabase';
+import {
+  DEFAULT_SAMPLE_CLASSIFICATION,
+  DEFAULT_SAMPLE_TEMPLATES_TASKS,
+} from './defaultValues';
+import {
+  GetAllStatsResponse,
+  DatabaseErrorResponse,
+  GetStatsByTemplateResponse,
+  GetStatsByTeamResponse,
+  GetStatsByTemplateTaskIdResponse,
+  GetGroupDivisionStatsResponse,
+  GetDailyTimeSummariesByTeamResponse,
+  GetDailyTimeSummariesByTemplateResponse,
+  GetTimeSavedSummaryByTeamResponse,
+  GetTimeSavedSummaryByTemplateResponse,
+  GetAllGroupsResponse,
+  GetAllTemplateNamesResponse,
+  GetAllTemplateTasksResponse,
+  GetTemplateCountResponse,
+  GetTimeSavedSumResponse,
+  isTemplateTaskResponse,
+  TimeSaverApiErrorResponse,
+} from '@alithya-oss/plugin-time-saver-common';
 
 export interface TemplateSpecs {
   specs: {
@@ -39,119 +62,245 @@ export interface SampleMigrationClassificationConfigOptions {
   useScaffolderTasksEntries?: boolean;
 }
 
-const DEFAULT_SAMPLE_CLASSIFICATION = {
-  engineering: {
-    devops: 8,
-    development_team: 8,
-    security: 3,
-  },
+const TimeSaverApiError = Error;
+
+interface ITimeSaverApiErrorResponse {
+  error: Error;
+  errorMessage: string;
+}
+
+const TemplateTaskIdNotFoundError: ITimeSaverApiErrorResponse = {
+  error: TimeSaverApiError('Template task ID not found'),
+  errorMessage: 'Template task ID not found',
+};
+const EmptyDatabaseError: ITimeSaverApiErrorResponse = {
+  error: TimeSaverApiError('Plugin database is empty'),
+  errorMessage: 'Plugin database is empty',
+};
+const NoStatisticsFoundError: ITimeSaverApiErrorResponse = {
+  error: TimeSaverApiError('No statistics found'),
+  errorMessage: 'No statistics found',
+};
+const DatabaseError: ITimeSaverApiErrorResponse = {
+  error: TimeSaverApiError('Database error'),
+  errorMessage: 'Database error',
 };
 
-const DEFAULT_SAMPLE_TEMPLATES_TASKS = [
-  'template:default/create-github-project',
-  'template:default/create-nodejs-service',
-  'template:default/create-golang-service',
-];
-
-export class TsApi {
+export class TimeSaverApi {
   constructor(
+    private readonly auth: AuthService,
     private readonly logger: LoggerService,
     private readonly config: RootConfigService,
     private readonly discovery: DiscoveryService,
-    private readonly auth: AuthService,
     private readonly timeSaverDb: TimeSaverStore,
     private readonly scaffolderDb: ScaffolderStore,
   ) {}
-  private readonly tsTableName = 'ts_template_time_savings';
 
-  public async getStatsByTemplateTaskId(templateTaskId: string) {
-    const templateName = await this.timeSaverDb.getTemplateNameByTsId(
+  ok<T>(result: T, logMessage?: string): T {
+    this.logger.debug(
+      `${logMessage ? `${logMessage} ` : ''}${JSON.stringify(result)}`,
+    );
+    return result;
+  }
+
+  fail(errorResponse: ITimeSaverApiErrorResponse, origin: string = '') {
+    const { error, errorMessage } = errorResponse;
+    this.logger.error(
+      `${origin !== '' ? `[${origin}] - ` : ''}${errorMessage}`,
+      error ? (error as Error) : undefined,
+    );
+    return {
+      errorMessage,
+    };
+  }
+
+  public async getStatsByTemplateTaskId(
+    templateTaskId: string,
+  ): Promise<GetStatsByTemplateTaskIdResponse | DatabaseErrorResponse> {
+    const templateName = await this.timeSaverDb.getTemplateNameByTemplateTaskId(
       templateTaskId,
     );
+    if (templateName === undefined) {
+      return this.fail(TemplateTaskIdNotFoundError, 'getStatsByTemplateTaskId');
+    }
     const queryResult = await this.timeSaverDb.getStatsByTemplateTaskId(
       templateTaskId,
     );
-    const outputBody = {
+    if (queryResult === undefined) {
+      return this.fail(NoStatisticsFoundError, 'getStatsByTemplateTaskId');
+    }
+    return this.ok<GetStatsByTemplateTaskIdResponse>({
       templateTaskId: templateTaskId,
       templateName: templateName,
       stats: queryResult,
-    };
-    this.logger.debug(JSON.stringify(outputBody));
-    return outputBody;
+    });
   }
 
-  public async getStatsByTeam(team: string) {
+  public async getStatsByTeam(
+    team: string,
+  ): Promise<GetStatsByTeamResponse | DatabaseErrorResponse> {
     const queryResult = await this.timeSaverDb.getStatsByTeam(team);
-    const outputBody = {
+    if (queryResult === undefined) {
+      return this.fail(NoStatisticsFoundError, 'getStatsByTeam');
+    }
+    return this.ok<GetStatsByTeamResponse>({
       team: team,
       stats: queryResult,
-    };
-    this.logger.debug(JSON.stringify(outputBody));
-    return outputBody;
+    });
   }
 
-  public async getStatsByTemplate(template: string) {
+  public async getStatsByTemplate(
+    template: string,
+  ): Promise<GetStatsByTemplateResponse | DatabaseErrorResponse> {
     const queryResult = await this.timeSaverDb.getStatsByTemplate(template);
-    const outputBody = {
-      template_name: template,
+    if (queryResult === undefined) {
+      return this.fail(NoStatisticsFoundError, 'getStatsByTemplate');
+    }
+    return this.ok<GetStatsByTemplateResponse>({
+      templateName: template,
       stats: queryResult,
-    };
-    this.logger.debug(JSON.stringify(outputBody));
-    return outputBody;
+    });
   }
 
-  public async getAllStats() {
+  public async getAllStats(): Promise<
+    GetAllStatsResponse | DatabaseErrorResponse
+  > {
     const queryResult = await this.timeSaverDb.getAllStats();
-    const outputBody = {
+    if (queryResult === undefined) {
+      return this.fail(EmptyDatabaseError, 'getAllStats');
+    }
+    return this.ok<GetAllStatsResponse>({
       stats: queryResult,
-    };
-    this.logger.debug(JSON.stringify(outputBody));
-    return outputBody;
+    });
   }
 
-  public async getGroupDivisionStats() {
+  public async getGroupDivisionStats(): Promise<
+    GetGroupDivisionStatsResponse | DatabaseErrorResponse
+  > {
     const queryResult = await this.timeSaverDb.getGroupSavingsDivision();
-    const outputBody = {
+    if (queryResult === undefined) {
+      return this.fail(EmptyDatabaseError, 'getGroupDivisionStats');
+    }
+    return this.ok<GetGroupDivisionStatsResponse>({
       stats: queryResult,
-    };
-    this.logger.debug(JSON.stringify(outputBody));
-    return outputBody;
+    });
   }
 
-  public async getDailyTimeSummariesTeamWise() {
-    const queryResult = await this.timeSaverDb.getDailyTimeSummariesTeamWise();
-    const outputBody = {
+  public async getDailyTimeSummariesByTeam(): Promise<
+    GetDailyTimeSummariesByTeamResponse | DatabaseErrorResponse
+  > {
+    const queryResult = await this.timeSaverDb.getDailyTimeSummariesByTeam();
+    if (queryResult === undefined) {
+      return this.fail(EmptyDatabaseError, 'getDailyTimeSummariesByTeam');
+    }
+    return this.ok<GetDailyTimeSummariesByTeamResponse>({
       stats: queryResult,
-    };
-    this.logger.debug(JSON.stringify(outputBody));
-    return outputBody;
-  }
-  public async getDailyTimeSummariesTemplateWise() {
-    const queryResult =
-      await this.timeSaverDb.getDailyTimeSummariesTemplateWise();
-    const outputBody = {
-      stats: queryResult,
-    };
-    this.logger.debug(JSON.stringify(outputBody));
-    return outputBody;
+    });
   }
 
-  public async getTimeSummarySavedTeamWise() {
-    const queryResult = await this.timeSaverDb.getTimeSummarySavedTeamWise();
-    const outputBody = {
-      stats: queryResult,
-    };
-    this.logger.debug(JSON.stringify(outputBody));
-    return outputBody;
-  }
-  public async getTimeSummarySavedTemplateWise() {
+  public async getDailyTimeSummariesByTemplate(): Promise<
+    GetDailyTimeSummariesByTemplateResponse | DatabaseErrorResponse
+  > {
     const queryResult =
-      await this.timeSaverDb.getTimeSummarySavedTemplateWise();
-    const outputBody = {
+      await this.timeSaverDb.getDailyTimeSummariesByTemplate();
+    if (queryResult === undefined) {
+      return this.fail(EmptyDatabaseError, 'getDailyTimeSummariesByTemplate');
+    }
+    return this.ok<GetDailyTimeSummariesByTemplateResponse>({
       stats: queryResult,
-    };
-    this.logger.debug(JSON.stringify(outputBody));
-    return outputBody;
+    });
+  }
+
+  public async getTimeSavedSummaryByTeam(): Promise<
+    GetTimeSavedSummaryByTeamResponse | DatabaseErrorResponse
+  > {
+    const queryResult = await this.timeSaverDb.getTimeSavedSummaryByTeam();
+    if (queryResult === undefined) {
+      return this.fail(EmptyDatabaseError, 'getTimeSavedSummaryByTeam');
+    }
+    return this.ok<GetTimeSavedSummaryByTeamResponse>({
+      stats: queryResult,
+    });
+  }
+
+  public async getTimeSavedSummaryByTemplate(): Promise<
+    GetTimeSavedSummaryByTemplateResponse | DatabaseErrorResponse
+  > {
+    const queryResult = await this.timeSaverDb.getTimeSavedSummaryByTemplate();
+    if (queryResult === undefined) {
+      return this.fail(EmptyDatabaseError, 'getTimeSavedSummaryByTemplate');
+    }
+    return this.ok<GetTimeSavedSummaryByTemplateResponse>({
+      stats: queryResult,
+    });
+  }
+
+  public async getAllGroups(): Promise<
+    GetAllGroupsResponse | TimeSaverApiErrorResponse
+  > {
+    const queryResult = (await this.timeSaverDb.getDistinctColumn('team')) as
+      | { team: string[] }
+      | undefined;
+    if (!queryResult) {
+      return this.fail(EmptyDatabaseError, 'getAllGroups');
+    }
+    return this.ok<GetAllGroupsResponse>({
+      groups: queryResult.team,
+    });
+  }
+
+  public async getAllTemplateNames(): Promise<
+    GetAllTemplateNamesResponse | TimeSaverApiErrorResponse
+  > {
+    const queryResult = (await this.timeSaverDb.getDistinctColumn(
+      'template_name',
+    )) as { template_name: string[] } | undefined;
+    if (!queryResult) {
+      return this.fail(EmptyDatabaseError, 'getAllTemplateNames');
+    }
+    return this.ok<GetAllTemplateNamesResponse>({
+      templates: queryResult.template_name,
+    });
+  }
+
+  public async getAllTemplateTasks(): Promise<
+    GetAllTemplateTasksResponse | TimeSaverApiErrorResponse
+  > {
+    const queryResult = (await this.timeSaverDb.getDistinctColumn(
+      'template_task_id',
+    )) as { template_task_id: string[] } | undefined;
+    if (!queryResult) {
+      return this.fail(EmptyDatabaseError, 'getAllTemplateTasks');
+    }
+    return this.ok<GetAllTemplateTasksResponse>({
+      templateTasks: queryResult.template_task_id,
+    });
+  }
+
+  public async getTemplateCount(): Promise<
+    GetTemplateCountResponse | DatabaseErrorResponse
+  > {
+    const queryResult = await this.timeSaverDb.getTemplateCount();
+    if (queryResult === undefined) {
+      return this.fail(DatabaseError, 'getTemplateCount');
+    }
+    this.logger.debug(`${typeof queryResult === 'number'}`);
+    return this.ok<GetTemplateCountResponse>({
+      count: queryResult,
+    });
+  }
+
+  public async getTimeSavedSum(
+    divider?: number,
+  ): Promise<GetTimeSavedSumResponse | DatabaseErrorResponse> {
+    const dividerInt = divider ?? 1;
+    const queryResult = await this.timeSaverDb.getTimeSavedSum();
+    if (queryResult === undefined) {
+      return this.fail(DatabaseError, 'getTimeSavedSum');
+    }
+    return this.ok<GetTimeSavedSumResponse>({
+      timeSaved: queryResult ? queryResult / dividerInt : queryResult,
+    });
   }
 
   public async getSampleMigrationClassificationConfig(
@@ -174,9 +323,16 @@ export class TsApi {
 
     const sampleClassification =
       customClassificationRequest || DEFAULT_SAMPLE_CLASSIFICATION;
-    const templatesList = options?.useScaffolderTasksEntries
-      ? (await this.getAllTemplateTasks()).templateTasks
-      : DEFAULT_SAMPLE_TEMPLATES_TASKS;
+
+    let templatesList: string[] = [];
+    if (options?.useScaffolderTasksEntries) {
+      const templateTaskResponse = await this.getAllTemplateTasks();
+      if (isTemplateTaskResponse(templateTaskResponse)) {
+        templatesList = templateTaskResponse.templateTasks;
+      } else {
+        templatesList = DEFAULT_SAMPLE_TEMPLATES_TASKS;
+      }
+    }
     this.logger.debug(
       `Generating sample classification configuration with ${
         options?.useScaffolderTasksEntries ? 'scaffolder DB' : 'user-defined'
@@ -293,8 +449,8 @@ export class TsApi {
 
       this.logger.info(`Starting backward migration`);
       const taskTemplateList = await new ScaffolderClient(
-        this.logger,
         this.auth,
+        this.logger,
         this.discovery,
       ).fetchTemplatesFromScaffolder();
       for (let i = 0; i < taskTemplateList.length; i++) {
@@ -378,165 +534,12 @@ export class TsApi {
       );
       return {
         status: 'error',
-        error: error as Error,
+        error: error ? (error as Error) : undefined,
       };
     }
     return {
       status: 'SUCCESS',
       migrationStatisticsReport,
     };
-  }
-
-  public async getAllGroups() {
-    let groups: string[];
-    let outputBody: {
-      groups: string[];
-      errorMessage: string;
-    } = {
-      groups: [],
-      errorMessage: '',
-    };
-
-    const queryResult = await this.timeSaverDb.getDistinctColumn(
-      this.tsTableName,
-      'team',
-    );
-
-    if (queryResult && queryResult.length > 0) {
-      groups = queryResult.map(row => row.team);
-      outputBody = {
-        ...outputBody,
-        groups,
-      };
-      this.logger.debug(JSON.stringify(outputBody));
-    } else {
-      const errorMessage = 'getAllGroups - DB returned 0 rows';
-      outputBody = {
-        ...outputBody,
-        errorMessage,
-      };
-      this.logger.warn(errorMessage);
-    }
-    return outputBody;
-  }
-
-  public async getAllTemplateNames() {
-    let templates: string[];
-    let outputBody: {
-      templates: string[];
-      errorMessage: string;
-    } = {
-      templates: [],
-      errorMessage: '',
-    };
-
-    const queryResult = await this.timeSaverDb.getDistinctColumn(
-      this.tsTableName,
-      'template_name',
-    );
-
-    if (queryResult && queryResult.length > 0) {
-      templates = queryResult.map(row => row.template_name);
-      outputBody = {
-        ...outputBody,
-        templates,
-      };
-      this.logger.debug(JSON.stringify(outputBody));
-    } else {
-      const errorMessage = 'getAllGroups - DB returned 0 rows';
-      outputBody = {
-        ...outputBody,
-        errorMessage,
-      };
-      this.logger.warn(errorMessage);
-    }
-    return outputBody;
-  }
-
-  public async getAllTemplateTasks() {
-    let templateTasks: string[];
-    let outputBody: {
-      templateTasks: string[];
-      errorMessage: string;
-    } = {
-      templateTasks: [],
-      errorMessage: '',
-    };
-
-    const queryResult = await this.timeSaverDb.getDistinctColumn(
-      this.tsTableName,
-      'template_task_id',
-    );
-
-    if (queryResult && queryResult.length > 0) {
-      templateTasks = queryResult.map(row => row.template_task_id);
-      outputBody = {
-        ...outputBody,
-        templateTasks,
-      };
-      this.logger.debug(JSON.stringify(outputBody));
-    } else {
-      const errorMessage = 'getAllGroups - DB returned 0 rows';
-      outputBody = {
-        ...outputBody,
-        errorMessage,
-      };
-      this.logger.warn(errorMessage);
-    }
-    return outputBody;
-  }
-
-  public async getTemplateCount() {
-    let outputBody;
-    const queryResult = (await this.timeSaverDb.getTemplateCount()) as {
-      count: string;
-    }[];
-
-    if (queryResult && queryResult?.length > 0) {
-      outputBody = {
-        templateTasks: parseInt(queryResult[0].count, 10),
-      };
-      this.logger.debug(`getTemplateCount: ${JSON.stringify(outputBody)}`);
-    } else {
-      const errorMessage = 'getTemplateCount did not return any results';
-      outputBody = {
-        templateTasks: 0,
-        errorMessage,
-      };
-      this.logger.warn(errorMessage);
-    }
-
-    return outputBody;
-  }
-
-  // public async getTimeSavedSum(divider?: number): Promise<{ timeSaved?: number | undefined; errorMessage?: string | undefined }> {
-  public async getTimeSavedSum(divider?: number) {
-    let outputBody: {
-      timeSaved?: number;
-      errorMessage?: string;
-    } = {
-      timeSaved: 0,
-      errorMessage: '',
-    };
-
-    const dividerInt = divider ?? 1;
-    const queryResult = await this.timeSaverDb.getTimeSavedSum(
-      this.tsTableName,
-      'time_saved',
-    );
-
-    if (queryResult && queryResult.length > 0) {
-      outputBody = {
-        timeSaved: queryResult[0].sum / dividerInt,
-      };
-      this.logger.debug(JSON.stringify(outputBody));
-    } else {
-      const errorMessage = 'getTimeSavedSum - DB returned 0 rows';
-      outputBody = {
-        errorMessage,
-      };
-      this.logger.warn(errorMessage);
-    }
-    return outputBody;
   }
 }

@@ -26,21 +26,18 @@ import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import { getRandomColor } from '../utils';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useTheme } from '@material-ui/core';
+import {
+  GetGroupDivisionStatsResponse,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 ChartJS.register(Title, Tooltip, ArcElement);
-
-type GroupDivisionPieChartResponse = {
-  stats: {
-    percentage: string;
-    team: string;
-  }[];
-};
 
 export function GroupDivisionPieChart(): React.ReactElement {
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
 
-  const [data, setData] = useState<GroupDivisionPieChartResponse | null>(null);
+  const [data, setData] = useState<GetGroupDivisionStatsResponse | null>(null);
   const theme = useTheme();
 
   useEffect(() => {
@@ -57,6 +54,10 @@ export function GroupDivisionPieChart(): React.ReactElement {
 
   if (!data) {
     return <CircularProgress />;
+  }
+
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
   }
 
   const options: ChartOptions<'pie'> = {
@@ -76,7 +77,7 @@ export function GroupDivisionPieChart(): React.ReactElement {
   };
 
   const labels = data.stats.map(stat => stat.team);
-  const percentages = data.stats.map(stat => parseFloat(stat.percentage));
+  const percentages = data.stats.map(stat => stat.percentage);
 
   const backgroundColors = Array.from({ length: labels.length }, () =>
     getRandomColor(),

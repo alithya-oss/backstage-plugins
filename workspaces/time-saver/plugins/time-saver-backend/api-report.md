@@ -4,11 +4,12 @@
 
 ```ts
 import { AuthService } from '@backstage/backend-plugin-api';
-import { BackendFeatureCompat } from '@backstage/backend-plugin-api';
+import { BackendFeature } from '@backstage/backend-plugin-api';
 import { DatabaseService } from '@backstage/backend-plugin-api';
 import { DiscoveryService } from '@backstage/backend-plugin-api';
 import express from 'express';
 import { HttpAuthService } from '@backstage/backend-plugin-api';
+import { LifecycleService } from '@backstage/backend-plugin-api';
 import { LoggerService } from '@backstage/backend-plugin-api';
 import { PluginTaskScheduler } from '@backstage/backend-tasks';
 import { RootConfigService } from '@backstage/backend-plugin-api';
@@ -30,6 +31,8 @@ export interface RouterOptions {
   // (undocumented)
   httpAuth?: HttpAuthService;
   // (undocumented)
+  lifecycle: LifecycleService;
+  // (undocumented)
   logger: LoggerService;
   // (undocumented)
   scheduler: PluginTaskScheduler;
@@ -38,7 +41,7 @@ export interface RouterOptions {
 }
 
 // @public (undocumented)
-const timeSaverPlugin: BackendFeatureCompat;
+const timeSaverPlugin: BackendFeature;
 export default timeSaverPlugin;
 export { timeSaverPlugin };
 

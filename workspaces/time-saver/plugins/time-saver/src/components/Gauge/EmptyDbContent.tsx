@@ -24,16 +24,16 @@ import {
   TableContainer,
   TableRow,
 } from '@material-ui/core';
-
-type TemplatesResponse = {
-  templates: string[];
-};
+import {
+  GetAllTemplateNamesResponse,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 export function EmptyTimeSaver(): React.ReactElement {
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
 
-  const [data, setData] = useState<TemplatesResponse | null>(null);
+  const [data, setData] = useState<GetAllTemplateNamesResponse | null>(null);
 
   useEffect(() => {
     const url = `${configApi.getString(
@@ -50,6 +50,11 @@ export function EmptyTimeSaver(): React.ReactElement {
   if (!data) {
     return <CircularProgress />;
   }
+
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
+  }
+
   const cellStyle: React.CSSProperties = {
     color: 'red',
     fontWeight: 'bold',
