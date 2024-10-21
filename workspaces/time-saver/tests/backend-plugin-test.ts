@@ -25,8 +25,7 @@ test.describe('Time Saver API tests', () => {
       baseURL: 'http://localhost:7007/api/time-saver', // Update with actual base URL
       extraHTTPHeaders: {
         'Content-Type': 'application/json',
-        Authorization:
-          'Bearer eyJ0eXAiOiJ2bmQuYmFja3N0YWdlLnVzZXIiLCJhbGciOiJFUzI1NiIsImtpZCI6ImFjMjI4MDBlLWJjYzYtNGIzZS04Nzk0LTNhOTgxZmYyNWJiZSJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjcwMDcvYXBpL2F1dGgiLCJzdWIiOiJ1c2VyOmRldmVsb3BtZW50L2d1ZXN0IiwiZW50IjpbInVzZXI6ZGV2ZWxvcG1lbnQvZ3Vlc3QiXSwiYXVkIjoiYmFja3N0YWdlIiwiaWF0IjoxNzI4OTIyNzI5LCJleHAiOjE3Mjg5MjYzMjksInVpcCI6ImY1Uk1CVzVPZ3NqMTg0ekhFaEk5LU0wclZrV1lSeDIxaXF4dWFIbXVJZHYwckYxMThUNXRNSFhMY2RUQk5nM3JKbHlZV1hrUVhhdlI1eHhQRDRmUE9BIn0.F7Ovv1NYff8B5Nq4oqmgVyY6pbrWBHQfIQkvd7_bFMPRAX6YgQF_WpMFsNDAMtpHruZTDYj8jq270t5aJ-ZVnQ', // Replace with your token if required
+        Authorization: 'Bearer ...', // Replace with your token if required
       },
     });
   });
