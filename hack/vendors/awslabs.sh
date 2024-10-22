@@ -134,7 +134,7 @@ function sync_harmonix() {
 
 function sync_harmonix_reference_repo() {
     GITLAB_HOSTNAME=${GITLAB_HOSTNAME:-'gitlab.com'}
-    GITLAB_GROUP=${GITLAB_GROUP:-'alithya-csna/cloud/toolbox/harmonix'}
+    GITLAB_GROUP=${GITLAB_GROUP:-'alithya-csna/cloud/aws/harmonix'}
     AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID:-'123456789012'}
 
     mkdir -p .tmp/harmonix/${VERSION}
@@ -152,19 +152,23 @@ function sync_harmonix_reference_repo() {
     rsync -av \
         .tmp/harmonix/${VERSION/"/"/"-"}/iac/roots/* \
         ./workspaces/aws/reference/environments
-    
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "" "s#{{ *gitlab_hostname *}}#$GITLAB_HOSTNAME#g" {} +;
-        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "" "s#{{ *awsAccount *}}#$AWS_ACCOUNT_ID#g" {} +;
 
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "" "s#{{ *gitlab_hostname *}}#$GITLAB_HOSTNAME#g" {} +; 
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "" "s#{{ *awsAccount *}}#$AWS_ACCOUNT_ID#g" {} +; 
+
+        find ./workspaces/aws/reference -type f -name "*.yml" -exec sed -i "" "s#opa-admin\/backstage-reference#${GITLAB_GROUP}/reference#g" {} +;
         find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "" "s#opa-admin\/backstage-reference#${GITLAB_GROUP}/reference#g" {} +;
         find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "" "s#aws-environment-providers#$GITLAB_GROUP#g" {} +;
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "" "s#\/opa\/#/harmonix/#g" {} +;
     else
-        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "s#{{ *gitlab_hostname *}}#$GITLAB_HOSTNAME#g" {} +;
-        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "s#{{ *awsAccount *}}#$AWS_ACCOUNT_ID#g" {} +;
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "s#{{ *gitlab_hostname *}}#$GITLAB_HOSTNAME#g" {} +; 
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "s#{{ *awsAccount *}}#$AWS_ACCOUNT_ID#g" {} +; 
 
+        find ./workspaces/aws/reference -type f -name "*.yml" -exec sed -i "s#opa-admin\/backstage-reference#${GITLAB_GROUP}/reference#g" {} +;
         find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "s#opa-admin\/backstage-reference#$GITLAB_GROUP/reference#g" {} +;
         find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "s#aws-environment-providers#$GITLAB_GROUP#g" {} +;
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "s#\/opa\/#/harmonix/#g" {} +;
     fi
 }
 
