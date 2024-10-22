@@ -13,6 +13,8 @@ Variable | Description | Default | Documentation
 --- | --- | --- | ---
 `AUTOMATION_KEY` | Key used by piplines to interact with Backstage | _none_ | [doc](https://backstage.io/docs/auth/service-to-service-auth#static-tokens)
 `SESSION_TOKEN` | Enables user sessions support for OIDC providers | _none_ | [doc](https://backstage.io/docs/auth/service-to-service-auth#static-tokens)
+`POSTGRES_HOST` | Hostname, IP address or FQDN of the PostgreSQL database server | `localhost` | [doc](https://backstage.io/docs/tutorials/switching-sqlite-postgres)
+`POSTGRES_PORT` | TCP listen port of the PostgreSQL database server | `5432` | [doc](https://backstage.io/docs/tutorials/switching-sqlite-postgres)
 `POSTGRES_DB` | Name of the PostgreSQL database | `postgres` | [doc](https://backstage.io/docs/tutorials/switching-sqlite-postgres)
 `POSTGRES_USER` | Name of the PostgreSQL used to connect to the database | `backstage` | [doc](https://backstage.io/docs/tutorials/switching-sqlite-postgres)
 `POSTGRES_PASSWORD` | Password of the `POSTGRES_USER` used to connect to the database | `B4ck5t4g3Us3r` | [doc](https://backstage.io/docs/tutorials/switching-sqlite-postgres)
