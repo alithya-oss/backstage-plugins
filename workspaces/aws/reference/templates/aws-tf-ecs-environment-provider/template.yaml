@@ -179,8 +179,8 @@ spec:
       action: opa:get-platform-parameters
       input:
         paramKeys:
-          - '/opa/platform-role'
-          - '/opa/pipeline-role'
+          - '/harmonix/platform-role'
+          - '/harmonix/pipeline-role'
 
     # pulls aws-tf-ecs-environment-provider repo content to local temp workspace with placeholder replacement
     - id: fetchBase
@@ -200,8 +200,8 @@ spec:
           awsRegion: ${{ parameters.awsRegion }}
           awsAccount: ${{ parameters.awsAccountID }}
           environmentRole: ${{ parameters.environmentRole }}
-          platformRole: ${{steps['resolvePlatformVariables'].output.params['/opa/platform-role'] }}
-          pipelineRole: ${{steps['resolvePlatformVariables'].output.params['/opa/pipeline-role'] }}
+          platformRole: ${{steps['resolvePlatformVariables'].output.params['/harmonix/platform-role'] }}
+          pipelineRole: ${{steps['resolvePlatformVariables'].output.params['/harmonix/pipeline-role'] }}
           platformAccount: ${{ steps['opaGetPlatformInfo'].output.platformAccount }}
           platformRegion: ${{ steps['opaGetPlatformInfo'].output.platformRegion }}
           prefix: ${{parameters.prefix}}

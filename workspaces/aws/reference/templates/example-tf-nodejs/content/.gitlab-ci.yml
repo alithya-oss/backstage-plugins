@@ -9,7 +9,7 @@ variables:
   OPA_PLATFORM_REGION: "${{ values.platformRegion }}"
 
 include:
-  - project: 'opa-admin/backstage-reference'
+  - project: 'alithya-csna/cloud/aws/harmonix/reference'
     ref: main 
     file:
       - 'common/cicd/.gitlab-ci-job-defaults-tf.yml'

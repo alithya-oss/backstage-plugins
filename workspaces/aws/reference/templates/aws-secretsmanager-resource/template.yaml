@@ -142,7 +142,7 @@ spec:
       name: Fetch Secrets Manager Infrastructure as Code
       action: fetch:template
       input:
-        url: https://gitlab.com/alithya-csna/cloud/toolbox/harmonix/reference/-/tree/main/common/aws_secretsmanager
+        url: https://gitlab.com/alithya-csna/cloud/aws/harmonix/reference/-/tree/main/common/aws_secretsmanager
         targetPath: ./.iac
         values:
           component_id: ${{ parameters.component_id | lower}}

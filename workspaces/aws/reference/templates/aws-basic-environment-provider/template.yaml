@@ -125,7 +125,7 @@ spec:
             allowedHosts:
               - gitlab.com
             allowedOwners:
-              - alithya-csna/cloud/toolbox/harmonix
+              - alithya-csna/cloud/aws/harmonix
   steps:
     - id: opaGetPlatformInfo
       name: Get OPA platform information
@@ -136,8 +136,8 @@ spec:
       action: opa:get-platform-parameters
       input:
         paramKeys:
-          - '/opa/platform-role'
-          - '/opa/pipeline-role'
+          - '/harmonix/platform-role'
+          - '/harmonix/pipeline-role'
     - id: fetchBase
       name: Fetch Code Base
       action: fetch:template
@@ -153,15 +153,15 @@ spec:
           awsRegion: ${{ parameters.awsRegion }}
           awsAccountID: ${{ parameters.awsAccountID }}
           environmentRole: ${{ parameters.environmentRole }}
-          platformRole: ${{steps['resolvePlatformVariables'].output.params['/opa/platform-role'] }}
-          pipelineRole: ${{steps['resolvePlatformVariables'].output.params['/opa/pipeline-role'] }}
+          platformRole: ${{steps['resolvePlatformVariables'].output.params['/harmonix/platform-role'] }}
+          pipelineRole: ${{steps['resolvePlatformVariables'].output.params['/harmonix/pipeline-role'] }}
           prefix: ${{parameters.prefix}}
     - id: fetchBaseIAC
       name: Fetch IAC Base
       action: fetch:plain
       input:
         targetPath: ./.iac
-        url: "https://gitlab.com/alithya-csna/cloud/toolbox/harmonix/reference/-/tree/main/environments"
+        url: "https://gitlab.com/alithya-csna/cloud/aws/harmonix/reference/-/tree/main/environments"
     - id: publish
       name: Publish
       action: publish:gitlab

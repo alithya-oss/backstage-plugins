@@ -164,7 +164,7 @@ spec:
       name: Fetch EKS Infrastructure as Code
       action: fetch:template
       input: 
-        url: https://gitlab.com/alithya-csna/cloud/toolbox/harmonix/reference/-/tree/main/common/aws_eks
+        url: https://gitlab.com/alithya-csna/cloud/aws/harmonix/reference/-/tree/main/common/aws_eks
         targetPath: ./.iac
         values:
           component_id: ${{ parameters.component_id | lower }}
