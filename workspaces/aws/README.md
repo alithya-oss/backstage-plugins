@@ -25,7 +25,7 @@ Variable | Description | Default | Documentation
 `GITHUB_INTEGRATION_APP_ID` | Application identifier of the Github Apps used to process and reconcile Github ressources (user, group, repository, etc.) | `""` | [doc](https://backstage.io/docs/integrations/github/github-apps)
 `GITHUB_INTEGRATION_ClIENT_ID` | Client identifier of the Github Apps used to process and reconcile Github ressources (user, group, repository, etc.) | `""` | [doc](https://backstage.io/docs/integrations/github/github-apps)
 `GITHUB_INTEGRATION_ClIENT_SECRET` | Secret identifier of the Github Apps used to process and reconcile Github ressources (user, group, repository, etc.) | `""` | [doc](https://backstage.io/docs/integrations/github/github-apps)
-`GITHUB_INTEGRATION_WEBHOOK_SECRET` | Webhook secret of the Github Apps used to receive events from Github ressources (user, group, repository, etc.) | `""` | [doc](https://backstage.io/docs/integrations/github/github-apps)
+`GITHUB_INTEGRATION_WEBHOOK_SECRET` | Webhook secret of the Github Apps used to receive events from Github ressources (user, group, repository, etc.) | `"n/a"` | [doc](https://backstage.io/docs/integrations/github/github-apps)
 `GITHUB_INTEGRATION_PRIVATE_KEY` | Private key of the Github Apps used to process and reconcile Github ressources (user, group, repository, etc.) | `""` | [doc](https://backstage.io/docs/integrations/github/github-apps)
 
 ## Getting Started
