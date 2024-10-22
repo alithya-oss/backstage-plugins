@@ -5852,6 +5852,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@backstage/plugin-auth-backend-module-github-provider@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@backstage/plugin-auth-backend-module-github-provider@npm:0.2.1"
+  dependencies:
+    "@backstage/backend-plugin-api": ^1.0.1
+    "@backstage/plugin-auth-node": ^0.5.3
+    passport-github2: ^0.1.12
+  checksum: a58c6f6600db847ef171ad93968fcaccc4795b761cb80485f47f65a8f0d6b3d2906c0de351df0731bf9481bda42c9537ca9f7e31634ae06edfc461cb6673657b
+  languageName: node
+  linkType: hard
+
 "@backstage/plugin-auth-backend-module-gitlab-provider@npm:^0.1.21":
   version: 0.1.21
   resolution: "@backstage/plugin-auth-backend-module-gitlab-provider@npm:0.1.21"
@@ -5862,6 +5873,19 @@ __metadata:
     passport: ^0.7.0
     passport-gitlab2: ^5.0.0
   checksum: 053cd58acebe0c46accd1392a273751df7be85c836459933176bebc9c86e95dbb447eaf9cd406b47371d8ddc462cfbe18f12b86edfca9b4e3e958c59d151e3b3
+  languageName: node
+  linkType: hard
+
+"@backstage/plugin-auth-backend-module-gitlab-provider@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@backstage/plugin-auth-backend-module-gitlab-provider@npm:0.2.1"
+  dependencies:
+    "@backstage/backend-plugin-api": ^1.0.1
+    "@backstage/plugin-auth-node": ^0.5.3
+    express: ^4.18.2
+    passport: ^0.7.0
+    passport-gitlab2: ^5.0.0
+  checksum: 528acf4b4ba3582bcd34b7219cb4f0092f125a695ba251d224199592ca10559b7000c7bcd8663bac63c40462c94e70cd99d3c31bc808a7e7ee0dbc10170f13d6
   languageName: node
   linkType: hard
 
@@ -6111,7 +6135,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-catalog-backend-module-github@npm:^0.7.2":
+"@backstage/plugin-catalog-backend-module-github-org@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@backstage/plugin-catalog-backend-module-github-org@npm:0.3.3"
+  dependencies:
+    "@backstage/backend-plugin-api": ^1.0.1
+    "@backstage/config": ^1.2.0
+    "@backstage/plugin-catalog-backend-module-github": ^0.7.6
+    "@backstage/plugin-catalog-node": ^1.13.1
+    "@backstage/plugin-events-node": ^0.4.2
+  checksum: c4179c2fc848aead506b94c2d00be34d74f7b20a52a83afff3003a4769cf25072f7d70f95dd28407a71cb09b70a2c94dff43a3571a0bcce4dd61a8cc097e4e2a
+  languageName: node
+  linkType: hard
+
+"@backstage/plugin-catalog-backend-module-github@npm:^0.7.2, @backstage/plugin-catalog-backend-module-github@npm:^0.7.6":
   version: 0.7.6
   resolution: "@backstage/plugin-catalog-backend-module-github@npm:0.7.6"
   dependencies:
@@ -6136,7 +6173,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-catalog-backend-module-gitlab@npm:^0.4.1":
+"@backstage/plugin-catalog-backend-module-gitlab-org@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "@backstage/plugin-catalog-backend-module-gitlab-org@npm:0.2.2"
+  dependencies:
+    "@backstage/backend-common": ^0.25.0
+    "@backstage/backend-plugin-api": ^1.0.1
+    "@backstage/plugin-catalog-backend-module-gitlab": ^0.4.4
+    "@backstage/plugin-catalog-node": ^1.13.1
+    "@backstage/plugin-events-node": ^0.4.2
+  checksum: 0d3a3df6642cc9492fdb7abc01dd58c8d3915fd8b313b93f25c58807d261f5da84e85a141714ec2284d2c21721f62d62fff25a7388040a38746b5ff3594abe44
+  languageName: node
+  linkType: hard
+
+"@backstage/plugin-catalog-backend-module-gitlab@npm:^0.4.1, @backstage/plugin-catalog-backend-module-gitlab@npm:^0.4.4":
   version: 0.4.4
   resolution: "@backstage/plugin-catalog-backend-module-gitlab@npm:0.4.4"
   dependencies:
@@ -18630,12 +18680,15 @@ __metadata:
     "@backstage/config": ^1.2.0
     "@backstage/plugin-app-backend": ^0.3.73
     "@backstage/plugin-auth-backend": ^0.22.12
-    "@backstage/plugin-auth-backend-module-github-provider": ^0.1.21
+    "@backstage/plugin-auth-backend-module-github-provider": ^0.2.1
+    "@backstage/plugin-auth-backend-module-gitlab-provider": ^0.2.1
     "@backstage/plugin-auth-backend-module-guest-provider": ^0.1.10
     "@backstage/plugin-auth-node": ^0.5.1
     "@backstage/plugin-catalog-backend": ^1.25.2
     "@backstage/plugin-catalog-backend-module-github": ^0.7.2
+    "@backstage/plugin-catalog-backend-module-github-org": ^0.3.3
     "@backstage/plugin-catalog-backend-module-gitlab": ^0.4.1
+    "@backstage/plugin-catalog-backend-module-gitlab-org": ^0.2.2
     "@backstage/plugin-catalog-backend-module-logs": ^0.0.4
     "@backstage/plugin-catalog-backend-module-scaffolder-entity-model": ^0.1.22
     "@backstage/plugin-kubernetes-backend": ^0.18.5
