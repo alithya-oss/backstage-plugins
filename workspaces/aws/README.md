@@ -5,7 +5,9 @@ It allow to publish artifact under the `@alithya-oss` for the time to stabilise 
 
 One done the content of the repository is submitted back in the form of pull-requests to the upstream project.
 
-## Environment variables
+## Getting Started
+
+### Environment variables
 
 Variable | Description | Default | Documentation
 --- | --- | --- | ---
@@ -28,13 +30,15 @@ Variable | Description | Default | Documentation
 `GITHUB_INTEGRATION_WEBHOOK_SECRET` | Webhook secret of the Github Apps used to receive events from Github ressources (user, group, repository, etc.) | `"n/a"` | [doc](https://backstage.io/docs/integrations/github/github-apps)
 `GITHUB_INTEGRATION_PRIVATE_KEY` | Private key of the Github Apps used to process and reconcile Github ressources (user, group, repository, etc.) | `""` | [doc](https://backstage.io/docs/integrations/github/github-apps)
 
-## Getting Started
+### Configure environment file
 
 Run the following command to generate the `.env` file containing the environment variables.
 
 ```sh
 hack/init.sh
 ```
+
+### Run in development mode
 
 Run the following command to run the local Backstage instance in development mode backed by a PostgreSQL database.
 
