@@ -10,10 +10,10 @@ eok "Started docker stack"
 until nc -vz localhost 5432
 do
   einfo "Waiting for database startup"
-  sleep 2s
+  sleep 5s
 done
 
 einfo "Starting Backstage in development mode"
 
-LOG_LEVEL=debug bash -c 'yarn dev' \
-|| popd && docker compose stop
+LOG_LEVEL=debug yarn dev \
+|| docker compose stop
