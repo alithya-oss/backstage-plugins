@@ -3,7 +3,6 @@
 
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { AwsCredentialIdentity } from '@aws-sdk/types';
-import { Logger } from 'winston';
 import { UserEntity } from '@backstage/catalog-model';
 import { getAWScreds } from '@alithya-oss/plugin-aws-apps-backend';
 import { EnvironmentProvider, EnvironmentProviderConnection } from '../types';
@@ -14,6 +13,9 @@ import {
   PutSecretValueCommandInput,
   SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
+
+import { LoggerService } from '@backstage/backend-plugin-api';
+import { Config } from '@backstage/config';
 
 export type EnvProviderConnectMap = {
   [key: string]: EnvironmentProviderConnection;
@@ -28,6 +30,8 @@ export type EnvProviderConnectMap = {
  * @returns A map of connection information, keyed off of the environment provider name
  */
 export async function getEnvironmentProviderConnectInfo(
+  config: Config,
+  logger: LoggerService,
   envProviders: EnvironmentProvider[],
   userEntity?: UserEntity,
 ): Promise<EnvProviderConnectMap> {
@@ -40,6 +44,8 @@ export async function getEnvironmentProviderConnectInfo(
           const { accountId, region, envProviderPrefix, envProviderName } =
             envProvider;
           const awsAuthResponse = await getAWScreds(
+            config,
+            logger,
             accountId,
             region,
             envProviderPrefix,
@@ -69,7 +75,7 @@ export async function getSSMParameterValue(
   region: string,
   creds: AwsCredentialIdentity,
   ssmPath: string,
-  logger?: Logger,
+  logger?: LoggerService,
 ): Promise<string> {
   const ssmClient = new SSMClient({
     region,
@@ -101,7 +107,7 @@ export async function getSSMParameterValue(
 export async function getPlatformAccountSSMParameterValue(
   ssmPath: string,
   region?: string,
-  logger?: Logger,
+  logger?: LoggerService,
 ): Promise<string> {
   const ssmClient = new SSMClient({
     region,
@@ -128,7 +134,7 @@ export async function createSecret(
   description: string,
   region?: string,
   tags?: { Key: string; Value: string | number | boolean }[],
-  logger?: Logger,
+  logger?: LoggerService,
 ): Promise<string | undefined> {
   if (logger) {
     logger.debug('Calling create Secret');
@@ -161,7 +167,7 @@ export async function putSecret(
   secretArn: string,
   secretValue: string,
   region?: string,
-  logger?: Logger,
+  logger?: LoggerService,
 ): Promise<void> {
   if (logger) {
     logger.debug(`Updating secret ${secretArn}`);

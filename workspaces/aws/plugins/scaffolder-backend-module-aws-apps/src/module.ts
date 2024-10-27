@@ -25,18 +25,19 @@ export const scaffolderModuleAwsApps = createBackendModule({
       deps: {
         scaffolder: scaffolderActionsExtensionPoint,
         config: coreServices.rootConfig,
+        logger: coreServices.logger,
         discovery: coreServices.discovery,
       },
-      async init({ scaffolder, config, discovery }) {
+      async init({ scaffolder, config, logger, discovery }) {
         const integrations = ScmIntegrations.fromConfig(config);
         const catalogClient = new CatalogClient({
           discoveryApi: discovery,
         });
         scaffolder.addActions(createS3BucketAction());
         scaffolder.addActions(createSecretAction({ envConfig: config }));
-        scaffolder.addActions(getEnvProvidersAction({ catalogClient }));
+        scaffolder.addActions(getEnvProvidersAction({ config, logger, catalogClient }));
         scaffolder.addActions(getComponentInfoAction());
-        scaffolder.addActions(getSsmParametersAction());
+        scaffolder.addActions(getSsmParametersAction(config, logger));
         scaffolder.addActions(getPlatformMetadataAction({ envConfig: config }));
         scaffolder.addActions(
           getPlatformParametersAction({ envConfig: config }),

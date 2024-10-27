@@ -14,6 +14,9 @@ import { getAWScreds } from '@alithya-oss/plugin-aws-apps-backend';
 import { getSSMParameterValue } from '../../helpers/action-context';
 import { EnvironmentProvider } from '../../types';
 
+import { LoggerService } from '@backstage/backend-plugin-api';
+import { Config } from '@backstage/config';
+
 const ID = 'opa:get-env-providers';
 
 const examples = [
@@ -53,8 +56,8 @@ interface DeploymentParameters {
 }
 
 /** @public */
-export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
-  const { catalogClient } = options;
+export function getEnvProvidersAction(options: { config: Config, logger: LoggerService, catalogClient: CatalogApi }) {
+  const { config, logger, catalogClient } = options;
 
   return createTemplateAction<{
     environmentRef: string;
@@ -280,6 +283,8 @@ export function getEnvProvidersAction(options: { catalogClient: CatalogApi }) {
           `Getting credentials for AWS deployment to account ${accountId} in ${region}`,
         );
         const response = await getAWScreds(
+          config,
+          logger,
           accountId,
           region,
           envProviderPrefix,

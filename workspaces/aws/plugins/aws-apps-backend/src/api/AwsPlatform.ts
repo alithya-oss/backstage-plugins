@@ -26,7 +26,7 @@ import {
   IRepositoryInfo,
 } from '@alithya-oss/plugin-aws-apps-common';
 import YAML from 'yaml';
-import { GitAPI } from './git-api';
+import { GitAPI } from './GitApiClient';
 import { LoggerService } from '@backstage/backend-plugin-api';
 
 export type GitLabDownloadFileResponse = {

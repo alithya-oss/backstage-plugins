@@ -13,6 +13,11 @@ import {
   EnvironmentProviderConnection,
 } from '../../types';
 
+import {
+  LoggerService,
+} from '@backstage/backend-plugin-api';
+import { Config } from '@backstage/config';
+
 const ID = 'opa:get-ssm-parameters';
 
 const examples = [
@@ -37,7 +42,7 @@ const examples = [
 ];
 
 /** @public */
-export function getSsmParametersAction() {
+export function getSsmParametersAction(config: Config, logger: LoggerService) {
   return createTemplateAction<{
     paramKeys: string[];
     envProviders: EnvironmentProvider[];
@@ -105,6 +110,8 @@ export function getSsmParametersAction() {
 
       const providerConnect: EnvProviderConnectMap =
         await getEnvironmentProviderConnectInfo(
+          config,
+          logger,
           envProviders,
           ctx.user!.entity!,
         );

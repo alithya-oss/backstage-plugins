@@ -27,7 +27,7 @@ import {
   createAuditRecord,
   getAWScreds,
 } from '../api';
-import { AwsAppsPlatformApi } from '../api/aws-platform';
+import { AwsAppsPlatformApi } from '../api/AwsPlatform';
 import { Config } from '@backstage/config';
 import { CatalogApi } from '@backstage/catalog-client';
 
@@ -81,6 +81,8 @@ export async function createRouter(
     const identity = await userInfo.getUserInfo(credentials);
 
     const creds = await getAWScreds(
+      config,
+      logger,
       awsAccount,
       awsRegion,
       prefix,
@@ -92,8 +94,8 @@ export async function createRouter(
     const roleArn = creds.roleArn;
 
     const apiClient = new AwsAppsApi(
+      config,
       logger,
-      creds.credentials,
       awsRegion,
       awsAccount,
     );
