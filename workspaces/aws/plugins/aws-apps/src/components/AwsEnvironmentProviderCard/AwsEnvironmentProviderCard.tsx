@@ -210,34 +210,38 @@ const AwsEnvironmentProviderCard = ({
 
   const deleteClick = async (index: number) => {
     const deletedItem = items.at(index);
-    // TODO Use a Modal instead - Linter is angry
-    // if (
-    //   confirm('Are you sure you want to remove this environment provider from this environment?')
-    // ) {
-    setSpinning(true);
-    updateProvider(deletedItem!, 'remove')
-      .then(async results => {
-        setAddProviderMessage(results);
-        setIsAddProviderSuccessful(true);
-        setSpinning(false);
-        // remove from table
-        const providersData = items.slice();
-        providersData.splice(index, 1);
-        setItems(providersData);
-        setProviderRequest(deletedItem);
-        await catalog.refreshEntity(
-          `awsenvironment:default/${entity.metadata.name}`,
-        );
-        await catalog.refreshEntity(
-          `awsenvironmentprovider:default/${deletedItem?.name}`,
-        );
-      })
-      .catch(err => {
-        setIsAddProviderSuccessful(false);
-        setAddProviderMessage(err);
-        setError(err);
-        setSpinning(false);
-      });
+
+    if (
+      // eslint-disable-next-line no-alert
+      confirm(
+        'Are you sure you want to remove this environment provider from this environment?',
+      )
+    ) {
+      setSpinning(true);
+      updateProvider(deletedItem!, 'remove')
+        .then(async results => {
+          setAddProviderMessage(results);
+          setIsAddProviderSuccessful(true);
+          setSpinning(false);
+          // remove from table
+          const providersData = items.slice();
+          providersData.splice(index, 1);
+          setItems(providersData);
+          setProviderRequest(deletedItem);
+          await catalog.refreshEntity(
+            `awsenvironment:default/${entity.metadata.name}`,
+          );
+          await catalog.refreshEntity(
+            `awsenvironmentprovider:default/${deletedItem?.name}`,
+          );
+        })
+        .catch(err => {
+          setIsAddProviderSuccessful(false);
+          setAddProviderMessage(err);
+          setError(err);
+          setSpinning(false);
+        });
+    }
   };
 
   const handleCloseAlert = () => {

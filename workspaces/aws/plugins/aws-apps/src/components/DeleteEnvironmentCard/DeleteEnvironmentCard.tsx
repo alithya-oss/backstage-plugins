@@ -64,7 +64,7 @@ const DeleteEnvironmentPanel = ({
     setDeleteResultMessage('Deleting entity from backstage catalog');
     // The entity will be removed from the catalog along with the auto-generated Location kind entity
     // which references the catalog entity
-    const uid = entity.metadata.uid || '';
+    const uid = entity.metadata.uid ?? '';
     const entityAnnotations = entity.metadata.annotations || {};
     const entityLocation =
       entityAnnotations['backstage.io/managed-by-location'] || '';
@@ -90,29 +90,31 @@ const DeleteEnvironmentPanel = ({
   };
 
   const handleClickDelete = async () => {
-    // TODO - Replace this with a Modal -> if (confirm('Are you sure you want to delete this environment?')) {
-    setSpinning(true);
-    if (isExistingComponents()) {
-      setDeleteResultMessage(
-        'There are providers, apps, or resources associated with this environment.  Delete them first and then retry deleting this environment',
-      );
-      setIsDeleteSuccessful(false);
+    // eslint-disable-next-line no-alert
+    if (confirm('Are you sure you want to delete this environment?')) {
+      setSpinning(true);
+      if (isExistingComponents()) {
+        setDeleteResultMessage(
+          'There are providers, apps, or resources associated with this environment.  Delete them first and then retry deleting this environment',
+        );
+        setIsDeleteSuccessful(false);
+        setSpinning(false);
+        return;
+      }
+      // Delete the repo
+      setIsDeleteSuccessful(true);
+      setDeleteResultMessage('Deleting Repository ....');
+      deleteRepo();
+      await sleep(3000);
+      setDeleteResultMessage('Deleting from catalog ....');
+      await sleep(3000);
+      await deleteFromCatalog();
       setSpinning(false);
-      return;
+      setDeleteResultMessage('Redirect to home ....');
+      navigate('/');
+      setIsDeleteSuccessful(true);
+      setDisabled(false);
     }
-    // Delete the repo
-    setIsDeleteSuccessful(true);
-    setDeleteResultMessage('Deleting Repository ....');
-    deleteRepo();
-    await sleep(3000);
-    setDeleteResultMessage('Deleting from catalog ....');
-    await sleep(3000);
-    await deleteFromCatalog();
-    setSpinning(false);
-    setDeleteResultMessage('Redirect to home ....');
-    navigate('/');
-    setIsDeleteSuccessful(true);
-    setDisabled(false);
   };
 
   return (

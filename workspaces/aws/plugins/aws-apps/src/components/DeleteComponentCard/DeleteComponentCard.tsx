@@ -50,7 +50,6 @@ const DeleteAppPanel = ({
 
   const appIACType = entity.metadata.iacType?.toString();
   const appSubtype = entity.spec?.subType?.toString() ?? 'undefinedSubtype';
-  // console.log(appIACType);
   const repoInfo = awsComponent.getRepoInfo();
 
   const handleCloseAlert = () => {
@@ -262,78 +261,80 @@ const DeleteAppPanel = ({
   // }
 
   const handleClickDelete = async () => {
-    // TODO - Replace with Modal => if (confirm('Are you sure you want to delete this app?')) {
-    setSpinning(true);
-    deleteAppFromSingleProvider(
-      awsComponent.componentName,
-      awsComponent.currentEnvironment,
-    )
-      .then(async _results => {
-        // console.log(_results)
-        setSpinning(false);
-        setIsDeleteSuccessful(true);
-        setDeleteResultMessage('App delete initiated.');
-        // now update repo to remove environment
-        // api.InitiateGitDelete
-        await sleep(2000);
-        // awsComponent.currentEnvironment.providerData.name
-      })
-      .catch(error => {
-        setSpinning(false);
-        setIsDeleteSuccessful(false);
-        setDeleteResultMessage(error.toString());
-      });
-  };
-
-  const handleClickDeleteAll = async () => {
-    // TODO: Replace with Modal =>  if (confirm('Are you sure you want to delete this app?')) {
-    const deployedEnvironments = Object.keys(awsComponent.environments);
-    deployedEnvironments.forEach(env => {
-      const environmentToRemove: GenericAWSEnvironment =
-        awsComponent.environments[env];
-      // remove environment x
+    // eslint-disable-next-line no-alert
+    if (confirm('Are you sure you want to delete this app?')) {
+      setSpinning(true);
       deleteAppFromSingleProvider(
         awsComponent.componentName,
-        environmentToRemove,
+        awsComponent.currentEnvironment,
       )
         .then(async _results => {
           // console.log(_results)
+          setSpinning(false);
           setIsDeleteSuccessful(true);
-          setDeleteResultMessage(
-            `CloudFormation delete stack on provider ${env} initiated.`,
-          );
+          setDeleteResultMessage('App delete initiated.');
+          // now update repo to remove environment
+          // api.InitiateGitDelete
           await sleep(2000);
+          // awsComponent.currentEnvironment.providerData.name
         })
         .catch(error => {
           setSpinning(false);
           setIsDeleteSuccessful(false);
           setDeleteResultMessage(error.toString());
         });
-    });
-    if (appIACType === 'cdk') {
-      await sleep(2000);
-      // Delete the repo now.
-      deleteRepo(repoInfo);
-      await sleep(2000);
-      if (awsComponent.componentType === AWSComponentType.AWSApp) {
-        deleteSecret(entity.metadata.repoSecretArn?.toString() ?? '');
-      }
-      await deleteFromCatalog();
-      setSpinning(false);
-      await sleep(2000);
-      setDeleteResultMessage('Redirect to home ....');
-      navigate('/');
-      setDisabled(false);
-    } else if (appIACType === 'terraform') {
-      await sleep(2000);
-      setSpinning(false);
-      setDisabled(false);
-      setDeleteResultMessage(
-        'Once the pipeline finish executing you may click Delete Repository',
-      );
     }
   };
-
+  const handleClickDeleteAll = async () => {
+    // eslint-disable-next-line no-alert
+    if (confirm('Are you sure you want to delete this app?')) {
+      const deployedEnvironments = Object.keys(awsComponent.environments);
+      deployedEnvironments.forEach(env => {
+        const environmentToRemove: GenericAWSEnvironment =
+          awsComponent.environments[env];
+        // remove environment x
+        deleteAppFromSingleProvider(
+          awsComponent.componentName,
+          environmentToRemove,
+        )
+          .then(async _results => {
+            // console.log(_results)
+            setIsDeleteSuccessful(true);
+            setDeleteResultMessage(
+              `CloudFormation delete stack on provider ${env} initiated.`,
+            );
+            await sleep(2000);
+          })
+          .catch(error => {
+            setSpinning(false);
+            setIsDeleteSuccessful(false);
+            setDeleteResultMessage(error.toString());
+          });
+      });
+      if (appIACType === 'cdk') {
+        await sleep(2000);
+        // Delete the repo now.
+        deleteRepo(repoInfo);
+        await sleep(2000);
+        if (awsComponent.componentType === AWSComponentType.AWSApp) {
+          deleteSecret(entity.metadata.repoSecretArn?.toString() ?? '');
+        }
+        await deleteFromCatalog();
+        setSpinning(false);
+        await sleep(2000);
+        setDeleteResultMessage('Redirect to home ....');
+        navigate('/');
+        setDisabled(false);
+      } else if (appIACType === 'terraform') {
+        await sleep(2000);
+        setSpinning(false);
+        setDisabled(false);
+        setDeleteResultMessage(
+          'Once the pipeline finish executing you may click Delete Repository',
+        );
+      }
+    }
+  };
   return (
     <InfoCard title="Delete Component">
       <CardContent>
