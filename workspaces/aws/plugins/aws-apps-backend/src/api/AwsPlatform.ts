@@ -28,6 +28,8 @@ import {
 import YAML from 'yaml';
 import { GitAPI } from './GitApiClient';
 import { LoggerService } from '@backstage/backend-plugin-api';
+import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
+import { Config } from '@backstage/config';
 
 export type GitLabDownloadFileResponse = {
   file_name: string;
@@ -47,6 +49,7 @@ export class AwsAppsPlatformApi {
   public git: GitAPI;
 
   public constructor(
+    private readonly config: Config,
     private readonly logger: LoggerService,
     private readonly platformRegion: string,
     private readonly awsRegion: string,
@@ -78,9 +81,19 @@ export class AwsAppsPlatformApi {
       `Calling getPlatformSecretValue for ${secretArn} against platform region ${this.platformRegion}`,
     );
 
+    const accountId = this.awsAccount
+    const awsCredentialsManager =
+      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new SecretsManagerClient({
       region: this.platformRegion,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
+    
     const params: GetSecretValueCommandInput = {
       SecretId: secretArn,
     };
@@ -102,8 +115,18 @@ export class AwsAppsPlatformApi {
     this.logger.info(
       `Calling getSsmValue for ${ssmKey} against platform region ${this.platformRegion}`,
     );
+
+    const accountId = this.awsAccount
+    const awsCredentialsManager =
+      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new SSMClient({
       region: this.platformRegion,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
 
     const params: GetParameterCommandInput = {

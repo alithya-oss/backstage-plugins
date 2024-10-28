@@ -134,6 +134,7 @@ export async function createRouter(
     }
     if (repoInfo === undefined) {
       return new AwsAppsPlatformApi(
+        config,
         logger,
         platformRegion,
         awsRegion,
@@ -142,6 +143,7 @@ export async function createRouter(
       );
     }
     return new AwsAppsPlatformApi(
+      config,
       logger,
       platformRegion,
       awsRegion,
