@@ -37,8 +37,8 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage/backend-common": "^0.23.3",
     "@alithya-oss/plugin-aws-apps-common": "workspace:^",
+    "@backstage/backend-common": "^0.23.3",
     "@backstage/backend-plugin-api": "^0.7.0"
   },
   "devDependencies": {
