@@ -35,7 +35,9 @@ export const scaffolderModuleAwsApps = createBackendModule({
         });
         scaffolder.addActions(createS3BucketAction());
         scaffolder.addActions(createSecretAction({ envConfig: config }));
-        scaffolder.addActions(getEnvProvidersAction({ config, logger, catalogClient }));
+        scaffolder.addActions(
+          getEnvProvidersAction({ config, logger, catalogClient }),
+        );
         scaffolder.addActions(getComponentInfoAction());
         scaffolder.addActions(getSsmParametersAction(config, logger));
         scaffolder.addActions(getPlatformMetadataAction({ envConfig: config }));

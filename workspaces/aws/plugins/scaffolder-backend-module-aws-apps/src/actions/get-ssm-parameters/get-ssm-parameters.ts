@@ -13,9 +13,7 @@ import {
   EnvironmentProviderConnection,
 } from '../../types';
 
-import {
-  LoggerService,
-} from '@backstage/backend-plugin-api';
+import { LoggerService } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 
 const ID = 'opa:get-ssm-parameters';
@@ -113,7 +111,7 @@ export function getSsmParametersAction(config: Config, logger: LoggerService) {
           config,
           logger,
           envProviders,
-          ctx.user!.entity!,
+          ctx.user.entity,
         );
 
       // Get a key/value map of SSM parameters for the supplied environment provider connection

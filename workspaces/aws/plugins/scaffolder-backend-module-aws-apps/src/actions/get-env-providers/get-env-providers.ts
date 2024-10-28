@@ -56,7 +56,11 @@ interface DeploymentParameters {
 }
 
 /** @public */
-export function getEnvProvidersAction(options: { config: Config, logger: LoggerService, catalogClient: CatalogApi }) {
+export function getEnvProvidersAction(options: {
+  config: Config;
+  logger: LoggerService;
+  catalogClient: CatalogApi;
+}) {
   const { config, logger, catalogClient } = options;
 
   return createTemplateAction<{
@@ -212,7 +216,7 @@ export function getEnvProvidersAction(options: { config: Config, logger: LoggerS
         );
       }
 
-      const envShortName = awsEnvEntity.metadata.shortName?.toString() || '';
+      const envShortName = awsEnvEntity.metadata.shortName?.toString() ?? '';
       ctx.output('envName', awsEnvEntity.metadata.name);
       ctx.output('envRef', environmentRef);
       ctx.output(
@@ -289,12 +293,12 @@ export function getEnvProvidersAction(options: { config: Config, logger: LoggerS
           region,
           envProviderPrefix,
           envProviderName,
-          ctx.user!.entity!,
+          ctx.user.entity,
         );
         const { credentials } = response;
 
         try {
-          const vpcId = !!ssmPathVpc
+          const vpcId = ssmPathVpc
             ? await getSSMParameterValue(
                 region,
                 credentials,
@@ -302,7 +306,7 @@ export function getEnvProvidersAction(options: { config: Config, logger: LoggerS
                 ctx.logger,
               )
             : '';
-          const publicSubnets = !!ssmPathVpc
+          const publicSubnets = ssmPathVpc
             ? await getSSMParameterValue(
                 region,
                 credentials,
@@ -310,7 +314,7 @@ export function getEnvProvidersAction(options: { config: Config, logger: LoggerS
                 ctx.logger,
               )
             : '';
-          const privateSubnets = !!ssmPathVpc
+          const privateSubnets = ssmPathVpc
             ? await getSSMParameterValue(
                 region,
                 credentials,
@@ -400,21 +404,21 @@ export function getEnvProvidersAction(options: { config: Config, logger: LoggerS
           )
           .map(entity => {
             const { metadata } = entity!;
-            const vpc = metadata.vpc?.toString() || '';
+            const vpc = metadata.vpc?.toString() ?? '';
 
             const deployParams: DeploymentParameters = {
-              envProviderPrefix: metadata.prefix?.toString() || '',
+              envProviderPrefix: metadata.prefix?.toString() ?? '',
               envName: envEntity.metadata.name,
               envProviderName: metadata.name,
               envRef: environmentRef,
-              envProviderType: metadata.envType?.toString().toLowerCase() || '',
-              accountId: metadata.awsAccount?.toString() || '',
-              region: metadata.awsRegion?.toString() || '',
-              ssmAssumeRoleArn: metadata.provisioningRole?.toString() || '',
+              envProviderType: metadata.envType?.toString().toLowerCase() ?? '',
+              accountId: metadata.awsAccount?.toString() ?? '',
+              region: metadata.awsRegion?.toString() ?? '',
+              ssmAssumeRoleArn: metadata.provisioningRole?.toString() ?? '',
               ssmPathVpc: vpc,
               ssmPrivateSubnets: `${vpc}/private-subnets`,
               ssmPublicSubnets: `${vpc}/public-subnets`,
-              ssmPathCluster: metadata.clusterName?.toString() || '',
+              ssmPathCluster: metadata.clusterName?.toString() ?? '',
             };
 
             if (metadata.kubectlLambdaArn) {

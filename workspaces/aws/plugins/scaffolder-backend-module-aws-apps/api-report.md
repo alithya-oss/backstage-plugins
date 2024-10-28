@@ -4,9 +4,11 @@
 
 ```ts
 import { AwsAuthResponse } from '@alithya-oss/plugin-aws-apps-backend';
+import { BackendFeatureCompat } from '@backstage/backend-plugin-api';
 import { CatalogApi } from '@backstage/catalog-client';
 import { Config } from '@backstage/config';
 import { JsonObject } from '@backstage/types';
+import { LoggerService } from '@backstage/backend-plugin-api';
 import { ScmIntegrationRegistry } from '@backstage/integration';
 import { TemplateAction } from '@backstage/plugin-scaffolder-node';
 
@@ -91,6 +93,8 @@ export function getComponentInfoAction(): TemplateAction<
 
 // @public (undocumented)
 export function getEnvProvidersAction(options: {
+  config: Config;
+  logger: LoggerService;
   catalogClient: CatalogApi;
 }): TemplateAction<
   {
@@ -116,13 +120,20 @@ export function getPlatformParametersAction(options: {
 >;
 
 // @public (undocumented)
-export function getSsmParametersAction(): TemplateAction<
+export function getSsmParametersAction(
+  config: Config,
+  logger: LoggerService,
+): TemplateAction<
   {
     paramKeys: string[];
     envProviders: EnvironmentProvider[];
   },
   JsonObject
 >;
+
+// @public (undocumented)
+const scaffolderModuleAwsApps: BackendFeatureCompat;
+export default scaffolderModuleAwsApps;
 
 // (No @packageDocumentation comment for this package)
 ```

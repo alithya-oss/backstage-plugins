@@ -93,12 +93,7 @@ export async function createRouter(
 
     const roleArn = creds.roleArn;
 
-    const apiClient = new AwsAppsApi(
-      config,
-      logger,
-      awsRegion,
-      awsAccount,
-    );
+    const apiClient = new AwsAppsApi(config, logger, awsRegion, awsAccount);
 
     const requester = identity?.userEntityRef.split('/')[1] || '';
 
@@ -694,18 +689,6 @@ export async function createRouter(
     logger.info('router entry: /audit-entries');
     // TODO: Validate migrated Code
     const credentials = await httpAuth.credentials(req, { allow: ['user'] });
-
-    // OLD code
-    // const token = getBearerTokenFromAuthorizationHeader(req.header('authorization'));
-
-    // // get a permission decision
-    // const decision = (
-    //   await permissions.authorize([{
-    //     permission: readOpaAppAuditPermission
-    //   }], {
-    //     token
-    //   })
-    // )
 
     // Additional actions **Optional** :
     const { token } = await auth.getPluginRequestToken({

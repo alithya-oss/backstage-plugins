@@ -164,9 +164,10 @@ export class AwsAppsApi {
     // resolve ECS cluster param to value
     const clusterRef = await this.getSSMParameter(clusterName);
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -202,9 +203,10 @@ export class AwsAppsApi {
     // resolve ECS cluster param to value
     const clusterRef = await this.getSSMParameter(clusterName);
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -246,9 +248,10 @@ export class AwsAppsApi {
     // resolve ECS cluster param to value
     const clusterRef = await this.getSSMParameter(clusterName);
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -282,10 +285,11 @@ export class AwsAppsApi {
     secretArn: string,
   ): Promise<GetSecretValueCommandOutput> {
     this.logger.info('Calling getSecretValue');
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -325,9 +329,10 @@ export class AwsAppsApi {
       return { Key: tag.Key, Value: tag.Value.toString() };
     });
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -365,10 +370,11 @@ export class AwsAppsApi {
     secretValue: string,
   ): Promise<PutSecretValueCommandOutput> {
     this.logger.info('Calling put Secret');
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -411,9 +417,10 @@ export class AwsAppsApi {
       return { Key: tag.Key, Value: tag.Value.toString() };
     });
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -470,9 +477,10 @@ export class AwsAppsApi {
   ): Promise<HeadObjectCommandOutput> {
     this.logger.info('Calling doesS3FileExist');
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -504,10 +512,11 @@ export class AwsAppsApi {
     logPrefix: string,
   ): Promise<DescribeLogGroupsCommandOutput> {
     this.logger.info('Calling getLogGroups');
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -537,10 +546,11 @@ export class AwsAppsApi {
     logGroupName: string,
   ): Promise<DescribeLogStreamsCommandOutput> {
     this.logger.info('Calling getLogStreams');
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -576,10 +586,11 @@ export class AwsAppsApi {
     startFromHead = true,
   ): Promise<GetLogEventsCommandOutput> {
     this.logger.info('Calling getLogGroupEvents');
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -601,10 +612,11 @@ export class AwsAppsApi {
     logRecordPointer: string,
   ): Promise<GetLogRecordCommandOutput> {
     this.logger.info('Calling getLogRecord');
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -628,9 +640,10 @@ export class AwsAppsApi {
   ): Promise<ScanCommandOutput> {
     this.logger.info('Calling getDynamodbTable');
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -662,9 +675,10 @@ export class AwsAppsApi {
   ): Promise<PutItemCommandOutput> {
     this.logger.info('Calling getDynamodbTable');
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -715,9 +729,10 @@ export class AwsAppsApi {
   ): Promise<ListGroupResourcesCommandOutput> {
     this.logger.info('Calling getResourceGroupResources');
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -816,10 +831,10 @@ export class AwsAppsApi {
   ): Promise<GetParameterCommandOutput> {
     this.logger.info(`Calling getSSMParameter - ${ssmParamName}`);
 
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -849,10 +864,11 @@ export class AwsAppsApi {
     taskDefinitionArn: string,
   ): Promise<DescribeTaskDefinitionCommandOutput> {
     this.logger.info('Calling Describe Task Definition');
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -881,10 +897,11 @@ export class AwsAppsApi {
     taskDefinition: TaskDefinition,
   ): Promise<RegisterTaskDefinitionCommandOutput> {
     this.logger.info('Calling Register Task Definition');
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -924,10 +941,11 @@ export class AwsAppsApi {
     stackName: string,
   ): Promise<DescribeStacksCommandOutput> {
     this.logger.info('Calling describeStack');
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -958,10 +976,11 @@ export class AwsAppsApi {
     stackName: string,
   ): Promise<DescribeStackEventsCommandOutput> {
     this.logger.info('Calling describeStackEvents');
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -1003,9 +1022,10 @@ export class AwsAppsApi {
   ): Promise<UpdateStackCommandOutput> {
     this.logger.info('Calling updateStack');
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -1061,9 +1081,10 @@ export class AwsAppsApi {
   ): Promise<CreateStackCommandOutput> {
     this.logger.info('Calling createStack');
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -1108,9 +1129,10 @@ export class AwsAppsApi {
   ): Promise<DeleteStackCommandOutput> {
     this.logger.info('Calling deleteStack');
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -1142,10 +1164,11 @@ export class AwsAppsApi {
     clusterName: string,
   ): Promise<DescribeClusterCommandOutput> {
     this.logger.info('Calling getEksCluster');
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -1167,10 +1190,11 @@ export class AwsAppsApi {
     body: string,
   ): Promise<InvokeCommandOutput> {
     this.logger.info('Calling callLambda');
-    
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,

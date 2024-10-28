@@ -81,9 +81,10 @@ export class AwsAppsPlatformApi {
       `Calling getPlatformSecretValue for ${secretArn} against platform region ${this.platformRegion}`,
     );
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,
@@ -93,7 +94,7 @@ export class AwsAppsPlatformApi {
       credentialDefaultProvider: () =>
         awsCredentialProvider.sdkCredentialProvider,
     });
-    
+
     const params: GetSecretValueCommandInput = {
       SecretId: secretArn,
     };
@@ -116,9 +117,10 @@ export class AwsAppsPlatformApi {
       `Calling getSsmValue for ${ssmKey} against platform region ${this.platformRegion}`,
     );
 
-    const accountId = this.awsAccount
-    const awsCredentialsManager =
-      DefaultAwsCredentialsManager.fromConfig(this.config);
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
     const awsCredentialProvider =
       await awsCredentialsManager.getCredentialProvider({
         accountId,

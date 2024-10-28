@@ -1,6 +1,4 @@
-import {
-  DefaultAwsCredentialsManager,
-} from '@backstage/integration-aws-node';
+import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 import { Config } from '@backstage/config';
 
 import { AssumeRoleCommand, STSClient } from '@aws-sdk/client-sts';
