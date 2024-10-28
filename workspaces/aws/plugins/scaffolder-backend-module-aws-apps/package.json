@@ -49,6 +49,7 @@
     "@backstage/config": "^1.2.0",
     "@backstage/errors": "^1.2.4",
     "@backstage/integration": "^1.14.0",
+    "@backstage/integration-aws-node": "^0.1.12",
     "@backstage/plugin-scaffolder-backend": "^1.24.1",
     "@backstage/plugin-scaffolder-node": "^0.4.10",
     "@backstage/types": "^1.1.1",

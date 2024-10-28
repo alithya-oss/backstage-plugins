@@ -3,6 +3,7 @@
 
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { AwsCredentialIdentity } from '@aws-sdk/types';
+import { Logger } from 'winston';
 import { UserEntity } from '@backstage/catalog-model';
 import { getAWScreds } from '@alithya-oss/plugin-aws-apps-backend';
 import { EnvironmentProvider, EnvironmentProviderConnection } from '../types';
@@ -14,6 +15,7 @@ import {
   SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
 
+import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 import { LoggerService } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 
@@ -75,7 +77,7 @@ export async function getSSMParameterValue(
   region: string,
   creds: AwsCredentialIdentity,
   ssmPath: string,
-  logger?: LoggerService,
+  logger?: Logger,
 ): Promise<string> {
   const ssmClient = new SSMClient({
     region,
@@ -105,13 +107,19 @@ export async function getSSMParameterValue(
 
 // Get the value for a specified SSM Parameter Store path
 export async function getPlatformAccountSSMParameterValue(
+  config: Config,
   ssmPath: string,
   region?: string,
-  logger?: LoggerService,
+  logger?: Logger,
 ): Promise<string> {
+  const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(config);
+  const awsCredentialProvider =
+    await awsCredentialsManager.getCredentialProvider({});
   const ssmClient = new SSMClient({
     region,
     customUserAgent: 'opa-plugin',
+    credentialDefaultProvider: () =>
+      awsCredentialProvider.sdkCredentialProvider,
   });
   const ssmResponse = await ssmClient.send(
     new GetParameterCommand({
@@ -134,7 +142,7 @@ export async function createSecret(
   description: string,
   region?: string,
   tags?: { Key: string; Value: string | number | boolean }[],
-  logger?: LoggerService,
+  logger?: Logger,
 ): Promise<string | undefined> {
   if (logger) {
     logger.debug('Calling create Secret');
@@ -167,7 +175,7 @@ export async function putSecret(
   secretArn: string,
   secretValue: string,
   region?: string,
-  logger?: LoggerService,
+  logger?: Logger,
 ): Promise<void> {
   if (logger) {
     logger.debug(`Updating secret ${secretArn}`);

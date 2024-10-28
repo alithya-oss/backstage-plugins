@@ -109,6 +109,7 @@ export function getPlatformParametersAction(options: { envConfig: Config }) {
             paramKeys.map(
               async (paramKey): Promise<{ [key: string]: string }> => {
                 const val = await getPlatformAccountSSMParameterValue(
+                  envConfig,
                   paramKey,
                   region,
                   ctx.logger,
