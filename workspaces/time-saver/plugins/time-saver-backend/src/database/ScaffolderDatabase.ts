@@ -15,6 +15,7 @@
  */
 import { DatabaseManager } from '@backstage/backend-defaults/database';
 import {
+  LifecycleService,
   LoggerService,
   RootConfigService,
 } from '@backstage/backend-plugin-api';
@@ -33,10 +34,17 @@ export class ScaffolderDatabase implements ScaffolderStore {
     private readonly knex: Knex,
     private readonly logger: LoggerService,
   ) {}
-  static async create(config: RootConfigService, logger: LoggerService) {
+  static async create(
+    config: RootConfigService,
+    logger: LoggerService,
+    lifecycle: LifecycleService,
+  ) {
     // const knex = await database.getClient();
 
-    const db = DatabaseManager.fromConfig(config).forPlugin('scaffolder');
+    const db = DatabaseManager.fromConfig(config).forPlugin('scaffolder', {
+      logger,
+      lifecycle,
+    });
     const knex = await db.getClient();
 
     return new ScaffolderDatabase(knex, logger);

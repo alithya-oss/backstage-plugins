@@ -25,17 +25,17 @@ import { TimeSaverStore } from '../database/TimeSaverDatabase';
 
 export class TsScheduler {
   constructor(
+    private readonly auth: AuthService,
     private readonly logger: LoggerService,
     private readonly discovery: DiscoveryService,
-    private readonly auth: AuthService,
     private readonly db: TimeSaverStore,
   ) {}
 
   async schedule(taskRunner: TaskRunner) {
     const tsHandler = new TimeSaverHandler(
+      this.auth,
       this.logger,
       this.discovery,
-      this.auth,
       this.db,
     );
     await taskRunner.run({

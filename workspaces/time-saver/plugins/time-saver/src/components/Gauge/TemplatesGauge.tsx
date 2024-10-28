@@ -17,15 +17,15 @@ import React, { useEffect, useState } from 'react';
 import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Gauge from './Gauge';
-
-type TemplateResponse = {
-  templates: string[];
-};
+import {
+  GetAllTemplateNamesResponse,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 export function TemplatesGauge(): React.ReactElement {
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
-  const [data, setData] = useState<TemplateResponse | null>(null);
+  const [data, setData] = useState<GetAllTemplateNamesResponse | null>(null);
 
   useEffect(() => {
     const url = `${configApi.getString(
@@ -41,6 +41,10 @@ export function TemplatesGauge(): React.ReactElement {
 
   if (!data) {
     return <CircularProgress />;
+  }
+
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
   }
 
   return <Gauge number={data.templates.length} heading="Templates" />;

@@ -21,14 +21,14 @@ import { useEffect, useState } from 'react';
 import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { TextField } from '@material-ui/core';
+import {
+  GetAllTemplateNamesResponse,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 interface TemplateChange {
   onTemplateChange: (templateTask: string) => void;
 }
-
-type TemplateResponse = {
-  templates: string[];
-};
 
 export default function TemplateAutocomplete({
   onTemplateChange,
@@ -44,7 +44,7 @@ export default function TemplateAutocomplete({
     onTemplateChange(selectedTemplateTaskId);
   };
 
-  const [data, setData] = useState<TemplateResponse | null>(null);
+  const [data, setData] = useState<GetAllTemplateNamesResponse | null>(null);
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
   useEffect(() => {
@@ -59,6 +59,10 @@ export default function TemplateAutocomplete({
 
   if (!data) {
     return <CircularProgress />;
+  }
+
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
   }
 
   const templates = data.templates;

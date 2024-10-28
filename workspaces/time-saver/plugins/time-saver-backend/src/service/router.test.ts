@@ -61,7 +61,10 @@ describe('createRouter', () => {
       },
     },
   });
-  const database = manager.forPlugin('time-saver');
+  const database = manager.forPlugin('time-saver', {
+    logger: mockServices.logger.mock(),
+    lifecycle: mockServices.lifecycle.mock(),
+  });
   class PersistingTaskRunner implements TaskRunner {
     private tasks: TaskInvocationDefinition[] = [];
 
@@ -82,22 +85,13 @@ describe('createRouter', () => {
   //  TODO : validate createScheduledTaskRunner parameters types.
 
   beforeAll(async () => {
-    // const discovery = HostDiscovery.fromConfig(config);
-    // const router = await createRouter({
-    //   database: database,
-    //   logger: getVoidLogger(),
-    //   discovery: discovery,
-    //   config: config,
-    //   scheduler: scheduler,
-    // });
-    // app = express().use(router);
     const router = await createRouter({
-      // config: new ConfigReader({}),
       config: config,
       logger: mockServices.logger.mock(),
       // database: createDatabase(),
       database: database,
       discovery: testDiscovery,
+      lifecycle: mockServices.lifecycle.mock(),
       urlReader: mockUrlReader,
       scheduler: scheduler,
       auth: mockServices.auth(),

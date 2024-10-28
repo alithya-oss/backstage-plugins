@@ -29,16 +29,12 @@ import { configApiRef, fetchApiRef, useApi } from '@backstage/core-plugin-api';
 import { getRandomColor } from '../utils';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useTheme } from '@material-ui/core';
+import {
+  GetDailyTimeSummariesByTemplateResponse,
+  isTimeSaverApiError,
+} from '@alithya-oss/plugin-time-saver-common';
 
 ChartJS.register(LineElement, PointElement, Title, Tooltip, Legend);
-
-type DailyTimeSummaryResponse = {
-  stats: {
-    date: string;
-    template_name: string;
-    total_time_saved: number;
-  }[];
-};
 
 interface DailyTimeSummaryLineProps {
   template_name?: string;
@@ -50,7 +46,8 @@ export function DailyTimeSummaryLineChartTemplateWise({
   const configApi = useApi(configApiRef);
   const fetchApi = useApi(fetchApiRef);
 
-  const [data, setData] = useState<DailyTimeSummaryResponse | null>(null);
+  const [data, setData] =
+    useState<GetDailyTimeSummariesByTemplateResponse | null>(null);
   const theme = useTheme();
   useEffect(() => {
     const url = `${configApi.getString(
@@ -75,17 +72,21 @@ export function DailyTimeSummaryLineChartTemplateWise({
     return <CircularProgress />;
   }
 
-  let filteredData: DailyTimeSummaryResponse;
+  if (isTimeSaverApiError(data)) {
+    return <>{data.errorMessage}</>;
+  }
+
+  let filteredData: GetDailyTimeSummariesByTemplateResponse;
   if (template_name) {
     filteredData = {
-      stats: data.stats.filter(stat => stat.template_name === template_name),
+      stats: data.stats.filter(stat => stat.templateName === template_name),
     };
   } else {
     filteredData = data;
   }
 
   const uniqueTemplates = Array.from(
-    new Set(filteredData.stats.map(stat => stat.template_name)),
+    new Set(filteredData.stats.map(stat => stat.templateName)),
   );
 
   const options: ChartOptions<'line'> = {
@@ -136,8 +137,8 @@ export function DailyTimeSummaryLineChartTemplateWise({
     labels: uniqueDates,
     datasets: uniqueTemplates.map(tn => {
       const templateData = filteredData.stats
-        .filter(stat => stat.template_name === tn)
-        .map(stat => ({ x: stat.date, y: stat.total_time_saved }));
+        .filter(stat => stat.templateName === tn)
+        .map(stat => ({ x: stat.date, y: stat.totalTimeSaved }));
 
       return {
         label: tn,

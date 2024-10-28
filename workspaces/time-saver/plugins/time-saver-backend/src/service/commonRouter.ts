@@ -16,13 +16,13 @@
 import express from 'express';
 import { LoggerService } from '@backstage/backend-plugin-api';
 import { TimeSaverHandler } from '../timeSaver/handler';
-import { TsApi } from '../api/apiService';
+import { TimeSaverApi } from '../api/timeSaverApi';
 
 export function setupCommonRoutes(
   router: express.Router,
   logger: LoggerService,
   tsHandler: TimeSaverHandler,
-  apiHandler: TsApi,
+  apiHandler: TimeSaverApi,
 ) {
   router.get('/health', (_, response) => {
     logger.info('PONG!');
@@ -55,22 +55,22 @@ export function setupCommonRoutes(
   });
 
   router.get('/getDailyTimeSummary/team', async (_request, response) => {
-    const result = await apiHandler.getDailyTimeSummariesTeamWise();
+    const result = await apiHandler.getDailyTimeSummariesByTeam();
     response.json(result);
   });
 
   router.get('/getDailyTimeSummary/template', async (_request, response) => {
-    const result = await apiHandler.getDailyTimeSummariesTemplateWise();
+    const result = await apiHandler.getDailyTimeSummariesByTemplate();
     response.json(result);
   });
 
   router.get('/getTimeSummary/team', async (_request, response) => {
-    const result = await apiHandler.getTimeSummarySavedTeamWise();
+    const result = await apiHandler.getTimeSavedSummaryByTeam();
     response.json(result);
   });
 
   router.get('/getTimeSummary/template', async (_request, response) => {
-    const result = await apiHandler.getTimeSummarySavedTemplateWise();
+    const result = await apiHandler.getTimeSavedSummaryByTemplate();
     response.json(result);
   });
 

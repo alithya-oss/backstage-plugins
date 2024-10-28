@@ -1,6 +1,6 @@
 # @alithya-oss/plugin-catalog-backend-module-time-saver-processor
 
-## 0.2.0
+## 1.1.0
 
 ### Minor Changes
 
