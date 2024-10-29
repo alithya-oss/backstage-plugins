@@ -1,6 +1,6 @@
 {
   "name": "@alithya-oss/plugin-cost-insights-aws-backend",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "repository": {
     "type": "git",
     "url": "github:awslabs/backstage-plugins-for-aws",

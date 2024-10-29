@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.1.4
+
+### Patch Changes
+
+- b76307e: Bump framework version 1.30.4 and aligned plugin names with [community-plugins](https://github.com/backstage/community-plugins) naming convention
+- Updated dependencies [b76307e]
+  - @alithya-oss/plugin-cost-insights-aws-common@0.1.3
+  - @alithya-oss/plugin-aws-core-common@0.5.1
+
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 

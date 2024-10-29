@@ -1,7 +1,7 @@
 {
   "name": "@alithya-oss/plugin-amazon-ecs-common",
   "description": "Common functionality for the amazon-ecs-plugin-for-backstage plugin",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "repository": {
     "type": "git",
     "url": "github:awslabs/backstage-plugins-for-aws",
