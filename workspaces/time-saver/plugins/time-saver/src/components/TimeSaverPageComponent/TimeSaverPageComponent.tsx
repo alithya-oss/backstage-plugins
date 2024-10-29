@@ -24,22 +24,22 @@ import {
   HeaderLabel,
   SupportButton,
 } from '@backstage/core-components';
-import { AllStatsBarChart } from '../AllStatsBarChartComponent/AllStatsBarChartComponent';
-import { ByTeamBarChart } from '../ByTeamBarCharComponent/ByTeamBarChartComponent';
-import { GroupDivisionPieChart } from '../GroupDivisionPieChartComponent/GroupDivisionPieChartComponent';
-import { DailyTimeSummaryLineChartTeamWise } from '../TeamWiseDailyTimeLinearComponent/TeamWiseDailyTimeLinearComponent';
-import { TeamWiseTimeSummaryLinearChart } from '../TeamWiseTimeSummaryLinearComponent/TeamWiseTimeSummaryLinearComponent';
-import TeamSelector from '../TeamSelectorComponent/TeamSelectorComponent';
-import { DailyTimeSummaryLineChartTemplateWise } from '../TemplateWiseDailyTimeLinearComponent/TemplateWiseWiseDailyTimeLinearComponent';
-import { TemplateWiseTimeSummaryLinearChart } from '../TemplateWiseTimeSummaryLinearComponent/TemplateWiseTimeSummaryLinearComponent';
-import TemplateAutocomplete from '../TemplateAutocompleteComponent/TemplateAutocompleteComponent';
-import { ByTemplateBarChart } from '../ByTemplateBarCharComponent/ByTemplateBarChartComponent';
-import StatsTable from '../Table/StatsTable';
-import { TemplateCountGauge } from '../Gauge/TemplateCountGauge';
-import { TimeSavedGauge } from '../Gauge/TimeSavedGauge';
-import { TeamsGauge } from '../Gauge/TeamsGauge';
-import { TemplatesGauge } from '../Gauge/TemplatesGauge';
-import { EmptyTimeSaver } from '../Gauge/EmptyDbContent';
+import {
+  AllStatisticsBarChart,
+  DailyTimeSummaryPerTeamLineChart,
+  DailyTimeSummaryPerTemplateLineChart,
+  GroupDivisionStatisticsPieChart,
+  StatisticsTable,
+  TeamCountGauge,
+  TeamSelector,
+  TeamStatisticsBarChart,
+  TemplateCountGauge,
+  TemplateExecutionsCountGauge,
+  TemplateNameAutocomplete,
+  TemplateStatisticsBarChart,
+  TimeSavedGauge,
+  TimeSummaryPerTeamLineChart,
+} from '@alithya-oss/plugin-time-saver-react';
 
 export const TimeSaverPageComponent = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -81,22 +81,22 @@ export const TimeSaverPageComponent = () => {
       </Grid>
       <Grid item xs={2}>
         <Paper elevation={0}>
-          <TimeSavedGauge heading="Time Saved [hours]" />
+          <TimeSavedGauge label="Time Saved [hours]" />
         </Paper>
       </Grid>
       <Grid item xs={2}>
         <Paper elevation={0}>
-          <TimeSavedGauge number={8} heading="Time Saved [days]" />
+          <TimeSavedGauge divider={7} label="Time Saved [days]" />
         </Paper>
       </Grid>
       <Grid item xs={2}>
         <Paper elevation={0}>
-          <TeamsGauge />
+          <TeamCountGauge />
         </Paper>
       </Grid>
       <Grid item xs={2}>
         <Paper elevation={0}>
-          <TemplatesGauge />
+          <TemplateExecutionsCountGauge />
         </Paper>
       </Grid>
     </Grid>
@@ -124,7 +124,7 @@ export const TimeSaverPageComponent = () => {
             queries
           </SupportButton>
         </ContentHeader>
-        <EmptyTimeSaver />
+        {/* <EmptyTimeSaver /> */}
         <Grid container spacing={3} direction="column">
           <Grid item>
             <InfoCard title="Time statistics that you have saved using Backstage Templates">
@@ -136,19 +136,19 @@ export const TimeSaverPageComponent = () => {
                         {GaugesContainer}
                         <Divider variant="fullWidth" />
                         <Grid xs={6}>
-                          <AllStatsBarChart />
+                          <AllStatisticsBarChart />
                         </Grid>
                         <Grid xs={6}>
-                          <StatsTable />
+                          <StatisticsTable />
                         </Grid>
                         <Grid xs={6}>
-                          <DailyTimeSummaryLineChartTeamWise />
+                          <DailyTimeSummaryPerTeamLineChart />
                         </Grid>
                         <Grid xs={6}>
-                          <TeamWiseTimeSummaryLinearChart />
+                          <TimeSummaryPerTeamLineChart />
                         </Grid>
                         <Grid xs={6}>
-                          <GroupDivisionPieChart />
+                          <GroupDivisionStatisticsPieChart />
                         </Grid>
                       </Grid>
                     )}
@@ -164,18 +164,20 @@ export const TimeSaverPageComponent = () => {
                           </Grid>
                         </Grid>
                         <Grid xs={6}>
-                          <ByTeamBarChart team={selectedTeam} />
+                          <TeamStatisticsBarChart teamName={selectedTeam} />
                         </Grid>{' '}
                         <Grid xs={6}>
-                          <StatsTable team={selectedTeam} />
+                          <StatisticsTable teamName={selectedTeam} />
                         </Grid>
                         <Grid xs={6}>
-                          <DailyTimeSummaryLineChartTeamWise
-                            team={selectedTeam}
+                          <DailyTimeSummaryPerTeamLineChart
+                            teamName={selectedTeam}
                           />
                         </Grid>
                         <Grid xs={6}>
-                          <TeamWiseTimeSummaryLinearChart team={selectedTeam} />
+                          <TimeSummaryPerTeamLineChart
+                            teamName={selectedTeam}
+                          />
                         </Grid>
                       </Grid>
                     )}
@@ -183,25 +185,25 @@ export const TimeSaverPageComponent = () => {
                       <Grid container spacing={3}>
                         <Grid xs={12}>
                           <Grid xs={6}>
-                            <TemplateAutocomplete
+                            <TemplateNameAutocomplete
                               onTemplateChange={handleTemplateChange}
                             />
                           </Grid>
                         </Grid>
                         <Grid xs={6}>
-                          <ByTemplateBarChart template_name={template} />
+                          <TemplateStatisticsBarChart templateName={template} />
                         </Grid>
                         <Grid xs={6}>
-                          <StatsTable template_name={template} />
+                          <StatisticsTable templateName={template} />
                         </Grid>
                         <Grid xs={6}>
-                          <DailyTimeSummaryLineChartTemplateWise
-                            template_name={template}
+                          <DailyTimeSummaryPerTemplateLineChart
+                            templateName={template}
                           />
                         </Grid>
                         <Grid xs={6}>
-                          <TemplateWiseTimeSummaryLinearChart
-                            template_name={template}
+                          <DailyTimeSummaryPerTemplateLineChart
+                            templateName={template}
                           />
                         </Grid>
                       </Grid>
