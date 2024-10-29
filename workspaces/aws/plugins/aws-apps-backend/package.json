@@ -65,6 +65,7 @@
     "@backstage/plugin-catalog-node": "^1.12.6",
     "@backstage/plugin-permission-common": "^0.8.1",
     "@backstage/plugin-permission-node": "^0.8.2",
+    "@octokit/rest": "^21.0.2",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
     "node-fetch": "^2.6.7",
@@ -80,6 +81,7 @@
     "@backstage/plugin-auth-backend": "^0.22.12",
     "@backstage/plugin-auth-backend-module-guest-provider": "^0.1.10",
     "@types/express": "*",
+    "@types/jest": "^29.5.14",
     "@types/supertest": "^2.0.12",
     "msw": "^2.3.1",
     "supertest": "^6.2.4"
