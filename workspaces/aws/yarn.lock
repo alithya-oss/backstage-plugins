@@ -570,7 +570,7 @@ __metadata:
     "@backstage/plugin-scaffolder-backend": "npm:^1.24.1"
     "@backstage/plugin-scaffolder-node": "npm:^0.4.10"
     "@backstage/types": "npm:^1.1.1"
-    "@types/lodash": "npm:4.17.7"
+    "@types/lodash": "npm:4.17.12"
     lodash: "npm:^4.17.21"
     winston: "npm:^3.13.1"
     yaml: "npm:^2.5.0"
@@ -16471,10 +16471,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:4.17.7":
-  version: 4.17.7
-  resolution: "@types/lodash@npm:4.17.7"
-  checksum: 10/b8177f19cf962414a66989837481b13f546afc2e98e8d465bec59e6ac03a59c584eb7053ce511cde3a09c5f3096d22a5ae22cfb56b23f3b0da75b0743b6b1a44
+"@types/lodash@npm:4.17.12":
+  version: 4.17.12
+  resolution: "@types/lodash@npm:4.17.12"
+  checksum: 10/3d829f97c0ea713135e6eb48e983feffb315f4cf228d03654ca8a328e3fecd03005bf7dd30bf411f4306967c610d96738d441588283a41456815f2ce1fd7044c
   languageName: node
   linkType: hard
 
