@@ -14,17 +14,39 @@
  * limitations under the License.
  */
 import {
+  createApiFactory,
   createPlugin,
   createRoutableExtension,
+  discoveryApiRef,
+  fetchApiRef,
+  identityApiRef,
 } from '@backstage/core-plugin-api';
 
 import { rootRouteRef } from './routes';
+import { TimeSaverClient } from './api';
+import { timeSaverApiRef } from '@alithya-oss/plugin-time-saver-react';
 
 /**
  * @public
  */
 export const TimeSaverPlugin = createPlugin({
   id: 'time-saver',
+  apis: [
+    createApiFactory({
+      api: timeSaverApiRef,
+      deps: {
+        discoveryApi: discoveryApiRef,
+        identityApi: identityApiRef,
+        fetchApi: fetchApiRef,
+      },
+      factory: ({ discoveryApi, identityApi, fetchApi }) =>
+        new TimeSaverClient({
+          fetchApi,
+          identityApi,
+          discoveryApi,
+        }),
+    }),
+  ],
   routes: {
     root: rootRouteRef,
   },
