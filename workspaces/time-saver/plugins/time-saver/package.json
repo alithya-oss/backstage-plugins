@@ -20,7 +20,8 @@
     "pluginId": "time-saver",
     "pluginPackages": [
       "@alithya-oss/plugin-time-saver",
-      "@alithya-oss/plugin-time-saver-backend"
+      "@alithya-oss/plugin-time-saver-backend",
+      "@alithya-oss/plugin-time-saver-react"
     ]
   },
   "sideEffects": false,
