@@ -11,6 +11,5 @@
  * limitations under the License.
  */
 
-export * from './locator';
 export * from './utils';
 export * from './constants';

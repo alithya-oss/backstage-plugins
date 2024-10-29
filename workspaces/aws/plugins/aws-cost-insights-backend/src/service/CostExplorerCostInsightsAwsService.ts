@@ -11,11 +11,11 @@
  * limitations under the License.
  */
 
-import { Logger } from 'winston';
 import {
   CostExplorerClient,
   Expression,
   GetCostAndUsageCommand,
+  GetCostAndUsageCommandOutput,
   Granularity,
   GroupDefinition,
   GroupDefinitionType,
@@ -40,25 +40,33 @@ import {
   stringifyEntityRef,
 } from '@backstage/catalog-model';
 import { CostInsightsAwsService } from './types';
-import { AwsCredentialsManager } from '@backstage/integration-aws-node';
+import {
+  AwsCredentialsManager,
+  DefaultAwsCredentialsManager,
+} from '@backstage/integration-aws-node';
 import {
   AuthService,
   BackstageCredentials,
+  coreServices,
+  createServiceFactory,
+  createServiceRef,
   DiscoveryService,
   HttpAuthService,
+  LoggerService,
 } from '@backstage/backend-plugin-api';
 import { createLegacyAuthAdapters } from '@backstage/backend-common';
 import { AwsCredentialIdentityProvider } from '@aws-sdk/types';
 import regression, { DataPoint } from 'regression';
-import { CostInsightsAwsConfig } from '../config';
+import { CostInsightsAwsConfig, readCostInsightsAwsConfig } from '../config';
 import { DateTime, Duration as LuxonDuration } from 'luxon';
+import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
 
 /** @public */
 export class CostExplorerCostInsightsAwsService
   implements CostInsightsAwsService
 {
   public constructor(
-    private readonly logger: Logger,
+    private readonly logger: LoggerService,
     private readonly auth: AuthService,
     private readonly catalogApi: CatalogApi,
     private readonly costExplorerClient: CostExplorerClient,
@@ -72,7 +80,7 @@ export class CostExplorerCostInsightsAwsService
       discovery: DiscoveryService;
       auth?: AuthService;
       httpAuth?: HttpAuthService;
-      logger: Logger;
+      logger: LoggerService;
       credentialsManager: AwsCredentialsManager;
     },
   ) {
@@ -113,7 +121,7 @@ export class CostExplorerCostInsightsAwsService
     intervals: string;
     credentials?: BackstageCredentials;
   }): Promise<Cost> {
-    this.logger.debug(`Fetch daily costs for ${options.entityRef}`);
+    this.logger.debug(`Fetch daily costs for ${options.entityRef.name}`);
 
     const entity = await this.catalogApi.getEntityByRef(
       options.entityRef,
@@ -145,7 +153,7 @@ export class CostExplorerCostInsightsAwsService
 
     if (annotation.name === COST_INSIGHTS_AWS_TAGS_ANNOTATION) {
       const tagFilters = annotation.value.split(',').map(e => {
-        const parts = e.split('=');
+        const parts: string[] = e.split('=');
 
         return {
           Tags: {
@@ -226,17 +234,18 @@ export class CostExplorerCostInsightsAwsService
     startDate: Date,
     endDate: Date,
   ): Promise<Cost> {
-    const response = await this.costExplorerClient.send(
-      new GetCostAndUsageCommand({
-        TimePeriod: {
-          Start: this.formatDate(endDate),
-          End: this.formatDate(startDate),
-        },
-        Granularity: Granularity.DAILY,
-        Metrics: ['UnblendedCost'],
-        Filter: filter,
-      }),
-    );
+    const response: GetCostAndUsageCommandOutput =
+      await this.costExplorerClient.send(
+        new GetCostAndUsageCommand({
+          TimePeriod: {
+            Start: this.formatDate(endDate),
+            End: this.formatDate(startDate),
+          },
+          Granularity: Granularity.DAILY,
+          Metrics: ['UnblendedCost'],
+          Filter: filter,
+        }),
+      );
 
     const aggregation = response.ResultsByTime!.map(result => {
       return {
@@ -259,38 +268,40 @@ export class CostExplorerCostInsightsAwsService
     startDate: Date,
     endDate: Date,
   ): Promise<Cost[]> {
-    const response = await this.costExplorerClient.send(
-      new GetCostAndUsageCommand({
-        TimePeriod: {
-          Start: this.formatDate(endDate),
-          End: this.formatDate(startDate),
-        },
-        Granularity: Granularity.DAILY,
-        Metrics: ['UnblendedCost'],
-        Filter: filter,
-        GroupBy: groupBy,
-      }),
-    );
+    const response: GetCostAndUsageCommandOutput =
+      await this.costExplorerClient.send(
+        new GetCostAndUsageCommand({
+          TimePeriod: {
+            Start: this.formatDate(endDate),
+            End: this.formatDate(startDate),
+          },
+          Granularity: Granularity.DAILY,
+          Metrics: ['UnblendedCost'],
+          Filter: filter,
+          GroupBy: groupBy,
+        }),
+      );
 
     const aggregations: Record<string, DateAggregation[]> = {};
 
-    for (let i = 0; i < response.ResultsByTime!.length; i++) {
-      const result = response.ResultsByTime![i];
-      const resultDate = result.TimePeriod!.Start!.replaceAll('-', '/');
+    if (response.ResultsByTime) {
+      for (const result of response.ResultsByTime) {
+        const resultDate = result.TimePeriod!.Start!.replaceAll('-', '/');
 
-      for (let j = 0; j < result.Groups!.length; j++) {
-        const groupResult = result.Groups![j];
+        if (result.Groups) {
+          for (const groupResult of result.Groups) {
+            const key = groupResult.Keys![0];
 
-        const key = groupResult.Keys![0];
+            if (!aggregations[key]) {
+              aggregations[key] = [];
+            }
 
-        if (!aggregations[key]) {
-          aggregations[key] = [];
+            aggregations[key].push({
+              date: resultDate,
+              amount: parseFloat(groupResult.Metrics!.UnblendedCost.Amount!),
+            });
+          }
         }
-
-        aggregations[key].push({
-          date: resultDate,
-          amount: parseFloat(groupResult.Metrics!.UnblendedCost.Amount!),
-        });
       }
     }
 
@@ -322,9 +333,9 @@ export class CostExplorerCostInsightsAwsService
     }
 
     const regex = /R(\d+)/;
-    const match = parts[0].match(regex);
+    const match = RegExp(regex).exec(parts[0]);
 
-    if (!match || !match[1]) {
+    if (!match?.[1]) {
       throw new Error(`Failed to parse repeating interval ${parts[0]}`);
     }
 
@@ -371,3 +382,40 @@ export class CostExplorerCostInsightsAwsService
     };
   }
 }
+
+/** @public */
+export const costInsightsAwsServiceRef =
+  createServiceRef<CostInsightsAwsService>({
+    id: 'cost-insights-aws.api',
+    defaultFactory: async service =>
+      createServiceFactory({
+        service,
+        deps: {
+          logger: coreServices.logger,
+          config: coreServices.rootConfig,
+          catalogApi: catalogServiceRef,
+          auth: coreServices.auth,
+          discovery: coreServices.discovery,
+          httpAuth: coreServices.httpAuth,
+        },
+        async factory({
+          logger,
+          config,
+          catalogApi,
+          auth,
+          httpAuth,
+          discovery,
+        }) {
+          const pluginConfig = readCostInsightsAwsConfig(config);
+
+          return CostExplorerCostInsightsAwsService.fromConfig(pluginConfig, {
+            catalogApi,
+            auth,
+            httpAuth,
+            discovery,
+            logger,
+            credentialsManager: DefaultAwsCredentialsManager.fromConfig(config),
+          });
+        },
+      }),
+  });

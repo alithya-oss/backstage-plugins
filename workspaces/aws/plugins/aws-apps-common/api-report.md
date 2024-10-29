@@ -4,10 +4,10 @@
 
 ```ts
 import { BasicPermission } from '@backstage/plugin-permission-common';
-import { DeployStackStatus } from '@alithya-oss/plugin-aws-apps/src/helpers/constants';
 import { Entity } from '@backstage/catalog-model';
 import { JsonObject } from '@backstage/types';
 import { KindValidator } from '@backstage/catalog-model';
+import { StackStatus } from '@aws-sdk/client-cloudformation';
 
 // @public (undocumented)
 export type AppPromoParams = {
@@ -344,6 +344,17 @@ export enum ComponentStateType {
 }
 
 // @public (undocumented)
+export type DeployStackStatus = StackStatus | ExtraStackDeployStatus;
+
+// @public (undocumented)
+export enum ExtraStackDeployStatus {
+  // (undocumented)
+  STAGED = 'STAGED',
+  // (undocumented)
+  UNSTAGED = 'UNSTAGED',
+}
+
+// @public (undocumented)
 export type GenericAWSEnvironment =
   | AWSDeploymentEnvironment
   | AWSECSAppDeploymentEnvironment
@@ -403,7 +414,7 @@ export interface IGitAPIResult {
   // (undocumented)
   httpResponse: number;
   // (undocumented)
-  isSuccuess: boolean;
+  isSuccess: boolean;
   // (undocumented)
   message: string;
   // (undocumented)

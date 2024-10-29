@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "author": {
     "name": "Amazon Web Services",
-    "url": "http://aws.amazon.com"
+    "url": "https://aws.amazon.com"
   },
   "publishConfig": {
     "access": "public",
@@ -46,5 +46,11 @@
     "dist",
     "config.d.ts"
   ],
-  "configSchema": "config.d.ts"
+  "configSchema": "config.d.ts",
+  "dependencies": {
+    "@aws-sdk/client-cloudformation": "^3.623.0",
+    "@backstage/catalog-model": "^1.6.0",
+    "@backstage/plugin-permission-common": "^0.8.1",
+    "@backstage/types": "^1.1.1"
+  }
 }

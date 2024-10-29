@@ -8,12 +8,16 @@ import { UserEntity } from '@backstage/catalog-model';
 import { getAWScreds } from '@alithya-oss/plugin-aws-apps-backend';
 import { EnvironmentProvider, EnvironmentProviderConnection } from '../types';
 import {
-  SecretsManagerClient,
-  CreateSecretCommandInput,
   CreateSecretCommand,
+  CreateSecretCommandInput,
   PutSecretValueCommand,
   PutSecretValueCommandInput,
+  SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
+
+import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
+import { LoggerService } from '@backstage/backend-plugin-api';
+import { Config } from '@backstage/config';
 
 export type EnvProviderConnectMap = {
   [key: string]: EnvironmentProviderConnection;
@@ -28,10 +32,12 @@ export type EnvProviderConnectMap = {
  * @returns A map of connection information, keyed off of the environment provider name
  */
 export async function getEnvironmentProviderConnectInfo(
+  config: Config,
+  logger: LoggerService,
   envProviders: EnvironmentProvider[],
   userEntity?: UserEntity,
 ): Promise<EnvProviderConnectMap> {
-  const envProviderConnectionsMap = (
+  return (
     await Promise.all(
       envProviders.map(
         async (
@@ -40,6 +46,8 @@ export async function getEnvironmentProviderConnectInfo(
           const { accountId, region, envProviderPrefix, envProviderName } =
             envProvider;
           const awsAuthResponse = await getAWScreds(
+            config,
+            logger,
             accountId,
             region,
             envProviderPrefix,
@@ -62,8 +70,6 @@ export async function getEnvironmentProviderConnectInfo(
       [envProviderConnection.providerName]: envProviderConnection,
     };
   }, {});
-
-  return envProviderConnectionsMap;
 }
 
 // Get the value for a specified SSM Parameter Store path
@@ -101,13 +107,19 @@ export async function getSSMParameterValue(
 
 // Get the value for a specified SSM Parameter Store path
 export async function getPlatformAccountSSMParameterValue(
+  config: Config,
   ssmPath: string,
   region?: string,
   logger?: Logger,
 ): Promise<string> {
+  const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(config);
+  const awsCredentialProvider =
+    await awsCredentialsManager.getCredentialProvider({});
   const ssmClient = new SSMClient({
     region,
     customUserAgent: 'opa-plugin',
+    credentialDefaultProvider: () =>
+      awsCredentialProvider.sdkCredentialProvider,
   });
   const ssmResponse = await ssmClient.send(
     new GetParameterCommand({
@@ -185,6 +197,6 @@ export async function putSecret(
       logger.error(error);
       logger.error('Error updating secret value');
     }
-    return Promise.reject(new Error('Error updating secret value'));
   }
+  return Promise.reject(new Error('Error updating secret value'));
 }

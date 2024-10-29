@@ -106,10 +106,12 @@ import {
   SSMClient,
 } from '@aws-sdk/client-ssm';
 
-import { AwsCredentialIdentity } from '@aws-sdk/types';
 import { parse as parseArn } from '@aws-sdk/util-arn-parser';
 import { AWSServiceResources } from '@alithya-oss/plugin-aws-apps-common';
 import { LoggerService } from '@backstage/backend-plugin-api';
+
+import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
+import { Config } from '@backstage/config';
 
 /** @public */
 export type DynamoDBTableData = {
@@ -134,8 +136,8 @@ export type DynamoDBTableData = {
 /** @public */
 export class AwsAppsApi {
   public constructor(
+    private readonly config: Config,
     private readonly logger: LoggerService,
-    private readonly awsCredentials: AwsCredentialIdentity,
     private readonly awsRegion: string,
     private readonly awsAccount: string,
   ) {
@@ -162,17 +164,25 @@ export class AwsAppsApi {
     // resolve ECS cluster param to value
     const clusterRef = await this.getSSMParameter(clusterName);
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new ECSClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: ListTasksCommandInput = {
-      cluster: clusterRef.Parameter?.Value?.toString() || '',
+      cluster: clusterRef.Parameter?.Value?.toString() ?? '',
       serviceName: serviceName,
     };
     const command = new ListTasksCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Describes tasks of an ECS Service
@@ -181,7 +191,7 @@ export class AwsAppsApi {
    * Describe the active running tasks of a giving cluster
    *
    * @param clusterName - The ECS Cluster name
-   * @param taskArns - List of Task arns
+   * @param taskArns - List of Task ARNs
    * @returns The DescribeTasksCommand object
    *
    */
@@ -193,17 +203,25 @@ export class AwsAppsApi {
     // resolve ECS cluster param to value
     const clusterRef = await this.getSSMParameter(clusterName);
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new ECSClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: DescribeTasksCommandInput = {
-      cluster: clusterRef.Parameter?.Value?.toString() || '',
+      cluster: clusterRef.Parameter?.Value?.toString() ?? '',
       tasks: taskArns,
     };
     const command = new DescribeTasksCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Update an ECS Service with desire task number.
@@ -213,6 +231,8 @@ export class AwsAppsApi {
    *
    * @param clusterName - The ECS Cluster name
    * @param serviceName - The ECS Service name
+   * @param taskDefinition - The name of the ECS task definition
+   * @param restart - Enable/disable task restart on new deployment
    * @param numberOfTasks - The number of tasks desired - use 0 or 1 to reset
    * @returns The UpdateServiceCommandOutput object
    *
@@ -228,20 +248,28 @@ export class AwsAppsApi {
     // resolve ECS cluster param to value
     const clusterRef = await this.getSSMParameter(clusterName);
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new ECSClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: UpdateServiceCommandInput = {
-      cluster: clusterRef.Parameter?.Value?.toString() || '',
+      cluster: clusterRef.Parameter?.Value?.toString() ?? '',
       service: serviceName,
       desiredCount: numberOfTasks,
       forceNewDeployment: restart,
       taskDefinition: taskDefinition,
     };
     const command = new UpdateServiceCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Get SecretsManager Secret value.
@@ -249,7 +277,7 @@ export class AwsAppsApi {
    * @remarks
    * Get SecretsManager Secret value.
    *
-   * @param secretArn - The Arn of the secret to retrive
+   * @param secretArn - The Arn of the secret to retrieve
    * @returns The GetSecretValueCommandOutput object
    *
    */
@@ -257,16 +285,25 @@ export class AwsAppsApi {
     secretArn: string,
   ): Promise<GetSecretValueCommandOutput> {
     this.logger.info('Calling getSecretValue');
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new SecretsManagerClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: GetSecretValueCommandInput = {
       SecretId: secretArn,
     };
     const command = new GetSecretValueCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   /**
@@ -275,6 +312,8 @@ export class AwsAppsApi {
    * create SecretsManager Secret.
    *
    * @param secretName - The name of the secret
+   * @param description - The description of the secret
+   * @param tags - The tags allocated to the secret
    * @returns The CreateSecretCommandOutput object
    *
    */
@@ -290,9 +329,18 @@ export class AwsAppsApi {
       return { Key: tag.Key, Value: tag.Value.toString() };
     });
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new SecretsManagerClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: CreateSecretCommandInput = {
       Name: secretName,
@@ -302,8 +350,7 @@ export class AwsAppsApi {
     };
     const command = new CreateSecretCommand(params);
     try {
-      const response = await client.send(command);
-      return response;
+      return await client.send(command);
     } catch (error: any) {
       throw Error(`Error creating Secret - ${error.toString()}`);
     }
@@ -323,9 +370,19 @@ export class AwsAppsApi {
     secretValue: string,
   ): Promise<PutSecretValueCommandOutput> {
     this.logger.info('Calling put Secret');
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new SecretsManagerClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: PutSecretValueCommandInput = {
       SecretId: secretArn,
@@ -333,8 +390,7 @@ export class AwsAppsApi {
     };
     const command = new PutSecretValueCommand(params);
     try {
-      const response = await client.send(command);
-      return response;
+      return await client.send(command);
     } catch (error) {
       throw Error('Error updating secret value');
     }
@@ -345,6 +401,7 @@ export class AwsAppsApi {
    * create an S3 bucket.
    *
    * @param bucketName - The name of the bucket
+   * @param tags - tags allocated to the bucket
    * @returns The CreateBucketCommandOutput object
    *
    */
@@ -360,9 +417,18 @@ export class AwsAppsApi {
       return { Key: tag.Key, Value: tag.Value.toString() };
     });
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new S3Client({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const createInput: CreateBucketCommandInput = {
       Bucket: fullBucketName,
@@ -411,9 +477,18 @@ export class AwsAppsApi {
   ): Promise<HeadObjectCommandOutput> {
     this.logger.info('Calling doesS3FileExist');
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new S3Client({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
 
     const input = {
@@ -421,9 +496,7 @@ export class AwsAppsApi {
       Key: fileName,
     };
     const command = new HeadObjectCommand(input);
-    const response = await client.send(command);
-
-    return response;
+    return client.send(command);
   }
   /**
    * Get CloudWatch log groups metadata array based on the supplied logPrefix.
@@ -439,16 +512,25 @@ export class AwsAppsApi {
     logPrefix: string,
   ): Promise<DescribeLogGroupsCommandOutput> {
     this.logger.info('Calling getLogGroups');
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new CloudWatchLogsClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: DescribeLogGroupsCommandInput = {
       logGroupNamePrefix: logPrefix,
     };
     const command = new DescribeLogGroupsCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Get the metadata of the CloudWatch log group streams.
@@ -464,9 +546,19 @@ export class AwsAppsApi {
     logGroupName: string,
   ): Promise<DescribeLogStreamsCommandOutput> {
     this.logger.info('Calling getLogStreams');
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new CloudWatchLogsClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: DescribeLogStreamsCommandInput = {
       logGroupName,
@@ -474,8 +566,7 @@ export class AwsAppsApi {
       descending: true,
     };
     const command = new DescribeLogStreamsCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Get CloudWatch log group streams content.
@@ -495,9 +586,19 @@ export class AwsAppsApi {
     startFromHead = true,
   ): Promise<GetLogEventsCommandOutput> {
     this.logger.info('Calling getLogGroupEvents');
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new CloudWatchLogsClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: GetLogEventsCommandInput = {
       logGroupName: logGroupName,
@@ -505,23 +606,31 @@ export class AwsAppsApi {
       startFromHead,
     };
     const command = new GetLogEventsCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   public async getLogRecord(
     logRecordPointer: string,
   ): Promise<GetLogRecordCommandOutput> {
     this.logger.info('Calling getLogRecord');
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new CloudWatchLogsClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: GetLogRecordCommandInput = {
       logRecordPointer: logRecordPointer,
     };
     const command = new GetLogRecordCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   public async getDynamodbTable(
@@ -531,9 +640,18 @@ export class AwsAppsApi {
   ): Promise<ScanCommandOutput> {
     this.logger.info('Calling getDynamodbTable');
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new DynamoDBClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     console.log(timeFrame);
     const params: ScanCommandInput = {
@@ -545,12 +663,11 @@ export class AwsAppsApi {
         '#appName': 'appName',
       },
       FilterExpression: '#appName = :appName',
-      //TODO: Add Query to fetch record by user for a giving time frame , use secondary index for time. need to calculate time backward
-      // appName -> search critera , timeframe.
+      // TODO: Add Query to fetch record by user for a giving time frame , use secondary index for time. need to calculate time backward
+      // appName -> search criteria , timeframe.
     };
     const command = new ScanCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   public async putDynamodbTableData(
@@ -558,9 +675,18 @@ export class AwsAppsApi {
   ): Promise<PutItemCommandOutput> {
     this.logger.info('Calling getDynamodbTable');
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new DynamoDBClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: PutItemCommandInput = {
       TableName: data.tableName,
@@ -585,8 +711,7 @@ export class AwsAppsApi {
       },
     };
     const command = new PutItemCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   /**
@@ -604,16 +729,24 @@ export class AwsAppsApi {
   ): Promise<ListGroupResourcesCommandOutput> {
     this.logger.info('Calling getResourceGroupResources');
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new ResourceGroupsClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: ListGroupResourcesCommandInput = {
       Group: resourceGroupName,
     };
     const command = new ListGroupResourcesCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
 
   /**
@@ -623,8 +756,8 @@ export class AwsAppsApi {
    * Get resources from a named Resource Group, parses them to destructure the ResourceType, and
    * categorizes the resources by service identifier
    *
-   * @param resourceGroupName - The Resource Group name to get a list of resources from.  This can be a string representing an ARN or the name of the Resource Group
    * @returns A ServiceResources object containing the grouped services
+   * @param resourceGroup - the name of the resource group
    */
   public async getCategorizedResources(
     resourceGroup: string,
@@ -632,61 +765,55 @@ export class AwsAppsApi {
     const rawResults = await this.getResourceGroupResources(resourceGroup);
 
     const resourceIdentifiers = rawResults.Resources ?? [];
-    let categorizedResources = resourceIdentifiers.reduce<AWSServiceResources>(
-      (acc, item): any => {
-        const idObj = item.Identifier;
-        if (idObj?.ResourceType) {
-          const resourceTypeId = idObj.ResourceType;
-          const [_, serviceName, resourceTypeName] = resourceTypeId.split('::');
+    return resourceIdentifiers.reduce<AWSServiceResources>((acc, item): any => {
+      const idObj = item.Identifier;
+      if (idObj?.ResourceType) {
+        const resourceTypeId = idObj.ResourceType;
+        const [_, serviceName, resourceTypeName] = resourceTypeId.split('::');
 
-          const resourceArn = idObj.ResourceArn ?? '';
-          try {
-            const { resource, service } = parseArn(resourceArn);
-            // Use a regex pattern to extract the resource name without the service resource type
-            // Most arns begin the resource name after a '/', but some (like CW logs) start after a ':'
-            const re = /.*?([:?\/])(.*)/;
-            const reMatches = resource.match(re);
-            let resourceName = reMatches ? reMatches[2] : resource;
-            // Handle the exception case for SSM Parameters where path-like values need to be prefixed with '/'
-            if (
-              service == 'ssm' &&
-              resource.startsWith('parameter') &&
-              resourceName.indexOf('/') > 0
-            ) {
-              resourceName = `/${resourceName}`;
-            }
-
-            if (acc[serviceName]) {
-              acc[serviceName] = [
-                ...acc[serviceName],
-                ...[
-                  {
-                    resourceTypeId,
-                    resourceTypeName,
-                    resourceArn,
-                    resourceName,
-                  },
-                ],
-              ];
-            } else {
-              acc[serviceName] = [
-                { resourceTypeId, resourceTypeName, resourceArn, resourceName },
-              ];
-            }
-          } catch {
-            throw new Error(
-              `Invalid arn provided for ${serviceName} in resource group ${resourceGroup}`,
-            );
+        const resourceArn = idObj.ResourceArn ?? '';
+        try {
+          const { resource, service } = parseArn(resourceArn);
+          // Use a regex pattern to extract the resource name without the service resource type
+          // Most ARNs begin the resource name after a '/', but some (like CW logs) start after a ':'
+          const re = /.*?([:?/])(.*)/;
+          const reMatches = RegExp(re).exec(resource);
+          let resourceName = reMatches ? reMatches[2] : resource;
+          // Handle the exception case for SSM Parameters where path-like values need to be prefixed with '/'
+          if (
+            service === 'ssm' &&
+            resource.startsWith('parameter') &&
+            resourceName.indexOf('/') > 0
+          ) {
+            resourceName = `/${resourceName}`;
           }
-          return acc;
-        } else {
-          throw new Error('Could not parse resource group resources response');
-        }
-      },
-      {},
-    );
 
-    return categorizedResources;
+          if (acc[serviceName]) {
+            acc[serviceName] = [
+              ...acc[serviceName],
+              ...[
+                {
+                  resourceTypeId,
+                  resourceTypeName,
+                  resourceArn,
+                  resourceName,
+                },
+              ],
+            ];
+          } else {
+            acc[serviceName] = [
+              { resourceTypeId, resourceTypeName, resourceArn, resourceName },
+            ];
+          }
+        } catch {
+          throw new Error(
+            `Invalid arn provided for ${serviceName} in resource group ${resourceGroup}`,
+          );
+        }
+        return acc;
+      }
+      throw new Error('Could not parse resource group resources response');
+    }, {});
   }
 
   /**
@@ -704,9 +831,18 @@ export class AwsAppsApi {
   ): Promise<GetParameterCommandOutput> {
     this.logger.info(`Calling getSSMParameter - ${ssmParamName}`);
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new SSMClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
 
     const params: GetParameterCommandInput = {
@@ -714,8 +850,7 @@ export class AwsAppsApi {
       WithDecryption: true,
     };
     const command = new GetParameterCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Describe Task definition
@@ -729,17 +864,26 @@ export class AwsAppsApi {
     taskDefinitionArn: string,
   ): Promise<DescribeTaskDefinitionCommandOutput> {
     this.logger.info('Calling Describe Task Definition');
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new ECSClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: DescribeTaskDefinitionCommandInput = {
       taskDefinition: taskDefinitionArn,
     };
 
     const command = new DescribeTaskDefinitionCommand(params);
-    const resp = client.send(command);
-    return resp;
+    return client.send(command);
   }
   /**
    * Register Task Definition
@@ -753,9 +897,19 @@ export class AwsAppsApi {
     taskDefinition: TaskDefinition,
   ): Promise<RegisterTaskDefinitionCommandOutput> {
     this.logger.info('Calling Register Task Definition');
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new ECSClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const registerTdParams: RegisterTaskDefinitionCommandInput = {
       containerDefinitions: taskDefinition.containerDefinitions,
@@ -770,9 +924,7 @@ export class AwsAppsApi {
 
     const registerCommand = new RegisterTaskDefinitionCommand(registerTdParams);
 
-    const resp = client.send(registerCommand);
-
-    return resp;
+    return client.send(registerCommand);
   }
 
   /**
@@ -789,17 +941,25 @@ export class AwsAppsApi {
     stackName: string,
   ): Promise<DescribeStacksCommandOutput> {
     this.logger.info('Calling describeStack');
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new CloudFormationClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const input = {
       StackName: stackName,
     };
     const command = new DescribeStacksCommand(input);
-    const response = await client.send(command);
-
-    return response;
+    return client.send(command);
   }
 
   /**
@@ -816,17 +976,25 @@ export class AwsAppsApi {
     stackName: string,
   ): Promise<DescribeStackEventsCommandOutput> {
     this.logger.info('Calling describeStackEvents');
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new CloudFormationClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const input = {
       StackName: stackName,
     };
     const command = new DescribeStackEventsCommand(input);
-    const response = await client.send(command);
-
-    return response;
+    return client.send(command);
   }
 
   /**
@@ -854,9 +1022,18 @@ export class AwsAppsApi {
   ): Promise<UpdateStackCommandOutput> {
     this.logger.info('Calling updateStack');
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new CloudFormationClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
 
     const input = {
@@ -876,9 +1053,7 @@ export class AwsAppsApi {
       ],
     };
     const command = new UpdateStackCommand(input);
-    const response = await client.send(command);
-
-    return response;
+    return client.send(command);
   }
 
   /**
@@ -906,9 +1081,18 @@ export class AwsAppsApi {
   ): Promise<CreateStackCommandOutput> {
     this.logger.info('Calling createStack');
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new CloudFormationClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
 
     const input = {
@@ -927,9 +1111,7 @@ export class AwsAppsApi {
       ],
     };
     const command = new CreateStackCommand(input);
-    const response = await client.send(command);
-
-    return response;
+    return client.send(command);
   }
 
   /**
@@ -947,18 +1129,25 @@ export class AwsAppsApi {
   ): Promise<DeleteStackCommandOutput> {
     this.logger.info('Calling deleteStack');
 
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new CloudFormationClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
 
     const input = {
       StackName: stackName,
     };
     const command = new DeleteStackCommand(input);
-    const response = await client.send(command);
-
-    return response;
+    return client.send(command);
   }
 
   /**
@@ -975,16 +1164,25 @@ export class AwsAppsApi {
     clusterName: string,
   ): Promise<DescribeClusterCommandOutput> {
     this.logger.info('Calling getEksCluster');
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new EKSClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
     const params: DescribeClusterCommandInput = {
       name: clusterName,
     };
     const command = new DescribeClusterCommand(params);
-    const response = await client.send(command);
-    return response;
+    return client.send(command);
   }
 
   public async callLambda(
@@ -992,9 +1190,19 @@ export class AwsAppsApi {
     body: string,
   ): Promise<InvokeCommandOutput> {
     this.logger.info('Calling callLambda');
+
+    const accountId = this.awsAccount;
+    const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
+      this.config,
+    );
+    const awsCredentialProvider =
+      await awsCredentialsManager.getCredentialProvider({
+        accountId,
+      });
     const client = new LambdaClient({
       region: this.awsRegion,
-      credentials: this.awsCredentials,
+      credentialDefaultProvider: () =>
+        awsCredentialProvider.sdkCredentialProvider,
     });
 
     const params: InvokeCommandInput = {
@@ -1004,7 +1212,6 @@ export class AwsAppsApi {
       InvocationType: 'RequestResponse',
     };
     const command = new InvokeCommand(params);
-    const response = await client.send(command);
-    return response;
+    return client.send(command);
   }
 }

@@ -10,7 +10,11 @@ import {
   CatalogImportPage,
   catalogImportPlugin,
 } from '@backstage/plugin-catalog-import';
-import { ScaffolderPage, scaffolderPlugin } from '@backstage/plugin-scaffolder';
+import {
+  RouterProps,
+  ScaffolderPage,
+  scaffolderPlugin,
+} from '@backstage/plugin-scaffolder';
 import { orgPlugin } from '@backstage/plugin-org';
 import { SearchPage } from '@backstage/plugin-search';
 import {
@@ -37,14 +41,99 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 
+import {
+  configApiRef,
+  githubAuthApiRef,
+  gitlabAuthApiRef,
+  useApi,
+} from '@backstage/core-plugin-api';
+
+import FlareIcon from '@material-ui/icons/Flare';
+import Brightness2Icon from '@material-ui/icons/Brightness2';
+
 import { costInsightsAwsPlugin } from '@alithya-oss/plugin-cost-insights-aws';
 import { AppCatalogPage } from '@alithya-oss/plugin-aws-apps';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { awsTheme } from '@aws/plugin-aws-apps-demo-for-backstage';
-import { ThemeProvider } from '@material-ui/core';
+import {
+  OPAHomePage,
+  customerTheme,
+  awsTheme,
+  opaTheme,
+} from '@aws/plugin-aws-apps-demo-for-backstage';
+import { UnifiedThemeProvider, themes } from '@backstage/theme';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
+
+const renderSignInPage = (props: any) => {
+  let providers: Array<Object> = [
+    {
+      id: 'github',
+      title: 'Github',
+      message: 'Sign in using Github',
+      apiRef: githubAuthApiRef,
+    },
+    {
+      id: 'gitlab',
+      title: 'Gitlab',
+      message: 'Sign in using Gitlab',
+      apiRef: gitlabAuthApiRef,
+      enableExperimentalRedirectFlow: true,
+    },
+  ];
+
+  if (
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useApi(configApiRef).getOptionalString('auth.environment') === 'development'
+  )
+    providers = ['guest', ...providers];
+
+  return <SignInPage {...props} auto providers={providers} />;
+};
+
+const scaffolderPageOptions: RouterProps = {
+  groups: [
+    {
+      title: 'AWS Environments and Environment Providers',
+      filter: entity =>
+        (entity?.metadata?.tags?.includes('environment-provider') ||
+          entity?.metadata?.tags?.includes('aws-environment')) ??
+        false,
+    },
+    {
+      title: 'AWS Resources',
+      filter: entity =>
+        entity?.metadata?.tags?.includes('aws-resource') ?? false,
+    },
+    {
+      title: 'Recommended',
+      filter: entity =>
+        entity?.metadata?.tags?.includes('recommended') ?? false,
+    },
+    {
+      title: 'Experimental',
+      filter: entity =>
+        entity?.metadata?.tags?.includes('experimental') ?? false,
+    },
+    {
+      title: 'Deprecated',
+      filter: entity => entity?.metadata?.tags?.includes('deprecated') ?? false,
+    },
+    {
+      title: 'Other',
+      filter: entity =>
+        !(
+          entity?.metadata?.tags?.includes('recommended') ||
+          entity?.metadata?.tags?.includes('experimental') ||
+          entity?.metadata?.tags?.includes('deprecated')
+        ) || false,
+    },
+  ],
+};
+
 const app = createApp({
   apis,
   plugins: [costInsightsAwsPlugin],
+  components: {
+    SignInPage: props => renderSignInPage(props),
+  },
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,
@@ -64,8 +153,36 @@ const app = createApp({
   },
   themes: [
     {
+      id: 'customerTheme',
+      title: 'CUSTOMER',
+      variant: 'light',
+      Provider: ({ children }) => (
+        <ThemeProvider theme={customerTheme}>
+          <CssBaseline>{children}</CssBaseline>
+        </ThemeProvider>
+      ),
+    },
+    {
+      id: 'light',
+      title: 'Light',
+      variant: 'light',
+      icon: <FlareIcon />,
+      Provider: ({ children }) => (
+        <UnifiedThemeProvider theme={themes.light} children={children} />
+      ),
+    },
+    {
+      id: 'dark',
+      title: 'Dark',
+      variant: 'dark',
+      icon: <Brightness2Icon />,
+      Provider: ({ children }) => (
+        <UnifiedThemeProvider theme={themes.dark} children={children} />
+      ),
+    },
+    {
       id: 'awsTheme',
-      title: 'aws',
+      title: 'AWS',
       variant: 'light',
       Provider: ({ children }) => (
         <ThemeProvider theme={awsTheme}>
@@ -73,15 +190,23 @@ const app = createApp({
         </ThemeProvider>
       ),
     },
+    {
+      id: 'opaTheme',
+      title: 'OPA',
+      variant: 'light',
+      Provider: ({ children }) => (
+        <ThemeProvider theme={opaTheme}>
+          <CssBaseline>{children}</CssBaseline>
+        </ThemeProvider>
+      ),
+    },
   ],
-  components: {
-    SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
-  },
 });
 
 const routes = (
   <FlatRoutes>
     <Route path="/" element={<Navigate to="catalog" />} />
+    <Route path="/home" element={<OPAHomePage />} />
     <Route path="/catalog" element={<CatalogIndexPage />} />
     <Route
       path="/catalog/:namespace/:kind/:name"
@@ -98,7 +223,10 @@ const routes = (
         <ReportIssue />
       </TechDocsAddons>
     </Route>
-    <Route path="/create" element={<ScaffolderPage />} />
+    <Route
+      path="/create"
+      element={<ScaffolderPage {...scaffolderPageOptions} />}
+    />
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route
       path="/catalog-import"

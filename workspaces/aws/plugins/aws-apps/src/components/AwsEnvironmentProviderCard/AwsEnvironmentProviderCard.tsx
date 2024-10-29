@@ -5,19 +5,21 @@ import React, { useEffect, useState } from 'react';
 import { InfoCard } from '@backstage/core-components';
 import {
   Button,
-  IconButton,
-  TableBody,
-  TableCell,
-  TableRow,
-  Table,
-  TableHead,
   CardContent,
   Grid,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
 } from '@material-ui/core';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useApi } from '@backstage/core-plugin-api';
 import { opaApiRef } from '../../api';
-import { Alert, AlertTitle, Typography } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Typography from '@mui/material/Typography';
 import {
   AWSEnvironmentProviderRecord,
   getGitCredentailsSecret,
@@ -32,8 +34,8 @@ import {
 
 import {
   CatalogApi,
-  EntityRefLink,
   catalogApiRef,
+  EntityRefLink,
   useEntity,
 } from '@backstage/plugin-catalog-react';
 import Backdrop from '@mui/material/Backdrop';
@@ -63,89 +65,92 @@ const AwsEnvironmentProviderCard = ({
   >([]);
 
   useEffect(() => {
-    getProviderDetails();
-  }, []);
+    async function getProviderDetails() {
+      // find existing resource relationships
+      const providerRefs: EntityRelation[] | undefined =
+        entity.relations?.filter(
+          relation =>
+            parseEntityRef(relation?.targetRef).kind ===
+            'awsenvironmentprovider',
+        );
 
-  async function getProviderDetails() {
-    // find existing resource relationships
-    const providerRefs: EntityRelation[] | undefined = entity.relations?.filter(
-      relation =>
-        parseEntityRef(relation?.targetRef).kind === 'awsenvironmentprovider',
-    )!;
+      const providers: AWSEnvironmentProviderRecord[] = [];
 
-    const providerEntities = await Promise.all(
-      providerRefs.map(
-        async (entityRef: { targetRef: string | CompoundEntityRef }) => {
-          const entity = await catalog.getEntityByRef(entityRef.targetRef);
-          return entity;
-        },
-      ),
-    );
+      if (providerRefs) {
+        const providerEntities = await Promise.all(
+          providerRefs.map(
+            async (entityRef: { targetRef: string | CompoundEntityRef }) => {
+              return catalog.getEntityByRef(entityRef.targetRef);
+            },
+          ),
+        );
 
-    let providers: AWSEnvironmentProviderRecord[] = [];
-
-    providerEntities.forEach((et, index) => {
-      providers.push({
-        id: index.toString(),
-        name: et?.metadata.name || '',
-        prefix: et?.metadata['prefix']?.toString() || '',
-        providerType: et?.metadata['envType']?.toString() || '',
-        description: et?.metadata['description']?.toString() || '',
-        accountNumber: et?.metadata['awsAccount']?.toString() || '',
-        region: et?.metadata['awsRegion']?.toString() || '',
-      });
-    });
-    setItems(providers);
-
-    let potentialProviders: AWSEnvironmentProviderRecord[] = [];
-    let index = 0;
-    const envRuntimeType = entity.metadata.environmentType?.toString() || '';
-
-    catalog
-      .getEntities({
-        filter: {
-          kind: 'awsenvironmentprovider',
-          'metadata.envType': envRuntimeType,
-        },
-      })
-      .then(entities => {
-        entities.items.forEach(et => {
-          if (providers.length > 0) {
-            providers.forEach(existingP => {
-              if (
-                et.metadata.name === existingP.name &&
-                et.metadata['prefix']?.toString() === existingP.prefix
-              ) {
-                // skip existing provider
-              } else {
-                index++;
-                potentialProviders.push({
-                  id: index.toString(),
-                  name: et?.metadata.name || '',
-                  prefix: et?.metadata['prefix']?.toString() || '',
-                  providerType: et?.metadata['envType']?.toString() || '',
-                  description: et?.metadata['description']?.toString() || '',
-                  accountNumber: et?.metadata['awsAccount']?.toString() || '',
-                  region: et?.metadata['awsRegion']?.toString() || '',
-                });
-              }
-            });
-          } else {
-            index++;
-            potentialProviders.push({
-              id: index.toString(),
-              name: et?.metadata.name || '',
-              prefix: et?.metadata['prefix']?.toString() || '',
-              providerType: et?.metadata['envType']?.toString() || '',
-              description: et?.metadata['description']?.toString() || '',
-              accountNumber: et?.metadata['awsAccount']?.toString() || '',
-              region: et?.metadata['awsRegion']?.toString() || '',
-            });
-          }
+        providerEntities.forEach((et, index) => {
+          providers.push({
+            id: index.toString(),
+            name: et?.metadata.name ?? '',
+            prefix: et?.metadata.prefix?.toString() ?? '',
+            providerType: et?.metadata.envType?.toString() ?? '',
+            description: et?.metadata.description?.toString() ?? '',
+            accountNumber: et?.metadata.awsAccount?.toString() ?? '',
+            region: et?.metadata.awsRegion?.toString() ?? '',
+          });
         });
-      });
-    setAvailableProviders(potentialProviders);
-  }
+        setItems(providers);
+      }
+
+      const potentialProviders: AWSEnvironmentProviderRecord[] = [];
+      let index = 0;
+      const envRuntimeType = entity.metadata.environmentType?.toString() ?? '';
+
+      catalog
+        .getEntities({
+          filter: {
+            kind: 'awsenvironmentprovider',
+            'metadata.envType': envRuntimeType,
+          },
+        })
+        .then(entities => {
+          entities.items.forEach(et => {
+            if (providers.length > 0) {
+              providers.forEach(existingP => {
+                if (
+                  et.metadata.name === existingP.name &&
+                  et.metadata.prefix?.toString() === existingP.prefix
+                ) {
+                  // skip existing provider
+                } else {
+                  index++;
+                  potentialProviders.push({
+                    id: index.toString(),
+                    name: et?.metadata.name ?? '',
+                    prefix: et?.metadata.prefix?.toString() ?? '',
+                    providerType: et?.metadata.envType?.toString() ?? '',
+                    description: et?.metadata.description?.toString() ?? '',
+                    accountNumber: et?.metadata.awsAccount?.toString() ?? '',
+                    region: et?.metadata.awsRegion?.toString() ?? '',
+                  });
+                }
+              });
+            } else {
+              index++;
+              potentialProviders.push({
+                id: index.toString(),
+                name: et?.metadata.name ?? '',
+                prefix: et?.metadata.prefix?.toString() ?? '',
+                providerType: et?.metadata.envType?.toString() ?? '',
+                description: et?.metadata.description?.toString() ?? '',
+                accountNumber: et?.metadata.awsAccount?.toString() ?? '',
+                region: et?.metadata.awsRegion?.toString() ?? '',
+              });
+            }
+          });
+        });
+      setAvailableProviders(potentialProviders);
+    }
+
+    getProviderDetails();
+  }, [catalog, entity.metadata.environmentType, entity.relations]);
 
   async function updateProvider(
     item: AWSEnvironmentProviderRecord,
@@ -159,7 +164,7 @@ const AwsEnvironmentProviderCard = ({
       providerName: item.name.toLowerCase(),
     };
 
-    let repoInfo = getRepoInfo(entity);
+    const repoInfo = getRepoInfo(entity);
     repoInfo.gitProjectGroup = 'aws-environments';
 
     const params = {
@@ -170,7 +175,7 @@ const AwsEnvironmentProviderCard = ({
       action,
       backendParamsOverrides,
     };
-    api.updateProviderToEnvironment(params);
+    return api.updateProviderToEnvironment(params);
   }
 
   const handleClickAdd = async () => {
@@ -198,7 +203,6 @@ const AwsEnvironmentProviderCard = ({
       .catch(err => {
         setIsAddProviderSuccessful(false);
         setAddProviderMessage(err);
-        console.log(err);
         setError(err);
         setSpinning(false);
       });
@@ -206,7 +210,9 @@ const AwsEnvironmentProviderCard = ({
 
   const deleteClick = async (index: number) => {
     const deletedItem = items.at(index);
+
     if (
+      // eslint-disable-next-line no-alert
       confirm(
         'Are you sure you want to remove this environment provider from this environment?',
       )
@@ -217,11 +223,11 @@ const AwsEnvironmentProviderCard = ({
           setAddProviderMessage(results);
           setIsAddProviderSuccessful(true);
           setSpinning(false);
-          //remove from table
+          // remove from table
           const providersData = items.slice();
           providersData.splice(index, 1);
           setItems(providersData);
-          setProviderRequest(deletedItem!);
+          setProviderRequest(deletedItem);
           await catalog.refreshEntity(
             `awsenvironment:default/${entity.metadata.name}`,
           );
@@ -232,7 +238,6 @@ const AwsEnvironmentProviderCard = ({
         .catch(err => {
           setIsAddProviderSuccessful(false);
           setAddProviderMessage(err);
-          console.log(err);
           setError(err);
           setSpinning(false);
         });
@@ -322,7 +327,7 @@ const AwsEnvironmentProviderCard = ({
             </Alert>
           )}
         </Grid>
-        <Typography margin={'10px'}>
+        <Typography margin="10px">
           <Button variant="contained" onClick={handleClickAdd}>
             Add
           </Button>

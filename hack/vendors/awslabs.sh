@@ -45,11 +45,14 @@ function sync_aws_core() {
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/core/common/* \
         ./workspaces/aws/plugins/aws-core-common
     rsync -av \
+        .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/core/node/* \
+        ./workspaces/aws/plugins/aws-core-node
+    rsync -av \
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/core/react/* \
         ./workspaces/aws/plugins/aws-core-react
     rsync -av \
         .tmp/backstage-plugins-for-aws/${VERSION/"/"/"-"}/plugins/core/scaffolder-actions/* \
-        ./workspaces/aws/plugins/plugin-scaffolder-backend-module-aws-core
+        ./workspaces/aws/plugins/scaffolder-backend-module-aws-core
 
     # cost-insights
     rsync -av \
@@ -129,6 +132,46 @@ function sync_harmonix() {
         ./workspaces/aws/plugins/scaffolder-backend-module-aws-apps
 }
 
+function sync_harmonix_reference_repo() {
+    GITLAB_HOSTNAME=${GITLAB_HOSTNAME:-'gitlab.com'}
+    GITLAB_GROUP=${GITLAB_GROUP:-'alithya-csna/cloud/aws/harmonix'}
+    AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID:-'123456789012'}
+
+    mkdir -p .tmp/harmonix/${VERSION}
+
+    curl -fsSL https://github.com/awslabs/harmonix/archive/refs/heads/${VERSION}.tar.gz |
+        tar -xvzf - \
+            --strip-components=1 \
+            --directory=.tmp/harmonix/${VERSION} \
+            harmonix-${VERSION/"/"/"-"}/backstage-reference \
+            harmonix-${VERSION/"/"/"-"}/iac/roots
+
+    rsync -av \
+        .tmp/harmonix/${VERSION/"/"/"-"}/backstage-reference/* \
+        ./workspaces/aws/reference/
+    rsync -av \
+        .tmp/harmonix/${VERSION/"/"/"-"}/iac/roots/* \
+        ./workspaces/aws/reference/environments
+
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "" "s#{{ *gitlab_hostname *}}#$GITLAB_HOSTNAME#g" {} +; 
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "" "s#{{ *awsAccount *}}#$AWS_ACCOUNT_ID#g" {} +; 
+
+        find ./workspaces/aws/reference -type f -name "*.yml" -exec sed -i "" "s#opa-admin\/backstage-reference#${GITLAB_GROUP}/reference#g" {} +;
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "" "s#opa-admin\/backstage-reference#${GITLAB_GROUP}/reference#g" {} +;
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "" "s#aws-environment-providers#$GITLAB_GROUP#g" {} +;
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "" "s#\/opa\/#/harmonix/#g" {} +;
+    else
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "s#{{ *gitlab_hostname *}}#$GITLAB_HOSTNAME#g" {} +; 
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "s#{{ *awsAccount *}}#$AWS_ACCOUNT_ID#g" {} +; 
+
+        find ./workspaces/aws/reference -type f -name "*.yml" -exec sed -i "s#opa-admin\/backstage-reference#${GITLAB_GROUP}/reference#g" {} +;
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "s#opa-admin\/backstage-reference#$GITLAB_GROUP/reference#g" {} +;
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "s#aws-environment-providers#$GITLAB_GROUP#g" {} +;
+        find ./workspaces/aws/reference -type f -name "*.yaml" -exec sed -i "s#\/opa\/#/harmonix/#g" {} +;
+    fi
+}
+
 function rename_harmonix() {
     changes=(
         "s#@aws/plugin-aws-apps-for-backstage#@alithya-oss/plugin-aws-apps#g"
@@ -152,9 +195,10 @@ function rename_harmonix() {
 }
 
 # sync_aws_core
-sync_harmonix
+# sync_harmonix
+sync_harmonix_reference_repo
 cd ./workspaces/aws/
 # rename_aws_core
-rename_harmonix
+# rename_harmonix
 # yarn install
-# yarn backstage-cli versions:bump --release 1.30.2
+# yarn backstage-cli versions:bump --release 1.30.4

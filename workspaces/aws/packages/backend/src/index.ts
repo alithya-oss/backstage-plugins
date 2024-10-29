@@ -7,6 +7,10 @@
  */
 
 import { createBackend } from '@backstage/backend-defaults';
+import {
+  gitlabPlugin,
+  catalogPluginGitlabFillerProcessorModule,
+} from '@immobiliarelabs/backstage-plugin-gitlab-backend';
 
 const backend = createBackend();
 
@@ -20,12 +24,19 @@ backend.add(import('@backstage/plugin-auth-backend'));
 // See https://backstage.io/docs/backend-system/building-backends/migrating#the-auth-plugin
 backend.add(import('@backstage/plugin-auth-backend-module-guest-provider'));
 // See https://backstage.io/docs/auth/guest/provider
+backend.add(import('@backstage/plugin-auth-backend-module-gitlab-provider'));
+backend.add(import('@backstage/plugin-auth-backend-module-github-provider'));
 
 // catalog plugin
 backend.add(import('@backstage/plugin-catalog-backend/alpha'));
 backend.add(
   import('@backstage/plugin-catalog-backend-module-scaffolder-entity-model'),
 );
+backend.add(import('@backstage/plugin-catalog-backend-module-gitlab/alpha'));
+backend.add(import('@backstage/plugin-catalog-backend-module-gitlab-org'));
+backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
+backend.add(import('@backstage/plugin-catalog-backend-module-github-org'));
+backend.add(import('./extensions/catalogAnnotateScmSlugEntityProcessor'));
 
 // See https://backstage.io/docs/features/software-catalog/configuration#subscribing-to-catalog-errors
 backend.add(import('@backstage/plugin-catalog-backend-module-logs'));
@@ -36,6 +47,7 @@ backend.add(import('@backstage/plugin-permission-backend/alpha'));
 backend.add(
   import('@backstage/plugin-permission-backend-module-allow-all-policy'),
 );
+// backend.add(import('./extensions/harmonixSamplePermissionPolicy'));
 
 // search plugin
 backend.add(import('@backstage/plugin-search-backend/alpha'));
@@ -68,5 +80,20 @@ backend.add(import('@alithya-oss/plugin-scaffolder-backend-module-aws-core'));
 
 // awsapps
 backend.add(import('@alithya-oss/plugin-aws-apps-backend'));
+backend.add(
+  import(
+    '@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor'
+  ),
+);
+backend.add(import('@alithya-oss/plugin-scaffolder-backend-module-aws-apps'));
+
+// scaffolder addons
+backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
+backend.add(import('@backstage/plugin-scaffolder-backend-module-gitlab'));
+backend.add(import('./extensions/roadihqScaffolderActions'));
+
+// gitlab third-party plugins
+backend.add(gitlabPlugin);
+backend.add(catalogPluginGitlabFillerProcessorModule);
 
 backend.start();

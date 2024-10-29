@@ -13,12 +13,15 @@ import {
   EnvironmentProviderConnection,
 } from '../../types';
 
+import { LoggerService } from '@backstage/backend-plugin-api';
+import { Config } from '@backstage/config';
+
 const ID = 'opa:get-ssm-parameters';
 
 const examples = [
   {
     description:
-      'Retreive AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
+      'Retrieve AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
     example: yaml.stringify({
       steps: [
         {
@@ -36,14 +39,15 @@ const examples = [
   },
 ];
 
-export function getSsmParametersAction() {
+/** @public */
+export function getSsmParametersAction(config: Config, logger: LoggerService) {
   return createTemplateAction<{
     paramKeys: string[];
     envProviders: EnvironmentProvider[];
   }>({
     id: ID,
     description:
-      'Retreive AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
+      'Retrieve AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
     examples,
     schema: {
       input: {
@@ -104,15 +108,17 @@ export function getSsmParametersAction() {
 
       const providerConnect: EnvProviderConnectMap =
         await getEnvironmentProviderConnectInfo(
+          config,
+          logger,
           envProviders,
-          ctx.user!.entity!,
+          ctx.user.entity,
         );
 
       // Get a key/value map of SSM parameters for the supplied environment provider connection
       const getEnvProviderSsmParams = async (
         connection: EnvironmentProviderConnection,
       ): Promise<{ [key: string]: string }> => {
-        const params = (
+        return (
           await Promise.all(
             paramKeys.map(
               async (paramKey): Promise<{ [key: string]: string }> => {
@@ -136,8 +142,6 @@ export function getSsmParametersAction() {
             [key]: paramKeyValMap[key],
           };
         }, {});
-
-        return params;
       };
 
       const paramsPerEnvProvider = (

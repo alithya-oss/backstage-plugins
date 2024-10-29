@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "author": {
     "name": "Amazon Web Services",
-    "url": "http://aws.amazon.com"
+    "url": "https://aws.amazon.com"
   },
   "publishConfig": {
     "access": "public",
@@ -25,7 +25,7 @@
   "backstage": {
     "role": "backend-plugin-module",
     "pluginId": "catalog",
-    "pluginPackage": "@backstage/plugin-catalog-node"
+    "pluginPackage": "@backstage/plugin-catalog-backend"
   },
   "scripts": {
     "start": "backstage-cli package start",
@@ -38,12 +38,16 @@
   },
   "dependencies": {
     "@alithya-oss/plugin-aws-apps-common": "workspace:^",
-    "@backstage/backend-common": "^0.23.3",
-    "@backstage/backend-plugin-api": "^0.7.0"
+    "@backstage/backend-common": "^0.24.1",
+    "@backstage/backend-plugin-api": "^0.8.1",
+    "@backstage/catalog-model": "^1.6.0",
+    "@backstage/plugin-catalog-common": "^1.0.26",
+    "@backstage/plugin-catalog-node": "^1.12.6"
   },
   "devDependencies": {
-    "@backstage/backend-test-utils": "^0.4.4",
-    "@backstage/cli": "^0.26.11"
+    "@backstage/backend-test-utils": "^0.5.1",
+    "@backstage/cli": "^0.27.0",
+    "@types/jest": "^29.5.14"
   },
   "files": [
     "dist"

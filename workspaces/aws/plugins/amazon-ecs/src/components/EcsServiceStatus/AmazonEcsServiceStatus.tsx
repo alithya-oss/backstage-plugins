@@ -26,28 +26,12 @@ export const AmazonEcsServiceStatus = ({
 }) => {
   switch (status) {
     case 'ACTIVE':
-      return (
-        <>
-          <StatusOK /> Active
-        </>
-      );
+      return <StatusOK>Active</StatusOK>;
     case 'INACTIVE':
-      return (
-        <>
-          <StatusError /> Inactive
-        </>
-      );
+      return <StatusError>Inactive</StatusError>;
     case 'DRAINING':
-      return (
-        <>
-          <StatusRunning /> Inactive
-        </>
-      );
+      return <StatusRunning>Inactive</StatusRunning>;
     default:
-      return (
-        <>
-          <StatusAborted /> Unknown
-        </>
-      );
+      return <StatusAborted>Unknown</StatusAborted>;
   }
 };

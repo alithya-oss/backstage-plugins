@@ -19,7 +19,7 @@ import { AwsCredentialsManager } from '@backstage/integration-aws-node';
 import { AwsCredentialIdentityProvider } from '@aws-sdk/types';
 import fs from 'fs-extra';
 import { z } from 'zod';
-import { resolveSafeChildPath } from '@backstage/backend-common';
+import { resolveSafeChildPath } from '@backstage/backend-plugin-api';
 import { glob } from 'glob';
 import { AWS_SDK_CUSTOM_USER_AGENT } from '@alithya-oss/plugin-aws-core-common';
 
@@ -74,7 +74,7 @@ export const createAwsS3CpAction = (options: {
       }
 
       const files = glob
-        .sync(resolveSafeChildPath(ctx.workspacePath, path ? path : '**'))
+        .sync(resolveSafeChildPath(ctx.workspacePath, path ?? '**'))
         .filter(filePath => fs.lstatSync(filePath).isFile());
 
       const client = new S3Client({

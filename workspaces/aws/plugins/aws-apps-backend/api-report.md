@@ -47,8 +47,8 @@ import { UserInfoService } from '@backstage/backend-plugin-api';
 // @public (undocumented)
 export class AwsAppsApi {
   constructor(
+    config: Config,
     logger: LoggerService,
-    awsCredentials: AwsCredentialIdentity,
     awsRegion: string,
     awsAccount: string,
   );
@@ -254,6 +254,8 @@ export type DynamoDBTableData = {
 
 // @public (undocumented)
 export function getAWScreds(
+  config: Config,
+  logger: LoggerService,
   accountId: string,
   region: string,
   prefix: string,

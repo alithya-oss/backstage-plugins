@@ -21,9 +21,13 @@ import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-
 import express from 'express';
 import Router from 'express-promise-router';
 import YAML from 'yaml';
-import { AwsAppsApi, getAWScreds } from '../api';
-import { AwsAuditResponse, createAuditRecord } from '../api/aws-audit';
-import { AwsAppsPlatformApi } from '../api/aws-platform';
+import {
+  AwsAppsApi,
+  AwsAuditResponse,
+  createAuditRecord,
+  getAWScreds,
+} from '../api';
+import { AwsAppsPlatformApi } from '../api/AwsPlatform';
 import { Config } from '@backstage/config';
 import { CatalogApi } from '@backstage/catalog-client';
 
@@ -53,7 +57,7 @@ export async function createRouter(
 
   router.use(permissionIntegrationRouter);
 
-  //Async function to get backend API client
+  // Async function to get backend API client
   async function getApiClient(
     req: any,
   ): Promise<{ apiClient: AwsAppsApi; apiClientConfig: ApiClientConfig }> {
@@ -77,6 +81,8 @@ export async function createRouter(
     const identity = await userInfo.getUserInfo(credentials);
 
     const creds = await getAWScreds(
+      config,
+      logger,
       awsAccount,
       awsRegion,
       prefix,
@@ -87,12 +93,7 @@ export async function createRouter(
 
     const roleArn = creds.roleArn;
 
-    const apiClient = new AwsAppsApi(
-      logger,
-      creds.credentials,
-      awsRegion,
-      awsAccount,
-    );
+    const apiClient = new AwsAppsApi(config, logger, awsRegion, awsAccount);
 
     const requester = identity?.userEntityRef.split('/')[1] || '';
 
@@ -119,7 +120,7 @@ export async function createRouter(
     const awsAccount = req.body.awsAccount?.toString();
 
     const platformRegion =
-      process.env.AWS_REGION || config.getString('backend.platformRegion');
+      process.env.AWS_REGION ?? config.getString('backend.platformRegion');
     const repoInfo: IRepositoryInfo = req.body.repoInfo;
     if (awsRegion === undefined || awsAccount === undefined) {
       throw new Error(
@@ -128,6 +129,7 @@ export async function createRouter(
     }
     if (repoInfo === undefined) {
       return new AwsAppsPlatformApi(
+        config,
         logger,
         platformRegion,
         awsRegion,
@@ -136,6 +138,7 @@ export async function createRouter(
       );
     }
     return new AwsAppsPlatformApi(
+      config,
       logger,
       platformRegion,
       awsRegion,
@@ -169,7 +172,7 @@ export async function createRouter(
     status: string;
     apiClientConfig: ApiClientConfig;
   }): Promise<AwsAuditResponse> {
-    const auditResponse = await createAuditRecord({
+    return createAuditRecord({
       actionType,
       actionName,
       appName: apiClientConfig.appName,
@@ -184,8 +187,6 @@ export async function createRouter(
       envProviderName: apiClientConfig.providerName,
       envProviderPrefix: apiClientConfig.prefix,
     });
-
-    return auditResponse;
   }
 
   router.use(express.json());
@@ -194,7 +195,7 @@ export async function createRouter(
     response.json({ status: 'ok' });
   });
 
-  //Route for getting ECS task details
+  // Route for getting ECS task details
   router.post('/ecs', async (req, res) => {
     logger.info('router entry: /ecs');
     const { apiClient, apiClientConfig } = await getApiClient(req);
@@ -205,11 +206,11 @@ export async function createRouter(
 
     const auditResponse = await createRouterAuditRecord({
       actionType: 'List ECS Tasks',
-      actionName: clusterName + '#' + serviceName,
-      status: service.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED',
+      actionName: `${clusterName}#${serviceName}`,
+      status: service.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED',
       apiClientConfig,
     });
-    if (auditResponse.status == 'FAILED')
+    if (auditResponse.status === 'FAILED')
       res.status(500).json({ message: 'auditing request FAILED.' });
 
     if (service.taskArns?.length === 0) {
@@ -223,7 +224,7 @@ export async function createRouter(
     res.status(200).json(tasks.tasks![0]);
   });
 
-  //Route for updating ECS service
+  // Route for updating ECS service
   router.post('/ecs/updateService', async (req, res) => {
     logger.info('router entry: /ecs/updateService');
     const { apiClient, apiClientConfig } = await getApiClient(req);
@@ -235,7 +236,7 @@ export async function createRouter(
     if (req.body.desiredCount === undefined) {
       desiredCount = undefined;
     } else {
-      desiredCount = parseInt(req.body.desiredCount.toString());
+      desiredCount = parseInt(req.body.desiredCount.toString(), 10);
     }
     const service = await apiClient.updateServiceTask(
       clusterName,
@@ -247,16 +248,16 @@ export async function createRouter(
 
     const auditResponse = await createRouterAuditRecord({
       actionType: 'Update ECS Service',
-      actionName: clusterName + '#' + serviceName,
-      status: service.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED',
+      actionName: `${clusterName}#${serviceName}`,
+      status: service.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED',
       apiClientConfig,
     });
-    if (auditResponse.status == 'FAILED')
+    if (auditResponse.status === 'FAILED')
       res.status(500).json({ message: 'auditing request FAILED.' });
     res.status(200).json(service.service);
   });
 
-  //Route for getting secret value from secretsmanager
+  // Route for getting secret value from secrets manager
   router.post('/secrets', async (req, res) => {
     logger.info('router entry: /secrets');
     const { apiClient, apiClientConfig } = await getApiClient(req);
@@ -266,11 +267,11 @@ export async function createRouter(
     const auditResponse = await createRouterAuditRecord({
       actionType: 'Get Secret',
       actionName: secretArn,
-      status: service.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED',
+      status: service.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED',
       apiClientConfig,
     });
 
-    if (auditResponse.status == 'FAILED')
+    if (auditResponse.status === 'FAILED')
       res.status(500).json({ message: 'auditing request FAILED.' });
     res.status(200).json(service);
   });
@@ -283,8 +284,8 @@ export async function createRouter(
     const service = await apiPlatformClient.getPlatformSecretValue(secretArn);
 
     const status =
-      service.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED';
-    if (status == 'FAILED')
+      service.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED';
+    if (status === 'FAILED')
       res
         .status(500)
         .json({ message: 'FAILED fetching platform secret request .' });
@@ -299,8 +300,8 @@ export async function createRouter(
     const paramName = req.body.paramName?.toString();
     const service = await apiPlatformClient.getSsmValue(paramName);
     const status =
-      service.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED';
-    if (status == 'FAILED')
+      service.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED';
+    if (status === 'FAILED')
       res
         .status(500)
         .json({ message: 'FAILED fetching platform param request .' });
@@ -322,7 +323,7 @@ export async function createRouter(
       gitAdminSecret,
     );
     const status = service.status === 'SUCCESS' ? 'SUCCESS' : 'FAILED';
-    if (status == 'FAILED')
+    if (status === 'FAILED')
       res.status(500).json({ message: 'FAILED Destroy TF Provider request .' });
     res.status(200).json(service);
   });
@@ -333,8 +334,8 @@ export async function createRouter(
     const secretName = req.body.secretName?.toString();
     const service = await apiPlatformClient.deletePlatformSecret(secretName);
     const status =
-      service.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED';
-    if (status == 'FAILED')
+      service.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED';
+    if (status === 'FAILED')
       res.status(500).json({ message: 'FAILED /platform/delete-secret .' });
     res.status(200).json(service);
   });
@@ -349,15 +350,15 @@ export async function createRouter(
       gitAdminSecret,
     );
     console.log(service);
-    const status = service.isSuccuess ? 'SUCCESS' : 'FAILED';
-    if (status == 'FAILED')
+    const status = service.isSuccess ? 'SUCCESS' : 'FAILED';
+    if (status === 'FAILED')
       res
         .status(500)
         .json({ message: 'FAILED fetching platform param request .' });
     res.status(200).json(service);
   });
 
-  //Route to promote app to git job
+  // Route to promote app to a git job
   router.post('/git/promote', async (req, res) => {
     logger.info('router entry: git/promote');
     const apiPlatformClient = getAwsAppsPlatformApi(req);
@@ -386,7 +387,7 @@ export async function createRouter(
     res.status(200).json(results);
   });
 
-  //Route to Bind app to resource using git job
+  // Route to Bind app to resource using a git job
   router.post('/platform/bind-resource', async (req, res) => {
     logger.info('router entry: /platform/bind-resource');
     const apiPlatformClient = getAwsAppsPlatformApi(req);
@@ -418,7 +419,7 @@ export async function createRouter(
     res.status(200).json(results);
   });
 
-  //Route to unBind app to resource using git job
+  // Route to unBind app to resource using a git job
   router.post('/platform/unbind-resource', async (req, res) => {
     logger.info('router entry: /platform/unbind-resource');
     const apiPlatformClient = getAwsAppsPlatformApi(req);
@@ -450,7 +451,7 @@ export async function createRouter(
     res.status(200).json(results);
   });
 
-  //Route to add provider to environment using git
+  // Route to add provider to environment using git
   router.post('/platform/update-provider', async (req, res) => {
     logger.info('router entry: /platform/update-provider');
     const apiPlatformClient = getAwsAppsPlatformApi(req);
@@ -514,7 +515,7 @@ export async function createRouter(
     res.status(200).json(configJson);
   });
 
-  //Route for getting resource
+  // Route for getting resource
   router.post('/resource-group', async (req, res) => {
     logger.info('router entry: /resource-group');
     const { apiClient, apiClientConfig } = await getApiClient(req);
@@ -535,7 +536,7 @@ export async function createRouter(
       status: !serviceResultErrorName ? 'SUCCESS' : 'FAILED',
       apiClientConfig,
     });
-    if (auditResponse.status == 'FAILED') {
+    if (auditResponse.status === 'FAILED') {
       res.status(500).json({ message: 'auditing request FAILED.' });
     }
     if (serviceResultErrorName) {
@@ -555,13 +556,13 @@ export async function createRouter(
     res.status(200).json(serviceResult);
   });
 
-  //Route for getting parameter from SSM
+  // Route for getting parameter from SSM
   router.post('/ssm-parameter', async (req, res) => {
     logger.info('router entry: /ssm-parameter');
     const { apiClient, apiClientConfig } = await getApiClient(req);
     const ssmParamName = req.body.ssmParamName?.toString();
     const serviceResult = await apiClient.getSSMParameter(ssmParamName);
-    let status = '';
+    let status: string;
 
     if (serviceResult.$metadata.httpStatusCode === 200) {
       status = 'SUCCESS';
@@ -595,15 +596,16 @@ export async function createRouter(
     const auditResponse = await createRouterAuditRecord({
       actionType: 'Get Log Stream',
       actionName: logGroupName,
-      status: logStreams.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED',
+      status:
+        logStreams.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED',
       apiClientConfig,
     });
-    if (auditResponse.status == 'FAILED')
+    if (auditResponse.status === 'FAILED')
       res.status(500).json({ message: 'auditing request FAILED.' });
     res.status(200).json(logStreams.logStreams);
   });
 
-  //Route for getting stream events from a log stream
+  // Route for getting stream events from a log stream
   router.post('/logs/stream-events', async (req, res) => {
     logger.info('router entry: /logs/stream-events');
     const { apiClient, apiClientConfig } = await getApiClient(req);
@@ -627,15 +629,15 @@ export async function createRouter(
       actionType: 'Get Log Stream Events',
       actionName: logStreamName,
       status:
-        logStreamEvents.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED',
+        logStreamEvents.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED',
       apiClientConfig,
     });
-    if (auditResponse.status == 'FAILED')
+    if (auditResponse.status === 'FAILED')
       res.status(500).json({ message: 'auditing request FAILED.' });
     res.status(200).set('Content-Type', 'text/plain').send(text);
   });
 
-  //Route for updating a ECS taskdefinition
+  // Route for updating an ECS task definition
   router.post('/ecs/updateTaskDefinition', async (req, res) => {
     logger.info('router entry: /ecs/updateTaskDefinition');
     const { apiClient, apiClientConfig } = await getApiClient(req);
@@ -663,23 +665,23 @@ export async function createRouter(
     const auditResponse = await createRouterAuditRecord({
       actionType: 'Update TaskDefinition',
       actionName: taskDefinition,
-      status: output.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED',
+      status: output.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED',
       apiClientConfig,
     });
-    if (auditResponse.status == 'FAILED')
+    if (auditResponse.status === 'FAILED')
       res.status(500).json({ message: 'auditing request FAILED.' });
     res.status(200).json(output.taskDefinition);
   });
 
-  //Route for getting ECS taskdefinition details
+  // Route for getting ECS task definition details
   router.post('/ecs/describeTaskDefinition', async (req, res) => {
     logger.info('router entry: /ecs/describeTaskDefinition');
     const { apiClient } = await getApiClient(req);
     const taskDefinition = req.body.taskDefinition?.toString();
-    const taskDefinitionOutout = await apiClient.describeTaskDefinition(
+    const taskDefinitionOutput = await apiClient.describeTaskDefinition(
       taskDefinition,
     );
-    res.status(200).json(taskDefinitionOutout.taskDefinition);
+    res.status(200).json(taskDefinitionOutput.taskDefinition);
   });
 
   // Route for getting Audit table entries
@@ -687,18 +689,6 @@ export async function createRouter(
     logger.info('router entry: /audit-entries');
     // TODO: Validate migrated Code
     const credentials = await httpAuth.credentials(req, { allow: ['user'] });
-
-    // OLD code
-    // const token = getBearerTokenFromAuthorizationHeader(req.header('authorization'));
-
-    // // get a permission decision
-    // const decision = (
-    //   await permissions.authorize([{
-    //     permission: readOpaAppAuditPermission
-    //   }], {
-    //     token
-    //   })
-    // )
 
     // Additional actions **Optional** :
     const { token } = await auth.getPluginRequestToken({
@@ -738,10 +728,10 @@ export async function createRouter(
       const auditResponse = await createRouterAuditRecord({
         actionType: 'Get Audit Table',
         actionName: appName,
-        status: results.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED',
+        status: results.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED',
         apiClientConfig,
       });
-      if (auditResponse.status == 'FAILED')
+      if (auditResponse.status === 'FAILED')
         res.status(500).json({ message: 'auditing request FAILED.' });
       res.status(200).json(results);
     } else {
@@ -751,7 +741,7 @@ export async function createRouter(
     }
   });
 
-  //Route for quering a dynamoDB table
+  // Route for querying a dynamoDB table
   router.post('/dynamo-db/query', async (req, res) => {
     logger.info('router entry: /dynamo-db/query');
     const { apiClient, apiClientConfig } = await getApiClient(req);
@@ -763,10 +753,10 @@ export async function createRouter(
     const auditResponse = await createRouterAuditRecord({
       actionType: 'Query DynamoDb Table',
       actionName: appName,
-      status: results.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED',
+      status: results.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED',
       apiClientConfig,
     });
-    if (auditResponse.status == 'FAILED')
+    if (auditResponse.status === 'FAILED')
       res.status(500).json({ message: 'auditing request FAILED.' });
 
     res.status(200).json(results);
@@ -852,10 +842,10 @@ export async function createRouter(
       actionType: 'Update Stack',
       actionName: componentName,
       status:
-        stackOutput.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED',
+        stackOutput.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED',
       apiClientConfig,
     });
-    if (auditResponse.status == 'FAILED')
+    if (auditResponse.status === 'FAILED')
       res.status(500).json({ message: 'auditing request FAILED.' });
     res.status(200).json(stackOutput);
   });
@@ -914,10 +904,10 @@ export async function createRouter(
       actionType: 'Create Stack',
       actionName: componentName,
       status:
-        stackOutput.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED',
+        stackOutput.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED',
       apiClientConfig,
     });
-    if (auditResponse.status == 'FAILED') {
+    if (auditResponse.status === 'FAILED') {
       res.status(500).json({ message: 'auditing request FAILED.' });
     }
 
@@ -938,10 +928,10 @@ export async function createRouter(
       actionType: 'Delete Stack',
       actionName: componentName,
       status:
-        stackOutput.$metadata.httpStatusCode == 200 ? 'SUCCESS' : 'FAILED',
+        stackOutput.$metadata.httpStatusCode === 200 ? 'SUCCESS' : 'FAILED',
       apiClientConfig,
     });
-    if (auditResponse.status == 'FAILED') {
+    if (auditResponse.status === 'FAILED') {
       res.status(500).json({ message: 'auditing request FAILED.' });
     }
     res.status(200).json(stackOutput);
@@ -972,14 +962,14 @@ export async function createRouter(
       const auditResponse = await createRouterAuditRecord({
         actionType: 'Invoke Lambda',
         actionName: actionDescription,
-        status: lambdaOutput.StatusCode == 200 ? 'SUCCESS' : 'FAILED',
+        status: lambdaOutput.StatusCode === 200 ? 'SUCCESS' : 'FAILED',
         apiClientConfig,
       });
-      if (auditResponse.status == 'FAILED')
+      if (auditResponse.status === 'FAILED')
         res.status(500).json({ message: 'auditing request FAILED.' });
     }
 
-    if (lambdaOutput.StatusCode == 200) {
+    if (lambdaOutput.StatusCode === 200) {
       res.status(200).send(lambdaOutput);
     } else {
       res.status(400).send({

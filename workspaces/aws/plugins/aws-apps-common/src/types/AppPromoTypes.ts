@@ -18,5 +18,5 @@ export type AWSProviderParams = {
   envRequiresManualApproval: boolean;
   prefix: string;
   providerName: string;
-  parameters: { [key: string]: string }; //Parameters key value map for provisioning the app on the designated provider
+  parameters: { [key: string]: string }; // Parameters key value map for provisioning the app on the designated provider
 };

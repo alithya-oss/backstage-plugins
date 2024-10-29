@@ -1,17 +1,15 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import {
-  Grid,
-  Typography,
-  IconButton,
-  Divider,
-  Card,
-  CardHeader,
-  CardContent,
-} from '@mui/material';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { OPAAppData } from '../../types';
 
 export const AboutField = ({
@@ -21,7 +19,7 @@ export const AboutField = ({
   children,
 }: {
   label: string;
-  value?: string | JSX.Element;
+  value?: string | ReactElement;
   gridSizes?: Record<string, number>;
   children?: React.ReactNode;
 }) => {
@@ -39,14 +37,13 @@ export const AboutField = ({
   );
 };
 
-export const AppView = ({ appData }: { appData: OPAAppData }): JSX.Element => {
+export const AppView = ({ appData }: { appData: OPAAppData }): ReactElement => {
   Object.keys(appData).forEach(key => {
-    const newkey = key.replace('opa/', '');
-    appData[newkey] = appData[key];
+    const newKey = key.replace('opa/', '');
+    appData[newKey] = appData[key];
     delete appData[key];
   });
   const details = appData;
-  console.log(appData);
 
   return (
     <div>

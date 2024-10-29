@@ -10,7 +10,9 @@ import {
   useEntity,
 } from '@backstage/plugin-catalog-react';
 import { Button, CardContent, Grid } from '@material-ui/core';
-import { Alert, AlertTitle, Typography } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Typography from '@mui/material/Typography';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useState } from 'react';
@@ -38,7 +40,7 @@ const DeleteEnvironmentPanel = ({
   };
 
   const [disabled, setDisabled] = useState(false);
-  let repoInfo = getRepoInfo(entity);
+  const repoInfo = getRepoInfo(entity);
   repoInfo.gitProjectGroup = 'aws-environments';
 
   const deleteRepo = () => {
@@ -47,13 +49,11 @@ const DeleteEnvironmentPanel = ({
         repoInfo,
         gitAdminSecret: getGitCredentailsSecret(repoInfo),
       })
-      .then(results => {
-        console.log(results);
+      .then(() => {
         setDeleteResultMessage('Gitlab Repository deleted.');
         setIsDeleteSuccessful(true);
       })
       .catch(error => {
-        console.log(error);
         setDeleteResultMessage(`Error deleting Repository ${error}.`);
         setSpinning(false);
         setIsDeleteSuccessful(false);
@@ -61,19 +61,18 @@ const DeleteEnvironmentPanel = ({
   };
 
   const deleteFromCatalog = async () => {
-    console.log('Deleting entity from backstage catalog');
     setDeleteResultMessage('Deleting entity from backstage catalog');
     // The entity will be removed from the catalog along with the auto-generated Location kind entity
     // which references the catalog entity
-    const uid = entity.metadata.uid || '';
+    const uid = entity.metadata.uid ?? '';
     const entityAnnotations = entity.metadata.annotations || {};
     const entityLocation =
       entityAnnotations['backstage.io/managed-by-location'] || '';
     const entityLocationRef = await catalogApi.getLocationByRef(entityLocation);
     if (entityLocationRef) {
-      catalogApi.removeLocationById(entityLocationRef.id);
+      await catalogApi.removeLocationById(entityLocationRef.id);
     }
-    catalogApi.removeEntityByUid(uid);
+    await catalogApi.removeEntityByUid(uid);
   };
 
   const isExistingComponents = () => {
@@ -91,6 +90,7 @@ const DeleteEnvironmentPanel = ({
   };
 
   const handleClickDelete = async () => {
+    // eslint-disable-next-line no-alert
     if (confirm('Are you sure you want to delete this environment?')) {
       setSpinning(true);
       if (isExistingComponents()) {
@@ -100,23 +100,20 @@ const DeleteEnvironmentPanel = ({
         setIsDeleteSuccessful(false);
         setSpinning(false);
         return;
-      } else {
-        // Delete the repo
-        setIsDeleteSuccessful(true);
-        setDeleteResultMessage('Deleting Repository ....');
-        deleteRepo();
-        await sleep(3000);
-        setDeleteResultMessage('Deleting from catalog ....');
-        await sleep(3000);
-        deleteFromCatalog();
-        setSpinning(false);
-        setDeleteResultMessage('Redirect to home ....');
-        navigate('/');
-        setIsDeleteSuccessful(true);
-        setDisabled(false);
       }
-    } else {
-      // Do nothing!
+      // Delete the repo
+      setIsDeleteSuccessful(true);
+      setDeleteResultMessage('Deleting Repository ....');
+      deleteRepo();
+      await sleep(3000);
+      setDeleteResultMessage('Deleting from catalog ....');
+      await sleep(3000);
+      await deleteFromCatalog();
+      setSpinning(false);
+      setDeleteResultMessage('Redirect to home ....');
+      navigate('/');
+      setIsDeleteSuccessful(true);
+      setDisabled(false);
     }
   };
 

@@ -9,6 +9,7 @@ import { validate as validateArn } from '@aws-sdk/util-arn-parser';
 import { putSecret } from '../../helpers/action-context';
 import { Config } from '@backstage/config';
 
+/** @public */
 export function createRepoAccessTokenAction(options: {
   integrations: ScmIntegrationRegistry;
   envConfig: Config;
@@ -49,7 +50,9 @@ export function createRepoAccessTokenAction(options: {
       },
     },
     async handler(ctx) {
-      let { repoUrl, projectId, secretArn, region } = ctx.input;
+      const { repoUrl, projectId, secretArn } = ctx.input;
+      let { region } = ctx.input;
+
       if (!region) {
         region = envConfig.getString('backend.platformRegion');
       }
@@ -76,7 +79,7 @@ export function createRepoAccessTokenAction(options: {
         const token = integrationConfig.config.token!;
 
         // get the apiBaseUrl
-        let apiBaseUrl =
+        const apiBaseUrl =
           integrationConfig.config.apiBaseUrl ?? `https://${host}/api/v4`;
 
         if (!validateArn(secretArn)) {
@@ -112,11 +115,10 @@ export function createRepoAccessTokenAction(options: {
           // We have a successful response, so return the token from the response data
           const data = await res.json();
           return data.token as string;
-        } else {
-          const message = `Failed to create repo access token: ${res.status}: ${res.statusText}`;
-          ctx.logger.info(message);
-          throw new Error(message);
         }
+        const message = `Failed to create repo access token: ${res.status}: ${res.statusText}`;
+        ctx.logger.info(message);
+        throw new Error(message);
       }
 
       /**

@@ -22,9 +22,9 @@ export function isResourceType(
 ): (entity: Entity) => boolean {
   return (entity: Entity): boolean => {
     let subType = 'N/A';
-    if (entity?.metadata?.['resourceType'])
-      subType = entity?.metadata?.['resourceType'].toString();
-    return subType == resourceType;
+    if (entity?.metadata?.resourceType)
+      subType = entity?.metadata?.resourceType.toString();
+    return subType === resourceType;
   };
 }
 
@@ -47,7 +47,7 @@ export function AwsResourcePage(_props: AwsResourcePageProps) {
       {_props.children}
       <EntityLayout>
         <EntityLayout.Route path="/" title="Overview">
-          <AwsRDSResourcePage></AwsRDSResourcePage>
+          <AwsRDSResourcePage />
         </EntityLayout.Route>
         <EntityLayout.Route path="/ci-cd" title="CI/CD" if={isCicdApplicable}>
           <CICDContent />
@@ -64,7 +64,7 @@ export function AwsResourcePage(_props: AwsResourcePageProps) {
       {_props.children}
       <EntityLayout>
         <EntityLayout.Route path="/" title="Overview">
-          <AwsS3ResourcePage></AwsS3ResourcePage>
+          <AwsS3ResourcePage />
         </EntityLayout.Route>
         <EntityLayout.Route path="/ci-cd" title="CI/CD" if={isCicdApplicable}>
           <CICDContent />
