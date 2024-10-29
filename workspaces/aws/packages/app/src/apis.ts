@@ -29,7 +29,9 @@ export const apis: AnyApiFactory[] = [
       return DefaultEntityPresentationApi.create({
         catalogApi,
         kindIcons: {
+          // eslint-disable-next-line react-hooks/rules-of-hooks
           awsenvironment: useApp().getSystemIcon('kind:domain')!,
+          // eslint-disable-next-line react-hooks/rules-of-hooks
           awsenvironmentprovider: useApp().getSystemIcon('kind:system')!,
         },
       });
