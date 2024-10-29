@@ -65,3 +65,17 @@ export const TimeSaverPage = TimeSaverPlugin.provide(
     mountPoint: rootRouteRef,
   }),
 );
+
+/**
+ * @public
+ */
+export const TimeSaverSamplesPage = TimeSaverPlugin.provide(
+  createRoutableExtension({
+    name: 'TimeSaverSamplesPage',
+    component: () =>
+      import('./components/TimeSaverSamplesPageComponent').then(
+        m => m.TimeSaverSamplesPageComponent,
+      ),
+    mountPoint: rootRouteRef,
+  }),
+);
