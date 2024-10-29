@@ -675,10 +675,12 @@ export class TimeSaverDatabase implements TimeSaverStore {
     TimeSummaryByTeamName[] | undefined | void
   > {
     try {
+      const formattedDate = this.formatDate(this.db, 'created_at', 'date');
+
       const subquery = this.db('ts_template_time_savings as sub')
         .select(
           'team',
-          this.db.raw(`DATE(created_at) as date`),
+          formattedDate,
           this.db.raw('SUM(time_saved) as total_time_saved'),
         )
         .groupBy('template_name', 'date', 'team');
@@ -687,12 +689,14 @@ export class TimeSaverDatabase implements TimeSaverStore {
         subquery.as('temp'),
       )
         .select(
-          'date',
+          'temp.date',
           'team',
           this.db.raw('SUM(total_time_saved) as total_time_saved'),
         )
         .groupBy('team', 'date')
         .orderBy('date');
+
+      this.logger.info(`APPA :: ${subquery} | ${JSON.stringify(result)}`);
 
       return this.ok<TimeSummaryByTeamName[] | undefined>(
         result && result.length
@@ -720,12 +724,14 @@ export class TimeSaverDatabase implements TimeSaverStore {
     TimeSummaryByTemplateName[] | undefined | void
   > {
     try {
+      const formattedDate = this.formatDate(this.db, 'created_at', 'date');
+
       const subquery = this.db<TimeSummaryByTemplateNameDbRow>(
         'ts_template_time_savings as sub',
       )
         .select(
           'template_name',
-          this.db.raw(`DATE(created_at) as date`),
+          formattedDate,
           this.db.raw('SUM(time_saved) as total_time_saved'),
         )
         .groupBy('template_name', 'date');
