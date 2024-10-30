@@ -1,5 +1,12 @@
 # @alithya-oss/plugin-rag-ai-backend-module-openai
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [93464d2]
+  - @alithya-oss/plugin-rag-ai-backend-embeddings-openai@1.1.1
+
 ## 0.2.0
 
 ### Minor Changes

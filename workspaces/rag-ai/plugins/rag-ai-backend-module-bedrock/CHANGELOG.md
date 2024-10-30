@@ -1,5 +1,11 @@
 # @alithya-oss/plugin-rag-ai-backend-module-bedrock
 
+## 0.1.1
+
+### Patch Changes
+
+- 93464d2: Bump framework version 1.30.4 and aligned plugin names with [community-plugins](https://github.com/backstage/community-plugins) naming convention
+
 ## 0.1.0
 
 ### Minor Changes

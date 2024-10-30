@@ -1,5 +1,11 @@
 # @roadiehq/rag-ai-backend-embeddings-openai
 
+## 1.1.1
+
+### Patch Changes
+
+- 93464d2: Bump framework version 1.30.4 and aligned plugin names with [community-plugins](https://github.com/backstage/community-plugins) naming convention
+
 ## 1.1.0
 
 ### Minor Changes
