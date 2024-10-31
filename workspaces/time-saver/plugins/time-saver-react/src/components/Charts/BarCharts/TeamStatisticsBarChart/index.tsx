@@ -23,14 +23,13 @@ export interface TeamStatisticsBarChartProps {
 }
 
 /**
- * Displays a team statistic's bar chart component.
+ * Displays a team's statistic's bar chart component.
  *
  * @public
  */
 const TeamStatisticsBarChart = (props: TeamStatisticsBarChartProps) => {
   const theme = useTheme();
   const apiResult = useStatistics({ team: props.teamName });
-  // const apiResult = useStatistics();
   const { loading, error, items } = apiResult;
 
   if (!!items) {
