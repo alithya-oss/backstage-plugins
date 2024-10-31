@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, { useState } from 'react';
-import { Typography, Grid, Tabs, Tab, Divider, Paper } from '@material-ui/core';
+import { Grid, Tabs, Tab, Divider, Paper } from '@material-ui/core';
 import {
   InfoCard,
   Header,
@@ -39,12 +39,13 @@ import {
   TemplateStatisticsBarChart,
   TimeSavedGauge,
   TimeSummaryPerTeamLineChart,
+  TimeSummaryPerTemplateLineChart,
 } from '@alithya-oss/plugin-time-saver-react';
 
 export const TimeSaverPageComponent = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedTeam, setSelectedTeam] = useState('');
-  const [template, setTemplate] = useState('');
+  const [selectedTemplate, setSelectedTemplate] = useState('');
 
   const handleChange = (
     _event: unknown,
@@ -59,7 +60,7 @@ export const TimeSaverPageComponent = () => {
   };
 
   const handleTemplateChange = (templateUsed: string) => {
-    setTemplate(templateUsed);
+    setSelectedTemplate(templateUsed);
   };
 
   const handleClearTeam = () => {
@@ -86,7 +87,7 @@ export const TimeSaverPageComponent = () => {
       </Grid>
       <Grid item xs={2}>
         <Paper elevation={0}>
-          <TimeSavedGauge divider={7} label="Time Saved [days]" />
+          <TimeSavedGauge divider={8} label="Time Saved [days]" />
         </Paper>
       </Grid>
       <Grid item xs={2}>
@@ -128,89 +129,87 @@ export const TimeSaverPageComponent = () => {
         <Grid container spacing={3} direction="column">
           <Grid item>
             <InfoCard title="Time statistics that you have saved using Backstage Templates">
-              <Typography variant="body1">
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    {selectedTab === 0 && (
-                      <Grid container spacing={2}>
-                        {GaugesContainer}
-                        <Divider variant="fullWidth" />
-                        <Grid xs={6}>
-                          <AllStatisticsBarChart />
-                        </Grid>
-                        <Grid xs={6}>
-                          <StatisticsTable />
-                        </Grid>
-                        <Grid xs={6}>
-                          <DailyTimeSummaryPerTeamLineChart />
-                        </Grid>
-                        <Grid xs={6}>
-                          <TimeSummaryPerTeamLineChart />
-                        </Grid>
-                        <Grid xs={6}>
-                          <GroupDivisionStatisticsPieChart />
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  {selectedTab === 0 && (
+                    <Grid container spacing={2}>
+                      {GaugesContainer}
+                      <Divider variant="fullWidth" />
+                      <Grid xs={6}>
+                        <AllStatisticsBarChart />
+                      </Grid>
+                      <Grid xs={6}>
+                        <StatisticsTable />
+                      </Grid>
+                      <Grid xs={6}>
+                        <DailyTimeSummaryPerTeamLineChart />
+                      </Grid>
+                      <Grid xs={6}>
+                        <TimeSummaryPerTeamLineChart />
+                      </Grid>
+                      <Grid xs={6}>
+                        <GroupDivisionStatisticsPieChart />
+                      </Grid>
+                    </Grid>
+                  )}
+                  {selectedTab === 1 && (
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <Grid item xs={6}>
+                          <TeamSelector
+                            onTeamChange={handleTeamChange}
+                            onClearButtonClick={handleClearTeam}
+                          />
+                          <Divider orientation="vertical" />
                         </Grid>
                       </Grid>
-                    )}
-                    {selectedTab === 1 && (
-                      <Grid container spacing={3}>
-                        <Grid xs={12}>
-                          <Grid xs={6}>
-                            <TeamSelector
-                              onTeamChange={handleTeamChange}
-                              onClearButtonClick={handleClearTeam}
-                            />
-                            <Divider orientation="vertical" />
-                          </Grid>
-                        </Grid>
-                        <Grid xs={6}>
-                          <TeamStatisticsBarChart teamName={selectedTeam} />
-                        </Grid>{' '}
-                        <Grid xs={6}>
-                          <StatisticsTable teamName={selectedTeam} />
-                        </Grid>
-                        <Grid xs={6}>
-                          <DailyTimeSummaryPerTeamLineChart
-                            teamName={selectedTeam}
-                          />
-                        </Grid>
-                        <Grid xs={6}>
-                          <TimeSummaryPerTeamLineChart
-                            teamName={selectedTeam}
-                          />
-                        </Grid>
+                      <Grid item xs={6}>
+                        <TeamStatisticsBarChart teamName={selectedTeam} />
+                      </Grid>{' '}
+                      <Grid item xs={6}>
+                        <StatisticsTable teamName={selectedTeam} />
                       </Grid>
-                    )}
-                    {selectedTab === 2 && (
-                      <Grid container spacing={3}>
-                        <Grid xs={12}>
-                          <Grid xs={6}>
-                            <TemplateNameAutocomplete
-                              onTemplateChange={handleTemplateChange}
-                            />
-                          </Grid>
-                        </Grid>
-                        <Grid xs={6}>
-                          <TemplateStatisticsBarChart templateName={template} />
-                        </Grid>
-                        <Grid xs={6}>
-                          <StatisticsTable templateName={template} />
-                        </Grid>
-                        <Grid xs={6}>
-                          <DailyTimeSummaryPerTemplateLineChart
-                            templateName={template}
-                          />
-                        </Grid>
-                        <Grid xs={6}>
-                          <DailyTimeSummaryPerTemplateLineChart
-                            templateName={template}
+                      <Grid item xs={6}>
+                        <DailyTimeSummaryPerTeamLineChart
+                          teamName={selectedTeam}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TimeSummaryPerTeamLineChart teamName={selectedTeam} />
+                      </Grid>
+                    </Grid>
+                  )}
+                  {selectedTab === 2 && (
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <Grid item xs={6}>
+                          <TemplateNameAutocomplete
+                            onTemplateChange={handleTemplateChange}
                           />
                         </Grid>
                       </Grid>
-                    )}
-                  </Grid>
+                      <Grid item xs={6}>
+                        <TemplateStatisticsBarChart
+                          templateName={selectedTemplate}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <StatisticsTable templateName={selectedTemplate} />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <DailyTimeSummaryPerTemplateLineChart
+                          templateName={selectedTemplate}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TimeSummaryPerTemplateLineChart
+                          templateName={selectedTemplate}
+                        />
+                      </Grid>
+                    </Grid>
+                  )}
                 </Grid>
-              </Typography>
+              </Grid>
             </InfoCard>
           </Grid>
         </Grid>
