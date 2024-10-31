@@ -20,7 +20,8 @@
     "pluginId": "time-saver",
     "pluginPackages": [
       "@alithya-oss/plugin-time-saver",
-      "@alithya-oss/plugin-time-saver-backend"
+      "@alithya-oss/plugin-time-saver-backend",
+      "@alithya-oss/plugin-time-saver-react"
     ]
   },
   "sideEffects": false,
@@ -35,8 +36,10 @@
   },
   "dependencies": {
     "@alithya-oss/plugin-time-saver-common": "workspace:^",
+    "@alithya-oss/plugin-time-saver-react": "workspace:^",
     "@backstage/core-components": "^0.15.0",
     "@backstage/core-plugin-api": "^1.9.4",
+    "@backstage/errors": "^1.2.4",
     "@backstage/theme": "^0.5.7",
     "@material-ui/core": "^4.12.2",
     "@material-ui/icons": "^4.9.1",

@@ -86,6 +86,11 @@ export type GetTimeSavedSumResponse = {
 };
 
 // @public (undocumented)
+export type GetUriParams = {
+  [key: string]: string | number;
+};
+
+// @public (undocumented)
 export type GroupSavingsDivision = {
   team: string;
   percentage: number;
