@@ -18,20 +18,20 @@ git clone https://github.com/alithya-oss/harmonix
 cd harmonix
 ```
 
-2. Run `build-scripts/backstage-install.sh`, the initialization script for the Harmonix dev environment.
+2. Run `build-script/backstage-install.sh`, the initialization script for the Harmonix dev environment.
     - This will create a `backstage` subfolder and generate a new Backstage setup in it.
     - It will also apply the patch from the `backstage-mods` folder, which is required for the integration of the
       plugins.
 
 ```shell
-buid-scripts/backstage-install.sh
+build-script/backstage-install.sh
 ```
 
 3. Copy your `.env` and `app-config.local.yaml` files over to this new backstage environment.
 
 ```shell
 # From the harmonix folder
-cp ../backstage-plugins/workspaces/aws/{.env, app-config.local.yaml} bacstage/
+cp ../backstage-plugins/workspaces/aws/{.env,app-config.local.yaml} backstage/
 ```
 
 4. Install the current version of Harmonix plugins in your new Harmonix dev environment.
@@ -49,8 +49,7 @@ rm -vf ./backstage/plugins/package.json
 6. Install dependencies with yarn
 
 ```shell
-cd backstage/
-yarn install
+cd backstage && yarn install
 ```
 
 ## Get Your Changes Ready
@@ -59,7 +58,7 @@ yarn install
     - Proceed with only one plugin at a time
 
 ```shell
-rysnc -viva ../../backstage-plugins/workspaces/aws/plugins/aws-apps ./plugins/
+rsync -viva ../../backstage-plugins/workspaces/aws/plugins/aws-apps ./plugins/
 ```
 
 2. Update your Harmonix dev environment's `backstage/package.json` file with these scripts and resolutions
@@ -104,12 +103,11 @@ rysnc -viva ../../backstage-plugins/workspaces/aws/plugins/aws-apps ./plugins/
 3. Install dependencies, again.
 
 ```shell
-cd backstage/
 yarn install
 ```
 
 4. Bump the versions
 
 ```shell
-yarn backstage-cli verisons:bump --relase 1.29.0
+yarn backstage-cli versions:bump --release 1.29.0
 ```
