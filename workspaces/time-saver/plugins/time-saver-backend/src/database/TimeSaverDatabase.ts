@@ -561,7 +561,7 @@ export class TimeSaverDatabase implements TimeSaverStore {
         // SQLite uses ROUND() but requires floating-point division
         roundingFunction =
           'ROUND((SUM(main.time_saved) / sub.total_team_time_saved) * 100, 2)';
-        windowedSumFunction = '(SELECT SUM(time_saved) FROM table_name)';
+        windowedSumFunction = `(SELECT SUM(time_saved) FROM ${TIME_SAVINGS_TABLE})`;
       } else {
         throw new Error(`Unsupported database client: ${client}`);
       }
