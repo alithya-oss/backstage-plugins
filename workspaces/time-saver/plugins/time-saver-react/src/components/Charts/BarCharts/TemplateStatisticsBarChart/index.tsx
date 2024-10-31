@@ -29,8 +29,7 @@ export interface TemplateStatisticsBarChartProps {
  */
 const TemplateStatisticsBarChart = (props: TemplateStatisticsBarChartProps) => {
   const theme = useTheme();
-  const apiResult = useStatistics({ template: props.templateName });
-  // const apiResult = useStatistics();
+  const apiResult = useStatistics({ templateName: props.templateName });
   const { loading, error, items } = apiResult;
 
   if (!!items) {
