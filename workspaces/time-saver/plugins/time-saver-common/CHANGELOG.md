@@ -1,5 +1,11 @@
 # @alithya-oss/plugin-time-saver-common
 
+## 0.6.0
+
+### Minor Changes
+
+- a349c3f: Provided GetUriParams type for backend API type verification
+
 ## 0.5.0
 
 ### Minor Changes

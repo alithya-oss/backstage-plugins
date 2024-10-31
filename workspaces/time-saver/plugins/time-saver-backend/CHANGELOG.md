@@ -1,5 +1,13 @@
 # @alithya-oss/plugin-time-saver-backend
 
+## 3.0.1
+
+### Patch Changes
+
+- a349c3f: Provided fix for Time Saver DB client Time Summary functions. SQL queries were not working correctly.
+- Updated dependencies [a349c3f]
+  - @alithya-oss/plugin-time-saver-common@0.6.0
+
 ## 3.0.0
 
 ### Major Changes
