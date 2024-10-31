@@ -538,33 +538,40 @@ export class TimeSaverDatabase implements TimeSaverStore {
     GroupSavingsDivision[] | undefined | void
   > {
     try {
-      const subquery = this.db('ts_template_time_savings as sub')
-        .select('team')
-        .sum('time_saved as total_team_time_saved')
-        .groupBy('team');
-
       // Rounding function differs by DB
       let roundingFunction;
+      let windowedSumFunction;
       const { client } = this.db.client.config;
       if (client === 'pg') {
         // PostgreSQL and MySQL/MariaDB use ROUND()
         roundingFunction =
           'ROUND((SUM(main.time_saved) / sub.total_team_time_saved)::numeric * 100, 2)';
+        windowedSumFunction = 'SUM(time_saved) OVER ()';
       } else if (['mysql', 'mysql2'].includes(client)) {
         // PostgreSQL and MySQL/MariaDB use ROUND()
         roundingFunction =
           'ROUND((SUM(main.time_saved) / sub.total_team_time_saved) * 100, 2)';
+        windowedSumFunction = 'SUM(time_saved) OVER ()';
       } else if (client === 'mssql') {
         // MSSQL uses ROUND() but the syntax is slightly different
         roundingFunction =
           'ROUND((SUM(main.time_saved) / sub.total_team_time_saved) * 100, 2)';
+        windowedSumFunction = 'SUM(time_saved) OVER ()';
       } else if (client === 'better-sqlite3') {
         // SQLite uses ROUND() but requires floating-point division
         roundingFunction =
           'ROUND((SUM(main.time_saved) / sub.total_team_time_saved) * 100, 2)';
+        windowedSumFunction = '(SELECT SUM(time_saved) FROM table_name)';
       } else {
         throw new Error(`Unsupported database client: ${client}`);
       }
+
+      const subquery = this.db('ts_template_time_savings as sub')
+        .select(
+          'team',
+          this.db.raw(`${windowedSumFunction} AS total_team_time_saved`),
+        )
+        .groupBy('team', 'time_saved');
 
       const result = await this.db<GroupSavingsDivisionDbRow>(
         'ts_template_time_savings as main',
