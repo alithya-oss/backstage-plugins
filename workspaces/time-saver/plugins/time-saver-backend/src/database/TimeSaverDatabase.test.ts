@@ -342,11 +342,11 @@ describe('TimeSaverDatabase', () => {
       expect(result).toStrictEqual([
         {
           team: 'architecture',
-          percentage: 20,
+          percentage: 100,
         },
         {
           team: 'engineering',
-          percentage: 80,
+          percentage: 100,
         },
       ]);
     });

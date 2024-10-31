@@ -12,19 +12,8 @@
     "module": "dist/index.esm.js",
     "types": "dist/index.d.ts"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/backstage/community-plugins",
-    "directory": "workspaces/timesaver/plugins/timesaver-common"
-  },
   "backstage": {
-    "role": "common-library",
-    "pluginId": "timesaver",
-    "pluginPackages": [
-      "@backstage-community/plugin-timesaver",
-      "@backstage-community/plugin-timesaver-backend",
-      "@backstage-community/plugin-timesaver-common"
-    ]
+    "role": "common-library"
   },
   "sideEffects": false,
   "scripts": {

@@ -1,1 +1,0 @@
-export { useGroupDivisionStatistics } from './useGroupDivisionStatistics';

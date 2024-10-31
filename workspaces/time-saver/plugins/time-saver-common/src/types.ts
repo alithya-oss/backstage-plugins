@@ -274,8 +274,3 @@ export type GetTimeSavedSumResponse = {
 export type TimeSaverApiErrorResponse = {
   errorMessage: string;
 };
-
-/**
- * @public
- */
-export type GetUriParams = { [key: string]: string | number };
