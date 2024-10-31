@@ -8,6 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  // TimeScale,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
@@ -20,6 +21,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
+  // TimeScale
 );
 
 export const options = {

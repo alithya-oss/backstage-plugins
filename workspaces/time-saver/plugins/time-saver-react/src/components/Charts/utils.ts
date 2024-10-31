@@ -65,33 +65,28 @@ export const getLineChartOptions = (
   },
   responsive: true,
   scales: {
-    x: [
-      {
-        type: 'time',
-        time: {
-          unit: 'day',
-          tooltipFormat: 'YYYY-MM-DD',
-          displayFormats: {
-            day: 'YYYY-MM-DD',
-          },
-          bounds: 'data',
-        },
-        scaleLabel: {
-          display: true,
-          labelString: 'Date',
+    x: {
+      // type: 'time',
+      time: {
+        unit: 'day',
+        tooltipFormat: 'YYYY-MM-DD',
+        displayFormats: {
+          day: 'YYYY-MM-DD',
         },
       },
-    ] as unknown as ChartOptions<'line'>['scales'],
-    y: [
-      {
-        stacked: true,
-        beginAtZero: true,
-        scaleLabel: {
-          display: true,
-          labelString: 'Total Time Saved',
-        },
+      scaleLabel: {
+        display: true,
+        labelString: 'Date',
       },
-    ] as unknown as ChartOptions<'line'>['scales'],
+    } as unknown as ChartOptions<'line'>['scales'],
+    y: {
+      stacked: true,
+      beginAtZero: true,
+      scaleLabel: {
+        display: true,
+        labelString: 'Total Time Saved',
+      },
+    } as unknown as ChartOptions<'line'>['scales'],
   },
 });
 
@@ -228,8 +223,8 @@ export function buildDatasetsFromPieChart(
   return [
     {
       data: statistics.map(stat => stat.percentage),
-      backgroundColors,
-      hoverBackgroundColors,
+      backgroundColor: backgroundColors,
+      hoverBackgroundColor: hoverBackgroundColors,
     },
   ];
 }
