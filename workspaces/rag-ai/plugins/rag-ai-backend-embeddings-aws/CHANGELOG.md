@@ -1,5 +1,13 @@
 # @alithya-oss/plugin-rag-ai-backend-embeddings-aws
 
+## 1.0.1
+
+### Patch Changes
+
+- c3db3c6: Add max retries to embeddings to prevent forever loop in case of errors.
+- Updated dependencies [c3db3c6]
+  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@1.0.1
+
 ## 1.0.0
 
 ### Major Changes

@@ -1,5 +1,11 @@
 # @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter
 
+## 1.0.1
+
+### Patch Changes
+
+- c3db3c6: Fix issue with cleaning up old TechDocs vectors
+
 ## 1.0.0
 
 ### Major Changes
