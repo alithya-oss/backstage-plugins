@@ -41,6 +41,9 @@ const TECHDOCS_ENTITY_FILTER = {
   'metadata.annotations.backstage.io/techdocs-ref': CATALOG_FILTER_EXISTS,
 };
 
+/**
+ * @public
+ */
 export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
   private readonly _vectorStore: RoadieVectorStore;
   private readonly catalogApi: CatalogApi;
@@ -92,7 +95,7 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
    *
    * It is recommended that this method is overwritten with more applicable implementation
    *
-   * @returns {RecursiveCharacterTextSplitter} The splitter object.
+   * @returns \{RecursiveCharacterTextSplitter\} The splitter object.
    */
   protected getSplitter() {
     // Defaults to 1000 chars, 200 overlap
