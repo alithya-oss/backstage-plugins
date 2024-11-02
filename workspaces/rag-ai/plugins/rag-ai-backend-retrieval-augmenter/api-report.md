@@ -19,6 +19,7 @@ import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { RetrievalPipeline } from '@alithya-oss/plugin-rag-ai-node';
 import { RetrievalRouter } from '@alithya-oss/plugin-rag-ai-node';
 import { RoadieVectorStore } from '@alithya-oss/plugin-rag-ai-node';
+import { TokenManager } from '@backstage/backend-common';
 
 // @public (undocumented)
 export type AugmentationOptions = {
@@ -79,6 +80,7 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
     catalogApi,
     logger,
     auth,
+    tokenManager,
     embeddings,
     discovery,
     augmentationOptions,
@@ -86,7 +88,8 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
     vectorStore: RoadieVectorStore;
     catalogApi: CatalogApi;
     logger: LoggerService;
-    auth: AuthService;
+    auth?: AuthService;
+    tokenManager?: TokenManager;
     embeddings: Embeddings;
     discovery: DiscoveryService;
     augmentationOptions?: AugmentationOptions;

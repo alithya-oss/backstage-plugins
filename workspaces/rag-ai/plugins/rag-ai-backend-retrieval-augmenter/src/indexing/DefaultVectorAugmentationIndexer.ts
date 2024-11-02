@@ -15,10 +15,9 @@
  */
 
 import {
-  AuthService,
-  LoggerService,
-  DiscoveryService,
-} from '@backstage/backend-plugin-api';
+  createLegacyAuthAdapters,
+  TokenManager,
+} from '@backstage/backend-common';
 import { CATALOG_FILTER_EXISTS, CatalogApi } from '@backstage/catalog-client';
 import { SearchIndex, AugmentationOptions, TechDocsDocument } from './types';
 import { Embeddings } from '@langchain/core/embeddings';
@@ -31,9 +30,20 @@ import {
   EntityFilterShape,
   RoadieVectorStore,
 } from '@alithya-oss/plugin-rag-ai-node';
+import {
+  AuthService,
+  DiscoveryService,
+  LoggerService,
+} from '@backstage/backend-plugin-api';
 import pLimit from 'p-limit';
 
-/** @public */
+const TECHDOCS_ENTITY_FILTER = {
+  'metadata.annotations.backstage.io/techdocs-ref': CATALOG_FILTER_EXISTS,
+};
+
+/**
+ * @public
+ */
 export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
   private readonly _vectorStore: RoadieVectorStore;
   private readonly catalogApi: CatalogApi;
@@ -48,6 +58,7 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
     catalogApi,
     logger,
     auth,
+    tokenManager,
     embeddings,
     discovery,
     augmentationOptions,
@@ -55,7 +66,8 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
     vectorStore: RoadieVectorStore;
     catalogApi: CatalogApi;
     logger: LoggerService;
-    auth: AuthService;
+    auth?: AuthService;
+    tokenManager?: TokenManager;
     embeddings: Embeddings;
     discovery: DiscoveryService;
     augmentationOptions?: AugmentationOptions;
@@ -65,7 +77,11 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
     this.augmentationOptions = augmentationOptions;
     this.catalogApi = catalogApi;
     this.logger = logger;
-    this.auth = auth;
+    this.auth = createLegacyAuthAdapters({
+      auth,
+      discovery,
+      tokenManager,
+    }).auth;
     this.discovery = discovery;
   }
 
@@ -78,6 +94,8 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
    * which is likely not the best candidate for structured data splitting.
    *
    * It is recommended that this method is overwritten with more applicable implementation
+   *
+   * @returns \{RecursiveCharacterTextSplitter\} The splitter object.
    */
   protected getSplitter() {
     // Defaults to 1000 chars, 200 overlap
@@ -173,10 +191,7 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
 
         const entitiesResponse = await this.catalogApi.getEntities(
           {
-            filter: {
-              'metadata.annotations.backstage.io/techdocs-ref':
-                CATALOG_FILTER_EXISTS,
-            },
+            filter: TECHDOCS_ENTITY_FILTER,
           },
           { token },
         );
@@ -191,9 +206,15 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
             const searchIndexUrl = `${techDocsBaseUrl}/static/docs/${namespace}/${kind}/${name}/search/search_index.json`;
 
             try {
+              const { token: techDocsToken } =
+                await this.auth.getPluginRequestToken({
+                  onBehalfOf: await this.auth.getOwnServiceCredentials(),
+                  targetPluginId: 'techdocs',
+                });
+
               const searchIndexResponse = await fetch(searchIndexUrl, {
                 headers: {
-                  Authorization: `Bearer ${token}`,
+                  Authorization: `Bearer ${techDocsToken}`,
                 },
               });
 
@@ -212,7 +233,8 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
               }, []);
             } catch (e) {
               this.logger.debug(
-                `Failed to retrieve tech docs search index for entity ${namespace}/${kind}/${name}\n${e}`,
+                `Failed to retrieve tech docs search index for entity ${namespace}/${kind}/${name}`,
+                e as Error,
               );
               return [];
             }
@@ -255,8 +277,10 @@ export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
       targetPluginId: 'catalog',
     });
 
+    const entityFilter =
+      source === 'tech-docs' ? TECHDOCS_ENTITY_FILTER : filter;
     const entities = (
-      await this.catalogApi.getEntities({ filter }, { token })
+      await this.catalogApi.getEntities({ filter: entityFilter }, { token })
     ).items.map(stringifyEntityRef);
 
     for (const entityRef of entities) {
