@@ -1,5 +1,12 @@
 # @alithya-oss/plugin-rag-ai
 
+## 1.2.1
+
+### Patch Changes
+
+- c3db3c6: Provide a default implementation of the RAG AI API client
+- c3db3c6: Add max retries to embeddings to prevent forever loop in case of errors.
+
 ## 1.2.0
 
 ### Minor Changes

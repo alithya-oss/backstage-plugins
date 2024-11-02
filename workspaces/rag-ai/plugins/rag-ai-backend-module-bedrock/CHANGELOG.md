@@ -1,5 +1,14 @@
 # @alithya-oss/plugin-rag-ai-backend-module-bedrock
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [c3db3c6]
+- Updated dependencies [c3db3c6]
+  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@1.0.1
+  - @alithya-oss/plugin-rag-ai-backend-embeddings-aws@1.0.1
+
 ## 0.1.1
 
 ### Patch Changes
