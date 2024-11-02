@@ -22,7 +22,7 @@ import {
 import { RagAiApi } from './types';
 import {
   EventSourceParserStream,
-  ParsedEvent,
+  EventSourceMessage,
 } from 'eventsource-parser/stream';
 
 /**
@@ -70,7 +70,10 @@ export class RoadieRagAiClient implements RagAiApi {
     return response.body!;
   }
 
-  async *ask(question: string, source: string): AsyncGenerator<ParsedEvent> {
+  async *ask(
+    question: string,
+    source: string,
+  ): AsyncGenerator<EventSourceMessage> {
     const { token } = await this.identityApi.getCredentials();
 
     const stream = await this.fetch(`query/${source}`, {

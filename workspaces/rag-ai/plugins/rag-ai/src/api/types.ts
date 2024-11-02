@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { createApiRef } from '@backstage/core-plugin-api';
-import { ParsedEvent } from 'eventsource-parser/stream';
+import { EventSourceMessage } from 'eventsource-parser/stream';
 
 /**
  * API to talk to rag-ai-backend
@@ -22,7 +22,7 @@ import { ParsedEvent } from 'eventsource-parser/stream';
  * @public
  */
 export interface RagAiApi {
-  ask(question: string, source: string): AsyncGenerator<ParsedEvent>;
+  ask(question: string, source: string): AsyncGenerator<EventSourceMessage>;
 }
 
 /**
