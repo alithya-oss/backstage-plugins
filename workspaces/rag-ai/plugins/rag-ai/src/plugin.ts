@@ -14,19 +14,38 @@
  * limitations under the License.
  */
 import {
+  configApiRef,
+  createApiFactory,
   createComponentExtension,
   createPlugin,
+  discoveryApiRef,
+  fetchApiRef,
+  identityApiRef,
 } from '@backstage/core-plugin-api';
+import { ragAiApiRef, RoadieRagAiClient } from './api';
 
-/**
- * The Backstage plugin that holds RAG-AI specific components
- * @public
- */
 export const ragAiPlugin = createPlugin({
   id: 'rag-ai',
+  apis: [
+    createApiFactory({
+      api: ragAiApiRef,
+      deps: {
+        configApi: configApiRef,
+        discoveryApi: discoveryApiRef,
+        fetchApi: fetchApiRef,
+        identityApi: identityApiRef,
+      },
+      factory: ({ configApi, discoveryApi, fetchApi, identityApi }) =>
+        new RoadieRagAiClient({
+          configApi,
+          discoveryApi,
+          fetchApi,
+          identityApi,
+        }),
+    }),
+  ],
 });
 
-/** @public */
 export const RagModal = ragAiPlugin.provide(
   createComponentExtension({
     name: 'RagModal',
@@ -37,7 +56,6 @@ export const RagModal = ragAiPlugin.provide(
   }),
 );
 
-/** @public */
 export const SidebarRagModal = ragAiPlugin.provide(
   createComponentExtension({
     name: 'SidebarRagModal',
