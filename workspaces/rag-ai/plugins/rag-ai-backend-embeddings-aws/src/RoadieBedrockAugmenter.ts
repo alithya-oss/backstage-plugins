@@ -20,6 +20,7 @@ import {
   DefaultVectorAugmentationIndexer,
   RoadieEmbeddingsConfig,
 } from '@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter';
+import { BedrockCohereEmbeddings } from './BedrockCohereEmbeddings';
 
 /**
  * Amazon Bedrock configuration to generate embeddings
@@ -40,11 +41,15 @@ export class RoadieBedrockAugmenter extends DefaultVectorAugmentationIndexer {
       auth: AuthService;
     },
   ) {
-    const embeddings = new BedrockEmbeddings({
+    const embeddingsConfig = {
       region: config.options.region,
       credentials: config.options.credentials,
       model: config.bedrockConfig.modelName,
-    });
+    };
+    const embeddings = config.bedrockConfig.modelName.includes('cohere')
+      ? new BedrockCohereEmbeddings({ ...embeddingsConfig, maxRetries: 3 })
+      : new BedrockEmbeddings({ ...embeddingsConfig, maxRetries: 3 });
+
     super({ ...config, embeddings });
   }
 }
