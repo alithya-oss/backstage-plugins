@@ -24,6 +24,7 @@ export type SidebarRagModalProps = RagModalProps & {
   icon?: IconComponent;
 };
 
+/** @public */
 export const SidebarRagModal = ({
   title = 'AI Assistant',
   icon = AssistantIcon,

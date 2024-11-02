@@ -24,7 +24,7 @@ export interface RagAiApi {
 // @public
 export const ragAiApiRef: ApiRef<RagAiApi>;
 
-// @public
+// @public (undocumented)
 export const ragAiPlugin: BackstagePlugin<{}, {}, {}>;
 
 // @public (undocumented)

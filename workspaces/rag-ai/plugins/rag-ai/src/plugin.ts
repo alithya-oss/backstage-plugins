@@ -24,6 +24,7 @@ import {
 } from '@backstage/core-plugin-api';
 import { ragAiApiRef, RoadieRagAiClient } from './api';
 
+/** @public */
 export const ragAiPlugin = createPlugin({
   id: 'rag-ai',
   apis: [
@@ -46,6 +47,7 @@ export const ragAiPlugin = createPlugin({
   ],
 });
 
+/** @public */
 export const RagModal = ragAiPlugin.provide(
   createComponentExtension({
     name: 'RagModal',
@@ -56,6 +58,7 @@ export const RagModal = ragAiPlugin.provide(
   }),
 );
 
+/** @public */
 export const SidebarRagModal = ragAiPlugin.provide(
   createComponentExtension({
     name: 'SidebarRagModal',
