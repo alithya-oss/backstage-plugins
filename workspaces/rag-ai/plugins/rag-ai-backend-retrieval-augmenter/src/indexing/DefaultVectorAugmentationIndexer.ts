@@ -29,7 +29,7 @@ import {
   EmbeddingsSource,
   EntityFilterShape,
   RoadieVectorStore,
-} from '@roadiehq/rag-ai-node';
+} from '@alithya-oss/plugin-rag-ai-node';
 import {
   AuthService,
   DiscoveryService,
