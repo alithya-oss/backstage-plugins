@@ -1,0 +1,293 @@
+openapi: 3.0.0
+info:
+  title: Time Saver API
+  version: 1.0.0
+  description: API for managing and retrieving time-saving statistics by templates and teams
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /stats/template/{templateTaskId}:
+    get:
+      summary: Retrieve time savings stats by template task ID
+      operationId: getStatsByTemplateTaskId
+      parameters:
+        - name: templateTaskId
+          in: path
+          required: true
+          description: The ID of the template task to retrieve stats for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Template time savings retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  templateTaskId:
+                    type: string
+                  templateName:
+                    type: string
+                  stats:
+                    $ref: '#/components/schemas/TemplateTimeSavings'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Template task not found
+
+  /stats/team/{team}:
+    get:
+      summary: Retrieve time savings stats by team
+      operationId: getStatsByTeam
+      parameters:
+        - name: team
+          in: path
+          required: true
+          description: The team name to retrieve stats for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Team time savings retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  team:
+                    type: string
+                  stats:
+                    $ref: '#/components/schemas/TemplateTimeSavingsCollection'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Team not found
+
+  /stats/template/{template}:
+    get:
+      summary: Retrieve time savings stats by template name
+      operationId: getStatsByTemplate
+      parameters:
+        - name: template
+          in: path
+          required: true
+          description: The template name to retrieve stats for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Template time savings retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  templateName:
+                    type: string
+                  stats:
+                    $ref: '#/components/schemas/TemplateTimeSavingsCollection'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Template not found
+
+  /stats:
+    get:
+      summary: Retrieve all time savings stats
+      operationId: getAllStats
+      responses:
+        '200':
+          description: All time savings stats retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stats:
+                    $ref: '#/components/schemas/TemplateTimeSavingsCollection'
+        '401':
+          description: Unauthorized
+        '404':
+          description: No stats found
+
+  /stats/group_division:
+    get:
+      summary: Retrieve group savings division
+      operationId: getGroupDivisionStats
+      responses:
+        '200':
+          description: Group savings division retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stats:
+                    $ref: '#/components/schemas/GroupSavingsDivision'
+        '401':
+          description: Unauthorized
+        '404':
+          description: No division stats found
+
+  /time_summary/team:
+    get:
+      summary: Retrieve time savings summary per team
+      operationId: getDailyTimeSummariesByTeam
+      responses:
+        '200':
+          description: Time savings summary per team retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stats:
+                    $ref: '#/components/schemas/TimeSummaryPerTeamName'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Plugin database has not been initialized
+
+  /time_summary/template:
+    get:
+      summary: Retrieve time savings summary per template
+      operationId: getDailyTimeSummariesByTemplate
+      responses:
+        '200':
+          description: Time savings summary per template retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stats:
+                    $ref: '#/components/schemas/TimeSummaryPerTemplateName'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Plugin database has not been initialized
+
+  /time_summary/daily/team:
+    get:
+      summary: Retrieve daily time savings summary per team
+      operationId: getDailyTimeSummariesByTeam
+      responses:
+        '200':
+          description: Daily time savings summary per team retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stats:
+                    $ref: '#/components/schemas/TimeSummaryPerTeamName'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Plugin database has not been initialized
+
+  /time_summary/daily/template:
+    get:
+      summary: Retrieve daily time savings summary per template
+      operationId: getDailyTimeSummariesByTemplate
+      responses:
+        '200':
+          description: Daily time savings summary per template retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stats:
+                    $ref: '#/components/schemas/TimeSummaryPerTemplateName'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Plugin database has not been initialized
+
+components:
+  schemas:
+    TemplateTimeSavings:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the template time savings record
+        team:
+          type: string
+          description: The team name
+        role:
+          type: string
+          description: The role associated with the time savings
+        createdAt:
+          type: string
+          format: date-time
+          description: The creation date of the record
+        createdBy:
+          type: string
+          description: The user who created the record
+        timeSaved:
+          type: number
+          description: The amount of time saved (in minutes)
+        templateName:
+          type: string
+          description: The template name
+        templateTaskId:
+          type: string
+          description: The template task ID
+        templateTaskStatus:
+          type: string
+          description: The status of the template task
+
+    TemplateTimeSavingsCollection:
+      type: array
+      items:
+        $ref: '#/components/schemas/TemplateTimeSavings'
+
+    GroupSavingsDivision:
+      type: object
+      properties:
+        team:
+          type: string
+          description: The team name
+        percentage:
+          type: number
+          description: The percentage of the total time saved
+
+    TimeSavedStatistics:
+      type: object
+      properties:
+        team:
+          type: string
+          description: The team name
+        templateName:
+          type: string
+          description: The template name
+        timeSaved:
+          type: number
+          description: The total time saved
+
+    TimeSummaryPerTeamName:
+      type: object
+      properties:
+        team:
+          type: string
+        date:
+          type: string
+          format: date-time
+        totalTimeSaved:
+          type: number
+
+    TimeSummaryPerTemplateName:
+      type: object
+      properties:
+        templateName:
+          type: string
+        date:
+          type: string
+          format: date-time
+        totalTimeSaved:
+          type: number
