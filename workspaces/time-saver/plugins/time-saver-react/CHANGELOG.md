@@ -1,6 +1,6 @@
 # @alithya-oss/plugin-time-saver-react
 
-## 1.0.0
+## 0.1.0
 
 ### Major Changes
 
