@@ -25,4 +25,3 @@
 | @backstage/test-utils       | package.json | error    |
 | @types/uuid                 | package.json | error    |
 | msw                         | package.json | error    |
-

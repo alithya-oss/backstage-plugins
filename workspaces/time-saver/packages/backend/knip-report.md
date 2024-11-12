@@ -27,4 +27,3 @@
 | @types/express-serve-static-core | package.json | error    |
 | @types/express                   | package.json | error    |
 | @types/luxon                     | package.json | error    |
-

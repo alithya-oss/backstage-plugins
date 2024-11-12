@@ -5,4 +5,3 @@
 | Name                      | Location     | Severity |
 | :------------------------ | :----------- | :------- |
 | @backstage/backend-common | package.json | error    |
-

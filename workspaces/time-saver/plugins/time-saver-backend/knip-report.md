@@ -15,4 +15,3 @@
 | @types/node-fetch | package.json | error    |
 | node-fetch        | package.json | error    |
 | msw               | package.json | error    |
-
