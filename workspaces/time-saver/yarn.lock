@@ -40,7 +40,7 @@ __metadata:
     "@backstage/config": "npm:^1.2.0"
     "@backstage/plugin-auth-backend": "npm:^0.23.1"
     "@backstage/plugin-auth-backend-module-guest-provider": "npm:^0.2.1"
-    "@types/express": "npm:*"
+    "@types/express": "npm:^4.17.6"
     "@types/node-fetch": "npm:^2.6.11"
     "@types/supertest": "npm:^2.0.12"
     express: "npm:^4.17.1"
@@ -107,7 +107,6 @@ __metadata:
     "@material-ui/core": "npm:^4.12.2"
     "@material-ui/icons": "npm:^4.9.1"
     "@material-ui/lab": "npm:4.0.0-alpha.61"
-    "@mui/material": "npm:^5.16.7"
     "@mui/x-data-grid": "npm:^7.13.0"
     "@testing-library/jest-dom": "npm:^6.0.0"
     "@testing-library/react": "npm:^14.0.0"
@@ -9007,7 +9006,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/material@npm:^5.12.2, @mui/material@npm:^5.16.7":
+"@mui/material@npm:^5.12.2":
   version: 5.16.7
   resolution: "@mui/material@npm:5.16.7"
   dependencies:
