@@ -1,5 +1,11 @@
 # @alithya-oss/plugin-rag-ai
 
+## 1.2.2
+
+### Patch Changes
+
+- a854796: Bump Backstage framework verison 1.32.5
+
 ## 1.2.1
 
 ### Patch Changes

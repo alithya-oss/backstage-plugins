@@ -1,5 +1,14 @@
 # backend
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [a854796]
+  - @alithya-oss/plugin-rag-ai-backend@2.0.1
+  - @alithya-oss/plugin-rag-ai-backend-module-bedrock@0.1.3
+  - @alithya-oss/plugin-rag-ai-backend-module-openai@0.2.3
+
 ## 0.0.4
 
 ### Patch Changes
