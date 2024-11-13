@@ -9,16 +9,16 @@ import { ApiRef } from '@backstage/core-plugin-api';
 import { BackstagePlugin } from '@backstage/core-plugin-api';
 import { ConfigApi } from '@backstage/core-plugin-api';
 import { DiscoveryApi } from '@backstage/core-plugin-api';
+import { EventSourceMessage } from 'eventsource-parser/stream';
 import { FetchApi } from '@backstage/core-plugin-api';
 import { IconComponent } from '@backstage/core-plugin-api';
 import { IdentityApi } from '@backstage/core-plugin-api';
 import { JSX as JSX_2 } from 'react';
-import { ParsedEvent } from 'eventsource-parser/stream';
 
 // @public
 export interface RagAiApi {
   // (undocumented)
-  ask(question: string, source: string): AsyncGenerator<ParsedEvent>;
+  ask(question: string, source: string): AsyncGenerator<EventSourceMessage>;
 }
 
 // @public
@@ -45,7 +45,7 @@ export class RoadieRagAiClient implements RagAiApi {
     identityApi: IdentityApi;
   });
   // (undocumented)
-  ask(question: string, source: string): AsyncGenerator<ParsedEvent>;
+  ask(question: string, source: string): AsyncGenerator<EventSourceMessage>;
 }
 
 // @public (undocumented)

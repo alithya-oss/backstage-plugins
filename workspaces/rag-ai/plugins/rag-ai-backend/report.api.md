@@ -5,7 +5,7 @@
 ```ts
 import { AugmentationIndexer } from '@alithya-oss/plugin-rag-ai-node';
 import { AuthService } from '@backstage/backend-plugin-api';
-import { BackendFeatureCompat } from '@backstage/backend-plugin-api';
+import { BackendFeature } from '@backstage/backend-plugin-api';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { BaseLLM } from '@langchain/core/language_models/llms';
 import { Config } from '@backstage/config';
@@ -21,7 +21,7 @@ export function createRouter(
 ): Promise<express.Router>;
 
 // @public
-const ragAiPlugin: BackendFeatureCompat;
+const ragAiPlugin: BackendFeature;
 export default ragAiPlugin;
 
 // @public
