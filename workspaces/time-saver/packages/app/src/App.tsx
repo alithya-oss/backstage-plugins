@@ -37,7 +37,7 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 
-import { TimeSaverPage } from '@alithya-oss/plugin-time-saver';
+// import { TimeSaverPage } from '@alithya-oss/plugin-time-saver';
 
 const app = createApp({
   apis,
@@ -97,7 +97,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
-    <Route path="/time-saver" element={<TimeSaverPage />} />
+    {/* <Route path="/time-saver" element={<TimeSaverPage />} /> */}
   </FlatRoutes>
 );
 

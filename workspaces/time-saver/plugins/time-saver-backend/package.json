@@ -20,7 +20,8 @@
     "pluginId": "time-saver",
     "pluginPackages": [
       "@alithya-oss/plugin-time-saver",
-      "@alithya-oss/plugin-time-saver-backend"
+      "@alithya-oss/plugin-time-saver-backend",
+      "@alithya-oss/plugin-time-saver-react"
     ]
   },
   "sideEffects": false,
@@ -36,8 +37,8 @@
   "dependencies": {
     "@alithya-oss/plugin-time-saver-common": "workspace:^",
     "@backstage/backend-common": "^0.25.0",
-    "@backstage/backend-defaults": "^0.5.0",
-    "@backstage/backend-plugin-api": "^1.0.0",
+    "@backstage/backend-defaults": "^0.5.2",
+    "@backstage/backend-plugin-api": "^1.0.1",
     "@backstage/backend-tasks": "^0.6.1",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
@@ -48,12 +49,12 @@
     "yn": "^4.0.0"
   },
   "devDependencies": {
-    "@backstage/backend-test-utils": "^1.0.0",
-    "@backstage/cli": "^0.27.1",
+    "@backstage/backend-test-utils": "^1.0.2",
+    "@backstage/cli": "^0.28.2",
     "@backstage/config": "^1.2.0",
-    "@backstage/plugin-auth-backend": "^0.23.0",
-    "@backstage/plugin-auth-backend-module-guest-provider": "^0.2.0",
-    "@types/express": "*",
+    "@backstage/plugin-auth-backend": "^0.23.1",
+    "@backstage/plugin-auth-backend-module-guest-provider": "^0.2.1",
+    "@types/express": "^4.17.6",
     "@types/node-fetch": "^2.6.11",
     "@types/supertest": "^2.0.12",
     "msw": "^2.3.1",

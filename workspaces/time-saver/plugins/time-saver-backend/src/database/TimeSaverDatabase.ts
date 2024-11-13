@@ -538,33 +538,40 @@ export class TimeSaverDatabase implements TimeSaverStore {
     GroupSavingsDivision[] | undefined | void
   > {
     try {
-      const subquery = this.db('ts_template_time_savings as sub')
-        .select('team')
-        .sum('time_saved as total_team_time_saved')
-        .groupBy('team');
-
       // Rounding function differs by DB
       let roundingFunction;
+      let windowedSumFunction;
       const { client } = this.db.client.config;
       if (client === 'pg') {
         // PostgreSQL and MySQL/MariaDB use ROUND()
         roundingFunction =
           'ROUND((SUM(main.time_saved) / sub.total_team_time_saved)::numeric * 100, 2)';
+        windowedSumFunction = 'SUM(time_saved) OVER ()';
       } else if (['mysql', 'mysql2'].includes(client)) {
         // PostgreSQL and MySQL/MariaDB use ROUND()
         roundingFunction =
           'ROUND((SUM(main.time_saved) / sub.total_team_time_saved) * 100, 2)';
+        windowedSumFunction = 'SUM(time_saved) OVER ()';
       } else if (client === 'mssql') {
         // MSSQL uses ROUND() but the syntax is slightly different
         roundingFunction =
           'ROUND((SUM(main.time_saved) / sub.total_team_time_saved) * 100, 2)';
+        windowedSumFunction = 'SUM(time_saved) OVER ()';
       } else if (client === 'better-sqlite3') {
         // SQLite uses ROUND() but requires floating-point division
         roundingFunction =
           'ROUND((SUM(main.time_saved) / sub.total_team_time_saved) * 100, 2)';
+        windowedSumFunction = `(SELECT SUM(time_saved) FROM ${TIME_SAVINGS_TABLE})`;
       } else {
         throw new Error(`Unsupported database client: ${client}`);
       }
+
+      const subquery = this.db('ts_template_time_savings as sub')
+        .select(
+          'team',
+          this.db.raw(`${windowedSumFunction} AS total_team_time_saved`),
+        )
+        .groupBy('team', 'time_saved');
 
       const result = await this.db<GroupSavingsDivisionDbRow>(
         'ts_template_time_savings as main',
@@ -675,10 +682,12 @@ export class TimeSaverDatabase implements TimeSaverStore {
     TimeSummaryByTeamName[] | undefined | void
   > {
     try {
+      const formattedDate = this.formatDate(this.db, 'created_at', 'date');
+
       const subquery = this.db('ts_template_time_savings as sub')
         .select(
           'team',
-          this.db.raw(`DATE(created_at) as date`),
+          formattedDate,
           this.db.raw('SUM(time_saved) as total_time_saved'),
         )
         .groupBy('template_name', 'date', 'team');
@@ -687,12 +696,14 @@ export class TimeSaverDatabase implements TimeSaverStore {
         subquery.as('temp'),
       )
         .select(
-          'date',
+          'temp.date',
           'team',
           this.db.raw('SUM(total_time_saved) as total_time_saved'),
         )
         .groupBy('team', 'date')
         .orderBy('date');
+
+      this.logger.info(`APPA :: ${subquery} | ${JSON.stringify(result)}`);
 
       return this.ok<TimeSummaryByTeamName[] | undefined>(
         result && result.length
@@ -720,12 +731,14 @@ export class TimeSaverDatabase implements TimeSaverStore {
     TimeSummaryByTemplateName[] | undefined | void
   > {
     try {
+      const formattedDate = this.formatDate(this.db, 'created_at', 'date');
+
       const subquery = this.db<TimeSummaryByTemplateNameDbRow>(
         'ts_template_time_savings as sub',
       )
         .select(
           'template_name',
-          this.db.raw(`DATE(created_at) as date`),
+          formattedDate,
           this.db.raw('SUM(time_saved) as total_time_saved'),
         )
         .groupBy('template_name', 'date');

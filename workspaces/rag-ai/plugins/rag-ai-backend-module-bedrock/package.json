@@ -38,7 +38,7 @@
     "@backstage/backend-plugin-api": "^1.0.1",
     "@backstage/catalog-client": "^1.7.1",
     "@backstage/integration-aws-node": "^0.1.12",
-    "@langchain/community": "^0.3.0"
+    "@langchain/community": "^0.3.11"
   },
   "devDependencies": {
     "@backstage/backend-test-utils": "^1.0.2",

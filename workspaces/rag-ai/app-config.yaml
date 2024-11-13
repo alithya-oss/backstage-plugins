@@ -122,16 +122,13 @@ catalog:
         - allow: [User, Group]
 
 aws:
+  # accountDefaults:
+  #   region: ${AWS_INTEGRATION_REGION}
+  #   roleName: ${AWS_INTEGRATION_ROLE}
   mainAccount:
     accessKeyId: ${AWS_ACCESS_KEY_ID}
     secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
     region: ${AWS_REGION}
-
-# integrations:
-#   awsS3:
-#     - accessKeyId: ${AWS_ACCESS_KEY_ID}
-#       secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
-#       roleArn: ${AWS_ROLE_ARN}
 
 ai:
   supportedSource:
