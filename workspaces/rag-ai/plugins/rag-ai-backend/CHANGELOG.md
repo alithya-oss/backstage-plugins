@@ -1,5 +1,13 @@
 # @alithya-oss/plugin-rag-ai-backend
 
+## 2.0.2
+
+### Patch Changes
+
+- cdebf2e: Enforce release 2024-11-14
+- Updated dependencies [cdebf2e]
+  - @alithya-oss/plugin-rag-ai-node@0.2.2
+
 ## 2.0.1
 
 ### Patch Changes
