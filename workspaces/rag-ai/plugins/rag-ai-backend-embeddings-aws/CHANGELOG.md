@@ -1,5 +1,15 @@
 # @alithya-oss/plugin-rag-ai-backend-embeddings-aws
 
+## 1.0.4
+
+### Patch Changes
+
+- 58e7d6f: Bump framework version 1.32.5
+- Updated dependencies [58e7d6f]
+  - @alithya-oss/plugin-rag-ai-backend@2.0.3
+  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@1.0.4
+  - @alithya-oss/plugin-rag-ai-node@0.2.3
+
 ## 1.0.3
 
 ### Patch Changes

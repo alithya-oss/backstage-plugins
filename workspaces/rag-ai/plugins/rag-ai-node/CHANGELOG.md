@@ -1,5 +1,11 @@
 # @alithya-oss/plugin-rag-ai-node
 
+## 0.2.3
+
+### Patch Changes
+
+- 58e7d6f: Bump framework version 1.32.5
+
 ## 0.2.2
 
 ### Patch Changes
