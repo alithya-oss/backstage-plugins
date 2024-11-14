@@ -1,5 +1,11 @@
 # @alithya-oss/plugin-time-saver-common
 
+## 0.5.3
+
+### Patch Changes
+
+- 58e7d6f: Bump framwork version 1.32.5
+
 ## 0.5.2
 
 ### Patch Changes

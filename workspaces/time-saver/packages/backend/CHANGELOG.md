@@ -1,5 +1,13 @@
 # backend
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [58e7d6f]
+  - @alithya-oss/plugin-catalog-backend-module-time-saver-processor@1.1.3
+  - @alithya-oss/plugin-time-saver-backend@3.0.3
+
 ## 0.0.4
 
 ### Patch Changes
