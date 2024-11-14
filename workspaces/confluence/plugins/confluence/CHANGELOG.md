@@ -1,5 +1,13 @@
 # @alithya-oss/plugin-confluence
 
+## 0.1.1
+
+### Patch Changes
+
+- 58e7d6f: Bump framework version 1.32.5
+- 0ce9e01: Updated dependencies
+- 0ce9e01: Updated framework to version 1.30.2
+
 ## 0.1.0
 
 ### Minor Changes

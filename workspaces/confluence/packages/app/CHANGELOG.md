@@ -1,5 +1,14 @@
 # app
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [58e7d6f]
+- Updated dependencies [0ce9e01]
+- Updated dependencies [0ce9e01]
+  - @alithya-oss/plugin-confluence@0.1.1
+
 ## 0.0.1
 
 ### Patch Changes
