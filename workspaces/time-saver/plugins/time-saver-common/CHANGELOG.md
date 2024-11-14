@@ -1,5 +1,11 @@
 # @alithya-oss/plugin-time-saver-common
 
+## 0.5.2
+
+### Patch Changes
+
+- cdebf2e: Enforce release 2024-11-14
+
 ## 0.5.1
 
 ### Patch Changes

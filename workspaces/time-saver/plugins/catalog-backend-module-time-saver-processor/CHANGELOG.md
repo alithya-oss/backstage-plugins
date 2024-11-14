@@ -1,5 +1,11 @@
 # @alithya-oss/plugin-catalog-backend-module-time-saver-processor
 
+## 1.1.2
+
+### Patch Changes
+
+- cdebf2e: Enforce release 2024-11-14
+
 ## 1.1.1
 
 ### Patch Changes
