@@ -1,4 +1,4 @@
-ARG POSTGRES_VERSION="15.8.0"
+ARG POSTGRES_VERSION="15.9.0"
 FROM docker.io/bitnami/postgresql:${POSTGRES_VERSION}
 
 USER root
