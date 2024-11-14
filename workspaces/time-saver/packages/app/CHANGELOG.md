@@ -1,5 +1,12 @@
 # app
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [58e7d6f]
+  - @alithya-oss/plugin-time-saver@1.4.3
+
 ## 0.0.3
 
 ### Patch Changes

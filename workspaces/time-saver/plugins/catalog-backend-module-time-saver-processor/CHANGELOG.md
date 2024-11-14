@@ -1,5 +1,11 @@
 # @alithya-oss/plugin-catalog-backend-module-time-saver-processor
 
+## 1.1.3
+
+### Patch Changes
+
+- 58e7d6f: Bump framwork version 1.32.5
+
 ## 1.1.2
 
 ### Patch Changes

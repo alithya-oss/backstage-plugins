@@ -1,5 +1,14 @@
 # @alithya-oss/plugin-time-saver
 
+## 1.4.3
+
+### Patch Changes
+
+- 58e7d6f: Bump framwork version 1.32.5
+- Updated dependencies [58e7d6f]
+  - @alithya-oss/plugin-time-saver-common@0.5.3
+  - @alithya-oss/plugin-time-saver-react@0.1.3
+
 ## 1.4.2
 
 ### Patch Changes
