@@ -1,5 +1,16 @@
 # @alithya-oss/plugin-rag-ai-backend-module-openai
 
+## 0.2.4
+
+### Patch Changes
+
+- cdebf2e: Enforce release 2024-11-14
+- Updated dependencies [cdebf2e]
+  - @alithya-oss/plugin-rag-ai-backend-embeddings-openai@1.1.4
+  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@1.0.3
+  - @alithya-oss/plugin-rag-ai-node@0.2.2
+  - @alithya-oss/plugin-rag-ai-storage-pgvector@0.2.2
+
 ## 0.2.3
 
 ### Patch Changes
