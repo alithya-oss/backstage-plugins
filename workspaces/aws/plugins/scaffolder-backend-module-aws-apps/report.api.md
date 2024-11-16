@@ -4,7 +4,7 @@
 
 ```ts
 import { AwsAuthResponse } from '@alithya-oss/plugin-aws-apps-backend';
-import { BackendFeatureCompat } from '@backstage/backend-plugin-api';
+import { BackendFeature } from '@backstage/backend-plugin-api';
 import { CatalogApi } from '@backstage/catalog-client';
 import { Config } from '@backstage/config';
 import { JsonObject } from '@backstage/types';
@@ -132,7 +132,7 @@ export function getSsmParametersAction(
 >;
 
 // @public (undocumented)
-const scaffolderModuleAwsApps: BackendFeatureCompat;
+const scaffolderModuleAwsApps: BackendFeature;
 export default scaffolderModuleAwsApps;
 
 // (No @packageDocumentation comment for this package)

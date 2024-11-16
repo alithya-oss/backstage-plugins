@@ -6,7 +6,7 @@
 import { AuthService } from '@backstage/backend-plugin-api';
 import { AwsCredentialIdentity } from '@aws-sdk/types';
 import { AWSServiceResources } from '@alithya-oss/plugin-aws-apps-common';
-import { BackendFeatureCompat } from '@backstage/backend-plugin-api';
+import { BackendFeature } from '@backstage/backend-plugin-api';
 import { BackstageUserInfo } from '@backstage/backend-plugin-api';
 import { CatalogApi } from '@backstage/catalog-client';
 import { Config } from '@backstage/config';
@@ -150,7 +150,7 @@ export class AwsAppsApi {
 }
 
 // @public
-const awsAppsPlugin: BackendFeatureCompat;
+const awsAppsPlugin: BackendFeature;
 export default awsAppsPlugin;
 
 // @public (undocumented)

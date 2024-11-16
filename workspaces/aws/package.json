@@ -12,7 +12,7 @@
     "build:backend": "yarn workspace backend build",
     "build:all": "backstage-cli repo build --all",
     "build:api-reports": "yarn build:api-reports:only --tsc",
-    "build:api-reports:only": "backstage-repo-tools api-reports -o ae-wrong-input-file-type --allow-warnings plugins/aws-apps --validate-release-tags",
+    "build:api-reports:only": "backstage-repo-tools api-reports -o ae-wrong-input-file-type,ae-undocumented --allow-warnings plugins/aws-apps --validate-release-tags",
     "build-image": "yarn workspace backend build-image",
     "tsc": "tsc",
     "tsc:full": "tsc --skipLibCheck false --incremental false",
@@ -39,9 +39,9 @@
     "directory": "workspaces/aws"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.27.0",
+    "@backstage/cli": "^0.28.2",
     "@backstage/e2e-test-utils": "^0.1.1",
-    "@backstage/repo-tools": "^0.9.6",
+    "@backstage/repo-tools": "^0.10.0",
     "@changesets/cli": "^2.27.1",
     "@microsoft/api-extractor-model": "^7.29.8",
     "@microsoft/tsdoc": "^0.15.0",
@@ -57,8 +57,7 @@
   },
   "resolutions": {
     "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "@microsoft/api-extractor": "7.36.4"
+    "@types/react-dom": "^18"
   },
   "prettier": "@spotify/prettier-config",
   "lint-staged": {

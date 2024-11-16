@@ -38,15 +38,15 @@
   },
   "dependencies": {
     "@alithya-oss/plugin-aws-apps-common": "workspace:^",
-    "@backstage/backend-common": "^0.24.1",
-    "@backstage/backend-plugin-api": "^0.8.1",
-    "@backstage/catalog-model": "^1.6.0",
-    "@backstage/plugin-catalog-common": "^1.0.26",
-    "@backstage/plugin-catalog-node": "^1.12.6"
+    "@backstage/backend-common": "^0.25.0",
+    "@backstage/backend-plugin-api": "^1.0.1",
+    "@backstage/catalog-model": "^1.7.0",
+    "@backstage/plugin-catalog-common": "^1.1.0",
+    "@backstage/plugin-catalog-node": "^1.13.1"
   },
   "devDependencies": {
-    "@backstage/backend-test-utils": "^0.5.1",
-    "@backstage/cli": "^0.27.0",
+    "@backstage/backend-test-utils": "^1.0.2",
+    "@backstage/cli": "^0.28.2",
     "@types/jest": "^29.5.14"
   },
   "files": [
