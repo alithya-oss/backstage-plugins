@@ -11446,7 +11446,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express-serve-static-core@npm:*, @types/express-serve-static-core@npm:^4.17.33, @types/express-serve-static-core@npm:^4.17.5":
+"@types/express-serve-static-core@npm:*, @types/express-serve-static-core@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "@types/express-serve-static-core@npm:5.0.1"
+  dependencies:
+    "@types/node": "npm:*"
+    "@types/qs": "npm:*"
+    "@types/range-parser": "npm:*"
+    "@types/send": "npm:*"
+  checksum: 10/9bccbf4c927a877e4fe60f9664737ec6ac39d4d906dbb2c8d00f67849bb0968833573c48602b5e77d3e0129fd1bdbe0eae08e68485f028ebf8c557806caa3377
+  languageName: node
+  linkType: hard
+
+"@types/express-serve-static-core@npm:^4.17.33, @types/express-serve-static-core@npm:^4.17.5":
   version: 4.19.5
   resolution: "@types/express-serve-static-core@npm:4.19.5"
   dependencies:
@@ -11458,7 +11470,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:*, @types/express@npm:^4.17.21, @types/express@npm:^4.17.6":
+"@types/express@npm:*, @types/express@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "@types/express@npm:5.0.0"
+  dependencies:
+    "@types/body-parser": "npm:*"
+    "@types/express-serve-static-core": "npm:^5.0.0"
+    "@types/qs": "npm:*"
+    "@types/serve-static": "npm:*"
+  checksum: 10/45b199ab669caa33e6badafeebf078e277ea95042309d325a04b1ec498f33d33fd5a4ae9c8e358342367b178fe454d7323c5dfc8002bf27070b210a2c6cc11f0
+  languageName: node
+  linkType: hard
+
+"@types/express@npm:^4.17.21, @types/express@npm:^4.17.6":
   version: 4.17.21
   resolution: "@types/express@npm:4.17.21"
   dependencies:
@@ -13696,7 +13720,7 @@ __metadata:
     "@backstage/plugin-search-backend": "npm:^1.6.1"
     "@backstage/plugin-search-backend-module-catalog": "npm:^0.2.4"
     "@backstage/plugin-search-backend-node": "npm:^1.3.4"
-    "@types/express": "npm:^4.17.6"
+    "@types/express": "npm:^5.0.0"
     "@types/express-serve-static-core": "npm:^4.17.5"
     "@types/luxon": "npm:^2.0.4"
     app: "link:../app"

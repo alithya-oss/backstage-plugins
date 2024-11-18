@@ -46,7 +46,7 @@
     "@backstage/config": "^1.2.0",
     "@backstage/integration-aws-node": "^0.1.12",
     "@backstage/plugin-catalog-node": "^1.12.6",
-    "@types/express": "^4.17.6",
+    "@types/express": "^5.0.0",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
     "node-fetch": "^2.6.7",
