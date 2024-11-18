@@ -45,7 +45,7 @@
     "@microsoft/tsdoc-config": "^0.17.0",
     "@playwright/test": "^1.32.3",
     "@spotify/prettier-config": "^15.0.0",
-    "@useoptic/optic": "~0.50.7",
+    "@useoptic/optic": "~0.55.0",
     "knip": "^5.27.4",
     "prettier": "^2.3.2",
     "ts-morph": "^23.0.0",
