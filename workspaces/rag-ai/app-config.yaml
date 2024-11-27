@@ -131,7 +131,7 @@ aws:
     region: ${AWS_REGION}
 
 ai:
-  supportedSource:
+  supportedSources:
     - catalog
     - tech-docs
   storage:
