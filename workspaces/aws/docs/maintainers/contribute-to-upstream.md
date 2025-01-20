@@ -8,8 +8,8 @@
 ## Setting-Up Your Harmonix Dev Environment
 
 1. Get a local copy of the `alithya-oss/harmonix` repository.
-    - Use the same parent folder than for you local copy of this repository (`alithya-oss/backstage-plugins`).
-      repository into the same project folder as your local copy of this repository (`alithya-oss/backstage-plugins`).
+   - Use the same parent folder than for you local copy of this repository (`alithya-oss/backstage-plugins`).
+     repository into the same project folder as your local copy of this repository (`alithya-oss/backstage-plugins`).
 
 ```shell
 # This Example uses '~/projects/alithya-oss/' as your base project directory
@@ -19,9 +19,9 @@ cd harmonix
 ```
 
 2. Run `build-scripts/backstage-install.sh`, the initialization script for the Harmonix dev environment.
-    - This will create a `backstage` subfolder and generate a new Backstage setup in it.
-    - It will also apply the patch from the `backstage-mods` folder, which is required for the integration of the
-      plugins.
+   - This will create a `backstage` subfolder and generate a new Backstage setup in it.
+   - It will also apply the patch from the `backstage-mods` folder, which is required for the integration of the
+     plugins.
 
 ```shell
 buid-scripts/backstage-install.sh
@@ -56,7 +56,7 @@ yarn install
 ## Get Your Changes Ready
 
 1. Bring forth the changes from `alithya-oss/backstage-plugins` to your new Harmonix dev environment
-    - Proceed with only one plugin at a time
+   - Proceed with only one plugin at a time
 
 ```shell
 rysnc -viva ../../backstage-plugins/workspaces/aws/plugins/aws-apps ./plugins/
@@ -88,7 +88,7 @@ rysnc -viva ../../backstage-plugins/workspaces/aws/plugins/aws-apps ./plugins/
     "new": "backstage-cli new --scope @alithya-oss",
     "postinstall": "cd ../../ && yarn install"
   }
-} 
+}
 ```
 
 ```json
