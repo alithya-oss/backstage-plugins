@@ -4,12 +4,12 @@
 
 ```ts
 import { AwsCredentialsManager } from '@backstage/integration-aws-node';
-import { BackendFeatureCompat } from '@backstage/backend-plugin-api';
-import { JsonObject } from '@backstage/types';
+import { BackendFeature } from '@backstage/backend-plugin-api';
+import { JsonObject } from '@backstage/types/index';
 import { TemplateAction } from '@backstage/plugin-scaffolder-node';
 
 // @public (undocumented)
-const awsCoreScaffolderModule: BackendFeatureCompat;
+const awsCoreScaffolderModule: BackendFeature;
 export default awsCoreScaffolderModule;
 
 // @public (undocumented)
