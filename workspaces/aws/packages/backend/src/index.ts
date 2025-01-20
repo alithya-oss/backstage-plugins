@@ -90,7 +90,7 @@ backend.add(import('@alithya-oss/plugin-scaffolder-backend-module-aws-apps'));
 // scaffolder addons
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-gitlab'));
-backend.add(import('./extensions/roadihqScaffolderActions'));
+backend.add(import('@roadiehq/scaffolder-backend-module-utils'));
 
 // gitlab third-party plugins
 backend.add(gitlabPlugin);
