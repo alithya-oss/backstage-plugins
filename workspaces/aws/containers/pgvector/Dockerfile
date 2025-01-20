@@ -1,11 +1,11 @@
-ARG POSTGRES_VERSION="15.10.0"
+ARG POSTGRES_VERSION="16.6.0"
 FROM docker.io/bitnami/postgresql:${POSTGRES_VERSION}
 
 USER root
 
 ENV PG_CONFIG='/opt/bitnami/postgresql/bin/pg_config'
 
-ARG VERSION="0.7.4"
+ARG VERSION="0.8.0"
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update -yqq \
