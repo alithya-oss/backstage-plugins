@@ -9531,9 +9531,6 @@ __metadata:
     "@backstage/e2e-test-utils": "npm:^0.1.1"
     "@backstage/repo-tools": "npm:^0.12.1"
     "@changesets/cli": "npm:^2.27.1"
-    "@microsoft/api-extractor-model": "npm:^7.29.8"
-    "@microsoft/tsdoc": "npm:^0.15.0"
-    "@microsoft/tsdoc-config": "npm:^0.17.0"
     "@mui/styles": "npm:^6.1.2"
     "@playwright/test": "npm:^1.32.3"
     "@spotify/prettier-config": "npm:^12.0.0"
@@ -10526,7 +10523,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microsoft/api-extractor-model@npm:7.30.2, @microsoft/api-extractor-model@npm:^7.29.8":
+"@microsoft/api-extractor-model@npm:7.30.2":
   version: 7.30.2
   resolution: "@microsoft/api-extractor-model@npm:7.30.2"
   dependencies:
@@ -10567,7 +10564,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microsoft/tsdoc-config@npm:^0.17.0, @microsoft/tsdoc-config@npm:~0.17.1":
+"@microsoft/tsdoc-config@npm:~0.17.1":
   version: 0.17.1
   resolution: "@microsoft/tsdoc-config@npm:0.17.1"
   dependencies:
@@ -10579,7 +10576,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microsoft/tsdoc@npm:0.15.1, @microsoft/tsdoc@npm:^0.15.0, @microsoft/tsdoc@npm:~0.15.1":
+"@microsoft/tsdoc@npm:0.15.1, @microsoft/tsdoc@npm:~0.15.1":
   version: 0.15.1
   resolution: "@microsoft/tsdoc@npm:0.15.1"
   checksum: 10/1a92612883088fe184dba596e7ba7a0daef0e6981caeca22bad6ad551d2247294f12e368537d0d8192525cf5743f7f15fcc2ad7b3b849f26a09a15ffdd89fd0c
