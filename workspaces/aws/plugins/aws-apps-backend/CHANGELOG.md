@@ -1,5 +1,13 @@
 # @alithya-oss/plugin-aws-apps-backend
 
+## 0.4.2
+
+### Patch Changes
+
+- f960c46: Fixed packages delivery
+- Updated dependencies [f960c46]
+  - @alithya-oss/plugin-aws-apps-common@0.4.2
+
 ## 0.4.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.1.5
+
+### Patch Changes
+
+- f960c46: Fixed packages delivery
+
 ## 0.1.4
 
 ### Patch Changes

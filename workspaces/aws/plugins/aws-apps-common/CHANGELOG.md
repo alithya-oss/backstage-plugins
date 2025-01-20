@@ -1,5 +1,11 @@
 # @aws/plugin-aws-apps-common-for-backstage
 
+## 0.4.2
+
+### Patch Changes
+
+- f960c46: Fixed packages delivery
+
 ## 0.4.1
 
 ### Patch Changes

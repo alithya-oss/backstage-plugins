@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.5.7
+
+### Patch Changes
+
+- f960c46: Fixed packages delivery
+- Updated dependencies [f960c46]
+  - @alithya-oss/plugin-aws-core-common@0.5.3
+  - @alithya-oss/plugin-aws-codepipeline-common@0.3.5
+  - @alithya-oss/plugin-aws-core-react@0.5.3
+
 ## 0.5.6
 
 ### Patch Changes

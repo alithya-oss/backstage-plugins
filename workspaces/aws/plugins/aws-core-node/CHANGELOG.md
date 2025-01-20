@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.1.3
+
+### Patch Changes
+
+- f960c46: Fixed packages delivery
+- Updated dependencies [f960c46]
+  - @alithya-oss/plugin-aws-core-common@0.5.3
+
 ## 0.1.2
 
 ### Patch Changes

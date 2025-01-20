@@ -1,7 +1,7 @@
 {
   "name": "@alithya-oss/plugin-aws-codepipeline-common",
   "description": "Common functionality for the aws-codepipeline-plugin-for-backstage plugin",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "repository": {
     "type": "git",
     "url": "github:awslabs/backstage-plugins-for-aws",

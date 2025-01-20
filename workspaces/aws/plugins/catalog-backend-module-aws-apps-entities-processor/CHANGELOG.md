@@ -1,5 +1,13 @@
 # @alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor
 
+## 0.3.7
+
+### Patch Changes
+
+- f960c46: Fixed packages delivery
+- Updated dependencies [f960c46]
+  - @alithya-oss/plugin-aws-apps-common@0.4.2
+
 ## 0.3.6
 
 ### Patch Changes
