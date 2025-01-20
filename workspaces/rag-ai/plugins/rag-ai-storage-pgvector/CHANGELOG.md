@@ -1,5 +1,13 @@
 # @alithya-oss/plugin-rag-ai-storage-pgvector
 
+## 0.2.4
+
+### Patch Changes
+
+- 3ba89eb: Bump Backstage framework version 1.35.0 and Langchain dependencies
+- Updated dependencies [3ba89eb]
+  - @alithya-oss/plugin-rag-ai-node@0.2.4
+
 ## 0.2.3
 
 ### Patch Changes
