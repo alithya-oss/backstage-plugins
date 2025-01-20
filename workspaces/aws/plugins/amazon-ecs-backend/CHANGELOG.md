@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.4.3
+
+### Patch Changes
+
+- f960c46: Fixed packages delivery
+- Updated dependencies [f960c46]
+  - @alithya-oss/plugin-aws-core-common@0.5.3
+  - @alithya-oss/plugin-amazon-ecs-common@0.2.5
+  - @alithya-oss/plugin-aws-core-node@0.1.3
+
 ## 0.4.2
 
 ### Patch Changes

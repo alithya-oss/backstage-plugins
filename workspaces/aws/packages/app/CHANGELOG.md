@@ -1,5 +1,16 @@
 # app
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [f960c46]
+  - @alithya-oss/plugin-amazon-ecs@0.4.6
+  - @alithya-oss/plugin-aws-apps@0.4.2
+  - @alithya-oss/plugin-aws-codebuild@0.5.7
+  - @alithya-oss/plugin-aws-codepipeline@0.5.7
+  - @alithya-oss/plugin-cost-insights-aws@0.1.6
+
 ## 0.0.2
 
 ### Patch Changes
