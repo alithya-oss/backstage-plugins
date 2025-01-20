@@ -4,10 +4,11 @@
 
 ```ts
 import { AwsAuthResponse } from '@alithya-oss/plugin-aws-apps-backend';
-import { BackendFeatureCompat } from '@backstage/backend-plugin-api';
+import { BackendFeature } from '@backstage/backend-plugin-api';
 import { CatalogApi } from '@backstage/catalog-client';
 import { Config } from '@backstage/config';
-import { JsonObject } from '@backstage/types';
+import { JsonObject } from '@backstage/types/index';
+import { JsonObject as JsonObject_2 } from '@backstage/types';
 import { LoggerService } from '@backstage/backend-plugin-api';
 import { ScmIntegrationRegistry } from '@backstage/integration';
 import { TemplateAction } from '@backstage/plugin-scaffolder-node';
@@ -100,7 +101,7 @@ export function getEnvProvidersAction(options: {
   {
     environmentRef: string;
   },
-  JsonObject
+  JsonObject_2
 >;
 
 // @public (undocumented)
@@ -132,7 +133,7 @@ export function getSsmParametersAction(
 >;
 
 // @public (undocumented)
-const scaffolderModuleAwsApps: BackendFeatureCompat;
+const scaffolderModuleAwsApps: BackendFeature;
 export default scaffolderModuleAwsApps;
 
 // (No @packageDocumentation comment for this package)

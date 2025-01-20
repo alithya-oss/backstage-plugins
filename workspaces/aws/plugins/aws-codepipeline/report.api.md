@@ -7,7 +7,7 @@
 
 import { BackstagePlugin } from '@backstage/core-plugin-api';
 import { Entity } from '@backstage/catalog-model';
-import { InfoCardVariants } from '@backstage/core-components';
+import { InfoCardVariants } from '@backstage/core-components/index';
 import { JSX as JSX_2 } from 'react';
 import { RouteRef } from '@backstage/core-plugin-api';
 

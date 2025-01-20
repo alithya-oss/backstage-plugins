@@ -5,7 +5,7 @@
 ```ts
 import { AuthService } from '@backstage/backend-plugin-api';
 import { AwsCredentialsManager } from '@backstage/integration-aws-node';
-import { BackendFeatureCompat } from '@backstage/backend-plugin-api';
+import { BackendFeature } from '@backstage/backend-plugin-api';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 import { CacheService } from '@backstage/backend-plugin-api';
 import { CatalogApi } from '@backstage/catalog-client';
@@ -83,7 +83,7 @@ export type CostInsightsAwsConfigGroup = {
 };
 
 // @public (undocumented)
-const costInsightsAwsPlugin: BackendFeatureCompat;
+const costInsightsAwsPlugin: BackendFeature;
 export default costInsightsAwsPlugin;
 
 // @public (undocumented)
