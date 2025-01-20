@@ -19,9 +19,7 @@
 '@alithya-oss/plugin-aws-codebuild': patch
 '@alithya-oss/plugin-aws-core-node': patch
 '@alithya-oss/plugin-amazon-ecs': patch
-'backend': patch
 '@alithya-oss/plugin-aws-apps': patch
-'app': patch
 ---
 
 Bump Backstage framework 1.35.0
