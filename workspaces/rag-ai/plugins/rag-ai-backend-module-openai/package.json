@@ -35,13 +35,13 @@
     "@alithya-oss/plugin-rag-ai-node": "workspace:^",
     "@alithya-oss/plugin-rag-ai-storage-pgvector": "workspace:^",
     "@backstage/backend-common": "^0.25.0",
-    "@backstage/backend-plugin-api": "^1.0.1",
-    "@backstage/catalog-client": "^1.7.1",
+    "@backstage/backend-plugin-api": "^1.1.1",
+    "@backstage/catalog-client": "^1.9.1",
     "@langchain/openai": "^0.3.11"
   },
   "devDependencies": {
-    "@backstage/backend-test-utils": "^1.0.2",
-    "@backstage/cli": "^0.28.2"
+    "@backstage/backend-test-utils": "^1.2.1",
+    "@backstage/cli": "^0.29.5"
   },
   "files": [
     "dist"
