@@ -1,5 +1,12 @@
 # app
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [3ba89eb]
+  - @alithya-oss/plugin-rag-ai@1.2.5
+
 ## 0.0.5
 
 ### Patch Changes

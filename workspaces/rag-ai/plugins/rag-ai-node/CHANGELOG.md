@@ -1,5 +1,11 @@
 # @alithya-oss/plugin-rag-ai-node
 
+## 0.2.4
+
+### Patch Changes
+
+- 3ba89eb: Bump Backstage framework version 1.35.0 and Langchain dependencies
+
 ## 0.2.3
 
 ### Patch Changes
