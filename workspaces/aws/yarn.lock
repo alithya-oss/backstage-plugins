@@ -391,6 +391,7 @@ __metadata:
   resolution: "@alithya-oss/plugin-aws-core-common@workspace:plugins/aws-core-common"
   dependencies:
     "@backstage/catalog-model": "npm:^1.7.3"
+    "@backstage/cli": "npm:^0.29.5"
     "@backstage/config": "npm:^1.3.2"
   languageName: unknown
   linkType: soft
