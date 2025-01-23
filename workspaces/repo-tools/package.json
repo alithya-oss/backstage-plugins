@@ -40,18 +40,13 @@
     "@backstage/cli": "^0.26.11",
     "@backstage/repo-tools": "^0.9.4",
     "@changesets/cli": "^2.27.1",
-    "@microsoft/api-extractor-model": "^7.29.8",
-    "@microsoft/tsdoc": "^0.15.0",
-    "@microsoft/tsdoc-config": "^0.17.0",
     "@playwright/test": "^1.32.3",
     "@spotify/prettier-config": "^15.0.0",
-    "@useoptic/optic": "~0.50.7",
-    "knip": "^5.27.4",
     "prettier": "^2.3.2",
     "ts-morph": "^23.0.0",
     "typescript": "~5.3.0"
   },
   "devDependencies": {
-    "@types/node": "^22.8.2"
+    "knip": "^5.27.4"
   }
 }
