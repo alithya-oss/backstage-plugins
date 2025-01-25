@@ -1,5 +1,5 @@
 {
-  "name": "backstage-plugin-bulletin-board",
+  "name": "@alithya-oss/backstage-plugin-bulletin-board",
   "version": "0.4.1",
   "main": "src/index.ts",
   "types": "src/index.ts",

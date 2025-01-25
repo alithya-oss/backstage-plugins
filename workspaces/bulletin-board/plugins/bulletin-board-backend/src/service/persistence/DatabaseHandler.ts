@@ -2,7 +2,7 @@ import { DatabaseService, resolvePackagePath } from '@backstage/backend-plugin-a
 import { Knex } from 'knex';
 
 const migrationsDir = resolvePackagePath(
-  'backstage-plugin-bulletin-board-backend',
+  '@alithya-oss/backstage-plugin-bulletin-board-backend',
   'migrations',
 );
 

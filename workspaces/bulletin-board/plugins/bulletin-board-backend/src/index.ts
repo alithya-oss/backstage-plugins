@@ -1,2 +1,1 @@
-export * from './service/router';
-export { bulletinBoardPlugin } from './plugin';
+export { bulletinBoardPlugin as default } from './plugin';

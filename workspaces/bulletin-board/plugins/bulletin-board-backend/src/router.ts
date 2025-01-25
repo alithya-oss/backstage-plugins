@@ -1,7 +1,7 @@
 import express from 'express';
 import Router from 'express-promise-router';
 import { Config } from '@backstage/config';
-import { DatabaseHandler } from './DatabaseHandler';
+import { DatabaseHandler } from './service/persistence/DatabaseHandler';
 import { DatabaseService, LoggerService } from '@backstage/backend-plugin-api';
 import { MiddlewareFactory } from '@backstage/backend-defaults/rootHttpRouter';
 
