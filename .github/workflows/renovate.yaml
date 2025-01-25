@@ -30,7 +30,7 @@ jobs:
     name: Renovate
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@v4
 
       # This third party action allows you to download the cache artifact from different workflow runs
       # Note that actions/cache doesn't work well because the cache key would need to be computed from
@@ -38,7 +38,7 @@ jobs:
       # cache wouldn't necessarily upload when it changes. actions/download-artifact also doesn't work
       # because it only handles artifacts uploaded in the same run, and we want to restore from the
       # previous successful run.
-      - uses: dawidd6/action-download-artifact@deb3bb83256a78589fef6a7b942e5f2573ad7c13 # v5
+      - uses: dawidd6/action-download-artifact@v5
         if: github.event.inputs.repoCache != 'disabled'
         continue-on-error: true
         with:
@@ -48,7 +48,7 @@ jobs:
       # Generate an access token for the backstage-goalie[bot] account.
       - name: Get token
         id: get_token
-        uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1
+        uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ secrets.BACKSTAGE_GOALIE_APPLICATION_ID }}
           private-key: ${{ secrets.BACKSTAGE_GOALIE_PRIVATE_KEY }}
@@ -74,10 +74,10 @@ jobs:
           # are different than the ones given after the cache is restored. We have to
           # change ownership to solve this. We also need to have correct permissions in
           # the entire /tmp/renovate tree, not just the section with the repo cache.
-          sudo chown -R runneradmin:root /tmp/renovate/
+          sudo chown -R 12021:0 /tmp/renovate/
           ls -R $cache_dir
 
-      - uses: renovatebot/github-action@0984fb80fc633b17e57f3e8b6c007fe0dc3e0d62 # v40.3.6
+      - uses: renovatebot/github-action@v41.0.2
         with:
           configurationFile: .github/renovate-action.json
           renovate-version: full
@@ -97,7 +97,8 @@ jobs:
           # To solve *that*, we'd have to extract to root (/), which isn't safe.
           tar -czvf $cache_archive -C $cache_dir .
 
-      - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
+      - uses: actions/upload-artifact@v4
+
         if: github.event.inputs.repoCache != 'disabled'
         with:
           name: ${{ env.cache_key }}
