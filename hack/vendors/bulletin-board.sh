@@ -23,8 +23,8 @@ function sync() {
 
 function rename() {
     changes=(
-        "s#@backstage-plugin-bulletin-board-backend#@alithya-oss/plugin-bulletin-board-backend#g"
-        "s#@backstage-plugin-bulletin-board#@alithya-oss/plugin-bulletin-board#g"
+        "s#@backstage-plugin-bulletin-board-backend#@alithya-oss/backstage-plugin-bulletin-board-backend#g"
+        "s#@backstage-plugin-bulletin-board#@alithya-oss/backstage-plugin-bulletin-board#g"
     )
 
     for item in "${changes[@]}"; do
@@ -41,7 +41,7 @@ function rename() {
 }
 
 sync
-cd ./workspaces/aws/
+cd ./workspaces/bulletin-board/
 rename
 yarn install
 yarn backstage-cli versions:bump --release 1.35.0
