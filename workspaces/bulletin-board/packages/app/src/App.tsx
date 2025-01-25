@@ -37,6 +37,8 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 
+import { BulletinBoardPage } from '@alithya-oss/backstage-plugin-bulletin-board';
+
 const app = createApp({
   apis,
   bindRoutes({ bind }) {
@@ -95,6 +97,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/bulletin-board" element={<BulletinBoardPage />} />
   </FlatRoutes>
 );
 
