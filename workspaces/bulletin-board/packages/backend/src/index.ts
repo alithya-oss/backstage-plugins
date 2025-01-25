@@ -52,5 +52,5 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 // kubernetes
 backend.add(import('@backstage/plugin-kubernetes-backend'));
 
-backend.add(import('@alithya-oss/backstage-plugin-bulletin-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-bulletin-board-backend'));
 backend.start();
