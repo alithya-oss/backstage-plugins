@@ -8,7 +8,7 @@ import { createRouter } from './router';
  * @public
  */
 export const bulletinBoardPlugin = createBackendPlugin({
-  pluginId: 'bulletin-board-backend',
+  pluginId: 'bulletin-board',
   register(env) {
     env.registerInit({
       deps: {
