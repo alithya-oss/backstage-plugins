@@ -2,16 +2,10 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = async function(knex) {
+exports.up = async function (knex) {
   await knex.schema.createTable('bulletins', table => {
-    table.comment(
-      'The table for bulletin board.',
-    );
-    table
-      .text('bulletin_id')
-      .notNullable()
-      .primary()
-      .comment('Bulleting ID');
+    table.comment('The table for bulletin board.');
+    table.text('bulletin_id').notNullable().primary().comment('Bulleting ID');
     table
       .text('bulletin_title')
       .notNullable()
@@ -20,22 +14,13 @@ exports.up = async function(knex) {
       .text('bulletin_description')
       .notNullable()
       .comment('Short summary of the bulletin.');
-    table
-      .text('bulletin_url')
-      .notNullable()
-      .comment('Link to the source');
-    table
-      .text('bulletin_tags')
-      .notNullable()
-      .comment('List of categories')
-    table
-      .text('created_by')
-      .notNullable()
-      .comment('Creator of the bulletin')
+    table.text('bulletin_url').notNullable().comment('Link to the source');
+    table.text('bulletin_tags').notNullable().comment('List of categories');
+    table.text('created_by').notNullable().comment('Creator of the bulletin');
     table
       .text('updated_by')
       .notNullable()
-      .comment('Person that updates the bulletin')
+      .comment('Person that updates the bulletin');
     table
       .timestamp('created_at')
       .notNullable()
@@ -51,6 +36,6 @@ exports.up = async function(knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = async function(knex) {
+exports.down = async function (knex) {
   await knex.schema.dropTable('bulletins');
 };

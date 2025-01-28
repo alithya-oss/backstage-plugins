@@ -1,4 +1,7 @@
-import { DatabaseService, resolvePackagePath } from '@backstage/backend-plugin-api';
+import {
+  DatabaseService,
+  resolvePackagePath,
+} from '@backstage/backend-plugin-api';
 import { Knex } from 'knex';
 
 const migrationsDir = resolvePackagePath(
@@ -11,13 +14,13 @@ type Options = {
 };
 
 type Body = {
-  id: string,
-  title: string,
-  description: string,
-  url: string,
-  tags: string,
-  user: string
-}
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  tags: string;
+  user: string;
+};
 
 export class DatabaseHandler {
   static async create(options: Options): Promise<DatabaseHandler> {
@@ -42,9 +45,9 @@ export class DatabaseHandler {
   getBulletins = async () => {
     return await this.client
       .select()
-      .orderBy('updated_at','desc')
+      .orderBy('updated_at', 'desc')
       .from('bulletins');
-  }
+  };
 
   createBulletin = async (body: Body) => {
     await this.client
@@ -60,25 +63,21 @@ export class DatabaseHandler {
         updated_at: new Date().toISOString(),
       })
       .into('bulletins');
-  }
+  };
 
   updateBulletin = async (id: string, body: Body) => {
-    return await this.client('bulletins')
-      .where({bulletin_id: id})
-      .update({
-        bulletin_id: body.id,
-        bulletin_title: body.title,
-        bulletin_description: body.description,
-        bulletin_url: body.url,
-        bulletin_tags: body.tags.toString(),
-        updated_by: body.user,
-        updated_at: new Date().toISOString()
-      })
+    return await this.client('bulletins').where({ bulletin_id: id }).update({
+      bulletin_id: body.id,
+      bulletin_title: body.title,
+      bulletin_description: body.description,
+      bulletin_url: body.url,
+      bulletin_tags: body.tags.toString(),
+      updated_by: body.user,
+      updated_at: new Date().toISOString(),
+    });
   };
 
   deleteBulletin = async (id: string) => {
-    return await this.client('bulletins')
-        .where({bulletin_id: id})
-        .del();
-  }
+    return await this.client('bulletins').where({ bulletin_id: id }).del();
+  };
 }

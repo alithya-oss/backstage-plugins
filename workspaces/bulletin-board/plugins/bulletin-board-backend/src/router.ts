@@ -44,7 +44,7 @@ export async function createRouter(
   router.post('/bulletins', async (req, res) => {
     const credentials = await httpAuth.credentials(req, { allow: ['user'] });
     const info = await userInfo.getUserInfo(credentials);
-    const body = {...req.body, user: info.userEntityRef};
+    const body = { ...req.body, user: info.userEntityRef };
     await dbHandler.createBulletin(body);
     res.json({ status: 'ok' });
   });
@@ -53,7 +53,7 @@ export async function createRouter(
     const { id } = req.params;
     const credentials = await httpAuth.credentials(req, { allow: ['user'] });
     const info = await userInfo.getUserInfo(credentials);
-    const body = {...req.body, user: info.userEntityRef};
+    const body = { ...req.body, user: info.userEntityRef };
     const count = await dbHandler.updateBulletin(id, body);
 
     if (count) {

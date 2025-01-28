@@ -1,18 +1,23 @@
-import {createApiRef, DiscoveryApi, FetchApi, IdentityApi } from '@backstage/core-plugin-api';
+import {
+  createApiRef,
+  DiscoveryApi,
+  FetchApi,
+  IdentityApi,
+} from '@backstage/core-plugin-api';
 
 export const bulletinBoardApiRef = createApiRef<BulletinBoardApi>({
   id: 'bulletin-board',
 });
 
 export type Bulletin = {
-  bulletin_id: string,
-  bulletin_title: string,
-  bulletin_url: string,
-  bulletin_description: string,
-  bulletin_tags: string,
-  user: string | undefined,
-  updated_at: string
-}
+  bulletin_id: string;
+  bulletin_title: string;
+  bulletin_url: string;
+  bulletin_description: string;
+  bulletin_tags: string;
+  user: string | undefined;
+  updated_at: string;
+};
 
 export interface BulletinBoardApi {
   getBulletins(): Promise<any>;
@@ -54,7 +59,7 @@ export class BulletinBoardClient implements BulletinBoardApi {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(bulletin)
+        body: JSON.stringify(bulletin),
       })
       .then(res => res.json());
   }
@@ -70,7 +75,7 @@ export class BulletinBoardClient implements BulletinBoardApi {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(bulletin)
+        body: JSON.stringify(bulletin),
       })
       .then(res => res.json());
   }
@@ -78,7 +83,7 @@ export class BulletinBoardClient implements BulletinBoardApi {
   async deleteBulletin(id: string): Promise<void> {
     const baseUrl = await this.discoveryApi.getBaseUrl('bulletin-board');
     return await this.fetchApi
-      .fetch(`${baseUrl}/bulletins/${id}`, {method: 'DELETE'})
+      .fetch(`${baseUrl}/bulletins/${id}`, { method: 'DELETE' })
       .then(res => res.json());
   }
 }

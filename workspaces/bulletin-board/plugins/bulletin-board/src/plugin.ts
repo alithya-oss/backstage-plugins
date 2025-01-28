@@ -1,10 +1,10 @@
-import { 
-  createPlugin, 
+import {
+  createPlugin,
   createRoutableExtension,
   createApiFactory,
   identityApiRef,
   discoveryApiRef,
-  fetchApiRef
+  fetchApiRef,
 } from '@backstage/core-plugin-api';
 import { bulletinBoardApiRef, BulletinBoardClient } from './api';
 import { rootRouteRef } from './routes';
@@ -23,9 +23,9 @@ export const bulletinBoardPlugin = createPlugin({
         fetchApi: fetchApiRef,
       },
       factory: ({ identityApi, discoveryApi, fetchApi }) =>
-      new BulletinBoardClient({ identityApi, discoveryApi, fetchApi }),
-    })
-  ]
+        new BulletinBoardClient({ identityApi, discoveryApi, fetchApi }),
+    }),
+  ],
 });
 
 export const BulletinBoardPage = bulletinBoardPlugin.provide(

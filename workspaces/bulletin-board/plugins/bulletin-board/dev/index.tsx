@@ -7,6 +7,6 @@ createDevApp()
   .addPage({
     element: <BulletinBoardPage />,
     title: 'Root Page',
-    path: '/bulletin-board'
+    path: '/bulletin-board',
   })
   .render();
