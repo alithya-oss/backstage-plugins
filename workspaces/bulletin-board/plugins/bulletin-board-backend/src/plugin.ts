@@ -16,13 +16,17 @@ export const bulletinBoardPlugin = createBackendPlugin({
         config: coreServices.rootConfig,
         database: coreServices.database,
         httpRouter: coreServices.httpRouter,
+        httpAuth: coreServices.httpAuth,
+        userInfo: coreServices.userInfo,
       },
-      async init({ logger, config, database, httpRouter }) {
+      async init({ logger, config, database, httpRouter, httpAuth, userInfo }) {
         httpRouter.use(
           await createRouter({
             logger,
             config,
             database,
+            httpAuth,
+            userInfo,
           }),
         );
         httpRouter.addAuthPolicy({

@@ -2,7 +2,12 @@ import express from 'express';
 import Router from 'express-promise-router';
 import { Config } from '@backstage/config';
 import { DatabaseHandler } from './service/persistence/DatabaseHandler';
-import { DatabaseService, LoggerService } from '@backstage/backend-plugin-api';
+import {
+  DatabaseService,
+  LoggerService,
+  HttpAuthService,
+  UserInfoService,
+} from '@backstage/backend-plugin-api';
 import { MiddlewareFactory } from '@backstage/backend-defaults/rootHttpRouter';
 
 /** @public */
@@ -10,13 +15,15 @@ export interface RouterOptions {
   logger: LoggerService;
   database: DatabaseService;
   config: Config;
+  httpAuth: HttpAuthService;
+  userInfo: UserInfoService;
 }
 
 /** @private */
 export async function createRouter(
   routerOptions: RouterOptions,
 ): Promise<express.Router> {
-  const { logger, database, config } = routerOptions;
+  const { logger, database, config, httpAuth, userInfo } = routerOptions;
 
   const dbHandler = await DatabaseHandler.create({ database });
   logger.info('Initializing Bulletin Board backend');
@@ -35,14 +42,18 @@ export async function createRouter(
   });
 
   router.post('/bulletins', async (req, res) => {
-    const body = req.body;
+    const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+    const info = await userInfo.getUserInfo(credentials);
+    const body = {...req.body, user: info.userEntityRef};
     await dbHandler.createBulletin(body);
     res.json({ status: 'ok' });
   });
 
   router.patch('/bulletins/:id', async (req, res) => {
     const { id } = req.params;
-    const body = req.body;
+    const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+    const info = await userInfo.getUserInfo(credentials);
+    const body = {...req.body, user: info.userEntityRef};
     const count = await dbHandler.updateBulletin(id, body);
 
     if (count) {
@@ -65,7 +76,7 @@ export async function createRouter(
 
   const middleware = MiddlewareFactory.create({ logger, config });
   router.use(middleware.error());
-  
+
   return router;
 }
 
