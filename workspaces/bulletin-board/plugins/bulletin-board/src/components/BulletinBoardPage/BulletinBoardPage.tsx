@@ -12,6 +12,9 @@ type BulletinBoardPageProps = {
   subtitle?: string;
 };
 
+/**
+ * @public
+ */
 export const BulletinBoardPage = (props: BulletinBoardPageProps) => {
   const useStyles = makeStyles({
     subHeader: {

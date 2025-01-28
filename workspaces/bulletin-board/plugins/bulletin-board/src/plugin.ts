@@ -9,6 +9,9 @@ import {
 import { bulletinBoardApiRef, BulletinBoardClient } from './api';
 import { rootRouteRef } from './routes';
 
+/**
+ * @public
+ */
 export const bulletinBoardPlugin = createPlugin({
   id: 'bulletin-board',
   routes: {
@@ -28,6 +31,9 @@ export const bulletinBoardPlugin = createPlugin({
   ],
 });
 
+/**
+ * @public
+ */
 export const BulletinBoardPage = bulletinBoardPlugin.provide(
   createRoutableExtension({
     name: 'BulletinBoardPage',
