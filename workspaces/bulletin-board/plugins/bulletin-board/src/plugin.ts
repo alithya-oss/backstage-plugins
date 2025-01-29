@@ -6,7 +6,8 @@ import {
   discoveryApiRef,
   fetchApiRef,
 } from '@backstage/core-plugin-api';
-import { bulletinBoardApiRef, BulletinBoardClient } from './api';
+import { bulletinBoardApiRef } from '@alithya-oss/backstage-plugin-bulletin-board-react';
+import { BulletinBoardClient } from './api';
 import { rootRouteRef } from './routes';
 
 /**
