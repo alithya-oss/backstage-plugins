@@ -44,27 +44,27 @@ async function main() {
     "..",
     "workspaces",
     workspace,
-    ".changeset"
+    ".changeset",
   );
   const fileNames = await fs.readdir(changesetsFolderPath);
   const changesetNames = fileNames.filter(
-    (name) => name.endsWith(".md") && name !== "README.md"
+    (name) => name.endsWith(".md") && name !== "README.md",
   );
 
   const changesets = await Promise.all(
     changesetNames.map(async (name) => {
       const content = await fs.readFile(
         join(changesetsFolderPath, name),
-        "utf8"
+        "utf8",
       );
       return { name, ...parseChangeset(content) };
-    })
+    }),
   );
 
   const errors = [];
   for (const changeset of changesets) {
     const privateReleases = changeset.releases.filter((release) =>
-      privatePackages.has(release.name)
+      privatePackages.has(release.name),
     );
     if (privateReleases.length > 0) {
       const names = privateReleases

@@ -75,7 +75,7 @@ async function main() {
         {
           shell: true,
           cwd: lockFile.directoryAbsolute,
-        }
+        },
       );
       stdout = result.stdout?.trim();
       stderr = result.stderr?.trim();
@@ -104,23 +104,23 @@ async function main() {
         const padding = " ".repeat(Math.max(0, 85 - 6 - command.length));
         console.error("");
         console.error(
-          "*************************************************************************************"
+          "*************************************************************************************",
         );
         console.error(
-          "* You have duplicate versions of some packages in a yarn.lock file.                 *"
+          "* You have duplicate versions of some packages in a yarn.lock file.                 *",
         );
         console.error(
-          "* To solve this, run the following command from the project root and commit all     *"
+          "* To solve this, run the following command from the project root and commit all     *",
         );
         console.log(
-          "* yarn.lock changes.                                                                *"
+          "* yarn.lock changes.                                                                *",
         );
         console.log(
-          "*                                                                                   *"
+          "*                                                                                   *",
         );
         console.log(`*   ${command}${padding} *`);
         console.error(
-          "*************************************************************************************"
+          "*************************************************************************************",
         );
         console.error("");
       }

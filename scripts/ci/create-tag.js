@@ -1,4 +1,18 @@
-#!/usr/bin/env node
+/*
+ * Copyright 2024 The Backstage Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import { Octokit } from "@octokit/rest";
 import { resolve as resolvePath } from "path";
@@ -59,7 +73,7 @@ async function main() {
 
   const repoRoot = resolvePath(__dirname, "..", "..");
   process.chdir(
-    resolvePath(repoRoot, "workspaces", process.env.WORKSPACE_NAME)
+    resolvePath(repoRoot, "workspaces", process.env.WORKSPACE_NAME),
   );
 
   const dirContents = await fs.readdir("./plugins", {
@@ -70,10 +84,10 @@ async function main() {
     if (item.isDirectory()) {
       try {
         const { name, version } = await getPackageJson(
-          resolvePath("./plugins", item.name)
+          resolvePath("./plugins", item.name),
         );
         const tagName = `${name}@${version}`;
-        
+
         console.log(`Creating release tag ${tagName} at ${commitSha}`);
         await createGitTag(octokit, commitSha, tagName);
       } catch (error) {

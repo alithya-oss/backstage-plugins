@@ -16,22 +16,22 @@
  * limitations under the License.
  */
 
-import path from 'path';
-import fs from 'fs-extra';
-import fetch from 'node-fetch';
-import { EOL } from 'os';
+import path from "path";
+import fs from "fs-extra";
+import fetch from "node-fetch";
+import { EOL } from "os";
 
 async function getBackstageVersion(workspace) {
   const rootPath = path.resolve(`workspaces/${workspace}/backstage.json`);
   if (!fs.exists(rootPath)) {
-    return 'N/A';
+    return "N/A";
   }
   return fs.readJson(rootPath).then((_) => _.version);
 }
 
 async function getLatestRelease() {
   const response = await fetch(
-    'https://api.github.com/repos/backstage/backstage/releases/latest',
+    "https://api.github.com/repos/backstage/backstage/releases/latest",
   );
   const json = await response.json();
   return json;
@@ -39,7 +39,7 @@ async function getLatestRelease() {
 
 async function getLatestPreRelease() {
   const response = await fetch(
-    'https://api.github.com/repos/backstage/backstage/releases',
+    "https://api.github.com/repos/backstage/backstage/releases",
   );
   const json = await response.json();
 
@@ -55,10 +55,10 @@ async function getLatestPreRelease() {
 }
 
 async function main() {
-  // Get the workspace
-  const [script, workspace] = process.argv.slice(1);
-  if (!workspace) {
-    throw new Error(`Argument must be ${script} <workspace>`);
+  // Get the workspace and release line
+  const [script, workspace, releaseLine] = process.argv.slice(1);
+  if (!workspace || !releaseLine) {
+    throw new Error(`Argument must be ${script} <workspace> <releaseLine>`);
   }
 
   // Get the current Backstage version from the backstage.json file
@@ -81,10 +81,17 @@ async function main() {
   const latestPreReleaseDate = new Date(
     latestPreRelease.published_at,
   ).getTime();
-  if (latestReleaseDate > latestPreReleaseDate) {
-    console.log(
-      `Latest Release is newer than latest Pre-release, using Latest Release name ${latestRelease.name}`,
-    );
+  if (releaseLine === "main" || latestReleaseDate > latestPreReleaseDate) {
+    if (releaseLine === "main") {
+      console.log(
+        `Selected release line is 'main', using Latest Release name ${latestRelease.name}`,
+      );
+    } else {
+      console.log(
+        `Latest Release is newer than latest Pre-release, using Latest Release name ${latestRelease.name}`,
+      );
+    }
+
     console.log();
 
     await fs.appendFile(
