@@ -1,30 +1,12 @@
 import {
-  createApiRef,
   DiscoveryApi,
   FetchApi,
   IdentityApi,
 } from '@backstage/core-plugin-api';
-
-export const bulletinBoardApiRef = createApiRef<BulletinBoardApi>({
-  id: 'bulletin-board',
-});
-
-export type Bulletin = {
-  bulletin_id: string;
-  bulletin_title: string;
-  bulletin_url: string;
-  bulletin_description: string;
-  bulletin_tags: string;
-  user: string | undefined;
-  updated_at: string;
-};
-
-export interface BulletinBoardApi {
-  getBulletins(): Promise<any>;
-  createBulletin(bulletin: any): Promise<any>;
-  updateBulletin(id: string, bulletin: Bulletin): Promise<any>;
-  deleteBulletin(id: string): Promise<void>;
-}
+import {
+  Bulletin,
+  BulletinBoardApi,
+} from 'alithya-oss/backstage-plugin-bulletin-board-common';
 
 export class BulletinBoardClient implements BulletinBoardApi {
   private readonly identityApi: IdentityApi;

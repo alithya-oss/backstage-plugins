@@ -9,7 +9,7 @@ import {
   CardMedia,
   IconButton,
 } from '@material-ui/core';
-import { Bulletin } from '../../api';
+import { Bulletin } from '@alithya-oss/backstage-plugin-bulletin-board-common';
 import EditIcon from '@material-ui/icons/Edit';
 import { DateTime } from 'luxon';
 

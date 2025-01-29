@@ -9,12 +9,19 @@
     "main": "dist/index.esm.js",
     "types": "dist/index.d.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alithya-oss/backstage-plugins",
+    "directory": "workspaces/bulletin-board/plugins/bulletin-board"
+  },
   "backstage": {
     "role": "frontend-plugin",
     "pluginId": "bulletin-board",
     "pluginPackages": [
       "@alithya-oss/backstage-plugin-bulletin-board",
-      "@alithya-oss/backstage-plugin-bulletin-board-backend"
+      "@alithya-oss/backstage-plugin-bulletin-board-backend",
+      "@alithya-oss/backstage-plugin-bulletin-board-common",
+      "@alithya-oss/backstage-plugin-bulletin-board-react"
     ]
   },
   "sideEffects": false,
@@ -28,6 +35,8 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
+    "@alithya-oss/backstage-plugin-bulletin-board-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-bulletin-board-react": "workspace:^",
     "@backstage/core-components": "^0.16.3",
     "@backstage/core-plugin-api": "^1.10.3",
     "@backstage/theme": "^0.6.3",

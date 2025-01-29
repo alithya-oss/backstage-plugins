@@ -4,7 +4,8 @@ import { Autocomplete, Pagination } from '@material-ui/lab';
 import { Header, Page, Content } from '@backstage/core-components';
 import { BulletinCard } from '../BulletinCard';
 import { FormDialog } from '../FormDialog';
-import { bulletinBoardApiRef, Bulletin } from '../../api';
+import { bulletinBoardApiRef } from '@alithya-oss/backstage-plugin-bulletin-board-react';
+import { Bulletin } from '@alithya-oss/backstage-plugin-bulletin-board-common';
 import { useApi } from '@backstage/core-plugin-api';
 
 type BulletinBoardPageProps = {
