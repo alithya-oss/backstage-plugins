@@ -6,7 +6,7 @@ import {
 import {
   Bulletin,
   BulletinBoardApi,
-} from 'alithya-oss/backstage-plugin-bulletin-board-common';
+} from '@alithya-oss/backstage-plugin-bulletin-board-common';
 
 export class BulletinBoardClient implements BulletinBoardApi {
   private readonly identityApi: IdentityApi;
