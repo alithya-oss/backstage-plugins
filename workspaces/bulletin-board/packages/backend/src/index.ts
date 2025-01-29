@@ -53,4 +53,7 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 backend.add(import('@backstage/plugin-kubernetes-backend'));
 
 backend.add(import('@alithya-oss/backstage-plugin-bulletin-board-backend'));
+// backend.add(
+//   import('@alithya-oss/backstage-plugin-search-backend-module-bulletin-board'),
+// );
 backend.start();
