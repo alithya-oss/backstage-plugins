@@ -7,7 +7,7 @@ import {
   fetchApiRef,
 } from '@backstage/core-plugin-api';
 import { bulletinBoardApiRef } from '@alithya-oss/backstage-plugin-bulletin-board-react';
-import { BulletinBoardClient } from './api';
+import { BulletinBoardClient } from '@alithya-oss/backstage-plugin-bulletin-board-common';
 import { rootRouteRef } from './routes';
 
 /**

@@ -1,12 +1,10 @@
 import {
   DiscoveryApi,
-  FetchApi,
   IdentityApi,
+  FetchApi,
 } from '@backstage/core-plugin-api';
-import {
-  Bulletin,
-  BulletinBoardApi,
-} from '@alithya-oss/backstage-plugin-bulletin-board-common';
+import { Bulletin } from '../types';
+import { BulletinBoardApi } from './BulletinBoardApi';
 
 export class BulletinBoardClient implements BulletinBoardApi {
   private readonly identityApi: IdentityApi;

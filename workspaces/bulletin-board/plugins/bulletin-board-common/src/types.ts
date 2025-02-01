@@ -10,13 +10,3 @@ export type Bulletin = {
   user: string | undefined;
   updated_at: string;
 };
-
-/**
- * @public
- */
-export interface BulletinBoardApi {
-  getBulletins(): Promise<any>;
-  createBulletin(bulletin: any): Promise<any>;
-  updateBulletin(id: string, bulletin: Bulletin): Promise<any>;
-  deleteBulletin(id: string): Promise<void>;
-}
