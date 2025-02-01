@@ -1,0 +1,1 @@
+import { BulletinBoardCollatorFactory } from "./BulletinBoardCollatorFactory";
