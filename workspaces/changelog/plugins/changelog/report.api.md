@@ -51,7 +51,7 @@ export const getInfoAboutChangelogAnnotationConfiguration: (
 ) => string;
 
 // @public (undocumented)
-export const isChangelogAnnotationConfigurationOk: (entity: Entity) => boolean;
+export const isChangelogAvailable: (entity: Entity) => boolean;
 
 // @public (undocumented)
 export function semverParser(content: string): ChangelogProps[];

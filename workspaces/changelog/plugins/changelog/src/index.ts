@@ -17,7 +17,7 @@
 export { EntityChangelogContent, EntityChangelogCard } from './plugin';
 export { semverParser } from './util/semverParser';
 export {
-  isChangelogAnnotationConfigurationOk,
+  isChangelogAvailable,
   getInfoAboutChangelogAnnotationConfiguration,
   CHANGELOG_ANNOTATION_REF,
   CHANGELOG_ANNOTATION_NAME,

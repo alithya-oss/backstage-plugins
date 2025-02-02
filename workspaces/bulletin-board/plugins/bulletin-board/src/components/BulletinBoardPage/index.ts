@@ -1,1 +1,0 @@
-export { BulletinBoardPage } from './BulletinBoardPage';

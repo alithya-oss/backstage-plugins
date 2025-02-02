@@ -62,7 +62,7 @@ import {
 import {
   EntityChangelogCard,
   EntityChangelogContent,
-  isChangelogAnnotationConfigurationOk,
+  isChangelogAvailable,
 } from '@alithya-oss/backstage-plugin-changelog';
 
 const techdocsContent = (
@@ -164,7 +164,7 @@ const serviceEntityPage = (
     <EntityLayout.Route
       path="/changelog"
       title="Changelog"
-      if={isChangelogAnnotationConfigurationOk}
+      if={isChangelogAvailable}
     >
       <EntityChangelogContent />
     </EntityLayout.Route>
@@ -218,7 +218,7 @@ const websiteEntityPage = (
     <EntityLayout.Route
       path="/changelog"
       title="Changelog"
-      if={isChangelogAnnotationConfigurationOk}
+      if={isChangelogAvailable}
     >
       <EntityChangelogContent />
     </EntityLayout.Route>

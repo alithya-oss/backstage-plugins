@@ -24,7 +24,7 @@ import { useApi } from '@backstage/core-plugin-api';
 import { changelogApiRef } from '../api';
 import { Alert } from '@material-ui/lab';
 import { ChangelogSmallTable } from './ChangelogSmallTable';
-import { isChangelogAnnotationConfigurationOk } from '../util/constants';
+import { isChangelogAvailable } from '../util/constants';
 import { ChangelogAnnotationsEmptyState } from './ChangelogAnnotationsEmptyState';
 
 const ChangelogCardWithTable = (props: EntityChangelogProps) => {
@@ -55,7 +55,7 @@ const ChangelogCardWithTable = (props: EntityChangelogProps) => {
 export const ChangelogCard = (props: EntityChangelogProps) => {
   const { entity } = useEntity();
 
-  if (!isChangelogAnnotationConfigurationOk(entity)) {
+  if (!isChangelogAvailable(entity)) {
     return <ChangelogAnnotationsEmptyState />;
   }
   return <ChangelogCardWithTable parser={props.parser} />;

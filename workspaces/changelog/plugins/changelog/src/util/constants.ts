@@ -22,7 +22,7 @@ export const CHANGELOG_ANNOTATION_REF = 'changelog-file-ref';
 export const CHANGELOG_ANNOTATION_NAME = 'changelog-name';
 
 /** @public */
-export const isChangelogAnnotationConfigurationOk = (
+export const isChangelogAvailable = (
   entity: Entity,
 ): boolean => {
   if (Boolean(entity.metadata.annotations?.[CHANGELOG_ANNOTATION_REF])) {
