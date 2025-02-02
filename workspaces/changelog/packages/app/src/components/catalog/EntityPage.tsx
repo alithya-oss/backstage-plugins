@@ -59,6 +59,12 @@ import {
   isKubernetesAvailable,
 } from '@backstage/plugin-kubernetes';
 
+import {
+  EntityChangelogCard,
+  EntityChangelogContent,
+  isChangelogAnnotationConfigurationOk,
+} from '@alithya-oss/backstage-plugin-changelog';
+
 const techdocsContent = (
   <EntityTechdocsContent>
     <TechDocsAddons>
@@ -142,6 +148,10 @@ const overviewContent = (
     <Grid item md={8} xs={12}>
       <EntityHasSubcomponentsCard variant="gridItem" />
     </Grid>
+
+    <Grid item md={6} xs={12}>
+      <EntityChangelogCard />
+    </Grid>
   </Grid>
 );
 
@@ -149,6 +159,14 @@ const serviceEntityPage = (
   <EntityLayout>
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route
+      path="/changelog"
+      title="Changelog"
+      if={isChangelogAnnotationConfigurationOk}
+    >
+      <EntityChangelogContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
@@ -195,6 +213,14 @@ const websiteEntityPage = (
   <EntityLayout>
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route
+      path="/changelog"
+      title="Changelog"
+      if={isChangelogAnnotationConfigurationOk}
+    >
+      <EntityChangelogContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
