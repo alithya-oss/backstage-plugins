@@ -27,53 +27,18 @@ Frontend plugin installation can be found here: [Frontend plugin](https://github
 Install:
 
 ```bash
-cd packages/backend
-yarn add @alithya-oss/backstage-plugin-changelog-backend
-```
-
-### Old backend system
-
-Create a file `packages/backend/src/plugins/changelog.ts`:
-
-```typescript
-import { createRouter } from '@alithya-oss/backstage-plugin-changelog-backend';
-import { Router } from 'express';
-import { PluginEnvironment } from '../types';
-
-export default async function createPlugin(
-  env: PluginEnvironment,
-): Promise<Router> {
-  return await createRouter({
-    discovery: env.discovery,
-    tokenManager: env.tokenManager,
-    logger: env.logger,
-    reader: env.reader,
-  });
-}
-```
-
-Add the plugin to `packages/backend/src/index.ts`:
-
-```typescript
-// import:
-import changelog from './plugins/changelog';
-...
-
-async function main() {
-  ...
-  // add env
-  const changelogEnv = useHotMemoize(module, () => createEnv('changelog'));
-  ...
-  // add to router
-  apiRouter.use('/changelog', await changelog(changelogEnv));
-  ...
-}
+yarn workspace backend add @alithya-oss/backstage-plugin-changelog-backend
 ```
 
 ### New backend system
 
 ```typescript
+import { createBackend } from '@backstage/backend-defaults';
+
+const backend = createBackend();
+...
 backend.add(import('@alithya-oss/backstage-plugin-changelog-backend'));
+backend.start();
 ```
 
 ### Configuration

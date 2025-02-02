@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import { loggerToWinstonLogger } from '@backstage/backend-common';
 import {
   coreServices,
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
-import { createRouter } from './service/router';
+import { createRouter } from './router';
 
 /**
  * Changelog backend plugin
@@ -33,19 +32,25 @@ export const changelogPlugin = createBackendPlugin({
       deps: {
         logger: coreServices.logger,
         reader: coreServices.urlReader,
+        config: coreServices.rootConfig,
         httpRouter: coreServices.httpRouter,
         discovery: coreServices.discovery,
         auth: coreServices.auth,
       },
-      async init({ logger, reader, httpRouter, auth, discovery }) {
+      async init({ logger, config, reader, httpRouter, auth, discovery }) {
         httpRouter.use(
           await createRouter({
-            logger: loggerToWinstonLogger(logger),
+            logger,
+            config,
             reader,
             auth,
             discovery,
           }),
         );
+        httpRouter.addAuthPolicy({
+          path: '/health',
+          allow: 'unauthenticated',
+        });
       },
     });
   },

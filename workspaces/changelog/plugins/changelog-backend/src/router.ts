@@ -14,38 +14,42 @@
  * limitations under the License.
  */
 
-import { errorHandler } from '@backstage/backend-common';
-import { CatalogClient, CatalogApi } from '@backstage/catalog-client';
-import { NotFoundError } from '@backstage/errors';
 import express from 'express';
 import Router from 'express-promise-router';
-import { Logger } from 'winston';
-import { readChangelogFile } from '../lib/changelogReader';
+import { Config } from '@backstage/config';
+import { MiddlewareFactory } from '@backstage/backend-defaults/rootHttpRouter';
+import { CatalogClient, CatalogApi } from '@backstage/catalog-client';
+import { NotFoundError } from '@backstage/errors';
+import { readChangelogFile } from './lib/changelogReader';
 import {
   ANNOTATION_SOURCE_LOCATION,
   parseLocationRef,
 } from '@backstage/catalog-model';
 import {
+  LoggerService,
   AuthService,
   DiscoveryService,
   UrlReaderService,
 } from '@backstage/backend-plugin-api';
 
+/** @public */
 export interface RouterOptions {
-  logger: Logger;
+  logger: LoggerService;
+  config: Config;
   reader: UrlReaderService;
   auth: AuthService;
   discovery: DiscoveryService;
   catalogApi?: CatalogApi;
 }
 
+/** @private */
 export async function createRouter(
-  options: RouterOptions,
+  routerOptions: RouterOptions,
 ): Promise<express.Router> {
-  const { logger, auth, reader, discovery } = options;
+  const { logger, auth, config, reader, discovery } = routerOptions;
 
   const catalogApi =
-    options.catalogApi ?? new CatalogClient({ discoveryApi: discovery });
+    routerOptions.catalogApi ?? new CatalogClient({ discoveryApi: discovery });
 
   const router = Router();
   router.use(express.json());
@@ -112,6 +116,13 @@ export async function createRouter(
     return res.status(500).json();
   });
 
-  router.use(errorHandler());
+  const middleware = MiddlewareFactory.create({ logger, config });
+  router.use(middleware.error());
+
   return router;
+}
+
+/** @public */
+export async function createRouterFromConfig(routerOptions: RouterOptions) {
+  return createRouter(routerOptions);
 }
