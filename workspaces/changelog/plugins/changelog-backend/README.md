@@ -24,20 +24,23 @@ Frontend plugin installation can be found here: [Frontend plugin](https://github
 
 ## Backend plugin
 
-Install:
+Add the backend plugin package:
 
 ```bash
 yarn workspace backend add @alithya-oss/backstage-plugin-changelog-backend
 ```
 
-### New backend system
+Edit the `packages/backend/src/index.ts`:
 
-```typescript
+In `packages/backend/src/index.ts` add the following:
+
+```diff
 import { createBackend } from '@backstage/backend-defaults';
 
 const backend = createBackend();
 ...
-backend.add(import('@alithya-oss/backstage-plugin-changelog-backend'));
++ backend.add(import('@alithya-oss/backstage-plugin-changelog-backend'));
+
 backend.start();
 ```
 
