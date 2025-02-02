@@ -1,1 +1,3 @@
-module.exports = require('../../.eslintrc.cjs');
+module.exports = {
+  root: true,
+};
