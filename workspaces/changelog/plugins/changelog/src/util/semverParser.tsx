@@ -1,6 +1,7 @@
 import { ChangelogProps } from './types';
 
 // SemVer Parser follows https://semver.org/
+/** @public */
 export function semverParser(content: string): ChangelogProps[] {
   const regex =
     /# \[([\d.]+)\]\([^)]+\) \((\d{4}-\d{2}-\d{2})\)(?:\n\n(?:### .+\n(?:\* .+\n)+))?((?:.|\n)*?)(?=(?:# \[\d+\.\d+\.\d+\])|\z)/g;

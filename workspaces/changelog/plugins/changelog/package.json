@@ -10,11 +10,17 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "frontend-plugin"
+    "role": "frontend-plugin",
+    "pluginId": "changelog",
+    "pluginPackages": [
+      "@alithya-oss/backstage-plugin-changelog",
+      "@alithya-oss/backstage-plugin-changelog-backend"
+    ]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RSC-Labs/backstage-changelog-plugin.git"
+    "url": "https://github.com/alithya-oss/backstage-plugins",
+    "directory": "workspaces/changelog/plugins/changelog"
   },
   "sideEffects": false,
   "scripts": {
@@ -62,6 +68,7 @@
     "frontend",
     "changelog",
     "rsc-labs",
+    "alithya",
     "typescript",
     "javascript"
   ]
