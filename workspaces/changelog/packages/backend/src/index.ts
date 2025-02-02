@@ -52,4 +52,7 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 // kubernetes
 backend.add(import('@backstage/plugin-kubernetes-backend'));
 
+// changelog
+backend.add(import('@alithya-oss/backstage-plugin-changelog-backend'));
+
 backend.start();

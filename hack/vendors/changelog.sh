@@ -10,7 +10,7 @@ function sync() {
         tar -xvzf - \
             --strip-components=1 \
             --directory=.tmp/backstage-changelog-plugin/${VERSION} \
-            backstage-changelog-plugin-${VERSION/"/"/"-"}/plugins
+            backstage-changelog-plugin-${VERSION/"/"/"-"}
 
     # bulletin board
     rsync -av \
@@ -19,6 +19,15 @@ function sync() {
     rsync -av \
         .tmp/backstage-changelog-plugin/${VERSION/"/"/"-"}/plugins/backstage-changelog-plugin/* \
         ./workspaces/changelog/plugins/changelog
+    rsync -av \
+        .tmp/backstage-changelog-plugin/${VERSION/"/"/"-"}/examples/* \
+        ./workspaces/changelog/examples
+    rsync -av \
+        .tmp/backstage-changelog-plugin/${VERSION/"/"/"-"}/docs/* \
+        ./workspaces/changelog/docs
+    rsync -av \
+        .tmp/backstage-changelog-plugin/${VERSION/"/"/"-"}/plugins/README.md \
+        ./workspaces/changelog/README.md
 }
 
 function rename() {
