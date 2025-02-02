@@ -3,4 +3,4 @@
 '@alithya-oss/backstage-plugin-changelog': major
 ---
 
-Refreshed the unmaintained 'rcs-labs/backstage-changelog-plugin' to ensure compatibility with the latest Backstage framework versions
+Refreshed the unmaintained 'rcs-labs/backstage-changelog-plugin' to ensure compatibility with the Backstage framework version 1.35.x and later.
