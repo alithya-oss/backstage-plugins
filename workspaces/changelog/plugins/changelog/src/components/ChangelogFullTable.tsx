@@ -20,59 +20,75 @@ import { MarkdownContent } from '@backstage/core-components';
 import { ChangelogAction, ChangelogProps } from '../util/types';
 
 const generateActionColumns = (changelogInfos: ChangelogProps[]) => {
-    const actionColumns: TableColumn[] = [];
-    if (changelogInfos.length) {
-        for (let j = 0; j < changelogInfos.length; j++) {
-          for (let i = 0; i < changelogInfos[j].actions.length; i++) {
-            if (!actionColumns.some(actionColumn => actionColumn.title === changelogInfos[j].actions[i].name)) {
-              actionColumns.push(
-                {
-                    title: changelogInfos[j].actions[i].name,
-                    render: (changelogInfo: any) => {
-                        const columnAction: ChangelogAction | undefined = changelogInfo.actions.find((action: { name: string; }) => action.name === changelogInfos[j].actions[i].name);
-                        return (
-                            <>
-                                {columnAction !== undefined && <MarkdownContent content={columnAction.content}/>}
-                            </>
-                        ) 
-                    },
-                    customFilterAndSearch(filter: string, rowData: any, _) {
-                      if (rowData.actions.length) {
-                        return (rowData.actions.find((action: { content: string; }) => action.content.toLowerCase().includes(filter.toLowerCase())) !== undefined);
-                      }
-                      return false;
-                    },
-                }
-              )
-            }
-          }
+  const actionColumns: TableColumn[] = [];
+  if (changelogInfos.length) {
+    for (let j = 0; j < changelogInfos.length; j++) {
+      for (let i = 0; i < changelogInfos[j].actions.length; i++) {
+        if (
+          !actionColumns.some(
+            actionColumn =>
+              actionColumn.title === changelogInfos[j].actions[i].name,
+          )
+        ) {
+          actionColumns.push({
+            title: changelogInfos[j].actions[i].name,
+            render: (changelogInfo: any) => {
+              const columnAction: ChangelogAction | undefined =
+                changelogInfo.actions.find(
+                  (action: { name: string }) =>
+                    action.name === changelogInfos[j].actions[i].name,
+                );
+              return (
+                <>
+                  {columnAction !== undefined && (
+                    <MarkdownContent content={columnAction.content} />
+                  )}
+                </>
+              );
+            },
+            customFilterAndSearch(filter: string, rowData: any, _) {
+              if (rowData.actions.length) {
+                return (
+                  rowData.actions.find((action: { content: string }) =>
+                    action.content.toLowerCase().includes(filter.toLowerCase()),
+                  ) !== undefined
+                );
+              }
+              return false;
+            },
+          });
         }
+      }
     }
-    return actionColumns;
-    
-}
+  }
+  return actionColumns;
+};
 
-export const ChangelogFullTable = ({changelogInfos} : {changelogInfos: ChangelogProps[]}) => {
-    const actionColumns: TableColumn[] = generateActionColumns(changelogInfos);
-    const columns: TableColumn[] = [
-      {
-        title: 'Version',
-        highlight: true,
-        render: (changelogInfo: any) => (
-          <MarkdownContent content={changelogInfo.versionNumber}/>
-        )
-      },
-        ...actionColumns
-    ];
+export const ChangelogFullTable = ({
+  changelogInfos,
+}: {
+  changelogInfos: ChangelogProps[];
+}) => {
+  const actionColumns: TableColumn[] = generateActionColumns(changelogInfos);
+  const columns: TableColumn[] = [
+    {
+      title: 'Version',
+      highlight: true,
+      render: (changelogInfo: any) => (
+        <MarkdownContent content={changelogInfo.versionNumber} />
+      ),
+    },
+    ...actionColumns,
+  ];
 
-    return (
-        <Table
-          options={{ 
-            pageSize: 5,
-          }}
-          data={changelogInfos}
-          columns={columns}
-          title="Changelog"
-        />
-    );
+  return (
+    <Table
+      options={{
+        pageSize: 5,
+      }}
+      data={changelogInfos}
+      columns={columns}
+      title="Changelog"
+    />
+  );
 };

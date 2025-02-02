@@ -15,43 +15,47 @@
  */
 
 import React from 'react';
-import { ChangelogProps } from "./types";
-import { StatusError, StatusOK, StatusPending, StatusRunning, StatusWarning } from '@backstage/core-components';
+import { ChangelogProps } from './types';
+import {
+  StatusError,
+  StatusOK,
+  StatusPending,
+  StatusRunning,
+  StatusWarning,
+} from '@backstage/core-components';
 
 enum EChangelogAction {
-    Added = 'Added',
-    Fixed = 'Fixed',
-    Changed = 'Changed',
-    Removed = 'Removed',
-    Deprecated = 'Deprecated',
-    Security = 'Security'
+  Added = 'Added',
+  Fixed = 'Fixed',
+  Changed = 'Changed',
+  Removed = 'Removed',
+  Deprecated = 'Deprecated',
+  Security = 'Security',
 }
 
 // Default parser follows https://keepachangelog.com/
-export function defaultParser(content: string) : ChangelogProps[] {
-    const splittedLines = content.split(/\r?\n/);
+export function defaultParser(content: string): ChangelogProps[] {
+  const splittedLines = content.split(/\r?\n/);
 
-    let changelogIndex = -1;
+  let changelogIndex = -1;
 
-    let action: string | undefined;
-    let ActionIcon: any;
-    let actionContent: string | undefined;
-    let versionContent: string | undefined;
-    let actionCounter: number = 0;
+  let action: string | undefined;
+  let ActionIcon: any;
+  let actionContent: string | undefined;
+  let versionContent: string | undefined;
+  let actionCounter: number = 0;
 
-
-    const changelogParsed = splittedLines.reduce((resultArray: ChangelogProps[], item: string, currentIndex: number) => {
+  const changelogParsed = splittedLines.reduce(
+    (resultArray: ChangelogProps[], item: string, currentIndex: number) => {
       const isItLastLine = currentIndex == splittedLines.length - 1;
       if (item.startsWith('## ') || isItLastLine) {
         if (action && actionContent && versionContent) {
-          resultArray[changelogIndex].actions.push(
-            {
-              name: action,
-              content: actionContent,
-              counter: actionCounter,
-              icon: ActionIcon
-            }
-          )
+          resultArray[changelogIndex].actions.push({
+            name: action,
+            content: actionContent,
+            counter: actionCounter,
+            icon: ActionIcon,
+          });
           resultArray[changelogIndex].versionContent = versionContent;
         }
 
@@ -66,20 +70,18 @@ export function defaultParser(content: string) : ChangelogProps[] {
           resultArray[changelogIndex] = {
             versionNumber: item,
             actions: [],
-            versionContent: undefined
-          }
+            versionContent: undefined,
+          };
         }
-      };
+      }
       if (item.startsWith('### ')) {
         if (action && actionContent) {
-          resultArray[changelogIndex].actions.push(
-            {
-              name: action,
-              content: actionContent,
-              counter: actionCounter,
-              icon: ActionIcon
-            }
-          )
+          resultArray[changelogIndex].actions.push({
+            name: action,
+            content: actionContent,
+            counter: actionCounter,
+            icon: ActionIcon,
+          });
           action = undefined;
           actionContent = undefined;
           actionCounter = 0;
@@ -87,27 +89,27 @@ export function defaultParser(content: string) : ChangelogProps[] {
 
         if (item.includes(`### ${EChangelogAction.Added}`)) {
           action = EChangelogAction.Added;
-          ActionIcon = () =>  <StatusOK/>
+          ActionIcon = () => <StatusOK />;
         }
         if (item.includes(`### ${EChangelogAction.Fixed}`)) {
           action = EChangelogAction.Fixed;
-          ActionIcon = () =>  <StatusRunning/>
+          ActionIcon = () => <StatusRunning />;
         }
         if (item.includes(`### ${EChangelogAction.Changed}`)) {
           action = EChangelogAction.Changed;
-          ActionIcon = () =>  <StatusPending/>
+          ActionIcon = () => <StatusPending />;
         }
         if (item.includes(`### ${EChangelogAction.Removed}`)) {
           action = EChangelogAction.Removed;
-          ActionIcon = () =>  <StatusError/>
+          ActionIcon = () => <StatusError />;
         }
         if (item.includes(`### ${EChangelogAction.Deprecated}`)) {
           action = EChangelogAction.Deprecated;
-          ActionIcon = () =>  <StatusWarning/>
+          ActionIcon = () => <StatusWarning />;
         }
         if (item.includes(`### ${EChangelogAction.Security}`)) {
           action = EChangelogAction.Deprecated;
-          ActionIcon = () =>  <StatusPending/>
+          ActionIcon = () => <StatusPending />;
         }
       }
       if (item.startsWith('-')) {
@@ -125,7 +127,9 @@ export function defaultParser(content: string) : ChangelogProps[] {
       }
 
       return resultArray;
-    }, [])
+    },
+    [],
+  );
 
-    return changelogParsed;
-  }
+  return changelogParsed;
+}

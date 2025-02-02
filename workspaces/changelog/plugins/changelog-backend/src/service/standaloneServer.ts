@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-import { UrlReaders, createServiceBuilder, loadBackendConfig, ServerTokenManager, HostDiscovery } from '@backstage/backend-common';
+import {
+  UrlReaders,
+  createServiceBuilder,
+  loadBackendConfig,
+  ServerTokenManager,
+  HostDiscovery,
+} from '@backstage/backend-common';
 import { Server } from 'http';
 import { Logger } from 'winston';
 import { createRouter } from './router';
@@ -37,7 +43,7 @@ export async function startStandaloneServer(
     logger,
     reader: UrlReaders.default({ logger, config }),
     tokenManager,
-    discovery
+    discovery,
   });
 
   let service = createServiceBuilder(module)

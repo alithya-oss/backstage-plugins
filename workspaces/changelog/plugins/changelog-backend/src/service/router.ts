@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {errorHandler } from '@backstage/backend-common';
+import { errorHandler } from '@backstage/backend-common';
 import { CatalogClient, CatalogApi } from '@backstage/catalog-client';
 import { NotFoundError } from '@backstage/errors';
 import express from 'express';
@@ -25,14 +25,18 @@ import {
   ANNOTATION_SOURCE_LOCATION,
   parseLocationRef,
 } from '@backstage/catalog-model';
-import { AuthService, DiscoveryService, UrlReaderService } from '@backstage/backend-plugin-api';
+import {
+  AuthService,
+  DiscoveryService,
+  UrlReaderService,
+} from '@backstage/backend-plugin-api';
 
 export interface RouterOptions {
   logger: Logger;
   reader: UrlReaderService;
-  auth: AuthService,
-  discovery: DiscoveryService,
-  catalogApi?: CatalogApi   
+  auth: AuthService;
+  discovery: DiscoveryService;
+  catalogApi?: CatalogApi;
 }
 
 export async function createRouter(
@@ -66,38 +70,46 @@ export async function createRouter(
         `No ${kind} entity in ${namespace} named "${name}"`,
       );
     }
-    const entitySourceLocation = entity?.metadata.annotations?.[ANNOTATION_SOURCE_LOCATION];
+    const entitySourceLocation =
+      entity?.metadata.annotations?.[ANNOTATION_SOURCE_LOCATION];
     const changelogFilename = entity?.metadata.annotations?.['changelog-name'];
-    const changelogFileReference = entity?.metadata.annotations?.['changelog-file-ref'];
+    const changelogFileReference =
+      entity?.metadata.annotations?.['changelog-file-ref'];
 
     if (!changelogFileReference) {
       if (changelogFilename && entitySourceLocation) {
-        const result = await readChangelogFile(entitySourceLocation + changelogFilename);
-        return res.status(200).json({content: result})
+        const result = await readChangelogFile(
+          entitySourceLocation + changelogFilename,
+        );
+        return res.status(200).json({ content: result });
       } else if (entitySourceLocation) {
         const { type, target } = parseLocationRef(entitySourceLocation);
         if (type === 'url') {
           const result = await reader.readUrl(`${target}CHANGELOG.md`);
-          return res.status(200).json({content: (await result.buffer()).toString('utf8')})
+          return res
+            .status(200)
+            .json({ content: (await result.buffer()).toString('utf8') });
         }
         if (type === 'file') {
           const result = await readChangelogFile(`${target}CHANGELOG.md`);
-          return res.status(200).json({content: result})
+          return res.status(200).json({ content: result });
         }
-        return res.status(500).json()
-      } 
+        return res.status(500).json();
+      }
       return res.status(404).json();
     }
     const { type, target } = parseLocationRef(changelogFileReference);
     if (type === 'url') {
       const result = await reader.readUrl(target);
-      return res.status(200).json({content: (await result.buffer()).toString('utf8')})
+      return res
+        .status(200)
+        .json({ content: (await result.buffer()).toString('utf8') });
     }
     if (type === 'file') {
       const result = await readChangelogFile(target);
-      return res.status(200).json({content: result})
+      return res.status(200).json({ content: result });
     }
-    return res.status(500).json()
+    return res.status(500).json();
   });
 
   router.use(errorHandler());

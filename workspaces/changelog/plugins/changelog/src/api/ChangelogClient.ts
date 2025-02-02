@@ -20,7 +20,6 @@ import { Entity, DEFAULT_NAMESPACE } from '@backstage/catalog-model';
 import { ResponseError } from '@backstage/errors';
 import { ChangelogApi } from './ChangelogApi';
 
-
 /** @public */
 export class ChangelogClient implements ChangelogApi {
   private readonly discoveryApi: DiscoveryApi;
@@ -45,14 +44,14 @@ export class ChangelogClient implements ChangelogApi {
   }
 
   public async readChangelog(entity: Entity): Promise<string> {
-        const routeParams = this.getEntityRouteParams(entity);
-        const path = generatePath(`:namespace/:kind/:name`, routeParams);
-        const baseUrl = await this.discoveryApi.getBaseUrl('changelog');
-        const response = await this.fetchApi.fetch(`${baseUrl}/entity/${path}`);
-        if (!response.ok) {
-            throw await ResponseError.fromResponse(response);
-        }
-        const result = await response.json();
-        return result.content;
+    const routeParams = this.getEntityRouteParams(entity);
+    const path = generatePath(`:namespace/:kind/:name`, routeParams);
+    const baseUrl = await this.discoveryApi.getBaseUrl('changelog');
+    const response = await this.fetchApi.fetch(`${baseUrl}/entity/${path}`);
+    if (!response.ok) {
+      throw await ResponseError.fromResponse(response);
     }
+    const result = await response.json();
+    return result.content;
+  }
 }

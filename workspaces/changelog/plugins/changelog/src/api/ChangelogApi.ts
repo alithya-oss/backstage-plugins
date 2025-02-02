@@ -19,10 +19,10 @@ import { createApiRef } from '@backstage/core-plugin-api';
 
 /** @public */
 export const changelogApiRef = createApiRef<ChangelogApi>({
-    id: 'plugin.changelog.client',
+  id: 'plugin.changelog.client',
 });
 
 /** @public */
 export interface ChangelogApi {
-    readChangelog(entity: Entity): Promise<string>;
+  readChangelog(entity: Entity): Promise<string>;
 }

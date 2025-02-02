@@ -4,6 +4,7 @@ Backstage Changelog Plugin is configurable and customizable plugin for viewing a
 You can write your own parser or use default one, which follows [Keep the changelog](https://keepachangelog.com/) notation.
 
 ### What is Changelog, why and who needs it?
+
 Description from [Keep the changelog](https://keepachangelog.com/).
 
 A changelog is a file which contains a curated, chronologically ordered list of notable changes for each version of a project.
@@ -13,6 +14,7 @@ People need changelog. Whether consumers or developers, the end users of softwar
 # Getting started
 
 If you haven't already, check out the [Backstage docs](https://backstage.io/docs/getting-started/) and create a Backstage application with
+
 ```
 npx @backstage/create-app
 ```
@@ -23,6 +25,7 @@ Backend plugin installation can be found here: [Backend plugin](https://github.c
 ## Frontend plugin
 
 Install:
+
 ```bash
 cd packages/app
 yarn add @alithya-oss/backstage-plugin-changelog
@@ -33,6 +36,7 @@ You have two options how you can use Changelog functionality.
 ### Card in Overview page:
 
 Add the card to `packages/app/src/components/catalog/EntityPage.tsx`:
+
 ```jsx
 // import:
 import { EntityChangelogCard } from '@alithya-oss/backstage-plugin-changelog';
@@ -53,6 +57,7 @@ const overviewContent = (
 ### Table in separated tab
 
 Add content to `packages/app/src/components/catalog/EntityPage.tsx`:
+
 ```jsx
 // import:
 import { EntityChangelogContent } from '@alithya-oss/backstage-plugin-changelog';
@@ -97,29 +102,30 @@ Parser is represented by following type:
 export interface EntityChangelogProps {
     parser?(content: string) : ChangelogProps[]
 }
-  
+
 ```
 
 It shall take `string` as argument and shall produce array of `ChangelogProps` output which follows:
 
 ```jsx
 export type ChangelogAction = {
-    name: string,
-    counter: number,
-    content: string,
-    icon?: any
-}
+  name: string,
+  counter: number,
+  content: string,
+  icon?: any,
+};
 
 export type ChangelogProps = {
-    versionNumber: string,
-    actions: ChangelogAction[],
-    versionContent: string | undefined
-}
+  versionNumber: string,
+  actions: ChangelogAction[],
+  versionContent: string | undefined,
+};
 ```
 
 Every field matches corresponding information in ChangelogCard or ChangelogContent.
 
 Let's assume that your content follows "Keep the changelog" format, so your CHANGELOG looks like this:
+
 ```md
 # Changelog
 
@@ -132,10 +138,10 @@ Let's assume that your content follows "Keep the changelog" format, so your CHAN
 ### Removed
 
 - Foreign translation
-
 ```
 
 Properly mapping to ChangelogProps format is:
+
 ```
 versionNumber = "[1.1.1] - 2023-03-05"
 actions = [

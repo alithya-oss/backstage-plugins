@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-import { createApiFactory, createComponentExtension, createPlugin, discoveryApiRef, fetchApiRef } from '@backstage/core-plugin-api';
+import {
+  createApiFactory,
+  createComponentExtension,
+  createPlugin,
+  discoveryApiRef,
+  fetchApiRef,
+} from '@backstage/core-plugin-api';
 import { changelogApiRef } from './api';
 
 import { rootRouteRef } from './routes';
@@ -28,12 +34,12 @@ export const backstagePluginChangelogPlugin = createPlugin({
       api: changelogApiRef,
       deps: {
         discoveryApi: discoveryApiRef,
-        fetchApi: fetchApiRef
+        fetchApi: fetchApiRef,
       },
-      factory: ({  discoveryApi, fetchApi }) =>
+      factory: ({ discoveryApi, fetchApi }) =>
         new ChangelogClient({
           discoveryApi,
-          fetchApi
+          fetchApi,
         }),
     }),
   ],
@@ -47,8 +53,7 @@ export const EntityChangelogCard = backstagePluginChangelogPlugin.provide(
   createComponentExtension({
     name: 'EntityChangelogCard',
     component: {
-      lazy: () =>
-        import('./components').then(m => m.ChangelogCard),
+      lazy: () => import('./components').then(m => m.ChangelogCard),
     },
   }),
 );
@@ -58,8 +63,7 @@ export const EntityChangelogContent = backstagePluginChangelogPlugin.provide(
   createComponentExtension({
     name: 'EntityChangelogContent',
     component: {
-      lazy: () =>
-        import('./components').then(m => m.ChangelogContent),
+      lazy: () => import('./components').then(m => m.ChangelogContent),
     },
   }),
 );

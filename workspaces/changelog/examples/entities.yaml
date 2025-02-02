@@ -1,11 +1,10 @@
-
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name:  examples-semver
+  name: examples-semver
   annotations:
-    backstage.io/source-location: "/Users/jennyssonjunior/Documents/open-source/backstage-changelog-plugin/examples/"
-    changelog-name: "CHANGELOG.semver.md"
+    backstage.io/source-location: '/Users/jennyssonjunior/Documents/open-source/backstage-changelog-plugin/examples/'
+    changelog-name: 'CHANGELOG.semver.md'
 spec:
   type: website
   lifecycle: experimental
@@ -26,9 +25,9 @@ kind: Component
 metadata:
   name: example-website
   annotations:
-    backstage.io/source-location: "file:/home/ubuntu/rsc/contributions/backstage-changelog-plugin/examples/"
-    changelog-file-ref: "url:https://github.com/RSC-Labs/backstage-changelog-plugin/tree/main/examples/CHANGELOG.md"
-    changelog-name: "CHANGELOG.md"
+    backstage.io/source-location: 'file:/home/ubuntu/rsc/contributions/backstage-changelog-plugin/examples/'
+    changelog-file-ref: 'url:https://github.com/RSC-Labs/backstage-changelog-plugin/tree/main/examples/CHANGELOG.md'
+    changelog-name: 'CHANGELOG.md'
 
 spec:
   type: website

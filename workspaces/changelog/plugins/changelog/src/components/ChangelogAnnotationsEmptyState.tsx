@@ -16,64 +16,68 @@
 
 import React from 'react';
 import { Box, Typography } from '@material-ui/core';
-import { CodeSnippet, EmptyState, LinkButton } from '@backstage/core-components';
+import {
+  CodeSnippet,
+  EmptyState,
+  LinkButton,
+} from '@backstage/core-components';
 import { CHANGELOG_ANNOTATION_NAME, CHANGELOG_ANNOTATION_REF } from '../util';
 import { ANNOTATION_SOURCE_LOCATION } from '@backstage/catalog-model';
 
-const missingSourceLocation = 
-`
+const missingSourceLocation = `
   annotations:
     ${ANNOTATION_SOURCE_LOCATION}: "file:/path-to-directory/"
-`
-const missingSourceLocationAndName = 
-`
+`;
+const missingSourceLocationAndName = `
   annotations:
     ${ANNOTATION_SOURCE_LOCATION}: "file:/path-to-directory/"
     ${CHANGELOG_ANNOTATION_NAME}: "CHANGELOG.md"
-`
-const missingChangelogFileRef = 
-`
+`;
+const missingChangelogFileRef = `
   annotations:
     ${CHANGELOG_ANNOTATION_REF}: "url:https://github.com/RSC-Labs/backstage-changelog-plugin/tree/main/examples/CHANGELOG.md"
-`
+`;
 
 export const ChangelogAnnotationsEmptyState = () => {
-    return (
-        <EmptyState 
-            missing="field"
-            title='Changelog plugin'
-            description='Missing Annotations'
-            action={
-            <>
-                <Typography variant="body1">
-                You need to properly configure your annotations.
-                One of below configuration is needed:
-                </Typography>
-                <Box>
-                <CodeSnippet
-                    text={missingSourceLocation}
-                    language="yaml"
-                    showLineNumbers
-                    customStyle={{ background: 'inherit', fontSize: '115%' }}
-                />
-                <CodeSnippet
-                    text={missingSourceLocationAndName}
-                    language="yaml"
-                    showLineNumbers
-                    customStyle={{ background: 'inherit', fontSize: '115%' }}
-                />
-                <CodeSnippet
-                    text={missingChangelogFileRef}
-                    language="yaml"
-                    showLineNumbers
-                    customStyle={{ background: 'inherit', fontSize: '115%' }}
-                />
-                </Box>
-                <LinkButton color="primary" to='https://github.com/RSC-Labs/backstage-changelog-plugin#backend-plugin'>
-                Read more
-                </LinkButton>
-            </>
-            }
-        />
-    );
-}
+  return (
+    <EmptyState
+      missing="field"
+      title="Changelog plugin"
+      description="Missing Annotations"
+      action={
+        <>
+          <Typography variant="body1">
+            You need to properly configure your annotations. One of below
+            configuration is needed:
+          </Typography>
+          <Box>
+            <CodeSnippet
+              text={missingSourceLocation}
+              language="yaml"
+              showLineNumbers
+              customStyle={{ background: 'inherit', fontSize: '115%' }}
+            />
+            <CodeSnippet
+              text={missingSourceLocationAndName}
+              language="yaml"
+              showLineNumbers
+              customStyle={{ background: 'inherit', fontSize: '115%' }}
+            />
+            <CodeSnippet
+              text={missingChangelogFileRef}
+              language="yaml"
+              showLineNumbers
+              customStyle={{ background: 'inherit', fontSize: '115%' }}
+            />
+          </Box>
+          <LinkButton
+            color="primary"
+            to="https://github.com/RSC-Labs/backstage-changelog-plugin#backend-plugin"
+          >
+            Read more
+          </LinkButton>
+        </>
+      }
+    />
+  );
+};

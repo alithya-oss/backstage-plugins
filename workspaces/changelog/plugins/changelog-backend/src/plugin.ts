@@ -35,7 +35,7 @@ export const changelogPlugin = createBackendPlugin({
         reader: coreServices.urlReader,
         httpRouter: coreServices.httpRouter,
         discovery: coreServices.discovery,
-        auth: coreServices.auth
+        auth: coreServices.auth,
       },
       async init({ logger, reader, httpRouter, auth, discovery }) {
         httpRouter.use(
@@ -43,7 +43,7 @@ export const changelogPlugin = createBackendPlugin({
             logger: loggerToWinstonLogger(logger),
             reader,
             auth,
-            discovery
+            discovery,
           }),
         );
       },

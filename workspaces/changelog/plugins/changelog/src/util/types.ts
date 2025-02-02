@@ -16,18 +16,18 @@
 
 /** @public */
 export type ChangelogAction = {
-    name: string,
-    counter: number,
-    content: string,
-    icon?: any
-}
+  name: string;
+  counter: number;
+  content: string;
+  icon?: any;
+};
 
 /** @public */
 export type ChangelogProps = {
-    versionNumber: string,
-    actions: ChangelogAction[],
-    versionContent: string | undefined
-}
+  versionNumber: string;
+  actions: ChangelogAction[];
+  versionContent: string | undefined;
+};
 
 /**
  * Props for {@link EntityChangelogCard}.
@@ -35,6 +35,5 @@ export type ChangelogProps = {
  * @public
  */
 export interface EntityChangelogProps {
-    parser?(content: string) : ChangelogProps[]
+  parser?(content: string): ChangelogProps[];
 }
-  
