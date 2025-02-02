@@ -3,7 +3,7 @@ kind: Component
 metadata:
   name: examples-semver
   annotations:
-    backstage.io/source-location: '/Users/jennyssonjunior/Documents/open-source/backstage-changelog-plugin/examples/'
+    backstage.io/source-location: '../../examples/'
     changelog-name: 'CHANGELOG.semver.md'
 spec:
   type: website
@@ -25,8 +25,8 @@ kind: Component
 metadata:
   name: example-website
   annotations:
-    backstage.io/source-location: 'file:/home/ubuntu/rsc/contributions/backstage-changelog-plugin/examples/'
-    changelog-file-ref: 'url:https://github.com/RSC-Labs/backstage-changelog-plugin/tree/main/examples/CHANGELOG.md'
+    backstage.io/source-location: '../../examples/'
+    # changelog-file-ref: 'url:https://github.com/alithya-oss/backstage-plugins/tree/main/workspaces/changelog/examples/CHANGELOG.md'
     changelog-name: 'CHANGELOG.md'
 
 spec:
