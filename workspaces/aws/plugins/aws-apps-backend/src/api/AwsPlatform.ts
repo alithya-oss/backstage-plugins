@@ -486,7 +486,7 @@ export class AwsAppsPlatformApi {
     let resultBody;
 
     if (this.gitProvider === GitProviders.GITLAB) {
-      resultBody = await result.value.json();
+      resultBody = result.value;
     } else if (this.gitProvider === GitProviders.GITHUB) {
       resultBody = result.message;
     }
