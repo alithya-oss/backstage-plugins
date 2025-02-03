@@ -1,5 +1,12 @@
 # @alithya-oss/plugin-scaffolder-backend-module-aws-apps
 
+## 0.3.8
+
+### Patch Changes
+
+- Updated dependencies [2af4ce7]
+  - @alithya-oss/plugin-aws-apps-backend@0.4.3
+
 ## 0.3.7
 
 ### Patch Changes

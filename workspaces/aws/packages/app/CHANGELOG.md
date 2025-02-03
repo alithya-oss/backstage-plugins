@@ -1,5 +1,12 @@
 # app
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [2af4ce7]
+  - @alithya-oss/plugin-aws-apps@0.4.3
+
 ## 0.0.3
 
 ### Patch Changes

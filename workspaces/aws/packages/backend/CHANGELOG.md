@@ -1,5 +1,15 @@
 # backend
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [2af4ce7]
+  - @alithya-oss/plugin-aws-apps-backend@0.4.3
+  - @alithya-oss/plugin-aws-apps-common@0.4.3
+  - @alithya-oss/plugin-scaffolder-backend-module-aws-apps@0.3.8
+  - @alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@0.3.8
+
 ## 0.0.4
 
 ### Patch Changes
