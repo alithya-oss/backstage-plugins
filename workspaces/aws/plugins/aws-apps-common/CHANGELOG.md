@@ -1,5 +1,11 @@
 # @aws/plugin-aws-apps-common-for-backstage
 
+## 0.4.3
+
+### Patch Changes
+
+- 2af4ce7: Fixed repo info for Gitlab does not support group nesting. (https://github.com/awslabs/harmonix/pull/140)
+
 ## 0.4.2
 
 ### Patch Changes

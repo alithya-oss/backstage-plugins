@@ -1,5 +1,13 @@
 # @alithya-oss/plugin-aws-apps-backend
 
+## 0.4.3
+
+### Patch Changes
+
+- 2af4ce7: Fixed repo info for Gitlab does not support group nesting. (https://github.com/awslabs/harmonix/pull/140)
+- Updated dependencies [2af4ce7]
+  - @alithya-oss/plugin-aws-apps-common@0.4.3
+
 ## 0.4.2
 
 ### Patch Changes
