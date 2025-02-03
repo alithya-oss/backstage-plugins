@@ -52,7 +52,6 @@ const DeleteProviderPanel = ({
 
   const [disabled, setDisabled] = useState(false);
   const repoInfo = getRepoInfo(entity);
-  repoInfo.gitProjectGroup = 'aws-providers';
 
   const deleteRepo = () => {
     api
