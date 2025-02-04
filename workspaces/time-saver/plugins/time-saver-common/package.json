@@ -34,13 +34,13 @@
     "postpack": "backstage-cli package postpack"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.28.2"
+    "@backstage/cli": "^0.29.6"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@backstage/plugin-permission-common": "^0.8.1",
+    "@backstage/plugin-permission-common": "^0.8.4",
     "luxon": "^3.5.0"
   }
 }

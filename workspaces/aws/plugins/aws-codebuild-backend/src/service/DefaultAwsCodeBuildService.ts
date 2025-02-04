@@ -55,7 +55,7 @@ import {
   LoggerService,
 } from '@backstage/backend-plugin-api';
 import { createLegacyAuthAdapters } from '@backstage/backend-common';
-import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
+import { catalogServiceRef } from '@backstage/plugin-catalog-node';
 
 /** @public */
 export class DefaultAwsCodeBuildService implements AwsCodeBuildService {

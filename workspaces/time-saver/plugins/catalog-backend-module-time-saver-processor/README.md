@@ -46,7 +46,7 @@ which may be leveraged by the Analytics API.
    import { createBackend } from '@backstage/backend-defaults';
 
    const backend = createBackend();
-   backend.add(import('@backstage/plugin-app-backend/alpha'));
+   backend.add(import('@backstage/plugin-app-backend'));
    + backend.add(import('@alithya-oss/plugin-catalog-backend-module-time-saver-processor'));
    // ...
    backend.start();
