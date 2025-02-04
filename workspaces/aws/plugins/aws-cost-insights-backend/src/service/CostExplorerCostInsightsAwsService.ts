@@ -59,7 +59,7 @@ import { AwsCredentialIdentityProvider } from '@aws-sdk/types';
 import regression, { DataPoint } from 'regression';
 import { CostInsightsAwsConfig, readCostInsightsAwsConfig } from '../config';
 import { DateTime, Duration as LuxonDuration } from 'luxon';
-import { catalogServiceRef } from '@backstage/plugin-catalog-node';
+import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
 
 /** @public */
 export class CostExplorerCostInsightsAwsService

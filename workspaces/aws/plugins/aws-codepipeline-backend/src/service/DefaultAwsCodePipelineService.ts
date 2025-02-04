@@ -55,7 +55,7 @@ import {
   LoggerService,
 } from '@backstage/backend-plugin-api';
 import { createLegacyAuthAdapters } from '@backstage/backend-common';
-import { catalogServiceRef } from '@backstage/plugin-catalog-node';
+import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
 
 const DEFAULT_EXECUTIONS_LIMIT = 100;
 

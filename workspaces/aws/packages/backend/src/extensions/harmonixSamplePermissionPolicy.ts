@@ -1,4 +1,4 @@
-import { policyExtensionPoint } from '@backstage/plugin-permission-node';
+import { policyExtensionPoint } from '@backstage/plugin-permission-node/alpha';
 import { createBackendModule } from '@backstage/backend-plugin-api';
 import { readOpaAppAuditPermission } from '@alithya-oss/plugin-aws-apps-common';
 import {
@@ -9,12 +9,12 @@ import { BackstageIdentityResponse } from '@backstage/plugin-auth-node';
 import {
   catalogConditions,
   createCatalogConditionalDecision,
-} from '@backstage/plugin-catalog-backend';
+} from '@backstage/plugin-catalog-backend/alpha';
 import {
   RESOURCE_TYPE_CATALOG_ENTITY,
   catalogEntityDeletePermission,
   catalogEntityReadPermission,
-} from '@backstage/plugin-catalog-common';
+} from '@backstage/plugin-catalog-common/alpha';
 import {
   AuthorizeResult,
   PolicyDecision,

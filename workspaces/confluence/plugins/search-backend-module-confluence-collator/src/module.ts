@@ -3,7 +3,7 @@ import {
   createBackendModule,
 } from '@backstage/backend-plugin-api';
 import { readSchedulerServiceTaskScheduleDefinitionFromConfig } from '@backstage/backend-plugin-api';
-import { searchIndexRegistryExtensionPoint } from '@backstage/plugin-search-backend-node';
+import { searchIndexRegistryExtensionPoint } from '@backstage/plugin-search-backend-node/alpha';
 import { ConfluenceCollatorFactory } from './collators';
 
 /**
