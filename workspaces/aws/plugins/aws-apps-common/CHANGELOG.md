@@ -1,5 +1,12 @@
 # @aws/plugin-aws-apps-common-for-backstage
 
+## 0.4.4
+
+### Patch Changes
+
+- 1cc277e: Bump Backstage framework version 1.35.1
+- 1cc277e: Fixed repo info for Gitlab does not support group nesting. (https://github.com/awslabs/harmonix/pull/140)
+
 ## 0.4.3
 
 ### Patch Changes

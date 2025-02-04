@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.2.13
+
+### Patch Changes
+
+- 1cc277e: Bump Backstage framework version 1.35.1
+- Updated dependencies [1cc277e]
+  - @alithya-oss/plugin-aws-core-common@0.5.4
+
 ## 0.2.12
 
 ### Patch Changes

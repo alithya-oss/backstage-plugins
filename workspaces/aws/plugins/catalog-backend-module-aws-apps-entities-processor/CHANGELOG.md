@@ -1,5 +1,14 @@
 # @alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor
 
+## 0.3.9
+
+### Patch Changes
+
+- 1cc277e: Bump Backstage framework version 1.35.1
+- Updated dependencies [1cc277e]
+- Updated dependencies [1cc277e]
+  - @alithya-oss/plugin-aws-apps-common@0.4.4
+
 ## 0.3.8
 
 ### Patch Changes
