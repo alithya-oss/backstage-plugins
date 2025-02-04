@@ -1,5 +1,13 @@
 # @alithya-oss/plugin-time-saver-backend
 
+## 3.0.4
+
+### Patch Changes
+
+- 1cc277e: Bump Backstage framework version 1.35.1
+- Updated dependencies [1cc277e]
+  - @alithya-oss/plugin-time-saver-common@0.5.4
+
 ## 3.0.3
 
 ### Patch Changes
