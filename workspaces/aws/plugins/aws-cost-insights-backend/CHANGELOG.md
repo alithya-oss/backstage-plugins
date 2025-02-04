@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.1.7
+
+### Patch Changes
+
+- 1cc277e: Bump Backstage framework version 1.35.1
+- Updated dependencies [1cc277e]
+  - @alithya-oss/plugin-cost-insights-aws-common@0.1.6
+  - @alithya-oss/plugin-aws-core-common@0.5.4
+
 ## 0.1.6
 
 ### Patch Changes

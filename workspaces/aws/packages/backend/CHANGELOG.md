@@ -1,5 +1,21 @@
 # backend
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [1cc277e]
+- Updated dependencies [1cc277e]
+  - @alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@0.3.9
+  - @alithya-oss/plugin-scaffolder-backend-module-aws-apps@0.3.9
+  - @alithya-oss/plugin-scaffolder-backend-module-aws-core@0.2.13
+  - @alithya-oss/plugin-cost-insights-aws-backend@0.1.7
+  - @alithya-oss/plugin-aws-codepipeline-backend@0.5.4
+  - @alithya-oss/plugin-aws-codebuild-backend@0.5.4
+  - @alithya-oss/plugin-amazon-ecs-backend@0.4.4
+  - @alithya-oss/plugin-aws-apps-backend@0.4.4
+  - @alithya-oss/plugin-aws-apps-common@0.4.4
+
 ## 0.0.5
 
 ### Patch Changes

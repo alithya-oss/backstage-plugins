@@ -1,5 +1,17 @@
 # app
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [1cc277e]
+- Updated dependencies [1cc277e]
+  - @alithya-oss/plugin-cost-insights-aws@0.1.7
+  - @alithya-oss/plugin-aws-codepipeline@0.5.8
+  - @alithya-oss/plugin-aws-codebuild@0.5.8
+  - @alithya-oss/plugin-amazon-ecs@0.4.7
+  - @alithya-oss/plugin-aws-apps@0.4.4
+
 ## 0.0.4
 
 ### Patch Changes
