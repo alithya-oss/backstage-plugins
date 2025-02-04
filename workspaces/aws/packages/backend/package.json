@@ -30,7 +30,7 @@
     "@alithya-oss/plugin-cost-insights-aws-backend": "workspace:^",
     "@alithya-oss/plugin-scaffolder-backend-module-aws-apps": "workspace:^",
     "@alithya-oss/plugin-scaffolder-backend-module-aws-core": "workspace:^",
-    "@backstage/backend-common": "^0.24.1",
+    "@backstage/backend-common": "^0.25.0",
     "@backstage/backend-defaults": "^0.7.0",
     "@backstage/backend-plugin-api": "^1.1.1",
     "@backstage/backend-tasks": "^0.6.1",
@@ -76,7 +76,7 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.29.5",
+    "@backstage/cli": "^0.29.6",
     "@types/express": "^4.17.6",
     "@types/express-serve-static-core": "^4.17.5",
     "@types/luxon": "^2.0.4"

@@ -21,7 +21,7 @@ In your `packages/backend/src/index.ts`, Add the collator to your backend instan
 import { createBackend } from '@backstage/backend-defaults';
 
 const backend = createBackend();
-backend.add(import('@backstage/plugin-search-backend/alpha'));
+backend.add(import('@backstage/plugin-search-backend'));
 backend.add(
   import('@alithya-oss/plugin-search-backend-module-confluence-collator'),
 );

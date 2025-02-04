@@ -22,13 +22,13 @@ __metadata:
     "@aws-sdk/client-ecs": "npm:^3.731.1"
     "@aws-sdk/middleware-sdk-sts": "npm:^3.731.0"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
-    "@backstage/backend-common": "npm:^0.24.1"
+    "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
     "@backstage/catalog-client": "npm:^1.9.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/config": "npm:^1.3.2"
     "@backstage/integration-aws-node": "npm:^0.1.15"
     "@backstage/plugin-auth-backend": "npm:^0.24.2"
@@ -54,7 +54,7 @@ __metadata:
   dependencies:
     "@aws-sdk/client-ecs": "npm:^3.731.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
   languageName: unknown
   linkType: soft
 
@@ -68,7 +68,7 @@ __metadata:
     "@aws-sdk/client-ecs": "npm:^3.731.1"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/core-app-api": "npm:^1.15.4"
     "@backstage/core-components": "npm:^0.16.3"
     "@backstage/core-plugin-api": "npm:^1.10.3"
@@ -114,13 +114,13 @@ __metadata:
     "@aws-sdk/credential-provider-node": "npm:^3.731.1"
     "@aws-sdk/types": "npm:^3.731.0"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
-    "@backstage/backend-common": "npm:^0.24.1"
+    "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
     "@backstage/catalog-client": "npm:^1.9.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/config": "npm:^1.3.2"
     "@backstage/errors": "npm:^1.2.7"
     "@backstage/integration-aws-node": "npm:^0.1.15"
@@ -152,7 +152,7 @@ __metadata:
   dependencies:
     "@aws-sdk/client-cloudformation": "npm:^3.731.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/plugin-permission-common": "npm:^0.8.4"
     "@backstage/types": "npm:^1.2.1"
   languageName: unknown
@@ -175,7 +175,7 @@ __metadata:
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
     "@backstage-community/plugin-github-actions": "npm:^0.6.16"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/core-app-api": "npm:^1.15.4"
     "@backstage/core-components": "npm:^0.16.3"
     "@backstage/core-plugin-api": "npm:^1.10.3"
@@ -185,7 +185,7 @@ __metadata:
     "@backstage/plugin-catalog-graph": "npm:^0.4.15"
     "@backstage/plugin-catalog-react": "npm:^1.15.1"
     "@backstage/plugin-permission-react": "npm:^0.4.30"
-    "@backstage/plugin-techdocs": "npm:^1.12.1"
+    "@backstage/plugin-techdocs": "npm:^1.12.2"
     "@backstage/plugin-techdocs-module-addons-contrib": "npm:^1.1.20"
     "@backstage/plugin-techdocs-react": "npm:^1.2.13"
     "@backstage/test-utils": "npm:^1.7.4"
@@ -231,13 +231,13 @@ __metadata:
     "@aws-sdk/client-codebuild": "npm:^3.731.1"
     "@aws-sdk/middleware-sdk-sts": "npm:^3.731.0"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
-    "@backstage/backend-common": "npm:^0.24.1"
+    "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
     "@backstage/catalog-client": "npm:^1.9.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/config": "npm:^1.3.2"
     "@backstage/integration-aws-node": "npm:^0.1.15"
     "@backstage/plugin-auth-backend": "npm:^0.24.2"
@@ -263,7 +263,7 @@ __metadata:
   dependencies:
     "@aws-sdk/client-codebuild": "npm:^3.731.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
   languageName: unknown
   linkType: soft
 
@@ -276,7 +276,7 @@ __metadata:
     "@alithya-oss/plugin-aws-core-react": "workspace:^"
     "@aws-sdk/client-codebuild": "npm:^3.731.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/core-app-api": "npm:^1.15.4"
     "@backstage/core-components": "npm:^0.16.3"
     "@backstage/core-plugin-api": "npm:^1.10.3"
@@ -313,13 +313,13 @@ __metadata:
     "@aws-sdk/client-codepipeline": "npm:^3.731.1"
     "@aws-sdk/middleware-sdk-sts": "npm:^3.731.0"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
-    "@backstage/backend-common": "npm:^0.24.1"
+    "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
     "@backstage/catalog-client": "npm:^1.9.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/config": "npm:^1.3.2"
     "@backstage/integration-aws-node": "npm:^0.1.15"
     "@backstage/plugin-auth-backend": "npm:^0.24.2"
@@ -345,7 +345,7 @@ __metadata:
   dependencies:
     "@aws-sdk/client-codepipeline": "npm:^3.731.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
   languageName: unknown
   linkType: soft
 
@@ -359,7 +359,7 @@ __metadata:
     "@aws-sdk/client-codepipeline": "npm:^3.731.1"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/core-app-api": "npm:^1.15.4"
     "@backstage/core-components": "npm:^0.16.3"
     "@backstage/core-plugin-api": "npm:^1.10.3"
@@ -391,7 +391,7 @@ __metadata:
   resolution: "@alithya-oss/plugin-aws-core-common@workspace:plugins/aws-core-common"
   dependencies:
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/config": "npm:^1.3.2"
   languageName: unknown
   linkType: soft
@@ -405,10 +405,10 @@ __metadata:
     "@aws-sdk/client-resource-explorer-2": "npm:^3.731.1"
     "@aws-sdk/client-resource-groups-tagging-api": "npm:^3.731.1"
     "@aws-sdk/types": "npm:^3.731.0"
-    "@backstage/backend-common": "npm:^0.24.1"
+    "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/config": "npm:^1.3.2"
     "@backstage/integration-aws-node": "npm:^0.1.15"
     "@types/jest": "npm:^29.5.14"
@@ -421,7 +421,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/plugin-aws-core-react@workspace:plugins/aws-core-react"
   dependencies:
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/core-components": "npm:^0.16.3"
     "@backstage/core-plugin-api": "npm:^1.10.3"
     "@backstage/errors": "npm:^1.2.7"
@@ -443,11 +443,11 @@ __metadata:
   resolution: "@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@workspace:plugins/catalog-backend-module-aws-apps-entities-processor"
   dependencies:
     "@alithya-oss/plugin-aws-apps-common": "workspace:^"
-    "@backstage/backend-common": "npm:^0.24.1"
+    "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/plugin-catalog-common": "npm:^1.1.3"
     "@backstage/plugin-catalog-node": "npm:^1.15.1"
     "@types/jest": "npm:^29.5.14"
@@ -465,13 +465,13 @@ __metadata:
     "@aws-sdk/types": "npm:^3.731.0"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
     "@backstage-community/plugin-cost-insights-common": "npm:^0.1.3"
-    "@backstage/backend-common": "npm:^0.24.1"
+    "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
     "@backstage/catalog-client": "npm:^1.9.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/config": "npm:^1.3.2"
     "@backstage/errors": "npm:^1.2.7"
     "@backstage/integration-aws-node": "npm:^0.1.15"
@@ -502,7 +502,7 @@ __metadata:
   dependencies:
     "@aws-sdk/client-ecs": "npm:^3.731.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
   languageName: unknown
   linkType: soft
 
@@ -518,7 +518,7 @@ __metadata:
     "@backstage-community/plugin-cost-insights": "npm:^0.12.25"
     "@backstage-community/plugin-cost-insights-common": "npm:^0.1.3"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/core-app-api": "npm:^1.15.4"
     "@backstage/core-components": "npm:^0.16.3"
     "@backstage/core-plugin-api": "npm:^1.10.3"
@@ -559,11 +559,11 @@ __metadata:
     "@aws-sdk/client-ssm": "npm:^3.731.1"
     "@aws-sdk/types": "npm:^3.731.0"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
-    "@backstage/backend-common": "npm:^0.24.1"
+    "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/catalog-client": "npm:^1.9.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/config": "npm:^1.3.2"
     "@backstage/errors": "npm:^1.2.7"
     "@backstage/integration": "npm:^1.16.1"
@@ -588,10 +588,10 @@ __metadata:
     "@aws-sdk/client-eventbridge": "npm:^3.731.1"
     "@aws-sdk/client-s3": "npm:^3.731.1"
     "@aws-sdk/types": "npm:^3.731.0"
-    "@backstage/backend-common": "npm:^0.24.1"
+    "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/config": "npm:^1.3.2"
     "@backstage/errors": "npm:^1.2.7"
     "@backstage/integration-aws-node": "npm:^0.1.15"
@@ -5400,9 +5400,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/cli@npm:^0.29.5":
-  version: 0.29.5
-  resolution: "@backstage/cli@npm:0.29.5"
+"@backstage/cli@npm:^0.29.6":
+  version: 0.29.6
+  resolution: "@backstage/cli@npm:0.29.6"
   dependencies:
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/cli-common": "npm:^0.1.15"
@@ -5530,7 +5530,7 @@ __metadata:
       optional: true
   bin:
     backstage-cli: bin/backstage-cli
-  checksum: 10/10d6367072b5072ddc974a98056a07d215552bb2903b1ca38843edc732f835e143e9ee9bc28849af60b2e1c9ceef9c88e9126f5d659e26beab3a69c0189dc9a5
+  checksum: 10/46bfa34be7d216a454962d07092828a55d27be4e53c5eb65a713d0b16fa5da226a668ca984e37290c6eaea7a97f05c42f3893e11703c46a9ded4a83ced6c12e6
   languageName: node
   linkType: hard
 
@@ -7442,9 +7442,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-scaffolder-react@npm:^1.14.3":
-  version: 1.14.3
-  resolution: "@backstage/plugin-scaffolder-react@npm:1.14.3"
+"@backstage/plugin-scaffolder-react@npm:^1.14.4":
+  version: 1.14.4
+  resolution: "@backstage/plugin-scaffolder-react@npm:1.14.4"
   dependencies:
     "@backstage/catalog-client": "npm:^1.9.1"
     "@backstage/catalog-model": "npm:^1.7.3"
@@ -7488,13 +7488,13 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10/3fca3000ee02884fbdd5d22841215d24397ad8406d6d646313ef812ef952078a38dad70eacdf0c910a28922b5733c8b9d902f18c41fd805b3d5fc0a801da0a99
+  checksum: 10/82df24bc0358d0317f60c71fd096b2cbf37cbc988f620e15acb22326582f15aef9ba3b6ac04fd2c66f9f4bc2d24154a79b8ab5657047a3f9f23d25c37f626ef3
   languageName: node
   linkType: hard
 
-"@backstage/plugin-scaffolder@npm:^1.27.4":
-  version: 1.27.4
-  resolution: "@backstage/plugin-scaffolder@npm:1.27.4"
+"@backstage/plugin-scaffolder@npm:^1.27.5":
+  version: 1.27.5
+  resolution: "@backstage/plugin-scaffolder@npm:1.27.5"
   dependencies:
     "@backstage/catalog-client": "npm:^1.9.1"
     "@backstage/catalog-model": "npm:^1.7.3"
@@ -7509,7 +7509,7 @@ __metadata:
     "@backstage/plugin-catalog-react": "npm:^1.15.1"
     "@backstage/plugin-permission-react": "npm:^0.4.30"
     "@backstage/plugin-scaffolder-common": "npm:^1.5.9"
-    "@backstage/plugin-scaffolder-react": "npm:^1.14.3"
+    "@backstage/plugin-scaffolder-react": "npm:^1.14.4"
     "@backstage/types": "npm:^1.2.1"
     "@codemirror/language": "npm:^6.0.0"
     "@codemirror/legacy-modes": "npm:^6.1.0"
@@ -7549,7 +7549,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10/3f86cd22b8c0075a29e98c91507b9e17a2d4ec14bad1c4d5d40bb7943b22b2afa69d86c6348789a71e77369dfbbd0d6d4bfb7085e051e5752db3a79f92effeae
+  checksum: 10/7f91e68519a85bec2db6255132806688eeec915bf82b608fa394a6fb272b2bce74a3de306f039e8ac46a048bcd2bdb5eb4f7e6575855506a8967854ff513428d
   languageName: node
   linkType: hard
 
@@ -7867,9 +7867,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-techdocs@npm:^1.12.1":
-  version: 1.12.1
-  resolution: "@backstage/plugin-techdocs@npm:1.12.1"
+"@backstage/plugin-techdocs@npm:^1.12.2":
+  version: 1.12.2
+  resolution: "@backstage/plugin-techdocs@npm:1.12.2"
   dependencies:
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/config": "npm:^1.3.2"
@@ -7906,7 +7906,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10/e57fb6df39d9f53f8ee9b0ff9c95151e198b36e2de9e7f4dcf2ffc38474767ed8fc8534a8f7db1f0df9967780434cd541c47fe812d4f5228a9a8021b0b1d7d3b
+  checksum: 10/6b78b3d7c3409a4ac1a61b28fee236c0cfdd33ce21cde06c6fe45f891707de7de7321f29ac8e1362afdba4ef62c0ef856ea68e3934d3cedee312955cea467f0b
   languageName: node
   linkType: hard
 
@@ -9894,7 +9894,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@internal/aws@workspace:."
   dependencies:
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/e2e-test-utils": "npm:^0.1.1"
     "@backstage/repo-tools": "npm:^0.12.1"
     "@changesets/cli": "npm:^2.27.1"
@@ -19027,7 +19027,7 @@ __metadata:
     "@backstage-community/plugin-github-actions": "npm:^0.6.23"
     "@backstage/app-defaults": "npm:^1.5.16"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/core-app-api": "npm:^1.15.4"
     "@backstage/core-components": "npm:^0.16.3"
     "@backstage/core-plugin-api": "npm:^1.10.3"
@@ -19041,10 +19041,10 @@ __metadata:
     "@backstage/plugin-kubernetes": "npm:^0.12.3"
     "@backstage/plugin-org": "npm:^0.6.35"
     "@backstage/plugin-permission-react": "npm:^0.4.30"
-    "@backstage/plugin-scaffolder": "npm:^1.27.4"
+    "@backstage/plugin-scaffolder": "npm:^1.27.5"
     "@backstage/plugin-search": "npm:^1.4.22"
     "@backstage/plugin-search-react": "npm:^1.8.5"
-    "@backstage/plugin-techdocs": "npm:^1.12.1"
+    "@backstage/plugin-techdocs": "npm:^1.12.2"
     "@backstage/plugin-techdocs-module-addons-contrib": "npm:^1.1.20"
     "@backstage/plugin-techdocs-react": "npm:^1.2.13"
     "@backstage/plugin-user-settings": "npm:^0.8.18"
@@ -19844,12 +19844,12 @@ __metadata:
     "@alithya-oss/plugin-cost-insights-aws-backend": "workspace:^"
     "@alithya-oss/plugin-scaffolder-backend-module-aws-apps": "workspace:^"
     "@alithya-oss/plugin-scaffolder-backend-module-aws-core": "workspace:^"
-    "@backstage/backend-common": "npm:^0.24.1"
+    "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-tasks": "npm:^0.6.1"
     "@backstage/catalog-model": "npm:^1.7.3"
-    "@backstage/cli": "npm:^0.29.5"
+    "@backstage/cli": "npm:^0.29.6"
     "@backstage/config": "npm:^1.3.2"
     "@backstage/plugin-app-backend": "npm:^0.4.4"
     "@backstage/plugin-auth-backend": "npm:^0.24.2"

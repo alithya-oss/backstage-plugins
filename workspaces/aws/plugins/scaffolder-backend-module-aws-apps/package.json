@@ -58,8 +58,8 @@
     "yaml": "^2.5.0"
   },
   "devDependencies": {
-    "@backstage/backend-common": "^0.24.1",
-    "@backstage/cli": "^0.29.5",
+    "@backstage/backend-common": "^0.25.0",
+    "@backstage/cli": "^0.29.6",
     "@types/lodash": "4.17.7"
   },
   "files": [
