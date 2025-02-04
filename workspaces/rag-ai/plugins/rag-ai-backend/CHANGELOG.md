@@ -1,5 +1,13 @@
 # @alithya-oss/plugin-rag-ai-backend
 
+## 2.0.5
+
+### Patch Changes
+
+- 1cc277e: Bump Backstage framework version 1.35.1
+- Updated dependencies [1cc277e]
+  - @alithya-oss/plugin-rag-ai-node@0.2.5
+
 ## 2.0.4
 
 ### Patch Changes
