@@ -1,5 +1,11 @@
 # @aws/plugin-aws-apps-common-for-backstage
 
+## 0.4.5
+
+### Patch Changes
+
+- 2b44cae: Moved package from @alithya-oss/plugin to @alithya-oss/backstage-plugin-\*
+
 ## 0.4.4
 
 ### Patch Changes
