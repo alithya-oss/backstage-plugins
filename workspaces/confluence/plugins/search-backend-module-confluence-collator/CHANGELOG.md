@@ -1,5 +1,11 @@
 # @alithya-oss/backstage-plugin-search-backend-module-confluence-collator
 
+## 0.1.3
+
+### Patch Changes
+
+- 2b44cae: Moved packages from @alithya-oss/plugin-_ to @alithya-oss/backstage-plugin-_
+
 ## 0.1.2
 
 ### Patch Changes
