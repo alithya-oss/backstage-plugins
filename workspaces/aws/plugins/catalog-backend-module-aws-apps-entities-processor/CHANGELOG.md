@@ -1,5 +1,13 @@
 # @alithya-oss/backstage-plugin-catalog-backend-module-aws-apps-entities-processor
 
+## 0.3.10
+
+### Patch Changes
+
+- 2b44cae: Moved package from @alithya-oss/plugin to @alithya-oss/backstage-plugin-\*
+- Updated dependencies [2b44cae]
+  - @alithya-oss/backstage-plugin-aws-apps-common@0.4.5
+
 ## 0.3.9
 
 ### Patch Changes

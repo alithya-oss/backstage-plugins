@@ -1,5 +1,13 @@
 # @alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps
 
+## 0.3.10
+
+### Patch Changes
+
+- 2b44cae: Moved package from @alithya-oss/plugin to @alithya-oss/backstage-plugin-\*
+- Updated dependencies [2b44cae]
+  - @alithya-oss/backstage-plugin-aws-apps-backend@0.4.5
+
 ## 0.3.9
 
 ### Patch Changes

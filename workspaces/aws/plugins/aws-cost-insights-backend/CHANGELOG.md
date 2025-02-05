@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.1.8
+
+### Patch Changes
+
+- 2b44cae: Moved package from @alithya-oss/plugin to @alithya-oss/backstage-plugin-\*
+- Updated dependencies [2b44cae]
+  - @alithya-oss/backstage-plugin-cost-insights-aws-common@0.1.7
+  - @alithya-oss/backstage-plugin-aws-core-common@0.5.5
+
 ## 0.1.7
 
 ### Patch Changes

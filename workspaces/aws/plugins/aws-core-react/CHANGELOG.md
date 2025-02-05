@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.5.5
+
+### Patch Changes
+
+- 2b44cae: Moved package from @alithya-oss/plugin to @alithya-oss/backstage-plugin-\*
+
 ## 0.5.4
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.1.5
+
+### Patch Changes
+
+- 2b44cae: Moved package from @alithya-oss/plugin to @alithya-oss/backstage-plugin-\*
+- Updated dependencies [2b44cae]
+  - @alithya-oss/backstage-plugin-aws-core-common@0.5.5
+
 ## 0.1.4
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.1.8
+
+### Patch Changes
+
+- 2b44cae: Moved package from @alithya-oss/plugin to @alithya-oss/backstage-plugin-\*
+- Updated dependencies [2b44cae]
+  - @alithya-oss/backstage-plugin-amazon-ecs-common@0.2.7
+  - @alithya-oss/backstage-plugin-aws-core-common@0.5.5
+  - @alithya-oss/backstage-plugin-aws-core-react@0.5.5
+
 ## 0.1.7
 
 ### Patch Changes
