@@ -19,11 +19,11 @@
     "lint": "backstage-cli package lint"
   },
   "dependencies": {
-    "@alithya-oss/plugin-amazon-ecs": "workspace:^",
-    "@alithya-oss/plugin-aws-apps": "workspace:^",
-    "@alithya-oss/plugin-aws-codebuild": "workspace:^",
-    "@alithya-oss/plugin-aws-codepipeline": "workspace:^",
-    "@alithya-oss/plugin-cost-insights-aws": "workspace:^",
+    "@alithya-oss/backstage-plugin-amazon-ecs": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-apps": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-codebuild": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-codepipeline": "workspace:^",
+    "@alithya-oss/backstage-plugin-cost-insights-aws": "workspace:^",
     "@aws/plugin-aws-apps-demo-for-backstage": "^0.3.1",
     "@backstage-community/plugin-cost-insights": "^0.12.27",
     "@backstage-community/plugin-github-actions": "^0.6.23",

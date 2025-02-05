@@ -20,7 +20,7 @@ import {
   SourceBasedRetrievalRouter,
   VectorEmbeddingsRetriever,
 } from './retrieval';
-import { RoadieVectorStore } from '@alithya-oss/plugin-rag-ai-node';
+import { RoadieVectorStore } from '@alithya-oss/backstage-plugin-rag-ai-node';
 import {
   AuthService,
   LoggerService,

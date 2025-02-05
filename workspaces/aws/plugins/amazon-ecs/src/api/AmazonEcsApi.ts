@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-import { ServicesResponse } from '@alithya-oss/plugin-amazon-ecs-common';
+import { ServicesResponse } from '@alithya-oss/backstage-plugin-amazon-ecs-common';
 import { createApiRef } from '@backstage/core-plugin-api';
 import type { CompoundEntityRef } from '@backstage/catalog-model';
 

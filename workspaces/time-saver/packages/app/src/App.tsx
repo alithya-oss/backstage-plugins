@@ -37,7 +37,7 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 
-// import { TimeSaverPage } from '@alithya-oss/plugin-time-saver';
+// import { TimeSaverPage } from '@alithya-oss/backstage-plugin-time-saver';
 
 const app = createApp({
   apis,

@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-aws-codepipeline-common",
+  "name": "@alithya-oss/backstage-plugin-aws-codepipeline-common",
   "description": "Common functionality for the aws-codepipeline-plugin-for-backstage plugin",
   "version": "0.3.6",
   "repository": {
@@ -20,9 +20,9 @@
     "role": "common-library",
     "pluginId": "aws-codepipeline",
     "pluginPackages": [
-      "@alithya-oss/plugin-aws-codepipeline",
-      "@alithya-oss/plugin-aws-codepipeline-backend",
-      "@alithya-oss/plugin-aws-codepipeline-common"
+      "@alithya-oss/backstage-plugin-aws-codepipeline",
+      "@alithya-oss/backstage-plugin-aws-codepipeline-backend",
+      "@alithya-oss/backstage-plugin-aws-codepipeline-common"
     ]
   },
   "sideEffects": false,

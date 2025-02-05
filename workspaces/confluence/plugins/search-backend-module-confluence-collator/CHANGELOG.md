@@ -1,4 +1,4 @@
-# @alithya-oss/plugin-search-backend-module-confluence-collator
+# @alithya-oss/backstage-plugin-search-backend-module-confluence-collator
 
 ## 0.1.2
 

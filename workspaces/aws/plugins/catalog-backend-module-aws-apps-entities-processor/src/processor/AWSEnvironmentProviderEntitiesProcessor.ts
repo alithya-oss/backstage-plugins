@@ -17,7 +17,7 @@ import { LocationSpec } from '@backstage/plugin-catalog-common';
 import {
   AWSEnvironmentProviderEntityV1,
   awsEnvironmentProviderEntityV1Validator,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 
 /** @public */
 export class AWSEnvironmentProviderEntitiesProcessor

@@ -12,9 +12,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alithya-oss/plugin-confluence@workspace:^, @alithya-oss/plugin-confluence@workspace:plugins/confluence":
+"@alithya-oss/backstage-plugin-confluence@workspace:^, @alithya-oss/backstage-plugin-confluence@workspace:plugins/confluence":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-confluence@workspace:plugins/confluence"
+  resolution: "@alithya-oss/backstage-plugin-confluence@workspace:plugins/confluence"
   dependencies:
     "@backstage/cli": "npm:^0.29.6"
     "@backstage/core-app-api": "npm:^1.15.4"
@@ -46,9 +46,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-search-backend-module-confluence-collator@workspace:^, @alithya-oss/plugin-search-backend-module-confluence-collator@workspace:plugins/search-backend-module-confluence-collator":
+"@alithya-oss/backstage-plugin-search-backend-module-confluence-collator@workspace:^, @alithya-oss/backstage-plugin-search-backend-module-confluence-collator@workspace:plugins/search-backend-module-confluence-collator":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-search-backend-module-confluence-collator@workspace:plugins/search-backend-module-confluence-collator"
+  resolution: "@alithya-oss/backstage-plugin-search-backend-module-confluence-collator@workspace:plugins/search-backend-module-confluence-collator"
   dependencies:
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
@@ -13199,7 +13199,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "app@workspace:packages/app"
   dependencies:
-    "@alithya-oss/plugin-confluence": "workspace:^"
+    "@alithya-oss/backstage-plugin-confluence": "workspace:^"
     "@backstage/app-defaults": "npm:^1.5.16"
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/cli": "npm:^0.29.6"
@@ -13870,7 +13870,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "backend@workspace:packages/backend"
   dependencies:
-    "@alithya-oss/plugin-search-backend-module-confluence-collator": "workspace:^"
+    "@alithya-oss/backstage-plugin-search-backend-module-confluence-collator": "workspace:^"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-tasks": "npm:^0.6.1"

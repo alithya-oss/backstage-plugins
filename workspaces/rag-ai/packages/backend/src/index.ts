@@ -48,8 +48,10 @@ backend.add(import('@backstage/plugin-search-backend-module-catalog'));
 backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 
 // rag-ai plugin
-backend.add(import('@alithya-oss/plugin-rag-ai-backend'));
-backend.add(import('@alithya-oss/plugin-rag-ai-backend-module-bedrock'));
-// backend.add(import('@alithya-oss/plugin-rag-ai-backend-module-openai'));
+backend.add(import('@alithya-oss/backstage-plugin-rag-ai-backend'));
+backend.add(
+  import('@alithya-oss/backstage-plugin-rag-ai-backend-module-bedrock'),
+);
+// backend.add(import('@alithya-oss/backstage-plugin-rag-ai-backend-module-openai'));
 
 backend.start();

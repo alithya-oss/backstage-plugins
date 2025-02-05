@@ -22,7 +22,7 @@ import { sleep } from '../../helpers/util';
 import {
   getGitCredentailsSecret,
   getRepoInfo,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 
 const DeleteEnvironmentPanel = ({
   input: { entity, catalogApi, api },

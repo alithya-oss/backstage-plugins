@@ -19,7 +19,7 @@ import {
   DiscoveryService,
 } from '@backstage/backend-plugin-api';
 import { CatalogApi } from '@backstage/catalog-client';
-import { RoadieVectorStore } from '@alithya-oss/plugin-rag-ai-node';
+import { RoadieVectorStore } from '@alithya-oss/backstage-plugin-rag-ai-node';
 import { Entity } from '@backstage/catalog-model';
 
 /** @public */

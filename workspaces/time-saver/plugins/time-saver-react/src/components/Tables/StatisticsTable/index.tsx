@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TableTemplate } from '../TableTemplate';
 import { useStatistics } from '../../../hooks';
-import { isTimeSaverApiError } from '@alithya-oss/plugin-time-saver-common';
+import { isTimeSaverApiError } from '@alithya-oss/backstage-plugin-time-saver-common';
 import { GridColDef, GridSortModel } from '@mui/x-data-grid';
 import { CircularProgress } from '@material-ui/core';
 

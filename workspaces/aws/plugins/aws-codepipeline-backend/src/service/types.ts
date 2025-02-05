@@ -15,7 +15,7 @@ import { CompoundEntityRef } from '@backstage/catalog-model';
 import {
   PipelineExecutionsResponse,
   PipelineStateResponse,
-} from '@alithya-oss/plugin-aws-codepipeline-common';
+} from '@alithya-oss/backstage-plugin-aws-codepipeline-common';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 
 /** @public */

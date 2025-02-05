@@ -20,7 +20,7 @@ import {
   EmbeddingsSource,
   EntityFilterShape,
   RoadieVectorStore,
-} from '@alithya-oss/plugin-rag-ai-node';
+} from '@alithya-oss/backstage-plugin-rag-ai-node';
 import { LoggerService } from '@backstage/backend-plugin-api';
 
 /** @public */

@@ -17,7 +17,7 @@ import {
   AWSECSAppDeploymentEnvironment,
   getRepoInfo,
   getRepoUrl,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 

@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-time-saver",
+  "name": "@alithya-oss/backstage-plugin-time-saver",
   "author": "tduniec <tomekduniec@gmail.com>",
   "version": "1.4.4",
   "main": "src/index.ts",
@@ -19,9 +19,9 @@
     "role": "frontend-plugin",
     "pluginId": "time-saver",
     "pluginPackages": [
-      "@alithya-oss/plugin-time-saver",
-      "@alithya-oss/plugin-time-saver-backend",
-      "@alithya-oss/plugin-time-saver-react"
+      "@alithya-oss/backstage-plugin-time-saver",
+      "@alithya-oss/backstage-plugin-time-saver-backend",
+      "@alithya-oss/backstage-plugin-time-saver-react"
     ]
   },
   "sideEffects": false,
@@ -35,8 +35,8 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-time-saver-common": "workspace:^",
-    "@alithya-oss/plugin-time-saver-react": "workspace:^",
+    "@alithya-oss/backstage-plugin-time-saver-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-time-saver-react": "workspace:^",
     "@backstage/core-components": "^0.16.3",
     "@backstage/core-plugin-api": "^1.10.3",
     "@backstage/errors": "^1.2.7",

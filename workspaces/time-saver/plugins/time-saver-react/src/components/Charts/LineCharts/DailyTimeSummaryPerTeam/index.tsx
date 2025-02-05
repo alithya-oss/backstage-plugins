@@ -1,7 +1,7 @@
 import React from 'react';
 import LineChartTemplate from '../LineChartTemplate';
 import { useDailyTimeSummaryPerTeam } from '../../../../hooks';
-import { isTimeSaverApiError } from '@alithya-oss/plugin-time-saver-common';
+import { isTimeSaverApiError } from '@alithya-oss/backstage-plugin-time-saver-common';
 import {
   getLineChartOptions,
   buildTimeSummaryPerTeamDataset,

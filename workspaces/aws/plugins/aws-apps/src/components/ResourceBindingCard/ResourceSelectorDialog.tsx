@@ -4,7 +4,7 @@
 import {
   AssociatedResources,
   ResourceBinding,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { CatalogApi } from '@backstage/plugin-catalog-react';
 import {
   Button,

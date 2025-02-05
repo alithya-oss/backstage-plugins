@@ -2,10 +2,10 @@
 
 ## Unused dependencies (2)
 
-| Name                                  | Location     | Severity |
-| :------------------------------------ | :----------- | :------- |
-| @alithya-oss/plugin-time-saver-common | package.json | error    |
-| @backstage/errors                     | package.json | error    |
+| Name                                            | Location     | Severity |
+| :---------------------------------------------- | :----------- | :------- |
+| @alithya-oss/backstage-plugin-time-saver-common | package.json | error    |
+| @backstage/errors                               | package.json | error    |
 
 ## Unused devDependencies (2)
 

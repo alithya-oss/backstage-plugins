@@ -24,7 +24,7 @@ import { ConfigReader } from '@backstage/config';
 import { mockClient } from 'aws-sdk-client-mock';
 import { getVoidLogger } from '@backstage/backend-common';
 import { DefaultAmazonEcsService } from './DefaultAmazonEcsService';
-import { AwsResourceLocator } from '@alithya-oss/plugin-aws-core-node';
+import { AwsResourceLocator } from '@alithya-oss/backstage-plugin-aws-core-node';
 import {
   DefaultAwsCredentialsManager,
   AwsCredentialProvider,
@@ -36,7 +36,7 @@ import {
   mockEcsCluster,
   mockEcsService,
   mockEcsTask,
-} from '@alithya-oss/plugin-amazon-ecs-common';
+} from '@alithya-oss/backstage-plugin-amazon-ecs-common';
 import { mockServices } from '@backstage/backend-test-utils';
 
 function getMockCredentialProvider(): Promise<AwsCredentialProvider> {

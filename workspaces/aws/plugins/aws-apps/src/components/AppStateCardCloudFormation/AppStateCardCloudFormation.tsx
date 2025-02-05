@@ -25,7 +25,7 @@ import {
   AWSServerlessAppDeploymentEnvironment,
   CloudFormationStack,
   getGitCredentailsSecret,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 
 type stackEvent = {
   action: string | undefined;

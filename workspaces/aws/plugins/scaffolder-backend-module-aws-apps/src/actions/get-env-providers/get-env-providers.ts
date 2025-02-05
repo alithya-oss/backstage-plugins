@@ -10,7 +10,7 @@ import {
 } from '@backstage/catalog-model';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import yaml from 'yaml';
-import { getAWScreds } from '@alithya-oss/plugin-aws-apps-backend';
+import { getAWScreds } from '@alithya-oss/backstage-plugin-aws-apps-backend';
 import { getSSMParameterValue } from '../../helpers/action-context';
 import { EnvironmentProvider } from '../../types';
 

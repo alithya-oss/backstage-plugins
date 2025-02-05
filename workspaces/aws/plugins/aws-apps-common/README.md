@@ -9,5 +9,5 @@ Shared isomorphic code for the aws-apps plugins.
 
 ## Links
 
-- [Frontend part of aws-apps](https://www.npmjs.com/package/@alithya-oss/plugin-aws-apps)
-- [Backend part of aws-apps](https://www.npmjs.com/package/@alithya-oss/plugin-aws-apps-backend)
+- [Frontend part of aws-apps](https://www.npmjs.com/package/@alithya-oss/backstage-plugin-aws-apps)
+- [Backend part of aws-apps](https://www.npmjs.com/package/@alithya-oss/backstage-plugin-aws-apps-backend)

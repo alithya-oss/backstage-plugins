@@ -21,8 +21,8 @@
     "build-image": "docker build ../.. -f Dockerfile --tag backstage"
   },
   "dependencies": {
-    "@alithya-oss/plugin-catalog-backend-module-time-saver-processor": "workspace:^",
-    "@alithya-oss/plugin-time-saver-backend": "workspace:^",
+    "@alithya-oss/backstage-plugin-catalog-backend-module-time-saver-processor": "workspace:^",
+    "@alithya-oss/backstage-plugin-time-saver-backend": "workspace:^",
     "@backstage/backend-common": "^0.25.0",
     "@backstage/backend-defaults": "^0.7.0",
     "@backstage/backend-tasks": "^0.6.1",

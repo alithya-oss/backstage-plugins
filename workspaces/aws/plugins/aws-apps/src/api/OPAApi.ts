@@ -23,11 +23,11 @@ import {
   BackendParams,
   BindResourceParams,
   AWSEnvironmentProviderRecord,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { createApiRef } from '@backstage/core-plugin-api';
 import { ContainerDetailsType } from '../types';
 import { InvokeCommandOutput } from '@aws-sdk/client-lambda';
-import { IRepositoryInfo } from '@alithya-oss/plugin-aws-apps-common';
+import { IRepositoryInfo } from '@alithya-oss/backstage-plugin-aws-apps-common';
 
 export const opaApiRef = createApiRef<OPAApi>({
   id: 'plugin.opa.app',

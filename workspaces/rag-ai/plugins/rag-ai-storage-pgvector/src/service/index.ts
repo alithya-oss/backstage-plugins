@@ -19,7 +19,7 @@ import {
   RootConfigService,
 } from '@backstage/backend-plugin-api';
 import { applyDatabaseMigrations } from '../database/migrations';
-import { RoadieVectorStore } from '@alithya-oss/plugin-rag-ai-node';
+import { RoadieVectorStore } from '@alithya-oss/backstage-plugin-rag-ai-node';
 import { RoadiePgVectorStore } from './RoadiePgVectorStore';
 
 /** @public */

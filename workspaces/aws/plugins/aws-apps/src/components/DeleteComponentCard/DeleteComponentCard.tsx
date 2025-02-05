@@ -10,7 +10,7 @@ import {
   GenericAWSEnvironment,
   getGitCredentailsSecret,
   IRepositoryInfo,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { Entity } from '@backstage/catalog-model';
 import { EmptyState, InfoCard } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';

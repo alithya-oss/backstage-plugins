@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-time-saver-react",
+  "name": "@alithya-oss/backstage-plugin-time-saver-react",
   "author": "Javier Prieto <javier.prieto@alithya.com>",
   "description": "Web library for the time saver plugin",
   "version": "0.1.4",
@@ -20,9 +20,9 @@
     "role": "web-library",
     "pluginId": "time-saver",
     "pluginPackages": [
-      "@alithya-oss/plugin-time-saver",
-      "@alithya-oss/plugin-time-saver-backend",
-      "@alithya-oss/plugin-time-saver-react"
+      "@alithya-oss/backstage-plugin-time-saver",
+      "@alithya-oss/backstage-plugin-time-saver-backend",
+      "@alithya-oss/backstage-plugin-time-saver-react"
     ]
   },
   "sideEffects": false,
@@ -36,7 +36,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-time-saver-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-time-saver-common": "workspace:^",
     "@backstage/core-plugin-api": "^1.10.3",
     "@backstage/errors": "^1.2.7",
     "@faker-js/faker": "^9.0.3",

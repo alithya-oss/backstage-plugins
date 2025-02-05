@@ -12,7 +12,7 @@
  */
 
 import { CompoundEntityRef } from '@backstage/catalog-model';
-import { ServicesResponse } from '@alithya-oss/plugin-amazon-ecs-common';
+import { ServicesResponse } from '@alithya-oss/backstage-plugin-amazon-ecs-common';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 
 /** @public */

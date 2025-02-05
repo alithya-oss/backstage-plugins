@@ -16,11 +16,11 @@ import { CatalogApi } from '@backstage/catalog-client';
 import {
   AwsResourceLocator,
   AwsResourceLocatorFactory,
-} from '@alithya-oss/plugin-aws-core-node';
+} from '@alithya-oss/backstage-plugin-aws-core-node';
 import {
   AWS_SDK_CUSTOM_USER_AGENT,
   getOneOfEntityAnnotations,
-} from '@alithya-oss/plugin-aws-core-common';
+} from '@alithya-oss/backstage-plugin-aws-core-common';
 import {
   AwsCredentialsManager,
   DefaultAwsCredentialsManager,
@@ -43,7 +43,7 @@ import {
   AWS_CODEPIPELINE_TAGS_ANNOTATION,
   PipelineExecutionsResponse,
   PipelineStateResponse,
-} from '@alithya-oss/plugin-aws-codepipeline-common';
+} from '@alithya-oss/backstage-plugin-aws-codepipeline-common';
 import {
   AuthService,
   BackstageCredentials,

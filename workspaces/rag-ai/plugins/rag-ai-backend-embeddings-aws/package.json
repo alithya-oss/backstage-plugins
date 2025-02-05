@@ -1,6 +1,6 @@
 {
-  "name": "@alithya-oss/plugin-rag-ai-backend-embeddings-aws",
-  "description": "The AWS (Bedrock) backend module for the @alithya-oss/plugin-rag-ai plugin.",
+  "name": "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws",
+  "description": "The AWS (Bedrock) backend module for the @alithya-oss/backstage-plugin-rag-ai plugin.",
   "version": "1.0.6",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -14,12 +14,12 @@
     "role": "node-library",
     "pluginId": "rag-ai",
     "pluginPackages": [
-      "@alithya-oss/plugin-rag-ai",
-      "@alithya-oss/plugin-rag-ai-backend",
-      "@alithya-oss/plugin-rag-ai-backend-embeddings-aws",
-      "@alithya-oss/plugin-rag-ai-backend-embeddings-openai",
-      "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter",
-      "@alithya-oss/plugin-rag-ai-node"
+      "@alithya-oss/backstage-plugin-rag-ai",
+      "@alithya-oss/backstage-plugin-rag-ai-backend",
+      "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws",
+      "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-openai",
+      "@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter",
+      "@alithya-oss/backstage-plugin-rag-ai-node"
     ]
   },
   "bugs": {
@@ -41,9 +41,9 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-rag-ai-backend": "workspace:^",
-    "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter": "workspace:^",
-    "@alithya-oss/plugin-rag-ai-node": "workspace:^",
+    "@alithya-oss/backstage-plugin-rag-ai-backend": "workspace:^",
+    "@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter": "workspace:^",
+    "@alithya-oss/backstage-plugin-rag-ai-node": "workspace:^",
     "@aws-sdk/client-bedrock-runtime": "^3.682.0",
     "@aws-sdk/types": "^3.679.0",
     "@backstage/backend-common": "^0.25.0",

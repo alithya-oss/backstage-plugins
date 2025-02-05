@@ -14,7 +14,7 @@ import { CatalogIcon, Content, Header, Page } from '@backstage/core-components';
 import {
   ConfluenceSearchResultListItem,
   ConfluenceSearchIcon,
-} from '@alithya-oss/plugin-confluence';
+} from '@alithya-oss/backstage-plugin-confluence';
 
 const useStyles = makeStyles((theme: Theme) => ({
   bar: {

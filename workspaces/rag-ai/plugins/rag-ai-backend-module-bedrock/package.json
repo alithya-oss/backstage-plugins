@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-rag-ai-backend-module-bedrock",
+  "name": "@alithya-oss/backstage-plugin-rag-ai-backend-module-bedrock",
   "description": "The bedrock backend module for the rag-ai plugin.",
   "version": "0.1.7",
   "main": "src/index.ts",
@@ -18,7 +18,7 @@
   "backstage": {
     "role": "backend-plugin-module",
     "pluginId": "rag-ai",
-    "pluginPackage": "@alithya-oss/plugin-rag-ai-backend"
+    "pluginPackage": "@alithya-oss/backstage-plugin-rag-ai-backend"
   },
   "scripts": {
     "start": "backstage-cli package start",
@@ -30,10 +30,10 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-rag-ai-backend-embeddings-aws": "workspace:^",
-    "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter": "workspace:^",
-    "@alithya-oss/plugin-rag-ai-node": "workspace:^",
-    "@alithya-oss/plugin-rag-ai-storage-pgvector": "workspace:^",
+    "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws": "workspace:^",
+    "@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter": "workspace:^",
+    "@alithya-oss/backstage-plugin-rag-ai-node": "workspace:^",
+    "@alithya-oss/backstage-plugin-rag-ai-storage-pgvector": "workspace:^",
     "@backstage/backend-common": "^0.25.0",
     "@backstage/backend-plugin-api": "^1.1.1",
     "@backstage/catalog-client": "^1.9.1",

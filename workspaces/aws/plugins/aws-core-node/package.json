@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-aws-core-node",
+  "name": "@alithya-oss/backstage-plugin-aws-core-node",
   "description": "Node library for the AWS plugins for Backstage",
   "version": "0.1.4",
   "repository": {
@@ -29,7 +29,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-aws-core-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^",
     "@aws-sdk/client-config-service": "^3.731.1",
     "@aws-sdk/client-resource-explorer-2": "^3.731.1",
     "@aws-sdk/client-resource-groups-tagging-api": "^3.731.1",

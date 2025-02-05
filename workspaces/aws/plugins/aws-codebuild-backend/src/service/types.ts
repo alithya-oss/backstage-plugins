@@ -12,7 +12,7 @@
  */
 
 import { CompoundEntityRef } from '@backstage/catalog-model';
-import { ProjectsResponse } from '@alithya-oss/plugin-aws-codebuild-common';
+import { ProjectsResponse } from '@alithya-oss/backstage-plugin-aws-codebuild-common';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 
 /** @public */

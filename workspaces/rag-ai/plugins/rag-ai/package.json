@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-rag-ai",
+  "name": "@alithya-oss/backstage-plugin-rag-ai",
   "version": "1.2.6",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -18,12 +18,12 @@
     "role": "frontend-plugin",
     "pluginId": "rag-ai",
     "pluginPackages": [
-      "@alithya-oss/plugin-rag-ai",
-      "@alithya-oss/plugin-rag-ai-backend",
-      "@alithya-oss/plugin-rag-ai-backend-embeddings-aws",
-      "@alithya-oss/plugin-rag-ai-backend-embeddings-openai",
-      "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter",
-      "@alithya-oss/plugin-rag-ai-node"
+      "@alithya-oss/backstage-plugin-rag-ai",
+      "@alithya-oss/backstage-plugin-rag-ai-backend",
+      "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws",
+      "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-openai",
+      "@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter",
+      "@alithya-oss/backstage-plugin-rag-ai-node"
     ]
   },
   "sideEffects": false,

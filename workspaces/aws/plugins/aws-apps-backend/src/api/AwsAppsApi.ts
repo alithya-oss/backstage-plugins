@@ -107,7 +107,7 @@ import {
 } from '@aws-sdk/client-ssm';
 
 import { parse as parseArn } from '@aws-sdk/util-arn-parser';
-import { AWSServiceResources } from '@alithya-oss/plugin-aws-apps-common';
+import { AWSServiceResources } from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { LoggerService } from '@backstage/backend-plugin-api';
 
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';

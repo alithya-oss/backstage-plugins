@@ -2,12 +2,12 @@
 
 ## Unused dependencies (4)
 
-| Name                           | Location     | Severity |
-| :----------------------------- | :----------- | :------- |
-| @alithya-oss/plugin-time-saver | package.json | error    |
-| react-router                   | package.json | error    |
-| react-use                      | package.json | error    |
-| history                        | package.json | error    |
+| Name                                     | Location     | Severity |
+| :--------------------------------------- | :----------- | :------- |
+| @alithya-oss/backstage-plugin-time-saver | package.json | error    |
+| react-router                             | package.json | error    |
+| react-use                                | package.json | error    |
+| history                                  | package.json | error    |
 
 ## Unused devDependencies (4)
 

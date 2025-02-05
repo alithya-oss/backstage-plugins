@@ -5,7 +5,7 @@ import {
   isTimeSaverApiError,
   TimeSaverApiErrorResponse,
   TimeSummaryByTemplateName,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 
 /**
  * Retrieves time-saved per template from the backend.

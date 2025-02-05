@@ -16,7 +16,7 @@
 import { LoggerService } from '@backstage/backend-plugin-api';
 import { BaseLLM } from '@langchain/core/language_models/llms';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
-import { EmbeddingDoc } from '@alithya-oss/plugin-rag-ai-node';
+import { EmbeddingDoc } from '@alithya-oss/backstage-plugin-rag-ai-node';
 import { createPromptTemplates } from './prompts';
 
 /** @public */

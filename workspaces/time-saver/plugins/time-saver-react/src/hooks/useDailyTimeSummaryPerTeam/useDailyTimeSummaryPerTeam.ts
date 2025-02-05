@@ -3,7 +3,7 @@ import {
   isTimeSaverApiError,
   TimeSaverApiErrorResponse,
   TimeSummaryByTeamName,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 import { timeSaverApiRef } from '../../api/TimeSaverApi';
 import useAsync from 'react-use/esm/useAsync';
 

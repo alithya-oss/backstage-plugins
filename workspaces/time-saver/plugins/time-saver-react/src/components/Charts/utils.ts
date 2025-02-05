@@ -2,7 +2,7 @@ import {
   GroupSavingsDivision,
   TimeSummaryByTeamName,
   TimeSummaryByTemplateName,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 import { Theme } from '@material-ui/core';
 import { ChartOptions } from 'chart.js';
 import { getRandomColor } from '../utils';

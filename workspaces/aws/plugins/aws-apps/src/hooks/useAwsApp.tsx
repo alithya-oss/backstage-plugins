@@ -14,7 +14,7 @@ import {
 import {
   AWSEnvironmentEntityV1,
   AWSEnvironmentProviderEntityV1,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 import {
   AWSComponent,
   AWSComponentType,
@@ -29,7 +29,7 @@ import {
   GenericAWSEnvironment,
   IRepositoryInfo,
   getRepoInfo,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 import {
   ProviderType,
   ExtraStackDeployStatus,

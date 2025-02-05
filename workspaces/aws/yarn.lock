@@ -12,13 +12,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alithya-oss/plugin-amazon-ecs-backend@workspace:^, @alithya-oss/plugin-amazon-ecs-backend@workspace:plugins/amazon-ecs-backend":
+"@alithya-oss/backstage-plugin-amazon-ecs-backend@workspace:^, @alithya-oss/backstage-plugin-amazon-ecs-backend@workspace:plugins/amazon-ecs-backend":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-amazon-ecs-backend@workspace:plugins/amazon-ecs-backend"
+  resolution: "@alithya-oss/backstage-plugin-amazon-ecs-backend@workspace:plugins/amazon-ecs-backend"
   dependencies:
-    "@alithya-oss/plugin-amazon-ecs-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-node": "workspace:^"
+    "@alithya-oss/backstage-plugin-amazon-ecs-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-node": "workspace:^"
     "@aws-sdk/client-ecs": "npm:^3.731.1"
     "@aws-sdk/middleware-sdk-sts": "npm:^3.731.0"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
@@ -48,9 +48,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-amazon-ecs-common@workspace:^, @alithya-oss/plugin-amazon-ecs-common@workspace:plugins/amazon-ecs-common":
+"@alithya-oss/backstage-plugin-amazon-ecs-common@workspace:^, @alithya-oss/backstage-plugin-amazon-ecs-common@workspace:plugins/amazon-ecs-common":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-amazon-ecs-common@workspace:plugins/amazon-ecs-common"
+  resolution: "@alithya-oss/backstage-plugin-amazon-ecs-common@workspace:plugins/amazon-ecs-common"
   dependencies:
     "@aws-sdk/client-ecs": "npm:^3.731.1"
     "@backstage/catalog-model": "npm:^1.7.3"
@@ -58,13 +58,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-amazon-ecs@workspace:^, @alithya-oss/plugin-amazon-ecs@workspace:plugins/amazon-ecs":
+"@alithya-oss/backstage-plugin-amazon-ecs@workspace:^, @alithya-oss/backstage-plugin-amazon-ecs@workspace:plugins/amazon-ecs":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-amazon-ecs@workspace:plugins/amazon-ecs"
+  resolution: "@alithya-oss/backstage-plugin-amazon-ecs@workspace:plugins/amazon-ecs"
   dependencies:
-    "@alithya-oss/plugin-amazon-ecs-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-react": "workspace:^"
+    "@alithya-oss/backstage-plugin-amazon-ecs-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-react": "workspace:^"
     "@aws-sdk/client-ecs": "npm:^3.731.1"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
     "@backstage/catalog-model": "npm:^1.7.3"
@@ -95,11 +95,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-apps-backend@workspace:^, @alithya-oss/plugin-aws-apps-backend@workspace:plugins/aws-apps-backend":
+"@alithya-oss/backstage-plugin-aws-apps-backend@workspace:^, @alithya-oss/backstage-plugin-aws-apps-backend@workspace:plugins/aws-apps-backend":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-aws-apps-backend@workspace:plugins/aws-apps-backend"
+  resolution: "@alithya-oss/backstage-plugin-aws-apps-backend@workspace:plugins/aws-apps-backend"
   dependencies:
-    "@alithya-oss/plugin-aws-apps-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^"
     "@aws-sdk/client-cloudformation": "npm:^3.731.1"
     "@aws-sdk/client-cloudwatch-logs": "npm:^3.731.1"
     "@aws-sdk/client-dynamodb": "npm:^3.731.1"
@@ -146,9 +146,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-apps-common@workspace:^, @alithya-oss/plugin-aws-apps-common@workspace:plugins/aws-apps-common":
+"@alithya-oss/backstage-plugin-aws-apps-common@workspace:^, @alithya-oss/backstage-plugin-aws-apps-common@workspace:plugins/aws-apps-common":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-aws-apps-common@workspace:plugins/aws-apps-common"
+  resolution: "@alithya-oss/backstage-plugin-aws-apps-common@workspace:plugins/aws-apps-common"
   dependencies:
     "@aws-sdk/client-cloudformation": "npm:^3.731.1"
     "@backstage/catalog-model": "npm:^1.7.3"
@@ -158,11 +158,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-apps@workspace:^, @alithya-oss/plugin-aws-apps@workspace:plugins/aws-apps":
+"@alithya-oss/backstage-plugin-aws-apps@workspace:^, @alithya-oss/backstage-plugin-aws-apps@workspace:plugins/aws-apps":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-aws-apps@workspace:plugins/aws-apps"
+  resolution: "@alithya-oss/backstage-plugin-aws-apps@workspace:plugins/aws-apps"
   dependencies:
-    "@alithya-oss/plugin-aws-apps-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^"
     "@aws-sdk/client-cloudformation": "npm:^3.731.1"
     "@aws-sdk/client-cloudwatch-logs": "npm:^3.731.1"
     "@aws-sdk/client-dynamodb": "npm:^3.731.1"
@@ -221,13 +221,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-codebuild-backend@workspace:^, @alithya-oss/plugin-aws-codebuild-backend@workspace:plugins/aws-codebuild-backend":
+"@alithya-oss/backstage-plugin-aws-codebuild-backend@workspace:^, @alithya-oss/backstage-plugin-aws-codebuild-backend@workspace:plugins/aws-codebuild-backend":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-aws-codebuild-backend@workspace:plugins/aws-codebuild-backend"
+  resolution: "@alithya-oss/backstage-plugin-aws-codebuild-backend@workspace:plugins/aws-codebuild-backend"
   dependencies:
-    "@alithya-oss/plugin-aws-codebuild-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-node": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-codebuild-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-node": "workspace:^"
     "@aws-sdk/client-codebuild": "npm:^3.731.1"
     "@aws-sdk/middleware-sdk-sts": "npm:^3.731.0"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
@@ -257,9 +257,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-codebuild-common@workspace:^, @alithya-oss/plugin-aws-codebuild-common@workspace:plugins/aws-codebuild-common":
+"@alithya-oss/backstage-plugin-aws-codebuild-common@workspace:^, @alithya-oss/backstage-plugin-aws-codebuild-common@workspace:plugins/aws-codebuild-common":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-aws-codebuild-common@workspace:plugins/aws-codebuild-common"
+  resolution: "@alithya-oss/backstage-plugin-aws-codebuild-common@workspace:plugins/aws-codebuild-common"
   dependencies:
     "@aws-sdk/client-codebuild": "npm:^3.731.1"
     "@backstage/catalog-model": "npm:^1.7.3"
@@ -267,13 +267,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-codebuild@workspace:^, @alithya-oss/plugin-aws-codebuild@workspace:plugins/aws-codebuild":
+"@alithya-oss/backstage-plugin-aws-codebuild@workspace:^, @alithya-oss/backstage-plugin-aws-codebuild@workspace:plugins/aws-codebuild":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-aws-codebuild@workspace:plugins/aws-codebuild"
+  resolution: "@alithya-oss/backstage-plugin-aws-codebuild@workspace:plugins/aws-codebuild"
   dependencies:
-    "@alithya-oss/plugin-aws-codebuild-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-react": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-codebuild-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-react": "workspace:^"
     "@aws-sdk/client-codebuild": "npm:^3.731.1"
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/cli": "npm:^0.29.6"
@@ -303,13 +303,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-codepipeline-backend@workspace:^, @alithya-oss/plugin-aws-codepipeline-backend@workspace:plugins/aws-codepipeline-backend":
+"@alithya-oss/backstage-plugin-aws-codepipeline-backend@workspace:^, @alithya-oss/backstage-plugin-aws-codepipeline-backend@workspace:plugins/aws-codepipeline-backend":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-aws-codepipeline-backend@workspace:plugins/aws-codepipeline-backend"
+  resolution: "@alithya-oss/backstage-plugin-aws-codepipeline-backend@workspace:plugins/aws-codepipeline-backend"
   dependencies:
-    "@alithya-oss/plugin-aws-codepipeline-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-node": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-codepipeline-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-node": "workspace:^"
     "@aws-sdk/client-codepipeline": "npm:^3.731.1"
     "@aws-sdk/middleware-sdk-sts": "npm:^3.731.0"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
@@ -339,9 +339,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-codepipeline-common@workspace:^, @alithya-oss/plugin-aws-codepipeline-common@workspace:plugins/aws-codepipeline-common":
+"@alithya-oss/backstage-plugin-aws-codepipeline-common@workspace:^, @alithya-oss/backstage-plugin-aws-codepipeline-common@workspace:plugins/aws-codepipeline-common":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-aws-codepipeline-common@workspace:plugins/aws-codepipeline-common"
+  resolution: "@alithya-oss/backstage-plugin-aws-codepipeline-common@workspace:plugins/aws-codepipeline-common"
   dependencies:
     "@aws-sdk/client-codepipeline": "npm:^3.731.1"
     "@backstage/catalog-model": "npm:^1.7.3"
@@ -349,13 +349,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-codepipeline@workspace:^, @alithya-oss/plugin-aws-codepipeline@workspace:plugins/aws-codepipeline":
+"@alithya-oss/backstage-plugin-aws-codepipeline@workspace:^, @alithya-oss/backstage-plugin-aws-codepipeline@workspace:plugins/aws-codepipeline":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-aws-codepipeline@workspace:plugins/aws-codepipeline"
+  resolution: "@alithya-oss/backstage-plugin-aws-codepipeline@workspace:plugins/aws-codepipeline"
   dependencies:
-    "@alithya-oss/plugin-aws-codepipeline-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-react": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-codepipeline-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-react": "workspace:^"
     "@aws-sdk/client-codepipeline": "npm:^3.731.1"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
     "@backstage/catalog-model": "npm:^1.7.3"
@@ -386,9 +386,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-core-common@workspace:^, @alithya-oss/plugin-aws-core-common@workspace:plugins/aws-core-common":
+"@alithya-oss/backstage-plugin-aws-core-common@workspace:^, @alithya-oss/backstage-plugin-aws-core-common@workspace:plugins/aws-core-common":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-aws-core-common@workspace:plugins/aws-core-common"
+  resolution: "@alithya-oss/backstage-plugin-aws-core-common@workspace:plugins/aws-core-common"
   dependencies:
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/cli": "npm:^0.29.6"
@@ -396,11 +396,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-core-node@workspace:^, @alithya-oss/plugin-aws-core-node@workspace:plugins/aws-core-node":
+"@alithya-oss/backstage-plugin-aws-core-node@workspace:^, @alithya-oss/backstage-plugin-aws-core-node@workspace:plugins/aws-core-node":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-aws-core-node@workspace:plugins/aws-core-node"
+  resolution: "@alithya-oss/backstage-plugin-aws-core-node@workspace:plugins/aws-core-node"
   dependencies:
-    "@alithya-oss/plugin-aws-core-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
     "@aws-sdk/client-config-service": "npm:^3.731.1"
     "@aws-sdk/client-resource-explorer-2": "npm:^3.731.1"
     "@aws-sdk/client-resource-groups-tagging-api": "npm:^3.731.1"
@@ -417,9 +417,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-aws-core-react@workspace:^, @alithya-oss/plugin-aws-core-react@workspace:plugins/aws-core-react":
+"@alithya-oss/backstage-plugin-aws-core-react@workspace:^, @alithya-oss/backstage-plugin-aws-core-react@workspace:plugins/aws-core-react":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-aws-core-react@workspace:plugins/aws-core-react"
+  resolution: "@alithya-oss/backstage-plugin-aws-core-react@workspace:plugins/aws-core-react"
   dependencies:
     "@backstage/cli": "npm:^0.29.6"
     "@backstage/core-components": "npm:^0.16.3"
@@ -438,11 +438,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@workspace:^, @alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@workspace:plugins/catalog-backend-module-aws-apps-entities-processor":
+"@alithya-oss/backstage-plugin-catalog-backend-module-aws-apps-entities-processor@workspace:^, @alithya-oss/backstage-plugin-catalog-backend-module-aws-apps-entities-processor@workspace:plugins/catalog-backend-module-aws-apps-entities-processor":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor@workspace:plugins/catalog-backend-module-aws-apps-entities-processor"
+  resolution: "@alithya-oss/backstage-plugin-catalog-backend-module-aws-apps-entities-processor@workspace:plugins/catalog-backend-module-aws-apps-entities-processor"
   dependencies:
-    "@alithya-oss/plugin-aws-apps-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
@@ -454,12 +454,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-cost-insights-aws-backend@workspace:^, @alithya-oss/plugin-cost-insights-aws-backend@workspace:plugins/aws-cost-insights-backend":
+"@alithya-oss/backstage-plugin-cost-insights-aws-backend@workspace:^, @alithya-oss/backstage-plugin-cost-insights-aws-backend@workspace:plugins/aws-cost-insights-backend":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-cost-insights-aws-backend@workspace:plugins/aws-cost-insights-backend"
+  resolution: "@alithya-oss/backstage-plugin-cost-insights-aws-backend@workspace:plugins/aws-cost-insights-backend"
   dependencies:
-    "@alithya-oss/plugin-aws-core-common": "workspace:^"
-    "@alithya-oss/plugin-cost-insights-aws-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-cost-insights-aws-common": "workspace:^"
     "@aws-sdk/client-cost-explorer": "npm:^3.731.1"
     "@aws-sdk/middleware-sdk-sts": "npm:^3.731.0"
     "@aws-sdk/types": "npm:^3.731.0"
@@ -496,9 +496,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-cost-insights-aws-common@workspace:^, @alithya-oss/plugin-cost-insights-aws-common@workspace:plugins/aws-cost-insights-common":
+"@alithya-oss/backstage-plugin-cost-insights-aws-common@workspace:^, @alithya-oss/backstage-plugin-cost-insights-aws-common@workspace:plugins/aws-cost-insights-common":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-cost-insights-aws-common@workspace:plugins/aws-cost-insights-common"
+  resolution: "@alithya-oss/backstage-plugin-cost-insights-aws-common@workspace:plugins/aws-cost-insights-common"
   dependencies:
     "@aws-sdk/client-ecs": "npm:^3.731.1"
     "@backstage/catalog-model": "npm:^1.7.3"
@@ -506,13 +506,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-cost-insights-aws@workspace:^, @alithya-oss/plugin-cost-insights-aws@workspace:plugins/aws-cost-insights":
+"@alithya-oss/backstage-plugin-cost-insights-aws@workspace:^, @alithya-oss/backstage-plugin-cost-insights-aws@workspace:plugins/aws-cost-insights":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-cost-insights-aws@workspace:plugins/aws-cost-insights"
+  resolution: "@alithya-oss/backstage-plugin-cost-insights-aws@workspace:plugins/aws-cost-insights"
   dependencies:
-    "@alithya-oss/plugin-amazon-ecs-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-common": "workspace:^"
-    "@alithya-oss/plugin-aws-core-react": "workspace:^"
+    "@alithya-oss/backstage-plugin-amazon-ecs-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-react": "workspace:^"
     "@aws-sdk/client-ecs": "npm:^3.731.1"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
     "@backstage-community/plugin-cost-insights": "npm:^0.12.25"
@@ -549,11 +549,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-scaffolder-backend-module-aws-apps@workspace:^, @alithya-oss/plugin-scaffolder-backend-module-aws-apps@workspace:plugins/scaffolder-backend-module-aws-apps":
+"@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps@workspace:^, @alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps@workspace:plugins/scaffolder-backend-module-aws-apps":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-scaffolder-backend-module-aws-apps@workspace:plugins/scaffolder-backend-module-aws-apps"
+  resolution: "@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps@workspace:plugins/scaffolder-backend-module-aws-apps"
   dependencies:
-    "@alithya-oss/plugin-aws-apps-backend": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-apps-backend": "workspace:^"
     "@aws-sdk/client-secrets-manager": "npm:^3.731.1"
     "@aws-sdk/client-sfn": "npm:^3.731.1"
     "@aws-sdk/client-ssm": "npm:^3.731.1"
@@ -578,11 +578,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-scaffolder-backend-module-aws-core@workspace:^, @alithya-oss/plugin-scaffolder-backend-module-aws-core@workspace:plugins/scaffolder-backend-module-aws-core":
+"@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-core@workspace:^, @alithya-oss/backstage-plugin-scaffolder-backend-module-aws-core@workspace:plugins/scaffolder-backend-module-aws-core":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-scaffolder-backend-module-aws-core@workspace:plugins/scaffolder-backend-module-aws-core"
+  resolution: "@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-core@workspace:plugins/scaffolder-backend-module-aws-core"
   dependencies:
-    "@alithya-oss/plugin-aws-core-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
     "@aws-sdk/client-cloudcontrol": "npm:^3.731.1"
     "@aws-sdk/client-codecommit": "npm:^3.731.1"
     "@aws-sdk/client-eventbridge": "npm:^3.731.1"
@@ -19017,11 +19017,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "app@workspace:packages/app"
   dependencies:
-    "@alithya-oss/plugin-amazon-ecs": "workspace:^"
-    "@alithya-oss/plugin-aws-apps": "workspace:^"
-    "@alithya-oss/plugin-aws-codebuild": "workspace:^"
-    "@alithya-oss/plugin-aws-codepipeline": "workspace:^"
-    "@alithya-oss/plugin-cost-insights-aws": "workspace:^"
+    "@alithya-oss/backstage-plugin-amazon-ecs": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-apps": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-codebuild": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-codepipeline": "workspace:^"
+    "@alithya-oss/backstage-plugin-cost-insights-aws": "workspace:^"
     "@aws/plugin-aws-apps-demo-for-backstage": "npm:^0.3.1"
     "@backstage-community/plugin-cost-insights": "npm:^0.12.27"
     "@backstage-community/plugin-github-actions": "npm:^0.6.23"
@@ -19835,15 +19835,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "backend@workspace:packages/backend"
   dependencies:
-    "@alithya-oss/plugin-amazon-ecs-backend": "workspace:^"
-    "@alithya-oss/plugin-aws-apps-backend": "workspace:^"
-    "@alithya-oss/plugin-aws-apps-common": "workspace:^"
-    "@alithya-oss/plugin-aws-codebuild-backend": "workspace:^"
-    "@alithya-oss/plugin-aws-codepipeline-backend": "workspace:^"
-    "@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor": "workspace:^"
-    "@alithya-oss/plugin-cost-insights-aws-backend": "workspace:^"
-    "@alithya-oss/plugin-scaffolder-backend-module-aws-apps": "workspace:^"
-    "@alithya-oss/plugin-scaffolder-backend-module-aws-core": "workspace:^"
+    "@alithya-oss/backstage-plugin-amazon-ecs-backend": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-apps-backend": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-codebuild-backend": "workspace:^"
+    "@alithya-oss/backstage-plugin-aws-codepipeline-backend": "workspace:^"
+    "@alithya-oss/backstage-plugin-catalog-backend-module-aws-apps-entities-processor": "workspace:^"
+    "@alithya-oss/backstage-plugin-cost-insights-aws-backend": "workspace:^"
+    "@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps": "workspace:^"
+    "@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-core": "workspace:^"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"

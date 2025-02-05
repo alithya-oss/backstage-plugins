@@ -15,7 +15,7 @@
  */
 import { SearchClient, SearchClientQuery } from './SearchClient';
 import { DiscoveryService, AuthService } from '@backstage/backend-plugin-api';
-import { EmbeddingsSource } from '@alithya-oss/plugin-rag-ai-node';
+import { EmbeddingsSource } from '@alithya-oss/backstage-plugin-rag-ai-node';
 import { mockServices } from '@backstage/backend-test-utils';
 
 describe('SearchClient', () => {

@@ -5,7 +5,7 @@ import {
   isTimeSaverApiError,
   TimeSaverApiErrorResponse,
   TimeSummaryByTeamName,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 
 /**
  * Retrieves time-saved per team from the backend.

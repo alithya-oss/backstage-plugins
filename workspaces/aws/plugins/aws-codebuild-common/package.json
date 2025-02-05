@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-aws-codebuild-common",
+  "name": "@alithya-oss/backstage-plugin-aws-codebuild-common",
   "description": "Common functionality for the aws-codebuild-plugin-for-backstage plugin",
   "version": "0.3.6",
   "repository": {
@@ -20,9 +20,9 @@
     "role": "common-library",
     "pluginId": "aws-codebuild",
     "pluginPackages": [
-      "@alithya-oss/plugin-aws-codebuild",
-      "@alithya-oss/plugin-aws-codebuild-backend",
-      "@alithya-oss/plugin-aws-codebuild-common"
+      "@alithya-oss/backstage-plugin-aws-codebuild",
+      "@alithya-oss/backstage-plugin-aws-codebuild-backend",
+      "@alithya-oss/backstage-plugin-aws-codebuild-common"
     ]
   },
   "sideEffects": false,

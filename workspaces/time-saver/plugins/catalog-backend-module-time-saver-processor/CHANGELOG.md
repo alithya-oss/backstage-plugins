@@ -1,4 +1,4 @@
-# @alithya-oss/plugin-catalog-backend-module-time-saver-processor
+# @alithya-oss/backstage-plugin-catalog-backend-module-time-saver-processor
 
 ## 1.1.4
 

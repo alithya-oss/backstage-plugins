@@ -40,7 +40,7 @@ import {
   TimeSavedGauge,
   TimeSummaryPerTeamLineChart,
   TimeSummaryPerTemplateLineChart,
-} from '@alithya-oss/plugin-time-saver-react';
+} from '@alithya-oss/backstage-plugin-time-saver-react';
 
 export const TimeSaverPageComponent = () => {
   const [selectedTab, setSelectedTab] = useState(0);

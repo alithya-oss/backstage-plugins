@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-cost-insights-aws",
+  "name": "@alithya-oss/backstage-plugin-cost-insights-aws",
   "version": "0.1.7",
   "repository": {
     "type": "git",
@@ -18,9 +18,9 @@
     "role": "frontend-plugin",
     "pluginId": "cost-insights-aws",
     "pluginPackages": [
-      "@alithya-oss/plugin-cost-insights-aws",
-      "@alithya-oss/plugin-cost-insights-aws-backend",
-      "@alithya-oss/plugin-cost-insights-aws-common"
+      "@alithya-oss/backstage-plugin-cost-insights-aws",
+      "@alithya-oss/backstage-plugin-cost-insights-aws-backend",
+      "@alithya-oss/backstage-plugin-cost-insights-aws-common"
     ]
   },
   "sideEffects": false,
@@ -34,9 +34,9 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-amazon-ecs-common": "workspace:^",
-    "@alithya-oss/plugin-aws-core-common": "workspace:^",
-    "@alithya-oss/plugin-aws-core-react": "workspace:^",
+    "@alithya-oss/backstage-plugin-amazon-ecs-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-core-react": "workspace:^",
     "@aws-sdk/client-ecs": "^3.731.1",
     "@aws-sdk/util-arn-parser": "^3.723.0",
     "@backstage-community/plugin-cost-insights": "^0.12.25",

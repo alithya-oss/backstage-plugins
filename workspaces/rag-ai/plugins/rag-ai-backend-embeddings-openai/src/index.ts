@@ -21,11 +21,11 @@ import {
 import {
   AugmentationIndexer,
   RoadieVectorStore,
-} from '@alithya-oss/plugin-rag-ai-node';
+} from '@alithya-oss/backstage-plugin-rag-ai-node';
 import { OpenAiConfig, RoadieOpenAiAugmenter } from './RoadieOpenAiAugmenter';
 import { CatalogApi } from '@backstage/catalog-client';
 import { Config } from '@backstage/config';
-import { AugmentationOptions } from '@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter';
+import { AugmentationOptions } from '@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter';
 
 /**
  * OpenAI client configuration to generate embeddings

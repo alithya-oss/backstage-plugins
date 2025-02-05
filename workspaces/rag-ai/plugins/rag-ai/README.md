@@ -33,7 +33,7 @@ App.tsx
 ```tsx
 
 // packages/app/src/App.tsx
-import { RagModal } from '@alithya-oss/plugin-rag-ai';
+import { RagModal } from '@alithya-oss/backstage-plugin-rag-ai';
 
 ...
 const App = () => (
@@ -52,7 +52,7 @@ You can also choose to use the `SidebarRagModal` component instead. In addition 
 
 ```tsx
 // packages/app/src/components/Root/Root.tsx
-import { SidebarRagModal } from '@alithya-oss/plugin-rag-ai';
+import { SidebarRagModal } from '@alithya-oss/backstage-plugin-rag-ai';
 ...
 export const Root = ({ children }: PropsWithChildren<{}>) => (
   <SidebarPage>

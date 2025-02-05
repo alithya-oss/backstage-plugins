@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-aws-codepipeline-backend",
+  "name": "@alithya-oss/backstage-plugin-aws-codepipeline-backend",
   "version": "0.5.4",
   "repository": {
     "type": "git",
@@ -18,9 +18,9 @@
     "role": "backend-plugin",
     "pluginId": "aws-codepipeline",
     "pluginPackages": [
-      "@alithya-oss/plugin-aws-codepipeline",
-      "@alithya-oss/plugin-aws-codepipeline-backend",
-      "@alithya-oss/plugin-aws-codepipeline-common"
+      "@alithya-oss/backstage-plugin-aws-codepipeline",
+      "@alithya-oss/backstage-plugin-aws-codepipeline-backend",
+      "@alithya-oss/backstage-plugin-aws-codepipeline-common"
     ]
   },
   "scripts": {
@@ -33,9 +33,9 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-aws-codepipeline-common": "workspace:^",
-    "@alithya-oss/plugin-aws-core-common": "workspace:^",
-    "@alithya-oss/plugin-aws-core-node": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-codepipeline-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-core-node": "workspace:^",
     "@aws-sdk/client-codepipeline": "^3.731.1",
     "@aws-sdk/middleware-sdk-sts": "^3.731.0",
     "@aws-sdk/util-arn-parser": "^3.723.0",

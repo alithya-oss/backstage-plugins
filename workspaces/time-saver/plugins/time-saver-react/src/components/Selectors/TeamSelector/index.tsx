@@ -1,7 +1,7 @@
 import React from 'react';
 import { SelectorTemplate } from '../SelectorTemplate';
 import { useTeams } from '../../../hooks';
-import { isTimeSaverApiError } from '@alithya-oss/plugin-time-saver-common';
+import { isTimeSaverApiError } from '@alithya-oss/backstage-plugin-time-saver-common';
 import { CircularProgress } from '@material-ui/core';
 
 /**

@@ -16,7 +16,7 @@ import { useApi } from '@backstage/core-plugin-api';
 import { awsCodeBuildApiRef } from '../api';
 import type { Entity } from '@backstage/catalog-model';
 import { getCompoundEntityRef } from '@backstage/catalog-model';
-import { ProjectsResponse } from '@alithya-oss/plugin-aws-codebuild-common';
+import { ProjectsResponse } from '@alithya-oss/backstage-plugin-aws-codebuild-common';
 
 export function useProjects({ entity }: { entity: Entity }) {
   const awsCodeBuildApi = useApi(awsCodeBuildApiRef);

@@ -24,7 +24,7 @@ import {
   BackendParams,
   BindResourceParams,
   IRepositoryInfo,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { ConfigApi, FetchApi } from '@backstage/core-plugin-api';
 import { ResponseError } from '@backstage/errors';
 import { OPAApi } from '.';

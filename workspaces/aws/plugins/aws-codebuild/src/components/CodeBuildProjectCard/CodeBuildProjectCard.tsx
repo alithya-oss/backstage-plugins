@@ -28,18 +28,18 @@ import {
   AWS_CODEBUILD_ARN_ANNOTATION,
   AWS_CODEBUILD_TAGS_ANNOTATION,
   ProjectResponse,
-} from '@alithya-oss/plugin-aws-codebuild-common';
+} from '@alithya-oss/backstage-plugin-aws-codebuild-common';
 import { isAwsCodeBuildAvailable } from '../../plugin';
 import {
   MissingResources,
   TabbedContent,
-} from '@alithya-oss/plugin-aws-core-react';
+} from '@alithya-oss/backstage-plugin-aws-core-react';
 import { Build } from '@aws-sdk/client-codebuild';
 import { BuildStatus } from '../BuildStatus';
 import { useProjects } from '../../hooks';
 import { formatTime, getDurationFromStringDates } from '../../util';
 import { useApi, configApiRef } from '@backstage/core-plugin-api';
-import { generateShortcutLink } from '@alithya-oss/plugin-aws-core-common';
+import { generateShortcutLink } from '@alithya-oss/backstage-plugin-aws-core-common';
 
 const generatedColumns = (
   region: string,

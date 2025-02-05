@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-cost-insights-aws-backend",
+  "name": "@alithya-oss/backstage-plugin-cost-insights-aws-backend",
   "version": "0.1.7",
   "repository": {
     "type": "git",
@@ -18,9 +18,9 @@
     "role": "backend-plugin",
     "pluginId": "cost-insights-aws",
     "pluginPackages": [
-      "@alithya-oss/plugin-cost-insights-aws",
-      "@alithya-oss/plugin-cost-insights-aws-backend",
-      "@alithya-oss/plugin-cost-insights-aws-common"
+      "@alithya-oss/backstage-plugin-cost-insights-aws",
+      "@alithya-oss/backstage-plugin-cost-insights-aws-backend",
+      "@alithya-oss/backstage-plugin-cost-insights-aws-common"
     ]
   },
   "scripts": {
@@ -33,8 +33,8 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-aws-core-common": "workspace:^",
-    "@alithya-oss/plugin-cost-insights-aws-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-cost-insights-aws-common": "workspace:^",
     "@aws-sdk/client-cost-explorer": "^3.731.1",
     "@aws-sdk/middleware-sdk-sts": "^3.731.0",
     "@aws-sdk/types": "^3.731.0",

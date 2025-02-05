@@ -24,18 +24,18 @@ import { CatalogApi } from '@backstage/catalog-client';
 import {
   AwsResourceLocator,
   AwsResourceLocatorFactory,
-} from '@alithya-oss/plugin-aws-core-node';
+} from '@alithya-oss/backstage-plugin-aws-core-node';
 import {
   AWS_SDK_CUSTOM_USER_AGENT,
   getOneOfEntityAnnotations,
-} from '@alithya-oss/plugin-aws-core-common';
+} from '@alithya-oss/backstage-plugin-aws-core-common';
 import {
   AWS_ECS_SERVICE_ARN_ANNOTATION,
   AWS_ECS_SERVICE_TAGS_ANNOTATION,
   ClusterResponse,
   ServiceResponse,
   ServicesResponse,
-} from '@alithya-oss/plugin-amazon-ecs-common';
+} from '@alithya-oss/backstage-plugin-amazon-ecs-common';
 import {
   AwsCredentialsManager,
   DefaultAwsCredentialsManager,

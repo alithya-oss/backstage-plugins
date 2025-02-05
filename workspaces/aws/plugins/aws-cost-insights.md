@@ -44,7 +44,7 @@ Note: This policy does not reflect least privilege and you should further limit 
 Install the backend package in your Backstage app:
 
 ```shell
-yarn workspace backend add @alithya-oss/plugin-cost-insights-aws-backend
+yarn workspace backend add @alithya-oss/backstage-plugin-cost-insights-aws-backend
 ```
 
 Add the plugin to the `packages/backend/src/index.ts`:
@@ -52,7 +52,7 @@ Add the plugin to the `packages/backend/src/index.ts`:
 ```typescript
 const backend = createBackend();
 // ...
-backend.add(import('@alithya-oss/plugin-cost-insights-aws-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-cost-insights-aws-backend'));
 // ...
 backend.start();
 ```
@@ -62,14 +62,14 @@ backend.start();
 Install the frontend packages in your Backstage app:
 
 ```shell
-yarn workspace app add @backstage-community/plugin-cost-insights @alithya-oss/plugin-cost-insights-aws
+yarn workspace app add @backstage-community/plugin-cost-insights @alithya-oss/backstage-plugin-cost-insights-aws
 ```
 
 Edit `packages/app/src/App.tsx` to register the `costInsightsAwsPlugin` plugin:
 
 ```typescript
 // ...
-import { costInsightsAwsPlugin } from '@alithya-oss/plugin-cost-insights-aws';
+import { costInsightsAwsPlugin } from '@alithya-oss/backstage-plugin-cost-insights-aws';
 
 const app = createApp({
   apis,

@@ -8,10 +8,10 @@ import {
   augmentationIndexerExtensionPoint,
   retrievalPipelineExtensionPoint,
   modelExtensionPoint,
-} from '@alithya-oss/plugin-rag-ai-node';
-import { createRoadiePgVectorStore } from '@alithya-oss/plugin-rag-ai-storage-pgvector';
-import { createDefaultRetrievalPipeline } from '@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter';
-import { initializeOpenAiEmbeddings } from '@alithya-oss/plugin-rag-ai-backend-embeddings-openai';
+} from '@alithya-oss/backstage-plugin-rag-ai-node';
+import { createRoadiePgVectorStore } from '@alithya-oss/backstage-plugin-rag-ai-storage-pgvector';
+import { createDefaultRetrievalPipeline } from '@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter';
+import { initializeOpenAiEmbeddings } from '@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-openai';
 import { OpenAI } from '@langchain/openai';
 
 /** OpenAI module for Rag AI backend plugin

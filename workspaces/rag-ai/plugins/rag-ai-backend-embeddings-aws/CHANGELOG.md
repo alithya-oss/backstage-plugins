@@ -1,4 +1,4 @@
-# @alithya-oss/plugin-rag-ai-backend-embeddings-aws
+# @alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws
 
 ## 1.0.6
 
@@ -6,9 +6,9 @@
 
 - 1cc277e: Bump Backstage framework version 1.35.1
 - Updated dependencies [1cc277e]
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@1.0.6
-  - @alithya-oss/plugin-rag-ai-backend@2.0.5
-  - @alithya-oss/plugin-rag-ai-node@0.2.5
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@1.0.6
+  - @alithya-oss/backstage-plugin-rag-ai-backend@2.0.5
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.5
 
 ## 1.0.5
 
@@ -16,9 +16,9 @@
 
 - 3ba89eb: Bump Backstage framework version 1.35.0 and Langchain dependencies
 - Updated dependencies [3ba89eb]
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@1.0.5
-  - @alithya-oss/plugin-rag-ai-backend@2.0.4
-  - @alithya-oss/plugin-rag-ai-node@0.2.4
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@1.0.5
+  - @alithya-oss/backstage-plugin-rag-ai-backend@2.0.4
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.4
 
 ## 1.0.4
 
@@ -26,9 +26,9 @@
 
 - 58e7d6f: Bump framework version 1.32.5
 - Updated dependencies [58e7d6f]
-  - @alithya-oss/plugin-rag-ai-backend@2.0.3
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@1.0.4
-  - @alithya-oss/plugin-rag-ai-node@0.2.3
+  - @alithya-oss/backstage-plugin-rag-ai-backend@2.0.3
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@1.0.4
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.3
 
 ## 1.0.3
 
@@ -36,9 +36,9 @@
 
 - cdebf2e: Enforce release 2024-11-14
 - Updated dependencies [cdebf2e]
-  - @alithya-oss/plugin-rag-ai-backend@2.0.2
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@1.0.3
-  - @alithya-oss/plugin-rag-ai-node@0.2.2
+  - @alithya-oss/backstage-plugin-rag-ai-backend@2.0.2
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@1.0.3
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.2
 
 ## 1.0.2
 
@@ -46,9 +46,9 @@
 
 - a854796: Bump Backstage framework verison 1.32.5
 - Updated dependencies [a854796]
-  - @alithya-oss/plugin-rag-ai-backend@2.0.1
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@1.0.2
-  - @alithya-oss/plugin-rag-ai-node@0.2.1
+  - @alithya-oss/backstage-plugin-rag-ai-backend@2.0.1
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@1.0.2
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.1
 
 ## 1.0.1
 
@@ -56,7 +56,7 @@
 
 - c3db3c6: Add max retries to embeddings to prevent forever loop in case of errors.
 - Updated dependencies [c3db3c6]
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@1.0.1
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@1.0.1
 
 ## 1.0.0
 
@@ -67,15 +67,15 @@
 ### Patch Changes
 
 - Updated dependencies [cff627d]
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@1.0.0
-  - @alithya-oss/plugin-rag-ai-backend@2.0.0
-  - @alithya-oss/plugin-rag-ai-node@0.2.0
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@1.0.0
+  - @alithya-oss/backstage-plugin-rag-ai-backend@2.0.0
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.0
 
 ## 0.2.6
 
 ### Patch Changes
 
-- 19198fb: Updated @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter to 0.3.6
+- 19198fb: Updated @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter to 0.3.6
 
 ## 0.2.5
 
@@ -83,9 +83,9 @@
 
 - f5bab23: Upgraded the langchain dependencies of the rag-ai plugins
 - Updated dependencies [f5bab23]
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@0.3.4
-  - @alithya-oss/plugin-rag-ai-backend@0.3.3
-  - @alithya-oss/plugin-rag-ai-node@0.1.4
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@0.3.4
+  - @alithya-oss/backstage-plugin-rag-ai-backend@0.3.3
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.1.4
 
 ## 0.2.4
 
@@ -96,9 +96,9 @@
 - Updated dependencies [9768baa]
 - Updated dependencies [ed73691]
 - Updated dependencies [9768baa]
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@0.3.3
-  - @alithya-oss/plugin-rag-ai-backend@0.3.2
-  - @alithya-oss/plugin-rag-ai-node@0.1.3
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@0.3.3
+  - @alithya-oss/backstage-plugin-rag-ai-backend@0.3.2
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.1.3
 
 ## 0.2.3
 
@@ -106,17 +106,17 @@
 
 - d02d5df: Upgrade to backstage 1.26.5
 - Updated dependencies [d02d5df]
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@0.3.1
-  - @alithya-oss/plugin-rag-ai-backend@0.3.1
-  - @alithya-oss/plugin-rag-ai-node@0.1.2
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@0.3.1
+  - @alithya-oss/backstage-plugin-rag-ai-backend@0.3.1
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.1.2
 
 ## 0.2.2
 
 ### Patch Changes
 
 - Updated dependencies [2ac9477]
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@0.3.0
-  - @alithya-oss/plugin-rag-ai-backend@0.3.0
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@0.3.0
+  - @alithya-oss/backstage-plugin-rag-ai-backend@0.3.0
 
 ## 0.2.1
 
@@ -124,9 +124,9 @@
 
 - 7cd4bdf: version upgrade to 1.25.0
 - Updated dependencies [7cd4bdf]
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@0.2.1
-  - @alithya-oss/plugin-rag-ai-backend@0.2.2
-  - @alithya-oss/plugin-rag-ai-node@0.1.1
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@0.2.1
+  - @alithya-oss/backstage-plugin-rag-ai-backend@0.2.2
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.1.1
 
 ## 0.2.0
 
@@ -137,8 +137,8 @@
 ### Patch Changes
 
 - Updated dependencies [7fa2871]
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@0.2.0
-  - @alithya-oss/plugin-rag-ai-backend@0.2.0
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@0.2.0
+  - @alithya-oss/backstage-plugin-rag-ai-backend@0.2.0
 
 ## 0.1.0
 
@@ -158,6 +158,6 @@
 ### Patch Changes
 
 - Updated dependencies [7b468fa]
-  - @alithya-oss/plugin-rag-ai-backend@0.1.0
-  - @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@0.1.0
-  - @alithya-oss/plugin-rag-ai-node@0.1.0
+  - @alithya-oss/backstage-plugin-rag-ai-backend@0.1.0
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@0.1.0
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.1.0

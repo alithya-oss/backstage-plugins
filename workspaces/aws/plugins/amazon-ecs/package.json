@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-amazon-ecs",
+  "name": "@alithya-oss/backstage-plugin-amazon-ecs",
   "version": "0.4.7",
   "repository": {
     "type": "git",
@@ -18,9 +18,9 @@
     "role": "frontend-plugin",
     "pluginId": "amazon-ecs",
     "pluginPackages": [
-      "@alithya-oss/plugin-amazon-ecs",
-      "@alithya-oss/plugin-amazon-ecs-backend",
-      "@alithya-oss/plugin-amazon-ecs-common"
+      "@alithya-oss/backstage-plugin-amazon-ecs",
+      "@alithya-oss/backstage-plugin-amazon-ecs-backend",
+      "@alithya-oss/backstage-plugin-amazon-ecs-common"
     ]
   },
   "sideEffects": false,
@@ -34,9 +34,9 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-amazon-ecs-common": "workspace:^",
-    "@alithya-oss/plugin-aws-core-common": "workspace:^",
-    "@alithya-oss/plugin-aws-core-react": "workspace:^",
+    "@alithya-oss/backstage-plugin-amazon-ecs-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-core-react": "workspace:^",
     "@aws-sdk/client-ecs": "^3.731.1",
     "@aws-sdk/util-arn-parser": "^3.723.0",
     "@backstage/catalog-model": "^1.7.3",

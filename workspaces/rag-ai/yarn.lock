@@ -12,13 +12,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alithya-oss/plugin-rag-ai-backend-embeddings-aws@workspace:^, @alithya-oss/plugin-rag-ai-backend-embeddings-aws@workspace:plugins/rag-ai-backend-embeddings-aws":
+"@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws@workspace:^, @alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws@workspace:plugins/rag-ai-backend-embeddings-aws":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-rag-ai-backend-embeddings-aws@workspace:plugins/rag-ai-backend-embeddings-aws"
+  resolution: "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws@workspace:plugins/rag-ai-backend-embeddings-aws"
   dependencies:
-    "@alithya-oss/plugin-rag-ai-backend": "workspace:^"
-    "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter": "workspace:^"
-    "@alithya-oss/plugin-rag-ai-node": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-backend": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-node": "workspace:^"
     "@aws-sdk/client-bedrock-runtime": "npm:^3.682.0"
     "@aws-sdk/types": "npm:^3.679.0"
     "@backstage/backend-common": "npm:^0.25.0"
@@ -35,12 +35,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-rag-ai-backend-embeddings-openai@workspace:^, @alithya-oss/plugin-rag-ai-backend-embeddings-openai@workspace:plugins/rag-ai-backend-embeddings-openai":
+"@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-openai@workspace:^, @alithya-oss/backstage-plugin-rag-ai-backend-embeddings-openai@workspace:plugins/rag-ai-backend-embeddings-openai":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-rag-ai-backend-embeddings-openai@workspace:plugins/rag-ai-backend-embeddings-openai"
+  resolution: "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-openai@workspace:plugins/rag-ai-backend-embeddings-openai"
   dependencies:
-    "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter": "workspace:^"
-    "@alithya-oss/plugin-rag-ai-node": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-node": "workspace:^"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
@@ -56,14 +56,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-rag-ai-backend-module-bedrock@workspace:^, @alithya-oss/plugin-rag-ai-backend-module-bedrock@workspace:plugins/rag-ai-backend-module-bedrock":
+"@alithya-oss/backstage-plugin-rag-ai-backend-module-bedrock@workspace:^, @alithya-oss/backstage-plugin-rag-ai-backend-module-bedrock@workspace:plugins/rag-ai-backend-module-bedrock":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-rag-ai-backend-module-bedrock@workspace:plugins/rag-ai-backend-module-bedrock"
+  resolution: "@alithya-oss/backstage-plugin-rag-ai-backend-module-bedrock@workspace:plugins/rag-ai-backend-module-bedrock"
   dependencies:
-    "@alithya-oss/plugin-rag-ai-backend-embeddings-aws": "workspace:^"
-    "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter": "workspace:^"
-    "@alithya-oss/plugin-rag-ai-node": "workspace:^"
-    "@alithya-oss/plugin-rag-ai-storage-pgvector": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-node": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-storage-pgvector": "workspace:^"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
@@ -74,14 +74,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-rag-ai-backend-module-openai@workspace:^, @alithya-oss/plugin-rag-ai-backend-module-openai@workspace:plugins/rag-ai-backend-module-openai":
+"@alithya-oss/backstage-plugin-rag-ai-backend-module-openai@workspace:^, @alithya-oss/backstage-plugin-rag-ai-backend-module-openai@workspace:plugins/rag-ai-backend-module-openai":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-rag-ai-backend-module-openai@workspace:plugins/rag-ai-backend-module-openai"
+  resolution: "@alithya-oss/backstage-plugin-rag-ai-backend-module-openai@workspace:plugins/rag-ai-backend-module-openai"
   dependencies:
-    "@alithya-oss/plugin-rag-ai-backend-embeddings-openai": "workspace:^"
-    "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter": "workspace:^"
-    "@alithya-oss/plugin-rag-ai-node": "workspace:^"
-    "@alithya-oss/plugin-rag-ai-storage-pgvector": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-openai": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-node": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-storage-pgvector": "workspace:^"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
@@ -91,11 +91,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@workspace:^, @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@workspace:plugins/rag-ai-backend-retrieval-augmenter":
+"@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@workspace:^, @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@workspace:plugins/rag-ai-backend-retrieval-augmenter":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter@workspace:plugins/rag-ai-backend-retrieval-augmenter"
+  resolution: "@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@workspace:plugins/rag-ai-backend-retrieval-augmenter"
   dependencies:
-    "@alithya-oss/plugin-rag-ai-node": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-node": "workspace:^"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.2.1"
@@ -116,11 +116,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-rag-ai-backend@workspace:^, @alithya-oss/plugin-rag-ai-backend@workspace:plugins/rag-ai-backend":
+"@alithya-oss/backstage-plugin-rag-ai-backend@workspace:^, @alithya-oss/backstage-plugin-rag-ai-backend@workspace:plugins/rag-ai-backend":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-rag-ai-backend@workspace:plugins/rag-ai-backend"
+  resolution: "@alithya-oss/backstage-plugin-rag-ai-backend@workspace:plugins/rag-ai-backend"
   dependencies:
-    "@alithya-oss/plugin-rag-ai-node": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-node": "workspace:^"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
@@ -141,9 +141,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-rag-ai-node@workspace:^, @alithya-oss/plugin-rag-ai-node@workspace:plugins/rag-ai-node":
+"@alithya-oss/backstage-plugin-rag-ai-node@workspace:^, @alithya-oss/backstage-plugin-rag-ai-node@workspace:plugins/rag-ai-node":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-rag-ai-node@workspace:plugins/rag-ai-node"
+  resolution: "@alithya-oss/backstage-plugin-rag-ai-node@workspace:plugins/rag-ai-node"
   dependencies:
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/cli": "npm:^0.29.6"
@@ -152,11 +152,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-rag-ai-storage-pgvector@workspace:^, @alithya-oss/plugin-rag-ai-storage-pgvector@workspace:plugins/rag-ai-storage-pgvector":
+"@alithya-oss/backstage-plugin-rag-ai-storage-pgvector@workspace:^, @alithya-oss/backstage-plugin-rag-ai-storage-pgvector@workspace:plugins/rag-ai-storage-pgvector":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-rag-ai-storage-pgvector@workspace:plugins/rag-ai-storage-pgvector"
+  resolution: "@alithya-oss/backstage-plugin-rag-ai-storage-pgvector@workspace:plugins/rag-ai-storage-pgvector"
   dependencies:
-    "@alithya-oss/plugin-rag-ai-node": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-node": "workspace:^"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/cli": "npm:^0.29.6"
@@ -169,9 +169,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-rag-ai@workspace:^, @alithya-oss/plugin-rag-ai@workspace:plugins/rag-ai":
+"@alithya-oss/backstage-plugin-rag-ai@workspace:^, @alithya-oss/backstage-plugin-rag-ai@workspace:plugins/rag-ai":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-rag-ai@workspace:plugins/rag-ai"
+  resolution: "@alithya-oss/backstage-plugin-rag-ai@workspace:plugins/rag-ai"
   dependencies:
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/cli": "npm:^0.29.6"
@@ -16095,7 +16095,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "app@workspace:packages/app"
   dependencies:
-    "@alithya-oss/plugin-rag-ai": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai": "workspace:^"
     "@backstage/app-defaults": "npm:^1.5.16"
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/cli": "npm:^0.29.6"
@@ -16832,9 +16832,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "backend@workspace:packages/backend"
   dependencies:
-    "@alithya-oss/plugin-rag-ai-backend": "workspace:^"
-    "@alithya-oss/plugin-rag-ai-backend-module-bedrock": "workspace:^"
-    "@alithya-oss/plugin-rag-ai-backend-module-openai": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-backend": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-backend-module-bedrock": "workspace:^"
+    "@alithya-oss/backstage-plugin-rag-ai-backend-module-openai": "workspace:^"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-tasks": "npm:^0.6.1"

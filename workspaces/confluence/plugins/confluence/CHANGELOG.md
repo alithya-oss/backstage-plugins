@@ -1,4 +1,4 @@
-# @alithya-oss/plugin-confluence
+# @alithya-oss/backstage-plugin-confluence
 
 ## 0.1.2
 

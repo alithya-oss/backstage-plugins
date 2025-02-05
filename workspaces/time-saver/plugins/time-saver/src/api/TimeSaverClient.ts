@@ -3,7 +3,7 @@ import {
   FetchApi,
   IdentityApi,
 } from '@backstage/core-plugin-api';
-import { TimeSaverApi } from '@alithya-oss/plugin-time-saver-react';
+import { TimeSaverApi } from '@alithya-oss/backstage-plugin-time-saver-react';
 import { ResponseError } from '@backstage/errors';
 import {
   GetUriParams,
@@ -21,7 +21,7 @@ import {
   GetAllTemplateNamesResponse,
   GetAllTemplateTasksResponse,
   GetGroupDivisionStatsResponse,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 
 /**
  * Time Saver API client

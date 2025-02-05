@@ -21,8 +21,8 @@ import {
 import {
   AWS_ECS_SERVICE_ARN_ANNOTATION,
   AWS_ECS_SERVICE_TAGS_ANNOTATION,
-} from '@alithya-oss/plugin-amazon-ecs-common';
-import { getOneOfEntityAnnotations } from '@alithya-oss/plugin-aws-core-common';
+} from '@alithya-oss/backstage-plugin-amazon-ecs-common';
+import { getOneOfEntityAnnotations } from '@alithya-oss/backstage-plugin-aws-core-common';
 import { EcsServices } from './EcsServices';
 
 /** @public */

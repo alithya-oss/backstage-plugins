@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-aws-apps-backend",
+  "name": "@alithya-oss/backstage-plugin-aws-apps-backend",
   "description": "App Development for Backstage.io on AWS Backend plugin",
   "version": "0.4.4",
   "main": "src/index.ts",
@@ -26,7 +26,7 @@
     "role": "backend-plugin",
     "pluginId": "aws-apps-backend",
     "pluginPackages": [
-      "@alithya-oss/plugin-aws-apps-backend"
+      "@alithya-oss/backstage-plugin-aws-apps-backend"
     ]
   },
   "scripts": {
@@ -39,7 +39,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-aws-apps-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^",
     "@aws-sdk/client-cloudformation": "^3.731.1",
     "@aws-sdk/client-cloudwatch-logs": "^3.731.1",
     "@aws-sdk/client-dynamodb": "^3.731.1",

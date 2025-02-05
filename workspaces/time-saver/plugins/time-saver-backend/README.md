@@ -17,13 +17,13 @@ This plugin provides an implementation of charts and statistics related to your 
 
 ```sh
 # From your Backstage root directory
-yarn workspace packages/backend @alithya-oss/plugin-time-saver-backend
+yarn workspace packages/backend @alithya-oss/backstage-plugin-time-saver-backend
 ```
 
 2. Wire up the API implementation to your App in `timeSaver.ts` file in `packages/backend/src/plugins/`:
 
 ```ts
-import { createRouter } from '@alithya-oss/plugin-time-saver-backend';
+import { createRouter } from '@alithya-oss/backstage-plugin-time-saver-backend';
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 
@@ -62,7 +62,7 @@ apiRouter.use('/time-saver', await timeSaver(timeSaverEnv)); // you should use a
 in `packages/backend/src/index.ts`
 
 ```ts
-backend.add(import('@alithya-oss/plugin-time-saver-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-time-saver-backend'));
 ```
 
 2. Install [time-saver](../time-saver/README.md) part if not installed already

@@ -8,7 +8,7 @@ import { useApi } from '@backstage/core-plugin-api';
 import { opaApiRef } from '../../api';
 import Typography from '@mui/material/Typography';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
-import { AuditRecord } from '@alithya-oss/plugin-aws-apps-common';
+import { AuditRecord } from '@alithya-oss/backstage-plugin-aws-apps-common';
 
 const AuditTable = () => {
   const api = useApi(opaApiRef);

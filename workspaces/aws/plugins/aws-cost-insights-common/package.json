@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-cost-insights-aws-common",
+  "name": "@alithya-oss/backstage-plugin-cost-insights-aws-common",
   "description": "Common functionality for the amazon-ecs-plugin-for-backstage plugin",
   "version": "0.1.6",
   "repository": {
@@ -20,9 +20,9 @@
     "role": "common-library",
     "pluginId": "cost-insights-aws",
     "pluginPackages": [
-      "@alithya-oss/plugin-cost-insights-aws",
-      "@alithya-oss/plugin-cost-insights-aws-backend",
-      "@alithya-oss/plugin-cost-insights-aws-common"
+      "@alithya-oss/backstage-plugin-cost-insights-aws",
+      "@alithya-oss/backstage-plugin-cost-insights-aws-backend",
+      "@alithya-oss/backstage-plugin-cost-insights-aws-common"
     ]
   },
   "sideEffects": false,
