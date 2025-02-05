@@ -1,5 +1,13 @@
 # @alithya-oss/backstage-plugin-rag-ai-storage-pgvector
 
+## 0.2.6
+
+### Patch Changes
+
+- 2b44cae: Moved package @alithya-oss/plugin-_ to @alithya-oss/backstage-plugin-_
+- Updated dependencies [2b44cae]
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.6
+
 ## 0.2.5
 
 ### Patch Changes

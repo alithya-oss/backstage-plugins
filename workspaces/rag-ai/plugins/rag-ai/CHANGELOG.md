@@ -1,5 +1,11 @@
 # @alithya-oss/backstage-plugin-rag-ai
 
+## 1.2.7
+
+### Patch Changes
+
+- 2b44cae: Moved package @alithya-oss/plugin-_ to @alithya-oss/backstage-plugin-_
+
 ## 1.2.6
 
 ### Patch Changes
