@@ -1,5 +1,15 @@
 # @alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws
 
+## 1.0.7
+
+### Patch Changes
+
+- 2b44cae: Moved package @alithya-oss/plugin-_ to @alithya-oss/backstage-plugin-_
+- Updated dependencies [2b44cae]
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@1.0.7
+  - @alithya-oss/backstage-plugin-rag-ai-backend@2.0.6
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.6
+
 ## 1.0.6
 
 ### Patch Changes
