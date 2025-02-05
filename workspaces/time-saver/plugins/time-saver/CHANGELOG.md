@@ -1,5 +1,14 @@
 # @alithya-oss/backstage-plugin-time-saver
 
+## 1.4.5
+
+### Patch Changes
+
+- 2b44cae: Move packages from @alithya-oss/plugin-_ to @alithya-oss/backstage-plugin-_
+- Updated dependencies [2b44cae]
+  - @alithya-oss/backstage-plugin-time-saver-common@0.5.5
+  - @alithya-oss/backstage-plugin-time-saver-react@0.1.5
+
 ## 1.4.4
 
 ### Patch Changes
