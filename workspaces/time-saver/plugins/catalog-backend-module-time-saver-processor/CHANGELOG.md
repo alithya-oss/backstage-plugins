@@ -1,5 +1,11 @@
 # @alithya-oss/backstage-plugin-catalog-backend-module-time-saver-processor
 
+## 1.1.5
+
+### Patch Changes
+
+- 2b44cae: Move packages from @alithya-oss/plugin-_ to @alithya-oss/backstage-plugin-_
+
 ## 1.1.4
 
 ### Patch Changes

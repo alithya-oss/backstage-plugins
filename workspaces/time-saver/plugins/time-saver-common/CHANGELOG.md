@@ -1,5 +1,11 @@
 # @alithya-oss/backstage-plugin-time-saver-common
 
+## 0.5.5
+
+### Patch Changes
+
+- 2b44cae: Move packages from @alithya-oss/plugin-_ to @alithya-oss/backstage-plugin-_
+
 ## 0.5.4
 
 ### Patch Changes
