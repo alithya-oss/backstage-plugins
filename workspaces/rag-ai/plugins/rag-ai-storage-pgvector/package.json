@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-rag-ai-storage-pgvector",
+  "name": "@alithya-oss/backstage-plugin-rag-ai-storage-pgvector",
   "version": "0.2.5",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -31,7 +31,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-rag-ai-node": "workspace:^",
+    "@alithya-oss/backstage-plugin-rag-ai-node": "workspace:^",
     "@backstage/backend-common": "^0.25.0",
     "@backstage/backend-plugin-api": "^1.1.1",
     "@backstage/config": "^1.3.2",

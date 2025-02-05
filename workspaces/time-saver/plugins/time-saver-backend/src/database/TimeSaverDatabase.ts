@@ -43,7 +43,7 @@ import {
   TimeSavedStatisticsByTemplateName,
   TimeSavedStatisticsByTeamNameDbRow,
   TimeSavedStatisticsByTemplateNameDbRow,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 import {
   TemplateTimeSavingsCollectionMap,
   GroupSavingsDivisionMap,
@@ -94,7 +94,7 @@ export interface TimeSaverStore {
 }
 
 const migrationsDir = resolvePackagePath(
-  '@alithya-oss/plugin-time-saver-backend',
+  '@alithya-oss/backstage-plugin-time-saver-backend',
   'migrations',
 );
 

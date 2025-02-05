@@ -18,7 +18,7 @@ import { useAsyncAwsApp } from '../../hooks/useAwsApp';
 import {
   AWSComponent,
   AWSECSAppDeploymentEnvironment,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 
 const OpaAppStateOverview = ({
   input: { cluster, serviceArn, taskDefArn },

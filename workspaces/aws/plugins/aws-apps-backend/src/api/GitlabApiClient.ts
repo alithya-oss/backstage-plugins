@@ -3,7 +3,7 @@ import {
   ICommitChange,
   IRepositoryInfo,
   ISCMBackendAPI,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { LoggerService } from '@backstage/backend-plugin-api';
 
 export class GitLabAPI implements ISCMBackendAPI {

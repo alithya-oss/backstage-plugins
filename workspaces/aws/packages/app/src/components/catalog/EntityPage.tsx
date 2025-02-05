@@ -68,23 +68,23 @@ import {
 import {
   isAmazonEcsServiceAvailable,
   EntityAmazonEcsServicesContent,
-} from '@alithya-oss/plugin-amazon-ecs';
+} from '@alithya-oss/backstage-plugin-amazon-ecs';
 import {
   EntityAwsCodePipelineCard,
   EntityAwsCodePipelineExecutionsContent,
   isAwsCodePipelineAvailable,
-} from '@alithya-oss/plugin-aws-codepipeline';
+} from '@alithya-oss/backstage-plugin-aws-codepipeline';
 import {
   EntityAwsCodeBuildCard,
   isAwsCodeBuildAvailable,
-} from '@alithya-oss/plugin-aws-codebuild';
+} from '@alithya-oss/backstage-plugin-aws-codebuild';
 import { EntityCostInsightsContent } from '@backstage-community/plugin-cost-insights';
 
 import {
   AwsEnvironmentPage,
   AwsEnvironmentProviderPage,
   AwsComponentPage,
-} from '@alithya-oss/plugin-aws-apps';
+} from '@alithya-oss/backstage-plugin-aws-apps';
 
 import {
   isGitlabAvailable,

@@ -16,7 +16,7 @@ This guide assumes that you are familiar with the general [Getting Started](../.
 Install the backend package in your Backstage app:
 
 ```shell
-yarn workspace backend add @alithya-oss/plugin-scaffolder-backend-module-aws-core
+yarn workspace backend add @alithya-oss/backstage-plugin-scaffolder-backend-module-aws-core
 ```
 
 ### New backend
@@ -26,7 +26,9 @@ Add the scaffolder module to the `packages/backend/src/index.ts`:
 ```typescript
 const backend = createBackend();
 // ...
-backend.add(import('@alithya-oss/plugin-scaffolder-backend-module-aws-core'));
+backend.add(
+  import('@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-core'),
+);
 // ...
 backend.start();
 ```
@@ -42,7 +44,7 @@ import { Router } from 'express';
 import type { PluginEnvironment } from '../types';
 import { createBuiltinActions } from '@backstage/plugin-scaffolder-backend';
 import { ScmIntegrations } from '@backstage/integration';
-import { createAwsCloudControlCreateAction } from '@alithya-oss/plugin-scaffolder-backend-module-aws-core';
+import { createAwsCloudControlCreateAction } from '@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-core';
 
 export default async function createPlugin(
   env: PluginEnvironment,

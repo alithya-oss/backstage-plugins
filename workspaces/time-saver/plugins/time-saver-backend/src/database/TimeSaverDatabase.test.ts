@@ -3,7 +3,7 @@ import { mockServices } from '@backstage/backend-test-utils';
 import { ConfigReader } from '@backstage/config';
 import { Knex as KnexType } from 'knex';
 import { TimeSaverDatabase, TimeSaverStore } from './TimeSaverDatabase';
-import { TemplateTimeSavings } from '@alithya-oss/plugin-time-saver-common';
+import { TemplateTimeSavings } from '@alithya-oss/backstage-plugin-time-saver-common';
 import { DateTime } from 'luxon';
 
 const templateTimeSavings: TemplateTimeSavings[] = [

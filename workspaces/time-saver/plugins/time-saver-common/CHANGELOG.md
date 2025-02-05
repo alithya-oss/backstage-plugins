@@ -1,4 +1,4 @@
-# @alithya-oss/plugin-time-saver-common
+# @alithya-oss/backstage-plugin-time-saver-common
 
 ## 0.5.4
 

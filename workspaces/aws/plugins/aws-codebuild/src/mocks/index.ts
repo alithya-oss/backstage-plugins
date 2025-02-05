@@ -17,7 +17,7 @@ import {
   ProjectsResponse,
   mockCodeBuildProjectBuild,
   mockCodeBuildProject,
-} from '@alithya-oss/plugin-aws-codebuild-common';
+} from '@alithya-oss/backstage-plugin-aws-codebuild-common';
 
 export class MockAwsCodeBuildApiClient implements AwsCodeBuildApi {
   // @ts-ignore

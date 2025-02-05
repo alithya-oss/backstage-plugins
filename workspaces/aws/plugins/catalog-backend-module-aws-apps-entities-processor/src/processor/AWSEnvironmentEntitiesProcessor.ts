@@ -19,7 +19,7 @@ import {
 import {
   AWSEnvironmentEntityV1,
   awsEnvironmentEntityV1Validator,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 
 /** @public */
 export class AWSEnvironmentEntitiesProcessor implements CatalogProcessor {

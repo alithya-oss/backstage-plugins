@@ -24,7 +24,7 @@ import {
   AWSEnvironmentProviderRecord,
   getGitCredentailsSecret,
   getRepoInfo,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 import {
   CompoundEntityRef,
   Entity,

@@ -26,7 +26,7 @@ import Router from 'express-promise-router';
 import {
   AugmentationIndexer,
   RetrievalPipeline,
-} from '@alithya-oss/plugin-rag-ai-node';
+} from '@alithya-oss/backstage-plugin-rag-ai-node';
 import { BaseLLM } from '@langchain/core/language_models/llms';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { LlmService } from './LlmService';

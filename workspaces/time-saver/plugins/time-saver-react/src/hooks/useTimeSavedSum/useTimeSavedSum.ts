@@ -5,7 +5,7 @@ import {
   isTimeSaverApiError,
   TimeSaverApiErrorResponse,
   GetUriParams,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 
 /**
  * Retrieves the total time saved from using software templates from the backend.

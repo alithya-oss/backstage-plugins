@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-scaffolder-backend-module-aws-apps",
+  "name": "@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps",
   "description": "App Development for Backstage.io on AWS - scaffolder actions",
   "version": "0.3.9",
   "main": "src/index.ts",
@@ -37,7 +37,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-aws-apps-backend": "workspace:^",
+    "@alithya-oss/backstage-plugin-aws-apps-backend": "workspace:^",
     "@aws-sdk/client-secrets-manager": "^3.731.1",
     "@aws-sdk/client-sfn": "^3.731.1",
     "@aws-sdk/client-ssm": "^3.731.1",

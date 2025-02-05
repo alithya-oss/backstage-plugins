@@ -1,7 +1,7 @@
 import React from 'react';
 import { GaugeTemplate } from '../GaugeTemplate';
 import { useTemplateTasks } from '../../../hooks';
-import { isTimeSaverApiError } from '@alithya-oss/plugin-time-saver-common';
+import { isTimeSaverApiError } from '@alithya-oss/backstage-plugin-time-saver-common';
 import { getRandomColor } from '../../utils';
 import { CircularProgress } from '@material-ui/core';
 

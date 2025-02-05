@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-time-saver-common",
+  "name": "@alithya-oss/backstage-plugin-time-saver-common",
   "author": "tduniec <tomekduniec@gmail.com>",
   "description": "Common functionalities for the time-saver plugin",
   "version": "0.5.4",
@@ -21,7 +21,7 @@
     "role": "common-library",
     "pluginId": "time-saver-common",
     "pluginPackages": [
-      "@alithya-oss/plugin-time-saver-common"
+      "@alithya-oss/backstage-plugin-time-saver-common"
     ]
   },
   "sideEffects": false,

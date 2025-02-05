@@ -5,7 +5,7 @@ import { AwsCodePipelineApi, awsCodePipelineApiRef } from '../../api';
 import {
   mockCodePipelineExecutions,
   mockEntityWithTags,
-} from '@alithya-oss/plugin-aws-codepipeline-common';
+} from '@alithya-oss/backstage-plugin-aws-codepipeline-common';
 import { ConfigApi, configApiRef } from '@backstage/core-plugin-api';
 import { ConfigReader } from '@backstage/core-app-api';
 

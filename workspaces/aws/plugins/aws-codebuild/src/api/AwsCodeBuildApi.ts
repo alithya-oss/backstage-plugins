@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-import { ProjectsResponse } from '@alithya-oss/plugin-aws-codebuild-common';
+import { ProjectsResponse } from '@alithya-oss/backstage-plugin-aws-codebuild-common';
 import { createApiRef } from '@backstage/core-plugin-api';
 import type { CompoundEntityRef } from '@backstage/catalog-model';
 

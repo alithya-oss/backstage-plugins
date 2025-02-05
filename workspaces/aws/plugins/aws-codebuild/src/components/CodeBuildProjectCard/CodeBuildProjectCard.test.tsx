@@ -9,7 +9,7 @@ import {
   mockCodeBuildProject,
   mockCodeBuildProjectBuild,
   mockEntityWithTags,
-} from '@alithya-oss/plugin-aws-codebuild-common';
+} from '@alithya-oss/backstage-plugin-aws-codebuild-common';
 
 const configApi: ConfigApi = new ConfigReader({
   aws: {

@@ -21,7 +21,7 @@ import {
 import {
   EmbeddingDoc,
   EmbeddingsSource,
-} from '@alithya-oss/plugin-rag-ai-node';
+} from '@alithya-oss/backstage-plugin-rag-ai-node';
 import { SearchResultSet } from '@backstage/plugin-search-common';
 import fetch from 'node-fetch';
 

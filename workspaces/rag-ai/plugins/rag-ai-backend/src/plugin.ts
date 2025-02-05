@@ -25,7 +25,7 @@ import {
   augmentationIndexerExtensionPoint,
   retrievalPipelineExtensionPoint,
   modelExtensionPoint,
-} from '@alithya-oss/plugin-rag-ai-node';
+} from '@alithya-oss/backstage-plugin-rag-ai-node';
 import { BaseLLM } from '@langchain/core/language_models/llms';
 
 /**

@@ -34,7 +34,7 @@ When you have you `packages/app/src/components/search/SearchPage.tsx` file ready
 ```tsx
 import {
   ConfluenceSearchResultListItem,
-  ConfluenceSearchIcon } from '@alithya-oss/plugin-confluence';
+  ConfluenceSearchIcon } from '@alithya-oss/backstage-plugin-confluence';
 ...
             <SearchType.Accordion
               name="Result Type"

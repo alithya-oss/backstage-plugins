@@ -9,7 +9,7 @@ import {
   AWSECSAppDeploymentEnvironment,
   AWSServiceResources,
   AWSResourceDeploymentEnvironment,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { LinearProgress, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { opaApiRef } from '../../api';

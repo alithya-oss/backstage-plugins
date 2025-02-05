@@ -20,7 +20,7 @@ import { configApiRef, ConfigApi } from '@backstage/core-plugin-api';
 import { awsCodeBuildApiRef } from '../src/api';
 import { MockAwsCodeBuildApiClient } from '../src/mocks';
 import { EntityProvider } from '@backstage/plugin-catalog-react';
-import { mockEntityWithTags } from '@alithya-oss/plugin-aws-codebuild-common';
+import { mockEntityWithTags } from '@alithya-oss/backstage-plugin-aws-codebuild-common';
 import { CodeBuildProjectCard } from '../src/components/CodeBuildProjectCard';
 
 const configApi: ConfigApi = new ConfigReader({});

@@ -18,7 +18,7 @@ import {
   AugmentationRetriever,
   EmbeddingDoc,
   EmbeddingsSource,
-} from '@alithya-oss/plugin-rag-ai-node';
+} from '@alithya-oss/backstage-plugin-rag-ai-node';
 import { SearchClient } from './SearchClient';
 import {
   AuthService,

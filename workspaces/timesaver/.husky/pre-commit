@@ -1,3 +1,0 @@
-cd workspaces/timesaver
-yarn prettier:check
-yarn lint:all

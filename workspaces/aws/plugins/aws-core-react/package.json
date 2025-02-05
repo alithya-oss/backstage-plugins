@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-aws-core-react",
+  "name": "@alithya-oss/backstage-plugin-aws-core-react",
   "description": "Web library for the AWS plugins for Backstage",
   "version": "0.5.4",
   "repository": {

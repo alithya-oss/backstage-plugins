@@ -18,12 +18,12 @@ import {
   useEntity,
   MissingAnnotationEmptyState,
 } from '@backstage/plugin-catalog-react';
-import { getOneOfEntityAnnotations } from '@alithya-oss/plugin-aws-core-common';
+import { getOneOfEntityAnnotations } from '@alithya-oss/backstage-plugin-aws-core-common';
 import {
   AWS_CODEPIPELINE_ARN_ANNOTATION,
   AWS_CODEPIPELINE_ARN_ANNOTATION_LEGACY,
   AWS_CODEPIPELINE_TAGS_ANNOTATION,
-} from '@alithya-oss/plugin-aws-codepipeline-common';
+} from '@alithya-oss/backstage-plugin-aws-codepipeline-common';
 import { CodePipelineExecutions } from './CodePipelineExecutions';
 
 /** @public */

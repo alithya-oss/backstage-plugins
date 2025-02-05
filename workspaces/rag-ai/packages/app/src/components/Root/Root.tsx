@@ -28,7 +28,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { MyGroupsSidebarItem } from '@backstage/plugin-org';
 import GroupIcon from '@material-ui/icons/People';
 
-import { SidebarRagModal } from '@alithya-oss/plugin-rag-ai';
+import { SidebarRagModal } from '@alithya-oss/backstage-plugin-rag-ai';
 
 const useSidebarLogoStyles = makeStyles({
   root: {

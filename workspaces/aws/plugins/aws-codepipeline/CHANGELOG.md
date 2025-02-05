@@ -6,9 +6,9 @@
 
 - 1cc277e: Bump Backstage framework version 1.35.1
 - Updated dependencies [1cc277e]
-  - @alithya-oss/plugin-aws-codepipeline-common@0.3.6
-  - @alithya-oss/plugin-aws-core-common@0.5.4
-  - @alithya-oss/plugin-aws-core-react@0.5.4
+  - @alithya-oss/backstage-plugin-aws-codepipeline-common@0.3.6
+  - @alithya-oss/backstage-plugin-aws-core-common@0.5.4
+  - @alithya-oss/backstage-plugin-aws-core-react@0.5.4
 
 ## 0.5.7
 
@@ -16,9 +16,9 @@
 
 - f960c46: Fixed packages delivery
 - Updated dependencies [f960c46]
-  - @alithya-oss/plugin-aws-core-common@0.5.3
-  - @alithya-oss/plugin-aws-codepipeline-common@0.3.5
-  - @alithya-oss/plugin-aws-core-react@0.5.3
+  - @alithya-oss/backstage-plugin-aws-core-common@0.5.3
+  - @alithya-oss/backstage-plugin-aws-codepipeline-common@0.3.5
+  - @alithya-oss/backstage-plugin-aws-core-react@0.5.3
 
 ## 0.5.6
 
@@ -26,9 +26,9 @@
 
 - 6c62697: Bump Backstage framework 1.35.0
 - Updated dependencies [6c62697]
-  - @alithya-oss/plugin-aws-codepipeline-common@0.3.4
-  - @alithya-oss/plugin-aws-core-common@0.5.2
-  - @alithya-oss/plugin-aws-core-react@0.5.2
+  - @alithya-oss/backstage-plugin-aws-codepipeline-common@0.3.4
+  - @alithya-oss/backstage-plugin-aws-core-common@0.5.2
+  - @alithya-oss/backstage-plugin-aws-core-react@0.5.2
 
 ## 0.5.5
 
@@ -36,9 +36,9 @@
 
 - b76307e: Bump framework version 1.30.4 and aligned plugin names with [community-plugins](https://github.com/backstage/community-plugins) naming convention
 - Updated dependencies [b76307e]
-  - @alithya-oss/plugin-aws-codepipeline-common@0.3.3
-  - @alithya-oss/plugin-aws-core-common@0.5.1
-  - @alithya-oss/plugin-aws-core-react@0.5.1
+  - @alithya-oss/backstage-plugin-aws-codepipeline-common@0.3.3
+  - @alithya-oss/backstage-plugin-aws-core-common@0.5.1
+  - @alithya-oss/backstage-plugin-aws-core-react@0.5.1
 
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.

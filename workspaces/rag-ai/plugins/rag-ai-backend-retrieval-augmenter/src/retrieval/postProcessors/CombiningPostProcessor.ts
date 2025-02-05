@@ -18,7 +18,7 @@ import {
   AugmentationPostProcessor,
   EmbeddingDoc,
   EmbeddingsSource,
-} from '@alithya-oss/plugin-rag-ai-node';
+} from '@alithya-oss/backstage-plugin-rag-ai-node';
 
 /** @public */
 export class CombiningPostProcessor implements AugmentationPostProcessor {

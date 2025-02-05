@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-amazon-ecs-common",
+  "name": "@alithya-oss/backstage-plugin-amazon-ecs-common",
   "description": "Common functionality for the amazon-ecs-plugin-for-backstage plugin",
   "version": "0.2.6",
   "repository": {
@@ -20,9 +20,9 @@
     "role": "common-library",
     "pluginId": "amazon-ecs",
     "pluginPackages": [
-      "@alithya-oss/plugin-amazon-ecs",
-      "@alithya-oss/plugin-amazon-ecs-backend",
-      "@alithya-oss/plugin-amazon-ecs-common"
+      "@alithya-oss/backstage-plugin-amazon-ecs",
+      "@alithya-oss/backstage-plugin-amazon-ecs-backend",
+      "@alithya-oss/backstage-plugin-amazon-ecs-common"
     ]
   },
   "sideEffects": false,

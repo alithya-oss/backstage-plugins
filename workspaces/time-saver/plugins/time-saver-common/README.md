@@ -17,20 +17,20 @@ This plugin provides an implementation of charts and statistics related to your 
 
 ```sh
 # From your Backstage root directory
-yarn workspace packages/backend @alithya-oss/plugin-time-saver-common
+yarn workspace packages/backend @alithya-oss/backstage-plugin-time-saver-common
 ```
 
 or
 
 ```sh
 # From your Backstage root directory
-yarn workspace packages/app @alithya-oss/plugin-time-saver-common
+yarn workspace packages/app @alithya-oss/backstage-plugin-time-saver-common
 ```
 
 2. Wire up the API implementation to your `packages/app/src/App.tsx`:
 
 ```tsx
-import { timeSaverPermission } from '@alithya-oss/plugin-time-saver-common';
+import { timeSaverPermission } from '@alithya-oss/backstage-plugin-time-saver-common';
 
 ...
 
@@ -49,7 +49,7 @@ import { timeSaverPermission } from '@alithya-oss/plugin-time-saver-common';
 
 ```tsx
 
-import { timeSaverPermission } from '@alithya-oss/plugin-time-saver-common';
+import { timeSaverPermission } from '@alithya-oss/backstage-plugin-time-saver-common';
 
 ...
 
@@ -69,7 +69,7 @@ import { timeSaverPermission } from '@alithya-oss/plugin-time-saver-common';
 
 ```ts
 ...
-import { timeSaverPermission } from '@alithya-oss/plugin-time-saver-common';
+import { timeSaverPermission } from '@alithya-oss/backstage-plugin-time-saver-common';
 ...
 
     if (isPermission(request.permission, timeSaverPermission)) {

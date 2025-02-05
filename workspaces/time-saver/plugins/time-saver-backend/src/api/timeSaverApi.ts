@@ -44,7 +44,7 @@ import {
   GetTimeSavedSumResponse,
   isTemplateTaskResponse,
   TimeSaverApiErrorResponse,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 
 export interface TemplateSpecs {
   specs: {

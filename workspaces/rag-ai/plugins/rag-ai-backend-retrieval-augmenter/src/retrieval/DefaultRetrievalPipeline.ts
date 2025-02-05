@@ -22,7 +22,7 @@ import {
   EntityFilterShape,
   RetrievalPipeline,
   RetrievalRouter,
-} from '@alithya-oss/plugin-rag-ai-node';
+} from '@alithya-oss/backstage-plugin-rag-ai-node';
 import { CombiningPostProcessor } from './postProcessors/CombiningPostProcessor';
 
 /** @public */

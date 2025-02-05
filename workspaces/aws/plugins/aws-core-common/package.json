@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-aws-core-common",
+  "name": "@alithya-oss/backstage-plugin-aws-core-common",
   "description": "Common functionality for AWS plugins for Backstage",
   "version": "0.5.4",
   "repository": {

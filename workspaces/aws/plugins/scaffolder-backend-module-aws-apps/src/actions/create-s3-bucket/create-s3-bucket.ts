@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
-// import { getAWScreds, AwsAppsApi, createAuditRecord } from '@alithya-oss/plugin-aws-apps-backend';
+// import { getAWScreds, AwsAppsApi, createAuditRecord } from '@alithya-oss/backstage-plugin-aws-apps-backend';
 import { EnvironmentProvider } from '../../types';
 
 /** @public */

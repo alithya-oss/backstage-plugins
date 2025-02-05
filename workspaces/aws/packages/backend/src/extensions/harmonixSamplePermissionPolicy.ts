@@ -1,6 +1,6 @@
 import { policyExtensionPoint } from '@backstage/plugin-permission-node/alpha';
 import { createBackendModule } from '@backstage/backend-plugin-api';
-import { readOpaAppAuditPermission } from '@alithya-oss/plugin-aws-apps-common';
+import { readOpaAppAuditPermission } from '@alithya-oss/backstage-plugin-aws-apps-common';
 import {
   DEFAULT_NAMESPACE,
   stringifyEntityRef,

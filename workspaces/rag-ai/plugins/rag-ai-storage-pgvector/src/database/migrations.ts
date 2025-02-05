@@ -19,7 +19,7 @@ import { Knex } from 'knex';
 
 export async function applyDatabaseMigrations(knex: Knex): Promise<void> {
   const migrationsDir = resolvePackagePath(
-    '@alithya-oss/plugin-rag-ai-storage-pgvector',
+    '@alithya-oss/backstage-plugin-rag-ai-storage-pgvector',
     'migrations',
   );
 

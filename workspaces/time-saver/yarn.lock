@@ -12,9 +12,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alithya-oss/plugin-catalog-backend-module-time-saver-processor@workspace:^, @alithya-oss/plugin-catalog-backend-module-time-saver-processor@workspace:plugins/catalog-backend-module-time-saver-processor":
+"@alithya-oss/backstage-plugin-catalog-backend-module-time-saver-processor@workspace:^, @alithya-oss/backstage-plugin-catalog-backend-module-time-saver-processor@workspace:plugins/catalog-backend-module-time-saver-processor":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-catalog-backend-module-time-saver-processor@workspace:plugins/catalog-backend-module-time-saver-processor"
+  resolution: "@alithya-oss/backstage-plugin-catalog-backend-module-time-saver-processor@workspace:plugins/catalog-backend-module-time-saver-processor"
   dependencies:
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
@@ -26,11 +26,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-time-saver-backend@workspace:^, @alithya-oss/plugin-time-saver-backend@workspace:plugins/time-saver-backend":
+"@alithya-oss/backstage-plugin-time-saver-backend@workspace:^, @alithya-oss/backstage-plugin-time-saver-backend@workspace:plugins/time-saver-backend":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-time-saver-backend@workspace:plugins/time-saver-backend"
+  resolution: "@alithya-oss/backstage-plugin-time-saver-backend@workspace:plugins/time-saver-backend"
   dependencies:
-    "@alithya-oss/plugin-time-saver-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-time-saver-common": "workspace:^"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
@@ -55,9 +55,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-time-saver-common@workspace:^, @alithya-oss/plugin-time-saver-common@workspace:plugins/time-saver-common":
+"@alithya-oss/backstage-plugin-time-saver-common@workspace:^, @alithya-oss/backstage-plugin-time-saver-common@workspace:plugins/time-saver-common":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-time-saver-common@workspace:plugins/time-saver-common"
+  resolution: "@alithya-oss/backstage-plugin-time-saver-common@workspace:plugins/time-saver-common"
   dependencies:
     "@backstage/cli": "npm:^0.29.6"
     "@backstage/plugin-permission-common": "npm:^0.8.4"
@@ -65,11 +65,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-time-saver-react@workspace:^, @alithya-oss/plugin-time-saver-react@workspace:plugins/time-saver-react":
+"@alithya-oss/backstage-plugin-time-saver-react@workspace:^, @alithya-oss/backstage-plugin-time-saver-react@workspace:plugins/time-saver-react":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-time-saver-react@workspace:plugins/time-saver-react"
+  resolution: "@alithya-oss/backstage-plugin-time-saver-react@workspace:plugins/time-saver-react"
   dependencies:
-    "@alithya-oss/plugin-time-saver-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-time-saver-common": "workspace:^"
     "@backstage/cli": "npm:^0.29.6"
     "@backstage/core-plugin-api": "npm:^1.10.3"
     "@backstage/errors": "npm:^1.2.7"
@@ -90,12 +90,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/plugin-time-saver@workspace:^, @alithya-oss/plugin-time-saver@workspace:plugins/time-saver":
+"@alithya-oss/backstage-plugin-time-saver@workspace:^, @alithya-oss/backstage-plugin-time-saver@workspace:plugins/time-saver":
   version: 0.0.0-use.local
-  resolution: "@alithya-oss/plugin-time-saver@workspace:plugins/time-saver"
+  resolution: "@alithya-oss/backstage-plugin-time-saver@workspace:plugins/time-saver"
   dependencies:
-    "@alithya-oss/plugin-time-saver-common": "workspace:^"
-    "@alithya-oss/plugin-time-saver-react": "workspace:^"
+    "@alithya-oss/backstage-plugin-time-saver-common": "workspace:^"
+    "@alithya-oss/backstage-plugin-time-saver-react": "workspace:^"
     "@backstage/cli": "npm:^0.29.6"
     "@backstage/core-app-api": "npm:^1.15.4"
     "@backstage/core-components": "npm:^0.16.3"
@@ -14914,7 +14914,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "app@workspace:packages/app"
   dependencies:
-    "@alithya-oss/plugin-time-saver": "workspace:^"
+    "@alithya-oss/backstage-plugin-time-saver": "workspace:^"
     "@backstage/app-defaults": "npm:^1.5.16"
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/cli": "npm:^0.29.6"
@@ -15629,8 +15629,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "backend@workspace:packages/backend"
   dependencies:
-    "@alithya-oss/plugin-catalog-backend-module-time-saver-processor": "workspace:^"
-    "@alithya-oss/plugin-time-saver-backend": "workspace:^"
+    "@alithya-oss/backstage-plugin-catalog-backend-module-time-saver-processor": "workspace:^"
+    "@alithya-oss/backstage-plugin-time-saver-backend": "workspace:^"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-tasks": "npm:^0.6.1"

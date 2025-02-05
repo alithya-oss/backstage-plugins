@@ -48,7 +48,7 @@ import {
   TemplateNameAutocomplete,
   TemplateCountGauge,
   TeamSelector,
-} from '@alithya-oss/plugin-time-saver-react';
+} from '@alithya-oss/backstage-plugin-time-saver-react';
 
 export const TimeSaverSamplesPageComponent = () => {
   return (

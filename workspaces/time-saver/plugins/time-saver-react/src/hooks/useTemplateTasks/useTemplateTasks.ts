@@ -4,7 +4,7 @@ import useAsync from 'react-use/esm/useAsync';
 import {
   TimeSaverApiErrorResponse,
   isTimeSaverApiError,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 
 /**
  * Retrieves a template tasks list from the backend.

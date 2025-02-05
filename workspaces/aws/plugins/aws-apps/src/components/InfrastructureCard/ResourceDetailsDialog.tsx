@@ -3,7 +3,7 @@
 
 import { Table, TableColumn } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
-import { AWSResource } from '@alithya-oss/plugin-aws-apps-common';
+import { AWSResource } from '@alithya-oss/backstage-plugin-aws-apps-common';
 import {
   Button,
   Dialog,

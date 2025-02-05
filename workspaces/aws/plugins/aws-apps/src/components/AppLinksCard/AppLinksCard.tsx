@@ -15,7 +15,7 @@ import {
 } from '@backstage/core-components';
 import { LinearProgress } from '@material-ui/core';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
-import { AWSComponent } from '@alithya-oss/plugin-aws-apps-common';
+import { AWSComponent } from '@alithya-oss/backstage-plugin-aws-apps-common';
 
 /** @public */
 export interface AppLinksProps {

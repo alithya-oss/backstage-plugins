@@ -1,4 +1,4 @@
-# @alithya-oss/plugin-rag-ai-backend-retrieval-augmenter
+# @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter
 
 ## 1.0.6
 
@@ -6,7 +6,7 @@
 
 - 1cc277e: Bump Backstage framework version 1.35.1
 - Updated dependencies [1cc277e]
-  - @alithya-oss/plugin-rag-ai-node@0.2.5
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.5
 
 ## 1.0.5
 
@@ -14,7 +14,7 @@
 
 - 3ba89eb: Bump Backstage framework version 1.35.0 and Langchain dependencies
 - Updated dependencies [3ba89eb]
-  - @alithya-oss/plugin-rag-ai-node@0.2.4
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.4
 
 ## 1.0.4
 
@@ -22,7 +22,7 @@
 
 - 58e7d6f: Bump framework version 1.32.5
 - Updated dependencies [58e7d6f]
-  - @alithya-oss/plugin-rag-ai-node@0.2.3
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.3
 
 ## 1.0.3
 
@@ -30,7 +30,7 @@
 
 - cdebf2e: Enforce release 2024-11-14
 - Updated dependencies [cdebf2e]
-  - @alithya-oss/plugin-rag-ai-node@0.2.2
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.2
 
 ## 1.0.2
 
@@ -38,7 +38,7 @@
 
 - a854796: Bump Backstage framework verison 1.32.5
 - Updated dependencies [a854796]
-  - @alithya-oss/plugin-rag-ai-node@0.2.1
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.1
 
 ## 1.0.1
 
@@ -55,7 +55,7 @@
 ### Patch Changes
 
 - Updated dependencies [cff627d]
-  - @alithya-oss/plugin-rag-ai-node@0.2.0
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.0
 
 ## 0.3.6
 
@@ -75,7 +75,7 @@
 
 - f5bab23: Upgraded the langchain dependencies of the rag-ai plugins
 - Updated dependencies [f5bab23]
-  - @alithya-oss/plugin-rag-ai-node@0.1.4
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.1.4
 
 ## 0.3.3
 
@@ -85,7 +85,7 @@
 - ed73691: Added source `all` for querying all sources simultaneously
 - 9768baa: Renamed type `SplitterOptions` to `AugmentationOptions`
 - Updated dependencies [ed73691]
-  - @alithya-oss/plugin-rag-ai-node@0.1.3
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.1.3
 
 ## 0.3.2
 
@@ -99,7 +99,7 @@
 
 - d02d5df: Upgrade to backstage 1.26.5
 - Updated dependencies [d02d5df]
-  - @alithya-oss/plugin-rag-ai-node@0.1.2
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.1.2
 
 ## 0.3.0
 
@@ -113,7 +113,7 @@
 
 - 7cd4bdf: version upgrade to 1.25.0
 - Updated dependencies [7cd4bdf]
-  - @alithya-oss/plugin-rag-ai-node@0.1.1
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.1.1
 
 ## 0.2.0
 
@@ -139,4 +139,4 @@
 ### Patch Changes
 
 - Updated dependencies [7b468fa]
-  - @alithya-oss/plugin-rag-ai-node@0.1.0
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.1.0

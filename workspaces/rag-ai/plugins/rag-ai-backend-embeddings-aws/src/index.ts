@@ -21,7 +21,7 @@ import {
 import {
   AugmentationIndexer,
   RoadieVectorStore,
-} from '@alithya-oss/plugin-rag-ai-node';
+} from '@alithya-oss/backstage-plugin-rag-ai-node';
 import {
   BedrockConfig,
   RoadieBedrockAugmenter,
@@ -29,7 +29,7 @@ import {
 import { CatalogApi } from '@backstage/catalog-client';
 import { AwsCredentialIdentity, Provider } from '@aws-sdk/types';
 import { Config } from '@backstage/config';
-import { AugmentationOptions } from '@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter';
+import { AugmentationOptions } from '@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter';
 
 /**
  * Amazon Bedrock client configuration to generate embeddings

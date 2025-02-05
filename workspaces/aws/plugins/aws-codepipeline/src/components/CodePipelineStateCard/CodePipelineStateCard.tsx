@@ -31,11 +31,11 @@ import {
   AWS_CODEPIPELINE_ARN_ANNOTATION,
   AWS_CODEPIPELINE_TAGS_ANNOTATION,
   PipelineState,
-} from '@alithya-oss/plugin-aws-codepipeline-common';
+} from '@alithya-oss/backstage-plugin-aws-codepipeline-common';
 import { usePipelineState } from '../../hooks';
 import { isAwsCodePipelineAvailable } from '../../plugin';
-import { TabbedContent } from '@alithya-oss/plugin-aws-core-react';
-import { MissingResources } from '@alithya-oss/plugin-aws-core-react';
+import { TabbedContent } from '@alithya-oss/backstage-plugin-aws-core-react';
+import { MissingResources } from '@alithya-oss/backstage-plugin-aws-core-react';
 
 const PipelineStageTable = ({
   stages,

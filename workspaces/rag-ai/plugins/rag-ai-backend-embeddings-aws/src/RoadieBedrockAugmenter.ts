@@ -19,7 +19,7 @@ import { AwsCredentialIdentity, Provider } from '@aws-sdk/types';
 import {
   DefaultVectorAugmentationIndexer,
   RoadieEmbeddingsConfig,
-} from '@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter';
+} from '@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter';
 import { BedrockCohereEmbeddings } from './BedrockCohereEmbeddings';
 
 /**

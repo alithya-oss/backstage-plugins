@@ -8,10 +8,10 @@ import {
   augmentationIndexerExtensionPoint,
   retrievalPipelineExtensionPoint,
   modelExtensionPoint,
-} from '@alithya-oss/plugin-rag-ai-node';
-import { createRoadiePgVectorStore } from '@alithya-oss/plugin-rag-ai-storage-pgvector';
-import { createDefaultRetrievalPipeline } from '@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter';
-import { initializeBedrockEmbeddings } from '@alithya-oss/plugin-rag-ai-backend-embeddings-aws';
+} from '@alithya-oss/backstage-plugin-rag-ai-node';
+import { createRoadiePgVectorStore } from '@alithya-oss/backstage-plugin-rag-ai-storage-pgvector';
+import { createDefaultRetrievalPipeline } from '@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter';
+import { initializeBedrockEmbeddings } from '@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws';
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 import { Bedrock } from '@langchain/community/llms/bedrock/web';
 

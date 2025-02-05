@@ -33,11 +33,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {
   ClusterResponse,
   ServicesResponse,
-} from '@alithya-oss/plugin-amazon-ecs-common';
+} from '@alithya-oss/backstage-plugin-amazon-ecs-common';
 
 import { Entity } from '@backstage/catalog-model';
 import { useEcsServices } from '../../hooks';
-import { MissingResources } from '@alithya-oss/plugin-aws-core-react';
+import { MissingResources } from '@alithya-oss/backstage-plugin-aws-core-react';
 import { EcsTaskDrawer } from '../EcsDrawer/EcsTaskDrawer';
 import { formatTime, getTaskDefinition } from '../../util';
 import { TaskStatus } from '../EcsTaskStatus';

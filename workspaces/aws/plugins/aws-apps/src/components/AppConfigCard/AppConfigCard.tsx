@@ -16,7 +16,7 @@ import { ContainerDetailsType } from '../../types';
 import {
   AWSComponent,
   AWSECSAppDeploymentEnvironment,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 
 const AppConfigOverview = ({
   input: { awsComponent },

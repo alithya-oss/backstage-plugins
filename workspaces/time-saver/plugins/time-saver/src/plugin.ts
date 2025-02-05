@@ -24,7 +24,7 @@ import {
 
 import { rootRouteRef } from './routes';
 import { TimeSaverClient } from './api';
-import { timeSaverApiRef } from '@alithya-oss/plugin-time-saver-react';
+import { timeSaverApiRef } from '@alithya-oss/backstage-plugin-time-saver-react';
 
 /**
  * @public

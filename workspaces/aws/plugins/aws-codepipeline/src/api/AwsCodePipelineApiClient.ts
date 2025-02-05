@@ -16,8 +16,8 @@ import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 import {
   PipelineExecutionsResponse,
   PipelineStateResponse,
-} from '@alithya-oss/plugin-aws-codepipeline-common';
-import { AwsApiClient } from '@alithya-oss/plugin-aws-core-react';
+} from '@alithya-oss/backstage-plugin-aws-codepipeline-common';
+import { AwsApiClient } from '@alithya-oss/backstage-plugin-aws-core-react';
 import type { CompoundEntityRef } from '@backstage/catalog-model';
 import { AwsCodePipelineApi } from '.';
 

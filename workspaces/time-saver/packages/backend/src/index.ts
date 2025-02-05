@@ -52,9 +52,9 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 backend.add(import('@backstage/plugin-kubernetes-backend'));
 
 // time-saver plugin
-// backend.add(import('@alithya-oss/plugin-time-saver-backend'));
+// backend.add(import('@alithya-oss/backstage-plugin-time-saver-backend'));
 // backend.add(
-//   import('@alithya-oss/plugin-catalog-backend-module-time-saver-processor'),
+//   import('@alithya-oss/backstage-plugin-catalog-backend-module-time-saver-processor'),
 // );
 
 backend.start();

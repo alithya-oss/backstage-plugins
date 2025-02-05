@@ -19,7 +19,7 @@ Install the OPA on AWS frontend plugin into your Backstage application:
 
 ```sh
 # From your Backstage root directory
-yarn add --cwd packages/app @alithya-oss/plugin-aws-apps@0.2.0
+yarn add --cwd packages/app @alithya-oss/backstage-plugin-aws-apps@0.2.0
 ```
 
 ## Configuration
@@ -42,7 +42,7 @@ import {
   AwsEnvironmentPage,
   AwsEnvironmentProviderPage,
   AwsComponentPage,
-} from '@alithya-oss/plugin-aws-apps';
+} from '@alithya-oss/backstage-plugin-aws-apps';
 
 import { isGitlabAvailable, EntityGitlabContent } from '@immobiliarelabs/backstage-plugin-gitlab';
 
@@ -134,7 +134,7 @@ It should be configured as a new `<Route ...>` in the file.
 // packages/app/src/App.tsx
 
 [imports...]
-+ import { AppCatalogPage } from '@alithya-oss/plugin-aws-apps';
++ import { AppCatalogPage } from '@alithya-oss/backstage-plugin-aws-apps';
 
 [...]
 

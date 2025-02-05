@@ -29,7 +29,7 @@ import {
   getGitCredentailsSecret,
   ResourceBinding,
   ResourcePolicy,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 import {
   CompoundEntityRef,
   Entity,

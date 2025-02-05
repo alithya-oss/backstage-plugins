@@ -1,4 +1,4 @@
-# @alithya-oss/plugin-aws-apps
+# @alithya-oss/backstage-plugin-aws-apps
 
 ## 0.4.4
 
@@ -8,7 +8,7 @@
 - 1cc277e: Fixed repo info for Gitlab does not support group nesting. (https://github.com/awslabs/harmonix/pull/140)
 - Updated dependencies [1cc277e]
 - Updated dependencies [1cc277e]
-  - @alithya-oss/plugin-aws-apps-common@0.4.4
+  - @alithya-oss/backstage-plugin-aws-apps-common@0.4.4
 
 ## 0.4.3
 
@@ -16,7 +16,7 @@
 
 - 2af4ce7: Fixed repo info for Gitlab does not support group nesting. (https://github.com/awslabs/harmonix/pull/140)
 - Updated dependencies [2af4ce7]
-  - @alithya-oss/plugin-aws-apps-common@0.4.3
+  - @alithya-oss/backstage-plugin-aws-apps-common@0.4.3
 
 ## 0.4.2
 
@@ -24,7 +24,7 @@
 
 - f960c46: Fixed packages delivery
 - Updated dependencies [f960c46]
-  - @alithya-oss/plugin-aws-apps-common@0.4.2
+  - @alithya-oss/backstage-plugin-aws-apps-common@0.4.2
 
 ## 0.4.1
 
@@ -32,7 +32,7 @@
 
 - 6c62697: Bump Backstage framework 1.35.0
 - Updated dependencies [6c62697]
-  - @alithya-oss/plugin-aws-apps-common@0.4.1
+  - @alithya-oss/backstage-plugin-aws-apps-common@0.4.1
 
 ## 0.4.0
 
@@ -43,7 +43,7 @@
 ### Patch Changes
 
 - Updated dependencies [b76307e]
-  - @alithya-oss/plugin-aws-apps-common@0.4.0
+  - @alithya-oss/backstage-plugin-aws-apps-common@0.4.0
 
 ## 0.3.6
 
@@ -51,4 +51,4 @@
 
 - 95c1ddb: Bump framework version 1.30.4 and aligned with `backstage/community-plugins` best practices
 - Updated dependencies [95c1ddb]
-  - @alithya-oss/plugin-aws-apps-common@0.3.5
+  - @alithya-oss/backstage-plugin-aws-apps-common@0.3.5

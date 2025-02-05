@@ -4,7 +4,7 @@ import { useStatistics } from '../../../../hooks';
 import {
   isTimeSaverApiError,
   TimeSavedStatistics,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 import {
   getUniqueTemplateNamesFromStatistics,
   generateBackgroundColorSet,

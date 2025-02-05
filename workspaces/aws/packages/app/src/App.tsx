@@ -51,8 +51,8 @@ import {
 import FlareIcon from '@material-ui/icons/Flare';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 
-import { costInsightsAwsPlugin } from '@alithya-oss/plugin-cost-insights-aws';
-import { AppCatalogPage } from '@alithya-oss/plugin-aws-apps';
+import { costInsightsAwsPlugin } from '@alithya-oss/backstage-plugin-cost-insights-aws';
+import { AppCatalogPage } from '@alithya-oss/backstage-plugin-aws-apps';
 import {
   OPAHomePage,
   customerTheme,

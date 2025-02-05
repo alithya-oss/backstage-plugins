@@ -15,7 +15,7 @@ import React, { useState } from 'react';
 import {
   PipelineExecutions,
   PipelineExecutionsResponse,
-} from '@alithya-oss/plugin-aws-codepipeline-common';
+} from '@alithya-oss/backstage-plugin-aws-codepipeline-common';
 import { LinearProgress, Select } from '@material-ui/core';
 import { Box, Typography, Link } from '@material-ui/core';
 import {
@@ -28,9 +28,9 @@ import { PipelineStageStatus } from '../PipelineStageStatus';
 import { formatTime } from '../../util';
 import { Entity } from '@backstage/catalog-model';
 import { usePipelineExecutions } from '../../hooks';
-import { MissingResources } from '@alithya-oss/plugin-aws-core-react';
+import { MissingResources } from '@alithya-oss/backstage-plugin-aws-core-react';
 import { configApiRef, useApi } from '@backstage/core-plugin-api';
-import { generateShortcutLink } from '@alithya-oss/plugin-aws-core-common';
+import { generateShortcutLink } from '@alithya-oss/backstage-plugin-aws-core-common';
 import { parse } from '@aws-sdk/util-arn-parser';
 
 const renderTrigger = (

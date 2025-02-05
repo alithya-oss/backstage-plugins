@@ -19,7 +19,7 @@ import {
   TimeSavedStatisticsByTeamNameDbRow,
   TimeSavedStatisticsByTemplateNameDbRow,
   isTimeSavedStatisticsDbRow,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 
 const DEFAULT_DB_CREATED_AT_VALUE = '';
 

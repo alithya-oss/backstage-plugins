@@ -8,7 +8,7 @@ Add the module package as dependency:
 
 ```bash
 # From your Backstage root directory
-yarn --cwd packages/backend add @alithya-oss/plugin-search-backend-module-confluence-collator
+yarn --cwd packages/backend add @alithya-oss/backstage-plugin-search-backend-module-confluence-collator
 ```
 
 ### New Backend System
@@ -23,7 +23,9 @@ import { createBackend } from '@backstage/backend-defaults';
 const backend = createBackend();
 backend.add(import('@backstage/plugin-search-backend'));
 backend.add(
-  import('@alithya-oss/plugin-search-backend-module-confluence-collator'),
+  import(
+    '@alithya-oss/backstage-plugin-search-backend-module-confluence-collator'
+  ),
 );
 backend.start();
 ```

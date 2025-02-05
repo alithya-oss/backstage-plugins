@@ -4,7 +4,7 @@ import { useGroupDivisionStatistics } from '../../../../hooks';
 import {
   GroupSavingsDivision,
   isTimeSaverApiError,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 import {
   getUniqueTeamsFromStatistics,
   generateBackgroundColorSet,

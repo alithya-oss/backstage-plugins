@@ -5,7 +5,7 @@ import {
   GroupSavingsDivision,
   isTimeSaverApiError,
   TimeSaverApiErrorResponse,
-} from '@alithya-oss/plugin-time-saver-common';
+} from '@alithya-oss/backstage-plugin-time-saver-common';
 
 /**
  * Retrieves time-saved percentages per team from the backend.

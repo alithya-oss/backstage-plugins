@@ -5,7 +5,7 @@ import { SubvalueCell, Table, TableColumn } from '@backstage/core-components';
 import {
   AWSResource,
   AWSServiceResources,
-} from '@alithya-oss/plugin-aws-apps-common';
+} from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { makeStyles, Typography } from '@material-ui/core';
 import Link from '@mui/material/Link';
 import React, { useState, useCallback } from 'react';

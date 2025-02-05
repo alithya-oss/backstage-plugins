@@ -1,4 +1,4 @@
-# @alithya-oss/plugin-rag-ai-node
+# @alithya-oss/backstage-plugin-rag-ai-node
 
 ## 0.2.5
 

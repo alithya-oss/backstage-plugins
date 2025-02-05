@@ -17,7 +17,7 @@ import { OpenAIEmbeddings } from '@langchain/openai';
 import {
   DefaultVectorAugmentationIndexer,
   RoadieEmbeddingsConfig,
-} from '@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter';
+} from '@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter';
 
 /**
  * OpenAI configuration to generate embeddings

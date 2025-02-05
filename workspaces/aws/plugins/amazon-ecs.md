@@ -47,7 +47,7 @@ Note: This policy does not reflect least privilege and you should further limit 
 Install the backend package in your Backstage app:
 
 ```shell
-yarn workspace backend add @alithya-oss/plugin-amazon-ecs-backend
+yarn workspace backend add @alithya-oss/backstage-plugin-amazon-ecs-backend
 ```
 
 #### New backend
@@ -57,7 +57,7 @@ Add the plugin to the `packages/backend/src/index.ts`:
 ```typescript
 const backend = createBackend();
 // ...
-backend.add(import('@alithya-oss/plugin-amazon-ecs-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-amazon-ecs-backend'));
 // ...
 backend.start();
 ```
@@ -70,7 +70,7 @@ Create a file `packages/backend/src/plugins/ecs.ts` with the following content:
 import {
   createRouter,
   DefaultAmazonEcsService,
-} from '@alithya-oss/plugin-amazon-ecs-backend';
+} from '@alithya-oss/backstage-plugin-amazon-ecs-backend';
 import { CatalogClient } from '@backstage/catalog-client';
 import { PluginEnvironment } from '../types';
 
@@ -113,13 +113,13 @@ Verify that the backend plugin is running in your Backstage app. You should rece
 Install the frontend package in your Backstage app:
 
 ```shell
-yarn workspace app add @alithya-oss/plugin-amazon-ecs
+yarn workspace app add @alithya-oss/backstage-plugin-amazon-ecs
 ```
 
 Edit `packages/app/src/components/catalog/EntityPage.tsx` to add an Amazon ECS service tab to the entity page:
 
 ```typescript
-import {EntityAmazonEcsServicesContent} from '@alithya-oss/plugin-amazon-ecs';
+import {EntityAmazonEcsServicesContent} from '@alithya-oss/backstage-plugin-amazon-ecs';
 
 {
   /* ... */

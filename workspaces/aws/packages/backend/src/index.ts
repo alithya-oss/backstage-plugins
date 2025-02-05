@@ -64,28 +64,32 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 backend.add(import('@backstage/plugin-kubernetes-backend'));
 
 // amazon ecs plugin
-backend.add(import('@alithya-oss/plugin-amazon-ecs-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-amazon-ecs-backend'));
 
 // aws codebuild plugin
-backend.add(import('@alithya-oss/plugin-aws-codebuild-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-aws-codebuild-backend'));
 
 // aws codepipeline plugin
-backend.add(import('@alithya-oss/plugin-aws-codepipeline-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-aws-codepipeline-backend'));
 
 // aws cost-insights plugin
-backend.add(import('@alithya-oss/plugin-cost-insights-aws-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-cost-insights-aws-backend'));
 
 // scaffolder
-backend.add(import('@alithya-oss/plugin-scaffolder-backend-module-aws-core'));
+backend.add(
+  import('@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-core'),
+);
 
 // awsapps
-backend.add(import('@alithya-oss/plugin-aws-apps-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-aws-apps-backend'));
 backend.add(
   import(
-    '@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor'
+    '@alithya-oss/backstage-plugin-catalog-backend-module-aws-apps-entities-processor'
   ),
 );
-backend.add(import('@alithya-oss/plugin-scaffolder-backend-module-aws-apps'));
+backend.add(
+  import('@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps'),
+);
 
 // scaffolder addons
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));

@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-search-backend-module-confluence-collator",
+  "name": "@alithya-oss/backstage-plugin-search-backend-module-confluence-collator",
   "version": "0.1.2",
   "description": "The confluence-collator backend module for the search plugin.",
   "backstage": {

@@ -1,5 +1,5 @@
 {
-  "name": "@alithya-oss/plugin-rag-ai-backend-embeddings-openai",
+  "name": "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-openai",
   "description": "The OpenAI backend module for the @alithya-oss/rag-ai plugin.",
   "version": "1.1.7",
   "main": "src/index.ts",
@@ -14,12 +14,12 @@
     "role": "node-library",
     "pluginId": "rag-ai",
     "pluginPackages": [
-      "@alithya-oss/plugin-rag-ai",
-      "@alithya-oss/plugin-rag-ai-backend",
-      "@alithya-oss/plugin-rag-ai-backend-embeddings-aws",
-      "@alithya-oss/plugin-rag-ai-backend-embeddings-openai",
-      "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter",
-      "@alithya-oss/plugin-rag-ai-node"
+      "@alithya-oss/backstage-plugin-rag-ai",
+      "@alithya-oss/backstage-plugin-rag-ai-backend",
+      "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws",
+      "@alithya-oss/backstage-plugin-rag-ai-backend-embeddings-openai",
+      "@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter",
+      "@alithya-oss/backstage-plugin-rag-ai-node"
     ]
   },
   "bugs": {
@@ -41,8 +41,8 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/plugin-rag-ai-backend-retrieval-augmenter": "workspace:^",
-    "@alithya-oss/plugin-rag-ai-node": "workspace:^",
+    "@alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter": "workspace:^",
+    "@alithya-oss/backstage-plugin-rag-ai-node": "workspace:^",
     "@backstage/backend-common": "^0.25.0",
     "@backstage/backend-plugin-api": "^1.1.1",
     "@backstage/catalog-client": "^1.9.1",

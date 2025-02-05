@@ -46,7 +46,7 @@ Note: This policy does not reflect least privilege and you should further limit 
 Install the backend package in your Backstage app:
 
 ```shell
-yarn workspace backend add @alithya-oss/plugin-aws-codebuild-backend
+yarn workspace backend add @alithya-oss/backstage-plugin-aws-codebuild-backend
 ```
 
 #### New backend
@@ -56,7 +56,7 @@ Add the plugin to the `packages/backend/src/index.ts`:
 ```typescript
 const backend = createBackend();
 // ...
-backend.add(import('@alithya-oss/plugin-aws-codebuild-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-aws-codebuild-backend'));
 // ...
 backend.start();
 ```
@@ -69,7 +69,7 @@ Create a file `packages/backend/src/plugins/codebuild.ts` with the following con
 import {
   createRouter,
   DefaultAwsCodeBuildService,
-} from '@alithya-oss/plugin-aws-codebuild-backend';
+} from '@alithya-oss/backstage-plugin-aws-codebuild-backend';
 import { CatalogClient } from '@backstage/catalog-client';
 import { PluginEnvironment } from '../types';
 
@@ -115,13 +115,13 @@ Verify that the backend plugin is running in your Backstage app. You should rece
 Install the frontend package in your Backstage app:
 
 ```shell
-yarn workspace app add @alithya-oss/plugin-aws-codebuild
+yarn workspace app add @alithya-oss/backstage-plugin-aws-codebuild
 ```
 
 Edit `packages/app/src/components/catalog/EntityPage.tsx` to add the AWS CodeBuild card to the entity page:
 
 ```typescript
-import { EntityAwsCodeBuildCard } from '@alithya-oss/plugin-aws-codebuild';
+import { EntityAwsCodeBuildCard } from '@alithya-oss/backstage-plugin-aws-codebuild';
 
 // For example in the overview section
 const overviewContent = (
