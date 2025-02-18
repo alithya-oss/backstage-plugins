@@ -48,7 +48,7 @@ jobs:
       # Generate an access token for the backstage-goalie[bot] account.
       - name: Get token
         id: get_token
-        uses: actions/create-github-app-token@67e27a7eb7db372a1c61a7f9bdab8699e9ee57f7 # v1
+        uses: actions/create-github-app-token@0d564482f06ca65fa9e77e2510873638c82206f2 # v1
         with:
           app-id: ${{ secrets.BACKSTAGE_GOALIE_APPLICATION_ID }}
           private-key: ${{ secrets.BACKSTAGE_GOALIE_PRIVATE_KEY }}
@@ -77,7 +77,7 @@ jobs:
           sudo chown -R 12021:0 /tmp/renovate/
           ls -R $cache_dir
 
-      - uses: renovatebot/github-action@9ad1a8e771c002ece340d1ff028fae4503fe041b # v41.0.12
+      - uses: renovatebot/github-action@e084b5ac6fd201023db6dd7743aec023babb02c8 # v41.0.13
         with:
           configurationFile: .github/renovate-action.json
           renovate-version: full
