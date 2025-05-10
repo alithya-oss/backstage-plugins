@@ -19,6 +19,7 @@ tasks:
     silent: true
 
   bump:yarn:
+    summary: Update Yarn in all workspaces
     cmds:
       - |
         YARN_VERSION="{{.YARN_VERSION}}"
@@ -35,6 +36,7 @@ tasks:
         {{end}}
 
   bump:framework:
+    summary: Update Backstage framework related dependencies in all workspaces
     cmds:
       - |
         WORKING_DIRECTORY="$(pwd)"
@@ -52,6 +54,7 @@ tasks:
         {{end}}
 
   ci:full:
+    summary: Run the continuous integration pipeline
     cmds:
       - |
         WORKING_DIRECTORY="$(pwd)"
@@ -70,6 +73,7 @@ tasks:
         {{end}}
 
   sync:repo-tools:
+    summary: Download backstage-community repository tools
     vars:
       VERSION: main
     cmds:
