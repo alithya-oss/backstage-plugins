@@ -68,3 +68,21 @@ tasks:
         yarn backstage-cli repo lint --since origin/main
         yarn backstage-cli repo test --coverage --maxWorkers=3
         {{end}}
+
+  sync:repo-tools:
+    vars:
+      VERSION: main
+    cmds:
+      - |
+        APP_VERSION="{{.VERSION}}"
+        mkdir -p .tmp/community-plugins/${APP_VERSION}
+        curl -fsSL https://github.com/backstage/community-plugins/archive/refs/heads/${APP_VERSION}.tar.gz \
+          | tar -xvzf - \
+          --strip-components=1 \
+          --directory=.tmp/community-plugins/${APP_VERSION} \
+          community-plugins-${APP_VERSION/"/"/"-"}/workspaces
+        rsync -av \
+          .tmp/community-plugins/${APP_VERSION/"/"/"-"}/workspaces/repo-tools \
+          ./workspaces/
+        cd workspaces/repo-tools
+        yarn install
