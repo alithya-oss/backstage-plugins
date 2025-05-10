@@ -69,5 +69,6 @@
   },
   "dependencies": {
     "knip": "^5.27.4"
-  }
+  },
+  "packageManager": "yarn@4.9.1"
 }

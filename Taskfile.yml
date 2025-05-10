@@ -3,22 +3,33 @@
 version: '3'
 
 vars:
-  GREETING: Hello, World!
+  WORKSPACES:
+    - aws
+    - changelog
+    - confluence
+    - rag-ai
+    - time-saver
+  YARN_VERSION: 4.9.1
 
 tasks:
   default:
+    dir: ./
     cmds:
-      - echo "{{.GREETING}}"
+      - yarn install
     silent: true
 
+  bump:yarn:
+    cmds:
+      - |
+        YARN_VERSION="{{.YARN_VERSION}}"
+        WORKING_DIRECTORY="$(pwd)"
+        yarn set version "${YARN_VERSION}"
+        {{range $index, $workspace := .WORKSPACES}}
+        echo "Updating yarn in \"{{$workspace}}\""
+        cd "${WORKING_DIRECTORY}/workspaces/{{$workspace}}/"
+        yarn set version "${YARN_VERSION}"
+        {{end}}
   bump:framework:
-    vars:
-      WORKSPACES:
-        - aws
-        - changelog
-        - confluence
-        - rag-ai
-        - time-saver
     cmds:
       - |
         WORKING_DIRECTORY="$(pwd)"
@@ -32,4 +43,5 @@ tasks:
         yarn fix
         yarn prettier --write .
         yarn lint
+        yarn dedupe
         {{end}}
