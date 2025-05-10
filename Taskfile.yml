@@ -24,11 +24,16 @@ tasks:
         YARN_VERSION="{{.YARN_VERSION}}"
         WORKING_DIRECTORY="$(pwd)"
         yarn set version "${YARN_VERSION}"
+        yarn install
+        yarn dedupe
         {{range $index, $workspace := .WORKSPACES}}
         echo "Updating yarn in \"{{$workspace}}\""
         cd "${WORKING_DIRECTORY}/workspaces/{{$workspace}}/"
         yarn set version "${YARN_VERSION}"
+        yarn install
+        yarn dedupe
         {{end}}
+
   bump:framework:
     cmds:
       - |
