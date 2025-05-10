@@ -1,4 +1,3 @@
-import React from 'react';
 import BarChartTemplate from '../BarChartTemplate';
 import { useStatistics } from '../../../../hooks';
 import {

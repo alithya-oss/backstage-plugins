@@ -1,4 +1,3 @@
-import React from 'react';
 import LineChartTemplate from '../LineChartTemplate';
 import { useDailyTimeSummaryPerTemplate } from '../../../../hooks';
 import { isTimeSaverApiError } from '@alithya-oss/backstage-plugin-time-saver-common';

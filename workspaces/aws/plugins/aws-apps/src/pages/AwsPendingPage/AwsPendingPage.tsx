@@ -12,7 +12,6 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { isGithubActionsAvailable } from '@backstage-community/plugin-github-actions';
 import { isGitlabAvailable } from '@immobiliarelabs/backstage-plugin-gitlab';
 import { Grid } from '@material-ui/core';
-import React from 'react';
 import { CICDContent } from '../../components/CICDContent/CICDContent';
 import { EntityGeneralInfoCard } from '../../plugin';
 

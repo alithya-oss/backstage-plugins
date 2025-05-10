@@ -6,7 +6,7 @@
     "node": "18 || 20"
   },
   "scripts": {
-    "dev": "concurrently \"yarn start\" \"yarn start-backend\"",
+    "dev": "concurrently \"docker compose up\" \"yarn workspaces foreach -A --include backend --include app --parallel --jobs unlimited -v -i run start\"",
     "start": "yarn workspace app start",
     "start-backend": "yarn workspace backend start",
     "build:backend": "yarn workspace backend build",
@@ -39,9 +39,9 @@
     "directory": "workspaces/aws"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.29.6",
+    "@backstage/cli": "^0.32.0",
     "@backstage/e2e-test-utils": "^0.1.1",
-    "@backstage/repo-tools": "^0.12.1",
+    "@backstage/repo-tools": "^0.13.2",
     "@changesets/cli": "^2.27.1",
     "@playwright/test": "^1.32.3",
     "@spotify/prettier-config": "^12.0.0",
@@ -68,5 +68,6 @@
   },
   "dependencies": {
     "@mui/styles": "^6.1.2"
-  }
+  },
+  "packageManager": "yarn@4.9.1"
 }

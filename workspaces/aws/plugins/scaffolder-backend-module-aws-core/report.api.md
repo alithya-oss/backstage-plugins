@@ -5,7 +5,6 @@
 ```ts
 import { AwsCredentialsManager } from '@backstage/integration-aws-node';
 import { BackendFeature } from '@backstage/backend-plugin-api';
-import { JsonObject } from '@backstage/types/index';
 import { TemplateAction } from '@backstage/plugin-scaffolder-node';
 
 // @public (undocumented)
@@ -15,66 +14,22 @@ export default awsCoreScaffolderModule;
 // @public (undocumented)
 export const createAwsCloudControlCreateAction: (options: {
   credsManager: AwsCredentialsManager;
-}) => TemplateAction<
-  {
-    accountId?: string | undefined;
-    region?: string | undefined;
-    typeName: string;
-    desiredState: string;
-    clientToken?: string | undefined;
-    roleArn?: string | undefined;
-    typeVersionId?: string | undefined;
-    wait?: boolean | undefined;
-    maxWaitTime?: number | undefined;
-  },
-  JsonObject
->;
+}) => TemplateAction<any, any, 'v1'>;
 
 // @public (undocumented)
 export const createAwsCodeCommitPublishAction: (options: {
   credsManager: AwsCredentialsManager;
-}) => TemplateAction<
-  {
-    accountId?: string | undefined;
-    region?: string | undefined;
-    repositoryName: string;
-    defaultBranch: string;
-    sourcePath?: string | undefined;
-    gitCommitMessage?: string | undefined;
-    gitAuthorName?: string | undefined;
-    gitAuthorEmail?: string | undefined;
-  },
-  JsonObject
->;
+}) => TemplateAction<any, any, 'v1'>;
 
 // @public (undocumented)
 export const createAwsEventBridgeEventAction: (options: {
   credsManager: AwsCredentialsManager;
-}) => TemplateAction<
-  {
-    accountId?: string | undefined;
-    region?: string | undefined;
-    source: string;
-    detail: string;
-    detailType: string;
-    eventBusName: string;
-  },
-  JsonObject
->;
+}) => TemplateAction<any, any, 'v1'>;
 
 // @public (undocumented)
 export const createAwsS3CpAction: (options: {
   credsManager: AwsCredentialsManager;
-}) => TemplateAction<
-  {
-    accountId?: string | undefined;
-    region?: string | undefined;
-    bucketName: string;
-    path?: string | undefined;
-    prefix?: string | undefined;
-  },
-  JsonObject
->;
+}) => TemplateAction<any, any, 'v1'>;
 
 // (No @packageDocumentation comment for this package)
 ```

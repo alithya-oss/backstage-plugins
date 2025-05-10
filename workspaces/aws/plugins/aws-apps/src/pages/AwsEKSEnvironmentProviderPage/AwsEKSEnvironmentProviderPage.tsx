@@ -11,7 +11,7 @@ import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { isGitlabAvailable } from '@immobiliarelabs/backstage-plugin-gitlab';
 import { Grid } from '@material-ui/core';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { CICDContent } from '../../components/CICDContent/CICDContent';
 import { EntityDeleteProviderCard, EntityProviderInfoCard } from '../../plugin';
 

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import React from 'react';
 import useAsync from 'react-use/lib/useAsync';
 import { LinearProgress } from '@material-ui/core';
 import { useEntity } from '@backstage/plugin-catalog-react';

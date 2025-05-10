@@ -31,7 +31,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/system';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { opaApiRef } from '../../api';
 import { base64PayloadConvert } from '../../helpers/util';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';

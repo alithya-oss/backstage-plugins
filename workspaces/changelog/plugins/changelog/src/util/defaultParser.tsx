@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import React from 'react';
 import { ChangelogProps } from './types';
 import {
   StatusError,
@@ -47,7 +46,7 @@ export function defaultParser(content: string): ChangelogProps[] {
 
   const changelogParsed = splittedLines.reduce(
     (resultArray: ChangelogProps[], item: string, currentIndex: number) => {
-      const isItLastLine = currentIndex == splittedLines.length - 1;
+      const isItLastLine = currentIndex === splittedLines.length - 1;
       if (item.startsWith('## ') || isItLastLine) {
         if (action && actionContent && versionContent) {
           resultArray[changelogIndex].actions.push({

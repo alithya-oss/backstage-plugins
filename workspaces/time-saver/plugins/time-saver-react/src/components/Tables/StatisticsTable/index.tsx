@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TableTemplate } from '../TableTemplate';
 import { useStatistics } from '../../../hooks';
 import { isTimeSaverApiError } from '@alithya-oss/backstage-plugin-time-saver-common';

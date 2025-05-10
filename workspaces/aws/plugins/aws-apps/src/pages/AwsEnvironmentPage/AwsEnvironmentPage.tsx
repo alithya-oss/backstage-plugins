@@ -7,7 +7,7 @@ import {
   EntityLayout,
 } from '@backstage/plugin-catalog';
 import { Grid } from '@material-ui/core';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { EntityCatalogGraphCard } from '@backstage/plugin-catalog-graph';
 
 export interface AwsEnvironmentPageProps {

@@ -1,0 +1,93 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  WORKSPACES:
+    - aws
+    - changelog
+    - confluence
+    - rag-ai
+    - time-saver
+  YARN_VERSION: 4.9.1
+
+tasks:
+  default:
+    dir: ./
+    cmds:
+      - yarn install
+    silent: true
+
+  bump:yarn:
+    summary: Update Yarn in all workspaces
+    cmds:
+      - |
+        YARN_VERSION="{{.YARN_VERSION}}"
+        WORKING_DIRECTORY="$(pwd)"
+        yarn set version "${YARN_VERSION}"
+        yarn install
+        yarn dedupe
+        {{range $index, $workspace := .WORKSPACES}}
+        echo "Updating yarn in \"{{$workspace}}\""
+        cd "${WORKING_DIRECTORY}/workspaces/{{$workspace}}/"
+        yarn set version "${YARN_VERSION}"
+        yarn install
+        yarn dedupe
+        {{end}}
+
+  bump:framework:
+    summary: Update Backstage framework related dependencies in all workspaces
+    cmds:
+      - |
+        WORKING_DIRECTORY="$(pwd)"
+        {{range $index, $workspace := .WORKSPACES}}
+        echo "Processing \"{{$workspace}}\""
+        cd "${WORKING_DIRECTORY}/workspaces/{{$workspace}}/"
+        yarn install
+        yarn backstage-cli versions:bump
+        yarn dedupe
+        yarn fix
+        yarn tsc
+        yarn build:api-reports:only
+        yarn prettier --write .
+        yarn lint
+        {{end}}
+
+  ci:full:
+    summary: Run the continuous integration pipeline
+    cmds:
+      - |
+        WORKING_DIRECTORY="$(pwd)"
+        {{range $index, $workspace := .WORKSPACES}}
+        echo "Processing \"{{$workspace}}\""
+        cd "${WORKING_DIRECTORY}/workspaces/{{$workspace}}/"
+        yarn install
+        yarn dedupe
+        yarn fix
+        yarn backstage-cli config:check --lax
+        yarn tsc
+        yarn build:api-reports:only
+        yarn prettier --write .
+        yarn backstage-cli repo lint --since origin/main
+        yarn backstage-cli repo test --coverage --maxWorkers=3
+        {{end}}
+
+  sync:repo-tools:
+    summary: Download backstage-community repository tools
+    vars:
+      VERSION: main
+    cmds:
+      - |
+        APP_VERSION="{{.VERSION}}"
+        mkdir -p .tmp/community-plugins/${APP_VERSION}
+        curl -fsSL https://github.com/backstage/community-plugins/archive/refs/heads/${APP_VERSION}.tar.gz \
+          | tar -xvzf - \
+          --strip-components=1 \
+          --directory=.tmp/community-plugins/${APP_VERSION} \
+          community-plugins-${APP_VERSION/"/"/"-"}/workspaces
+        rsync -av \
+          .tmp/community-plugins/${APP_VERSION/"/"/"-"}/workspaces/repo-tools \
+          ./workspaces/
+        cd workspaces/repo-tools
+        yarn install
+        yarn lint --fix

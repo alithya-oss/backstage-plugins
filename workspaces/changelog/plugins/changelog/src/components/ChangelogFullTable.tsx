@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import React from 'react';
 import { Table, TableColumn } from '@backstage/core-components';
 import { MarkdownContent } from '@backstage/core-components';
 import { ChangelogAction, ChangelogProps } from '../util/types';

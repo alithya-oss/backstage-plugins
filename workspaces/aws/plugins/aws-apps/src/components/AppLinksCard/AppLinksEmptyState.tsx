@@ -3,7 +3,6 @@
 
 import { BackstageTheme } from '@backstage/theme';
 import { Button, makeStyles, Typography } from '@material-ui/core';
-import React from 'react';
 import { CodeSnippet } from '@backstage/core-components';
 
 const ENTITY_YAML = `metadata:

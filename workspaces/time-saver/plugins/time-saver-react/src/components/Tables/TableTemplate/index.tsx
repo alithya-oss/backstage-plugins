@@ -1,4 +1,3 @@
-import React from 'react';
 import TableTemplateView from './view';
 import { useTheme } from '@material-ui/core';
 import {

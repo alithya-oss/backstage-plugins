@@ -1,4 +1,4 @@
-import React from 'react';
+import { ChangeEvent, useState } from 'react';
 import { AutocompleteTemplate } from '../AutocompleteTemplate';
 import { useTemplates } from '../../../hooks';
 import { isTimeSaverApiError } from '@alithya-oss/backstage-plugin-time-saver-common';
@@ -22,10 +22,10 @@ const TemplateNameAutocomplete = (props: TemplateNameAutocompleteProps) => {
   const apiResult = useTemplates();
   const { loading, error, items } = apiResult;
 
-  const [_task, setTask] = React.useState('');
+  const [_task, setTask] = useState('');
 
   const onChangeHandler = (
-    _event: React.ChangeEvent<NonNullable<unknown>>,
+    _event: ChangeEvent<NonNullable<unknown>>,
     value: string | null,
   ) => {
     const selectedTemplateTaskId = value || '';

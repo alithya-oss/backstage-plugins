@@ -1,4 +1,3 @@
-import React from 'react';
 import { GaugeTemplate } from '../GaugeTemplate';
 import { useTemplateTasks } from '../../../hooks';
 import { isTimeSaverApiError } from '@alithya-oss/backstage-plugin-time-saver-common';
