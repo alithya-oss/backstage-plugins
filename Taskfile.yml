@@ -1,0 +1,35 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+
+  bump:framework:
+    vars:
+      WORKSPACES:
+        - aws
+        - changelog
+        - confluence
+        - rag-ai
+        - time-saver
+    cmds:
+      - |
+        WORKING_DIRECTORY="$(pwd)"
+        {{range $index, $workspace := .WORKSPACES}}
+        echo "Processing \"{{$workspace}}\""
+        cd "${WORKING_DIRECTORY}/workspaces/{{$workspace}}/"
+        yarn install
+        yarn backstage-cli versions:bump
+        yarn tsc
+        yarn build:api-reports:only
+        yarn fix
+        yarn prettier --write .
+        yarn lint
+        {{end}}
