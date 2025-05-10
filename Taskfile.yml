@@ -86,3 +86,4 @@ tasks:
           ./workspaces/
         cd workspaces/repo-tools
         yarn install
+        yarn lint --fix
