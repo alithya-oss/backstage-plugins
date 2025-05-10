@@ -1,5 +1,14 @@
 # @alithya-oss/backstage-plugin-time-saver
 
+## 1.4.6
+
+### Patch Changes
+
+- f021c9d: Bump Backstage framework version 1.38.1
+- Updated dependencies [f021c9d]
+  - @alithya-oss/backstage-plugin-time-saver-common@0.5.6
+  - @alithya-oss/backstage-plugin-time-saver-react@0.1.6
+
 ## 1.4.5
 
 ### Patch Changes
