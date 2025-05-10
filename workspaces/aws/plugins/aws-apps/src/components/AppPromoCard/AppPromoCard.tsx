@@ -39,7 +39,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { opaApiRef } from '../../api';
 import { ProviderType } from '../../helpers/constants';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';

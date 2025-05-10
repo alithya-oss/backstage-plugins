@@ -1,4 +1,4 @@
-import React from 'react';
+import { ChangeEvent, useState } from 'react';
 import { SelectorTemplate } from '../SelectorTemplate';
 import { useTeams } from '../../../hooks';
 import { isTimeSaverApiError } from '@alithya-oss/backstage-plugin-time-saver-common';
@@ -23,10 +23,10 @@ const TeamSelector = (props: TeamSelectorProps) => {
   const apiResult = useTeams();
   const { loading, error, items } = apiResult;
 
-  const [team, setTeam] = React.useState('');
+  const [team, setTeam] = useState('');
 
   const handleChange = (
-    event: React.ChangeEvent<{
+    event: ChangeEvent<{
       name?: string | undefined;
       value: unknown;
     }>,

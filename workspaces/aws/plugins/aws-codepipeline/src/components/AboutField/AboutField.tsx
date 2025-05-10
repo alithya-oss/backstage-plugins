@@ -14,7 +14,7 @@
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
-import React, { ReactElement } from 'react';
+import { Children, ReactNode, ReactElement } from 'react';
 
 const useStyles = makeStyles(theme => ({
   links: {
@@ -53,12 +53,12 @@ export const AboutField = ({
   label: string;
   value?: string | ReactElement;
   gridSizes?: Record<string, number>;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }) => {
   const classes = useStyles();
 
   // Content is either children or a string prop `value`
-  const content = React.Children.count(children) ? (
+  const content = Children.count(children) ? (
     children
   ) : (
     <Typography variant="body2" className={classes.description}>

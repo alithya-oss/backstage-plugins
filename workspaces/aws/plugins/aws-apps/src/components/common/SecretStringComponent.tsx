@@ -3,7 +3,7 @@
 
 import { IconButton } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 /**
  * A UI component for displaying sensitive strings

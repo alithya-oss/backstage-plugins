@@ -1,4 +1,3 @@
-import React from 'react';
 import PieChartTemplate from '../PieChartTemplate';
 import { useGroupDivisionStatistics } from '../../../../hooks';
 import {

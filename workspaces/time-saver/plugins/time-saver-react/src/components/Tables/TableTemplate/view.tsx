@@ -1,5 +1,4 @@
 import { Paper, Theme } from '@material-ui/core';
-import React from 'react';
 import {
   DataGrid,
   GridCallbackDetails,

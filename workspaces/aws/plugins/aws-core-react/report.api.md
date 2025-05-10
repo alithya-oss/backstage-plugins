@@ -5,8 +5,8 @@
 ```ts
 import { DiscoveryApi } from '@backstage/core-plugin-api';
 import { FetchApi } from '@backstage/core-plugin-api';
+import { JSX as JSX_2 } from 'react/jsx-runtime';
 import { PropsWithChildren } from 'react';
-import { default as React_2 } from 'react';
 import { ReactElement } from 'react';
 import { TabProps } from '@material-ui/core/Tab';
 
@@ -22,12 +22,12 @@ export abstract class AwsApiClient {
 }
 
 // @public (undocumented)
-export function MissingResources(): React_2.JSX.Element;
+export function MissingResources(): JSX_2.Element;
 
 // @public (undocumented)
 export function TabbedContent(
   props: PropsWithChildren<TabbedContentProps>,
-): React_2.JSX.Element;
+): JSX_2.Element;
 
 // @public (undocumented)
 export type TabbedContentProps = {

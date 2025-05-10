@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import React, { ReactElement } from 'react';
+import { ReactElement, Children, ReactNode } from 'react';
 import { OPAAppData } from '../../types';
 
 export const AboutField = ({
@@ -21,10 +21,10 @@ export const AboutField = ({
   label: string;
   value?: string | ReactElement;
   gridSizes?: Record<string, number>;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }) => {
   // Content is either children or a string prop `value`
-  const content = React.Children.count(children) ? (
+  const content = Children.count(children) ? (
     children
   ) : (
     <Typography variant="body2">{value || `unknown`}</Typography>

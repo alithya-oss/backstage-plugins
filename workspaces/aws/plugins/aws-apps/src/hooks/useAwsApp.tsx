@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { ReactNode, createContext } from 'react';
+import { ReactNode, createContext, useContext } from 'react';
 import { useApi, configApiRef } from '@backstage/core-plugin-api';
 import { catalogApiRef, useEntity } from '@backstage/plugin-catalog-react';
 import useAsyncRetry from 'react-use/lib/useAsyncRetry';
@@ -682,7 +682,7 @@ export const AwsAppProvider = (props: AwsAppProviderProps) => (
  * @public
  */
 export function useAsyncAwsApp(): AwsComponentHookLoadingStatus {
-  return React.useContext(AwsAppContext);
+  return useContext(AwsAppContext);
 }
 
 export const MISSING = 'missing';

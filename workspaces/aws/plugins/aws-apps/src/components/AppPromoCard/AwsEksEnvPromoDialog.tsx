@@ -16,7 +16,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { Close } from '@mui/icons-material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 
 // Declare styles to use in the components

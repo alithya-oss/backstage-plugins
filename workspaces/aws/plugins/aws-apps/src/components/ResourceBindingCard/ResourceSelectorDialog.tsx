@@ -23,7 +23,7 @@ import {
   TableRow,
 } from '@material-ui/core';
 import { Close } from '@mui/icons-material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Declare styles to use in the components
 const useStyles = makeStyles(theme => ({

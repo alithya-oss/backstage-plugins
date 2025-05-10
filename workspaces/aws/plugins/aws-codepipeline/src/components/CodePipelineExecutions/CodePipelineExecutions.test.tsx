@@ -1,4 +1,3 @@
-import React from 'react';
 import { renderInTestApp, TestApiProvider } from '@backstage/test-utils';
 import { CodePipelineExecutions } from '.';
 import { AwsCodePipelineApi, awsCodePipelineApiRef } from '../../api';

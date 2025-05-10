@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { EmptyState } from '@backstage/core-components';
 import { LinearProgress } from '@material-ui/core';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';

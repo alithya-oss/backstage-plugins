@@ -11,7 +11,7 @@ import {
   AWSResourceDeploymentEnvironment,
 } from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { LinearProgress, Typography } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { opaApiRef } from '../../api';
 import { ServiceResourcesComponent } from './ServiceComponent';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';

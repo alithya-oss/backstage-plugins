@@ -1,4 +1,3 @@
-import React from 'react';
 import AutocompleteTemplateView from './view';
 import {
   AutocompleteChangeDetails,

@@ -24,7 +24,8 @@ export function createRepoAccessTokenAction(options: {
     projectId: number;
     region?: string | undefined;
   },
-  JsonObject
+  JsonObject,
+  'v1'
 >;
 
 // @public (undocumented)
@@ -39,7 +40,8 @@ export function createS3BucketAction(): TemplateAction<
         }[]
       | undefined;
   },
-  JsonObject
+  JsonObject,
+  'v1'
 >;
 
 // @public (undocumented)
@@ -57,7 +59,8 @@ export function createSecretAction(options: {
         }[]
       | undefined;
   },
-  JsonObject
+  JsonObject,
+  'v1'
 >;
 
 // @public (undocumented)
@@ -89,7 +92,8 @@ export function getComponentInfoAction(): TemplateAction<
   {
     componentName: string;
   },
-  JsonObject
+  JsonObject,
+  'v1'
 >;
 
 // @public (undocumented)
@@ -101,13 +105,14 @@ export function getEnvProvidersAction(options: {
   {
     environmentRef: string;
   },
-  JsonObject_2
+  JsonObject_2,
+  'v1'
 >;
 
 // @public (undocumented)
 export function getPlatformMetadataAction(options: {
   envConfig: Config;
-}): TemplateAction<JsonObject, JsonObject>;
+}): TemplateAction<JsonObject, JsonObject, 'v1'>;
 
 // @public (undocumented)
 export function getPlatformParametersAction(options: {
@@ -117,7 +122,8 @@ export function getPlatformParametersAction(options: {
     paramKeys: string[];
     region?: string | undefined;
   },
-  JsonObject
+  JsonObject,
+  'v1'
 >;
 
 // @public (undocumented)
@@ -129,7 +135,8 @@ export function getSsmParametersAction(
     paramKeys: string[];
     envProviders: EnvironmentProvider[];
   },
-  JsonObject
+  JsonObject,
+  'v1'
 >;
 
 // @public (undocumented)

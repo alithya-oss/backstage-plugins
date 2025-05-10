@@ -20,7 +20,6 @@ import {
   EntityTagPicker,
   UserListPicker,
 } from '@backstage/plugin-catalog-react';
-import React from 'react';
 import { AdvancedEntityTypePicker } from './AdvancedEntityTypePicker';
 import { columnFactories } from './awsColumns';
 
