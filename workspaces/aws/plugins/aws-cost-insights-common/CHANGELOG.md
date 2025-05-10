@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.1.8
+
+### Patch Changes
+
+- f021c9d: Bump Backstage framework version 1.38.1
+
 ## 0.1.7
 
 ### Patch Changes
