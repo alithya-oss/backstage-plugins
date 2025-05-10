@@ -43,10 +43,28 @@ tasks:
         cd "${WORKING_DIRECTORY}/workspaces/{{$workspace}}/"
         yarn install
         yarn backstage-cli versions:bump
+        yarn dedupe
+        yarn fix
         yarn tsc
         yarn build:api-reports:only
-        yarn fix
         yarn prettier --write .
         yarn lint
+        {{end}}
+
+  ci:full:
+    cmds:
+      - |
+        WORKING_DIRECTORY="$(pwd)"
+        {{range $index, $workspace := .WORKSPACES}}
+        echo "Processing \"{{$workspace}}\""
+        cd "${WORKING_DIRECTORY}/workspaces/{{$workspace}}/"
+        yarn install
         yarn dedupe
+        yarn fix
+        yarn backstage-cli config:check --lax
+        yarn tsc
+        yarn build:api-reports:only
+        yarn prettier --write .
+        yarn backstage-cli repo lint --since origin/main
+        yarn backstage-cli repo test --coverage --maxWorkers=3
         {{end}}
