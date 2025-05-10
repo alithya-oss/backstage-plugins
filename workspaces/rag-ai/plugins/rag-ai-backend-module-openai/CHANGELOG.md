@@ -1,5 +1,16 @@
 # @alithya-oss/backstage-plugin-rag-ai-backend-module-openai
 
+## 0.2.9
+
+### Patch Changes
+
+- f021c9d: Bump Backstage framework version 1.38.1
+- Updated dependencies [f021c9d]
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@1.0.8
+  - @alithya-oss/backstage-plugin-rag-ai-backend-embeddings-openai@1.1.9
+  - @alithya-oss/backstage-plugin-rag-ai-storage-pgvector@0.2.7
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.7
+
 ## 0.2.8
 
 ### Patch Changes

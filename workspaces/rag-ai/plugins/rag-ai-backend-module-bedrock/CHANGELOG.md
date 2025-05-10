@@ -1,5 +1,16 @@
 # @alithya-oss/backstage-plugin-rag-ai-backend-module-bedrock
 
+## 0.1.9
+
+### Patch Changes
+
+- f021c9d: Bump Backstage framework version 1.38.1
+- Updated dependencies [f021c9d]
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@1.0.8
+  - @alithya-oss/backstage-plugin-rag-ai-backend-embeddings-aws@1.0.8
+  - @alithya-oss/backstage-plugin-rag-ai-storage-pgvector@0.2.7
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.7
+
 ## 0.1.8
 
 ### Patch Changes
