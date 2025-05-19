@@ -26,7 +26,7 @@
     "@alithya-oss/backstage-plugin-cost-insights-aws": "workspace:^",
     "@aws/plugin-aws-apps-demo-for-backstage": "^0.3.1",
     "@backstage-community/plugin-cost-insights": "^0.12.27",
-    "@backstage-community/plugin-github-actions": "^0.6.23",
+    "@backstage-community/plugin-github-actions": "^0.10.0",
     "@backstage/app-defaults": "^1.6.1",
     "@backstage/catalog-model": "^1.7.3",
     "@backstage/cli": "^0.32.0",
