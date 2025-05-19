@@ -173,7 +173,7 @@ __metadata:
     "@aws-sdk/client-secrets-manager": "npm:^3.731.1"
     "@aws-sdk/client-ssm": "npm:^3.731.1"
     "@aws-sdk/util-arn-parser": "npm:^3.723.0"
-    "@backstage-community/plugin-github-actions": "npm:^0.6.16"
+    "@backstage-community/plugin-github-actions": "npm:^0.10.0"
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/cli": "npm:^0.32.0"
     "@backstage/core-app-api": "npm:^1.16.1"
@@ -4807,18 +4807,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-github-actions@npm:^0.6.16, @backstage-community/plugin-github-actions@npm:^0.6.23":
-  version: 0.6.23
-  resolution: "@backstage-community/plugin-github-actions@npm:0.6.23"
+"@backstage-community/plugin-github-actions@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "@backstage-community/plugin-github-actions@npm:0.10.0"
   dependencies:
-    "@backstage/catalog-model": "npm:^1.7.0"
-    "@backstage/core-compat-api": "npm:^0.3.1"
-    "@backstage/core-components": "npm:^0.15.1"
-    "@backstage/core-plugin-api": "npm:^1.10.0"
-    "@backstage/frontend-plugin-api": "npm:^0.9.0"
-    "@backstage/integration": "npm:^1.15.1"
-    "@backstage/integration-react": "npm:^1.2.0"
-    "@backstage/plugin-catalog-react": "npm:^1.14.0"
+    "@backstage/catalog-model": "npm:^1.7.3"
+    "@backstage/core-compat-api": "npm:^0.4.1"
+    "@backstage/core-components": "npm:^0.17.1"
+    "@backstage/core-plugin-api": "npm:^1.10.6"
+    "@backstage/frontend-plugin-api": "npm:^0.10.1"
+    "@backstage/integration": "npm:^1.16.3"
+    "@backstage/integration-react": "npm:^1.2.6"
+    "@backstage/plugin-catalog-react": "npm:^1.17.0"
     "@material-ui/core": "npm:^4.12.2"
     "@material-ui/icons": "npm:^4.9.1"
     "@material-ui/lab": "npm:4.0.0-alpha.61"
@@ -4831,7 +4831,7 @@ __metadata:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
     react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
     react-router-dom: 6.0.0-beta.0 || ^6.3.0
-  checksum: 10/739c85281b475090974ba7217bde0c2e05382b7953b6d7d4343763a358ed75ca6adc70b1a8b6454b3fb737723b1ff0c076c75469ebacf45972bdda6b604f40c7
+  checksum: 10/cf5e3c9161db27a5b3fad562cfd8d22a43d83196101660e05d7ae12dc1e7fbc8443d97f45a5b92e736fd45f365538f8553cff9a654f100fe01ad306f3e7de5c3
   languageName: node
   linkType: hard
 
@@ -5566,7 +5566,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/core-compat-api@npm:^0.3.0, @backstage/core-compat-api@npm:^0.3.1":
+"@backstage/core-compat-api@npm:^0.3.0":
   version: 0.3.5
   resolution: "@backstage/core-compat-api@npm:0.3.5"
   dependencies:
@@ -5990,7 +5990,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/frontend-plugin-api@npm:^0.9.0, @backstage/frontend-plugin-api@npm:^0.9.4":
+"@backstage/frontend-plugin-api@npm:^0.9.4":
   version: 0.9.4
   resolution: "@backstage/frontend-plugin-api@npm:0.9.4"
   dependencies:
@@ -6054,7 +6054,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/integration-react@npm:^1.2.0, @backstage/integration-react@npm:^1.2.6":
+"@backstage/integration-react@npm:^1.2.6":
   version: 1.2.6
   resolution: "@backstage/integration-react@npm:1.2.6"
   dependencies:
@@ -6075,7 +6075,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/integration@npm:^1.13.0, @backstage/integration@npm:^1.14.0, @backstage/integration@npm:^1.15.0, @backstage/integration@npm:^1.15.1, @backstage/integration@npm:^1.16.1, @backstage/integration@npm:^1.16.3":
+"@backstage/integration@npm:^1.13.0, @backstage/integration@npm:^1.14.0, @backstage/integration@npm:^1.15.0, @backstage/integration@npm:^1.16.1, @backstage/integration@npm:^1.16.3":
   version: 1.16.3
   resolution: "@backstage/integration@npm:1.16.3"
   dependencies:
@@ -19276,7 +19276,7 @@ __metadata:
     "@alithya-oss/backstage-plugin-cost-insights-aws": "workspace:^"
     "@aws/plugin-aws-apps-demo-for-backstage": "npm:^0.3.1"
     "@backstage-community/plugin-cost-insights": "npm:^0.12.27"
-    "@backstage-community/plugin-github-actions": "npm:^0.6.23"
+    "@backstage-community/plugin-github-actions": "npm:^0.10.0"
     "@backstage/app-defaults": "npm:^1.6.1"
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/cli": "npm:^0.32.0"
