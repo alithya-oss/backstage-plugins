@@ -8,6 +8,7 @@ vars:
     - changelog
     - confluence
     - rag-ai
+    - tech-insights
     - time-saver
   YARN_VERSION: 4.9.1
 
