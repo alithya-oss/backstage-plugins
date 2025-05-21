@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.1.9
+
+### Patch Changes
+
+- 2f8d114: Bump Backstage framework dependencies v1.39.0
+
 ## 0.1.8
 
 ### Patch Changes

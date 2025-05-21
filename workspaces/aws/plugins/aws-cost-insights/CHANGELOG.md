@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.1.10
+
+### Patch Changes
+
+- 2f8d114: Bump Backstage framework dependencies v1.39.0
+- Updated dependencies [2f8d114]
+  - @alithya-oss/backstage-plugin-amazon-ecs-common@0.2.9
+  - @alithya-oss/backstage-plugin-aws-core-common@0.5.7
+  - @alithya-oss/backstage-plugin-aws-core-react@0.5.7
+
 ## 0.1.9
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.1.7
+
+### Patch Changes
+
+- 2f8d114: Bump Backstage framework dependencies v1.39.0
+- Updated dependencies [2f8d114]
+  - @alithya-oss/backstage-plugin-aws-core-common@0.5.7
+
 ## 0.1.6
 
 ### Patch Changes
