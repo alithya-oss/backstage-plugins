@@ -1,5 +1,14 @@
 # @roadiehq/rag-ai-backend-embeddings-openai
 
+## 1.1.10
+
+### Patch Changes
+
+- 2f8d114: Bump Backstage framework dependencies v1.39.0
+- Updated dependencies [2f8d114]
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@1.0.9
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.8
+
 ## 1.1.9
 
 ### Patch Changes
