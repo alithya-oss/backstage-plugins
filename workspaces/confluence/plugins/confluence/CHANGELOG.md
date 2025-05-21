@@ -1,5 +1,11 @@
 # @alithya-oss/backstage-plugin-confluence
 
+## 0.1.4
+
+### Patch Changes
+
+- 2f8d114: Bump Backstage framework dependencies v1.39.0
+
 ## 0.1.3
 
 ### Patch Changes
