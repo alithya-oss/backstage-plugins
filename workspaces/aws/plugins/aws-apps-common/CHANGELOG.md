@@ -1,5 +1,11 @@
 # @aws/plugin-aws-apps-common-for-backstage
 
+## 0.4.7
+
+### Patch Changes
+
+- 2f8d114: Bump Backstage framework dependencies v1.39.0
+
 ## 0.4.6
 
 ### Patch Changes
