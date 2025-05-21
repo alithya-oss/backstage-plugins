@@ -1,7 +1,7 @@
 module.exports = {
-  extends: [require.resolve("@backstage/cli/config/eslint")],
+  extends: [require.resolve('@backstage/cli/config/eslint')],
   rules: {
-    "no-console": 0,
-    "no-restricted-imports": 0,
+    'no-console': 0,
+    'no-restricted-imports': 0,
   },
 };

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { Command } from 'commander';
 import { exitWithError } from '../lib/errors';
 import { assertError } from '@backstage/errors';

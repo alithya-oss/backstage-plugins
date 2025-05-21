@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Backstage Authors
+ * Copyright 2025 The Alithya Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-import { resolve as resolvePath } from "path";
-import { promises as fs } from "fs";
-import { exec } from "child_process";
-import url from "url";
-import { promisify } from "util";
 
-const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
-const repoRoot = resolvePath(__dirname, "..", "..");
+import { resolve as resolvePath } from 'path';
+import { promises as fs } from 'fs';
+import { exec } from 'child_process';
+import url from 'url';
+import { promisify } from 'util';
+
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const repoRoot = resolvePath(__dirname, '..', '..');
 
 const execAsync = promisify(exec);
 
 async function handlePackage() {
-  const rootDirPath = resolvePath(repoRoot, "workspaces");
+  const rootDirPath = resolvePath(repoRoot, 'workspaces');
 
   const dirContents = await fs.readdir(rootDirPath, {
     withFileTypes: true,
@@ -35,13 +36,13 @@ async function handlePackage() {
   for (const item of dirContents) {
     if (item.isDirectory()) {
       const packageDir = item.name;
-      const fullDir = resolvePath(repoRoot, "workspaces", packageDir);
+      const fullDir = resolvePath(repoRoot, 'workspaces', packageDir);
 
       try {
         console.log(`Processing directory: ${fullDir}`);
 
         // Run `yarn backstage-repo-tools knip-reports`
-        await execAsync("yarn backstage-repo-tools knip-reports", {
+        await execAsync('yarn backstage-repo-tools knip-reports', {
           cwd: fullDir,
         });
         console.log(`Ran knip-reports in ${fullDir}`);
@@ -52,6 +53,6 @@ async function handlePackage() {
   }
 }
 
-handlePackage().catch((error) => {
-  console.error("Error in handlePackage:", error.message);
+handlePackage().catch(error => {
+  console.error('Error in handlePackage:', error.message);
 });

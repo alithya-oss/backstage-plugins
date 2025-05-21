@@ -75,20 +75,53 @@ tasks:
 
   sync:repo-tools:
     summary: Download backstage-community repository tools
-    vars:
-      VERSION: main
+    env:
+      APP_VERSION: main
     cmds:
+      - mkdir -p .tmp/community-plugins/${APP_VERSION}
       - |
-        APP_VERSION="{{.VERSION}}"
-        mkdir -p .tmp/community-plugins/${APP_VERSION}
         curl -fsSL https://github.com/backstage/community-plugins/archive/refs/heads/${APP_VERSION}.tar.gz \
-          | tar -xvzf - \
-          --strip-components=1 \
-          --directory=.tmp/community-plugins/${APP_VERSION} \
-          community-plugins-${APP_VERSION/"/"/"-"}/workspaces
+        | tar -xvzf - \
+        --strip-components=1 \
+        --directory=.tmp/community-plugins/${APP_VERSION} \
+        community-plugins-${APP_VERSION/"/"/"-"}/
+      - |
         rsync -av \
           .tmp/community-plugins/${APP_VERSION/"/"/"-"}/workspaces/repo-tools \
           ./workspaces/
-        cd workspaces/repo-tools
-        yarn install
-        yarn lint --fix
+      - |
+        rsync -av \
+          .tmp/community-plugins/${APP_VERSION/"/"/"-"}/.husky \
+          .tmp/community-plugins/${APP_VERSION/"/"/"-"}/.yarn \
+          .tmp/community-plugins/${APP_VERSION/"/"/"-"}/scripts \
+          .tmp/community-plugins/${APP_VERSION/"/"/"-"}/.editorconfig \
+          .tmp/community-plugins/${APP_VERSION/"/"/"-"}/.eslintrc.cjs \
+          .tmp/community-plugins/${APP_VERSION/"/"/"-"}/.yarnrc.yml \
+          .tmp/community-plugins/${APP_VERSION/"/"/"-"}/package.json \
+          .tmp/community-plugins/${APP_VERSION/"/"/"-"}/yarn.lock \
+          ./
+      - |
+        sed \
+        -e "s#backstage/community-plugins#alithya-oss/backstage-plugins#g" \
+        -e "s#backstage-community/plugins#alithya-oss/backstage-plugins#g" \
+        -i ./package.json
+      - |
+        sed \
+        -e "s#\(The\s\)Backstage\(\sAuthors\)#\1Alithya\2#g" \
+        -i ./scripts/templates/copyright-header.txt
+      - yarn install
+      - |
+        cat <<EOF | tee -a .gitignore
+        .tmp
+        scripts
+        EOF
+      - |
+        cat <<EOF | tee .prettierignore
+        .tmp
+        scripts
+        EOF
+      # - yarn prettier:fix
+      # - |
+      #   cd workspaces/repo-tools
+      #   yarn install --immutable
+      #   yarn lint --fix

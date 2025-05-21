@@ -1,12 +1,11 @@
-
 # Contributing to `alithya-oss/backstage-plugins`
 
 The `alithya-oss/backstage-plugins` repository is primarily designed as a collaborative space for plugins maintained by Alithya, and contributions expected to break compatiblity with upstream project.
 As an example this repository started with the refactoring of the [Confluence Search](https://github.com/K-Phoen/backstage-plugin-confluence) to align the code with the [new backend system](https://backstage.io/docs/backend-system/).
 
-This repository provides to maintainers the tools to manage and publish Backstage plugins in the ` 
+This repository provides to maintainers the tools to manage and publish Backstage plugins in the `
 
- as a collaborative space for Alithya and Backstage community members to host and manage their plugins for Backstage. This repository will provide plugin maintainers with tools for plugin management and publication. By contributing a plugin to this repository, maintainers agree to adhere to specific guidelines and a standardized release process detailed in this guide.
+as a collaborative space for Alithya and Backstage community members to host and manage their plugins for Backstage. This repository will provide plugin maintainers with tools for plugin management and publication. By contributing a plugin to this repository, maintainers agree to adhere to specific guidelines and a standardized release process detailed in this guide.
 
 If you have questions or feedback regarding Community Plugins, you can visit the [Community Plugins #general channel](https://discord.com/channels/687207715902193673/1211692810294788126) in the Backstage [Discord](https://discord.gg/backstage-687207715902193673).
 
@@ -104,9 +103,9 @@ To create a changeset, follow these steps:
 
 2. Run the following command to create a new changeset:
 
-    ```bash
-    $ yarn changeset
-    ```
+   ```bash
+   $ yarn changeset
+   ```
 
 3. You will be prompted to select the packages and the type of change you are making.
 
@@ -204,7 +203,7 @@ cp -r ../existing-plugins/plugins/plugin-name plugins/
 
 8. Update external references to the old plugin location such as documentation to point to the new location in the `backstage/community-plugins` repository.
 
-9.  In the original repository, update the plugin to indicate that it has been moved to the `backstage/community-plugins` repository. You may wish to deprecate the old version on npm.
+9. In the original repository, update the plugin to indicate that it has been moved to the `backstage/community-plugins` repository. You may wish to deprecate the old version on npm.
 
 ## Organization Membership Request for CODEOWNERS
 

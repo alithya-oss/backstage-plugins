@@ -2,9 +2,7 @@
 
 # Alithya-OSS Backstage Plugins
 
-The `alithya-oss/backstage-plugins` repository is a   
-
-This repository is a collection of Philips plugins for Backstage. It is a community-driven repository where Philips developers can contribute their plugins to be shared with the rest of the community.
+This repository is a collection of Backstage plugins developped from scratch or [hard-forked](#hard-fork-policy) by Alithya. It is a community-driven repository where Alithya's developers can contribute to their plugins that can be shared publicly with the rest of the community.
 
 ## Repository layout
 

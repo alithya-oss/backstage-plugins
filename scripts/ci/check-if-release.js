@@ -1,4 +1,19 @@
-#!/usr/bin/env node
+/*
+ * Copyright 2025 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /* eslint-disable @backstage/no-undeclared-imports */
 /*
  * Copyright 2020 The Backstage Authors
@@ -24,19 +39,19 @@
 //
 // needs_release = 'true' | 'false'
 
-import { execFile as execFileCb } from "child_process";
-import { promises as fs } from "fs";
-import { promisify } from "util";
-import { resolve as resolvePath } from "path";
-import { EOL } from "os";
-import escapeRegExp from "lodash.escaperegexp";
+import { execFile as execFileCb } from 'child_process';
+import { promises as fs } from 'fs';
+import { promisify } from 'util';
+import { resolve as resolvePath } from 'path';
+import { EOL } from 'os';
+import escapeRegExp from 'lodash.escaperegexp';
 
-import * as url from "url";
+import * as url from 'url';
 
-const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-const parentRef = process.env.COMMIT_SHA_BEFORE || "HEAD^";
-const targetBranch = process.env.TARGET_BRANCH || "main";
+const parentRef = process.env.COMMIT_SHA_BEFORE || 'HEAD^';
+const targetBranch = process.env.TARGET_BRANCH || 'main';
 
 const execFile = promisify(execFileCb);
 
@@ -52,30 +67,30 @@ async function runPlain(cmd, ...args) {
       throw error;
     }
     throw new Error(
-      `Command '${[cmd, ...args].join(" ")}' failed with code ${error.code}`,
+      `Command '${[cmd, ...args].join(' ')}' failed with code ${error.code}`,
     );
   }
 }
 
 async function main() {
   if (!process.env.WORKSPACE_NAME) {
-    throw new Error("WORKSPACE_NAME environment variable not set");
+    throw new Error('WORKSPACE_NAME environment variable not set');
   }
 
-  const repoRoot = resolvePath(__dirname, "..", "..");
-  process.cwd(resolvePath(repoRoot, "workspaces", process.env.WORKSPACE_NAME));
+  const repoRoot = resolvePath(__dirname, '..', '..');
+  process.cwd(resolvePath(repoRoot, 'workspaces', process.env.WORKSPACE_NAME));
 
   if (!process.env.GITHUB_OUTPUT) {
-    throw new Error("GITHUB_OUTPUT environment variable not set");
+    throw new Error('GITHUB_OUTPUT environment variable not set');
   }
 
   // Ensure we have fetched the targetBranch
-  await runPlain("git", "fetch", "origin", targetBranch);
+  await runPlain('git', 'fetch', 'origin', targetBranch);
 
   const diff = await runPlain(
-    "git",
-    "diff",
-    "--name-only",
+    'git',
+    'diff',
+    '--name-only',
     `${targetBranch}..${parentRef}`,
     "'*/package.json'", // Git treats this as what would usually be **/package.json
   );
@@ -85,34 +100,34 @@ async function main() {
     `^workspaces\/${safeWorkspaceName}\/(packages|plugins)\/[^/]+\/package\\.json$`,
   );
   const packageList = diff
-    .split("\n")
-    .filter((path) => path.match(workspacePackageJsonRegex));
+    .split('\n')
+    .filter(path => path.match(workspacePackageJsonRegex));
 
   const packageVersions = await Promise.all(
-    packageList.map(async (path) => {
+    packageList.map(async path => {
       let name;
       let newVersion;
       let oldVersion;
 
       try {
         const data = JSON.parse(
-          await runPlain("git", "show", `${parentRef}:${path}`),
+          await runPlain('git', 'show', `${parentRef}:${path}`),
         );
         name = data.name;
         oldVersion = data.version;
       } catch {
-        oldVersion = "<none>";
+        oldVersion = '<none>';
       }
 
       try {
         const data = JSON.parse(
-          await fs.readFile(resolvePath(repoRoot, path), "utf8"),
+          await fs.readFile(resolvePath(repoRoot, path), 'utf8'),
         );
         name = data.name;
         newVersion = data.version;
       } catch (error) {
-        if (error.code === "ENOENT") {
-          newVersion = "<none>";
+        if (error.code === 'ENOENT') {
+          newVersion = '<none>';
         }
       }
 
@@ -123,27 +138,27 @@ async function main() {
   const newVersions = packageVersions.filter(
     ({ oldVersion, newVersion }) =>
       oldVersion !== newVersion &&
-      oldVersion !== "<none>" &&
-      newVersion !== "<none>",
+      oldVersion !== '<none>' &&
+      newVersion !== '<none>',
   );
 
   if (newVersions.length === 0) {
-    console.log("No package version bumps detected, no release needed");
+    console.log('No package version bumps detected, no release needed');
     await fs.appendFile(process.env.GITHUB_OUTPUT, `needs_release=false${EOL}`);
     return;
   }
 
-  console.log("Package version bumps detected, a new release is needed");
-  const maxLength = Math.max(...newVersions.map((_) => _.name.length));
+  console.log('Package version bumps detected, a new release is needed');
+  const maxLength = Math.max(...newVersions.map(_ => _.name.length));
   for (const { name, oldVersion, newVersion } of newVersions) {
     console.log(
-      `  ${name.padEnd(maxLength, " ")} ${oldVersion} to ${newVersion}`,
+      `  ${name.padEnd(maxLength, ' ')} ${oldVersion} to ${newVersion}`,
     );
   }
   await fs.appendFile(process.env.GITHUB_OUTPUT, `needs_release=true${EOL}`);
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error(error.stack);
   process.exit(1);
 });

@@ -57,4 +57,11 @@ site
 *-credentials.yaml
 
 # vscode database functionality support files
-*.session.sql
+*.session.sql.tmp
+scripts
+.tmp
+scripts
+.tmp
+scripts
+.tmp
+scripts
