@@ -1,4 +1,19 @@
-#!/usr/bin/env node
+/*
+ * Copyright 2025 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /* eslint-disable @backstage/no-undeclared-imports */
 /*
  * Copyright 2020 The Backstage Authors
@@ -16,22 +31,22 @@
  * limitations under the License.
  */
 
-import path from "path";
-import fs from "fs-extra";
-import fetch from "node-fetch";
-import { EOL } from "os";
+import path from 'path';
+import fs from 'fs-extra';
+import fetch from 'node-fetch';
+import { EOL } from 'os';
 
 async function getBackstageVersion(workspace) {
   const rootPath = path.resolve(`workspaces/${workspace}/backstage.json`);
   if (!fs.exists(rootPath)) {
-    return "N/A";
+    return 'N/A';
   }
-  return fs.readJson(rootPath).then((_) => _.version);
+  return fs.readJson(rootPath).then(_ => _.version);
 }
 
 async function getLatestRelease() {
   const response = await fetch(
-    "https://api.github.com/repos/backstage/backstage/releases/latest",
+    'https://api.github.com/repos/backstage/backstage/releases/latest',
   );
   const json = await response.json();
   return json;
@@ -39,11 +54,11 @@ async function getLatestRelease() {
 
 async function getLatestPreRelease() {
   const response = await fetch(
-    "https://api.github.com/repos/backstage/backstage/releases",
+    'https://api.github.com/repos/backstage/backstage/releases',
   );
   const json = await response.json();
 
-  const preReleasesOnly = json.filter((release) => {
+  const preReleasesOnly = json.filter(release => {
     return release.prerelease === true;
   });
 
@@ -81,8 +96,8 @@ async function main() {
   const latestPreReleaseDate = new Date(
     latestPreRelease.published_at,
   ).getTime();
-  if (releaseLine === "main" || latestReleaseDate > latestPreReleaseDate) {
-    if (releaseLine === "main") {
+  if (releaseLine === 'main' || latestReleaseDate > latestPreReleaseDate) {
+    if (releaseLine === 'main') {
       console.log(
         `Selected release line is 'main', using Latest Release name ${latestRelease.name}`,
       );
@@ -116,7 +131,7 @@ async function main() {
   );
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error(error.stack);
   process.exit(1);
 });

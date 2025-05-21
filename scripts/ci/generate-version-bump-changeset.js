@@ -1,4 +1,19 @@
-#!/usr/bin/env node
+/*
+ * Copyright 2025 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /* eslint-disable @backstage/no-undeclared-imports */
 /*
  * Copyright 2025 The Backstage Authors
@@ -20,9 +35,9 @@
 // for example: `/workspaces/azure-devops` and would be called like this:
 // `node ../../scripts/ci/generate-version-bump-changeset.js 1.29.1 minor`
 
-import fs from "fs-extra";
-import { getPackages } from "@manypkg/get-packages";
-import { join } from "path";
+import fs from 'fs-extra';
+import { getPackages } from '@manypkg/get-packages';
+import { join } from 'path';
 
 async function main() {
   // Get the releaseVersion and versionBumpType
@@ -34,10 +49,10 @@ async function main() {
     );
   }
 
-  const workspacePlugins = join(process.cwd(), "plugins");
+  const workspacePlugins = join(process.cwd(), 'plugins');
   const workspaceChangesetFilename = `version-bump-${releaseVersion.replaceAll(
-    ".",
-    "-",
+    '.',
+    '-',
   )}.md`;
   const workspaceChangeset = join(
     process.cwd(),
@@ -48,12 +63,12 @@ async function main() {
   // as this avoids including any sample `app` and/or sample `backend` in the changeset
   const { packages } = await getPackages(workspacePlugins);
   const packageEntries = packages
-    .filter((p) => p.packageJson.name.includes("@backstage-community"))
-    .map((p) => `'${p.packageJson.name}': ${versionBumpType}`);
+    .filter(p => p.packageJson.name.includes('@backstage-community'))
+    .map(p => `'${p.packageJson.name}': ${versionBumpType}`);
 
   // Populate the changeset contents
   const changeset = `---
-${packageEntries.join("\n")}
+${packageEntries.join('\n')}
 ---
 
 Backstage version bump to v${releaseVersion}\n`;
@@ -62,7 +77,7 @@ Backstage version bump to v${releaseVersion}\n`;
   await fs.writeFile(workspaceChangeset, changeset);
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error(error.stack);
   process.exit(1);
 });

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { Project } from 'ts-morph';
 import { BackstagePackage, BackstagePackageJson } from '@backstage/cli-node';
 import fs from 'fs-extra';
