@@ -9,6 +9,8 @@ yarn.lock                                           @alithya-oss/backstage-plugi
 */yarn.lock                                         @alithya-oss/backstage-plugins-maintainers
 
 /workspaces/aws                                     @alithya-oss/backstage-plugins-maintainers @fjudith @nizarajroud
+/workspaces/changelog                               @alithya-oss/backstage-plugins-maintainers @fjudith
 /workspaces/confluence                              @alithya-oss/backstage-plugins-maintainers @fjudith
 /workspaces/rag-ai                                  @alithya-oss/backstage-plugins-maintainers @fjudith
+/workspaces/tech-insights                           @alithya-oss/backstage-plugins-maintainers @fjudith
 /workspaces/time-saver                              @alithya-oss/backstage-plugins-maintainers @ionSurf
