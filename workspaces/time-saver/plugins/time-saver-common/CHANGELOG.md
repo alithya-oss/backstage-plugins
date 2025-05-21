@@ -1,5 +1,11 @@
 # @alithya-oss/backstage-plugin-time-saver-common
 
+## 0.5.7
+
+### Patch Changes
+
+- 2f8d114: Bump Backstage framework dependencies v1.39.0
+
 ## 0.5.6
 
 ### Patch Changes
