@@ -1,6 +1,6 @@
 {
   "name": "@alithya-oss/backstage-plugin-tech-insights-backend-module-catalog-entities",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "Apache-2.0",
   "description": "The catalog-entities backend module for the tech-insights plugin.",
   "main": "src/index.ts",
