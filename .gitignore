@@ -58,10 +58,5 @@ site
 
 # vscode database functionality support files
 *.session.sql.tmp
-scripts
-.tmp
-scripts
-.tmp
-scripts
 .tmp
 scripts

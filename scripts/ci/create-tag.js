@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { Octokit } from '@octokit/rest';
 import { resolve as resolvePath } from 'path';
 import fs from 'fs-extra';

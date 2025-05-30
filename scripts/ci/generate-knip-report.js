@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { resolve as resolvePath } from 'path';
 import { promises as fs } from 'fs';
 import { exec } from 'child_process';
