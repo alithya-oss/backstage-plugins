@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { promisify } from 'util';
 import { exec as execOriginal } from 'child_process';
 import fs from 'fs/promises';
