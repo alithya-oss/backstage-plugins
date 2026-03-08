@@ -32,11 +32,11 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage/core-components": "^0.17.2",
-    "@backstage/core-plugin-api": "^1.10.7",
-    "@backstage/plugin-search-common": "^1.2.18",
-    "@backstage/plugin-search-react": "^1.9.0",
-    "@backstage/theme": "^0.6.6",
+    "@backstage/core-components": "catalog:",
+    "@backstage/core-plugin-api": "catalog:",
+    "@backstage/plugin-search-common": "catalog:",
+    "@backstage/plugin-search-react": "catalog:",
+    "@backstage/theme": "catalog:",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.61",
@@ -48,10 +48,10 @@
     "react-router-dom": "^6.14.1"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.32.1",
-    "@backstage/core-app-api": "^1.17.0",
-    "@backstage/dev-utils": "^1.1.10",
-    "@backstage/test-utils": "^1.7.8",
+    "@backstage/cli": "catalog:",
+    "@backstage/core-app-api": "catalog:",
+    "@backstage/dev-utils": "catalog:",
+    "@backstage/test-utils": "catalog:",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.2",
     "@types/react": "^18",

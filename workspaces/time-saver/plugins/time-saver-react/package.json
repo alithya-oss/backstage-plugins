@@ -37,8 +37,8 @@
   },
   "dependencies": {
     "@alithya-oss/backstage-plugin-time-saver-common": "workspace:^",
-    "@backstage/core-plugin-api": "^1.10.7",
-    "@backstage/errors": "^1.2.7",
+    "@backstage/core-plugin-api": "catalog:",
+    "@backstage/errors": "catalog:",
     "@faker-js/faker": "^9.0.3",
     "@material-ui/core": "^4.9.13",
     "@mui/material": "^6.1.5",
@@ -52,8 +52,8 @@
     "react": "^16.13.1 || ^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.32.1",
-    "@backstage/test-utils": "^1.7.8",
+    "@backstage/cli": "catalog:",
+    "@backstage/test-utils": "catalog:",
     "@faker-js/faker": "^9.0.3",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^14.0.0",
