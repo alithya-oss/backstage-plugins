@@ -10,7 +10,7 @@ vars:
     - rag-ai
     - tech-insights
     - time-saver
-  YARN_VERSION: 4.9.1
+  YARN_VERSION: 4.13.0
 
 tasks:
   default:
