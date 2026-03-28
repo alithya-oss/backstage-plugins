@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { join } from 'path';
 import { copy } from 'fs-extra';
 import { execSync } from 'child_process';
@@ -31,8 +30,8 @@ export const createWorkspace = async (opts: { name: string; cwd?: string }) => {
   const templatePath = join(__dirname, 'templates', 'workspace');
 
   execSync(
-    `npx @backstage/create-app --path ${workspacePath} --skip-install --template-path=${templatePath}`,
-    { input: opts.name },
+    `npx @backstage/create-app@latest --path ${workspacePath} --skip-install --template-path=${templatePath}`,
+    { env: { ...process.env, BACKSTAGE_APP_NAME: opts.name } },
   );
 
   // experimental test
