@@ -26,8 +26,7 @@ export interface ConfluenceResultItemProps {
 export const ConfluenceSearchIcon: () => JSX_2.Element;
 
 // @public
-export const ConfluenceSearchResultListItem: ({
-  result,
-  highlight,
-}: ConfluenceResultItemProps) => JSX_2.Element | null;
+export const ConfluenceSearchResultListItem: (
+  input: ConfluenceResultItemProps,
+) => JSX_2.Element | null;
 ```
