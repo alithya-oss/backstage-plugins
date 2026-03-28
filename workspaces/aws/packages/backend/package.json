@@ -70,7 +70,7 @@
     "@immobiliarelabs/backstage-plugin-gitlab-backend": "^6.6.0",
     "@roadiehq/scaffolder-backend-module-utils": "^3.2.0",
     "app": "link:../app",
-    "better-sqlite3": "^9.0.0",
+    "better-sqlite3": "^12.0.0",
     "node-gyp": "^10.0.0",
     "pg": "^8.11.3",
     "winston": "^3.2.1"
