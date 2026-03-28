@@ -39,20 +39,13 @@ export class CombiningPostProcessor implements AugmentationPostProcessor {
 }
 
 // @public (undocumented)
-export const createDefaultRetrievalPipeline: ({
-  vectorStore,
-  discovery,
-  logger,
-  auth,
-}: DefaultRetrievalPipelineOptions) => DefaultRetrievalPipeline;
+export const createDefaultRetrievalPipeline: (
+  input: DefaultRetrievalPipelineOptions,
+) => DefaultRetrievalPipeline;
 
 // @public (undocumented)
 export class DefaultRetrievalPipeline implements RetrievalPipeline {
-  constructor({
-    routers,
-    retrievers,
-    postProcessors,
-  }: {
+  constructor(input: {
     routers?: RetrievalRouter[];
     retrievers?: AugmentationRetriever[];
     postProcessors?: AugmentationPostProcessor[];
@@ -75,16 +68,7 @@ export type DefaultRetrievalPipelineOptions = {
 
 // @public (undocumented)
 export class DefaultVectorAugmentationIndexer implements AugmentationIndexer {
-  protected constructor({
-    vectorStore,
-    catalogApi,
-    logger,
-    auth,
-    tokenManager,
-    embeddings,
-    discovery,
-    augmentationOptions,
-  }: {
+  protected constructor(input: {
     vectorStore: RoadieVectorStore;
     catalogApi: CatalogApi;
     logger: LoggerService;
@@ -159,12 +143,7 @@ export type SearchClientQuery = {
 
 // @public (undocumented)
 export class SearchRetriever implements AugmentationRetriever {
-  constructor({
-    discovery,
-    logger,
-    searchClient,
-    auth,
-  }: {
+  constructor(input: {
     discovery: DiscoveryService;
     logger: LoggerService;
     searchClient?: SearchClient;
@@ -178,10 +157,7 @@ export class SearchRetriever implements AugmentationRetriever {
 
 // @public (undocumented)
 export class SourceBasedRetrievalRouter implements RetrievalRouter {
-  constructor({
-    logger,
-    retrievers,
-  }: {
+  constructor(input: {
     logger: LoggerService;
     retrievers: Map<EmbeddingsSource, AugmentationRetriever[]>;
   });
@@ -202,13 +178,7 @@ export type TechDocsDocument = {
 
 // @public (undocumented)
 export class VectorEmbeddingsRetriever implements AugmentationRetriever {
-  constructor({
-    vectorStore,
-    logger,
-  }: {
-    vectorStore: RoadieVectorStore;
-    logger: LoggerService;
-  });
+  constructor(input: { vectorStore: RoadieVectorStore; logger: LoggerService });
   // (undocumented)
   get id(): string;
   // (undocumented)
