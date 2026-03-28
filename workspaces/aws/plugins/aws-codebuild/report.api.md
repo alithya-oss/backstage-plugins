@@ -20,8 +20,8 @@ export const awsCodeBuildPlugin: BackstagePlugin<
 
 // @public (undocumented)
 export const EntityAwsCodeBuildCard: (input: {
-  variant?: InfoCardVariants | undefined;
-  title?: string | undefined;
+  variant?: InfoCardVariants;
+  title?: string;
 }) => JSX_2.Element;
 
 // @public (undocumented)

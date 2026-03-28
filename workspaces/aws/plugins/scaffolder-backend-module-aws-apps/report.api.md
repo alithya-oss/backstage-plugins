@@ -21,7 +21,7 @@ export function createRepoAccessTokenAction(options: {
     repoUrl: string;
     secretArn: string;
     projectId: number;
-    region?: string | undefined;
+    region?: string;
   },
   JsonObject,
   'v1'
@@ -32,12 +32,10 @@ export function createS3BucketAction(): TemplateAction<
   {
     bucketName: string;
     envProviders: EnvironmentProvider[];
-    tags?:
-      | {
-          Key: string;
-          Value: string | number | boolean;
-        }[]
-      | undefined;
+    tags?: {
+      Key: string;
+      Value: string | number | boolean;
+    }[];
   },
   JsonObject,
   'v1'
@@ -49,14 +47,12 @@ export function createSecretAction(options: {
 }): TemplateAction<
   {
     secretName: string;
-    description?: string | undefined;
-    region?: string | undefined;
-    tags?:
-      | {
-          Key: string;
-          Value: string | number | boolean;
-        }[]
-      | undefined;
+    description?: string;
+    region?: string;
+    tags?: {
+      Key: string;
+      Value: string | number | boolean;
+    }[];
   },
   JsonObject,
   'v1'
@@ -119,7 +115,7 @@ export function getPlatformParametersAction(options: {
 }): TemplateAction<
   {
     paramKeys: string[];
-    region?: string | undefined;
+    region?: string;
   },
   JsonObject,
   'v1'

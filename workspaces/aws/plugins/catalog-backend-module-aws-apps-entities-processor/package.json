@@ -39,14 +39,14 @@
   "dependencies": {
     "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^",
     "@backstage/backend-common": "^0.25.0",
-    "@backstage/backend-plugin-api": "^1.8.0",
-    "@backstage/catalog-model": "^1.7.7",
-    "@backstage/plugin-catalog-common": "^1.1.8",
-    "@backstage/plugin-catalog-node": "^2.1.0"
+    "@backstage/backend-plugin-api": "backstage:^",
+    "@backstage/catalog-model": "backstage:^",
+    "@backstage/plugin-catalog-common": "backstage:^",
+    "@backstage/plugin-catalog-node": "backstage:^"
   },
   "devDependencies": {
-    "@backstage/backend-test-utils": "^1.11.1",
-    "@backstage/cli": "^0.36.0",
+    "@backstage/backend-test-utils": "backstage:^",
+    "@backstage/cli": "backstage:^",
     "@types/jest": "^29.5.14"
   },
   "files": [
