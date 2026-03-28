@@ -40,7 +40,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.36.0"
+    "@backstage/cli": "backstage:^"
   },
   "files": [
     "dist",
@@ -49,8 +49,8 @@
   "configSchema": "config.d.ts",
   "dependencies": {
     "@aws-sdk/client-cloudformation": "^3.731.1",
-    "@backstage/catalog-model": "^1.7.7",
-    "@backstage/plugin-permission-common": "^0.9.7",
-    "@backstage/types": "^1.2.2"
+    "@backstage/catalog-model": "backstage:^",
+    "@backstage/plugin-permission-common": "backstage:^",
+    "@backstage/types": "backstage:^"
   }
 }
