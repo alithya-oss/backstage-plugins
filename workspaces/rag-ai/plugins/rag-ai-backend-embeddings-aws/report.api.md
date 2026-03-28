@@ -14,15 +14,9 @@ import { Provider } from '@aws-sdk/types';
 import { RoadieVectorStore } from '@alithya-oss/backstage-plugin-rag-ai-node';
 
 // @public (undocumented)
-export function initializeBedrockEmbeddings({
-  logger,
-  auth,
-  vectorStore,
-  catalogApi,
-  discovery,
-  config,
-  options,
-}: RoadieBedrockEmbeddingsConfig): Promise<AugmentationIndexer>;
+export function initializeBedrockEmbeddings(
+  input: RoadieBedrockEmbeddingsConfig,
+): Promise<AugmentationIndexer>;
 
 // @public
 export interface RoadieBedrockEmbeddingsConfig {

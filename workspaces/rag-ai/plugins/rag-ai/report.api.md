@@ -47,11 +47,7 @@ export class RoadieRagAiClient implements RagAiApi {
 }
 
 // @public (undocumented)
-export const SidebarRagModal: ({
-  title,
-  icon,
-  ...props
-}: SidebarRagModalProps) => JSX_2.Element;
+export const SidebarRagModal: (input: SidebarRagModalProps) => JSX_2.Element;
 
 // @public (undocumented)
 export type SidebarRagModalProps = RagModalProps & {
