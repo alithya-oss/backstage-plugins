@@ -35,9 +35,7 @@ export const AwsEnvironmentPage: AwsEnvironmentPage_2;
 export const AwsEnvironmentProviderPage: AwsEnvironmentProviderPage_2;
 
 // @public (undocumented)
-export const EntityAnnotationTypeTable: ({
-  type,
-}: {
+export const EntityAnnotationTypeTable: (input: {
   type: string;
 }) => JSX_2.Element;
 
@@ -78,9 +76,7 @@ export const EntityEnvironmentInfoCard: () => JSX_2.Element;
 export const EntityEnvironmentSelector: () => JSX_2.Element;
 
 // @public (undocumented)
-export const EntityGeneralInfoCard: ({
-  appPending,
-}: {
+export const EntityGeneralInfoCard: (input: {
   appPending: boolean;
 }) => JSX_2.Element;
 

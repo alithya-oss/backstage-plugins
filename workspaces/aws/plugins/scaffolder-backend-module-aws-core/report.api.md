@@ -12,24 +12,85 @@ const awsCoreScaffolderModule: BackendFeature;
 export default awsCoreScaffolderModule;
 
 // @public (undocumented)
-export const createAwsCloudControlCreateAction: (options: {
+export function createAwsCloudControlCreateAction(options: {
   credsManager: AwsCredentialsManager;
-}) => TemplateAction<any, any, 'v1'>;
+}): TemplateAction<
+  {
+    typeName: string;
+    desiredState: string;
+    wait: boolean;
+    maxWaitTime: number;
+    accountId?: string | undefined;
+    region?: string | undefined;
+    clientToken?: string | undefined;
+    roleArn?: string | undefined;
+    typeVersionId?: string | undefined;
+  },
+  {
+    identifier: string;
+  },
+  'v2'
+>;
 
 // @public (undocumented)
-export const createAwsCodeCommitPublishAction: (options: {
+export function createAwsCodeCommitPublishAction(options: {
   credsManager: AwsCredentialsManager;
-}) => TemplateAction<any, any, 'v1'>;
+}): TemplateAction<
+  {
+    repositoryName: string;
+    defaultBranch: string;
+    accountId?: string | undefined;
+    region?: string | undefined;
+    sourcePath?: string | undefined;
+    gitCommitMessage?: string | undefined;
+    gitAuthorName?: string | undefined;
+    gitAuthorEmail?: string | undefined;
+  },
+  {
+    arn?: string | undefined;
+    repositoryName?: string | undefined;
+    repositoryId?: string | undefined;
+    cloneUrlHttp?: string | undefined;
+    cloneUrlSsh?: string | undefined;
+  },
+  'v2'
+>;
 
 // @public (undocumented)
 export const createAwsEventBridgeEventAction: (options: {
   credsManager: AwsCredentialsManager;
-}) => TemplateAction<any, any, 'v1'>;
+}) => TemplateAction<
+  {
+    source: string;
+    detailType: string;
+    eventBusName: string;
+    accountId?: string | undefined;
+    region?: string | undefined;
+    detail?: string | undefined;
+    detailObject?: any;
+  },
+  {
+    [x: string]: any;
+  },
+  'v2'
+>;
 
 // @public (undocumented)
-export const createAwsS3CpAction: (options: {
+export function createAwsS3CpAction(options: {
   credsManager: AwsCredentialsManager;
-}) => TemplateAction<any, any, 'v1'>;
+}): TemplateAction<
+  {
+    bucketName: string;
+    accountId?: string | undefined;
+    region?: string | undefined;
+    path?: string | undefined;
+    prefix?: string | undefined;
+  },
+  {
+    [x: string]: any;
+  },
+  'v2'
+>;
 
 // (No @packageDocumentation comment for this package)
 ```

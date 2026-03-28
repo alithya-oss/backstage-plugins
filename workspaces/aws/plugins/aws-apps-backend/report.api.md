@@ -212,22 +212,9 @@ export interface AwsAuthResponse {
 }
 
 // @public (undocumented)
-export function createAuditRecord({
-  envProviderPrefix,
-  envProviderName,
-  appName,
-  apiClient,
-  roleArn,
-  awsRegion,
-  awsAccount,
-  requester,
-  owner,
-  actionType,
-  actionName,
-  requestArgs,
-  status,
-  message,
-}: AwsAuditRequest): Promise<AwsAuditResponse>;
+export function createAuditRecord(
+  input: AwsAuditRequest,
+): Promise<AwsAuditResponse>;
 
 // @public (undocumented)
 export function createRouter(options: RouterOptions): Promise<express.Router>;
