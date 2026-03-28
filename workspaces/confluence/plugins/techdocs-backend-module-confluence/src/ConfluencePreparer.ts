@@ -534,7 +534,8 @@ export class ConfluencePreparer implements PreparerBase {
         urlObj.pathname.includes('/spaces/') ||
         urlObj.pathname.includes('/pages/viewpage.action') ||
         urlObj.hostname.includes('confluence') ||
-        urlObj.hostname.includes('.atlassian.net')
+        urlObj.hostname === 'atlassian.net' ||
+        urlObj.hostname.endsWith('.atlassian.net')
       );
     } catch {
       return false;
