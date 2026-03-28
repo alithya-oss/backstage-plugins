@@ -20,6 +20,8 @@ export class ConfluenceCollatorFactory implements DocumentCollatorFactory {
   static fromConfig(
     config: Config,
     options: ConfluenceCollatorFactoryOptions,
+    instanceKey?: string,
+    type?: string,
   ): ConfluenceCollatorFactory;
   // (undocumented)
   getCollator(): Promise<Readable>;
@@ -36,12 +38,23 @@ export type ConfluenceCollatorFactoryOptions = {
   username?: string;
   password?: string;
   spaces?: string[];
+  query?: string;
   parallelismLimit?: number;
+  maxRequestsPerSecond?: number;
+  type?: string;
   logger: LoggerService;
 };
 
 // @public
 export type ConfluenceDocument = ConfluenceDocumentMetadata & {
+  type:
+    | 'page'
+    | 'blogpost'
+    | 'comment'
+    | 'attachment'
+    | 'folder'
+    | 'embed'
+    | 'database';
   body: {
     storage: {
       value: string;
@@ -49,7 +62,10 @@ export type ConfluenceDocument = ConfluenceDocumentMetadata & {
   };
   version: {
     by: {
+      displayName: string;
       publicName: string;
+      email?: string;
+      accountStatus?: string;
     };
     when: string;
     friendlyWhen: string;
@@ -74,12 +90,22 @@ export type ConfluenceDocumentList = {
 
 // @public
 export type ConfluenceDocumentMetadata = {
+  id: string;
   title: string;
   status: string;
   _links: {
-    self: string;
+    base?: string;
     webui: string;
   };
+  version?: {
+    when: string;
+  };
+};
+
+// @public
+export type DocumentMetadata = {
+  url: string;
+  versionWhen?: string;
 };
 
 // @public

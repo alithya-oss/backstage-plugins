@@ -1,12 +1,28 @@
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import {
   DocumentCollatorFactory,
   IndexableDocument,
 } from '@backstage/plugin-search-common';
 import { Config } from '@backstage/config';
 import { Readable } from 'stream';
-import fetch from 'node-fetch';
+import fetch, { RequestInfo, RequestInit, Response } from 'node-fetch';
 import pLimit from 'p-limit';
 import { LoggerService } from '@backstage/backend-plugin-api';
+import pThrottle from 'p-throttle';
 
 /**
  * Document metadata
@@ -14,11 +30,12 @@ import { LoggerService } from '@backstage/backend-plugin-api';
  * @public
  */
 export type ConfluenceDocumentMetadata = {
+  id: string;
   title: string;
   status: string;
 
   _links: {
-    self: string;
+    base?: string; // not available when listing documents with search API
     webui: string;
   };
 };
@@ -48,7 +65,10 @@ export type ConfluenceCollatorFactoryOptions = {
   username?: string;
   password?: string;
   spaces?: string[];
+  query?: string;
   parallelismLimit?: number;
+  maxRequestsPerSecond?: number;
+  type?: string;
   logger: LoggerService;
 };
 
@@ -66,6 +86,7 @@ export type ConfluenceDocument = ConfluenceDocumentMetadata & {
   version: {
     by: {
       publicName: string;
+      displayName?: string;
     };
     when: string;
     friendlyWhen: string;
@@ -111,6 +132,7 @@ export interface IndexableConfluenceDocument extends IndexableDocument {
  * @public
  */
 export class ConfluenceCollatorFactory implements DocumentCollatorFactory {
+  public readonly type: string;
   private readonly baseUrl: string | undefined;
   private readonly auth: string | undefined;
   private readonly token: string | undefined;
@@ -118,11 +140,16 @@ export class ConfluenceCollatorFactory implements DocumentCollatorFactory {
   private readonly username: string | undefined;
   private readonly password: string | undefined;
   private readonly spaces: string[] | undefined;
+  private readonly query: string | undefined;
   private readonly parallelismLimit: number | undefined;
   private readonly logger: LoggerService;
-  public readonly type: string = 'confluence';
+  private readonly fetch: (
+    url: RequestInfo,
+    init?: RequestInit,
+  ) => Promise<Response>;
 
   private constructor(options: ConfluenceCollatorFactoryOptions) {
+    this.type = options.type ?? 'confluence';
     this.baseUrl = options.baseUrl;
     this.auth = options.auth;
     this.token = options.token;
@@ -130,21 +157,54 @@ export class ConfluenceCollatorFactory implements DocumentCollatorFactory {
     this.username = options.username;
     this.password = options.password;
     this.spaces = options.spaces;
+    this.query = options.query;
     this.parallelismLimit = options.parallelismLimit;
     this.logger = options.logger.child({ documentType: this.type });
+
+    if (options.maxRequestsPerSecond) {
+      const throttle = pThrottle({
+        limit: options.maxRequestsPerSecond,
+        interval: 1000,
+      });
+      this.fetch = throttle(async (url: RequestInfo, init?: RequestInit) => {
+        const response = await fetch(url, init);
+        return response;
+      });
+    } else {
+      this.fetch = fetch;
+    }
   }
 
-  static fromConfig(config: Config, options: ConfluenceCollatorFactoryOptions) {
-    const baseUrl = config.getString('confluence.baseUrl');
-    const auth = config.getOptionalString('confluence.auth.type') ?? 'bearer';
-    const token = config.getOptionalString('confluence.auth.token');
-    const email = config.getOptionalString('confluence.auth.email');
-    const username = config.getOptionalString('confluence.auth.username');
-    const password = config.getOptionalString('confluence.auth.password');
-    const spaces = config.getOptionalStringArray('confluence.spaces') ?? [];
-    const parallelismLimit = config.getOptionalNumber(
-      'confluence.parallelismLimit',
-    );
+  static fromConfig(
+    config: Config,
+    options: ConfluenceCollatorFactoryOptions,
+    instanceKey = 'default',
+    type = 'confluence',
+  ) {
+    // Support both single-instance config (confluence: { baseUrl: ... })
+    // and multi-instance config (confluence: { default: { baseUrl: ... }, other: { ... } }).
+    const rootConf = config.getConfig('confluence');
+    let conf: Config;
+    if (rootConf.has(instanceKey)) {
+      conf = rootConf.getConfig(instanceKey);
+    } else if (rootConf.has('baseUrl')) {
+      // single-instance shape (deprecated), use rootConf directly
+      conf = rootConf;
+    } else {
+      // Neither the named instance nor a single-instance config exists -> will throw below when trying to read required values
+      conf = rootConf.getConfig(instanceKey);
+    }
+
+    const baseUrl = conf.getString('baseUrl');
+    const auth = conf.getOptionalString('auth.type') ?? 'bearer';
+    const token = conf.getOptionalString('auth.token');
+    const email = conf.getOptionalString('auth.email');
+    const username = conf.getOptionalString('auth.username');
+    const password = conf.getOptionalString('auth.password');
+    const spaces = conf.getOptionalStringArray('spaces') ?? [];
+    const query = conf.getOptionalString('query') ?? '';
+
+    const parallelismLimit = conf.getOptionalNumber('parallelismLimit');
 
     if ((auth === 'basic' || auth === 'bearer') && !token) {
       throw new Error(
@@ -173,28 +233,19 @@ export class ConfluenceCollatorFactory implements DocumentCollatorFactory {
       username,
       password,
       spaces,
+      query,
       parallelismLimit,
+      maxRequestsPerSecond: conf.getOptionalNumber('maxRequestsPerSecond'),
+      type,
     });
   }
-
   async getCollator() {
     return Readable.from(this.execute());
   }
 
   async *execute(): AsyncGenerator<IndexableConfluenceDocument> {
-    let spacesList: string[] = await this.getSpacesConfig();
-
-    if (spacesList.length === 0) {
-      this.logger.info(
-        'No confluence.spaces configured in app-config.yaml, fetching all spaces',
-      );
-
-      spacesList = await this.discoverSpaces();
-    }
-
-    this.logger.info(`Indexing spaces: ${JSON.stringify(spacesList)}`);
-
-    const documentsList = await this.getDocumentsFromSpaces(spacesList);
+    const query = await this.getConfluenceQuery();
+    const documentsList = await this.getDocuments(query);
 
     this.logger.debug(`Document list: ${JSON.stringify(documentsList)}`);
 
@@ -228,25 +279,6 @@ export class ConfluenceCollatorFactory implements DocumentCollatorFactory {
     }
   }
 
-  private async discoverSpaces(): Promise<string[]> {
-    const data = await this.get(
-      `${this.baseUrl}/rest/api/space?&limit=1000&type=global&status=current`,
-    );
-
-    if (!data.results) {
-      return [];
-    }
-
-    const spacesList = [];
-    for (const result of data.results) {
-      spacesList.push(result.key);
-    }
-
-    this.logger.debug(`Discovered spaces: ${JSON.stringify(spacesList)}`);
-
-    return spacesList;
-  }
-
   private async getSpacesConfig(): Promise<string[]> {
     const spaceList: string[] = [];
     if (this.spaces?.length === 0) {
@@ -255,36 +287,57 @@ export class ConfluenceCollatorFactory implements DocumentCollatorFactory {
     return this.spaces || [];
   }
 
-  private async getDocumentsFromSpace(space: string): Promise<string[]> {
+  private async getConfluenceQuery(): Promise<string> {
+    const spaceList = await this.getSpacesConfig();
+    const spaceQuery =
+      spaceList.length > 0
+        ? spaceList.map(s => `space="${s}"`).join(' or ')
+        : '';
+    const additionalQuery = this.query?.trim() ?? '';
+
+    let query = '';
+    if (spaceQuery && additionalQuery) {
+      query = `(${spaceQuery}) and (${additionalQuery})`;
+    } else if (spaceQuery) {
+      query = spaceQuery;
+    } else if (additionalQuery) {
+      query = additionalQuery;
+    }
+    // If no query is provided, default to fetching all pages, blogposts, comments and attachments (which encompasses all content)
+    // https://developer.atlassian.com/server/confluence/advanced-searching-using-cql/#type
+    if (query === '') {
+      this.logger.info(
+        `No confluence query nor spaces provided via config, so will index all pages, blogposts, comments and attachments`,
+      );
+      query = 'type IN (page, blogpost, comment, attachment)';
+    }
+    return query;
+  }
+
+  private async getDocuments(query: string): Promise<string[]> {
     const documentsList = [];
 
-    this.logger.info(`Exploring space: "${space}"`);
+    this.logger.info(`Exploring documents using query: ${query}`);
 
     let next = true;
-    let requestUrl = `${this.baseUrl}/rest/api/content?limit=1000&status=current&spaceKey=${space}`;
+    let requestUrl = `${this.baseUrl}/rest/api/content/search?limit=1000&status=current&cql=${query}`;
     while (next) {
       const data = await this.get<ConfluenceDocumentList>(requestUrl);
       if (!data.results) {
         break;
       }
 
-      documentsList.push(...data.results.map(result => result._links.self));
+      documentsList.push(
+        ...data.results.map(
+          result => `${this.baseUrl}/rest/api/content/${result.id}`,
+        ),
+      );
 
       if (data._links.next) {
         requestUrl = `${this.baseUrl}${data._links.next}`;
       } else {
         next = false;
       }
-    }
-
-    return documentsList;
-  }
-
-  private async getDocumentsFromSpaces(spaces: string[]): Promise<string[]> {
-    const documentsList = [];
-
-    for (const space of spaces) {
-      documentsList.push(...(await this.getDocumentsFromSpace(space)));
     }
 
     return documentsList;
@@ -305,14 +358,14 @@ export class ConfluenceCollatorFactory implements DocumentCollatorFactory {
     const ancestors: IndexableAncestorRef[] = [
       {
         title: data.space.name,
-        location: `${this.baseUrl}${data.space._links.webui}`,
+        location: `${data._links.base}${data.space._links.webui}`,
       },
     ];
 
     data.ancestors.forEach(ancestor => {
       ancestors.push({
         title: ancestor.title,
-        location: `${this.baseUrl}${ancestor._links.webui}`,
+        location: `${data._links.base}${ancestor._links.webui}`,
       });
     });
 
@@ -320,11 +373,12 @@ export class ConfluenceCollatorFactory implements DocumentCollatorFactory {
       {
         title: data.title,
         text: this.stripHtml(data.body.storage.value),
-        location: `${this.baseUrl}${data._links.webui}`,
+        location: `${data._links.base}${data._links.webui}`,
         spaceKey: data.space.key,
         spaceName: data.space.name,
         ancestors: ancestors,
-        lastModifiedBy: data.version.by.publicName,
+        lastModifiedBy:
+          data.version.by.publicName ?? data.version.by.displayName,
         lastModified: data.version.when,
         lastModifiedFriendly: data.version.friendlyWhen,
       },
@@ -353,7 +407,7 @@ export class ConfluenceCollatorFactory implements DocumentCollatorFactory {
   }
 
   private async get<T = any>(requestUrl: string): Promise<T> {
-    const res = await fetch(requestUrl, {
+    const res = await this.fetch(requestUrl, {
       method: 'get',
       headers: {
         Authorization: this.getAuthorizationHeader(),
@@ -369,7 +423,6 @@ export class ConfluenceCollatorFactory implements DocumentCollatorFactory {
 
       throw new Error(`Request failed with ${res.status} ${res.statusText}`);
     }
-
     return await res.json();
   }
 }
