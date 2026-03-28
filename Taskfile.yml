@@ -10,7 +10,7 @@ vars:
     - rag-ai
     - tech-insights
     - time-saver
-  YARN_VERSION: 4.9.1
+  YARN_VERSION: 4.13.0
 
 tasks:
   default:
@@ -26,12 +26,13 @@ tasks:
         YARN_VERSION="{{.YARN_VERSION}}"
         WORKING_DIRECTORY="$(pwd)"
         yarn set version "${YARN_VERSION}"
+        yarn plugin import https://versions.backstage.io/v1/tags/main/yarn-plugin
         yarn install
         yarn dedupe
         {{range $index, $workspace := .WORKSPACES}}
         echo "Updating yarn in \"{{$workspace}}\""
         cd "${WORKING_DIRECTORY}/workspaces/{{$workspace}}/"
-        yarn set version "${YARN_VERSION}"
+        yarn plugin import https://versions.backstage.io/v1/tags/main/yarn-plugin
         yarn install
         yarn dedupe
         {{end}}
