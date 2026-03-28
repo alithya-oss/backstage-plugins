@@ -30,14 +30,10 @@ export function AwsEKSEnvironmentProviderPage(/* {children}: AwsEnvironmentProvi
       <EntityLayout.Route path="/" title="Overview">
         <Grid container spacing={3} alignItems="stretch">
           <Grid item md={6}>
-            <EntityAboutCard variant="gridItem" />
+            <EntityAboutCard />
           </Grid>
           <Grid item md={6} xs={12}>
-            <EntityCatalogGraphCard
-              variant="gridItem"
-              height={400}
-              showArrowHeads
-            />
+            <EntityCatalogGraphCard height={400} showArrowHeads />
           </Grid>
           <Grid item md={6}>
             <EntityProviderInfoCard />

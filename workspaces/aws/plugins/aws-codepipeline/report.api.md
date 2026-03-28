@@ -19,11 +19,7 @@ export const awsCodePipelinePlugin: BackstagePlugin<
 >;
 
 // @public (undocumented)
-export const EntityAwsCodePipelineCard: ({
-  variant,
-  paging,
-  title,
-}: {
+export const EntityAwsCodePipelineCard: (input: {
   variant?: InfoCardVariants | undefined;
   paging?: boolean | undefined;
   title?: string | undefined;
