@@ -37,7 +37,7 @@
     "@alithya-oss/backstage-plugin-aws-codebuild-common": "workspace:^",
     "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^",
     "@alithya-oss/backstage-plugin-aws-core-react": "workspace:^",
-    "@aws-sdk/client-codebuild": "^3.731.1",
+    "@aws-sdk/client-codebuild": "^3.1019.0",
     "@backstage/catalog-model": "backstage:^",
     "@backstage/core-components": "backstage:^",
     "@backstage/core-plugin-api": "backstage:^",

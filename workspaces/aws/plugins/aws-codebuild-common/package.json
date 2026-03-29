@@ -41,7 +41,7 @@
     "dist"
   ],
   "dependencies": {
-    "@aws-sdk/client-codebuild": "^3.731.1",
+    "@aws-sdk/client-codebuild": "^3.1019.0",
     "@backstage/catalog-model": "backstage:^"
   }
 }
