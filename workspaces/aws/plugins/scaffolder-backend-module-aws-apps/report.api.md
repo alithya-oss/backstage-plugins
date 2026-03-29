@@ -6,25 +6,26 @@
 import { AwsAuthResponse } from '@alithya-oss/backstage-plugin-aws-apps-backend';
 import { BackendFeature } from '@backstage/backend-plugin-api';
 import { CatalogApi } from '@backstage/catalog-client';
-import { Config } from '@backstage/config';
-import { JsonObject } from '@backstage/types';
 import { LoggerService } from '@backstage/backend-plugin-api';
+import { RootConfigService } from '@backstage/backend-plugin-api';
 import { ScmIntegrationRegistry } from '@backstage/integration';
 import { TemplateAction } from '@backstage/plugin-scaffolder-node';
 
 // @public (undocumented)
 export function createRepoAccessTokenAction(options: {
   integrations: ScmIntegrationRegistry;
-  envConfig: Config;
+  envConfig: RootConfigService;
 }): TemplateAction<
   {
     repoUrl: string;
-    secretArn: string;
     projectId: number;
-    region?: string;
+    secretArn: string;
+    region?: string | undefined;
   },
-  JsonObject,
-  'v1'
+  {
+    [x: string]: any;
+  },
+  'v2'
 >;
 
 // @public (undocumented)
@@ -32,30 +33,38 @@ export function createS3BucketAction(): TemplateAction<
   {
     bucketName: string;
     envProviders: EnvironmentProvider[];
-    tags?: {
-      Key: string;
-      Value: string | number | boolean;
-    }[];
+    tags?:
+      | {
+          Value: string | number | boolean;
+          Key: string;
+        }[]
+      | undefined;
   },
-  JsonObject,
-  'v1'
+  {
+    awsBucketName: string;
+  },
+  'v2'
 >;
 
 // @public (undocumented)
 export function createSecretAction(options: {
-  envConfig: Config;
+  envConfig: RootConfigService;
 }): TemplateAction<
   {
     secretName: string;
-    description?: string;
-    region?: string;
-    tags?: {
-      Key: string;
-      Value: string | number | boolean;
-    }[];
+    description?: string | undefined;
+    region?: string | undefined;
+    tags?:
+      | {
+          Value: string | number | boolean;
+          Key: string;
+        }[]
+      | undefined;
   },
-  JsonObject,
-  'v1'
+  {
+    secretARN?: string | undefined;
+  },
+  'v2'
 >;
 
 // @public (undocumented)
@@ -87,51 +96,85 @@ export function getComponentInfoAction(): TemplateAction<
   {
     componentName: string;
   },
-  JsonObject,
-  'v1'
+  {
+    kebabCaseComponentName: string;
+  },
+  'v2'
 >;
 
 // @public (undocumented)
 export function getEnvProvidersAction(options: {
-  config: Config;
+  config: RootConfigService;
   logger: LoggerService;
   catalogClient: CatalogApi;
 }): TemplateAction<
   {
     environmentRef: string;
   },
-  JsonObject,
-  'v1'
+  {
+    envName: string;
+    envShortName: string;
+    envRef: string;
+    envDeployManualApproval: string | boolean;
+    envProviders: {
+      region: string;
+      envProviderName: string;
+      envProviderType: string;
+      assumedRoleArn: string;
+      account?: string | undefined;
+      accountId?: string | undefined;
+      clusterArn?: string | undefined;
+      kubectlLambdaArn?: string | undefined;
+      envProviderPrefix?: string | undefined;
+      vpcId?: string | undefined;
+      publicSubnets?: string | undefined;
+      privateSubnets?: string | undefined;
+      kubectlLambdaRoleArn?: string | undefined;
+    }[];
+  },
+  'v2'
 >;
 
 // @public (undocumented)
 export function getPlatformMetadataAction(options: {
-  envConfig: Config;
-}): TemplateAction<JsonObject, JsonObject, 'v1'>;
+  envConfig: RootConfigService;
+}): TemplateAction<
+  {
+    [x: string]: any;
+  },
+  {
+    platformRegion: string;
+  },
+  'v2'
+>;
 
 // @public (undocumented)
 export function getPlatformParametersAction(options: {
-  envConfig: Config;
+  envConfig: RootConfigService;
 }): TemplateAction<
   {
     paramKeys: string[];
-    region?: string;
+    region?: string | undefined;
   },
-  JsonObject,
-  'v1'
+  {
+    params: Record<string, string>;
+  },
+  'v2'
 >;
 
 // @public (undocumented)
 export function getSsmParametersAction(
-  config: Config,
+  config: RootConfigService,
   logger: LoggerService,
 ): TemplateAction<
   {
     paramKeys: string[];
     envProviders: EnvironmentProvider[];
   },
-  JsonObject,
-  'v1'
+  {
+    params: Record<string, Record<string, string>>;
+  },
+  'v2'
 >;
 
 // @public (undocumented)

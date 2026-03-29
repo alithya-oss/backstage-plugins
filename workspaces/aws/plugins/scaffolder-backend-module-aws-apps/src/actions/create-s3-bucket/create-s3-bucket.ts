@@ -7,56 +7,34 @@ import { EnvironmentProvider } from '../../types';
 
 /** @public */
 export function createS3BucketAction() {
-  return createTemplateAction<{
-    bucketName: string;
-    envProviders: EnvironmentProvider[];
-    tags?: { Key: string; Value: string | number | boolean }[];
-  }>({
+  return createTemplateAction({
     id: 'opa:create-s3-bucket',
     description: 'Creates an S3 bucket',
     schema: {
       input: {
-        type: 'object',
-        required: ['bucketName', 'envProviders'],
-        properties: {
-          bucketName: {
-            title: 'Bucket Name',
-            description: 'The name of the S3 bucket to create',
-            type: 'string',
-          },
-          envProviders: {
-            title: 'AWS Environment Providers',
-            description:
+        bucketName: z =>
+          z.string().describe('The name of the S3 bucket to create'),
+        envProviders: z =>
+          z
+            .array(z.custom<EnvironmentProvider>())
+            .describe(
               'The AWS environment providers containing account and region info',
-            type: 'array',
-          },
-          tags: {
-            title: 'AWS Tags',
-            description:
+            ),
+        tags: z =>
+          z
+            .array(
+              z.object({
+                Key: z.string(),
+                Value: z.union([z.string(), z.number(), z.boolean()]),
+              }),
+            )
+            .optional()
+            .describe(
               'key/value pairs to apply as tags to any created AWS resources',
-            type: 'array',
-            minProperties: 1,
-            items: [
-              {
-                type: 'object',
-                properties: {
-                  Key: { type: 'string' },
-                  Value: { type: ['string', 'number', 'boolean'] },
-                },
-              },
-            ],
-          },
-        },
+            ),
       },
       output: {
-        type: 'object',
-        required: ['awsBucketName'],
-        properties: {
-          awsBucketName: {
-            title: 'S3 Bucket Name',
-            type: 'string',
-          },
-        },
+        awsBucketName: z => z.string().describe('S3 Bucket Name'),
       },
     },
     async handler() {

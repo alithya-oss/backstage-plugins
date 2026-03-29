@@ -7,46 +7,29 @@ import { parseRepoUrl } from '../../helpers/util';
 import { InputError } from '@backstage/errors';
 import { validate as validateArn } from '@aws-sdk/util-arn-parser';
 import { putSecret } from '../../helpers/action-context';
-import { Config } from '@backstage/config';
+import { RootConfigService } from '@backstage/backend-plugin-api';
 
 /** @public */
 export function createRepoAccessTokenAction(options: {
   integrations: ScmIntegrationRegistry;
-  envConfig: Config;
+  envConfig: RootConfigService;
 }) {
   const { integrations, envConfig } = options;
-  return createTemplateAction<{
-    repoUrl: string;
-    secretArn: string;
-    projectId: number;
-    region?: string;
-  }>({
+  return createTemplateAction({
     id: 'opa:createRepoAccessToken:gitlab',
     description:
       'Initializes a git repository of the content in the workspace, and publishes it to GitLab.',
     schema: {
       input: {
-        type: 'object',
-        required: ['repoUrl', 'secretArn', 'projectId'],
-        properties: {
-          repoUrl: {
-            title: 'Repository Location',
-            type: 'string',
-          },
-          projectId: {
-            title: 'Project Id',
-            type: 'number',
-          },
-          secretArn: {
-            title:
+        repoUrl: z => z.string().describe('Repository Location'),
+        projectId: z => z.number().describe('Project Id'),
+        secretArn: z =>
+          z
+            .string()
+            .describe(
               'Arn of the SecretsManager secret where the access token will be stored',
-            type: 'string',
-          },
-          region: {
-            title: 'AWS Region',
-            type: 'string',
-          },
-        },
+            ),
+        region: z => z.string().optional().describe('AWS Region'),
       },
     },
     async handler(ctx) {

@@ -33,6 +33,7 @@ export interface AppCatalogPageProps extends DefaultCatalogPageProps {
   kind: string;
 }
 
+/** @public */
 export function AppCatalogPage(props: AppCatalogPageProps) {
   const { actions, tableOptions = {}, emptyContent, kind } = props;
 
