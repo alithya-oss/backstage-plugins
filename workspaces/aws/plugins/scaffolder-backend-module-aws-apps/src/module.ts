@@ -3,7 +3,7 @@ import {
   createBackendModule,
 } from '@backstage/backend-plugin-api';
 import { CatalogClient } from '@backstage/catalog-client';
-import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
+import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node';
 import { ScmIntegrations } from '@backstage/integration';
 import {
   createRepoAccessTokenAction,

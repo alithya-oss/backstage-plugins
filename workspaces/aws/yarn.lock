@@ -26,9 +26,9 @@ __metadata:
     "@alithya-oss/backstage-plugin-amazon-ecs-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-node": "workspace:^"
-    "@aws-sdk/client-ecs": "npm:^3.731.1"
-    "@aws-sdk/middleware-sdk-sts": "npm:^3.731.0"
-    "@aws-sdk/util-arn-parser": "npm:^3.723.0"
+    "@aws-sdk/client-ecs": "npm:^3.1019.0"
+    "@aws-sdk/middleware-sdk-sts": "npm:^3.972.8"
+    "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "backstage:^"
     "@backstage/backend-plugin-api": "backstage:^"
@@ -59,7 +59,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-amazon-ecs-common@workspace:plugins/amazon-ecs-common"
   dependencies:
-    "@aws-sdk/client-ecs": "npm:^3.731.1"
+    "@aws-sdk/client-ecs": "npm:^3.1019.0"
     "@backstage/catalog-model": "backstage:^"
     "@backstage/cli": "backstage:^"
   languageName: unknown
@@ -72,8 +72,8 @@ __metadata:
     "@alithya-oss/backstage-plugin-amazon-ecs-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-react": "workspace:^"
-    "@aws-sdk/client-ecs": "npm:^3.731.1"
-    "@aws-sdk/util-arn-parser": "npm:^3.723.0"
+    "@aws-sdk/client-ecs": "npm:^3.1019.0"
+    "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage/catalog-model": "backstage:^"
     "@backstage/cli": "backstage:^"
     "@backstage/core-app-api": "backstage:^"
@@ -107,20 +107,20 @@ __metadata:
   resolution: "@alithya-oss/backstage-plugin-aws-apps-backend@workspace:plugins/aws-apps-backend"
   dependencies:
     "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^"
-    "@aws-sdk/client-cloudformation": "npm:^3.731.1"
-    "@aws-sdk/client-cloudwatch-logs": "npm:^3.731.1"
-    "@aws-sdk/client-dynamodb": "npm:^3.731.1"
-    "@aws-sdk/client-ecs": "npm:^3.731.1"
-    "@aws-sdk/client-eks": "npm:^3.731.1"
-    "@aws-sdk/client-lambda": "npm:^3.731.1"
-    "@aws-sdk/client-resource-groups": "npm:^3.731.1"
-    "@aws-sdk/client-s3": "npm:^3.731.1"
-    "@aws-sdk/client-secrets-manager": "npm:^3.731.1"
-    "@aws-sdk/client-ssm": "npm:^3.731.1"
-    "@aws-sdk/client-sts": "npm:^3.731.1"
-    "@aws-sdk/credential-provider-node": "npm:^3.731.1"
-    "@aws-sdk/types": "npm:^3.731.0"
-    "@aws-sdk/util-arn-parser": "npm:^3.723.0"
+    "@aws-sdk/client-cloudformation": "npm:^3.1019.0"
+    "@aws-sdk/client-cloudwatch-logs": "npm:^3.1019.0"
+    "@aws-sdk/client-dynamodb": "npm:^3.1019.0"
+    "@aws-sdk/client-ecs": "npm:^3.1019.0"
+    "@aws-sdk/client-eks": "npm:^3.1019.0"
+    "@aws-sdk/client-lambda": "npm:^3.1019.0"
+    "@aws-sdk/client-resource-groups": "npm:^3.1019.0"
+    "@aws-sdk/client-s3": "npm:^3.1019.0"
+    "@aws-sdk/client-secrets-manager": "npm:^3.1019.0"
+    "@aws-sdk/client-ssm": "npm:^3.1019.0"
+    "@aws-sdk/client-sts": "npm:^3.1019.0"
+    "@aws-sdk/credential-provider-node": "npm:^3.972.27"
+    "@aws-sdk/types": "npm:^3.973.6"
+    "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "backstage:^"
     "@backstage/backend-plugin-api": "backstage:^"
@@ -157,7 +157,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-aws-apps-common@workspace:plugins/aws-apps-common"
   dependencies:
-    "@aws-sdk/client-cloudformation": "npm:^3.731.1"
+    "@aws-sdk/client-cloudformation": "npm:^3.1019.0"
     "@backstage/catalog-model": "backstage:^"
     "@backstage/cli": "backstage:^"
     "@backstage/plugin-permission-common": "backstage:^"
@@ -170,16 +170,16 @@ __metadata:
   resolution: "@alithya-oss/backstage-plugin-aws-apps@workspace:plugins/aws-apps"
   dependencies:
     "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^"
-    "@aws-sdk/client-cloudformation": "npm:^3.731.1"
-    "@aws-sdk/client-cloudwatch-logs": "npm:^3.731.1"
-    "@aws-sdk/client-dynamodb": "npm:^3.731.1"
-    "@aws-sdk/client-ecs": "npm:^3.731.1"
-    "@aws-sdk/client-eks": "npm:^3.731.1"
-    "@aws-sdk/client-lambda": "npm:^3.731.1"
-    "@aws-sdk/client-s3": "npm:^3.731.1"
-    "@aws-sdk/client-secrets-manager": "npm:^3.731.1"
-    "@aws-sdk/client-ssm": "npm:^3.731.1"
-    "@aws-sdk/util-arn-parser": "npm:^3.723.0"
+    "@aws-sdk/client-cloudformation": "npm:^3.1019.0"
+    "@aws-sdk/client-cloudwatch-logs": "npm:^3.1019.0"
+    "@aws-sdk/client-dynamodb": "npm:^3.1019.0"
+    "@aws-sdk/client-ecs": "npm:^3.1019.0"
+    "@aws-sdk/client-eks": "npm:^3.1019.0"
+    "@aws-sdk/client-lambda": "npm:^3.1019.0"
+    "@aws-sdk/client-s3": "npm:^3.1019.0"
+    "@aws-sdk/client-secrets-manager": "npm:^3.1019.0"
+    "@aws-sdk/client-ssm": "npm:^3.1019.0"
+    "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage-community/plugin-github-actions": "npm:^0.6.16"
     "@backstage/catalog-model": "backstage:^"
     "@backstage/cli": "backstage:^"
@@ -235,9 +235,9 @@ __metadata:
     "@alithya-oss/backstage-plugin-aws-codebuild-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-node": "workspace:^"
-    "@aws-sdk/client-codebuild": "npm:^3.731.1"
-    "@aws-sdk/middleware-sdk-sts": "npm:^3.731.0"
-    "@aws-sdk/util-arn-parser": "npm:^3.723.0"
+    "@aws-sdk/client-codebuild": "npm:^3.1019.0"
+    "@aws-sdk/middleware-sdk-sts": "npm:^3.972.8"
+    "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "backstage:^"
     "@backstage/backend-plugin-api": "backstage:^"
@@ -268,7 +268,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-aws-codebuild-common@workspace:plugins/aws-codebuild-common"
   dependencies:
-    "@aws-sdk/client-codebuild": "npm:^3.731.1"
+    "@aws-sdk/client-codebuild": "npm:^3.1019.0"
     "@backstage/catalog-model": "backstage:^"
     "@backstage/cli": "backstage:^"
   languageName: unknown
@@ -281,7 +281,7 @@ __metadata:
     "@alithya-oss/backstage-plugin-aws-codebuild-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-react": "workspace:^"
-    "@aws-sdk/client-codebuild": "npm:^3.731.1"
+    "@aws-sdk/client-codebuild": "npm:^3.1019.0"
     "@backstage/catalog-model": "backstage:^"
     "@backstage/cli": "backstage:^"
     "@backstage/core-app-api": "backstage:^"
@@ -317,9 +317,9 @@ __metadata:
     "@alithya-oss/backstage-plugin-aws-codepipeline-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-node": "workspace:^"
-    "@aws-sdk/client-codepipeline": "npm:^3.731.1"
-    "@aws-sdk/middleware-sdk-sts": "npm:^3.731.0"
-    "@aws-sdk/util-arn-parser": "npm:^3.723.0"
+    "@aws-sdk/client-codepipeline": "npm:^3.1019.0"
+    "@aws-sdk/middleware-sdk-sts": "npm:^3.972.8"
+    "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "backstage:^"
     "@backstage/backend-plugin-api": "backstage:^"
@@ -350,7 +350,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-aws-codepipeline-common@workspace:plugins/aws-codepipeline-common"
   dependencies:
-    "@aws-sdk/client-codepipeline": "npm:^3.731.1"
+    "@aws-sdk/client-codepipeline": "npm:^3.1019.0"
     "@backstage/catalog-model": "backstage:^"
     "@backstage/cli": "backstage:^"
   languageName: unknown
@@ -363,8 +363,8 @@ __metadata:
     "@alithya-oss/backstage-plugin-aws-codepipeline-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-react": "workspace:^"
-    "@aws-sdk/client-codepipeline": "npm:^3.731.1"
-    "@aws-sdk/util-arn-parser": "npm:^3.723.0"
+    "@aws-sdk/client-codepipeline": "npm:^3.1019.0"
+    "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage/catalog-model": "backstage:^"
     "@backstage/cli": "backstage:^"
     "@backstage/core-app-api": "backstage:^"
@@ -408,10 +408,10 @@ __metadata:
   resolution: "@alithya-oss/backstage-plugin-aws-core-node@workspace:plugins/aws-core-node"
   dependencies:
     "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
-    "@aws-sdk/client-config-service": "npm:^3.731.1"
-    "@aws-sdk/client-resource-explorer-2": "npm:^3.731.1"
-    "@aws-sdk/client-resource-groups-tagging-api": "npm:^3.731.1"
-    "@aws-sdk/types": "npm:^3.731.0"
+    "@aws-sdk/client-config-service": "npm:^3.1019.0"
+    "@aws-sdk/client-resource-explorer-2": "npm:^3.1019.0"
+    "@aws-sdk/client-resource-groups-tagging-api": "npm:^3.1019.0"
+    "@aws-sdk/types": "npm:^3.973.6"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "backstage:^"
     "@backstage/backend-test-utils": "backstage:^"
@@ -467,10 +467,10 @@ __metadata:
   dependencies:
     "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
     "@alithya-oss/backstage-plugin-cost-insights-aws-common": "workspace:^"
-    "@aws-sdk/client-cost-explorer": "npm:^3.731.1"
-    "@aws-sdk/middleware-sdk-sts": "npm:^3.731.0"
-    "@aws-sdk/types": "npm:^3.731.0"
-    "@aws-sdk/util-arn-parser": "npm:^3.723.0"
+    "@aws-sdk/client-cost-explorer": "npm:^3.1019.0"
+    "@aws-sdk/middleware-sdk-sts": "npm:^3.972.8"
+    "@aws-sdk/types": "npm:^3.973.6"
+    "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage-community/plugin-cost-insights-common": "npm:^0.1.3"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-defaults": "backstage:^"
@@ -507,7 +507,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-cost-insights-aws-common@workspace:plugins/aws-cost-insights-common"
   dependencies:
-    "@aws-sdk/client-ecs": "npm:^3.731.1"
+    "@aws-sdk/client-ecs": "npm:^3.1019.0"
     "@backstage/catalog-model": "backstage:^"
     "@backstage/cli": "backstage:^"
   languageName: unknown
@@ -520,8 +520,8 @@ __metadata:
     "@alithya-oss/backstage-plugin-amazon-ecs-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-core-react": "workspace:^"
-    "@aws-sdk/client-ecs": "npm:^3.731.1"
-    "@aws-sdk/util-arn-parser": "npm:^3.723.0"
+    "@aws-sdk/client-ecs": "npm:^3.1019.0"
+    "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage-community/plugin-cost-insights": "npm:^0.12.25"
     "@backstage-community/plugin-cost-insights-common": "npm:^0.1.3"
     "@backstage/catalog-model": "backstage:^"
@@ -561,11 +561,11 @@ __metadata:
   resolution: "@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps@workspace:plugins/scaffolder-backend-module-aws-apps"
   dependencies:
     "@alithya-oss/backstage-plugin-aws-apps-backend": "workspace:^"
-    "@aws-sdk/client-secrets-manager": "npm:^3.731.1"
-    "@aws-sdk/client-sfn": "npm:^3.731.1"
-    "@aws-sdk/client-ssm": "npm:^3.731.1"
-    "@aws-sdk/types": "npm:^3.731.0"
-    "@aws-sdk/util-arn-parser": "npm:^3.723.0"
+    "@aws-sdk/client-secrets-manager": "npm:^3.1019.0"
+    "@aws-sdk/client-sfn": "npm:^3.1019.0"
+    "@aws-sdk/client-ssm": "npm:^3.1019.0"
+    "@aws-sdk/types": "npm:^3.973.6"
+    "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage/backend-plugin-api": "backstage:^"
     "@backstage/catalog-client": "backstage:^"
     "@backstage/catalog-model": "backstage:^"
@@ -589,11 +589,11 @@ __metadata:
   resolution: "@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-core@workspace:plugins/scaffolder-backend-module-aws-core"
   dependencies:
     "@alithya-oss/backstage-plugin-aws-core-common": "workspace:^"
-    "@aws-sdk/client-cloudcontrol": "npm:^3.731.1"
-    "@aws-sdk/client-codecommit": "npm:^3.731.1"
-    "@aws-sdk/client-eventbridge": "npm:^3.731.1"
-    "@aws-sdk/client-s3": "npm:^3.731.1"
-    "@aws-sdk/types": "npm:^3.731.0"
+    "@aws-sdk/client-cloudcontrol": "npm:^3.1019.0"
+    "@aws-sdk/client-codecommit": "npm:^3.1019.0"
+    "@aws-sdk/client-eventbridge": "npm:^3.1019.0"
+    "@aws-sdk/client-s3": "npm:^3.1019.0"
+    "@aws-sdk/types": "npm:^3.973.6"
     "@backstage/backend-common": "npm:^0.25.0"
     "@backstage/backend-plugin-api": "backstage:^"
     "@backstage/backend-test-utils": "backstage:^"
@@ -906,7 +906,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-cloudcontrol@npm:^3.731.1":
+"@aws-sdk/client-cloudcontrol@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-cloudcontrol@npm:3.1019.0"
   dependencies:
@@ -954,7 +954,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-cloudformation@npm:^3.731.1":
+"@aws-sdk/client-cloudformation@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-cloudformation@npm:3.1019.0"
   dependencies:
@@ -1002,7 +1002,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-cloudwatch-logs@npm:^3.731.1":
+"@aws-sdk/client-cloudwatch-logs@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-cloudwatch-logs@npm:3.1019.0"
   dependencies:
@@ -1052,7 +1052,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-codebuild@npm:^3.731.1":
+"@aws-sdk/client-codebuild@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-codebuild@npm:3.1019.0"
   dependencies:
@@ -1099,7 +1099,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-codecommit@npm:^3.350.0, @aws-sdk/client-codecommit@npm:^3.731.1":
+"@aws-sdk/client-codecommit@npm:^3.1019.0, @aws-sdk/client-codecommit@npm:^3.350.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-codecommit@npm:3.1019.0"
   dependencies:
@@ -1146,7 +1146,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-codepipeline@npm:^3.731.1":
+"@aws-sdk/client-codepipeline@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-codepipeline@npm:3.1019.0"
   dependencies:
@@ -1240,7 +1240,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-config-service@npm:^3.731.1":
+"@aws-sdk/client-config-service@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-config-service@npm:3.1019.0"
   dependencies:
@@ -1287,7 +1287,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-cost-explorer@npm:^3.731.1":
+"@aws-sdk/client-cost-explorer@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-cost-explorer@npm:3.1019.0"
   dependencies:
@@ -1334,7 +1334,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-dynamodb@npm:^3.731.1":
+"@aws-sdk/client-dynamodb@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-dynamodb@npm:3.1019.0"
   dependencies:
@@ -1384,7 +1384,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-ecs@npm:^3.731.1":
+"@aws-sdk/client-ecs@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-ecs@npm:3.1019.0"
   dependencies:
@@ -1432,7 +1432,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-eks@npm:^3.731.1":
+"@aws-sdk/client-eks@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-eks@npm:3.1019.0"
   dependencies:
@@ -1480,7 +1480,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-eventbridge@npm:^3.731.1":
+"@aws-sdk/client-eventbridge@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-eventbridge@npm:3.1019.0"
   dependencies:
@@ -1528,7 +1528,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-lambda@npm:^3.731.1":
+"@aws-sdk/client-lambda@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-lambda@npm:3.1019.0"
   dependencies:
@@ -1580,7 +1580,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-resource-explorer-2@npm:^3.731.1":
+"@aws-sdk/client-resource-explorer-2@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-resource-explorer-2@npm:3.1019.0"
   dependencies:
@@ -1627,7 +1627,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-resource-groups-tagging-api@npm:^3.731.1":
+"@aws-sdk/client-resource-groups-tagging-api@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-resource-groups-tagging-api@npm:3.1019.0"
   dependencies:
@@ -1674,7 +1674,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-resource-groups@npm:^3.731.1":
+"@aws-sdk/client-resource-groups@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-resource-groups@npm:3.1019.0"
   dependencies:
@@ -1721,7 +1721,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-s3@npm:^3.350.0, @aws-sdk/client-s3@npm:^3.731.1":
+"@aws-sdk/client-s3@npm:^3.1019.0, @aws-sdk/client-s3@npm:^3.350.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-s3@npm:3.1019.0"
   dependencies:
@@ -1784,7 +1784,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-secrets-manager@npm:^3.731.1":
+"@aws-sdk/client-secrets-manager@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-secrets-manager@npm:3.1019.0"
   dependencies:
@@ -1831,7 +1831,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-sfn@npm:^3.731.1":
+"@aws-sdk/client-sfn@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-sfn@npm:3.1019.0"
   dependencies:
@@ -1878,7 +1878,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-ssm@npm:^3.731.1":
+"@aws-sdk/client-ssm@npm:^3.1019.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-ssm@npm:3.1019.0"
   dependencies:
@@ -1926,7 +1926,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-sts@npm:^3.350.0, @aws-sdk/client-sts@npm:^3.731.1":
+"@aws-sdk/client-sts@npm:^3.1019.0, @aws-sdk/client-sts@npm:^3.350.0":
   version: 3.1019.0
   resolution: "@aws-sdk/client-sts@npm:3.1019.0"
   dependencies:
@@ -2086,7 +2086,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/credential-provider-node@npm:^3.350.0, @aws-sdk/credential-provider-node@npm:^3.731.1, @aws-sdk/credential-provider-node@npm:^3.972.27":
+"@aws-sdk/credential-provider-node@npm:^3.350.0, @aws-sdk/credential-provider-node@npm:^3.972.27":
   version: 3.972.27
   resolution: "@aws-sdk/credential-provider-node@npm:3.972.27"
   dependencies:
@@ -2353,7 +2353,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/middleware-sdk-sts@npm:^3.731.0":
+"@aws-sdk/middleware-sdk-sts@npm:^3.972.8":
   version: 3.972.8
   resolution: "@aws-sdk/middleware-sdk-sts@npm:3.972.8"
   dependencies:
@@ -2505,7 +2505,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/types@npm:^3.222.0, @aws-sdk/types@npm:^3.347.0, @aws-sdk/types@npm:^3.731.0, @aws-sdk/types@npm:^3.973.6":
+"@aws-sdk/types@npm:^3.222.0, @aws-sdk/types@npm:^3.347.0, @aws-sdk/types@npm:^3.973.6":
   version: 3.973.6
   resolution: "@aws-sdk/types@npm:3.973.6"
   dependencies:
@@ -2515,7 +2515,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/util-arn-parser@npm:^3.310.0, @aws-sdk/util-arn-parser@npm:^3.723.0, @aws-sdk/util-arn-parser@npm:^3.972.3":
+"@aws-sdk/util-arn-parser@npm:^3.310.0, @aws-sdk/util-arn-parser@npm:^3.972.3":
   version: 3.972.3
   resolution: "@aws-sdk/util-arn-parser@npm:3.972.3"
   dependencies:
