@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { CatalogApi } from '@backstage/catalog-client';
-import { JsonArray } from '@backstage/types';
 import {
   Entity,
   EntityRelation,
@@ -14,8 +13,10 @@ import { getAWScreds } from '@alithya-oss/backstage-plugin-aws-apps-backend';
 import { getSSMParameterValue } from '../../helpers/action-context';
 import { EnvironmentProvider } from '../../types';
 
-import { LoggerService } from '@backstage/backend-plugin-api';
-import { Config } from '@backstage/config';
+import {
+  LoggerService,
+  RootConfigService,
+} from '@backstage/backend-plugin-api';
 
 const ID = 'opa:get-env-providers';
 
@@ -57,129 +58,57 @@ interface DeploymentParameters {
 
 /** @public */
 export function getEnvProvidersAction(options: {
-  config: Config;
+  config: RootConfigService;
   logger: LoggerService;
   catalogClient: CatalogApi;
 }) {
   const { config, logger, catalogClient } = options;
 
-  return createTemplateAction<{
-    environmentRef: string;
-  }>({
+  return createTemplateAction({
     id: ID,
     description: 'Retrieves AWS Environment Provider data',
     examples,
     schema: {
       input: {
-        required: ['environmentRef'],
-        type: 'object',
-        properties: {
-          environmentRef: {
-            type: 'string',
-            title: 'Entity reference',
-            description:
-              'The entity reference identifier for an AWS Environment',
-          },
-        },
+        environmentRef: z =>
+          z
+            .string()
+            .describe('The entity reference identifier for an AWS Environment'),
       },
       output: {
-        type: 'object',
-        required: [
-          'envName',
-          'envShortName',
-          'envRef',
-          'envDeployManualApproval',
-          'envProviders',
-        ],
-        properties: {
-          envName: {
-            title: 'The AWS environment name',
-            type: 'string',
-          },
-          envShortName: {
-            title: 'The short AWS environment name e.g. dev, qa, prod',
-            type: 'string',
-          },
-          envRef: {
-            title: 'The entity reference ID of the environment',
-            type: 'string',
-          },
-          envDeployManualApproval: {
-            title:
+        envName: z => z.string().describe('The AWS environment name'),
+        envShortName: z =>
+          z
+            .string()
+            .describe('The short AWS environment name e.g. dev, qa, prod'),
+        envRef: z =>
+          z.string().describe('The entity reference ID of the environment'),
+        envDeployManualApproval: z =>
+          z
+            .union([z.boolean(), z.string()])
+            .describe(
               'Whether manual approval is required for deploying to the environment',
-            type: 'boolean',
-          },
-          envProviders: {
-            title: 'The AWS environment providers',
-            type: 'array',
-            items: {
-              type: 'object',
-              required: [
-                'envProviderName',
-                'envProviderType',
-                'envProviderPrefix',
-                'account',
-                'region',
-                'vpcId',
-                'publicSubnets',
-                'privateSubnets',
-                'assumedRoleArn',
-              ],
-              properties: {
-                envProviderName: {
-                  title: 'The AWS environment provider name',
-                  type: 'string',
-                },
-                envProviderType: {
-                  title: 'The AWS environment provider type',
-                  type: 'string',
-                },
-                account: {
-                  title:
-                    'The AWS account where infrastructure will be deployed',
-                  type: 'string',
-                },
-                region: {
-                  title: 'The AWS region where infrastructure will be deployed',
-                  type: 'string',
-                },
-                vpcId: {
-                  title:
-                    'The VPC identifier where infrastructure will be deployed',
-                  type: 'string',
-                },
-                publicSubnets: {
-                  title: 'The VPC public subnet ids',
-                  type: 'array',
-                },
-                privateSubnets: {
-                  title: 'The VPC private subnet ids',
-                  type: 'array',
-                },
-                clusterArn: {
-                  title:
-                    'The Arn of the cluster where the service and task are deployed, if needed. A cluster could be ECS or EKS',
-                  type: 'string',
-                },
-                assumedRoleArn: {
-                  title:
-                    'The Arn of AWS IAM role that can be assumed to deploy resources to the environment provider',
-                  type: 'string',
-                },
-                kubectlLambdaArn: {
-                  title:
-                    "EKS Only - The Arn of the lambda function that that can execute kubectl commands against the provider's EKS cluster",
-                  type: 'string',
-                },
-                kubectlLambdaRoleArn: {
-                  title:
-                    "The Arn of the IAM role for the lambda function that that can execute kubectl commands against the provider's EKS cluster",
-                  type: 'string',
-                },
-              },
-            },
-          },
-        },
+            ),
+        envProviders: z =>
+          z
+            .array(
+              z.object({
+                envProviderName: z.string(),
+                envProviderType: z.string(),
+                envProviderPrefix: z.string().optional(),
+                account: z.string().optional(),
+                accountId: z.string().optional(),
+                region: z.string(),
+                vpcId: z.string().optional(),
+                publicSubnets: z.string().optional(),
+                privateSubnets: z.string().optional(),
+                clusterArn: z.string().optional(),
+                assumedRoleArn: z.string(),
+                kubectlLambdaArn: z.string().optional(),
+                kubectlLambdaRoleArn: z.string().optional(),
+              }),
+            )
+            .describe('The AWS environment providers'),
       },
     },
     async handler(ctx) {
@@ -238,7 +167,7 @@ export function getEnvProvidersAction(options: {
         )}`,
       );
 
-      const envProviderOutputArray: JsonArray = [];
+      const envProviderOutputArray: EnvironmentProvider[] = [];
 
       // looping over all providers of the selected environment
       for (const params of deploymentParametersArray) {

@@ -4,7 +4,7 @@
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import yaml from 'yaml';
 import { getPlatformAccountSSMParameterValue } from '../../helpers/action-context';
-import { Config } from '@backstage/config';
+import { RootConfigService } from '@backstage/backend-plugin-api';
 
 const ID = 'opa:get-platform-parameters';
 
@@ -29,46 +29,29 @@ const examples = [
 ];
 
 /** @public */
-export function getPlatformParametersAction(options: { envConfig: Config }) {
+export function getPlatformParametersAction(options: {
+  envConfig: RootConfigService;
+}) {
   const { envConfig } = options;
-  return createTemplateAction<{
-    paramKeys: string[];
-    region?: string;
-  }>({
+  return createTemplateAction({
     id: ID,
     description:
       'Retrieve AWS SSM parameter values for platform configurations can be used by other template actions',
     examples,
     schema: {
       input: {
-        type: 'object',
-        required: ['paramKeys'],
-        properties: {
-          paramKeys: {
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-            title: 'SSM parameter keys',
-            description: 'The SSM parameter keys to look up',
-          },
-          region: {
-            type: 'string',
-            title: 'Platform region',
-            description:
+        paramKeys: z =>
+          z.array(z.string()).describe('The SSM parameter keys to look up'),
+        region: z =>
+          z
+            .string()
+            .optional()
+            .describe(
               'Optional region to locate SSM parameters.  If not provided, the default region will be used where Backstage is running',
-          },
-        },
+            ),
       },
       output: {
-        type: 'object',
-        required: ['params'],
-        properties: {
-          params: {
-            title: 'Map of SSM parameters',
-            type: 'object',
-          },
-        },
+        params: z => z.record(z.string()).describe('Map of SSM parameters'),
       },
     },
     async handler(ctx) {

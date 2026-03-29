@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-import { useAsyncRetry } from 'react-use';
+import useAsyncRetry from 'react-use/esm/useAsyncRetry';
 import { useApi } from '@backstage/core-plugin-api';
 import { amazonEcsApiRef } from '../api';
 import { ServicesResponse } from '@alithya-oss/backstage-plugin-amazon-ecs-common';

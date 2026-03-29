@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Config } from '@backstage/config';
+import { RootConfigService } from '@backstage/backend-plugin-api';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import yaml from 'yaml';
 
@@ -23,7 +23,9 @@ const examples = [
 ];
 
 /** @public */
-export function getPlatformMetadataAction(options: { envConfig: Config }) {
+export function getPlatformMetadataAction(options: {
+  envConfig: RootConfigService;
+}) {
   const { envConfig } = options;
 
   return createTemplateAction({
@@ -32,14 +34,12 @@ export function getPlatformMetadataAction(options: { envConfig: Config }) {
     examples,
     schema: {
       output: {
-        type: 'object',
-        required: ['platformRegion'],
-        properties: {
-          platformRegion: {
-            title: 'The AWS region where the OPA on AWS solution is deployed',
-            type: 'string',
-          },
-        },
+        platformRegion: z =>
+          z
+            .string()
+            .describe(
+              'The AWS region where the OPA on AWS solution is deployed',
+            ),
       },
     },
     async handler(ctx) {

@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-import { useAsyncRetry } from 'react-use';
+import useAsyncRetry from 'react-use/esm/useAsyncRetry';
 import { useApi } from '@backstage/core-plugin-api';
 import { awsCodePipelineApiRef } from '../api';
 import type { Entity } from '@backstage/catalog-model';

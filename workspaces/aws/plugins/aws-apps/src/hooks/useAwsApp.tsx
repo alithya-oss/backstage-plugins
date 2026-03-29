@@ -4,7 +4,7 @@
 import { ReactNode, createContext, useContext } from 'react';
 import { useApi, configApiRef } from '@backstage/core-plugin-api';
 import { catalogApiRef, useEntity } from '@backstage/plugin-catalog-react';
-import useAsyncRetry from 'react-use/lib/useAsyncRetry';
+import useAsyncRetry from 'react-use/esm/useAsyncRetry';
 import {
   Entity,
   EntityRelation,

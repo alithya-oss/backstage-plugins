@@ -9,28 +9,18 @@ import { JSX as JSX_2 } from 'react/jsx-runtime';
 import { ReactNode } from 'react';
 import { RouteRef } from '@backstage/core-plugin-api';
 
-// Warning: (ae-forgotten-export) The symbol "AppCatalogPage_2" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export const AppCatalogPage: AppCatalogPage_2;
 
-// Warning: (ae-forgotten-export) The symbol "AwsAppPage_2" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export const AwsAppPage: AwsAppPage_2;
 
-// Warning: (ae-forgotten-export) The symbol "AwsComponentPage_2" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export const AwsComponentPage: AwsComponentPage_2;
 
-// Warning: (ae-forgotten-export) The symbol "AwsEnvironmentPage_2" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export const AwsEnvironmentPage: AwsEnvironmentPage_2;
 
-// Warning: (ae-forgotten-export) The symbol "AwsEnvironmentProviderPage_2" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export const AwsEnvironmentProviderPage: AwsEnvironmentProviderPage_2;
 

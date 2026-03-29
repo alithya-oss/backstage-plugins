@@ -13,8 +13,10 @@ import {
   EnvironmentProviderConnection,
 } from '../../types';
 
-import { LoggerService } from '@backstage/backend-plugin-api';
-import { Config } from '@backstage/config';
+import {
+  LoggerService,
+  RootConfigService,
+} from '@backstage/backend-plugin-api';
 
 const ID = 'opa:get-ssm-parameters';
 
@@ -40,46 +42,33 @@ const examples = [
 ];
 
 /** @public */
-export function getSsmParametersAction(config: Config, logger: LoggerService) {
-  return createTemplateAction<{
-    paramKeys: string[];
-    envProviders: EnvironmentProvider[];
-  }>({
+export function getSsmParametersAction(
+  config: RootConfigService,
+  logger: LoggerService,
+) {
+  return createTemplateAction({
     id: ID,
     description:
       'Retrieve AWS SSM parameter values for each environment provider so that their configurations can be used by other template actions',
     examples,
     schema: {
       input: {
-        type: 'object',
-        required: ['paramKeys'],
-        properties: {
-          paramKeys: {
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-            title: 'SSM parameter keys',
-            description: 'The SSM parameter keys to look up',
-          },
-          envProviders: {
-            title: 'AWS Environment Providers',
-            description:
+        paramKeys: z =>
+          z.array(z.string()).describe('The SSM parameter keys to look up'),
+        envProviders: z =>
+          z
+            .array(z.custom<EnvironmentProvider>())
+            .describe(
               'The AWS environment providers containing account and region info',
-            type: 'array',
-          },
-        },
+            ),
       },
       output: {
-        type: 'object',
-        required: ['params'],
-        properties: {
-          params: {
-            title:
+        params: z =>
+          z
+            .record(z.record(z.string()))
+            .describe(
               'Map of SSM parameters, keyed off of the environment provider name',
-            type: 'object',
-          },
-        },
+            ),
       },
     },
     async handler(ctx) {
