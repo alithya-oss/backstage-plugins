@@ -16,3 +16,4 @@
 
 export { usePolling } from './usePolling';
 export { useArgoWorkflows } from './useArgoWorkflows';
+export { useWorkflowDetail } from './useWorkflowDetail';
