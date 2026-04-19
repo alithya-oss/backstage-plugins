@@ -78,7 +78,7 @@ development_status:
   4-1-keyboard-navigation-for-workflow-table-and-expand: done
   4-2-keyboard-navigation-for-dag-cards-and-node-panel: done
   4-3-screen-reader-support: done
-  4-4-reduced-motion-and-animation-accessibility: backlog
+  4-4-reduced-motion-and-animation-accessibility: done
   4-5-error-boundaries-and-graceful-degradation: backlog
   4-6-documentation-and-community-release-preparation: backlog
   epic-4-retrospective: optional

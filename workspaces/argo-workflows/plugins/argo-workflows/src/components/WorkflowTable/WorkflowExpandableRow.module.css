@@ -78,3 +78,10 @@
     overflow-x: auto;
   }
 }
+
+/* Disable animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .expandButton {
+    transition: none;
+  }
+}
