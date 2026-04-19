@@ -67,7 +67,7 @@ development_status:
   3-1-backend-workflow-detail-route-with-status-nodes: done
   3-2-dag-layout-algorithm-compute-dag-columns: done
   3-3-workflow-detail-hook: done
-  3-4-expandable-row-with-dag-card-flow: backlog
+  3-4-expandable-row-with-dag-card-flow: done
   3-5-dag-node-cards-with-status-visualization: backlog
   3-6-node-status-dots-in-table-row: backlog
   3-7-node-detail-panel: backlog

@@ -14,12 +14,32 @@
  * limitations under the License.
  */
 
-export { WorkflowTable } from './WorkflowTable';
-export type { WorkflowTableProps } from './WorkflowTable';
-export { WorkflowFilters } from './WorkflowFilters';
-export type { WorkflowFiltersProps } from './WorkflowFilters';
-export {
-  ExpandButton,
-  WorkflowExpandedContent,
-} from './WorkflowExpandableRow';
-export type { WorkflowExpandableRowProps } from './WorkflowExpandableRow';
+@layer components {
+  .container {
+    align-items: center;
+    display: flex;
+    gap: var(--bui-space-1);
+    overflow-x: auto;
+    padding: var(--bui-space-2) 0;
+  }
+
+  .column {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: var(--bui-space-2);
+  }
+
+  .parallelLabel {
+    color: var(--bui-fg-secondary);
+    font-size: 10px;
+    text-transform: uppercase;
+  }
+
+  .empty {
+    color: var(--bui-fg-secondary);
+    font-size: 13px;
+    padding: var(--bui-space-4);
+  }
+}

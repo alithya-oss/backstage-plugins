@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-export { WorkflowTable } from './WorkflowTable';
-export type { WorkflowTableProps } from './WorkflowTable';
-export { WorkflowFilters } from './WorkflowFilters';
-export type { WorkflowFiltersProps } from './WorkflowFilters';
-export {
-  ExpandButton,
-  WorkflowExpandedContent,
-} from './WorkflowExpandableRow';
-export type { WorkflowExpandableRowProps } from './WorkflowExpandableRow';
+export { DAGCardFlow } from './DAGCardFlow';
+export type { DAGCardFlowProps } from './DAGCardFlow';
+export { DAGNodeCard } from './DAGNodeCard';
+export type { DAGNodeCardProps } from './DAGNodeCard';
+export { DAGArrow } from './DAGArrow';
+export type { DAGArrowProps, ArrowStatus } from './DAGArrow';

@@ -39,6 +39,10 @@ import type {
   WorkflowPhase,
 } from '@backstage-community/plugin-argo-workflows-common';
 import { formatDuration } from '@backstage-community/plugin-argo-workflows-common';
+import {
+  ExpandButton,
+  WorkflowExpandedContent,
+} from './WorkflowExpandableRow';
 import styles from './WorkflowStatusIndicator.module.css';
 import filterStyles from './WorkflowFilters.module.css';
 
@@ -202,6 +206,33 @@ export function WorkflowTable({
     new Set(),
   );
   const [searchText, setSearchText] = useState('');
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const handleToggleExpand = useCallback(
+    (workflowId: string) => {
+      setExpandedId(prev => (prev === workflowId ? null : workflowId));
+    },
+    [],
+  );
+
+  const expandableColumns = useMemo<ColumnConfig<WorkflowTableItem>[]>(
+    () => [
+      {
+        id: 'expand',
+        label: '',
+        cell: item => (
+          <Cell>
+            <ExpandButton
+              isExpanded={expandedId === item.id}
+              onToggle={() => handleToggleExpand(item.id)}
+            />
+          </Cell>
+        ),
+      },
+      ...columns,
+    ],
+    [expandedId, handleToggleExpand],
+  );
 
   const tableData = useMemo<WorkflowTableItem[]>(() => {
     let result: WorkflowTableItem[] = workflows.map(w => ({
@@ -303,10 +334,22 @@ export function WorkflowTable({
           </button>
         </div>
       ) : (
-        <Table<WorkflowTableItem>
-          columnConfig={columns}
-          {...tableProps}
-        />
+        <>
+          <Table<WorkflowTableItem>
+            columnConfig={expandableColumns}
+            {...tableProps}
+          />
+          {expandedId && (
+            <div data-testid="expanded-row-content">
+              {(() => {
+                const wf = workflows.find(
+                  w => `${w.namespace}/${w.name}` === expandedId,
+                );
+                return wf ? <WorkflowExpandedContent workflow={wf} /> : null;
+              })()}
+            </div>
+          )}
+        </>
       )}
     </>
   );
