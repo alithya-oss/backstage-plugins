@@ -43,6 +43,7 @@ import {
   ExpandButton,
   WorkflowExpandedContent,
 } from './WorkflowExpandableRow';
+import { NodeStatusDots } from './NodeStatusDots';
 import styles from './WorkflowStatusIndicator.module.css';
 import filterStyles from './WorkflowFilters.module.css';
 
@@ -170,6 +171,15 @@ const columns: ColumnConfig<WorkflowTableItem>[] = [
     cell: item => (
       <Cell>
         <WorkflowStatusIndicator phase={item.phase} />
+      </Cell>
+    ),
+  },
+  {
+    id: 'nodeStatus',
+    label: 'Node Status',
+    cell: item => (
+      <Cell>
+        <NodeStatusDots nodes={item.nodes} />
       </Cell>
     ),
   },
