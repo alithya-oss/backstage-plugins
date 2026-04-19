@@ -70,7 +70,7 @@ development_status:
   3-4-expandable-row-with-dag-card-flow: done
   3-5-dag-node-cards-with-status-visualization: done
   3-6-node-status-dots-in-table-row: done
-  3-7-node-detail-panel: backlog
+  3-7-node-detail-panel: done
   epic-3-retrospective: optional
 
   # Epic 4: Accessibility & Polish

@@ -61,4 +61,15 @@
     color: var(--bui-fg-tertiary);
     font-size: 16px;
   }
+
+  .dagWithPanel {
+    display: flex;
+    gap: 0;
+  }
+
+  .dagArea {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+  }
 }

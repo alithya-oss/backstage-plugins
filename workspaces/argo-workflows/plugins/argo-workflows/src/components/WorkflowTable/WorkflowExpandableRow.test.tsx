@@ -27,8 +27,46 @@ jest.mock('../../hooks', () => ({
 }));
 
 jest.mock('../DAGCardFlow', () => ({
-  DAGCardFlow: ({ nodes }: { nodes: unknown[] }) => (
-    <div data-testid="mock-dag-card-flow">DAG with {nodes.length} nodes</div>
+  DAGCardFlow: ({
+    nodes,
+    onNodeClick,
+    selectedNodeId,
+  }: {
+    nodes: unknown[];
+    onNodeClick?: (id: string) => void;
+    selectedNodeId?: string;
+  }) => (
+    <div data-testid="mock-dag-card-flow">
+      DAG with {nodes.length} nodes
+      {selectedNodeId && (
+        <span data-testid="selected-node">{selectedNodeId}</span>
+      )}
+      {onNodeClick && (
+        <button
+          data-testid="click-node-n1"
+          onClick={() => onNodeClick('n1')}
+        >
+          click n1
+        </button>
+      )}
+    </div>
+  ),
+}));
+
+jest.mock('../NodeDetailPanel', () => ({
+  NodeDetailPanel: ({
+    node,
+    onClose,
+  }: {
+    node: { displayName: string };
+    onClose: () => void;
+  }) => (
+    <div data-testid="mock-node-detail-panel">
+      Panel: {node.displayName}
+      <button data-testid="mock-panel-close" onClick={onClose}>
+        close
+      </button>
+    </div>
   ),
 }));
 
@@ -123,5 +161,87 @@ describe('WorkflowExpandedContent', () => {
       <WorkflowExpandedContent workflow={mockWorkflow} />,
     );
     expect(container.innerHTML).toBe('');
+  });
+
+  it('shows NodeDetailPanel when a node is clicked', () => {
+    useWorkflowDetail.mockReturnValue({
+      workflow: {
+        ...mockWorkflow,
+        nodes: [
+          { id: 'n1', displayName: 'build', type: 'Pod', phase: 'Succeeded' },
+        ],
+      },
+      loading: false,
+      error: null,
+    });
+
+    render(<WorkflowExpandedContent workflow={mockWorkflow} />);
+    fireEvent.click(screen.getByTestId('click-node-n1'));
+    expect(screen.getByTestId('mock-node-detail-panel')).toBeInTheDocument();
+    expect(screen.getByText('Panel: build')).toBeInTheDocument();
+  });
+
+  it('closes panel when same node is clicked again', () => {
+    useWorkflowDetail.mockReturnValue({
+      workflow: {
+        ...mockWorkflow,
+        nodes: [
+          { id: 'n1', displayName: 'build', type: 'Pod', phase: 'Succeeded' },
+        ],
+      },
+      loading: false,
+      error: null,
+    });
+
+    render(<WorkflowExpandedContent workflow={mockWorkflow} />);
+    // Open panel
+    fireEvent.click(screen.getByTestId('click-node-n1'));
+    expect(screen.getByTestId('mock-node-detail-panel')).toBeInTheDocument();
+    // Click same node again — closes
+    fireEvent.click(screen.getByTestId('click-node-n1'));
+    expect(
+      screen.queryByTestId('mock-node-detail-panel'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('closes panel when close button is clicked', () => {
+    useWorkflowDetail.mockReturnValue({
+      workflow: {
+        ...mockWorkflow,
+        nodes: [
+          { id: 'n1', displayName: 'build', type: 'Pod', phase: 'Succeeded' },
+        ],
+      },
+      loading: false,
+      error: null,
+    });
+
+    render(<WorkflowExpandedContent workflow={mockWorkflow} />);
+    fireEvent.click(screen.getByTestId('click-node-n1'));
+    fireEvent.click(screen.getByTestId('mock-panel-close'));
+    expect(
+      screen.queryByTestId('mock-node-detail-panel'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('closes panel when Escape is pressed', () => {
+    useWorkflowDetail.mockReturnValue({
+      workflow: {
+        ...mockWorkflow,
+        nodes: [
+          { id: 'n1', displayName: 'build', type: 'Pod', phase: 'Succeeded' },
+        ],
+      },
+      loading: false,
+      error: null,
+    });
+
+    render(<WorkflowExpandedContent workflow={mockWorkflow} />);
+    fireEvent.click(screen.getByTestId('click-node-n1'));
+    expect(screen.getByTestId('mock-node-detail-panel')).toBeInTheDocument();
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(
+      screen.queryByTestId('mock-node-detail-panel'),
+    ).not.toBeInTheDocument();
   });
 });

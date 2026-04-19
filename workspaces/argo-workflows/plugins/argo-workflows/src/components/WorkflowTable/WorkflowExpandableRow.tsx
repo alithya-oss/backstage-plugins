@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import type { WorkflowSummary } from '@backstage-community/plugin-argo-workflows-common';
 import { useWorkflowDetail } from '../../hooks';
 import { DAGCardFlow } from '../DAGCardFlow';
+import { NodeDetailPanel } from '../NodeDetailPanel';
 import styles from './WorkflowExpandableRow.module.css';
 
 /**
@@ -76,11 +77,34 @@ export function WorkflowExpandedContent({
 }: {
   workflow: WorkflowSummary;
 }) {
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+
   const {
     workflow: detail,
     loading,
     error,
   } = useWorkflowDetail(workflow.namespace, workflow.name);
+
+  const handleNodeClick = useCallback(
+    (nodeId: string) => {
+      setSelectedNodeId(prev => (prev === nodeId ? null : nodeId));
+    },
+    [],
+  );
+
+  const handleClosePanel = useCallback(() => {
+    setSelectedNodeId(null);
+  }, []);
+
+  // Escape key closes the panel
+  useEffect(() => {
+    if (!selectedNodeId) return undefined;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedNodeId(null);
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [selectedNodeId]);
 
   if (loading) {
     return (
@@ -102,9 +126,24 @@ export function WorkflowExpandedContent({
     return null;
   }
 
+  const selectedNode = selectedNodeId
+    ? detail.nodes.find(n => n.id === selectedNodeId) ?? null
+    : null;
+
   return (
     <div className={styles.expandedContent}>
-      <DAGCardFlow nodes={detail.nodes} />
+      <div className={styles.dagWithPanel}>
+        <div className={styles.dagArea}>
+          <DAGCardFlow
+            nodes={detail.nodes}
+            selectedNodeId={selectedNodeId ?? undefined}
+            onNodeClick={handleNodeClick}
+          />
+        </div>
+        {selectedNode && (
+          <NodeDetailPanel node={selectedNode} onClose={handleClosePanel} />
+        )}
+      </div>
     </div>
   );
 }
