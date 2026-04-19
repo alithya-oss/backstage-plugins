@@ -29,6 +29,7 @@ export type {
   NodeStatus,
   WorkflowSummary,
   WorkflowDetail,
+  DAGColumn,
 } from './types';
 
 export type { ArgoWorkflowsApi } from './api';
@@ -44,3 +45,5 @@ export type { BUIStatus } from './statusMapping';
 export { PHASE_STATUS_MAP, PHASE_ICON_MAP } from './statusMapping';
 
 export { formatDuration } from './duration';
+
+export { computeDAGColumns } from './computeDAGColumns';

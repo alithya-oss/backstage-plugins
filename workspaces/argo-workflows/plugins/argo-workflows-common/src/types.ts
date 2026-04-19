@@ -127,3 +127,14 @@ export interface WorkflowDetail extends WorkflowSummary {
   /** Full node statuses for DAG rendering (overrides WorkflowSummary.nodes) */
   nodes: NodeStatus[];
 }
+
+/**
+ * A column in the DAG layout representing nodes at the same topological level.
+ * @public
+ */
+export interface DAGColumn {
+  /** Nodes at this execution stage (parallel if more than one) */
+  nodes: NodeStatus[];
+  /** True if this column contains more than one node (parallel execution) */
+  isParallel: boolean;
+}
