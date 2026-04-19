@@ -1,6 +1,28 @@
 # Story 3.2: DAG Layout Algorithm (computeDAGColumns)
 
-Status: review
+Status: done
+
+## Code Review Record
+
+**Reviewed:** 2026-04-19
+**Reviewer:** Kiro (3-layer adversarial review)
+
+### Findings
+
+| Severity | Count | Notes |
+|----------|-------|-------|
+| Critical | 0 | — |
+| High | 0 | — |
+| Medium | 2 | Defensive edge cases (null input, duplicate child IDs) — not blockers |
+| Low | 5 | Minor improvements (type safety, test coverage gaps) |
+
+### Acceptance Criteria
+
+All 9 ACs verified ✅
+
+### Verdict
+
+**APPROVED** — Implementation satisfies all acceptance criteria. Medium-severity findings are defensive improvements for malformed input, not blockers for well-formed Argo Workflows API responses.
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
