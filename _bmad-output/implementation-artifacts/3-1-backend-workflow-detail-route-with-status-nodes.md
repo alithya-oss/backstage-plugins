@@ -1,6 +1,6 @@
 # Story 3.1: Backend Workflow Detail Route with status.nodes
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -298,6 +298,28 @@ Auto (Kiro)
 - 13 new mapper tests, 7 new service tests, 4 new router tests — 65 total tests pass across 3 suites
 - Build succeeds; pre-existing `plugin.test.ts` failure (TodoListService import) unrelated to changes
 - Removed unused `ServiceError` type import from service test file
+
+### Code Review Results (2026-04-19)
+
+**Verdict: APPROVE**
+
+All 5 acceptance criteria satisfied. No critical issues found.
+
+| Severity | Count | Notes |
+|----------|-------|-------|
+| Critical | 0 | None |
+| Medium | 2 | Test coverage gaps (not bugs) |
+| Low | 4 | Minor improvements |
+
+**Medium Findings (optional follow-up):**
+1. Missing test for workflow name with special characters (URL encoding verified, but no test)
+2. No test distinguishing 404 for missing workflow vs missing namespace (error message could be confusing)
+
+**Low Findings (informational):**
+1. `mapK8sError` 404 message says "Namespace not found" — could be misleading for missing workflow
+2. No input validation for empty/whitespace namespace/name in `getWorkflow`
+3. `children`/`outboundNodes` set to `undefined` when empty — frontend must handle both `undefined` and `[]`
+4. `VALID_NODE_TYPES` manually maintained — could drift from `NodeType` type
 
 ### File List
 
