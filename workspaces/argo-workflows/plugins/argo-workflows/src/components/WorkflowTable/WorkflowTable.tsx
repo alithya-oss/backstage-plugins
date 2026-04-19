@@ -14,15 +14,26 @@
  * limitations under the License.
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
-import { Table, TableColumn } from '@backstage/core-components';
+import { useState, useMemo, useCallback } from 'react';
+import {
+  Table,
+  useTable,
+  Cell,
+  CellText,
+  type ColumnConfig,
+  type TableItem,
+  SearchField,
+  TagGroup,
+  Tag,
+  Flex,
+  Text,
+} from '@backstage/ui';
 import {
   RiCheckboxCircleLine,
   RiErrorWarningLine,
   RiRefreshLine,
   RiTimeLine,
 } from '@remixicon/react';
-import classNames from 'classnames';
 import type {
   WorkflowSummary,
   WorkflowPhase,
@@ -30,7 +41,11 @@ import type {
 import { formatDuration } from '@backstage-community/plugin-argo-workflows-common';
 import styles from './WorkflowStatusIndicator.module.css';
 import filterStyles from './WorkflowFilters.module.css';
-import { WorkflowFilters } from './WorkflowFilters';
+
+/**
+ * WorkflowSummary extended with an `id` field for BUI Table compatibility.
+ */
+type WorkflowTableItem = WorkflowSummary & TableItem;
 
 /**
  * Props for the WorkflowTable component.
@@ -43,13 +58,21 @@ export interface WorkflowTableProps {
   lastUpdated?: Date | null;
 }
 
+const PHASE_KEYS: { id: WorkflowPhase }[] = [
+  { id: 'Succeeded' },
+  { id: 'Failed' },
+  { id: 'Running' },
+  { id: 'Pending' },
+  { id: 'Error' },
+];
+
 function WorkflowStatusIndicator({ phase }: { phase: WorkflowPhase }) {
   switch (phase) {
     case 'Succeeded':
       return (
         <span className={styles.status}>
           <RiCheckboxCircleLine
-            className={classNames(styles.statusIcon, styles.ok)}
+            className={`${styles.statusIcon} ${styles.ok}`}
           />
           Succeeded
         </span>
@@ -58,7 +81,7 @@ function WorkflowStatusIndicator({ phase }: { phase: WorkflowPhase }) {
       return (
         <span className={styles.status}>
           <RiErrorWarningLine
-            className={classNames(styles.statusIcon, styles.error)}
+            className={`${styles.statusIcon} ${styles.error}`}
           />
           Failed
         </span>
@@ -67,7 +90,7 @@ function WorkflowStatusIndicator({ phase }: { phase: WorkflowPhase }) {
       return (
         <span className={styles.status}>
           <RiErrorWarningLine
-            className={classNames(styles.statusIcon, styles.error)}
+            className={`${styles.statusIcon} ${styles.error}`}
           />
           Error
         </span>
@@ -76,7 +99,7 @@ function WorkflowStatusIndicator({ phase }: { phase: WorkflowPhase }) {
       return (
         <span className={styles.status}>
           <RiRefreshLine
-            className={classNames(styles.statusIcon, styles.running)}
+            className={`${styles.statusIcon} ${styles.running}`}
           />
           Running
         </span>
@@ -84,9 +107,7 @@ function WorkflowStatusIndicator({ phase }: { phase: WorkflowPhase }) {
     case 'Pending':
       return (
         <span className={styles.status}>
-          <RiTimeLine
-            className={classNames(styles.statusIcon, styles.pending)}
-          />
+          <RiTimeLine className={`${styles.statusIcon} ${styles.pending}`} />
           Pending
         </span>
       );
@@ -118,40 +139,52 @@ function formatRelativeTime(isoString: string): string {
   return `${diffDay} day${diffDay !== 1 ? 's' : ''} ago`;
 }
 
-const columns: TableColumn<WorkflowSummary>[] = [
+/**
+ * Formats a Date into a short poll indicator string.
+ */
+function formatPollTime(lastUpdated: Date | null): string {
+  if (!lastUpdated) return '—';
+  const time = lastUpdated.getTime();
+  if (Number.isNaN(time)) return '—';
+  const diffSec = Math.floor((Date.now() - time) / 1000);
+  if (diffSec < 5) return 'just now';
+  if (diffSec < 60) return `${diffSec}s ago`;
+  const diffMin = Math.floor(diffSec / 60);
+  return `${diffMin}m ago`;
+}
+
+const columns: ColumnConfig<WorkflowTableItem>[] = [
   {
-    title: 'Name',
-    field: 'name',
+    id: 'name',
+    label: 'Name',
+    isRowHeader: true,
+    cell: item => <CellText title={item.name} />,
   },
   {
-    title: 'Status',
-    field: 'phase',
-    render: (row: WorkflowSummary) => (
-      <WorkflowStatusIndicator phase={row.phase} />
+    id: 'phase',
+    label: 'Status',
+    cell: item => (
+      <Cell>
+        <WorkflowStatusIndicator phase={item.phase} />
+      </Cell>
     ),
   },
   {
-    title: 'Started',
-    field: 'startedAt',
-    render: (row: WorkflowSummary) => formatRelativeTime(row.startedAt),
-    customSort: (a: WorkflowSummary, b: WorkflowSummary) =>
-      new Date(a.startedAt).getTime() - new Date(b.startedAt).getTime(),
-    defaultSort: 'desc',
+    id: 'startedAt',
+    label: 'Started',
+    isSortable: true,
+    cell: item => <CellText title={formatRelativeTime(item.startedAt)} />,
   },
   {
-    title: 'Duration',
-    field: 'duration',
-    render: (row: WorkflowSummary) => (
-      <span style={{ fontFamily: 'monospace' }}>
-        {formatDuration(row.duration)}
-      </span>
-    ),
-    customSort: (a: WorkflowSummary, b: WorkflowSummary) =>
-      (a.duration ?? 0) - (b.duration ?? 0),
+    id: 'duration',
+    label: 'Duration',
+    isSortable: true,
+    cell: item => <CellText title={formatDuration(item.duration)} />,
   },
   {
-    title: 'Namespace',
-    field: 'namespace',
+    id: 'namespace',
+    label: 'Namespace',
+    cell: item => <CellText title={item.namespace} />,
   },
 ];
 
@@ -165,14 +198,19 @@ export function WorkflowTable({
   loading,
   lastUpdated,
 }: WorkflowTableProps) {
-  const [activePhases, setActivePhases] = useState<WorkflowPhase[]>([]);
+  const [activePhases, setActivePhases] = useState<Set<WorkflowPhase>>(
+    new Set(),
+  );
   const [searchText, setSearchText] = useState('');
 
-  const filteredWorkflows = useMemo(() => {
-    let result = workflows;
+  const tableData = useMemo<WorkflowTableItem[]>(() => {
+    let result: WorkflowTableItem[] = workflows.map(w => ({
+      ...w,
+      id: `${w.namespace}/${w.name}`,
+    }));
 
-    if (activePhases.length > 0) {
-      result = result.filter(w => activePhases.includes(w.phase));
+    if (activePhases.size > 0) {
+      result = result.filter(w => activePhases.has(w.phase));
     }
 
     if (searchText.trim()) {
@@ -184,23 +222,75 @@ export function WorkflowTable({
   }, [workflows, activePhases, searchText]);
 
   const handleClearFilters = useCallback(() => {
-    setActivePhases([]);
+    setActivePhases(new Set());
     setSearchText('');
   }, []);
 
-  const hasActiveFilters = activePhases.length > 0 || searchText.trim() !== '';
+  const { tableProps } = useTable<WorkflowTableItem>({
+    mode: 'complete',
+    data: loading ? undefined : tableData,
+    sortFn: (data, sort) => {
+      const { column, direction } = sort;
+      return [...data].sort((a, b) => {
+        let cmp = 0;
+        if (column === 'startedAt') {
+          cmp =
+            new Date(a.startedAt).getTime() - new Date(b.startedAt).getTime();
+        } else if (column === 'duration') {
+          cmp = (a.duration ?? 0) - (b.duration ?? 0);
+        }
+        return direction === 'descending' ? -cmp : cmp;
+      });
+    },
+    initialSort: { column: 'startedAt', direction: 'descending' },
+    paginationOptions: {
+      pageSize: 20,
+      pageSizeOptions: [10, 20, 50],
+    },
+  });
+
+  const hasActiveFilters = activePhases.size > 0 || searchText.trim() !== '';
   const showEmptyFilterState =
-    hasActiveFilters && filteredWorkflows.length === 0 && workflows.length > 0;
+    hasActiveFilters && tableData.length === 0 && workflows.length > 0;
+
+  const selectedKeys = useMemo(
+    () => (activePhases.size === 0 ? 'all' as const : activePhases),
+    [activePhases],
+  );
 
   return (
     <>
-      <WorkflowFilters
-        phases={activePhases}
-        onPhasesChange={setActivePhases}
-        searchText={searchText}
-        onSearchChange={setSearchText}
-        lastUpdated={lastUpdated ?? null}
-      />
+      <Flex gap="3" mb="4" align="center">
+        <TagGroup
+          selectionMode="multiple"
+          selectedKeys={selectedKeys}
+          onSelectionChange={selection => {
+            if (selection === 'all') {
+              setActivePhases(new Set());
+            } else {
+              setActivePhases(selection as Set<WorkflowPhase>);
+            }
+          }}
+        >
+          {PHASE_KEYS.map(({ id }) => (
+            <Tag key={id} id={id}>
+              {id}
+            </Tag>
+          ))}
+        </TagGroup>
+        <SearchField
+          value={searchText}
+          onChange={setSearchText}
+          placeholder="Search by name…"
+        />
+        <Flex gap="1" align="center" style={{ marginLeft: 'auto' }}>
+          <span className={filterStyles.pollDot} />
+          <Text variant="body-x-small" color="secondary">
+            Updated {formatPollTime(lastUpdated ?? null)}
+          </Text>
+        </Flex>
+      </Flex>
+
       {showEmptyFilterState ? (
         <div className={filterStyles.emptyFilters}>
           No workflows match the current filters.{' '}
@@ -213,17 +303,9 @@ export function WorkflowTable({
           </button>
         </div>
       ) : (
-        <Table<WorkflowSummary>
-          title="Argo Workflows"
-          columns={columns}
-          data={filteredWorkflows}
-          isLoading={loading}
-          options={{
-            pageSize: 20,
-            pageSizeOptions: [10, 20, 50],
-            sorting: true,
-            paging: true,
-          }}
+        <Table<WorkflowTableItem>
+          columnConfig={columns}
+          {...tableProps}
         />
       )}
     </>

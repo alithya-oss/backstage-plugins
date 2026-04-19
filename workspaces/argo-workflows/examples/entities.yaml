@@ -1,0 +1,61 @@
+---
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-system
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: examples
+spec:
+  owner: guests
+---
+# Component with namespace + label-selector (filtered workflows)
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: frontend-app
+  annotations:
+    backstage.io/kubernetes-namespace: argo
+    backstage.io/kubernetes-label-selector: app=frontend
+spec:
+  type: service
+  lifecycle: production
+  owner: guests
+  system: examples
+---
+# Component with namespace only (all workflows in namespace)
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backend-api
+  annotations:
+    backstage.io/kubernetes-namespace: argo
+spec:
+  type: service
+  lifecycle: production
+  owner: guests
+  system: examples
+---
+# Component with multi-cluster annotation
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ml-service
+  annotations:
+    backstage.io/kubernetes-namespace: ml-jobs
+    backstage.io/kubernetes-label-selector: app=ml-platform
+    argoworkflows.io/cluster-name: gpu-cluster
+spec:
+  type: service
+  lifecycle: experimental
+  owner: guests
+  system: examples
+---
+# Component without Argo Workflows annotations (empty state)
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: docs-site
+spec:
+  type: website
+  lifecycle: production
+  owner: guests
+  system: examples
