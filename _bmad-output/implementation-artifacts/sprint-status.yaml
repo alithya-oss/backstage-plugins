@@ -63,8 +63,8 @@ development_status:
   epic-2-retrospective: optional
 
   # Epic 3: DAG Visualization & Node Inspection
-  epic-3: backlog
-  3-1-backend-workflow-detail-route-with-status-nodes: backlog
+  epic-3: in-progress
+  3-1-backend-workflow-detail-route-with-status-nodes: review
   3-2-dag-layout-algorithm-compute-dag-columns: backlog
   3-3-workflow-detail-hook: backlog
   3-4-expandable-row-with-dag-card-flow: backlog

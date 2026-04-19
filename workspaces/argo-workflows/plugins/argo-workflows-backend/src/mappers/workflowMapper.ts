@@ -16,7 +16,10 @@
 
 import type {
   NodePhase,
+  NodeStatus,
   NodeStatusSummary,
+  NodeType,
+  WorkflowDetail,
   WorkflowPhase,
   WorkflowSummary,
 } from '@backstage-community/plugin-argo-workflows-common';
@@ -39,6 +42,18 @@ const VALID_NODE_PHASES = new Set<string>([
   'Failed',
   'Error',
   'Omitted',
+]);
+
+const VALID_NODE_TYPES = new Set<string>([
+  'Pod',
+  'DAG',
+  'Steps',
+  'StepGroup',
+  'Retry',
+  'Suspend',
+  'HTTP',
+  'Skipped',
+  'TaskGroup',
 ]);
 
 function computeDuration(
@@ -105,4 +120,56 @@ export function mapCrdListToWorkflowSummaries(rawList: any): WorkflowSummary[] {
   const items = rawList?.items;
   if (!Array.isArray(items)) return [];
   return items.map(mapCrdToWorkflowSummary);
+}
+
+function extractFullNodes(
+  nodes: Record<string, any> | undefined,
+): NodeStatus[] {
+  if (!nodes || typeof nodes !== 'object') return [];
+  return Object.entries(nodes)
+    .filter(([, node]) => node && typeof node === 'object')
+    .map(([id, node]) => {
+      const children =
+        Array.isArray(node.children) && node.children.length > 0
+          ? node.children.map(String)
+          : undefined;
+      const outboundNodes =
+        Array.isArray(node.outboundNodes) && node.outboundNodes.length > 0
+          ? node.outboundNodes.map(String)
+          : undefined;
+
+      return {
+        id: String(id),
+        displayName: String(node.displayName ?? ''),
+        type: (VALID_NODE_TYPES.has(node.type)
+          ? node.type
+          : 'Pod') as NodeType,
+        phase: (VALID_NODE_PHASES.has(node.phase)
+          ? node.phase
+          : 'Pending') as NodePhase,
+        startedAt: node.startedAt ? String(node.startedAt) : undefined,
+        finishedAt: node.finishedAt ? String(node.finishedAt) : undefined,
+        duration: computeDuration(node.startedAt, node.finishedAt),
+        message: node.message ? String(node.message) : undefined,
+        templateName: node.templateName
+          ? String(node.templateName)
+          : undefined,
+        children,
+        outboundNodes,
+        boundaryID: node.boundaryID ? String(node.boundaryID) : undefined,
+      };
+    });
+}
+
+/**
+ * Maps a raw Argo Workflow CRD to a WorkflowDetail with full NodeStatus array.
+ * @public
+ */
+export function mapCrdToWorkflowDetail(raw: any): WorkflowDetail {
+  const summary = mapCrdToWorkflowSummary(raw);
+  const status = raw?.status ?? {};
+  return {
+    ...summary,
+    nodes: extractFullNodes(status.nodes),
+  };
 }

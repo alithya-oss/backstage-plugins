@@ -16,5 +16,6 @@
 
 export {
   mapCrdToWorkflowSummary,
+  mapCrdToWorkflowDetail,
   mapCrdListToWorkflowSummaries,
 } from './workflowMapper';

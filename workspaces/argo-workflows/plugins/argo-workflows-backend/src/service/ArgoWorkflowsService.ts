@@ -16,8 +16,8 @@
 
 import type { LoggerService } from '@backstage/backend-plugin-api';
 import type { Config } from '@backstage/config';
-import type { WorkflowSummary } from '@backstage-community/plugin-argo-workflows-common';
-import { mapCrdListToWorkflowSummaries } from '../mappers';
+import type { WorkflowDetail, WorkflowSummary } from '@backstage-community/plugin-argo-workflows-common';
+import { mapCrdListToWorkflowSummaries, mapCrdToWorkflowDetail } from '../mappers';
 
 /** @public */
 export interface ServiceError extends Error {
@@ -151,6 +151,63 @@ export class ArgoWorkflowsService {
 
     // Apply offset-based pagination
     return all.slice(offset, offset + limit);
+  }
+
+  async getWorkflow(
+    namespace: string,
+    name: string,
+  ): Promise<WorkflowDetail> {
+    const apiPath = `/apis/argoproj.io/v1alpha1/namespaces/${encodeURIComponent(namespace)}/workflows/${encodeURIComponent(name)}`;
+    const url = `${this.clusterUrl}${apiPath}`;
+
+    this.logger.debug(`Fetching workflow detail from ${apiPath}`, {
+      namespace,
+      name,
+    });
+
+    let response: Response;
+    try {
+      const headers: Record<string, string> = {
+        Accept: 'application/json',
+      };
+      if (this.clusterToken) {
+        headers.Authorization = `Bearer ${this.clusterToken}`;
+      }
+      response = await this.fetchFn(url, {
+        headers,
+        signal: AbortSignal.timeout(10_000),
+      });
+    } catch (err: any) {
+      if (err?.name === 'TimeoutError' || err?.name === 'AbortError') {
+        throw createServiceError(
+          'Kubernetes API request timed out. The cluster may be unreachable. Try again later.',
+          'GATEWAY_TIMEOUT',
+          504,
+        );
+      }
+      throw createServiceError(
+        'Unable to connect to the Kubernetes cluster. Check your Backstage Kubernetes plugin configuration.',
+        'BAD_GATEWAY',
+        502,
+      );
+    }
+
+    if (!response.ok) {
+      this.mapK8sError(response.status, namespace);
+    }
+
+    let body: any;
+    try {
+      body = await response.json();
+    } catch {
+      throw createServiceError(
+        'Invalid response from Kubernetes API',
+        'BAD_GATEWAY',
+        502,
+      );
+    }
+
+    return mapCrdToWorkflowDetail(body);
   }
 
   private mapK8sError(status: number, namespace: string): never {

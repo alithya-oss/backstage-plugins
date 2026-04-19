@@ -69,6 +69,22 @@ export async function createRouter(
     }
   });
 
+  router.get('/workflows/:namespace/:name', async (req, res) => {
+    const { namespace, name } = req.params;
+
+    try {
+      const workflow = await service.getWorkflow(namespace, name);
+      res.json(workflow);
+    } catch (err: any) {
+      const statusCode = (err as ServiceError).statusCode ?? 500;
+      const code = (err as ServiceError).code ?? 'INTERNAL_ERROR';
+      const message = err.message ?? 'An unexpected error occurred';
+      res.status(statusCode).json({
+        error: { message, code, statusCode },
+      });
+    }
+  });
+
   logger.info('Argo Workflows backend plugin initialized');
   return router;
 }

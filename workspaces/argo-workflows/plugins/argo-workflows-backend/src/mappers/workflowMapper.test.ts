@@ -16,6 +16,7 @@
 
 import {
   mapCrdToWorkflowSummary,
+  mapCrdToWorkflowDetail,
   mapCrdListToWorkflowSummaries,
 } from './workflowMapper';
 
@@ -237,5 +238,268 @@ describe('mapCrdListToWorkflowSummaries', () => {
 
   it('returns empty array for non-array items', () => {
     expect(mapCrdListToWorkflowSummaries({ items: 'bad' })).toEqual([]);
+  });
+});
+
+const detailCrd = {
+  metadata: {
+    name: 'pipeline-abc',
+    namespace: 'production',
+    labels: { app: 'payment' },
+    creationTimestamp: '2026-04-18T14:00:00Z',
+  },
+  status: {
+    phase: 'Failed',
+    startedAt: '2026-04-18T14:00:00Z',
+    finishedAt: '2026-04-18T14:05:30Z',
+    nodes: {
+      'pipeline-abc': {
+        displayName: 'pipeline-abc',
+        type: 'DAG',
+        phase: 'Failed',
+        startedAt: '2026-04-18T14:00:00Z',
+        finishedAt: '2026-04-18T14:05:30Z',
+        children: ['pipeline-abc-build-123', 'pipeline-abc-test-456'],
+        outboundNodes: ['pipeline-abc-deploy-789'],
+        boundaryID: '',
+      },
+      'pipeline-abc-build-123': {
+        displayName: 'build',
+        type: 'Pod',
+        phase: 'Succeeded',
+        startedAt: '2026-04-18T14:00:05Z',
+        finishedAt: '2026-04-18T14:02:00Z',
+        templateName: 'build-template',
+        children: ['pipeline-abc-deploy-789'],
+        boundaryID: 'pipeline-abc',
+      },
+      'pipeline-abc-test-456': {
+        displayName: 'test',
+        type: 'Pod',
+        phase: 'Failed',
+        startedAt: '2026-04-18T14:00:05Z',
+        finishedAt: '2026-04-18T14:03:00Z',
+        message: 'exit code 1: test suite failed',
+        templateName: 'test-template',
+        boundaryID: 'pipeline-abc',
+      },
+      'pipeline-abc-deploy-789': {
+        displayName: 'deploy',
+        type: 'Pod',
+        phase: 'Omitted',
+        boundaryID: 'pipeline-abc',
+      },
+    },
+  },
+};
+
+describe('mapCrdToWorkflowDetail', () => {
+  it('maps complete CRD with all node fields', () => {
+    const result = mapCrdToWorkflowDetail(detailCrd);
+
+    expect(result.name).toBe('pipeline-abc');
+    expect(result.namespace).toBe('production');
+    expect(result.phase).toBe('Failed');
+    expect(result.nodes).toHaveLength(4);
+
+    const buildNode = result.nodes.find(n => n.id === 'pipeline-abc-build-123');
+    expect(buildNode).toEqual({
+      id: 'pipeline-abc-build-123',
+      displayName: 'build',
+      type: 'Pod',
+      phase: 'Succeeded',
+      startedAt: '2026-04-18T14:00:05Z',
+      finishedAt: '2026-04-18T14:02:00Z',
+      duration: 115,
+      message: undefined,
+      templateName: 'build-template',
+      children: ['pipeline-abc-deploy-789'],
+      outboundNodes: undefined,
+      boundaryID: 'pipeline-abc',
+    });
+  });
+
+  it('includes boundary nodes (DAG, Steps, StepGroup) in output', () => {
+    const crd = {
+      metadata: { name: 'wf', namespace: 'ns' },
+      status: {
+        phase: 'Succeeded',
+        startedAt: '2026-04-18T10:00:00Z',
+        nodes: {
+          root: { displayName: 'root', type: 'DAG', phase: 'Succeeded' },
+          steps: { displayName: 'steps', type: 'Steps', phase: 'Succeeded' },
+          group: { displayName: 'group', type: 'StepGroup', phase: 'Succeeded' },
+          pod: { displayName: 'run', type: 'Pod', phase: 'Succeeded' },
+        },
+      },
+    };
+    const result = mapCrdToWorkflowDetail(crd);
+    expect(result.nodes).toHaveLength(4);
+
+    const types = result.nodes.map(n => n.type);
+    expect(types).toContain('DAG');
+    expect(types).toContain('Steps');
+    expect(types).toContain('StepGroup');
+    expect(types).toContain('Pod');
+  });
+
+  it('handles missing status.nodes — returns empty nodes array', () => {
+    const crd = {
+      metadata: { name: 'wf', namespace: 'ns' },
+      status: { phase: 'Running', startedAt: '2026-04-18T10:00:00Z' },
+    };
+    const result = mapCrdToWorkflowDetail(crd);
+    expect(result.nodes).toEqual([]);
+  });
+
+  it('handles empty status.nodes map — returns empty nodes array', () => {
+    const crd = {
+      metadata: { name: 'wf', namespace: 'ns' },
+      status: { phase: 'Running', startedAt: '2026-04-18T10:00:00Z', nodes: {} },
+    };
+    const result = mapCrdToWorkflowDetail(crd);
+    expect(result.nodes).toEqual([]);
+  });
+
+  it('handles partial node data (missing optional fields)', () => {
+    const crd = {
+      metadata: { name: 'wf', namespace: 'ns' },
+      status: {
+        phase: 'Running',
+        startedAt: '2026-04-18T10:00:00Z',
+        nodes: {
+          n1: { displayName: 'step', type: 'Pod', phase: 'Running' },
+        },
+      },
+    };
+    const result = mapCrdToWorkflowDetail(crd);
+    expect(result.nodes).toHaveLength(1);
+    const node = result.nodes[0];
+    expect(node.id).toBe('n1');
+    expect(node.message).toBeUndefined();
+    expect(node.templateName).toBeUndefined();
+    expect(node.children).toBeUndefined();
+    expect(node.outboundNodes).toBeUndefined();
+    expect(node.boundaryID).toBeUndefined();
+    expect(node.startedAt).toBeUndefined();
+    expect(node.finishedAt).toBeUndefined();
+    expect(node.duration).toBeUndefined();
+  });
+
+  it('defaults invalid node phase to Pending', () => {
+    const crd = {
+      metadata: { name: 'wf', namespace: 'ns' },
+      status: {
+        phase: 'Running',
+        startedAt: '2026-04-18T10:00:00Z',
+        nodes: {
+          n1: { displayName: 'step', type: 'Pod', phase: 'BogusPhase' },
+        },
+      },
+    };
+    const result = mapCrdToWorkflowDetail(crd);
+    expect(result.nodes[0].phase).toBe('Pending');
+  });
+
+  it('defaults invalid node type to Pod', () => {
+    const crd = {
+      metadata: { name: 'wf', namespace: 'ns' },
+      status: {
+        phase: 'Running',
+        startedAt: '2026-04-18T10:00:00Z',
+        nodes: {
+          n1: { displayName: 'step', type: 'UnknownType', phase: 'Running' },
+        },
+      },
+    };
+    const result = mapCrdToWorkflowDetail(crd);
+    expect(result.nodes[0].type).toBe('Pod');
+  });
+
+  it('computes per-node duration from startedAt/finishedAt', () => {
+    const crd = {
+      metadata: { name: 'wf', namespace: 'ns' },
+      status: {
+        phase: 'Succeeded',
+        startedAt: '2026-04-18T10:00:00Z',
+        finishedAt: '2026-04-18T10:10:00Z',
+        nodes: {
+          n1: {
+            displayName: 'step',
+            type: 'Pod',
+            phase: 'Succeeded',
+            startedAt: '2026-04-18T10:00:00Z',
+            finishedAt: '2026-04-18T10:03:47Z',
+          },
+        },
+      },
+    };
+    const result = mapCrdToWorkflowDetail(crd);
+    expect(result.nodes[0].duration).toBe(227);
+  });
+
+  it('returns undefined duration for nodes without finishedAt', () => {
+    const crd = {
+      metadata: { name: 'wf', namespace: 'ns' },
+      status: {
+        phase: 'Running',
+        startedAt: '2026-04-18T10:00:00Z',
+        nodes: {
+          n1: {
+            displayName: 'step',
+            type: 'Pod',
+            phase: 'Running',
+            startedAt: '2026-04-18T10:00:00Z',
+          },
+        },
+      },
+    };
+    const result = mapCrdToWorkflowDetail(crd);
+    expect(result.nodes[0].duration).toBeUndefined();
+  });
+
+  it('handles malformed node entries (null, non-object) gracefully', () => {
+    const crd = {
+      metadata: { name: 'wf', namespace: 'ns' },
+      status: {
+        phase: 'Running',
+        startedAt: '2026-04-18T10:00:00Z',
+        nodes: {
+          n1: null,
+          n2: 'string-value',
+          n3: 42,
+          n4: { displayName: 'valid', type: 'Pod', phase: 'Succeeded' },
+        },
+      },
+    };
+    const result = mapCrdToWorkflowDetail(crd);
+    expect(result.nodes).toHaveLength(1);
+    expect(result.nodes[0].id).toBe('n4');
+  });
+
+  it('maps top-level workflow fields correctly (reuses summary logic)', () => {
+    const result = mapCrdToWorkflowDetail(detailCrd);
+    expect(result.name).toBe('pipeline-abc');
+    expect(result.namespace).toBe('production');
+    expect(result.phase).toBe('Failed');
+    expect(result.startedAt).toBe('2026-04-18T14:00:00Z');
+    expect(result.finishedAt).toBe('2026-04-18T14:05:30Z');
+    expect(result.duration).toBe(330);
+    expect(result.labels).toEqual({ app: 'payment' });
+  });
+
+  it('uses node map keys as node IDs', () => {
+    const result = mapCrdToWorkflowDetail(detailCrd);
+    const ids = result.nodes.map(n => n.id);
+    expect(ids).toContain('pipeline-abc');
+    expect(ids).toContain('pipeline-abc-build-123');
+    expect(ids).toContain('pipeline-abc-test-456');
+    expect(ids).toContain('pipeline-abc-deploy-789');
+  });
+
+  it('includes message field for failed nodes', () => {
+    const result = mapCrdToWorkflowDetail(detailCrd);
+    const failedNode = result.nodes.find(n => n.id === 'pipeline-abc-test-456');
+    expect(failedNode?.message).toBe('exit code 1: test suite failed');
   });
 });

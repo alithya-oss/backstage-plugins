@@ -22,15 +22,18 @@ import { createRouter } from './router';
 // Mock the ArgoWorkflowsService
 jest.mock('./service', () => {
   const mockListWorkflows = jest.fn();
+  const mockGetWorkflow = jest.fn();
   return {
     ArgoWorkflowsService: jest.fn().mockImplementation(() => ({
       listWorkflows: mockListWorkflows,
+      getWorkflow: mockGetWorkflow,
     })),
     __mockListWorkflows: mockListWorkflows,
+    __mockGetWorkflow: mockGetWorkflow,
   };
 });
 
-const { __mockListWorkflows: mockListWorkflows } =
+const { __mockListWorkflows: mockListWorkflows, __mockGetWorkflow: mockGetWorkflow } =
   jest.requireMock('./service');
 
 const mockLogger = {
@@ -203,6 +206,68 @@ describe('createRouter', () => {
         limit: 20,
         offset: 0,
       });
+    });
+  });
+
+  describe('GET /workflows/:namespace/:name', () => {
+    it('returns 200 with WorkflowDetail object', async () => {
+      const detail = {
+        name: 'pipeline-abc',
+        namespace: 'production',
+        phase: 'Succeeded',
+        startedAt: '2026-04-18T14:00:00Z',
+        finishedAt: '2026-04-18T14:05:00Z',
+        duration: 300,
+        nodes: [
+          { id: 'root', displayName: 'pipeline-abc', type: 'DAG', phase: 'Succeeded' },
+          { id: 'build-1', displayName: 'build', type: 'Pod', phase: 'Succeeded' },
+        ],
+      };
+      mockGetWorkflow.mockResolvedValue(detail);
+      const app = await createApp();
+
+      const res = await request(app).get('/workflows/production/pipeline-abc');
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual(detail);
+    });
+
+    it('passes namespace and name params to service', async () => {
+      mockGetWorkflow.mockResolvedValue({ name: 'wf', nodes: [] });
+      const app = await createApp();
+
+      await request(app).get('/workflows/my-namespace/my-workflow');
+
+      expect(mockGetWorkflow).toHaveBeenCalledWith('my-namespace', 'my-workflow');
+    });
+
+    it('returns ErrorResponse for service errors', async () => {
+      const err = new Error('Access denied') as any;
+      err.statusCode = 403;
+      err.code = 'FORBIDDEN';
+      mockGetWorkflow.mockRejectedValue(err);
+      const app = await createApp();
+
+      const res = await request(app).get('/workflows/production/wf');
+
+      expect(res.status).toBe(403);
+      expect(res.body).toEqual({
+        error: {
+          message: 'Access denied',
+          code: 'FORBIDDEN',
+          statusCode: 403,
+        },
+      });
+    });
+
+    it('returns 500 for unexpected errors', async () => {
+      mockGetWorkflow.mockRejectedValue(new Error('unexpected'));
+      const app = await createApp();
+
+      const res = await request(app).get('/workflows/ns/wf');
+
+      expect(res.status).toBe(500);
+      expect(res.body.error.code).toBe('INTERNAL_ERROR');
     });
   });
 });

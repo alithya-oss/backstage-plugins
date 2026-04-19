@@ -16,7 +16,6 @@
 
 import { ConfigReader } from '@backstage/config';
 import { ArgoWorkflowsService } from './ArgoWorkflowsService';
-import type { ServiceError } from './ArgoWorkflowsService';
 
 const mockLogger = {
   info: jest.fn(),
@@ -233,6 +232,137 @@ describe('ArgoWorkflowsService', () => {
       const service = createService(mockFetch);
 
       await expect(service.listWorkflows('ns')).rejects.toMatchObject({
+        statusCode: 502,
+        code: 'BAD_GATEWAY',
+        message: expect.stringContaining('Invalid response'),
+      });
+    });
+  });
+
+  describe('getWorkflow', () => {
+    const k8sDetailResponse = {
+      metadata: {
+        name: 'pipeline-abc',
+        namespace: 'production',
+        labels: { app: 'payment' },
+        creationTimestamp: '2026-04-18T14:00:00Z',
+      },
+      status: {
+        phase: 'Succeeded',
+        startedAt: '2026-04-18T14:00:00Z',
+        finishedAt: '2026-04-18T14:05:00Z',
+        nodes: {
+          root: {
+            displayName: 'pipeline-abc',
+            type: 'DAG',
+            phase: 'Succeeded',
+            startedAt: '2026-04-18T14:00:00Z',
+            finishedAt: '2026-04-18T14:05:00Z',
+            children: ['build-1'],
+          },
+          'build-1': {
+            displayName: 'build',
+            type: 'Pod',
+            phase: 'Succeeded',
+            startedAt: '2026-04-18T14:00:05Z',
+            finishedAt: '2026-04-18T14:02:00Z',
+            templateName: 'build-template',
+            boundaryID: 'root',
+          },
+        },
+      },
+    };
+
+    it('returns WorkflowDetail for successful fetch', async () => {
+      const mockFetch = createMockFetch(k8sDetailResponse);
+      const service = createService(mockFetch);
+
+      const result = await service.getWorkflow('production', 'pipeline-abc');
+
+      expect(result.name).toBe('pipeline-abc');
+      expect(result.namespace).toBe('production');
+      expect(result.phase).toBe('Succeeded');
+      expect(result.nodes).toHaveLength(2);
+      expect(result.nodes[0].type).toBe('DAG');
+      expect(result.nodes[1].type).toBe('Pod');
+    });
+
+    it('constructs correct K8s API URL with namespace and name', async () => {
+      const mockFetch = createMockFetch(k8sDetailResponse);
+      const service = createService(mockFetch);
+
+      await service.getWorkflow('my-namespace', 'my-workflow');
+
+      const calledUrl = mockFetch.mock.calls[0][0] as string;
+      expect(calledUrl).toBe(
+        'https://k8s.example.com/apis/argoproj.io/v1alpha1/namespaces/my-namespace/workflows/my-workflow',
+      );
+    });
+
+    it('throws 403 ServiceError for K8s 403 response', async () => {
+      const mockFetch = createMockFetch({ message: 'forbidden' }, 403);
+      const service = createService(mockFetch);
+
+      await expect(
+        service.getWorkflow('production', 'wf'),
+      ).rejects.toMatchObject({
+        statusCode: 403,
+        code: 'FORBIDDEN',
+        message: expect.stringContaining('Access denied'),
+      });
+    });
+
+    it('throws 404 ServiceError for K8s 404 response', async () => {
+      const mockFetch = createMockFetch({ message: 'not found' }, 404);
+      const service = createService(mockFetch);
+
+      await expect(
+        service.getWorkflow('bad-ns', 'wf'),
+      ).rejects.toMatchObject({
+        statusCode: 404,
+        code: 'NOT_FOUND',
+        message: expect.stringContaining("'bad-ns'"),
+      });
+    });
+
+    it('throws 502 ServiceError for K8s 500 response', async () => {
+      const mockFetch = createMockFetch({ message: 'internal' }, 500);
+      const service = createService(mockFetch);
+
+      await expect(
+        service.getWorkflow('ns', 'wf'),
+      ).rejects.toMatchObject({
+        statusCode: 502,
+        code: 'BAD_GATEWAY',
+      });
+    });
+
+    it('throws 504 ServiceError for timeout', async () => {
+      const timeoutErr = new Error('timeout');
+      timeoutErr.name = 'TimeoutError';
+      const mockFetch = jest.fn().mockRejectedValue(timeoutErr);
+      const service = createService(mockFetch);
+
+      await expect(
+        service.getWorkflow('ns', 'wf'),
+      ).rejects.toMatchObject({
+        statusCode: 504,
+        code: 'GATEWAY_TIMEOUT',
+        message: expect.stringContaining('timed out'),
+      });
+    });
+
+    it('throws 502 ServiceError for non-JSON response', async () => {
+      const mockFetch = jest.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.reject(new Error('Invalid JSON')),
+      });
+      const service = createService(mockFetch);
+
+      await expect(
+        service.getWorkflow('ns', 'wf'),
+      ).rejects.toMatchObject({
         statusCode: 502,
         code: 'BAD_GATEWAY',
         message: expect.stringContaining('Invalid response'),
