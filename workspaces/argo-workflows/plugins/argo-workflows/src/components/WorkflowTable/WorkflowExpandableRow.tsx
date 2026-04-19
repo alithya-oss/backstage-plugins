@@ -38,9 +38,11 @@ export interface WorkflowExpandableRowProps {
 export function ExpandButton({
   isExpanded,
   onToggle,
+  workflowId,
 }: {
   isExpanded: boolean;
   onToggle: () => void;
+  workflowId: string;
 }) {
   return (
     <button
@@ -48,6 +50,7 @@ export function ExpandButton({
       className={`${styles.expandButton}${isExpanded ? ` ${styles.expandButtonExpanded}` : ''}`}
       onClick={onToggle}
       aria-expanded={isExpanded}
+      aria-controls={`expanded-content-${workflowId}`}
     >
       ▶
     </button>
@@ -78,6 +81,7 @@ export function WorkflowExpandedContent({
   workflow: WorkflowSummary;
 }) {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const workflowId = `${workflow.namespace}/${workflow.name}`;
 
   const {
     workflow: detail,
@@ -108,7 +112,12 @@ export function WorkflowExpandedContent({
 
   if (loading) {
     return (
-      <div className={styles.expandedContent}>
+      <div
+        className={styles.expandedContent}
+        id={`expanded-content-${workflowId}`}
+        role="region"
+        aria-label={`Workflow DAG for ${workflow.name}`}
+      >
         <LoadingSkeleton />
       </div>
     );
@@ -116,7 +125,12 @@ export function WorkflowExpandedContent({
 
   if (error) {
     return (
-      <div className={styles.expandedContent}>
+      <div
+        className={styles.expandedContent}
+        id={`expanded-content-${workflowId}`}
+        role="region"
+        aria-label={`Workflow DAG for ${workflow.name}`}
+      >
         Unable to load workflow detail: {error.message}
       </div>
     );
@@ -131,7 +145,12 @@ export function WorkflowExpandedContent({
     : null;
 
   return (
-    <div className={styles.expandedContent}>
+    <div
+      className={styles.expandedContent}
+      id={`expanded-content-${workflowId}`}
+      role="region"
+      aria-label={`Workflow DAG for ${workflow.name}`}
+    >
       <div className={styles.dagWithPanel}>
         <div className={styles.dagArea}>
           <DAGCardFlow

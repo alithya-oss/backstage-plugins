@@ -32,6 +32,11 @@
     color: var(--bui-fg-info);
   }
 
+  .expandButton:focus-visible {
+    outline: 2px solid var(--bui-border-focus, Highlight);
+    outline-offset: 2px;
+  }
+
   .expandButtonExpanded {
     color: var(--bui-fg-info);
     transform: rotate(90deg);

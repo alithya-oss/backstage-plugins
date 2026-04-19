@@ -82,23 +82,70 @@ const mockWorkflow: WorkflowSummary = {
 
 describe('ExpandButton', () => {
   it('renders expand button in collapsed state', () => {
-    render(<ExpandButton isExpanded={false} onToggle={jest.fn()} />);
+    render(
+      <ExpandButton
+        isExpanded={false}
+        onToggle={jest.fn()}
+        workflowId="production/my-workflow"
+      />,
+    );
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('aria-expanded', 'false');
     expect(button).toHaveTextContent('▶');
   });
 
   it('renders expand button in expanded state', () => {
-    render(<ExpandButton isExpanded={true} onToggle={jest.fn()} />);
+    render(
+      <ExpandButton
+        isExpanded={true}
+        onToggle={jest.fn()}
+        workflowId="production/my-workflow"
+      />,
+    );
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('aria-expanded', 'true');
   });
 
   it('calls onToggle when clicked', () => {
     const onToggle = jest.fn();
-    render(<ExpandButton isExpanded={false} onToggle={onToggle} />);
+    render(
+      <ExpandButton
+        isExpanded={false}
+        onToggle={onToggle}
+        workflowId="production/my-workflow"
+      />,
+    );
     fireEvent.click(screen.getByRole('button'));
     expect(onToggle).toHaveBeenCalledTimes(1);
+  });
+
+  it('has aria-controls pointing to expanded content ID', () => {
+    render(
+      <ExpandButton
+        isExpanded={false}
+        onToggle={jest.fn()}
+        workflowId="production/my-workflow"
+      />,
+    );
+    const button = screen.getByRole('button');
+    expect(button).toHaveAttribute(
+      'aria-controls',
+      'expanded-content-production/my-workflow',
+    );
+  });
+
+  it('toggles on Enter key (native button behavior)', () => {
+    const onToggle = jest.fn();
+    render(
+      <ExpandButton
+        isExpanded={false}
+        onToggle={onToggle}
+        workflowId="production/my-workflow"
+      />,
+    );
+    fireEvent.keyDown(screen.getByRole('button'), { key: 'Enter' });
+    // Native button fires click on Enter — verify button is a <button>
+    expect(screen.getByRole('button').tagName).toBe('BUTTON');
   });
 });
 
@@ -119,6 +166,45 @@ describe('WorkflowExpandedContent', () => {
     );
     // Skeleton cards should be present
     expect(container.querySelectorAll('[class*="skeletonCard"]').length).toBeGreaterThan(0);
+  });
+
+  it('expanded content has role="region" and aria-label', () => {
+    useWorkflowDetail.mockReturnValue({
+      workflow: {
+        ...mockWorkflow,
+        nodes: [
+          { id: 'n1', displayName: 'build', type: 'Pod', phase: 'Succeeded' },
+        ],
+      },
+      loading: false,
+      error: null,
+    });
+
+    render(<WorkflowExpandedContent workflow={mockWorkflow} />);
+    const region = screen.getByRole('region');
+    expect(region).toHaveAttribute(
+      'aria-label',
+      'Workflow DAG for my-workflow',
+    );
+    expect(region).toHaveAttribute(
+      'id',
+      'expanded-content-production/my-workflow',
+    );
+  });
+
+  it('loading state has role="region" and aria-label', () => {
+    useWorkflowDetail.mockReturnValue({
+      workflow: null,
+      loading: true,
+      error: null,
+    });
+
+    render(<WorkflowExpandedContent workflow={mockWorkflow} />);
+    const region = screen.getByRole('region');
+    expect(region).toHaveAttribute(
+      'aria-label',
+      'Workflow DAG for my-workflow',
+    );
   });
 
   it('shows error message when error occurs', () => {

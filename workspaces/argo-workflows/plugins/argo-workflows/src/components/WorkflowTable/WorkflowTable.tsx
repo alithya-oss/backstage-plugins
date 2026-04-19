@@ -235,6 +235,7 @@ export function WorkflowTable({
             <ExpandButton
               isExpanded={expandedId === item.id}
               onToggle={() => handleToggleExpand(item.id)}
+              workflowId={item.id}
             />
           </Cell>
         ),
