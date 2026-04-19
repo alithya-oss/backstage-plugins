@@ -76,7 +76,7 @@ development_status:
   # Epic 4: Accessibility & Polish
   epic-4: in-progress
   4-1-keyboard-navigation-for-workflow-table-and-expand: done
-  4-2-keyboard-navigation-for-dag-cards-and-node-panel: backlog
+  4-2-keyboard-navigation-for-dag-cards-and-node-panel: done
   4-3-screen-reader-support: backlog
   4-4-reduced-motion-and-animation-accessibility: backlog
   4-5-error-boundaries-and-graceful-degradation: backlog

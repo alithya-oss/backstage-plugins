@@ -330,4 +330,23 @@ describe('WorkflowExpandedContent', () => {
       screen.queryByTestId('mock-node-detail-panel'),
     ).not.toBeInTheDocument();
   });
+
+  it('panel wrapper receives focus when panel opens', () => {
+    useWorkflowDetail.mockReturnValue({
+      workflow: {
+        ...mockWorkflow,
+        nodes: [
+          { id: 'n1', displayName: 'build', type: 'Pod', phase: 'Succeeded' },
+        ],
+      },
+      loading: false,
+      error: null,
+    });
+
+    render(<WorkflowExpandedContent workflow={mockWorkflow} />);
+    fireEvent.click(screen.getByTestId('click-node-n1'));
+    // The panel wrapper div should have tabIndex=-1 and be focusable
+    const panelWrapper = screen.getByTestId('mock-node-detail-panel').parentElement;
+    expect(panelWrapper).toHaveAttribute('tabindex', '-1');
+  });
 });

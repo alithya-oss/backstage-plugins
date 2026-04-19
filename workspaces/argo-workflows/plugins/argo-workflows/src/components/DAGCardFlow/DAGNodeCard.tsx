@@ -62,13 +62,23 @@ export function DAGNodeCard({ node, isSelected, onClick }: DAGNodeCardProps) {
     .filter(Boolean)
     .join(' ');
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick?.();
+    }
+  };
+
   return (
     <div
       className={classNames}
       onClick={onClick}
+      onKeyDown={handleKeyDown}
       title={`${node.displayName} — ${node.phase}`}
       role="button"
       tabIndex={0}
+      aria-label={`${node.displayName}, ${node.phase}, ${formatDuration(node.duration)}`}
+      aria-pressed={isSelected ?? false}
       data-testid={`dag-node-${node.id}`}
     >
       <div className={styles.topRow}>

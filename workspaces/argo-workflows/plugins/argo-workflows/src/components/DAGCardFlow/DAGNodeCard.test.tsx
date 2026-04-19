@@ -127,4 +127,43 @@ describe('DAGNodeCard', () => {
     const card = screen.getByTestId('dag-node-node-1');
     expect(card.className).not.toContain('selected');
   });
+
+  it('has aria-label with displayName, phase, and duration', () => {
+    render(<DAGNodeCard node={makeNode({ duration: 120 })} />);
+    const card = screen.getByTestId('dag-node-node-1');
+    expect(card).toHaveAttribute('aria-label', 'build, Succeeded, 2m 0s');
+  });
+
+  it('has aria-pressed="false" when not selected', () => {
+    render(<DAGNodeCard node={makeNode()} isSelected={false} />);
+    const card = screen.getByTestId('dag-node-node-1');
+    expect(card).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  it('has aria-pressed="true" when selected', () => {
+    render(<DAGNodeCard node={makeNode()} isSelected />);
+    const card = screen.getByTestId('dag-node-node-1');
+    expect(card).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('calls onClick on Enter key', () => {
+    const onClick = jest.fn();
+    render(<DAGNodeCard node={makeNode()} onClick={onClick} />);
+    fireEvent.keyDown(screen.getByTestId('dag-node-node-1'), { key: 'Enter' });
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('calls onClick on Space key', () => {
+    const onClick = jest.fn();
+    render(<DAGNodeCard node={makeNode()} onClick={onClick} />);
+    fireEvent.keyDown(screen.getByTestId('dag-node-node-1'), { key: ' ' });
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not call onClick on other keys', () => {
+    const onClick = jest.fn();
+    render(<DAGNodeCard node={makeNode()} onClick={onClick} />);
+    fireEvent.keyDown(screen.getByTestId('dag-node-node-1'), { key: 'Tab' });
+    expect(onClick).not.toHaveBeenCalled();
+  });
 });

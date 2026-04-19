@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import type { WorkflowSummary } from '@backstage-community/plugin-argo-workflows-common';
 import { useWorkflowDetail } from '../../hooks';
 import { DAGCardFlow } from '../DAGCardFlow';
@@ -82,6 +82,8 @@ export function WorkflowExpandedContent({
 }) {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const workflowId = `${workflow.namespace}/${workflow.name}`;
+  const panelRef = useRef<HTMLDivElement>(null);
+  const lastFocusedRef = useRef<HTMLElement | null>(null);
 
   const {
     workflow: detail,
@@ -91,6 +93,7 @@ export function WorkflowExpandedContent({
 
   const handleNodeClick = useCallback(
     (nodeId: string) => {
+      lastFocusedRef.current = document.activeElement as HTMLElement;
       setSelectedNodeId(prev => (prev === nodeId ? null : nodeId));
     },
     [],
@@ -98,16 +101,30 @@ export function WorkflowExpandedContent({
 
   const handleClosePanel = useCallback(() => {
     setSelectedNodeId(null);
+    // Restore focus to the card that opened the panel
+    lastFocusedRef.current?.focus();
+    lastFocusedRef.current = null;
   }, []);
 
-  // Escape key closes the panel
+  // Escape key closes the panel and restores focus
   useEffect(() => {
     if (!selectedNodeId) return undefined;
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setSelectedNodeId(null);
+      if (e.key === 'Escape') {
+        setSelectedNodeId(null);
+        lastFocusedRef.current?.focus();
+        lastFocusedRef.current = null;
+      }
     };
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);
+  }, [selectedNodeId]);
+
+  // Focus the panel when it opens
+  useEffect(() => {
+    if (selectedNodeId && panelRef.current) {
+      panelRef.current.focus();
+    }
   }, [selectedNodeId]);
 
   if (loading) {
@@ -160,7 +177,9 @@ export function WorkflowExpandedContent({
           />
         </div>
         {selectedNode && (
-          <NodeDetailPanel node={selectedNode} onClose={handleClosePanel} />
+          <div ref={panelRef} tabIndex={-1} style={{ outline: 'none' }}>
+            <NodeDetailPanel node={selectedNode} onClose={handleClosePanel} />
+          </div>
         )}
       </div>
     </div>

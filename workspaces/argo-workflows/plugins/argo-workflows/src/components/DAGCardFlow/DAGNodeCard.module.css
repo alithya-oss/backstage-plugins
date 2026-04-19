@@ -33,6 +33,11 @@
     background: var(--bui-bg-neutral-3);
   }
 
+  .card:focus-visible {
+    outline: 2px solid var(--bui-border-focus, Highlight);
+    outline-offset: 2px;
+  }
+
   .selected {
     box-shadow: 0 0 0 2px var(--bui-fg-info);
   }
