@@ -52,14 +52,14 @@ development_status:
   epic-1-retrospective: optional
 
   # Epic 2: Workflow List & Entity Integration
-  epic-2: backlog
-  2-1-backend-workflow-list-route-with-k8s-crd-fetching: backlog
-  2-2-frontend-api-client: backlog
-  2-3-polling-hook: backlog
-  2-4-workflow-list-hook-with-entity-annotations: backlog
-  2-5-workflow-list-table-with-status-badges: backlog
-  2-6-workflow-filters-and-search: backlog
-  2-7-empty-and-error-states: backlog
+  epic-2: done
+  2-1-backend-workflow-list-route-with-k8s-crd-fetching: done
+  2-2-frontend-api-client: done
+  2-3-polling-hook: done
+  2-4-workflow-list-hook-with-entity-annotations: done
+  2-5-workflow-list-table-with-status-badges: done
+  2-6-workflow-filters-and-search: done
+  2-7-empty-and-error-states: done
   epic-2-retrospective: optional
 
   # Epic 3: DAG Visualization & Node Inspection

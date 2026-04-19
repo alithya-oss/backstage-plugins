@@ -16,7 +16,22 @@
 
 import express from 'express';
 import request from 'supertest';
+import { ConfigReader } from '@backstage/config';
 import { createRouter } from './router';
+
+// Mock the ArgoWorkflowsService
+jest.mock('./service', () => {
+  const mockListWorkflows = jest.fn();
+  return {
+    ArgoWorkflowsService: jest.fn().mockImplementation(() => ({
+      listWorkflows: mockListWorkflows,
+    })),
+    __mockListWorkflows: mockListWorkflows,
+  };
+});
+
+const { __mockListWorkflows: mockListWorkflows } =
+  jest.requireMock('./service');
 
 const mockLogger = {
   info: jest.fn(),
@@ -26,23 +41,168 @@ const mockLogger = {
   child: jest.fn().mockReturnThis(),
 };
 
-describe('createRouter', () => {
-  let app: express.Express;
+const mockHttpAuth = {
+  credentials: jest.fn(),
+  issueUserCookie: jest.fn(),
+};
 
-  beforeAll(async () => {
-    const router = await createRouter({ logger: mockLogger as any });
-    app = express().use(router);
+const config = new ConfigReader({});
+
+async function createApp() {
+  const router = await createRouter({
+    logger: mockLogger as any,
+    config,
+    httpAuth: mockHttpAuth as any,
   });
+  const app = express();
+  app.use(router);
+  return app;
+}
+
+describe('createRouter', () => {
+  beforeEach(() => jest.clearAllMocks());
 
   describe('GET /health', () => {
     it('returns HTTP 200', async () => {
-      const response = await request(app).get('/health');
-      expect(response.status).toBe(200);
+      const app = await createApp();
+      const res = await request(app).get('/health');
+      expect(res.status).toBe(200);
     });
 
     it('returns { status: "ok" } JSON body', async () => {
-      const response = await request(app).get('/health');
-      expect(response.body).toEqual({ status: 'ok' });
+      const app = await createApp();
+      const res = await request(app).get('/health');
+      expect(res.body).toEqual({ status: 'ok' });
+    });
+  });
+
+  describe('GET /workflows/:namespace', () => {
+    it('returns 200 with WorkflowSummary array', async () => {
+      const workflows = [
+        {
+          name: 'wf-1',
+          namespace: 'production',
+          phase: 'Succeeded',
+          startedAt: '2026-04-18T10:00:00Z',
+          nodes: [],
+        },
+      ];
+      mockListWorkflows.mockResolvedValue(workflows);
+      const app = await createApp();
+
+      const res = await request(app).get('/workflows/production');
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual(workflows);
+    });
+
+    it('passes labelSelector to service', async () => {
+      mockListWorkflows.mockResolvedValue([]);
+      const app = await createApp();
+
+      await request(app).get(
+        '/workflows/production?labelSelector=app%3Dmy-service',
+      );
+
+      expect(mockListWorkflows).toHaveBeenCalledWith('production', {
+        labelSelector: 'app=my-service',
+        limit: 20,
+        offset: 0,
+      });
+    });
+
+    it('passes limit and offset to service', async () => {
+      mockListWorkflows.mockResolvedValue([]);
+      const app = await createApp();
+
+      await request(app).get('/workflows/ns?limit=10&offset=5');
+
+      expect(mockListWorkflows).toHaveBeenCalledWith('ns', {
+        labelSelector: undefined,
+        limit: 10,
+        offset: 5,
+      });
+    });
+
+    it('uses default limit=20 and offset=0', async () => {
+      mockListWorkflows.mockResolvedValue([]);
+      const app = await createApp();
+
+      await request(app).get('/workflows/ns');
+
+      expect(mockListWorkflows).toHaveBeenCalledWith('ns', {
+        labelSelector: undefined,
+        limit: 20,
+        offset: 0,
+      });
+    });
+
+    it('returns ErrorResponse for service errors', async () => {
+      const err = new Error('Access denied') as any;
+      err.statusCode = 403;
+      err.code = 'FORBIDDEN';
+      mockListWorkflows.mockRejectedValue(err);
+      const app = await createApp();
+
+      const res = await request(app).get('/workflows/production');
+
+      expect(res.status).toBe(403);
+      expect(res.body).toEqual({
+        error: {
+          message: 'Access denied',
+          code: 'FORBIDDEN',
+          statusCode: 403,
+        },
+      });
+    });
+
+    it('returns 500 for unexpected errors', async () => {
+      mockListWorkflows.mockRejectedValue(new Error('unexpected'));
+      const app = await createApp();
+
+      const res = await request(app).get('/workflows/ns');
+
+      expect(res.status).toBe(500);
+      expect(res.body.error.code).toBe('INTERNAL_ERROR');
+    });
+
+    it('clamps negative limit to 1', async () => {
+      mockListWorkflows.mockResolvedValue([]);
+      const app = await createApp();
+
+      await request(app).get('/workflows/ns?limit=-5');
+
+      expect(mockListWorkflows).toHaveBeenCalledWith('ns', {
+        labelSelector: undefined,
+        limit: 1,
+        offset: 0,
+      });
+    });
+
+    it('clamps limit over 100 to 100', async () => {
+      mockListWorkflows.mockResolvedValue([]);
+      const app = await createApp();
+
+      await request(app).get('/workflows/ns?limit=500');
+
+      expect(mockListWorkflows).toHaveBeenCalledWith('ns', {
+        labelSelector: undefined,
+        limit: 100,
+        offset: 0,
+      });
+    });
+
+    it('clamps negative offset to 0', async () => {
+      mockListWorkflows.mockResolvedValue([]);
+      const app = await createApp();
+
+      await request(app).get('/workflows/ns?offset=-10');
+
+      expect(mockListWorkflows).toHaveBeenCalledWith('ns', {
+        labelSelector: undefined,
+        limit: 20,
+        offset: 0,
+      });
     });
   });
 });

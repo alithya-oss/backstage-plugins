@@ -14,17 +14,5 @@
  * limitations under the License.
  */
 
-/**
- * Frontend plugin for Argo Workflows in Backstage.
- *
- * @packageDocumentation
- */
-
-export {
-  argoWorkflowsPlugin,
-  EntityArgoWorkflowsContent,
-} from './plugin';
-
-export { ArgoWorkflowsApiClient, ArgoWorkflowsError } from './api';
-
-export { usePolling, useArgoWorkflows } from './hooks';
+export { WorkflowEmptyState } from './WorkflowEmptyState';
+export type { WorkflowEmptyStateProps } from './WorkflowEmptyState';

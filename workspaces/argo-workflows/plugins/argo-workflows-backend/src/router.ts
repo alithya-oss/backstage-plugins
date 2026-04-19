@@ -13,24 +13,60 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { LoggerService } from '@backstage/backend-plugin-api';
+
+import type {
+  HttpAuthService,
+  LoggerService,
+} from '@backstage/backend-plugin-api';
+import type { Config } from '@backstage/config';
 import express from 'express';
 import Router from 'express-promise-router';
+import { ArgoWorkflowsService } from './service';
+import type { ServiceError } from './service';
 
 /** @public */
 export interface RouterOptions {
   logger: LoggerService;
+  config: Config;
+  httpAuth: HttpAuthService;
 }
 
 /** @public */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { logger } = options;
+  const { logger, config } = options;
   const router = Router();
+
+  const service = new ArgoWorkflowsService({ logger, config });
 
   router.get('/health', (_, response) => {
     response.json({ status: 'ok' });
+  });
+
+  router.get('/workflows/:namespace', async (req, res) => {
+    const { namespace } = req.params;
+    const labelSelector = req.query.labelSelector as string | undefined;
+    const rawLimit = parseInt(req.query.limit as string, 10) || 20;
+    const rawOffset = parseInt(req.query.offset as string, 10) || 0;
+    const limit = Math.max(1, Math.min(100, rawLimit));
+    const offset = Math.max(0, rawOffset);
+
+    try {
+      const workflows = await service.listWorkflows(namespace, {
+        labelSelector,
+        limit,
+        offset,
+      });
+      res.json(workflows);
+    } catch (err: any) {
+      const statusCode = (err as ServiceError).statusCode ?? 500;
+      const code = (err as ServiceError).code ?? 'INTERNAL_ERROR';
+      const message = err.message ?? 'An unexpected error occurred';
+      res.status(statusCode).json({
+        error: { message, code, statusCode },
+      });
+    }
   });
 
   logger.info('Argo Workflows backend plugin initialized');

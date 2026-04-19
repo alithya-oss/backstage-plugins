@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import {
   coreServices,
   createBackendPlugin,
@@ -27,10 +28,12 @@ export const argoWorkflowsPlugin = createBackendPlugin({
       deps: {
         logger: coreServices.logger,
         httpRouter: coreServices.httpRouter,
+        httpAuth: coreServices.httpAuth,
+        config: coreServices.rootConfig,
       },
-      async init({ logger, httpRouter }) {
+      async init({ logger, httpRouter, httpAuth, config }) {
         httpRouter.use(
-          await createRouter({ logger }),
+          await createRouter({ logger, config, httpAuth }),
         );
         httpRouter.addAuthPolicy({
           path: '/health',

@@ -15,9 +15,14 @@
  */
 
 import {
+  createApiFactory,
   createPlugin,
   createRoutableExtension,
+  discoveryApiRef,
+  fetchApiRef,
 } from '@backstage/core-plugin-api';
+import { argoWorkflowsApiRef } from '@backstage-community/plugin-argo-workflows-common';
+import { ArgoWorkflowsApiClient } from './api';
 import { rootRouteRef } from './routes';
 
 /** @public */
@@ -26,6 +31,14 @@ export const argoWorkflowsPlugin = createPlugin({
   routes: {
     root: rootRouteRef,
   },
+  apis: [
+    createApiFactory({
+      api: argoWorkflowsApiRef,
+      deps: { discoveryApi: discoveryApiRef, fetchApi: fetchApiRef },
+      factory: ({ discoveryApi, fetchApi }) =>
+        new ArgoWorkflowsApiClient({ discoveryApi, fetchApi }),
+    }),
+  ],
 });
 
 /** @public */
