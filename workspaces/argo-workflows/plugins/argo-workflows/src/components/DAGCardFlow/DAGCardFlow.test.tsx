@@ -141,4 +141,24 @@ describe('DAGCardFlow', () => {
     const arrow = screen.getByTestId('dag-arrow');
     expect(arrow.className).toContain('inactive');
   });
+
+  it('container has role="group"', () => {
+    const nodes = [makeNode('a')];
+    render(<DAGCardFlow nodes={nodes} />);
+    const flow = screen.getByTestId('dag-card-flow');
+    expect(flow).toHaveAttribute('role', 'group');
+  });
+
+  it('container has aria-label with node count and phase summary', () => {
+    const nodes = [
+      makeNode('a', { phase: 'Succeeded', children: ['b'] }),
+      makeNode('b', { phase: 'Failed' }),
+    ];
+    render(<DAGCardFlow nodes={nodes} />);
+    const flow = screen.getByTestId('dag-card-flow');
+    expect(flow).toHaveAttribute(
+      'aria-label',
+      'Workflow execution graph with 2 nodes: 1 succeeded, 1 failed',
+    );
+  });
 });

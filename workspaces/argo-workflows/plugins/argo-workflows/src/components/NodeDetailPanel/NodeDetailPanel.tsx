@@ -57,6 +57,9 @@ export function NodeDetailPanel({ node, onClose }: NodeDetailPanelProps) {
     <div
       className={`${styles.panel} ${borderClass}`}
       data-testid="node-detail-panel"
+      role="complementary"
+      aria-label={`Node detail for ${node.displayName}`}
+      aria-live="polite"
     >
       <div className={styles.header}>
         <span className={styles.headerIcon}>{icon}</span>

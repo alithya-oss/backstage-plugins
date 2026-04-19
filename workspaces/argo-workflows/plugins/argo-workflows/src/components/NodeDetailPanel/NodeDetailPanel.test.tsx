@@ -168,4 +168,22 @@ describe('NodeDetailPanel', () => {
     const panel = screen.getByTestId('node-detail-panel');
     expect(panel.className).toContain('borderInfo');
   });
+
+  it('has role="complementary"', () => {
+    render(<NodeDetailPanel node={makeNode()} onClose={jest.fn()} />);
+    const panel = screen.getByTestId('node-detail-panel');
+    expect(panel).toHaveAttribute('role', 'complementary');
+  });
+
+  it('has aria-label with node displayName', () => {
+    render(<NodeDetailPanel node={makeNode()} onClose={jest.fn()} />);
+    const panel = screen.getByTestId('node-detail-panel');
+    expect(panel).toHaveAttribute('aria-label', 'Node detail for build');
+  });
+
+  it('has aria-live="polite"', () => {
+    render(<NodeDetailPanel node={makeNode()} onClose={jest.fn()} />);
+    const panel = screen.getByTestId('node-detail-panel');
+    expect(panel).toHaveAttribute('aria-live', 'polite');
+  });
 });

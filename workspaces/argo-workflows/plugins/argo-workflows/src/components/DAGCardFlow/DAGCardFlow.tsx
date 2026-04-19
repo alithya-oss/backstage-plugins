@@ -42,6 +42,18 @@ function getArrowStatus(column: DAGColumn): ArrowStatus {
   return 'inactive';
 }
 
+function buildFlowAriaLabel(cols: DAGColumn[]): string {
+  const allNodes = cols.flatMap(c => c.nodes);
+  const counts: Record<string, number> = {};
+  for (const n of allNodes) {
+    counts[n.phase] = (counts[n.phase] ?? 0) + 1;
+  }
+  const parts = Object.entries(counts).map(
+    ([phase, count]) => `${count} ${phase.toLowerCase()}`,
+  );
+  return `Workflow execution graph with ${allNodes.length} nodes: ${parts.join(', ')}`;
+}
+
 /**
  * Horizontal left-to-right DAG card flow visualization.
  *
@@ -66,7 +78,12 @@ export function DAGCardFlow({
   }
 
   return (
-    <div className={styles.container} data-testid="dag-card-flow">
+    <div
+      className={styles.container}
+      data-testid="dag-card-flow"
+      role="group"
+      aria-label={buildFlowAriaLabel(columns)}
+    >
       {columns.map((column, colIndex) => (
         <React.Fragment key={colIndex}>
           {colIndex > 0 && (

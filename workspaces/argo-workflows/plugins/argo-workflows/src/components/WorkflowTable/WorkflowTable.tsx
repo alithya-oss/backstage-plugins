@@ -325,7 +325,7 @@ export function WorkflowTable({
           onChange={setSearchText}
           placeholder="Search by name…"
         />
-        <Flex gap="1" align="center" style={{ marginLeft: 'auto' }}>
+        <Flex gap="1" align="center" style={{ marginLeft: 'auto' }} aria-live="off">
           <span className={filterStyles.pollDot} />
           <Text variant="body-x-small" color="secondary">
             Updated {formatPollTime(lastUpdated ?? null)}
