@@ -23,6 +23,18 @@ import {
 import { useArgoWorkflows } from '../hooks';
 import { WorkflowTable } from './WorkflowTable';
 import { WorkflowEmptyState } from './EmptyState';
+import { ErrorBoundary } from './ErrorBoundary';
+
+function PageErrorFallback() {
+  return (
+    <div data-testid="page-error-fallback">
+      <p>Something went wrong loading Argo Workflows.</p>
+      <button type="button" onClick={() => window.location.reload()}>
+        Try refreshing the page
+      </button>
+    </div>
+  );
+}
 
 /** @public */
 export const ArgoWorkflowsPage = () => {
@@ -38,29 +50,35 @@ export const ArgoWorkflowsPage = () => {
 
   if (error) {
     return (
-      <WorkflowEmptyState
-        error={error}
-        namespace={namespace}
-        labelSelector={labelSelector}
-      />
+      <ErrorBoundary fallback={<PageErrorFallback />}>
+        <WorkflowEmptyState
+          error={error}
+          namespace={namespace}
+          labelSelector={labelSelector}
+        />
+      </ErrorBoundary>
     );
   }
 
   if (!loading && workflows.length === 0) {
     return (
-      <WorkflowEmptyState
-        workflowCount={0}
-        namespace={namespace}
-        labelSelector={labelSelector}
-      />
+      <ErrorBoundary fallback={<PageErrorFallback />}>
+        <WorkflowEmptyState
+          workflowCount={0}
+          namespace={namespace}
+          labelSelector={labelSelector}
+        />
+      </ErrorBoundary>
     );
   }
 
   return (
-    <WorkflowTable
-      workflows={workflows}
-      loading={loading}
-      lastUpdated={lastUpdated}
-    />
+    <ErrorBoundary fallback={<PageErrorFallback />}>
+      <WorkflowTable
+        workflows={workflows}
+        loading={loading}
+        lastUpdated={lastUpdated}
+      />
+    </ErrorBoundary>
   );
 };

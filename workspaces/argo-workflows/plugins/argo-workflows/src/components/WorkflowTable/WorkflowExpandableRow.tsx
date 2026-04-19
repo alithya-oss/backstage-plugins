@@ -16,9 +16,11 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import type { WorkflowSummary } from '@backstage-community/plugin-argo-workflows-common';
+import { formatDuration } from '@backstage-community/plugin-argo-workflows-common';
 import { useWorkflowDetail } from '../../hooks';
 import { DAGCardFlow } from '../DAGCardFlow';
 import { NodeDetailPanel } from '../NodeDetailPanel';
+import { ErrorBoundary } from '../ErrorBoundary';
 import styles from './WorkflowExpandableRow.module.css';
 
 /**
@@ -170,15 +172,38 @@ export function WorkflowExpandedContent({
     >
       <div className={styles.dagWithPanel}>
         <div className={styles.dagArea}>
-          <DAGCardFlow
-            nodes={detail.nodes}
-            selectedNodeId={selectedNodeId ?? undefined}
-            onNodeClick={handleNodeClick}
-          />
+          <ErrorBoundary
+            fallback={
+              <div data-testid="dag-error-fallback">
+                <p>Unable to render workflow graph. Showing metadata only.</p>
+                <dl>
+                  <dt>Name</dt><dd>{detail.name}</dd>
+                  <dt>Phase</dt><dd>{detail.phase}</dd>
+                  <dt>Started</dt><dd>{detail.startedAt}</dd>
+                  <dt>Finished</dt><dd>{detail.finishedAt ?? '—'}</dd>
+                  <dt>Duration</dt><dd>{formatDuration(detail.duration)}</dd>
+                </dl>
+              </div>
+            }
+          >
+            <DAGCardFlow
+              nodes={detail.nodes}
+              selectedNodeId={selectedNodeId ?? undefined}
+              onNodeClick={handleNodeClick}
+            />
+          </ErrorBoundary>
         </div>
         {selectedNode && (
           <div ref={panelRef} tabIndex={-1} style={{ outline: 'none' }}>
-            <NodeDetailPanel node={selectedNode} onClose={handleClosePanel} />
+            <ErrorBoundary
+              fallback={
+                <span data-testid="panel-error-fallback">
+                  Unable to display node details
+                </span>
+              }
+            >
+              <NodeDetailPanel node={selectedNode} onClose={handleClosePanel} />
+            </ErrorBoundary>
           </div>
         )}
       </div>
