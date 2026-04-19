@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Argo Workflows Plugin — UX Design Directions (A, B, C, D)</title>
+<style>
+  :root {
+    --bg-page: #f5f5f5;
+    --bg-neutral-1: #ffffff;
+    --bg-neutral-2: #fafafa;
+    --bg-neutral-3: #f0f0f0;
+    --bg-neutral-4: #e0e0e0;
+    --fg-primary: #1a1a1a;
+    --fg-secondary: #6b6b6b;
+    --fg-tertiary: #999999;
+    --border-1: #e0e0e0;
+    --border-2: #cccccc;
+    --bg-success: #e6f4ea;
+    --fg-success: #1e7e34;
+    --border-success: #1e7e34;
+    --bg-danger: #fce8e6;
+    --fg-danger: #c62828;
+    --border-danger: #c62828;
+    --bg-warning: #fff8e1;
+    --fg-warning: #f57f17;
+    --border-warning: #f57f17;
+    --bg-info: #e3f2fd;
+    --fg-info: #1565c0;
+    --border-info: #1565c0;
+    --font-regular: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', monospace;
+    --radius-1: 4px;
+    --radius-2: 8px;
+    --radius-3: 12px;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+  }
+  [data-theme="dark"] {
+    --bg-page: #121212;
+    --bg-neutral-1: #1e1e1e;
+    --bg-neutral-2: #252525;
+    --bg-neutral-3: #333333;
+    --bg-neutral-4: #444444;
+    --fg-primary: #e0e0e0;
+    --fg-secondary: #999999;
+    --fg-tertiary: #666666;
+    --border-1: #333333;
+    --border-2: #444444;
+    --bg-success: #1b3a26;
+    --fg-success: #66bb6a;
+    --border-success: #66bb6a;
+    --bg-danger: #3e1a1a;
+    --fg-danger: #ef5350;
+    --border-danger: #ef5350;
+    --bg-warning: #3e3014;
+    --fg-warning: #ffb74d;
+    --border-warning: #ffb74d;
+    --bg-info: #1a2e3e;
+    --fg-info: #42a5f5;
+    --border-info: #42a5f5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font-regular); background: var(--bg-page); color: var(--fg-primary); line-height: 1.5; }
+
+  /* Navigation */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--bg-neutral-1); border-bottom: 1px solid var(--border-1);
+    padding: var(--space-3) var(--space-6);
+    display: flex; align-items: center; gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+  .nav h1 { font-size: 15px; font-weight: 600; white-space: nowrap; }
+  .nav-tabs { display: flex; gap: var(--space-1); flex-wrap: wrap; }
+  .nav-tab {
+    padding: var(--space-2) var(--space-4); border: none; background: none;
+    cursor: pointer; font-family: var(--font-regular); font-size: 12px;
+    color: var(--fg-secondary); border-radius: var(--radius-1); transition: all 0.15s;
+  }
+  .nav-tab:hover { background: var(--bg-neutral-3); color: var(--fg-primary); }
+  .nav-tab.active { background: var(--bg-info); color: var(--fg-info); font-weight: 500; }
+  .theme-toggle {
+    margin-left: auto; padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--border-1); background: var(--bg-neutral-2);
+    border-radius: var(--radius-1); cursor: pointer; font-size: 13px;
+    color: var(--fg-primary); font-family: var(--font-regular);
+  }
+
+  /* Sections */
+  .section { display: none; padding: 64px var(--space-6) var(--space-6); min-height: 100vh; }
+  .section.active { display: block; }
+  .section-title { font-size: 20px; font-weight: 600; margin-bottom: var(--space-2); }
+  .section-desc { font-size: 14px; color: var(--fg-secondary); margin-bottom: var(--space-6); max-width: 750px; }
+
+  /* Mockup frame */
+  .mockup-frame {
+    background: var(--bg-neutral-1); border: 1px solid var(--border-1);
+    border-radius: var(--radius-3); overflow: hidden; margin-bottom: var(--space-8);
+  }
+  .mockup-header {
+    background: var(--bg-neutral-2); border-bottom: 1px solid var(--border-1);
+    padding: var(--space-3) var(--space-4); display: flex; align-items: center; gap: var(--space-3);
+  }
+  .mockup-header .dots { display: flex; gap: 6px; }
+  .mockup-header .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mockup-header .dot:nth-child(1) { background: #ff5f57; }
+  .mockup-header .dot:nth-child(2) { background: #febc2e; }
+  .mockup-header .dot:nth-child(3) { background: #28c840; }
+  .mockup-header .title { font-size: 12px; color: var(--fg-secondary); }
+  .mockup-body { padding: 0; }
+
+  /* Backstage shell */
+  .bs-shell { display: flex; min-height: 500px; }
+  .bs-sidebar {
+    width: 200px; background: var(--bg-neutral-2); border-right: 1px solid var(--border-1);
+    padding: var(--space-4); flex-shrink: 0;
+  }
+  .bs-sidebar-item {
+    padding: var(--space-2) var(--space-3); font-size: 13px; color: var(--fg-secondary);
+    border-radius: var(--radius-1); margin-bottom: 2px;
+  }
+  .bs-sidebar-item.active { background: var(--bg-info); color: var(--fg-info); font-weight: 500; }
+  .bs-main { flex: 1; padding: var(--space-6); overflow: auto; }
+
+  /* Entity header */
+  .entity-header { margin-bottom: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--border-1); }
+  .entity-kind { font-size: 11px; color: var(--fg-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+  .entity-name { font-size: 18px; font-weight: 600; }
+
+  /* Tabs */
+  .entity-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border-1); margin-bottom: var(--space-6); }
+  .entity-tab {
+    padding: var(--space-3) var(--space-4); font-size: 13px; color: var(--fg-secondary);
+    border-bottom: 2px solid transparent; margin-bottom: -2px;
+  }
+  .entity-tab.active { color: var(--fg-info); border-bottom-color: var(--fg-info); font-weight: 500; }
+
+  /* Badge */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; white-space: nowrap;
+  }
+  .badge-success { background: var(--bg-success); color: var(--fg-success); }
+  .badge-danger { background: var(--bg-danger); color: var(--fg-danger); }
+  .badge-warning { background: var(--bg-warning); color: var(--fg-warning); }
+  .badge-info { background: var(--bg-info); color: var(--fg-info); }
+  .badge-secondary { background: var(--bg-neutral-3); color: var(--fg-secondary); }
+
+  /* Toolbar */
+  .toolbar { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); }
+  .search-input {
+    padding: var(--space-2) var(--space-3); border: 1px solid var(--border-1);
+    border-radius: var(--radius-1); background: var(--bg-neutral-1);
+    color: var(--fg-primary); font-size: 13px; font-family: var(--font-regular); width: 200px;
+  }
+  .filter-chip {
+    padding: 4px 10px; border-radius: 12px; font-size: 11px;
+    border: 1px solid var(--border-1); background: var(--bg-neutral-2);
+    color: var(--fg-secondary); cursor: pointer;
+  }
+  .filter-chip.active { background: var(--bg-info); color: var(--fg-info); border-color: var(--fg-info); }
+  .poll-indicator { font-size: 11px; color: var(--fg-secondary); display: flex; align-items: center; gap: 4px; margin-left: auto; }
+  .poll-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--fg-success); }
+
+  /* Table */
+  .table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .table th {
+    text-align: left; padding: var(--space-3) var(--space-4);
+    font-weight: 500; color: var(--fg-secondary); font-size: 11px;
+    border-bottom: 1px solid var(--border-1); text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .table td { padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border-1); vertical-align: middle; }
+  .table tbody tr:hover > td { background: var(--bg-neutral-2); }
+  .mono { font-family: var(--font-mono); font-size: 12px; }
+  .name-link { color: var(--fg-info); text-decoration: none; font-weight: 500; cursor: pointer; }
+
+  /* Breadcrumb */
+  .breadcrumb { display: flex; align-items: center; gap: var(--space-2); font-size: 13px; color: var(--fg-secondary); margin-bottom: var(--space-4); }
+  .breadcrumb a { color: var(--fg-info); text-decoration: none; cursor: pointer; }
+  .breadcrumb .sep { color: var(--fg-tertiary); }
+
+  /* Workflow detail header */
+  .wf-detail-header {
+    display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4);
+    padding-bottom: var(--space-4); border-bottom: 1px solid var(--border-1); flex-wrap: wrap;
+  }
+  .wf-detail-name { font-size: 16px; font-weight: 600; }
+  .wf-detail-meta { display: flex; gap: var(--space-6); font-size: 12px; color: var(--fg-secondary); }
+  .wf-detail-meta .label { font-weight: 500; }
+
+  /* DAG Canvas */
+  .dag-canvas {
+    background: var(--bg-neutral-1); border: 1px solid var(--border-1);
+    border-radius: var(--radius-2); position: relative; min-height: 350px; overflow: hidden;
+  }
+
+  /* DAG Nodes */
+  .dag-node {
+    display: inline-flex; flex-direction: column; background: var(--bg-neutral-2);
+    border: 2px solid var(--border-1); border-radius: var(--radius-2);
+    padding: var(--space-2) var(--space-3); min-width: 160px;
+    cursor: pointer; transition: all 0.15s; position: absolute;
+  }
+  .dag-node:hover { background: var(--bg-neutral-3); }
+  .dag-node.selected { background: var(--bg-neutral-3); box-shadow: 0 0 0 2px var(--fg-info); }
+  .dag-node.succeeded { border-color: var(--fg-success); }
+  .dag-node.failed { border-color: var(--fg-danger); }
+  .dag-node.running { border-color: var(--fg-info); }
+  .dag-node.pending { border-color: var(--fg-warning); }
+  .dag-node.omitted { border-color: var(--border-1); opacity: 0.5; }
+  .dag-node-top { display: flex; align-items: center; gap: 6px; }
+  .dag-node-icon { font-size: 14px; flex-shrink: 0; }
+  .dag-node-label { font-size: 13px; font-weight: 500; }
+  .dag-node-duration { font-family: var(--font-mono); font-size: 11px; color: var(--fg-secondary); margin-top: 2px; }
+
+  /* DAG Edges */
+  .dag-edges { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+  .dag-edge { stroke: var(--border-2); stroke-width: 1.5; fill: none; }
+  .dag-edge.success { stroke: var(--fg-success); }
+  .dag-edge.danger { stroke: var(--fg-danger); }
+  .dag-edge.inactive { stroke: var(--border-1); stroke-dasharray: 4 4; opacity: 0.4; }
+
+  /* Node Detail Panel */
+  .node-panel {
+    width: 340px; background: var(--bg-neutral-2); border-left: 1px solid var(--border-1);
+    padding: var(--space-6); flex-shrink: 0;
+  }
+  .node-panel-title {
+    font-size: 16px; font-weight: 600; margin-bottom: var(--space-4);
+    display: flex; align-items: center; gap: var(--space-2);
+  }
+  .node-panel-close { margin-left: auto; background: none; border: none; color: var(--fg-secondary); cursor: pointer; font-size: 18px; }
+  .node-meta-row {
+    display: flex; justify-content: space-between; padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--border-1); font-size: 13px;
+  }
+  .node-meta-label { color: var(--fg-secondary); }
+  .node-meta-value { font-weight: 500; }
+  .node-error {
+    margin-top: var(--space-4); padding: var(--space-3); background: var(--bg-danger);
+    border-radius: var(--radius-1); font-family: var(--font-mono); font-size: 12px; color: var(--fg-danger);
+  }
+
+  /* Minimap */
+  .minimap {
+    position: absolute; bottom: var(--space-3); right: var(--space-3);
+    width: 150px; height: 100px; background: var(--bg-neutral-1);
+    border: 1px solid var(--border-1); border-radius: var(--radius-1); opacity: 0.85; padding: var(--space-2);
+  }
+  .minimap-viewport { border: 1.5px solid var(--fg-info); border-radius: 2px; width: 60%; height: 50%; position: absolute; top: 15%; left: 10%; }
+  .minimap-dot { width: 4px; height: 4px; border-radius: 50%; position: absolute; }
+
+  /* Controls */
+  .dag-controls { position: absolute; bottom: var(--space-3); left: var(--space-3); display: flex; flex-direction: column; gap: var(--space-1); }
+  .dag-control-btn {
+    width: 32px; height: 32px; background: var(--bg-neutral-1); border: 1px solid var(--border-1);
+    border-radius: var(--radius-1); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px; color: var(--fg-primary);
+  }
+  .dag-control-btn:hover { background: var(--bg-neutral-3); }
+
+  /* Direction comparison grid */
+  .direction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+  @media (max-width: 1200px) { .direction-grid { grid-template-columns: 1fr; } }
+  .direction-card {
+    background: var(--bg-neutral-1); border: 1px solid var(--border-1);
+    border-radius: var(--radius-2); padding: var(--space-4);
+  }
+  .direction-card h3 { font-size: 14px; margin-bottom: var(--space-2); color: var(--fg-info); }
+  .direction-card p { font-size: 13px; color: var(--fg-secondary); margin-bottom: var(--space-4); }
+  .pro-con { font-size: 12px; margin-top: var(--space-3); }
+  .pro { color: var(--fg-success); }
+  .con { color: var(--fg-danger); }
+
+  .pagination {
+    display: flex; align-items: center; gap: var(--space-3); justify-content: flex-end;
+    margin-top: var(--space-4); font-size: 12px; color: var(--fg-secondary);
+  }
+
+  /* === Direction D specific === */
+  .expand-btn {
+    width: 28px; height: 28px; border: 1px solid var(--border-1);
+    background: var(--bg-neutral-2); border-radius: var(--radius-1);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--fg-secondary); transition: all 0.15s;
+  }
+  .expand-btn:hover { background: var(--bg-neutral-3); color: var(--fg-primary); }
+  .expand-btn.open { background: var(--bg-info); color: var(--fg-info); border-color: var(--fg-info); transform: rotate(90deg); }
+  .task-status { display: flex; gap: 3px; align-items: center; }
+  .task-dot {
+    width: 14px; height: 14px; border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700; color: white;
+  }
+  .task-dot.s { background: var(--fg-success); }
+  .task-dot.f { background: var(--fg-danger); }
+  .task-dot.r { background: var(--fg-info); }
+  .task-dot.p { background: var(--fg-warning); }
+  .task-dot.o { background: var(--fg-tertiary); }
+  .expanded-row td { padding: 0 !important; border-bottom: 1px solid var(--border-1); background: var(--bg-neutral-2); }
+  .expanded-content { padding: var(--space-4) var(--space-6); }
+  .dag-flow { display: flex; flex-direction: column; gap: var(--space-4); }
+  .dag-flow-header { display: flex; align-items: center; gap: var(--space-4); font-size: 12px; color: var(--fg-secondary); flex-wrap: wrap; }
+  .dag-flow-header .wf-name { font-weight: 600; color: var(--fg-primary); font-size: 13px; }
+  .dag-inline {
+    background: var(--bg-neutral-1); border: 1px solid var(--border-1);
+    border-radius: var(--radius-2); padding: var(--space-4) var(--space-5);
+    position: relative; overflow-x: auto;
+  }
+  .dag-h { display: flex; align-items: flex-start; gap: 0; min-width: max-content; }
+  .dag-column { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
+  .dag-arrow {
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; color: var(--border-2); font-size: 18px; align-self: center; flex-shrink: 0;
+  }
+  .dag-arrow.success { color: var(--fg-success); }
+  .dag-arrow.danger { color: var(--fg-danger); }
+  .dag-arrow.inactive { color: var(--fg-tertiary); opacity: 0.4; }
+  .dag-card {
+    background: var(--bg-neutral-1); border: 2px solid var(--border-1);
+    border-radius: var(--radius-2); padding: var(--space-3) var(--space-4);
+    min-width: 150px; max-width: 180px; cursor: pointer; transition: all 0.15s;
+  }
+  .dag-card:hover { background: var(--bg-neutral-3); }
+  .dag-card.selected { box-shadow: 0 0 0 2px var(--fg-info); }
+  .dag-card.succeeded { border-color: var(--fg-success); }
+  .dag-card.failed { border-color: var(--fg-danger); }
+  .dag-card.running { border-color: var(--fg-info); }
+  .dag-card.omitted { border-color: var(--border-1); opacity: 0.5; }
+  .dag-card-top { display: flex; align-items: center; gap: 6px; }
+  .dag-card-icon { font-size: 13px; flex-shrink: 0; }
+  .dag-card-name { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dag-card-meta { font-family: var(--font-mono); font-size: 10px; color: var(--fg-secondary); margin-top: 3px; }
+  .parallel-label { font-size: 9px; color: var(--fg-tertiary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .node-detail-inline {
+    margin-top: var(--space-4); background: var(--bg-neutral-1);
+    border: 1px solid var(--border-1); border-left: 3px solid var(--fg-danger);
+    border-radius: var(--radius-2); padding: var(--space-4); display: flex; gap: var(--space-6);
+  }
+  .node-detail-section { flex: 1; }
+  .node-detail-title {
+    font-size: 14px; font-weight: 600; display: flex; align-items: center;
+    gap: var(--space-2); margin-bottom: var(--space-3);
+  }
+  .node-detail-close { margin-left: auto; background: none; border: none; color: var(--fg-secondary); cursor: pointer; font-size: 16px; }
+  .meta-grid { display: grid; grid-template-columns: auto 1fr; gap: var(--space-2) var(--space-4); font-size: 12px; }
+  .meta-label { color: var(--fg-secondary); }
+  .meta-value { font-weight: 500; }
+  .node-error-box {
+    margin-top: var(--space-3); padding: var(--space-3); background: var(--bg-danger);
+    border-radius: var(--radius-1); font-family: var(--font-mono); font-size: 11px; color: var(--fg-danger);
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<div class="nav">
+  <h1>Argo Workflows Plugin — Design Directions</h1>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('overview',this)">Overview</button>
+    <button class="nav-tab" onclick="showSection('dirA',this)">A: Full-Width DAG</button>
+    <button class="nav-tab" onclick="showSection('dirB',this)">B: Split Panel</button>
+    <button class="nav-tab" onclick="showSection('dirC',this)">C: Compact Dense</button>
+    <button class="nav-tab" onclick="showSection('dirD',this)">D: Tekton-Style Expandable</button>
+    <button class="nav-tab" onclick="showSection('dirE',this)">E: Expand+Vertical DAG</button>
+    <button class="nav-tab" onclick="showSection('dirF',this)">F: Expand+Horizontal DAG+Panel</button>
+    <button class="nav-tab" onclick="showSection('compare',this)">Compare</button>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()">🌓 Toggle Theme</button>
+</div>
+
+<!-- ==================== OVERVIEW ==================== -->
+<div class="section active" id="overview">
+  <div class="section-title">Design Direction Exploration</div>
+  <div class="section-desc">
+    Four layout directions for the Argo Workflows Backstage plugin. All use BUI tokens — the difference is how the DAG diagram, workflow list, and node detail panel are arranged. Each direction optimizes for a different priority.
+  </div>
+  <div class="direction-grid">
+    <div class="direction-card">
+      <h3>Direction A: Full-Width DAG</h3>
+      <p>DAG takes full content width. Node detail panel slides in as an overlay from the right. Maximizes DAG visibility.</p>
+      <div class="pro-con">
+        <div class="pro">✓ Maximum DAG canvas space — best for large workflows</div>
+        <div class="pro">✓ Topology is the hero</div>
+        <div class="con">✗ Panel partially obscures DAG when open</div>
+      </div>
+    </div>
+    <div class="direction-card">
+      <h3>Direction B: Split Panel</h3>
+      <p>DAG and node detail panel share the content area side-by-side. Both always fully visible.</p>
+      <div class="pro-con">
+        <div class="pro">✓ DAG and detail always visible simultaneously</div>
+        <div class="pro">✓ Spatial context fully preserved</div>
+        <div class="con">✗ DAG canvas narrower when panel open</div>
+      </div>
+    </div>
+    <div class="direction-card">
+      <h3>Direction C: Compact Dense</h3>
+      <p>Summary cards + DAG + node detail all on one screen. Optimized for SRE incident response.</p>
+      <div class="pro-con">
+        <div class="pro">✓ All information on one screen — zero scrolling</div>
+        <div class="pro">✓ Optimized for incident response speed</div>
+        <div class="con">✗ Smaller DAG canvas for large workflows</div>
+      </div>
+    </div>
+    <div class="direction-card">
+      <h3>Direction D: Tekton-Style Expandable Rows</h3>
+      <p>Workflow list with expand button per row. Expanding reveals the DAG inline below the row — same pattern as the Tekton plugin.</p>
+      <div class="pro-con">
+        <div class="pro">✓ Exact same UX pattern as Tekton — familiar to Backstage users</div>
+        <div class="pro">✓ List + DAG in one view, no page navigation</div>
+        <div class="pro">✓ Node status summary dots in the table row</div>
+        <div class="con">✗ DAG constrained to row expansion area width</div>
+      </div>
+    </div>
+    <div class="direction-card">
+      <h3>Direction E: Expandable Rows + Vertical DAG (D + C hybrid)</h3>
+      <p>Tekton-style expandable rows from D, but the expanded area shows a vertical top-to-bottom DAG with a side panel like C. Combines the best of both patterns.</p>
+      <div class="pro-con">
+        <div class="pro">✓ Tekton-familiar expandable row pattern</div>
+        <div class="pro">✓ Vertical DAG shows true topology with parallel branches side-by-side</div>
+        <div class="pro">✓ Node detail side panel preserves DAG context</div>
+        <div class="pro">✓ No page navigation — list and DAG in one view</div>
+        <div class="con">✗ Expanded area is taller than horizontal layout</div>
+      </div>
+    </div>
+    <div class="direction-card">
+      <h3>Direction F: Expandable Rows + Horizontal DAG + Side Panel</h3>
+      <p>Tekton-style expandable rows with D's horizontal left-to-right DAG card flow, plus a node detail side panel from E. No summary cards — clean and focused.</p>
+      <div class="pro-con">
+        <div class="pro">✓ Tekton-familiar expandable row pattern</div>
+        <div class="pro">✓ Horizontal DAG fits naturally in expanded row width</div>
+        <div class="pro">✓ Side panel for node detail preserves DAG context</div>
+        <div class="pro">✓ Compact vertical footprint — less scrolling than E</div>
+        <div class="con">✗ Horizontal scroll needed for very wide workflows</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DIRECTION A: Full-Width DAG ==================== -->
+<div class="section" id="dirA">
+  <div class="section-title">Direction A: Full-Width DAG</div>
+  <div class="section-desc">DAG takes full content width. Node detail panel slides in as an overlay from the right.</div>
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <span class="title">Direction A — Full-Width DAG with Overlay Panel</span>
+    </div>
+    <div class="mockup-body">
+      <div class="bs-shell" style="min-height:550px;">
+        <div class="bs-sidebar">
+          <div class="bs-sidebar-item">Overview</div>
+          <div class="bs-sidebar-item active">Argo Workflows</div>
+          <div class="bs-sidebar-item">Kubernetes</div>
+        </div>
+        <div class="bs-main" style="padding:var(--space-4);">
+          <div class="breadcrumb"><a>Argo Workflows</a><span class="sep">›</span><span>payment-ci-pipeline-7f8a2</span></div>
+          <div class="wf-detail-header">
+            <div class="wf-detail-name">payment-ci-pipeline-7f8a2</div>
+            <span class="badge badge-danger">✗ Failed</span>
+            <div class="wf-detail-meta" style="margin-left:auto;">
+              <span><span class="label">Started:</span> 2 min ago</span>
+              <span><span class="label">Duration:</span> 3m 47s</span>
+            </div>
+          </div>
+          <div style="display:flex;position:relative;">
+            <div class="dag-canvas" style="flex:1;min-height:420px;">
+              <svg class="dag-edges" viewBox="0 0 800 420">
+                <path class="dag-edge success" d="M 140 55 L 140 80 L 80 80 L 80 115"/>
+                <path class="dag-edge success" d="M 140 55 L 140 80 L 200 80 L 200 115"/>
+                <path class="dag-edge success" d="M 80 165 L 80 190 L 140 190 L 140 215"/>
+                <path class="dag-edge success" d="M 200 165 L 200 190 L 140 190 L 140 215"/>
+                <path class="dag-edge danger" d="M 140 265 L 140 290 L 80 290 L 80 315"/>
+                <path class="dag-edge inactive" d="M 140 265 L 140 290 L 200 290 L 200 315"/>
+              </svg>
+              <div class="dag-node succeeded" style="left:70px;top:10px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success)">✓</span><span class="dag-node-label">checkout</span></div><div class="dag-node-duration">12s</div></div>
+              <div class="dag-node succeeded" style="left:10px;top:115px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success)">✓</span><span class="dag-node-label">build</span></div><div class="dag-node-duration">1m 23s</div></div>
+              <div class="dag-node succeeded" style="left:190px;top:115px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success)">✓</span><span class="dag-node-label">unit-tests</span></div><div class="dag-node-duration">2m 05s</div></div>
+              <div class="dag-node succeeded" style="left:70px;top:215px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success)">✓</span><span class="dag-node-label">push-image</span></div><div class="dag-node-duration">34s</div></div>
+              <div class="dag-node failed selected" style="left:10px;top:315px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-danger)">✗</span><span class="dag-node-label">security-scan</span></div><div class="dag-node-duration">47s</div></div>
+              <div class="dag-node omitted" style="left:190px;top:315px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-secondary)">—</span><span class="dag-node-label">deploy-staging</span></div><div class="dag-node-duration">—</div></div>
+              <div class="dag-controls"><button class="dag-control-btn">+</button><button class="dag-control-btn">−</button><button class="dag-control-btn">⊡</button></div>
+              <div class="minimap"><div class="minimap-viewport"></div><div class="minimap-dot" style="top:20%;left:35%;background:var(--fg-success)"></div><div class="minimap-dot" style="top:40%;left:20%;background:var(--fg-success)"></div><div class="minimap-dot" style="top:40%;left:55%;background:var(--fg-success)"></div><div class="minimap-dot" style="top:60%;left:35%;background:var(--fg-success)"></div><div class="minimap-dot" style="top:80%;left:20%;background:var(--fg-danger)"></div><div class="minimap-dot" style="top:80%;left:55%;background:var(--fg-tertiary)"></div></div>
+            </div>
+            <!-- Overlay Panel -->
+            <div class="node-panel" style="position:absolute;right:0;top:0;bottom:0;box-shadow:-4px 0 12px rgba(0,0,0,0.1);">
+              <div class="node-panel-title"><span style="color:var(--fg-danger)">✗</span> security-scan <button class="node-panel-close">×</button></div>
+              <div class="node-meta-row"><span class="node-meta-label">Phase</span><span class="badge badge-danger">✗ Failed</span></div>
+              <div class="node-meta-row"><span class="node-meta-label">Type</span><span class="node-meta-value">Pod</span></div>
+              <div class="node-meta-row"><span class="node-meta-label">Started</span><span class="node-meta-value mono">14:23:41</span></div>
+              <div class="node-meta-row"><span class="node-meta-label">Finished</span><span class="node-meta-value mono">14:24:28</span></div>
+              <div class="node-meta-row"><span class="node-meta-label">Duration</span><span class="node-meta-value mono">47s</span></div>
+              <div class="node-meta-row"><span class="node-meta-label">Template</span><span class="node-meta-value">security-scan</span></div>
+              <div class="node-error">Error: CVE-2026-1234 found in dependency lodash@4.17.20 (severity: HIGH).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DIRECTION B: Split Panel ==================== -->
+<div class="section" id="dirB">
+  <div class="section-title">Direction B: Split Panel</div>
+  <div class="section-desc">DAG and node detail panel share the content area side-by-side. Both fully visible simultaneously.</div>
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <span class="title">Direction B — Split Panel: DAG + Node Detail Side-by-Side</span>
+    </div>
+    <div class="mockup-body">
+      <div class="bs-shell" style="min-height:550px;">
+        <div class="bs-sidebar">
+          <div class="bs-sidebar-item">Overview</div>
+          <div class="bs-sidebar-item active">Argo Workflows</div>
+          <div class="bs-sidebar-item">Kubernetes</div>
+        </div>
+        <div class="bs-main" style="padding:var(--space-4);">
+          <div class="breadcrumb"><a>Argo Workflows</a><span class="sep">›</span><span>payment-ci-pipeline-7f8a2</span></div>
+          <div class="wf-detail-header">
+            <div class="wf-detail-name">payment-ci-pipeline-7f8a2</div>
+            <span class="badge badge-danger">✗ Failed</span>
+            <div class="wf-detail-meta" style="margin-left:auto;">
+              <span><span class="label">Started:</span> 2 min ago</span>
+              <span><span class="label">Duration:</span> 3m 47s</span>
+            </div>
+            <div class="poll-indicator"><div class="poll-dot" style="background:var(--fg-tertiary)"></div> Terminal</div>
+          </div>
+          <div style="display:flex;gap:0;">
+            <div class="dag-canvas" style="flex:1;min-height:420px;border-right:none;border-radius:var(--radius-2) 0 0 var(--radius-2);">
+              <svg class="dag-edges" viewBox="0 0 600 420">
+                <path class="dag-edge success" d="M 120 55 L 120 80 L 60 80 L 60 115"/>
+                <path class="dag-edge success" d="M 120 55 L 120 80 L 180 80 L 180 115"/>
+                <path class="dag-edge success" d="M 60 165 L 60 190 L 120 190 L 120 215"/>
+                <path class="dag-edge success" d="M 180 165 L 180 190 L 120 190 L 120 215"/>
+                <path class="dag-edge danger" d="M 120 265 L 120 290 L 60 290 L 60 315"/>
+                <path class="dag-edge inactive" d="M 120 265 L 120 290 L 180 290 L 180 315"/>
+              </svg>
+              <div class="dag-node succeeded" style="left:50px;top:10px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success)">✓</span><span class="dag-node-label">checkout</span></div><div class="dag-node-duration">12s</div></div>
+              <div class="dag-node succeeded" style="left:0;top:115px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success)">✓</span><span class="dag-node-label">build</span></div><div class="dag-node-duration">1m 23s</div></div>
+              <div class="dag-node succeeded" style="left:170px;top:115px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success)">✓</span><span class="dag-node-label">unit-tests</span></div><div class="dag-node-duration">2m 05s</div></div>
+              <div class="dag-node succeeded" style="left:50px;top:215px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success)">✓</span><span class="dag-node-label">push-image</span></div><div class="dag-node-duration">34s</div></div>
+              <div class="dag-node failed selected" style="left:0;top:315px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-danger)">✗</span><span class="dag-node-label">security-scan</span></div><div class="dag-node-duration">47s</div></div>
+              <div class="dag-node omitted" style="left:170px;top:315px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-secondary)">—</span><span class="dag-node-label">deploy-staging</span></div><div class="dag-node-duration">—</div></div>
+              <div class="dag-controls"><button class="dag-control-btn">+</button><button class="dag-control-btn">−</button><button class="dag-control-btn">⊡</button></div>
+              <div class="minimap"><div class="minimap-viewport"></div><div class="minimap-dot" style="top:20%;left:35%;background:var(--fg-success)"></div><div class="minimap-dot" style="top:40%;left:20%;background:var(--fg-success)"></div><div class="minimap-dot" style="top:40%;left:55%;background:var(--fg-success)"></div><div class="minimap-dot" style="top:60%;left:35%;background:var(--fg-success)"></div><div class="minimap-dot" style="top:80%;left:20%;background:var(--fg-danger)"></div><div class="minimap-dot" style="top:80%;left:55%;background:var(--fg-tertiary)"></div></div>
+            </div>
+            <div class="node-panel" style="border-radius:0 var(--radius-2) var(--radius-2) 0;border:1px solid var(--border-1);border-left:2px solid var(--fg-danger);">
+              <div class="node-panel-title"><span style="color:var(--fg-danger)">✗</span> security-scan <button class="node-panel-close">×</button></div>
+              <div class="node-meta-row"><span class="node-meta-label">Phase</span><span class="badge badge-danger">✗ Failed</span></div>
+              <div class="node-meta-row"><span class="node-meta-label">Type</span><span class="node-meta-value">Pod</span></div>
+              <div class="node-meta-row"><span class="node-meta-label">Started</span><span class="node-meta-value mono">14:23:41</span></div>
+              <div class="node-meta-row"><span class="node-meta-label">Finished</span><span class="node-meta-value mono">14:24:28</span></div>
+              <div class="node-meta-row"><span class="node-meta-label">Duration</span><span class="node-meta-value mono">47s</span></div>
+              <div class="node-meta-row"><span class="node-meta-label">Template</span><span class="node-meta-value">security-scan</span></div>
+              <div class="node-error">Error: CVE-2026-1234 found in dependency lodash@4.17.20 (severity: HIGH).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DIRECTION C: Compact Dense ==================== -->
+<div class="section" id="dirC">
+  <div class="section-title">Direction C: Compact Dense</div>
+  <div class="section-desc">All information on one screen — workflow summary, DAG, and node detail. Optimized for SRE incident response.</div>
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <span class="title">Direction C — Compact Dense: Everything Visible</span>
+    </div>
+    <div class="mockup-body">
+      <div class="bs-shell" style="min-height:600px;">
+        <div class="bs-sidebar">
+          <div class="bs-sidebar-item">Overview</div>
+          <div class="bs-sidebar-item active">Argo Workflows</div>
+          <div class="bs-sidebar-item">Kubernetes</div>
+        </div>
+        <div class="bs-main" style="padding:var(--space-4);">
+          <div class="breadcrumb"><a>Argo Workflows</a><span class="sep">›</span><span>payment-ci-pipeline-7f8a2</span></div>
+          <!-- Summary cards -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:var(--space-3);margin-bottom:var(--space-4);">
+            <div style="background:var(--bg-neutral-2);border:1px solid var(--border-1);border-radius:var(--radius-2);padding:var(--space-3);">
+              <div style="font-size:11px;color:var(--fg-secondary);text-transform:uppercase;letter-spacing:0.3px;">Status</div>
+              <div style="margin-top:4px;"><span class="badge badge-danger">✗ Failed</span></div>
+            </div>
+            <div style="background:var(--bg-neutral-2);border:1px solid var(--border-1);border-radius:var(--radius-2);padding:var(--space-3);">
+              <div style="font-size:11px;color:var(--fg-secondary);text-transform:uppercase;letter-spacing:0.3px;">Duration</div>
+              <div style="margin-top:4px;font-family:var(--font-mono);font-size:14px;font-weight:600;">3m 47s</div>
+            </div>
+            <div style="background:var(--bg-neutral-2);border:1px solid var(--border-1);border-radius:var(--radius-2);padding:var(--space-3);">
+              <div style="font-size:11px;color:var(--fg-secondary);text-transform:uppercase;letter-spacing:0.3px;">Nodes</div>
+              <div style="margin-top:4px;font-size:13px;"><span style="color:var(--fg-success)">4 ✓</span> &nbsp;<span style="color:var(--fg-danger)">1 ✗</span> &nbsp;<span style="color:var(--fg-secondary)">1 —</span></div>
+            </div>
+            <div style="background:var(--bg-neutral-2);border:1px solid var(--border-1);border-radius:var(--radius-2);padding:var(--space-3);">
+              <div style="font-size:11px;color:var(--fg-secondary);text-transform:uppercase;letter-spacing:0.3px;">Started</div>
+              <div style="margin-top:4px;font-family:var(--font-mono);font-size:13px;">14:22:54</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:0;">
+            <div class="dag-canvas" style="flex:1;min-height:340px;border-right:none;border-radius:var(--radius-2) 0 0 var(--radius-2);">
+              <svg class="dag-edges" viewBox="0 0 500 340">
+                <path class="dag-edge success" d="M 100 50 L 100 70 L 50 70 L 50 100"/>
+                <path class="dag-edge success" d="M 100 50 L 100 70 L 160 70 L 160 100"/>
+                <path class="dag-edge success" d="M 50 148 L 50 168 L 100 168 L 100 190"/>
+                <path class="dag-edge success" d="M 160 148 L 160 168 L 100 168 L 100 190"/>
+                <path class="dag-edge danger" d="M 100 238 L 100 258 L 50 258 L 50 280"/>
+                <path class="dag-edge inactive" d="M 100 238 L 100 258 L 160 258 L 160 280"/>
+              </svg>
+              <div class="dag-node succeeded" style="left:35px;top:8px;min-width:140px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">checkout</span></div><div class="dag-node-duration" style="font-size:10px">12s</div></div>
+              <div class="dag-node succeeded" style="left:0;top:100px;min-width:140px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">build</span></div><div class="dag-node-duration" style="font-size:10px">1m 23s</div></div>
+              <div class="dag-node succeeded" style="left:150px;top:100px;min-width:140px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">unit-tests</span></div><div class="dag-node-duration" style="font-size:10px">2m 05s</div></div>
+              <div class="dag-node succeeded" style="left:35px;top:190px;min-width:140px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">push-image</span></div><div class="dag-node-duration" style="font-size:10px">34s</div></div>
+              <div class="dag-node failed selected" style="left:0;top:280px;min-width:140px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-danger);font-size:12px">✗</span><span class="dag-node-label" style="font-size:12px">security-scan</span></div><div class="dag-node-duration" style="font-size:10px">47s</div></div>
+              <div class="dag-node omitted" style="left:150px;top:280px;min-width:140px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-secondary);font-size:12px">—</span><span class="dag-node-label" style="font-size:12px">deploy-staging</span></div><div class="dag-node-duration" style="font-size:10px">—</div></div>
+              <div class="dag-controls"><button class="dag-control-btn" style="width:28px;height:28px;font-size:14px">+</button><button class="dag-control-btn" style="width:28px;height:28px;font-size:14px">−</button><button class="dag-control-btn" style="width:28px;height:28px;font-size:14px">⊡</button></div>
+            </div>
+            <div class="node-panel" style="width:300px;border-radius:0 var(--radius-2) var(--radius-2) 0;border:1px solid var(--border-1);border-left:2px solid var(--fg-danger);padding:var(--space-4);">
+              <div class="node-panel-title" style="font-size:14px;"><span style="color:var(--fg-danger)">✗</span> security-scan <button class="node-panel-close">×</button></div>
+              <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Phase</span><span class="badge badge-danger" style="font-size:10px">✗ Failed</span></div>
+              <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Type</span><span class="node-meta-value">Pod</span></div>
+              <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Duration</span><span class="node-meta-value mono" style="font-size:11px">47s</span></div>
+              <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Template</span><span class="node-meta-value">security-scan</span></div>
+              <div class="node-error" style="font-size:11px;">Error: CVE-2026-1234 found in dependency lodash@4.17.20 (severity: HIGH).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DIRECTION D: Tekton-Style Expandable ==================== -->
+<div class="section" id="dirD">
+  <div class="section-title">Direction D: Tekton-Style Expandable Rows</div>
+  <div class="section-desc">Workflow list with expand button per row. Expanding reveals the DAG inline below the row — same pattern as the Tekton plugin. Node status summary dots in the table row provide at-a-glance status.</div>
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <span class="title">Direction D — Tekton-Style: Expandable Rows with Inline DAG</span>
+    </div>
+    <div class="mockup-body">
+      <div class="bs-shell" style="min-height:700px;">
+        <div class="bs-sidebar">
+          <div class="bs-sidebar-item">Overview</div>
+          <div class="bs-sidebar-item">CI/CD</div>
+          <div class="bs-sidebar-item active">Argo Workflows</div>
+          <div class="bs-sidebar-item">Kubernetes</div>
+          <div class="bs-sidebar-item">Docs</div>
+        </div>
+        <div class="bs-main">
+          <div class="entity-header">
+            <div class="entity-kind">Service</div>
+            <div class="entity-name">payment-service</div>
+          </div>
+          <div class="entity-tabs">
+            <div class="entity-tab">Overview</div>
+            <div class="entity-tab active">Argo Workflows</div>
+            <div class="entity-tab">Kubernetes</div>
+          </div>
+          <div class="toolbar">
+            <input class="search-input" placeholder="Search workflows..." />
+            <div class="filter-chip active">All</div>
+            <div class="filter-chip">Succeeded</div>
+            <div class="filter-chip">Failed</div>
+            <div class="filter-chip">Running</div>
+            <div class="poll-indicator"><div class="poll-dot"></div> Updated 5s ago</div>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width:36px"></th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Node Status</th>
+                <th>Started</th>
+                <th>Duration</th>
+                <th>Namespace</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1: Failed — EXPANDED -->
+              <tr style="background:var(--bg-neutral-2);">
+                <td><button class="expand-btn open" onclick="toggleRow('d-row1')">▶</button></td>
+                <td><span class="name-link">payment-ci-pipeline-7f8a2</span></td>
+                <td><span class="badge badge-danger">✗ Failed</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot f">✗</div><div class="task-dot o">—</div></div></td>
+                <td class="mono">2 min ago</td>
+                <td class="mono">3m 47s</td>
+                <td>production</td>
+              </tr>
+              <tr class="expanded-row" id="d-row1">
+                <td colspan="7">
+                  <div class="expanded-content">
+                    <div class="dag-flow">
+                      <div class="dag-flow-header">
+                        <span class="wf-name">payment-ci-pipeline-7f8a2</span>
+                        <span class="badge badge-danger">✗ Failed</span>
+                        <span>Started: <span class="mono">14:22:54</span></span>
+                        <span>Duration: <span class="mono">3m 47s</span></span>
+                        <span>Namespace: production</span>
+                      </div>
+                      <div class="dag-inline">
+                        <div class="dag-h">
+                          <div class="dag-column">
+                            <div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">checkout</span></div><div class="dag-card-meta">12s</div></div>
+                          </div>
+                          <div class="dag-arrow success">→</div>
+                          <div class="dag-column">
+                            <div class="parallel-label">parallel</div>
+                            <div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">build</span></div><div class="dag-card-meta">1m 23s</div></div>
+                            <div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">unit-tests</span></div><div class="dag-card-meta">2m 05s</div></div>
+                          </div>
+                          <div class="dag-arrow success">→</div>
+                          <div class="dag-column">
+                            <div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">push-image</span></div><div class="dag-card-meta">34s</div></div>
+                          </div>
+                          <div class="dag-arrow danger">→</div>
+                          <div class="dag-column">
+                            <div class="parallel-label">parallel</div>
+                            <div class="dag-card failed selected"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-danger)">✗</span><span class="dag-card-name">security-scan</span></div><div class="dag-card-meta">47s</div></div>
+                            <div class="dag-card omitted"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-secondary)">—</span><span class="dag-card-name">deploy-staging</span></div><div class="dag-card-meta">—</div></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="node-detail-inline">
+                        <div class="node-detail-section">
+                          <div class="node-detail-title"><span style="color:var(--fg-danger)">✗</span> security-scan <button class="node-detail-close">×</button></div>
+                          <div class="meta-grid">
+                            <span class="meta-label">Phase</span><span><span class="badge badge-danger">✗ Failed</span></span>
+                            <span class="meta-label">Type</span><span class="meta-value">Pod</span>
+                            <span class="meta-label">Template</span><span class="meta-value">security-scan</span>
+                            <span class="meta-label">Started</span><span class="meta-value mono">14:23:41</span>
+                            <span class="meta-label">Finished</span><span class="meta-value mono">14:24:28</span>
+                            <span class="meta-label">Duration</span><span class="meta-value mono">47s</span>
+                          </div>
+                          <div class="node-error-box">Error: CVE-2026-1234 found in dependency lodash@4.17.20 (severity: HIGH). Policy requires no HIGH or CRITICAL vulnerabilities.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 2: Succeeded — collapsed -->
+              <tr>
+                <td><button class="expand-btn" onclick="toggleRow('d-row2')">▶</button></td>
+                <td><span class="name-link">payment-ci-pipeline-6e3b1</span></td>
+                <td><span class="badge badge-success">✓ Succeeded</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div></div></td>
+                <td class="mono">1 hour ago</td>
+                <td class="mono">5m 12s</td>
+                <td>production</td>
+              </tr>
+              <tr class="expanded-row" id="d-row2" style="display:none;">
+                <td colspan="7">
+                  <div class="expanded-content">
+                    <div class="dag-flow">
+                      <div class="dag-flow-header"><span class="wf-name">payment-ci-pipeline-6e3b1</span><span class="badge badge-success">✓ Succeeded</span><span>Duration: <span class="mono">5m 12s</span></span></div>
+                      <div class="dag-inline">
+                        <div class="dag-h">
+                          <div class="dag-column"><div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">checkout</span></div><div class="dag-card-meta">11s</div></div></div>
+                          <div class="dag-arrow success">→</div>
+                          <div class="dag-column"><div class="parallel-label">parallel</div><div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">build</span></div><div class="dag-card-meta">1m 20s</div></div><div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">unit-tests</span></div><div class="dag-card-meta">2m 01s</div></div></div>
+                          <div class="dag-arrow success">→</div>
+                          <div class="dag-column"><div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">push-image</span></div><div class="dag-card-meta">30s</div></div></div>
+                          <div class="dag-arrow success">→</div>
+                          <div class="dag-column"><div class="parallel-label">parallel</div><div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">security-scan</span></div><div class="dag-card-meta">42s</div></div><div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">deploy-staging</span></div><div class="dag-card-meta">1m 08s</div></div></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 3 -->
+              <tr>
+                <td><button class="expand-btn">▶</button></td>
+                <td><span class="name-link">payment-ci-pipeline-5d2c0</span></td>
+                <td><span class="badge badge-success">✓ Succeeded</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div></div></td>
+                <td class="mono">3 hours ago</td>
+                <td class="mono">4m 58s</td>
+                <td>production</td>
+              </tr>
+              <!-- Row 4: Running -->
+              <tr>
+                <td><button class="expand-btn">▶</button></td>
+                <td><span class="name-link">payment-deploy-staging-4c1b9</span></td>
+                <td><span class="badge badge-info">◌ Running</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot r">◌</div><div class="task-dot p">○</div><div class="task-dot p">○</div></div></td>
+                <td class="mono">5 min ago</td>
+                <td class="mono">2m 31s</td>
+                <td>staging</td>
+              </tr>
+              <!-- Row 5 -->
+              <tr>
+                <td><button class="expand-btn">▶</button></td>
+                <td><span class="name-link">payment-ci-pipeline-3a0a8</span></td>
+                <td><span class="badge badge-success">✓ Succeeded</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div></div></td>
+                <td class="mono">5 hours ago</td>
+                <td class="mono">5m 03s</td>
+                <td>production</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination">Showing 1–5 of 23 &nbsp; ◀ &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; ▶</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DIRECTION E: Expandable + Vertical DAG ==================== -->
+<div class="section" id="dirE">
+  <div class="section-title">Direction E: Expandable Rows + Vertical DAG</div>
+  <div class="section-desc">Tekton-style expandable rows from Direction D, but the expanded area shows a vertical top-to-bottom DAG with summary cards — combining D's familiar list pattern with C's rich visualization layout.</div>
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <span class="title">Direction E — Expandable Rows with Vertical DAG + Summary Cards</span>
+    </div>
+    <div class="mockup-body">
+      <div class="bs-shell" style="min-height:900px;">
+        <div class="bs-sidebar">
+          <div class="bs-sidebar-item">Overview</div>
+          <div class="bs-sidebar-item">CI/CD</div>
+          <div class="bs-sidebar-item active">Argo Workflows</div>
+          <div class="bs-sidebar-item">Kubernetes</div>
+          <div class="bs-sidebar-item">Docs</div>
+        </div>
+        <div class="bs-main">
+          <div class="entity-header">
+            <div class="entity-kind">Service</div>
+            <div class="entity-name">payment-service</div>
+          </div>
+          <div class="entity-tabs">
+            <div class="entity-tab">Overview</div>
+            <div class="entity-tab active">Argo Workflows</div>
+            <div class="entity-tab">Kubernetes</div>
+          </div>
+          <div class="toolbar">
+            <input class="search-input" placeholder="Search workflows..." />
+            <div class="filter-chip active">All</div>
+            <div class="filter-chip">Succeeded</div>
+            <div class="filter-chip">Failed</div>
+            <div class="filter-chip">Running</div>
+            <div class="poll-indicator"><div class="poll-dot"></div> Updated 5s ago</div>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width:36px"></th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Node Status</th>
+                <th>Started</th>
+                <th>Duration</th>
+                <th>Namespace</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1: Failed — EXPANDED with vertical DAG -->
+              <tr style="background:var(--bg-neutral-2);">
+                <td><button class="expand-btn open" onclick="toggleRow('e-row1')">▶</button></td>
+                <td><span class="name-link">payment-ci-pipeline-7f8a2</span></td>
+                <td><span class="badge badge-danger">✗ Failed</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot f">✗</div><div class="task-dot o">—</div></div></td>
+                <td class="mono">2 min ago</td>
+                <td class="mono">3m 47s</td>
+                <td>production</td>
+              </tr>
+              <tr class="expanded-row" id="e-row1">
+                <td colspan="7">
+                  <div class="expanded-content">
+
+                    <!-- Vertical DAG + Node detail side-by-side (from C layout) -->
+                    <div style="display:flex;gap:0;">
+                      <!-- Vertical DAG canvas -->
+                      <div class="dag-canvas" style="flex:1;min-height:380px;border-right:none;border-radius:var(--radius-2) 0 0 var(--radius-2);">
+                        <svg class="dag-edges" viewBox="0 0 500 380">
+                          <path class="dag-edge success" d="M 110 50 L 110 70 L 55 70 L 55 100"/>
+                          <path class="dag-edge success" d="M 110 50 L 110 70 L 170 70 L 170 100"/>
+                          <path class="dag-edge success" d="M 55 148 L 55 168 L 110 168 L 110 195"/>
+                          <path class="dag-edge success" d="M 170 148 L 170 168 L 110 168 L 110 195"/>
+                          <path class="dag-edge danger" d="M 110 243 L 110 263 L 55 263 L 55 290"/>
+                          <path class="dag-edge inactive" d="M 110 243 L 110 263 L 170 263 L 170 290"/>
+                        </svg>
+                        <div class="dag-node succeeded" style="left:42px;top:8px;min-width:140px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">checkout</span></div><div class="dag-node-duration" style="font-size:10px">12s</div></div>
+                        <div class="dag-node succeeded" style="left:0;top:100px;min-width:130px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">build</span></div><div class="dag-node-duration" style="font-size:10px">1m 23s</div></div>
+                        <div class="dag-node succeeded" style="left:145px;top:100px;min-width:130px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">unit-tests</span></div><div class="dag-node-duration" style="font-size:10px">2m 05s</div></div>
+                        <div class="dag-node succeeded" style="left:42px;top:195px;min-width:140px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">push-image</span></div><div class="dag-node-duration" style="font-size:10px">34s</div></div>
+                        <div class="dag-node failed selected" style="left:0;top:290px;min-width:130px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-danger);font-size:12px">✗</span><span class="dag-node-label" style="font-size:12px">security-scan</span></div><div class="dag-node-duration" style="font-size:10px">47s</div></div>
+                        <div class="dag-node omitted" style="left:145px;top:290px;min-width:130px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-secondary);font-size:12px">—</span><span class="dag-node-label" style="font-size:12px">deploy-staging</span></div><div class="dag-node-duration" style="font-size:10px">—</div></div>
+                        <div class="dag-controls"><button class="dag-control-btn" style="width:28px;height:28px;font-size:14px">+</button><button class="dag-control-btn" style="width:28px;height:28px;font-size:14px">−</button><button class="dag-control-btn" style="width:28px;height:28px;font-size:14px">⊡</button></div>
+                      </div>
+
+                      <!-- Node detail panel (from C) -->
+                      <div class="node-panel" style="width:300px;border-radius:0 var(--radius-2) var(--radius-2) 0;border:1px solid var(--border-1);border-left:2px solid var(--fg-danger);padding:var(--space-4);">
+                        <div class="node-panel-title" style="font-size:14px;"><span style="color:var(--fg-danger)">✗</span> security-scan <button class="node-panel-close">×</button></div>
+                        <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Phase</span><span class="badge badge-danger" style="font-size:10px">✗ Failed</span></div>
+                        <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Type</span><span class="node-meta-value">Pod</span></div>
+                        <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Started</span><span class="node-meta-value mono" style="font-size:11px">14:23:41</span></div>
+                        <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Finished</span><span class="node-meta-value mono" style="font-size:11px">14:24:28</span></div>
+                        <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Duration</span><span class="node-meta-value mono" style="font-size:11px">47s</span></div>
+                        <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Template</span><span class="node-meta-value">security-scan</span></div>
+                        <div class="node-error" style="font-size:11px;">Error: CVE-2026-1234 found in dependency lodash@4.17.20 (severity: HIGH). Policy requires no HIGH or CRITICAL vulnerabilities.</div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 2: Succeeded — collapsed -->
+              <tr>
+                <td><button class="expand-btn" onclick="toggleRow('e-row2')">▶</button></td>
+                <td><span class="name-link">payment-ci-pipeline-6e3b1</span></td>
+                <td><span class="badge badge-success">✓ Succeeded</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div></div></td>
+                <td class="mono">1 hour ago</td>
+                <td class="mono">5m 12s</td>
+                <td>production</td>
+              </tr>
+              <tr class="expanded-row" id="e-row2" style="display:none;">
+                <td colspan="7">
+                  <div class="expanded-content">
+                    <div class="dag-canvas" style="min-height:380px;">
+                      <svg class="dag-edges" viewBox="0 0 500 380">
+                        <path class="dag-edge success" d="M 110 50 L 110 70 L 55 70 L 55 100"/>
+                        <path class="dag-edge success" d="M 110 50 L 110 70 L 170 70 L 170 100"/>
+                        <path class="dag-edge success" d="M 55 148 L 55 168 L 110 168 L 110 195"/>
+                        <path class="dag-edge success" d="M 170 148 L 170 168 L 110 168 L 110 195"/>
+                        <path class="dag-edge success" d="M 110 243 L 110 263 L 55 263 L 55 290"/>
+                        <path class="dag-edge success" d="M 110 243 L 110 263 L 170 263 L 170 290"/>
+                      </svg>
+                      <div class="dag-node succeeded" style="left:42px;top:8px;min-width:140px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">checkout</span></div><div class="dag-node-duration" style="font-size:10px">11s</div></div>
+                      <div class="dag-node succeeded" style="left:0;top:100px;min-width:130px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">build</span></div><div class="dag-node-duration" style="font-size:10px">1m 20s</div></div>
+                      <div class="dag-node succeeded" style="left:145px;top:100px;min-width:130px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">unit-tests</span></div><div class="dag-node-duration" style="font-size:10px">2m 01s</div></div>
+                      <div class="dag-node succeeded" style="left:42px;top:195px;min-width:140px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">push-image</span></div><div class="dag-node-duration" style="font-size:10px">30s</div></div>
+                      <div class="dag-node succeeded" style="left:0;top:290px;min-width:130px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">security-scan</span></div><div class="dag-node-duration" style="font-size:10px">42s</div></div>
+                      <div class="dag-node succeeded" style="left:145px;top:290px;min-width:130px;"><div class="dag-node-top"><span class="dag-node-icon" style="color:var(--fg-success);font-size:12px">✓</span><span class="dag-node-label" style="font-size:12px">deploy-staging</span></div><div class="dag-node-duration" style="font-size:10px">1m 08s</div></div>
+                      <div class="dag-controls"><button class="dag-control-btn" style="width:28px;height:28px;font-size:14px">+</button><button class="dag-control-btn" style="width:28px;height:28px;font-size:14px">−</button><button class="dag-control-btn" style="width:28px;height:28px;font-size:14px">⊡</button></div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 3 -->
+              <tr>
+                <td><button class="expand-btn">▶</button></td>
+                <td><span class="name-link">payment-ci-pipeline-5d2c0</span></td>
+                <td><span class="badge badge-success">✓ Succeeded</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div></div></td>
+                <td class="mono">3 hours ago</td>
+                <td class="mono">4m 58s</td>
+                <td>production</td>
+              </tr>
+              <!-- Row 4: Running -->
+              <tr>
+                <td><button class="expand-btn">▶</button></td>
+                <td><span class="name-link">payment-deploy-staging-4c1b9</span></td>
+                <td><span class="badge badge-info">◌ Running</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot r">◌</div><div class="task-dot p">○</div><div class="task-dot p">○</div></div></td>
+                <td class="mono">5 min ago</td>
+                <td class="mono">2m 31s</td>
+                <td>staging</td>
+              </tr>
+              <!-- Row 5 -->
+              <tr>
+                <td><button class="expand-btn">▶</button></td>
+                <td><span class="name-link">payment-ci-pipeline-3a0a8</span></td>
+                <td><span class="badge badge-success">✓ Succeeded</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div></div></td>
+                <td class="mono">5 hours ago</td>
+                <td class="mono">5m 03s</td>
+                <td>production</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination">Showing 1–5 of 23 &nbsp; ◀ &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; ▶</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DIRECTION F: Expandable + Horizontal DAG + Panel ==================== -->
+<div class="section" id="dirF">
+  <div class="section-title">Direction F: Expandable Rows + Horizontal DAG + Side Panel</div>
+  <div class="section-desc">Tekton-style expandable rows with D's horizontal left-to-right DAG card flow, plus a node detail side panel. No summary cards, no page navigation — clean and compact.</div>
+  <div class="mockup-frame">
+    <div class="mockup-header">
+      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <span class="title">Direction F — Expandable Rows with Horizontal DAG + Side Panel</span>
+    </div>
+    <div class="mockup-body">
+      <div class="bs-shell" style="min-height:750px;">
+        <div class="bs-sidebar">
+          <div class="bs-sidebar-item">Overview</div>
+          <div class="bs-sidebar-item">CI/CD</div>
+          <div class="bs-sidebar-item active">Argo Workflows</div>
+          <div class="bs-sidebar-item">Kubernetes</div>
+          <div class="bs-sidebar-item">Docs</div>
+        </div>
+        <div class="bs-main">
+          <div class="entity-header">
+            <div class="entity-kind">Service</div>
+            <div class="entity-name">payment-service</div>
+          </div>
+          <div class="entity-tabs">
+            <div class="entity-tab">Overview</div>
+            <div class="entity-tab active">Argo Workflows</div>
+            <div class="entity-tab">Kubernetes</div>
+          </div>
+          <div class="toolbar">
+            <input class="search-input" placeholder="Search workflows..." />
+            <div class="filter-chip active">All</div>
+            <div class="filter-chip">Succeeded</div>
+            <div class="filter-chip">Failed</div>
+            <div class="filter-chip">Running</div>
+            <div class="poll-indicator"><div class="poll-dot"></div> Updated 5s ago</div>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width:36px"></th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Node Status</th>
+                <th>Started</th>
+                <th>Duration</th>
+                <th>Namespace</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1: Failed — EXPANDED -->
+              <tr style="background:var(--bg-neutral-2);">
+                <td><button class="expand-btn open" onclick="toggleRow('f-row1')">▶</button></td>
+                <td><span class="name-link">payment-ci-pipeline-7f8a2</span></td>
+                <td><span class="badge badge-danger">✗ Failed</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot f">✗</div><div class="task-dot o">—</div></div></td>
+                <td class="mono">2 min ago</td>
+                <td class="mono">3m 47s</td>
+                <td>production</td>
+              </tr>
+              <tr class="expanded-row" id="f-row1">
+                <td colspan="7">
+                  <div class="expanded-content">
+                    <div style="display:flex;gap:0;">
+                      <!-- Horizontal DAG (from D) -->
+                      <div class="dag-inline" style="flex:1;border-right:none;border-radius:var(--radius-2) 0 0 var(--radius-2);min-height:180px;">
+                        <div class="dag-h">
+                          <div class="dag-column">
+                            <div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">checkout</span></div><div class="dag-card-meta">12s</div></div>
+                          </div>
+                          <div class="dag-arrow success">→</div>
+                          <div class="dag-column">
+                            <div class="parallel-label">parallel</div>
+                            <div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">build</span></div><div class="dag-card-meta">1m 23s</div></div>
+                            <div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">unit-tests</span></div><div class="dag-card-meta">2m 05s</div></div>
+                          </div>
+                          <div class="dag-arrow success">→</div>
+                          <div class="dag-column">
+                            <div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">push-image</span></div><div class="dag-card-meta">34s</div></div>
+                          </div>
+                          <div class="dag-arrow danger">→</div>
+                          <div class="dag-column">
+                            <div class="parallel-label">parallel</div>
+                            <div class="dag-card failed selected"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-danger)">✗</span><span class="dag-card-name">security-scan</span></div><div class="dag-card-meta">47s</div></div>
+                            <div class="dag-card omitted"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-secondary)">—</span><span class="dag-card-name">deploy-staging</span></div><div class="dag-card-meta">—</div></div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Side panel (from E/C) -->
+                      <div class="node-panel" style="width:300px;border-radius:0 var(--radius-2) var(--radius-2) 0;border:1px solid var(--border-1);border-left:2px solid var(--fg-danger);padding:var(--space-4);">
+                        <div class="node-panel-title" style="font-size:14px;"><span style="color:var(--fg-danger)">✗</span> security-scan <button class="node-panel-close">×</button></div>
+                        <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Phase</span><span class="badge badge-danger" style="font-size:10px">✗ Failed</span></div>
+                        <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Type</span><span class="node-meta-value">Pod</span></div>
+                        <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Started</span><span class="node-meta-value mono" style="font-size:11px">14:23:41</span></div>
+                        <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Finished</span><span class="node-meta-value mono" style="font-size:11px">14:24:28</span></div>
+                        <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Duration</span><span class="node-meta-value mono" style="font-size:11px">47s</span></div>
+                        <div class="node-meta-row" style="font-size:12px;"><span class="node-meta-label">Template</span><span class="node-meta-value">security-scan</span></div>
+                        <div class="node-error" style="font-size:11px;">Error: CVE-2026-1234 found in dependency lodash@4.17.20 (severity: HIGH). Policy requires no HIGH or CRITICAL vulnerabilities.</div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 2: Succeeded — collapsed -->
+              <tr>
+                <td><button class="expand-btn" onclick="toggleRow('f-row2')">▶</button></td>
+                <td><span class="name-link">payment-ci-pipeline-6e3b1</span></td>
+                <td><span class="badge badge-success">✓ Succeeded</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div></div></td>
+                <td class="mono">1 hour ago</td>
+                <td class="mono">5m 12s</td>
+                <td>production</td>
+              </tr>
+              <tr class="expanded-row" id="f-row2" style="display:none;">
+                <td colspan="7">
+                  <div class="expanded-content">
+                    <div class="dag-inline">
+                      <div class="dag-h">
+                        <div class="dag-column"><div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">checkout</span></div><div class="dag-card-meta">11s</div></div></div>
+                        <div class="dag-arrow success">→</div>
+                        <div class="dag-column"><div class="parallel-label">parallel</div><div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">build</span></div><div class="dag-card-meta">1m 20s</div></div><div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">unit-tests</span></div><div class="dag-card-meta">2m 01s</div></div></div>
+                        <div class="dag-arrow success">→</div>
+                        <div class="dag-column"><div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">push-image</span></div><div class="dag-card-meta">30s</div></div></div>
+                        <div class="dag-arrow success">→</div>
+                        <div class="dag-column"><div class="parallel-label">parallel</div><div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">security-scan</span></div><div class="dag-card-meta">42s</div></div><div class="dag-card succeeded"><div class="dag-card-top"><span class="dag-card-icon" style="color:var(--fg-success)">✓</span><span class="dag-card-name">deploy-staging</span></div><div class="dag-card-meta">1m 08s</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 3 -->
+              <tr>
+                <td><button class="expand-btn">▶</button></td>
+                <td><span class="name-link">payment-ci-pipeline-5d2c0</span></td>
+                <td><span class="badge badge-success">✓ Succeeded</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div></div></td>
+                <td class="mono">3 hours ago</td>
+                <td class="mono">4m 58s</td>
+                <td>production</td>
+              </tr>
+              <!-- Row 4: Running -->
+              <tr>
+                <td><button class="expand-btn">▶</button></td>
+                <td><span class="name-link">payment-deploy-staging-4c1b9</span></td>
+                <td><span class="badge badge-info">◌ Running</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot r">◌</div><div class="task-dot p">○</div><div class="task-dot p">○</div></div></td>
+                <td class="mono">5 min ago</td>
+                <td class="mono">2m 31s</td>
+                <td>staging</td>
+              </tr>
+              <!-- Row 5 -->
+              <tr>
+                <td><button class="expand-btn">▶</button></td>
+                <td><span class="name-link">payment-ci-pipeline-3a0a8</span></td>
+                <td><span class="badge badge-success">✓ Succeeded</span></td>
+                <td><div class="task-status"><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div><div class="task-dot s">✓</div></div></td>
+                <td class="mono">5 hours ago</td>
+                <td class="mono">5m 03s</td>
+                <td>production</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination">Showing 1–5 of 23 &nbsp; ◀ &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; ▶</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== COMPARE ==================== -->
+<div class="section" id="compare">
+  <div class="section-title">Direction Comparison</div>
+  <div class="section-desc">Side-by-side evaluation of all four layout directions against our experience principles.</div>
+  <div class="mockup-frame">
+    <div class="mockup-body" style="padding:var(--space-6);">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Criterion</th>
+            <th>A: Full-Width</th>
+            <th>B: Split Panel</th>
+            <th>C: Compact</th>
+            <th>D: Tekton-Style</th>
+            <th>E: Expand+Vertical ⭐</th>
+            <th>F: Expand+Horiz+Panel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>DAG canvas size</strong></td>
+            <td><span class="badge badge-success">✓ Maximum</span></td>
+            <td><span class="badge badge-warning">○ Reduced</span></td>
+            <td><span class="badge badge-danger">✗ Smallest</span></td>
+            <td><span class="badge badge-warning">○ Row-width</span></td>
+            <td><span class="badge badge-success">✓ Full row-width</span></td>
+            <td><span class="badge badge-warning">○ Row-width</span></td>
+          </tr>
+          <tr>
+            <td><strong>Context preservation</strong></td>
+            <td><span class="badge badge-warning">○ Panel occludes</span></td>
+            <td><span class="badge badge-success">✓ Both visible</span></td>
+            <td><span class="badge badge-success">✓ Both visible</span></td>
+            <td><span class="badge badge-success">✓ Inline below row</span></td>
+            <td><span class="badge badge-success">✓ DAG + panel inline</span></td>
+            <td><span class="badge badge-success">✓ DAG + panel inline</span></td>
+          </tr>
+          <tr>
+            <td><strong>List + DAG in one view</strong></td>
+            <td><span class="badge badge-danger">✗ Separate page</span></td>
+            <td><span class="badge badge-danger">✗ Separate page</span></td>
+            <td><span class="badge badge-danger">✗ Separate page</span></td>
+            <td><span class="badge badge-success">✓ Same view</span></td>
+            <td><span class="badge badge-success">✓ Same view</span></td>
+            <td><span class="badge badge-success">✓ Same view</span></td>
+          </tr>
+          <tr>
+            <td><strong>Large workflow comfort</strong></td>
+            <td><span class="badge badge-success">✓ Best</span></td>
+            <td><span class="badge badge-success">✓ Good</span></td>
+            <td><span class="badge badge-warning">○ Tight</span></td>
+            <td><span class="badge badge-warning">○ Horizontal scroll</span></td>
+            <td><span class="badge badge-success">✓ Vertical + zoom</span></td>
+            <td><span class="badge badge-warning">○ Horizontal scroll</span></td>
+          </tr>
+          <tr>
+            <td><strong>Incident response speed</strong></td>
+            <td><span class="badge badge-warning">○ Need panel</span></td>
+            <td><span class="badge badge-success">✓ Click → see</span></td>
+            <td><span class="badge badge-success">✓ Everything visible</span></td>
+            <td><span class="badge badge-success">✓ Expand → see</span></td>
+            <td><span class="badge badge-success">✓ Expand → all info</span></td>
+            <td><span class="badge badge-success">✓ Expand → all info</span></td>
+          </tr>
+          <tr>
+            <td><strong>Tekton plugin familiarity</strong></td>
+            <td><span class="badge badge-danger">✗ Different</span></td>
+            <td><span class="badge badge-danger">✗ Different</span></td>
+            <td><span class="badge badge-danger">✗ Different</span></td>
+            <td><span class="badge badge-success">✓ Same pattern</span></td>
+            <td><span class="badge badge-success">✓ Same pattern</span></td>
+            <td><span class="badge badge-success">✓ Same pattern</span></td>
+          </tr>
+          <tr>
+            <td><strong>No page navigation needed</strong></td>
+            <td><span class="badge badge-danger">✗ Drill-down</span></td>
+            <td><span class="badge badge-danger">✗ Drill-down</span></td>
+            <td><span class="badge badge-danger">✗ Drill-down</span></td>
+            <td><span class="badge badge-success">✓ Expand in place</span></td>
+            <td><span class="badge badge-success">✓ Expand in place</span></td>
+            <td><span class="badge badge-success">✓ Expand in place</span></td>
+          </tr>
+          <tr>
+            <td><strong>True DAG topology visible</strong></td>
+            <td><span class="badge badge-success">✓ Full graph</span></td>
+            <td><span class="badge badge-success">✓ Full graph</span></td>
+            <td><span class="badge badge-success">✓ Full graph</span></td>
+            <td><span class="badge badge-warning">○ Linearized</span></td>
+            <td><span class="badge badge-success">✓ Full graph</span></td>
+            <td><span class="badge badge-warning">○ Linearized</span></td>
+          </tr>
+          <tr>
+            <td><strong>Summary cards</strong></td>
+            <td><span class="badge badge-danger">✗ No</span></td>
+            <td><span class="badge badge-danger">✗ No</span></td>
+            <td><span class="badge badge-success">✓ Yes</span></td>
+            <td><span class="badge badge-danger">✗ No</span></td>
+            <td><span class="badge badge-danger">✗ No</span></td>
+            <td><span class="badge badge-danger">✗ No</span></td>
+          </tr>
+          <tr>
+            <td><strong>Implementation complexity</strong></td>
+            <td><span class="badge badge-warning">○ Overlay</span></td>
+            <td><span class="badge badge-success">✓ Simple flex</span></td>
+            <td><span class="badge badge-warning">○ Grid</span></td>
+            <td><span class="badge badge-success">✓ Expandable row</span></td>
+            <td><span class="badge badge-warning">○ Expand + React Flow</span></td>
+            <td><span class="badge badge-success">✓ Expand + cards</span></td>
+          </tr>
+          <tr>
+            <td><strong>Compact vertical footprint</strong></td>
+            <td><span class="badge badge-warning">○ Full page</span></td>
+            <td><span class="badge badge-warning">○ Full page</span></td>
+            <td><span class="badge badge-warning">○ Full page</span></td>
+            <td><span class="badge badge-success">✓ Compact</span></td>
+            <td><span class="badge badge-warning">○ Tall expanded</span></td>
+            <td><span class="badge badge-success">✓ Compact</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:var(--space-6);padding:var(--space-4);background:var(--bg-info);border-radius:var(--radius-2);">
+        <div style="font-weight:600;color:var(--fg-info);margin-bottom:var(--space-2);">⭐ Direction E: Expandable Rows + Vertical DAG (D + C hybrid)</div>
+        <div style="font-size:13px;color:var(--fg-info);">
+          Combines the best of both worlds. The Tekton-familiar expandable row pattern keeps list and DAG in one view with no page navigation. The vertical top-to-bottom DAG renders true graph topology with parallel branches side-by-side — unlike D's linearized horizontal flow. The node detail panel sits alongside the DAG for context preservation. Handles large workflows with zoom/pan/minimap controls inside the expanded area.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+function toggleRow(id) {
+  const row = document.getElementById(id);
+  const btn = row.previousElementSibling.querySelector('.expand-btn');
+  if (row.style.display === 'none') {
+    row.style.display = '';
+    btn.classList.add('open');
+  } else {
+    row.style.display = 'none';
+    btn.classList.remove('open');
+  }
+}
+function toggleTheme() {
+  if (document.body.hasAttribute('data-theme')) {
+    document.body.removeAttribute('data-theme');
+  } else {
+    document.body.setAttribute('data-theme', 'dark');
+  }
+}
+</script>
+</body>
+</html>

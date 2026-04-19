@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: argo-workflows-plugins
+  description: Argo Workflows plugins for Backstage
+spec:
+  type: backstage-workspace
+  lifecycle: experimental
+  owner: backstage-community
