@@ -1,15 +1,5 @@
 # @backstage-community/plugin-argo-workflows-common
 
-Shared types, API references, and utilities for the Argo Workflows Backstage plugin.
+Welcome to the common package for the argo-workflows plugin!
 
-## Installation
-
-```bash
-yarn add @backstage-community/plugin-argo-workflows-common
-```
-
-## Usage
-
-```typescript
-import { PLUGIN_ID } from '@backstage-community/plugin-argo-workflows-common';
-```
+_This plugin was created through the Backstage CLI_

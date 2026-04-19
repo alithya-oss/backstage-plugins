@@ -13,4 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { argoWorkflowsPlugin as default } from './plugin';
+import { createDevApp } from '@backstage/frontend-dev-utils';
+
+import plugin from '../src';
+
+createDevApp({ features: [plugin] });

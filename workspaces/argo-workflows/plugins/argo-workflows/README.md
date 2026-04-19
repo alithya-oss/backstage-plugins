@@ -1,26 +1,20 @@
-# @backstage-community/plugin-argo-workflows
+# argo-workflows
 
-Frontend plugin for viewing Argo Workflow executions in Backstage, featuring a Tekton-style expandable row layout with horizontal DAG card flow visualization.
+Welcome to the argo-workflows plugin!
 
-## Installation
+_This plugin was created through the Backstage CLI_
 
-```bash
-yarn add @backstage-community/plugin-argo-workflows
-```
+## Getting started
 
-## Usage
+Your plugin has been added to the app in this repository, meaning you'll be able
+to access it by running `yarn start` in the root directory, and then navigating
+to [/argo-workflows](http://localhost:3000/argo-workflows).
 
-Add the plugin to your entity page:
+This plugin is built with Backstage's [frontend
+system](https://backstage.io/docs/frontend-system/architecture/index), and you
+can find more information about building plugins in the [plugin builder
+documentation](https://backstage.io/docs/frontend-system/building-plugins/index).
 
-```tsx
-// packages/app/src/components/catalog/EntityPage.tsx
-import { EntityArgoWorkflowsContent } from '@backstage-community/plugin-argo-workflows';
-
-const serviceEntityPage = (
-  <EntityLayout>
-    <EntityLayout.Route path="/argo-workflows" title="Argo Workflows">
-      <EntityArgoWorkflowsContent />
-    </EntityLayout.Route>
-  </EntityLayout>
-);
-```
+You can also serve the plugin in isolation by running `yarn start` in the plugin directory.
+This method of serving the plugin provides quicker iteration speed and a faster startup and hot reloads.
+It is only meant for local development, and the setup for it can be found inside the [/dev](./dev) directory.

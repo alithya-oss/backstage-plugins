@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {
   coreServices,
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
 import { createRouter } from './router';
+import { todoListServiceRef } from './services/TodoListService';
 
-/** @public */
+/**
+ * argoWorkflowsPlugin backend plugin
+ *
+ * @public
+ */
 export const argoWorkflowsPlugin = createBackendPlugin({
   pluginId: 'argo-workflows',
   register(env) {

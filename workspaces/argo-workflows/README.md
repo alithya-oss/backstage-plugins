@@ -1,30 +1,16 @@
-# Argo Workflows Plugins for Backstage
+# [Backstage](https://backstage.io)
 
-This workspace contains the Argo Workflows plugins for Backstage, providing workflow execution observability directly in the Backstage service catalog.
+This is your newly scaffolded Backstage App, Good Luck!
 
-## Packages
+To start the app, run:
 
-| Package | Description |
-|---------|-------------|
-| [`@backstage-community/plugin-argo-workflows-common`](./plugins/argo-workflows-common/) | Shared types, API refs, and utilities |
-| [`@backstage-community/plugin-argo-workflows`](./plugins/argo-workflows/) | Frontend plugin with workflow list and DAG visualization |
-| [`@backstage-community/plugin-argo-workflows-backend`](./plugins/argo-workflows-backend/) | Backend plugin for K8s CRD fetching |
-
-## Development
-
-```bash
-# Install dependencies
+```sh
 yarn install
-
-# Start the dev app
 yarn start
+```
 
-# Build all packages
-yarn build:all
+To generate knip reports for this app, run:
 
-# Run tests
-yarn test
-
-# Lint
-yarn lint:all
+```sh
+yarn backstage-repo-tools knip-reports
 ```

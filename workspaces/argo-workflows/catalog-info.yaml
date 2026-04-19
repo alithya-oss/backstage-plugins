@@ -1,9 +1,14 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: argo-workflows-plugins
-  description: Argo Workflows plugins for Backstage
+  name: argo-workflows
+  description: An example of a Backstage application.
+  # Example for optional annotations
+  # annotations:
+  #   github.com/project-slug: backstage/backstage
+  #   backstage.io/techdocs-ref: dir:.
 spec:
-  type: backstage-workspace
+  type: website
+  owner: john@example.com
   lifecycle: experimental
-  owner: backstage-community
+  
