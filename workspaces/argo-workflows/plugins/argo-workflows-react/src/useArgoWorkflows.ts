@@ -21,8 +21,8 @@ import {
   argoWorkflowsApiRef,
   ARGO_WORKFLOWS_NAMESPACE_ANNOTATION,
   ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION,
-} from '@backstage-community/plugin-argo-workflows-common';
-import type { WorkflowSummary } from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import type { WorkflowSummary } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { usePolling } from './usePolling';
 
 const POLL_INTERVAL_MS = 30000;

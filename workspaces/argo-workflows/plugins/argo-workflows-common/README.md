@@ -1,4 +1,4 @@
-# @backstage-community/plugin-argo-workflows-common
+# @alithya-oss/backstage-plugin-argo-workflows-common
 
 Shared types, utilities, and API reference for the Argo Workflows plugin. Used by both the frontend and backend packages.
 
@@ -7,7 +7,7 @@ Shared types, utilities, and API reference for the Argo Workflows plugin. Used b
 This package is typically installed automatically as a dependency of the frontend or backend plugin. If needed directly:
 
 ```bash
-yarn add @backstage-community/plugin-argo-workflows-common
+yarn add @alithya-oss/backstage-plugin-argo-workflows-common
 ```
 
 ## Exports

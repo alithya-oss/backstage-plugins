@@ -16,7 +16,7 @@
 
 import type { LoggerService } from '@backstage/backend-plugin-api';
 import type { Config } from '@backstage/config';
-import type { WorkflowDetail, WorkflowSummary } from '@backstage-community/plugin-argo-workflows-common';
+import type { WorkflowDetail, WorkflowSummary } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { mapCrdListToWorkflowSummaries, mapCrdToWorkflowDetail } from '../mappers';
 
 /** @public */

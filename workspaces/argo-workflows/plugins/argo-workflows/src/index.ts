@@ -30,3 +30,5 @@ export { ArgoWorkflowsApiClient, ArgoWorkflowsError } from './api';
 export { usePolling, useArgoWorkflows } from './hooks';
 
 export { argoWorkflowsTranslationRef } from './translation';
+
+export {computeDAGLayout, type ComputeDAGLayoutOptions} from './utils/computeDAGLayout'

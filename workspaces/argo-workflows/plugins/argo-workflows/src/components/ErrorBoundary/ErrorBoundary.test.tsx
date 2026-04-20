@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import { render, screen } from '@testing-library/react';
 import { ErrorBoundary } from './ErrorBoundary';
 

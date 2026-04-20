@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import { render, screen, fireEvent } from '@testing-library/react';
-import type { WorkflowSummary } from '@backstage-community/plugin-argo-workflows-common';
+import type { WorkflowSummary } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import {
   ExpandButton,
   WorkflowExpandedContent,

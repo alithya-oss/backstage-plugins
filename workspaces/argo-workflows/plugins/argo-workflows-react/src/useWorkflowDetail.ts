@@ -19,7 +19,7 @@ import { useApi } from '@backstage/core-plugin-api';
 import {
   argoWorkflowsApiRef,
   type WorkflowDetail,
-} from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { usePolling } from './usePolling';
 
 const DETAIL_POLL_INTERVAL_MS = 5000;

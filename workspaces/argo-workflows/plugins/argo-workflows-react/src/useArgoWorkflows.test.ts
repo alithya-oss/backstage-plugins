@@ -17,7 +17,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { useApi } from '@backstage/core-plugin-api';
 import type { Entity } from '@backstage/catalog-model';
-import type { WorkflowSummary } from '@backstage-community/plugin-argo-workflows-common';
+import type { WorkflowSummary } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { useArgoWorkflows } from './useArgoWorkflows';
 
 jest.mock('@backstage/core-plugin-api', () => ({

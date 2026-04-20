@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import { useEntity } from '@backstage/plugin-catalog-react';
 import {
   ARGO_WORKFLOWS_NAMESPACE_ANNOTATION,
   ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION,
-} from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { useArgoWorkflows } from '../hooks';
 import { WorkflowTable } from './WorkflowTable';
 import { WorkflowEmptyState } from './EmptyState';

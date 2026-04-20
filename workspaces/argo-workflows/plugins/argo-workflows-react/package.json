@@ -1,5 +1,5 @@
 {
-  "name": "@backstage-community/plugin-argo-workflows-react",
+  "name": "@alithya-oss/backstage-plugin-argo-workflows-react",
   "version": "0.1.0",
   "license": "Apache-2.0",
   "description": "Shared hooks and utilities for the argo-workflows plugin",
@@ -20,10 +20,10 @@
     "role": "web-library",
     "pluginId": "argo-workflows",
     "pluginPackages": [
-      "@backstage-community/plugin-argo-workflows-common",
-      "@backstage-community/plugin-argo-workflows-react",
-      "@backstage-community/plugin-argo-workflows",
-      "@backstage-community/plugin-argo-workflows-backend"
+      "@alithya-oss/backstage-plugin-argo-workflows-common",
+      "@alithya-oss/backstage-plugin-argo-workflows-react",
+      "@alithya-oss/backstage-plugin-argo-workflows",
+      "@alithya-oss/backstage-plugin-argo-workflows-backend"
     ]
   },
   "sideEffects": false,
@@ -37,7 +37,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage-community/plugin-argo-workflows-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-argo-workflows-common": "workspace:^",
     "@backstage/catalog-model": "backstage:^",
     "@backstage/core-plugin-api": "backstage:^"
   },

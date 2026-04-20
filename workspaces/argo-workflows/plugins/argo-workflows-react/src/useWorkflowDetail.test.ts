@@ -19,7 +19,7 @@ import { useApi } from '@backstage/core-plugin-api';
 import type {
   WorkflowDetail,
   WorkflowPhase,
-} from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { useWorkflowDetail } from './useWorkflowDetail';
 
 jest.mock('@backstage/core-plugin-api', () => ({

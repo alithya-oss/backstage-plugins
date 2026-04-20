@@ -1,5 +1,5 @@
 {
-  "name": "@backstage-community/plugin-argo-workflows-common",
+  "name": "@alithya-oss/backstage-plugin-argo-workflows-common",
   "version": "0.1.0",
   "license": "Apache-2.0",
   "private": true,
@@ -21,10 +21,10 @@
     "role": "common-library",
     "pluginId": "argo-workflows",
     "pluginPackages": [
-      "@backstage-community/plugin-argo-workflows-common",
-      "@backstage-community/plugin-argo-workflows-react",
-      "@backstage-community/plugin-argo-workflows",
-      "@backstage-community/plugin-argo-workflows-backend"
+      "@alithya-oss/backstage-plugin-argo-workflows-common",
+      "@alithya-oss/backstage-plugin-argo-workflows-react",
+      "@alithya-oss/backstage-plugin-argo-workflows",
+      "@alithya-oss/backstage-plugin-argo-workflows-backend"
     ]
   },
   "sideEffects": false,

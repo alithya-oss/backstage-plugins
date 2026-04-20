@@ -15,7 +15,7 @@
  */
 
 import { computeDAGLayout } from './computeDAGLayout';
-import type { NodeStatus } from '@backstage-community/plugin-argo-workflows-common';
+import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 
 function makeNode(
   id: string,

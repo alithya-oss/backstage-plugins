@@ -15,4 +15,4 @@
  */
 
 /** @public */
-export { usePolling } from '@backstage-community/plugin-argo-workflows-react';
+export { usePolling } from '@alithya-oss/backstage-plugin-argo-workflows-react';

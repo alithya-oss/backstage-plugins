@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import styles from './DAGArrow.module.css';
 
 /**

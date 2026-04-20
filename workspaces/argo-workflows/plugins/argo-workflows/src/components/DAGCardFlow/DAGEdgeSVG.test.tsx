@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import { render, screen } from '@testing-library/react';
-import type { LayoutEdge, NodeStatus } from '@backstage-community/plugin-argo-workflows-common';
+import type { LayoutEdge, NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { DAGEdgeSVG } from './DAGEdgeSVG';
 
 function makeNode(id: string, phase: string = 'Succeeded'): NodeStatus {

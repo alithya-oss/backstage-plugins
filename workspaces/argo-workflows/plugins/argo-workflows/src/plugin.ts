@@ -21,7 +21,7 @@ import {
   discoveryApiRef,
   fetchApiRef,
 } from '@backstage/core-plugin-api';
-import { argoWorkflowsApiRef } from '@backstage-community/plugin-argo-workflows-common';
+import { argoWorkflowsApiRef } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { ArgoWorkflowsApiClient } from './api';
 import { rootRouteRef, dagViewRouteRef } from './routes';
 

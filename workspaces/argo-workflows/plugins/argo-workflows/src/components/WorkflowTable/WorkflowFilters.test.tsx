@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
+import type { WorkflowPhase } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { WorkflowFilters } from './WorkflowFilters';
 
 describe('WorkflowFilters', () => {
   const defaultProps = {
-    phases: [] as string[],
+    phases: [] as WorkflowPhase[],
     onPhasesChange: jest.fn(),
     searchText: '',
     onSearchChange: jest.fn(),

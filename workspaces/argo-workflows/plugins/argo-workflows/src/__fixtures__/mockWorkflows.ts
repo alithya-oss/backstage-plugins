@@ -18,7 +18,7 @@ import type {
   WorkflowSummary,
   WorkflowDetail,
   NodeStatus,
-} from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 
 /* ------------------------------------------------------------------ */
 /*  Helper: deterministic ISO timestamps relative to a fixed anchor   */

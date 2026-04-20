@@ -22,7 +22,7 @@ import type {
   WorkflowDetail,
   WorkflowPhase,
   WorkflowSummary,
-} from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 
 const BOUNDARY_NODE_TYPES = new Set(['DAG', 'Steps', 'StepGroup']);
 

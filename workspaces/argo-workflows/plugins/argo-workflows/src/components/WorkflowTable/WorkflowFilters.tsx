@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import classNames from 'classnames';
-import type { WorkflowPhase } from '@backstage-community/plugin-argo-workflows-common';
+import type { WorkflowPhase } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import styles from './WorkflowFilters.module.css';
 
 const FILTER_PHASES: WorkflowPhase[] = [

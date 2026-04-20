@@ -1,18 +1,18 @@
-# @backstage-community/plugin-argo-workflows-backend
+# @alithya-oss/backstage-plugin-argo-workflows-backend
 
 Backend plugin that fetches Argo Workflow CRDs from Kubernetes and exposes them as REST endpoints with permission-controlled access.
 
 ## Installation
 
 ```bash
-yarn --cwd packages/backend add @backstage-community/plugin-argo-workflows-backend
+yarn --cwd packages/backend add @alithya-oss/backstage-plugin-argo-workflows-backend
 ```
 
 ## Setup
 
 ```typescript
 // packages/backend/src/index.ts
-backend.add(import('@backstage-community/plugin-argo-workflows-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-argo-workflows-backend'));
 ```
 
 ### Kubernetes Configuration
@@ -46,7 +46,7 @@ The plugin integrates with the Backstage permission framework. All data routes c
 To restrict access, define a permission policy:
 
 ```typescript
-import { argoWorkflowsReadPermission } from '@backstage-community/plugin-argo-workflows-common';
+import { argoWorkflowsReadPermission } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { isPermission, AuthorizeResult } from '@backstage/plugin-permission-common';
 
 class MyPermissionPolicy implements PermissionPolicy {

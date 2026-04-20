@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import { render, screen } from '@testing-library/react';
-import type { NodeStatusSummary } from '@backstage-community/plugin-argo-workflows-common';
+import type { NodeStatusSummary } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { NodeStatusDots } from './NodeStatusDots';
 
 function makeNodes(

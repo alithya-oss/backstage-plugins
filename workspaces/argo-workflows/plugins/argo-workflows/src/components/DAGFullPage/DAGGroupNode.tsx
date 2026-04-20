@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import { Handle, Position, type NodeProps } from '@xyflow/react';
-import type { DAGGroup } from '@backstage-community/plugin-argo-workflows-common';
+import type { DAGGroup } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import styles from './DAGGroupNode.module.css';
 
 /**

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { renderInTestApp } from '@backstage/test-utils';
-import type { WorkflowSummary } from '@backstage-community/plugin-argo-workflows-common';
+import type { WorkflowSummary } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { WorkflowTable } from './WorkflowTable';
 
 const mockWorkflows: WorkflowSummary[] = [

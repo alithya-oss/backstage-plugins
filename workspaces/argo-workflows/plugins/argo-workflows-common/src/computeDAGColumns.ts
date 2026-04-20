@@ -24,9 +24,8 @@ const BOUNDARY_TYPES = new Set(['DAG', 'Steps', 'StepGroup']);
  * Uses Kahn's algorithm (BFS topological sort) to group nodes by execution stage.
  * Boundary nodes (DAG, Steps, StepGroup) are filtered out — only execution nodes appear.
  *
- * @deprecated Use {@link computeDAGLayout} from `./computeDAGLayout` instead.
+ * @deprecated Use the dagre-based layout function from the frontend plugin instead.
  * This function returns column-based grouping without x/y positions.
- * `computeDAGLayout` returns precise positions using dagre.
  *
  * @public
  */

@@ -22,7 +22,7 @@ import type {
 import type { Config } from '@backstage/config';
 import { NotAllowedError } from '@backstage/errors';
 import { AuthorizeResult } from '@backstage/plugin-permission-common';
-import { argoWorkflowsReadPermission } from '@backstage-community/plugin-argo-workflows-common';
+import { argoWorkflowsReadPermission } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import express from 'express';
 import Router from 'express-promise-router';
 import { ArgoWorkflowsService } from './service';

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import type { NodeStatusSummary } from '@backstage-community/plugin-argo-workflows-common';
-import { PHASE_ICON_MAP } from '@backstage-community/plugin-argo-workflows-common';
+
+import type { NodeStatusSummary } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import { PHASE_ICON_MAP } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import styles from './NodeStatusDots.module.css';
 
 /**

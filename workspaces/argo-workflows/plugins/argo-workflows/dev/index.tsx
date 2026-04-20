@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import { createDevApp } from '@backstage/dev-utils';
 import { ApiProvider, ConfigReader } from '@backstage/core-app-api';
 import { TestApiRegistry } from '@backstage/test-utils';
@@ -32,8 +32,8 @@ import type {
   ArgoWorkflowsApi,
   WorkflowSummary,
   WorkflowDetail,
-} from '@backstage-community/plugin-argo-workflows-common';
-import { argoWorkflowsApiRef } from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import { argoWorkflowsApiRef } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import {
   mockWorkflowSummaries,
   mockWorkflowDetails,

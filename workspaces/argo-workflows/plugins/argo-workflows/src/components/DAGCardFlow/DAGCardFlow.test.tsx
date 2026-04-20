@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import { render, screen, fireEvent } from '@testing-library/react';
-import type { NodeStatus } from '@backstage-community/plugin-argo-workflows-common';
+import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { DAGCardFlow } from './DAGCardFlow';
 
 function makeNode(

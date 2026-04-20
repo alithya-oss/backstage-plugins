@@ -18,7 +18,7 @@ import {
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
 import { createRouter } from './router';
-import { argoWorkflowsReadPermission } from '@backstage-community/plugin-argo-workflows-common';
+import { argoWorkflowsReadPermission } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 
 /**
  * argoWorkflowsPlugin backend plugin

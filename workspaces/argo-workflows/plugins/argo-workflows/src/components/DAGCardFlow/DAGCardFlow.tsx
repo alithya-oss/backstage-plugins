@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import type { NodeStatus, DAGColumn } from '@backstage-community/plugin-argo-workflows-common';
-import { computeDAGColumns } from '@backstage-community/plugin-argo-workflows-common';
+import { Fragment } from 'react';
+import type { NodeStatus, DAGColumn } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import { computeDAGColumns } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { DAGNodeCard } from './DAGNodeCard';
 import { DAGArrow, type ArrowStatus } from './DAGArrow';
 import styles from './DAGCardFlow.module.css';
@@ -85,7 +85,7 @@ export function DAGCardFlow({
       aria-label={buildFlowAriaLabel(columns)}
     >
       {columns.map((column, colIndex) => (
-        <React.Fragment key={colIndex}>
+        <Fragment key={colIndex}>
           {colIndex > 0 && (
             <DAGArrow status={getArrowStatus(columns[colIndex - 1])} />
           )}
@@ -102,7 +102,7 @@ export function DAGCardFlow({
               />
             ))}
           </div>
-        </React.Fragment>
+        </Fragment>
       ))}
     </div>
   );

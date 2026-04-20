@@ -19,7 +19,7 @@ import type {
   ArgoWorkflowsApi,
   WorkflowDetail,
   WorkflowSummary,
-} from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 
 /** @public */
 export class ArgoWorkflowsError extends Error {

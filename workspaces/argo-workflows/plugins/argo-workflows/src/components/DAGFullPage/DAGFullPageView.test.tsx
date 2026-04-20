@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { DAGFullPageView } from './DAGFullPageView';
@@ -39,7 +39,7 @@ jest.mock('@xyflow/react', () => ({
 }));
 
 jest.mock('../NodeDetailPanel', () => ({
-  NodeDetailPanel: ({ node, onClose }: any) => (
+  NodeDetailPanel: ({ node }: any) => (
     <div data-testid="mock-panel">{node.displayName}</div>
   ),
 }));

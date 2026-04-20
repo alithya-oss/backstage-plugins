@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import type { NodeStatus } from '@backstage-community/plugin-argo-workflows-common';
+
+import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import {
   PHASE_ICON_MAP,
   formatDuration,
-} from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import styles from './DAGNodeCard.module.css';
 
 /**

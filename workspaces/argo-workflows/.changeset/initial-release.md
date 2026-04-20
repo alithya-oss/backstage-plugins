@@ -1,7 +1,7 @@
 ---
-'@backstage-community/plugin-argo-workflows-common': minor
-'@backstage-community/plugin-argo-workflows': minor
-'@backstage-community/plugin-argo-workflows-backend': minor
+'@alithya-oss/backstage-plugin-argo-workflows-common': minor
+'@alithya-oss/backstage-plugin-argo-workflows': minor
+'@alithya-oss/backstage-plugin-argo-workflows-backend': minor
 ---
 
 Initial release of the Argo Workflows plugin for Backstage.

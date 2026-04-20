@@ -37,8 +37,8 @@ import {
 import type {
   WorkflowSummary,
   WorkflowPhase,
-} from '@backstage-community/plugin-argo-workflows-common';
-import { formatDuration } from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import { formatDuration } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import {
   ExpandButton,
   WorkflowExpandedContent,
@@ -234,8 +234,8 @@ export function WorkflowTable({
           <Cell>
             <ExpandButton
               isExpanded={expandedId === item.id}
-              onToggle={() => handleToggleExpand(item.id)}
-              workflowId={item.id}
+              onToggle={() => handleToggleExpand(String(item.id))}
+              workflowId={String(item.id)}
             />
           </Cell>
         ),

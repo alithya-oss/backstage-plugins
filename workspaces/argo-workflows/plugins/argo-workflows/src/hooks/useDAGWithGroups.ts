@@ -16,8 +16,8 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import type { Node as RFNode, Edge as RFEdge } from '@xyflow/react';
-import type { NodeStatus } from '@backstage-community/plugin-argo-workflows-common';
-import { decompressNodes } from '@backstage-community/plugin-argo-workflows-common';
+import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import { decompressNodes } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { computeDAGLayout } from '../utils/computeDAGLayout';
 
 /**

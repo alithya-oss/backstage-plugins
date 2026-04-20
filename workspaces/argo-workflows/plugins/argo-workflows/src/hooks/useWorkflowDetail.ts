@@ -15,4 +15,4 @@
  */
 
 /** @public */
-export { useWorkflowDetail } from '@backstage-community/plugin-argo-workflows-react';
+export { useWorkflowDetail } from '@alithya-oss/backstage-plugin-argo-workflows-react';

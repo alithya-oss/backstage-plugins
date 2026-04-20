@@ -21,10 +21,10 @@ Visualize and monitor [Argo Workflows](https://argoproj.github.io/workflows/) di
 
 | Package | Description |
 |---------|-------------|
-| [`@backstage-community/plugin-argo-workflows`](./plugins/argo-workflows/) | Frontend plugin (React components, hooks, API client) |
-| [`@backstage-community/plugin-argo-workflows-backend`](./plugins/argo-workflows-backend/) | Backend plugin (K8s CRD fetching, REST routes, permissions) |
-| [`@backstage-community/plugin-argo-workflows-common`](./plugins/argo-workflows-common/) | Shared types, utilities, API ref, status mapping, permissions |
-| [`@backstage-community/plugin-argo-workflows-react`](./plugins/argo-workflows-react/) | Reusable hooks for third-party plugins |
+| [`@alithya-oss/backstage-plugin-argo-workflows`](./plugins/argo-workflows/) | Frontend plugin (React components, hooks, API client) |
+| [`@alithya-oss/backstage-plugin-argo-workflows-backend`](./plugins/argo-workflows-backend/) | Backend plugin (K8s CRD fetching, REST routes, permissions) |
+| [`@alithya-oss/backstage-plugin-argo-workflows-common`](./plugins/argo-workflows-common/) | Shared types, utilities, API ref, status mapping, permissions |
+| [`@alithya-oss/backstage-plugin-argo-workflows-react`](./plugins/argo-workflows-react/) | Reusable hooks for third-party plugins |
 
 ## Quick Start
 
@@ -54,7 +54,7 @@ metadata:
 The plugin supports the Backstage permission framework. Define a policy for `argo-workflows.workflow.read` to control access:
 
 ```typescript
-import { argoWorkflowsReadPermission } from '@backstage-community/plugin-argo-workflows-common';
+import { argoWorkflowsReadPermission } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 ```
 
 See the [backend README](./plugins/argo-workflows-backend/README.md) for configuration details.

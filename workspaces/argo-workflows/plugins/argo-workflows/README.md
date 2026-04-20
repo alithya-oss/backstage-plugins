@@ -1,18 +1,18 @@
-# @backstage-community/plugin-argo-workflows
+# @alithya-oss/backstage-plugin-argo-workflows
 
 Frontend plugin for viewing Argo Workflows in Backstage. Provides a workflow list table with expandable DAG visualization, full-page DAG view, node detail panel, and status indicators.
 
 ## Installation
 
 ```bash
-yarn --cwd packages/app add @backstage-community/plugin-argo-workflows
+yarn --cwd packages/app add @alithya-oss/backstage-plugin-argo-workflows
 ```
 
 ## Setup (Legacy Frontend System)
 
 ```tsx
 // packages/app/src/components/catalog/EntityPage.tsx
-import { EntityArgoWorkflowsContent } from '@backstage-community/plugin-argo-workflows';
+import { EntityArgoWorkflowsContent } from '@alithya-oss/backstage-plugin-argo-workflows';
 
 <EntityLayout.Route path="/argo-workflows" title="Argo Workflows">
   <EntityArgoWorkflowsContent />
@@ -36,7 +36,7 @@ Click "Full View ↗" on any inline DAG to open the full-page view at `/argo-wor
 All user-facing strings are translatable. To override:
 
 ```tsx
-import { argoWorkflowsTranslationRef } from '@backstage-community/plugin-argo-workflows';
+import { argoWorkflowsTranslationRef } from '@alithya-oss/backstage-plugin-argo-workflows';
 
 // In your app, provide custom translations:
 const app = createApp({

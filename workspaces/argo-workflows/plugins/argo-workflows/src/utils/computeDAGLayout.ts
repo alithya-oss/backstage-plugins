@@ -20,7 +20,7 @@ import type {
   NodeStatus,
   PositionedNode,
   LayoutEdge,
-} from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 
 const BOUNDARY_TYPES = new Set(['DAG', 'Steps', 'StepGroup']);
 const DEFAULT_NODE_WIDTH = 180;

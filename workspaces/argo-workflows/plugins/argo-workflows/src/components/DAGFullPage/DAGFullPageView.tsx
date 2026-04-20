@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ReactFlow,
@@ -27,7 +27,7 @@ import {
   getSmoothStepPath,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import type { NodeStatus } from '@backstage-community/plugin-argo-workflows-common';
+import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { useWorkflowDetail } from '../../hooks';
 import { useDAGWithGroups } from '../../hooks/useDAGWithGroups';
 import { DAGNodeCard } from '../DAGCardFlow/DAGNodeCard';

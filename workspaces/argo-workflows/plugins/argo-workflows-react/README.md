@@ -1,11 +1,11 @@
-# @backstage-community/plugin-argo-workflows-react
+# @alithya-oss/backstage-plugin-argo-workflows-react
 
 Reusable React hooks for the Argo Workflows plugin. Third-party plugins can depend on this package to access workflow data without pulling in the full frontend plugin.
 
 ## Installation
 
 ```bash
-yarn add @backstage-community/plugin-argo-workflows-react
+yarn add @alithya-oss/backstage-plugin-argo-workflows-react
 ```
 
 ## Hooks
@@ -15,7 +15,7 @@ yarn add @backstage-community/plugin-argo-workflows-react
 Fetches the workflow list for a Backstage entity based on its annotations.
 
 ```typescript
-import { useArgoWorkflows } from '@backstage-community/plugin-argo-workflows-react';
+import { useArgoWorkflows } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 
 const { workflows, loading, error, lastUpdated } = useArgoWorkflows(entity);
 ```
@@ -36,7 +36,7 @@ Polls at 30-second intervals automatically.
 Fetches a single workflow's full detail with polling.
 
 ```typescript
-import { useWorkflowDetail } from '@backstage-community/plugin-argo-workflows-react';
+import { useWorkflowDetail } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 
 const { workflow, loading, error } = useWorkflowDetail('production', 'my-workflow');
 ```
@@ -57,7 +57,7 @@ Polls at 5-second intervals for running workflows. Stops on terminal states.
 Generic polling hook used internally by the other hooks.
 
 ```typescript
-import { usePolling } from '@backstage-community/plugin-argo-workflows-react';
+import { usePolling } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 
 const { data, loading, error, lastUpdated } = usePolling(
   () => fetchSomething(),

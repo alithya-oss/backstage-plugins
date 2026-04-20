@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import React, { useMemo } from 'react';
-import type { NodeStatus } from '@backstage-community/plugin-argo-workflows-common';
+import { useMemo } from 'react';
+import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { computeDAGLayout } from '../../utils/computeDAGLayout';
 import { DAGNodeCard } from './DAGNodeCard';
 import { DAGEdgeSVG } from './DAGEdgeSVG';
