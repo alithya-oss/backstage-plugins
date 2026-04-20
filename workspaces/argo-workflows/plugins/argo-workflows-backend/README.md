@@ -1,6 +1,6 @@
 # @backstage-community/plugin-argo-workflows-backend
 
-Backend plugin that fetches Argo Workflow CRDs from Kubernetes and exposes them as REST endpoints for the frontend plugin.
+Backend plugin that fetches Argo Workflow CRDs from Kubernetes and exposes them as REST endpoints with permission-controlled access.
 
 ## Installation
 
@@ -10,8 +10,6 @@ yarn --cwd packages/backend add @backstage-community/plugin-argo-workflows-backe
 
 ## Setup
 
-Register the plugin in your backend:
-
 ```typescript
 // packages/backend/src/index.ts
 backend.add(import('@backstage-community/plugin-argo-workflows-backend'));
@@ -19,9 +17,8 @@ backend.add(import('@backstage-community/plugin-argo-workflows-backend'));
 
 ### Kubernetes Configuration
 
-Configure Argo Workflow CRDs as custom resources in `app-config.yaml`:
-
 ```yaml
+# app-config.yaml
 kubernetes:
   customResources:
     - group: argoproj.io
@@ -30,8 +27,6 @@ kubernetes:
 ```
 
 ### RBAC Requirements
-
-The Backstage service account needs these permissions:
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -42,24 +37,34 @@ rules:
   - apiGroups: ["argoproj.io"]
     resources: ["workflows"]
     verbs: ["get", "list"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: backstage-argo-workflows
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: backstage-argo-workflows
-subjects:
-  - kind: ServiceAccount
-    name: backstage
-    namespace: backstage
 ```
+
+## Permission Framework
+
+The plugin integrates with the Backstage permission framework. All data routes check `argo-workflows.workflow.read` permission.
+
+To restrict access, define a permission policy:
+
+```typescript
+import { argoWorkflowsReadPermission } from '@backstage-community/plugin-argo-workflows-common';
+import { isPermission, AuthorizeResult } from '@backstage/plugin-permission-common';
+
+class MyPermissionPolicy implements PermissionPolicy {
+  async handle(request, user) {
+    if (isPermission(request.permission, argoWorkflowsReadPermission)) {
+      // Your authorization logic here
+      return { result: AuthorizeResult.ALLOW };
+    }
+    return { result: AuthorizeResult.ALLOW };
+  }
+}
+```
+
+By default (no policy configured), all authenticated users have access.
 
 ## API Routes
 
-All routes require Backstage authentication (except `/health`).
+All routes require Backstage authentication (except `/health`). All data routes require `argo-workflows.workflow.read` permission.
 
 | Route | Method | Description |
 |-------|--------|-------------|
