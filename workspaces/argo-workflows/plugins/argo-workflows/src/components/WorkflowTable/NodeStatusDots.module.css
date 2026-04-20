@@ -45,4 +45,18 @@
     color: var(--bui-fg-tertiary);
     font-size: 13px;
   }
+
+  .bar {
+    border-radius: 2px;
+    display: flex;
+    height: 16px;
+    min-width: 100px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .segment {
+    min-width: 2px;
+    transition: width 0.2s ease;
+  }
 }

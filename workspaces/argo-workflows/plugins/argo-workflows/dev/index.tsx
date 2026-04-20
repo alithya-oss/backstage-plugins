@@ -83,7 +83,11 @@ class MockArgoWorkflowsApiClient implements ArgoWorkflowsApi {
 }
 
 const apis = TestApiRegistry.from(
-  [configApiRef, new ConfigReader({})],
+  [configApiRef, new ConfigReader({
+    argoWorkflows: {
+      nodeStatusStyle: 'bar',
+    },
+  })],
   [argoWorkflowsApiRef, new MockArgoWorkflowsApiClient()],
   [discoveryApiRef, { getBaseUrl: async () => 'http://localhost:7007/api' }],
   [fetchApiRef, { fetch: globalThis.fetch.bind(globalThis) }],
@@ -96,7 +100,7 @@ createDevApp()
     title: 'Workflows (with labels)',
     element: (
       <ApiProvider apis={apis}>
-        <EntityProvider entity={entityWithAnnotations}>
+        <EntityProvider entity={entityWithAnnotations} key="with-labels">
           <EntityArgoWorkflowsContent />
         </EntityProvider>
       </ApiProvider>
@@ -107,7 +111,7 @@ createDevApp()
     title: 'Workflows (all)',
     element: (
       <ApiProvider apis={apis}>
-        <EntityProvider entity={entityNamespaceOnly}>
+        <EntityProvider entity={entityNamespaceOnly} key="all">
           <EntityArgoWorkflowsContent />
         </EntityProvider>
       </ApiProvider>
@@ -118,7 +122,7 @@ createDevApp()
     title: 'Workflows (empty)',
     element: (
       <ApiProvider apis={apis}>
-        <EntityProvider entity={entityWithoutAnnotations}>
+        <EntityProvider entity={entityWithoutAnnotations} key="empty">
           <EntityArgoWorkflowsContent />
         </EntityProvider>
       </ApiProvider>

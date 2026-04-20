@@ -23,6 +23,7 @@
     "url": "https://github.com/backstage/community-plugins",
     "directory": "workspaces/argo-workflows/plugins/argo-workflows"
   },
+  "configSchema": "config.d.ts",
   "backstage": {
     "role": "frontend-plugin",
     "pluginId": "argo-workflows",

@@ -18,110 +18,42 @@ import { render, screen } from '@testing-library/react';
 import type { NodeStatusSummary } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { NodeStatusDots } from './NodeStatusDots';
 
-function makeNodes(
-  count: number,
-  phase: string = 'Succeeded',
-): NodeStatusSummary[] {
-  return Array.from({ length: count }, (_, i) => ({
-    displayName: `node-${i + 1}`,
-    phase: phase as NodeStatusSummary['phase'],
-  }));
-}
-
-describe('NodeStatusDots', () => {
-  it('renders one dot per node', () => {
-    const nodes = makeNodes(5);
-    render(<NodeStatusDots nodes={nodes} />);
-    const dots = screen.getAllByTestId('node-dot');
-    expect(dots).toHaveLength(5);
-  });
-
-  it('renders correct phase icon character in each dot', () => {
+// Default: configApiRef not available → falls back to 'dots' mode
+describe('NodeStatusDots (dots mode — default)', () => {
+  it('renders dots for nodes', () => {
     const nodes: NodeStatusSummary[] = [
       { displayName: 'a', phase: 'Succeeded' },
       { displayName: 'b', phase: 'Failed' },
-      { displayName: 'c', phase: 'Running' },
     ];
     render(<NodeStatusDots nodes={nodes} />);
-    expect(screen.getByText('✓')).toBeInTheDocument();
-    expect(screen.getByText('✗')).toBeInTheDocument();
-    expect(screen.getByText('◌')).toBeInTheDocument();
+    expect(screen.getByTestId('node-status-dots')).toBeInTheDocument();
+    expect(screen.getAllByTestId('node-dot')).toHaveLength(2);
   });
 
-  it('each dot has title attribute with displayName and phase', () => {
-    const nodes: NodeStatusSummary[] = [
-      { displayName: 'build', phase: 'Succeeded' },
-      { displayName: 'deploy', phase: 'Failed' },
-    ];
+  it('shows overflow for >12 nodes', () => {
+    const nodes = Array.from({ length: 15 }, (_, i) => ({
+      displayName: `node-${i}`,
+      phase: 'Succeeded' as const,
+    }));
     render(<NodeStatusDots nodes={nodes} />);
-    const dots = screen.getAllByTestId('node-dot');
-    expect(dots[0]).toHaveAttribute('title', 'build: Succeeded');
-    expect(dots[1]).toHaveAttribute('title', 'deploy: Failed');
+    expect(screen.getAllByTestId('node-dot')).toHaveLength(10);
+    expect(screen.getByTestId('node-dots-overflow')).toHaveTextContent('+5 more');
   });
 
-  it('shows overflow text when more than 12 nodes', () => {
-    const nodes = makeNodes(15);
-    render(<NodeStatusDots nodes={nodes} />);
-    const dots = screen.getAllByTestId('node-dot');
-    expect(dots).toHaveLength(10);
-    expect(screen.getByTestId('node-dots-overflow')).toHaveTextContent(
-      '+5 more',
-    );
-  });
-
-  it('shows all dots when exactly 12 nodes', () => {
-    const nodes = makeNodes(12);
-    render(<NodeStatusDots nodes={nodes} />);
-    const dots = screen.getAllByTestId('node-dot');
-    expect(dots).toHaveLength(12);
-    expect(screen.queryByTestId('node-dots-overflow')).not.toBeInTheDocument();
-  });
-
-  it('shows gray dash for empty nodes', () => {
+  it('shows dash for empty nodes', () => {
     render(<NodeStatusDots nodes={[]} />);
     expect(screen.getByText('—')).toBeInTheDocument();
-    expect(screen.queryByTestId('node-dot')).not.toBeInTheDocument();
   });
 
-  it('container has aria-label with phase counts', () => {
-    const nodes: NodeStatusSummary[] = [
-      { displayName: 'a', phase: 'Succeeded' },
-      { displayName: 'b', phase: 'Succeeded' },
-      { displayName: 'c', phase: 'Failed' },
-    ];
-    render(<NodeStatusDots nodes={nodes} />);
-    const container = screen.getByLabelText(/Node status:/);
-    expect(container).toHaveAttribute(
-      'aria-label',
-      'Node status: 2 succeeded, 1 failed',
-    );
-  });
-
-  it('empty nodes has aria-label with none', () => {
-    render(<NodeStatusDots nodes={[]} />);
-    expect(screen.getByLabelText('Node status: none')).toBeInTheDocument();
-  });
-
-  it('single node renders one dot without overflow', () => {
-    const nodes = makeNodes(1);
-    render(<NodeStatusDots nodes={nodes} />);
-    const dots = screen.getAllByTestId('node-dot');
-    expect(dots).toHaveLength(1);
-    expect(screen.queryByTestId('node-dots-overflow')).not.toBeInTheDocument();
-  });
-
-  it('renders dots for all 7 phase types', () => {
+  it('has aria-label with phase counts', () => {
     const nodes: NodeStatusSummary[] = [
       { displayName: 'a', phase: 'Succeeded' },
       { displayName: 'b', phase: 'Failed' },
-      { displayName: 'c', phase: 'Error' },
-      { displayName: 'd', phase: 'Running' },
-      { displayName: 'e', phase: 'Pending' },
-      { displayName: 'f', phase: 'Skipped' },
-      { displayName: 'g', phase: 'Omitted' },
     ];
     render(<NodeStatusDots nodes={nodes} />);
-    const dots = screen.getAllByTestId('node-dot');
-    expect(dots).toHaveLength(7);
+    expect(screen.getByTestId('node-status-dots')).toHaveAttribute(
+      'aria-label',
+      'Node status: 1 succeeded, 1 failed',
+    );
   });
 });

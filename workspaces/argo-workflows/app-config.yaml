@@ -23,3 +23,9 @@ kubernetes:
     - group: 'argoproj.io'
       apiVersion: 'v1alpha1'
       plural: 'workflows'
+
+argoWorkflows:
+  # Node status visualization style in the workflow table.
+  # 'dots' (default): colored squares, one per node
+  # 'bar': horizontal stacked bar proportional to phase counts
+  nodeStatusStyle: bar
