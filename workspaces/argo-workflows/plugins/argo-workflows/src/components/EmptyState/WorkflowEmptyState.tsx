@@ -56,7 +56,9 @@ function classifyError(error: Error): ClassifiedAlert {
         severity: 'danger',
         title: 'Access Denied',
         message:
-          'The Backstage service account needs get and list permissions on workflows.argoproj.io.',
+          error.message.includes('permission')
+            ? 'You don\'t have permission to view Argo Workflows for this entity. Contact your Backstage administrator.'
+            : 'The Backstage service account needs get and list permissions on workflows.argoproj.io.',
       };
     }
     if (error.statusCode === 502 || error.statusCode === 504) {

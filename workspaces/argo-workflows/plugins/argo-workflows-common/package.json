@@ -38,7 +38,8 @@
   },
   "dependencies": {
     "@backstage/catalog-model": "^1.7.7",
-    "@backstage/core-plugin-api": "^1.12.4"
+    "@backstage/core-plugin-api": "^1.12.4",
+    "@backstage/plugin-permission-common": "^0.9.8"
   },
   "devDependencies": {
     "@backstage/cli": "^0.36.0"

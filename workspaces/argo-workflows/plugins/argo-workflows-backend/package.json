@@ -41,6 +41,8 @@
     "@backstage/catalog-client": "^1.14.0",
     "@backstage/errors": "^1.2.7",
     "@backstage/plugin-catalog-node": "^2.1.0",
+    "@backstage/plugin-permission-common": "^0.9.8",
+    "@backstage/plugin-permission-node": "^0.10.12",
     "@backstage/types": "^1.2.2",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",

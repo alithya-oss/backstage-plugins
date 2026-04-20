@@ -54,3 +54,8 @@ export { formatDuration } from './duration';
 export { computeDAGColumns } from './computeDAGColumns';
 
 export { decompressNodes } from './decompressNodes';
+
+export {
+  argoWorkflowsReadPermission,
+  argoWorkflowsPermissions,
+} from './permissions';

@@ -17,8 +17,12 @@
 import type {
   HttpAuthService,
   LoggerService,
+  PermissionsService,
 } from '@backstage/backend-plugin-api';
 import type { Config } from '@backstage/config';
+import { NotAllowedError } from '@backstage/errors';
+import { AuthorizeResult } from '@backstage/plugin-permission-common';
+import { argoWorkflowsReadPermission } from '@backstage-community/plugin-argo-workflows-common';
 import express from 'express';
 import Router from 'express-promise-router';
 import { ArgoWorkflowsService } from './service';
@@ -29,16 +33,33 @@ export interface RouterOptions {
   logger: LoggerService;
   config: Config;
   httpAuth: HttpAuthService;
+  permissions: PermissionsService;
 }
 
 /** @public */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { logger, config } = options;
+  const { logger, config, httpAuth, permissions } = options;
   const router = Router();
 
   const service = new ArgoWorkflowsService({ logger, config });
+
+  /** Check read permission for the current request. */
+  async function checkReadPermission(req: express.Request): Promise<void> {
+    const credentials = await httpAuth.credentials(req);
+    const decision = (
+      await permissions.authorize(
+        [{ permission: argoWorkflowsReadPermission }],
+        { credentials },
+      )
+    )[0];
+    if (decision.result === AuthorizeResult.DENY) {
+      throw new NotAllowedError(
+        'You do not have permission to view Argo Workflows data.',
+      );
+    }
+  }
 
   router.get('/health', (_, response) => {
     response.json({ status: 'ok' });
@@ -53,6 +74,7 @@ export async function createRouter(
     const offset = Math.max(0, rawOffset);
 
     try {
+      await checkReadPermission(req);
       const workflows = await service.listWorkflows(namespace, {
         labelSelector,
         limit,
@@ -60,6 +82,12 @@ export async function createRouter(
       });
       res.json(workflows);
     } catch (err: any) {
+      if (err instanceof NotAllowedError) {
+        res.status(403).json({
+          error: { message: err.message, code: 'PERMISSION_DENIED', statusCode: 403 },
+        });
+        return;
+      }
       const statusCode = (err as ServiceError).statusCode ?? 500;
       const code = (err as ServiceError).code ?? 'INTERNAL_ERROR';
       const message = err.message ?? 'An unexpected error occurred';
@@ -73,9 +101,16 @@ export async function createRouter(
     const { namespace, name } = req.params;
 
     try {
+      await checkReadPermission(req);
       const workflow = await service.getWorkflow(namespace, name);
       res.json(workflow);
     } catch (err: any) {
+      if (err instanceof NotAllowedError) {
+        res.status(403).json({
+          error: { message: err.message, code: 'PERMISSION_DENIED', statusCode: 403 },
+        });
+        return;
+      }
       const statusCode = (err as ServiceError).statusCode ?? 500;
       const code = (err as ServiceError).code ?? 'INTERNAL_ERROR';
       const message = err.message ?? 'An unexpected error occurred';

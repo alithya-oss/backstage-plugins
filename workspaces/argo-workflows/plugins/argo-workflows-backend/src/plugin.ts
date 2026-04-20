@@ -18,7 +18,7 @@ import {
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
 import { createRouter } from './router';
-import { todoListServiceRef } from './services/TodoListService';
+import { argoWorkflowsReadPermission } from '@backstage-community/plugin-argo-workflows-common';
 
 /**
  * argoWorkflowsPlugin backend plugin
@@ -34,10 +34,13 @@ export const argoWorkflowsPlugin = createBackendPlugin({
         httpRouter: coreServices.httpRouter,
         httpAuth: coreServices.httpAuth,
         config: coreServices.rootConfig,
+        permissions: coreServices.permissions,
+        permissionsRegistry: coreServices.permissionsRegistry,
       },
-      async init({ logger, httpRouter, httpAuth, config }) {
+      async init({ logger, httpRouter, httpAuth, config, permissions, permissionsRegistry }) {
+        permissionsRegistry.addPermissions([argoWorkflowsReadPermission]);
         httpRouter.use(
-          await createRouter({ logger, config, httpAuth }),
+          await createRouter({ logger, config, httpAuth, permissions }),
         );
         httpRouter.addAuthPolicy({
           path: '/health',

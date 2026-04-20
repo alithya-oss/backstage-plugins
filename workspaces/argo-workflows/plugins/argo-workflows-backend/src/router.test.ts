@@ -49,6 +49,10 @@ const mockHttpAuth = {
   issueUserCookie: jest.fn(),
 };
 
+const mockPermissions = {
+  authorize: jest.fn().mockResolvedValue([{ result: 'ALLOW' }]),
+};
+
 const config = new ConfigReader({});
 
 async function createApp() {
@@ -56,6 +60,7 @@ async function createApp() {
     logger: mockLogger as any,
     config,
     httpAuth: mockHttpAuth as any,
+    permissions: mockPermissions as any,
   });
   const app = express();
   app.use(router);
@@ -80,6 +85,13 @@ describe('createRouter', () => {
   });
 
   describe('GET /workflows/:namespace', () => {
+    it('returns 403 when permission is denied', async () => {
+      mockPermissions.authorize.mockResolvedValueOnce([{ result: 'DENY' }]);
+      const app = await createApp();
+      const res = await request(app).get('/workflows/production');
+      expect(res.status).toBe(403);
+    });
+
     it('returns 200 with WorkflowSummary array', async () => {
       const workflows = [
         {
