@@ -27,10 +27,10 @@
     "role": "frontend-plugin",
     "pluginId": "argo-workflows",
     "pluginPackages": [
-      "@alithya-oss/backstage-plugin-argo-workflows-common",
-      "@alithya-oss/backstage-plugin-argo-workflows-react",
       "@alithya-oss/backstage-plugin-argo-workflows",
-      "@alithya-oss/backstage-plugin-argo-workflows-backend"
+      "@alithya-oss/backstage-plugin-argo-workflows-backend",
+      "@alithya-oss/backstage-plugin-argo-workflows-common",
+      "@alithya-oss/backstage-plugin-argo-workflows-react"
     ]
   },
   "sideEffects": false,
