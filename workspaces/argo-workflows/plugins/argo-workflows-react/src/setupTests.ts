@@ -13,6 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/** @public */
-export { useWorkflowDetail } from '@backstage-community/plugin-argo-workflows-react';
+import '@testing-library/jest-dom';

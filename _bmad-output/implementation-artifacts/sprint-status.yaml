@@ -93,8 +93,8 @@ development_status:
   epic-5-retrospective: optional
 
   # Epic 6: Platform Integration & i18n
-  epic-6: backlog
-  6-1-argo-workflows-react-package: backlog
+  epic-6: in-progress
+  6-1-argo-workflows-react-package: done
   6-2-backstage-permission-framework: backlog
   6-3-new-frontend-system-support: backlog
   6-4-i18n-translation-support: backlog

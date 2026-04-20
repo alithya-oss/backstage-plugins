@@ -20,6 +20,7 @@
     "pluginId": "argo-workflows",
     "pluginPackages": [
       "@backstage-community/plugin-argo-workflows-common",
+      "@backstage-community/plugin-argo-workflows-react",
       "@backstage-community/plugin-argo-workflows",
       "@backstage-community/plugin-argo-workflows-backend"
     ]
@@ -36,6 +37,7 @@
   },
   "dependencies": {
     "@backstage-community/plugin-argo-workflows-common": "workspace:^",
+    "@backstage-community/plugin-argo-workflows-react": "workspace:^",
     "@backstage/catalog-model": "^1.7.7",
     "@backstage/core-components": "^0.18.8",
     "@backstage/core-plugin-api": "^1.12.4",

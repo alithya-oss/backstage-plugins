@@ -20,6 +20,7 @@
     "pluginId": "argo-workflows",
     "pluginPackages": [
       "@backstage-community/plugin-argo-workflows-common",
+      "@backstage-community/plugin-argo-workflows-react",
       "@backstage-community/plugin-argo-workflows",
       "@backstage-community/plugin-argo-workflows-backend"
     ]

@@ -14,5 +14,12 @@
  * limitations under the License.
  */
 
-/** @public */
-export { useWorkflowDetail } from '@backstage-community/plugin-argo-workflows-react';
+/**
+ * Shared hooks for the Argo Workflows Backstage plugin.
+ *
+ * @packageDocumentation
+ */
+
+export { usePolling } from './usePolling';
+export { useArgoWorkflows } from './useArgoWorkflows';
+export { useWorkflowDetail } from './useWorkflowDetail';
