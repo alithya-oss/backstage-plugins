@@ -15,6 +15,7 @@
  */
 
 import { createDevApp } from '@backstage/dev-utils';
+import '@backstage/ui/css/styles.css';
 import { ApiProvider, ConfigReader } from '@backstage/core-app-api';
 import { TestApiRegistry } from '@backstage/test-utils';
 import { EntityProvider } from '@backstage/plugin-catalog-react';
