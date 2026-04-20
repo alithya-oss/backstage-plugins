@@ -22,8 +22,6 @@ import {
   Controls,
   Handle,
   Position,
-  type Node as RFNode,
-  type Edge as RFEdge,
   type NodeProps,
   type EdgeProps,
   getSmoothStepPath,
@@ -31,9 +29,10 @@ import {
 import '@xyflow/react/dist/style.css';
 import type { NodeStatus } from '@backstage-community/plugin-argo-workflows-common';
 import { useWorkflowDetail } from '../../hooks';
-import { computeDAGLayout } from '../../utils/computeDAGLayout';
+import { useDAGWithGroups } from '../../hooks/useDAGWithGroups';
 import { DAGNodeCard } from '../DAGCardFlow/DAGNodeCard';
 import { NodeDetailPanel } from '../NodeDetailPanel';
+import { DAGGroupNode } from './DAGGroupNode';
 import styles from './DAGFullPageView.module.css';
 
 const FAILURE_PHASES = new Set(['Failed', 'Error']);
@@ -92,7 +91,7 @@ function DAGCustomEdge({
   );
 }
 
-const nodeTypes = { dagNode: DAGCustomNode };
+const nodeTypes = { dagNode: DAGCustomNode, dagGroup: DAGGroupNode };
 const edgeTypes = { dagEdge: DAGCustomEdge };
 
 /**
@@ -127,44 +126,21 @@ export function DAGFullPageView() {
     return () => document.removeEventListener('keydown', handler);
   }, [selectedNodeId]);
 
-  const layout = useMemo(
-    () => (workflow ? computeDAGLayout(workflow.nodes) : null),
-    [workflow],
+  const { rfNodes, rfEdges } = useDAGWithGroups(
+    workflow?.nodes ?? [],
+    { selectedNodeId: selectedNodeId ?? undefined, onNodeClick: handleNodeClick },
   );
 
-  const rfNodes: RFNode[] = useMemo(() => {
-    if (!layout) return [];
-    return layout.nodes.map(pn => ({
-      id: pn.id,
-      position: { x: pn.x, y: pn.y },
-      type: 'dagNode' as const,
-      data: {
-        node: pn.data,
-        isSelected: pn.id === selectedNodeId,
-        onNodeClick: handleNodeClick,
-      },
-    }));
-  }, [layout, selectedNodeId, handleNodeClick]);
-
+  // Build nodeMap for panel lookup
   const nodeMap = useMemo(() => {
-    if (!layout) return new Map<string, NodeStatus>();
     const map = new Map<string, NodeStatus>();
-    for (const pn of layout.nodes) {
-      map.set(pn.id, pn.data);
+    if (workflow) {
+      for (const n of workflow.nodes) {
+        map.set(n.id, n);
+      }
     }
     return map;
-  }, [layout]);
-
-  const rfEdges: RFEdge[] = useMemo(() => {
-    if (!layout) return [];
-    return layout.edges.map(e => ({
-      id: `${e.source}-${e.target}`,
-      source: e.source,
-      target: e.target,
-      type: 'dagEdge' as const,
-      data: { phase: nodeMap.get(e.source)?.phase ?? 'Pending' },
-    }));
-  }, [layout, nodeMap]);
+  }, [workflow]);
 
   const selectedNode = selectedNodeId
     ? nodeMap.get(selectedNodeId) ?? null

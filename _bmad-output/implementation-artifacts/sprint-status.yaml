@@ -84,12 +84,12 @@ development_status:
   epic-4-retrospective: optional
 
   # Epic 5: Advanced DAG Visualization
-  epic-5: in-progress
+  epic-5: done
   5-1-dagre-layout-engine: done
   5-2-react-flow-inline-dag: done
   5-3-react-flow-full-page-dag-view: done
   5-4-compressed-nodes-decompression: done
-  5-5-collapsible-group-nodes-in-react-flow: backlog
+  5-5-collapsible-group-nodes-in-react-flow: done
   epic-5-retrospective: optional
 
   # Epic 6: Platform Integration & i18n
