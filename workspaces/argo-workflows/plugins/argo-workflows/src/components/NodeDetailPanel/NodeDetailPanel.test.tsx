@@ -19,6 +19,27 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import type { NodeStatus } from '@backstage-community/plugin-argo-workflows-common';
 import { NodeDetailPanel } from './NodeDetailPanel';
 
+// Mock the translation hook to return the key as the translated string
+jest.mock('@backstage/core-plugin-api/alpha', () => ({
+  ...jest.requireActual('@backstage/core-plugin-api/alpha'),
+  useTranslationRef: () => ({
+    t: (key: string, params?: Record<string, string>) => {
+      // Return the last segment of the key as a readable label
+      const parts = key.split('.');
+      const label = parts[parts.length - 1];
+      // Capitalize first letter for display
+      const readable = label.charAt(0).toUpperCase() + label.slice(1);
+      if (params) {
+        return Object.entries(params).reduce(
+          (s, [k, v]) => s.replace(`{{${k}}}`, v),
+          readable,
+        );
+      }
+      return readable;
+    },
+  }),
+}));
+
 function makeNode(overrides?: Partial<NodeStatus>): NodeStatus {
   return {
     id: 'node-1',
@@ -51,7 +72,7 @@ describe('NodeDetailPanel', () => {
 
   it('renders close button with aria-label', () => {
     render(<NodeDetailPanel node={makeNode()} onClose={jest.fn()} />);
-    const btn = screen.getByLabelText('Close node detail panel');
+    const btn = screen.getByLabelText('CloseLabel');
     expect(btn).toBeInTheDocument();
     expect(btn).toHaveTextContent('×');
   });

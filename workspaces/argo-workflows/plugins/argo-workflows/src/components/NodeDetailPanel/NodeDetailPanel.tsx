@@ -20,6 +20,8 @@ import {
   PHASE_ICON_MAP,
   formatDuration,
 } from '@backstage-community/plugin-argo-workflows-common';
+import { useTranslationRef } from '@backstage/core-plugin-api/alpha';
+import { argoWorkflowsTranslationRef } from '../../translation';
 import styles from './NodeDetailPanel.module.css';
 
 /**
@@ -49,6 +51,7 @@ const ERROR_PHASES = new Set(['Failed', 'Error']);
  * @public
  */
 export function NodeDetailPanel({ node, onClose }: NodeDetailPanelProps) {
+  const { t } = useTranslationRef(argoWorkflowsTranslationRef);
   const borderClass = BORDER_CLASS[node.phase] ?? '';
   const icon = PHASE_ICON_MAP[node.phase] ?? '—';
   const showError = ERROR_PHASES.has(node.phase) && !!node.message;
@@ -70,7 +73,7 @@ export function NodeDetailPanel({ node, onClose }: NodeDetailPanelProps) {
           type="button"
           className={styles.closeButton}
           onClick={onClose}
-          aria-label="Close node detail panel"
+          aria-label={t('nodePanel.closeLabel')}
           data-testid="panel-close"
         >
           ×
@@ -78,26 +81,26 @@ export function NodeDetailPanel({ node, onClose }: NodeDetailPanelProps) {
       </div>
 
       <div className={styles.grid}>
-        <span className={styles.label}>Phase</span>
+        <span className={styles.label}>{t('nodePanel.phase')}</span>
         <span className={styles.value}>{node.phase}</span>
 
-        <span className={styles.label}>Type</span>
+        <span className={styles.label}>{t('nodePanel.type')}</span>
         <span className={styles.value}>{node.type}</span>
 
-        <span className={styles.label}>Template</span>
+        <span className={styles.label}>{t('nodePanel.template')}</span>
         <span className={styles.value}>{node.templateName ?? '—'}</span>
 
-        <span className={styles.label}>Started</span>
+        <span className={styles.label}>{t('nodePanel.started')}</span>
         <span className={`${styles.value} ${styles.mono}`}>
           {node.startedAt ?? '—'}
         </span>
 
-        <span className={styles.label}>Finished</span>
+        <span className={styles.label}>{t('nodePanel.finished')}</span>
         <span className={`${styles.value} ${styles.mono}`}>
           {node.finishedAt ?? '—'}
         </span>
 
-        <span className={styles.label}>Duration</span>
+        <span className={styles.label}>{t('nodePanel.duration')}</span>
         <span className={`${styles.value} ${styles.mono}`}>
           {formatDuration(node.duration)}
         </span>

@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-/**
- * Frontend plugin for Argo Workflows in Backstage.
- *
- * @packageDocumentation
- */
+import { argoWorkflowsTranslationRef } from './translation';
 
-export {
-  argoWorkflowsPlugin,
-  EntityArgoWorkflowsContent,
-} from './plugin';
+describe('argoWorkflowsTranslationRef', () => {
+  it('is defined', () => {
+    expect(argoWorkflowsTranslationRef).toBeDefined();
+  });
 
-export { ArgoWorkflowsApiClient, ArgoWorkflowsError } from './api';
-
-export { usePolling, useArgoWorkflows } from './hooks';
-
-export { argoWorkflowsTranslationRef } from './translation';
+  it('has the correct ID', () => {
+    expect(argoWorkflowsTranslationRef.id).toBe('plugin.argo-workflows');
+  });
+});

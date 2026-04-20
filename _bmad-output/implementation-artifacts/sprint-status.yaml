@@ -97,6 +97,6 @@ development_status:
   6-1-argo-workflows-react-package: done
   6-2-backstage-permission-framework: done
   6-3-new-frontend-system-support: done
-  6-4-i18n-translation-support: backlog
+  6-4-i18n-translation-support: done
   6-5-phase-2-documentation-update: backlog
   epic-6-retrospective: optional
