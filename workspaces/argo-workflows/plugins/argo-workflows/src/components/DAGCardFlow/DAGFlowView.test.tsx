@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { render, screen, fireEvent } from '@testing-library/react';
 import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { DAGFlowView } from './DAGFlowView';
@@ -31,20 +30,14 @@ function makeNode(id: string, overrides?: Partial<NodeStatus>): NodeStatus {
 
 describe('DAGFlowView', () => {
   it('renders node cards for execution nodes', () => {
-    const nodes = [
-      makeNode('a', { children: ['b'] }),
-      makeNode('b'),
-    ];
+    const nodes = [makeNode('a', { children: ['b'] }), makeNode('b')];
     render(<DAGFlowView nodes={nodes} />);
     expect(screen.getByTestId('dag-node-a')).toBeInTheDocument();
     expect(screen.getByTestId('dag-node-b')).toBeInTheDocument();
   });
 
   it('renders SVG edges between nodes', () => {
-    const nodes = [
-      makeNode('a', { children: ['b'] }),
-      makeNode('b'),
-    ];
+    const nodes = [makeNode('a', { children: ['b'] }), makeNode('b')];
     render(<DAGFlowView nodes={nodes} />);
     expect(screen.getByTestId('dag-edge-svg')).toBeInTheDocument();
     expect(screen.getAllByTestId('dag-edge-path')).toHaveLength(1);
@@ -53,7 +46,9 @@ describe('DAGFlowView', () => {
   it('handles empty nodes array', () => {
     render(<DAGFlowView nodes={[]} />);
     expect(screen.getByTestId('dag-empty')).toBeInTheDocument();
-    expect(screen.getByText('This workflow has no execution nodes.')).toBeInTheDocument();
+    expect(
+      screen.getByText('This workflow has no execution nodes.'),
+    ).toBeInTheDocument();
   });
 
   it('passes selectedNodeId to node cards', () => {

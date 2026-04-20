@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import classNames from 'classnames';
 import { ArgoWorkflowsError } from '../../api';
 import styles from './WorkflowEmptyState.module.css';
@@ -55,10 +54,9 @@ function classifyError(error: Error): ClassifiedAlert {
       return {
         severity: 'danger',
         title: 'Access Denied',
-        message:
-          error.message.includes('permission')
-            ? 'You don\'t have permission to view Argo Workflows for this entity. Contact your Backstage administrator.'
-            : 'The Backstage service account needs get and list permissions on workflows.argoproj.io.',
+        message: error.message.includes('permission')
+          ? "You don't have permission to view Argo Workflows for this entity. Contact your Backstage administrator."
+          : 'The Backstage service account needs get and list permissions on workflows.argoproj.io.',
       };
     }
     if (error.statusCode === 502 || error.statusCode === 504) {
@@ -78,10 +76,7 @@ function classifyError(error: Error): ClassifiedAlert {
   };
 }
 
-function buildEmptyMessage(
-  namespace?: string,
-  labelSelector?: string,
-): string {
+function buildEmptyMessage(namespace?: string, labelSelector?: string): string {
   const ns = namespace?.trim();
   const selector = labelSelector?.trim();
 
@@ -131,10 +126,7 @@ export function WorkflowEmptyState({
 
   if (workflowCount === 0) {
     return (
-      <div
-        className={classNames(styles.alert, styles.alertInfo)}
-        role="status"
-      >
+      <div className={classNames(styles.alert, styles.alertInfo)} role="status">
         <div className={styles.alertTitle}>No Workflows</div>
         <div className={styles.alertMessage}>
           {buildEmptyMessage(namespace, labelSelector)}

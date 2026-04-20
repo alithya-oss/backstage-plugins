@@ -46,16 +46,32 @@ function getEdgeColor(phase: string): string {
 
 /** Custom React Flow node wrapping DAGNodeCard. */
 function DAGCustomNode({ data }: NodeProps) {
-  const nodeData = data as { node: NodeStatus; isSelected: boolean; onNodeClick?: (id: string) => void };
+  const nodeData = data as {
+    node: NodeStatus;
+    isSelected: boolean;
+    onNodeClick?: (id: string) => void;
+  };
   return (
     <>
-      <Handle type="target" position={Position.Left} style={{ visibility: 'hidden' }} />
+      <Handle
+        type="target"
+        position={Position.Left}
+        style={{ visibility: 'hidden' }}
+      />
       <DAGNodeCard
         node={nodeData.node}
         isSelected={nodeData.isSelected}
-        onClick={nodeData.onNodeClick ? () => nodeData.onNodeClick!(nodeData.node.id) : undefined}
+        onClick={
+          nodeData.onNodeClick
+            ? () => nodeData.onNodeClick!(nodeData.node.id)
+            : undefined
+        }
       />
-      <Handle type="source" position={Position.Right} style={{ visibility: 'hidden' }} />
+      <Handle
+        type="source"
+        position={Position.Right}
+        style={{ visibility: 'hidden' }}
+      />
     </>
   );
 }
@@ -126,10 +142,10 @@ export function DAGFullPageView() {
     return () => document.removeEventListener('keydown', handler);
   }, [selectedNodeId]);
 
-  const { rfNodes, rfEdges } = useDAGWithGroups(
-    workflow?.nodes ?? [],
-    { selectedNodeId: selectedNodeId ?? undefined, onNodeClick: handleNodeClick },
-  );
+  const { rfNodes, rfEdges } = useDAGWithGroups(workflow?.nodes ?? [], {
+    selectedNodeId: selectedNodeId ?? undefined,
+    onNodeClick: handleNodeClick,
+  });
 
   // Build nodeMap for panel lookup
   const nodeMap = useMemo(() => {
@@ -196,9 +212,7 @@ export function DAGFullPageView() {
         >
           ← Back
         </button>
-        <span className={styles.title}>
-          {workflow.name}
-        </span>
+        <span className={styles.title}>{workflow.name}</span>
       </div>
       <div className={styles.content}>
         <div className={styles.flowContainer}>

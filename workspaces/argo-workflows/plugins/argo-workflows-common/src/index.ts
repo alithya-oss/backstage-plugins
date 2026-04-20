@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * Common types and utilities for the Argo Workflows Backstage plugin.
  *

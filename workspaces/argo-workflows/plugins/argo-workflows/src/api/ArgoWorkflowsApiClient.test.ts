@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { ArgoWorkflowsApiClient, ArgoWorkflowsError } from './ArgoWorkflowsApiClient';
+import {
+  ArgoWorkflowsApiClient,
+  ArgoWorkflowsError,
+} from './ArgoWorkflowsApiClient';
 
 const BASE_URL = 'http://localhost:7007/api/argo-workflows';
 
@@ -78,7 +81,13 @@ describe('ArgoWorkflowsApiClient', () => {
 
     it('returns parsed WorkflowSummary array', async () => {
       const workflows = [
-        { name: 'wf-1', namespace: 'ns', phase: 'Succeeded', startedAt: '2026-04-18T10:00:00Z', nodes: [] },
+        {
+          name: 'wf-1',
+          namespace: 'ns',
+          phase: 'Succeeded',
+          startedAt: '2026-04-18T10:00:00Z',
+          nodes: [],
+        },
       ];
       const fetchApi = createMockFetchApi(workflows);
       const client = createClient(fetchApi);
@@ -118,7 +127,9 @@ describe('ArgoWorkflowsApiClient', () => {
         namespace: 'ns',
         phase: 'Succeeded',
         startedAt: '2026-04-18T10:00:00Z',
-        nodes: [{ id: 'n1', displayName: 'build', type: 'Pod', phase: 'Succeeded' }],
+        nodes: [
+          { id: 'n1', displayName: 'build', type: 'Pod', phase: 'Succeeded' },
+        ],
       };
       const fetchApi = createMockFetchApi(detail);
       const client = createClient(fetchApi);
@@ -148,7 +159,9 @@ describe('ArgoWorkflowsApiClient', () => {
       const fetchApi = createMockFetchApi(errorBody, false, 403);
       const client = createClient(fetchApi);
 
-      await expect(client.listWorkflows('ns')).rejects.toThrow(ArgoWorkflowsError);
+      await expect(client.listWorkflows('ns')).rejects.toThrow(
+        ArgoWorkflowsError,
+      );
       await expect(client.listWorkflows('ns')).rejects.toMatchObject({
         message: 'Access denied',
         code: 'FORBIDDEN',
@@ -180,7 +193,9 @@ describe('ArgoWorkflowsApiClient', () => {
 
       await client.listWorkflows('ns');
 
-      expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('argo-workflows');
+      expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith(
+        'argo-workflows',
+      );
     });
   });
 

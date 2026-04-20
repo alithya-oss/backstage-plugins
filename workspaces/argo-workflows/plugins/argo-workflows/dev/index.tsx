@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { createDevApp } from '@backstage/dev-utils';
 import { ApiProvider, ConfigReader } from '@backstage/core-app-api';
 import { TestApiRegistry } from '@backstage/test-utils';
@@ -24,10 +23,7 @@ import {
   discoveryApiRef,
   fetchApiRef,
 } from '@backstage/core-plugin-api';
-import {
-  argoWorkflowsPlugin,
-  EntityArgoWorkflowsContent,
-} from '../src/plugin';
+import { argoWorkflowsPlugin, EntityArgoWorkflowsContent } from '../src/plugin';
 import type {
   ArgoWorkflowsApi,
   WorkflowSummary,
@@ -51,9 +47,7 @@ class MockArgoWorkflowsApiClient implements ArgoWorkflowsApi {
     namespace: string,
     labelSelector?: string,
   ): Promise<WorkflowSummary[]> {
-    let results = mockWorkflowSummaries.filter(
-      w => w.namespace === namespace,
-    );
+    let results = mockWorkflowSummaries.filter(w => w.namespace === namespace);
 
     if (labelSelector) {
       const [key, value] = labelSelector.split('=');
@@ -63,10 +57,7 @@ class MockArgoWorkflowsApiClient implements ArgoWorkflowsApi {
     return results;
   }
 
-  async getWorkflow(
-    namespace: string,
-    name: string,
-  ): Promise<WorkflowDetail> {
+  async getWorkflow(namespace: string, name: string): Promise<WorkflowDetail> {
     const detail = mockWorkflowDetails[name];
     if (detail && detail.namespace === namespace) {
       return detail;

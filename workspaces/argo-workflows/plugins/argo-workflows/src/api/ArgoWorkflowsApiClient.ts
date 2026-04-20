@@ -57,14 +57,13 @@ export class ArgoWorkflowsApiClient implements ArgoWorkflowsApi {
       params.set('labelSelector', labelSelector);
     }
     const query = params.toString();
-    const url = `${baseUrl}/workflows/${encodeURIComponent(namespace)}${query ? `?${query}` : ''}`;
+    const url = `${baseUrl}/workflows/${encodeURIComponent(namespace)}${
+      query ? `?${query}` : ''
+    }`;
     return this.request<WorkflowSummary[]>(url);
   }
 
-  async getWorkflow(
-    namespace: string,
-    name: string,
-  ): Promise<WorkflowDetail> {
+  async getWorkflow(namespace: string, name: string): Promise<WorkflowDetail> {
     if (!namespace || namespace.trim() === '') {
       throw new Error('namespace is required and cannot be empty');
     }
@@ -72,7 +71,9 @@ export class ArgoWorkflowsApiClient implements ArgoWorkflowsApi {
       throw new Error('name is required and cannot be empty');
     }
     const baseUrl = await this.discoveryApi.getBaseUrl('argo-workflows');
-    const url = `${baseUrl}/workflows/${encodeURIComponent(namespace)}/${encodeURIComponent(name)}`;
+    const url = `${baseUrl}/workflows/${encodeURIComponent(
+      namespace,
+    )}/${encodeURIComponent(name)}`;
     return this.request<WorkflowDetail>(url);
   }
 
@@ -85,7 +86,9 @@ export class ArgoWorkflowsApiClient implements ArgoWorkflowsApi {
       return (await response.json()) as T;
     } catch (error) {
       throw new Error(
-        `Failed to parse response from ${url}: ${error instanceof Error ? error.message : String(error)}`,
+        `Failed to parse response from ${url}: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
       );
     }
   }

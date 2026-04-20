@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import {
   PHASE_ICON_MAP,
@@ -77,7 +76,9 @@ export function DAGNodeCard({ node, isSelected, onClick }: DAGNodeCardProps) {
       title={`${node.displayName} — ${node.phase}`}
       role="button"
       tabIndex={0}
-      aria-label={`${node.displayName}, ${node.phase}, ${formatDuration(node.duration)}`}
+      aria-label={`${node.displayName}, ${node.phase}, ${formatDuration(
+        node.duration,
+      )}`}
       aria-pressed={isSelected ?? false}
       data-testid={`dag-node-${node.id}`}
     >
@@ -85,9 +86,7 @@ export function DAGNodeCard({ node, isSelected, onClick }: DAGNodeCardProps) {
         <span className={styles.icon}>{icon}</span>
         <span className={styles.name}>{node.displayName}</span>
       </div>
-      <span className={styles.duration}>
-        {formatDuration(node.duration)}
-      </span>
+      <span className={styles.duration}>{formatDuration(node.duration)}</span>
     </div>
   );
 }

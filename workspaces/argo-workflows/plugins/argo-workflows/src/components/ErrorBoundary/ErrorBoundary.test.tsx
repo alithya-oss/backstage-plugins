@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { render, screen } from '@testing-library/react';
 import { ErrorBoundary } from './ErrorBoundary';
 
@@ -30,9 +29,7 @@ describe('ErrorBoundary', () => {
   let consoleErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    consoleErrorSpy = jest
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -93,7 +90,11 @@ describe('ErrorBoundary', () => {
   it('renders panel fallback when panel throws', () => {
     render(
       <ErrorBoundary
-        fallback={<span data-testid="panel-fallback">Unable to display node details</span>}
+        fallback={
+          <span data-testid="panel-fallback">
+            Unable to display node details
+          </span>
+        }
       >
         <ThrowingComponent />
       </ErrorBoundary>,
@@ -114,8 +115,6 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
     expect(screen.getByTestId('page-fallback')).toBeInTheDocument();
-    expect(
-      screen.getByText(/Something went wrong/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Something went wrong/)).toBeInTheDocument();
   });
 });

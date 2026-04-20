@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import type { DAGGroup } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import styles from './DAGGroupNode.module.css';
@@ -55,7 +54,11 @@ export function DAGGroupNode({ data }: NodeProps) {
         className={`${styles.collapsed} ${borderClass}`}
         data-testid={`dag-group-${group.id}`}
       >
-        <Handle type="target" position={Position.Left} style={{ visibility: 'hidden' }} />
+        <Handle
+          type="target"
+          position={Position.Left}
+          style={{ visibility: 'hidden' }}
+        />
         <button
           type="button"
           className={styles.toggle}
@@ -66,7 +69,11 @@ export function DAGGroupNode({ data }: NodeProps) {
         </button>
         <span className={styles.name}>{group.displayName}</span>
         <span className={styles.badge}>{group.childNodeIds.length} nodes</span>
-        <Handle type="source" position={Position.Right} style={{ visibility: 'hidden' }} />
+        <Handle
+          type="source"
+          position={Position.Right}
+          style={{ visibility: 'hidden' }}
+        />
       </div>
     );
   }

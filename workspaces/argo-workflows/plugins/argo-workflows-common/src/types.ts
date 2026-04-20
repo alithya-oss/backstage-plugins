@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * Argo Workflow top-level phase.
  * @public

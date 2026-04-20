@@ -16,8 +16,14 @@
 
 import type { LoggerService } from '@backstage/backend-plugin-api';
 import type { Config } from '@backstage/config';
-import type { WorkflowDetail, WorkflowSummary } from '@alithya-oss/backstage-plugin-argo-workflows-common';
-import { mapCrdListToWorkflowSummaries, mapCrdToWorkflowDetail } from '../mappers';
+import type {
+  WorkflowDetail,
+  WorkflowSummary,
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import {
+  mapCrdListToWorkflowSummaries,
+  mapCrdToWorkflowDetail,
+} from '../mappers';
 
 /** @public */
 export interface ServiceError extends Error {
@@ -95,9 +101,13 @@ export class ArgoWorkflowsService {
     // Fetch enough items to cover offset + limit
     params.set('limit', String(offset + limit));
 
-    const apiPath = `/apis/argoproj.io/v1alpha1/namespaces/${encodeURIComponent(namespace)}/workflows`;
+    const apiPath = `/apis/argoproj.io/v1alpha1/namespaces/${encodeURIComponent(
+      namespace,
+    )}/workflows`;
     const queryString = params.toString();
-    const url = `${this.clusterUrl}${apiPath}${queryString ? `?${queryString}` : ''}`;
+    const url = `${this.clusterUrl}${apiPath}${
+      queryString ? `?${queryString}` : ''
+    }`;
 
     this.logger.debug(`Fetching workflows from ${apiPath}`, {
       namespace,
@@ -153,11 +163,10 @@ export class ArgoWorkflowsService {
     return all.slice(offset, offset + limit);
   }
 
-  async getWorkflow(
-    namespace: string,
-    name: string,
-  ): Promise<WorkflowDetail> {
-    const apiPath = `/apis/argoproj.io/v1alpha1/namespaces/${encodeURIComponent(namespace)}/workflows/${encodeURIComponent(name)}`;
+  async getWorkflow(namespace: string, name: string): Promise<WorkflowDetail> {
+    const apiPath = `/apis/argoproj.io/v1alpha1/namespaces/${encodeURIComponent(
+      namespace,
+    )}/workflows/${encodeURIComponent(name)}`;
     const url = `${this.clusterUrl}${apiPath}`;
 
     this.logger.debug(`Fetching workflow detail from ${apiPath}`, {

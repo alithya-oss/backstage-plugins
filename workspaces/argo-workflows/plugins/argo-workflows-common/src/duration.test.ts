@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { formatDuration } from './duration';
 
 describe('formatDuration', () => {

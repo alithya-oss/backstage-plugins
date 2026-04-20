@@ -142,7 +142,8 @@ export function useDAGWithGroups(
           const minX = Math.min(...childPositions.map(n => n.x)) - 20;
           const minY = Math.min(...childPositions.map(n => n.y)) - 30;
           const maxX = Math.max(...childPositions.map(n => n.x + n.width)) + 20;
-          const maxY = Math.max(...childPositions.map(n => n.y + n.height)) + 20;
+          const maxY =
+            Math.max(...childPositions.map(n => n.y + n.height)) + 20;
           resultNodes.push({
             id: `group-${group.id}`,
             position: { x: minX, y: minY },
@@ -173,7 +174,13 @@ export function useDAGWithGroups(
     }));
 
     return { rfNodes: resultNodes, rfEdges: resultEdges };
-  }, [decomposed, collapsedIds, toggleGroup, options?.selectedNodeId, options?.onNodeClick]);
+  }, [
+    decomposed,
+    collapsedIds,
+    toggleGroup,
+    options?.selectedNodeId,
+    options?.onNodeClick,
+  ]);
 
   return { rfNodes, rfEdges, toggleGroup, groups: decomposed.groups };
 }

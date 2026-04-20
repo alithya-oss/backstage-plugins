@@ -31,8 +31,7 @@ export const argoWorkflowsTranslationRef = createTranslationRef({
       clearFilters: 'Clear filters',
     },
     emptyState: {
-      noWorkflows:
-        'No Argo Workflows found in namespace {{namespace}}.',
+      noWorkflows: 'No Argo Workflows found in namespace {{namespace}}.',
       noWorkflowsWithSelector:
         'No Argo Workflows found in namespace {{namespace}} matching label selector {{selector}}.',
       noWorkflowsGeneric: 'No Argo Workflows found for this entity.',
@@ -53,8 +52,7 @@ export const argoWorkflowsTranslationRef = createTranslationRef({
     },
     dagFlow: {
       noNodes: 'This workflow has no execution nodes.',
-      errorFallback:
-        'Unable to render workflow graph. Showing metadata only.',
+      errorFallback: 'Unable to render workflow graph. Showing metadata only.',
     },
     nodePanel: {
       phase: 'Phase',

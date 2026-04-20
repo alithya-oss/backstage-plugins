@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-
-import type { LayoutEdge, NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import type {
+  LayoutEdge,
+  NodeStatus,
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import styles from './DAGEdgeSVG.module.css';
 
 /**

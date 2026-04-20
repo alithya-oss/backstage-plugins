@@ -20,10 +20,7 @@
  * @packageDocumentation
  */
 
-export {
-  argoWorkflowsPlugin,
-  EntityArgoWorkflowsContent,
-} from './plugin';
+export { argoWorkflowsPlugin, EntityArgoWorkflowsContent } from './plugin';
 
 export { ArgoWorkflowsApiClient, ArgoWorkflowsError } from './api';
 
@@ -31,4 +28,7 @@ export { usePolling, useArgoWorkflows } from './hooks';
 
 export { argoWorkflowsTranslationRef } from './translation';
 
-export {computeDAGLayout, type ComputeDAGLayoutOptions} from './utils/computeDAGLayout'
+export {
+  computeDAGLayout,
+  type ComputeDAGLayoutOptions,
+} from './utils/computeDAGLayout';

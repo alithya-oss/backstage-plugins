@@ -19,12 +19,12 @@ Visualize and monitor [Argo Workflows](https://argoproj.github.io/workflows/) di
 
 ## Packages
 
-| Package | Description |
-|---------|-------------|
-| [`@alithya-oss/backstage-plugin-argo-workflows`](./plugins/argo-workflows/) | Frontend plugin (React components, hooks, API client) |
-| [`@alithya-oss/backstage-plugin-argo-workflows-backend`](./plugins/argo-workflows-backend/) | Backend plugin (K8s CRD fetching, REST routes, permissions) |
-| [`@alithya-oss/backstage-plugin-argo-workflows-common`](./plugins/argo-workflows-common/) | Shared types, utilities, API ref, status mapping, permissions |
-| [`@alithya-oss/backstage-plugin-argo-workflows-react`](./plugins/argo-workflows-react/) | Reusable hooks for third-party plugins |
+| Package                                                                                     | Description                                                   |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| [`@alithya-oss/backstage-plugin-argo-workflows`](./plugins/argo-workflows/)                 | Frontend plugin (React components, hooks, API client)         |
+| [`@alithya-oss/backstage-plugin-argo-workflows-backend`](./plugins/argo-workflows-backend/) | Backend plugin (K8s CRD fetching, REST routes, permissions)   |
+| [`@alithya-oss/backstage-plugin-argo-workflows-common`](./plugins/argo-workflows-common/)   | Shared types, utilities, API ref, status mapping, permissions |
+| [`@alithya-oss/backstage-plugin-argo-workflows-react`](./plugins/argo-workflows-react/)     | Reusable hooks for third-party plugins                        |
 
 ## Quick Start
 
@@ -44,10 +44,10 @@ metadata:
     backstage.io/kubernetes-label-selector: app=my-service
 ```
 
-| Annotation | Required | Description |
-|-----------|----------|-------------|
-| `backstage.io/kubernetes-namespace` | Yes | K8s namespace where workflows run |
-| `backstage.io/kubernetes-label-selector` | No | Label selector to filter workflows |
+| Annotation                               | Required | Description                        |
+| ---------------------------------------- | -------- | ---------------------------------- |
+| `backstage.io/kubernetes-namespace`      | Yes      | K8s namespace where workflows run  |
+| `backstage.io/kubernetes-label-selector` | No       | Label selector to filter workflows |
 
 ## Permission Framework
 

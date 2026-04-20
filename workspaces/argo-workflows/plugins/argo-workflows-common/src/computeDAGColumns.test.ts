@@ -17,10 +17,7 @@
 import { computeDAGColumns } from './computeDAGColumns';
 import type { NodeStatus } from './types';
 
-function makeNode(
-  id: string,
-  overrides?: Partial<NodeStatus>,
-): NodeStatus {
+function makeNode(id: string, overrides?: Partial<NodeStatus>): NodeStatus {
   return {
     id,
     displayName: id,
@@ -156,10 +153,7 @@ describe('computeDAGColumns', () => {
   });
 
   it('handles children referencing non-existent IDs', () => {
-    const nodes = [
-      makeNode('a', { children: ['b', 'ghost'] }),
-      makeNode('b'),
-    ];
+    const nodes = [makeNode('a', { children: ['b', 'ghost'] }), makeNode('b')];
     const result = computeDAGColumns(nodes);
     expect(result).toHaveLength(2);
     expect(result[0].nodes[0].id).toBe('a');

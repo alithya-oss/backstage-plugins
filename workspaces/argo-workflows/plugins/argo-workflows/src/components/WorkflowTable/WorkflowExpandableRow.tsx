@@ -49,7 +49,9 @@ export function ExpandButton({
   return (
     <button
       type="button"
-      className={`${styles.expandButton}${isExpanded ? ` ${styles.expandButtonExpanded}` : ''}`}
+      className={`${styles.expandButton}${
+        isExpanded ? ` ${styles.expandButtonExpanded}` : ''
+      }`}
       onClick={onToggle}
       aria-expanded={isExpanded}
       aria-controls={`expanded-content-${workflowId}`}
@@ -93,13 +95,10 @@ export function WorkflowExpandedContent({
     error,
   } = useWorkflowDetail(workflow.namespace, workflow.name);
 
-  const handleNodeClick = useCallback(
-    (nodeId: string) => {
-      lastFocusedRef.current = document.activeElement as HTMLElement;
-      setSelectedNodeId(prev => (prev === nodeId ? null : nodeId));
-    },
-    [],
-  );
+  const handleNodeClick = useCallback((nodeId: string) => {
+    lastFocusedRef.current = document.activeElement as HTMLElement;
+    setSelectedNodeId(prev => (prev === nodeId ? null : nodeId));
+  }, []);
 
   const handleClosePanel = useCallback(() => {
     setSelectedNodeId(null);
@@ -177,11 +176,16 @@ export function WorkflowExpandedContent({
               <div data-testid="dag-error-fallback">
                 <p>Unable to render workflow graph. Showing metadata only.</p>
                 <dl>
-                  <dt>Name</dt><dd>{detail.name}</dd>
-                  <dt>Phase</dt><dd>{detail.phase}</dd>
-                  <dt>Started</dt><dd>{detail.startedAt}</dd>
-                  <dt>Finished</dt><dd>{detail.finishedAt ?? '—'}</dd>
-                  <dt>Duration</dt><dd>{formatDuration(detail.duration)}</dd>
+                  <dt>Name</dt>
+                  <dd>{detail.name}</dd>
+                  <dt>Phase</dt>
+                  <dd>{detail.phase}</dd>
+                  <dt>Started</dt>
+                  <dd>{detail.startedAt}</dd>
+                  <dt>Finished</dt>
+                  <dd>{detail.finishedAt ?? '—'}</dd>
+                  <dt>Duration</dt>
+                  <dd>{formatDuration(detail.duration)}</dd>
                 </dl>
               </div>
             }

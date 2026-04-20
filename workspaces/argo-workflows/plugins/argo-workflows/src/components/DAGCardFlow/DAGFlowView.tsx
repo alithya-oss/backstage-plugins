@@ -43,7 +43,9 @@ function buildAriaLabel(nodes: NodeStatus[]): string {
   const parts = Object.entries(counts).map(
     ([phase, count]) => `${count} ${phase.toLowerCase()}`,
   );
-  return `Workflow execution graph with ${nodes.length} nodes: ${parts.join(', ')}`;
+  return `Workflow execution graph with ${nodes.length} nodes: ${parts.join(
+    ', ',
+  )}`;
 }
 
 /**
@@ -90,9 +92,7 @@ export function DAGFlowView({
         style={{ width: containerWidth, height: containerHeight }}
         data-testid="dag-flow-view"
         role="group"
-        aria-label={buildAriaLabel(
-          layout.nodes.map(n => n.data),
-        )}
+        aria-label={buildAriaLabel(layout.nodes.map(n => n.data))}
       >
         <DAGEdgeSVG
           edges={layout.edges}
@@ -118,9 +118,7 @@ export function DAGFlowView({
             <DAGNodeCard
               node={pn.data}
               isSelected={pn.id === selectedNodeId}
-              onClick={
-                onNodeClick ? () => onNodeClick(pn.id) : undefined
-              }
+              onClick={onNodeClick ? () => onNodeClick(pn.id) : undefined}
             />
           </div>
         ))}

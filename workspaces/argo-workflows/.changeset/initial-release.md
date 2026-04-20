@@ -7,6 +7,7 @@
 Initial release of the Argo Workflows plugin for Backstage.
 
 Features:
+
 - Workflow list table with status badges, filtering, sorting, search, and pagination
 - Expandable DAG visualization with horizontal card flow layout
 - Node detail panel with metadata grid and error message display

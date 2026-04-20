@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
@@ -124,18 +123,14 @@ describe('WorkflowTable', () => {
   });
 
   it('shows loading state when loading is true', async () => {
-    await renderInTestApp(
-      <WorkflowTable workflows={[]} loading />,
-    );
+    await renderInTestApp(<WorkflowTable workflows={[]} loading />);
 
     // Backstage Table renders a progress bar when isLoading is true
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
   it('renders empty table when workflows array is empty', async () => {
-    await renderInTestApp(
-      <WorkflowTable workflows={[]} loading={false} />,
-    );
+    await renderInTestApp(<WorkflowTable workflows={[]} loading={false} />);
 
     expect(screen.getByText('Argo Workflows')).toBeInTheDocument();
     // No data rows should be present
@@ -173,12 +168,8 @@ describe('WorkflowTable', () => {
 
     // Only the Failed workflow should be visible
     expect(screen.getByText('deploy-staging-def456')).toBeInTheDocument();
-    expect(
-      screen.queryByText('deploy-prod-abc123'),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByText('build-main-ghi789'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('deploy-prod-abc123')).not.toBeInTheDocument();
+    expect(screen.queryByText('build-main-ghi789')).not.toBeInTheDocument();
   });
 
   it('filters workflows by name when search text is entered', async () => {
@@ -193,12 +184,8 @@ describe('WorkflowTable', () => {
     );
 
     expect(screen.getByText('deploy-prod-abc123')).toBeInTheDocument();
-    expect(
-      screen.queryByText('deploy-staging-def456'),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByText('build-main-ghi789'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('deploy-staging-def456')).not.toBeInTheDocument();
+    expect(screen.queryByText('build-main-ghi789')).not.toBeInTheDocument();
   });
 
   it('combines filter and search to narrow results', async () => {
@@ -210,16 +197,11 @@ describe('WorkflowTable', () => {
     // Filter by Succeeded phase
     await user.click(screen.getByRole('button', { name: 'Succeeded' }));
     // Search for "deploy"
-    await user.type(
-      screen.getByPlaceholderText('Search by name…'),
-      'deploy',
-    );
+    await user.type(screen.getByPlaceholderText('Search by name…'), 'deploy');
 
     // Only deploy-prod-abc123 is Succeeded AND matches "deploy"
     expect(screen.getByText('deploy-prod-abc123')).toBeInTheDocument();
-    expect(
-      screen.queryByText('deploy-staging-def456'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('deploy-staging-def456')).not.toBeInTheDocument();
   });
 
   it('shows empty filter message when filters match nothing', async () => {

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { render, screen } from '@testing-library/react';
 import type { NodeStatusSummary } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { NodeStatusDots } from './NodeStatusDots';

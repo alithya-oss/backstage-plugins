@@ -45,7 +45,11 @@ export class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo): void {
-    console.error('[argo-workflows] Rendering error:', error, info.componentStack);
+    console.error(
+      '[argo-workflows] Rendering error:',
+      error,
+      info.componentStack,
+    );
   }
 
   render() {

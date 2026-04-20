@@ -37,7 +37,14 @@ export const argoWorkflowsPlugin = createBackendPlugin({
         permissions: coreServices.permissions,
         permissionsRegistry: coreServices.permissionsRegistry,
       },
-      async init({ logger, httpRouter, httpAuth, config, permissions, permissionsRegistry }) {
+      async init({
+        logger,
+        httpRouter,
+        httpAuth,
+        config,
+        permissions,
+        permissionsRegistry,
+      }) {
         permissionsRegistry.addPermissions([argoWorkflowsReadPermission]);
         httpRouter.use(
           await createRouter({ logger, config, httpAuth, permissions }),

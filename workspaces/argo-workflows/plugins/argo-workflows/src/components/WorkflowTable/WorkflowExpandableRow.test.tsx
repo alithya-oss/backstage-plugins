@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-
 import { render, screen, fireEvent } from '@testing-library/react';
 import type { WorkflowSummary } from '@alithya-oss/backstage-plugin-argo-workflows-common';
-import {
-  ExpandButton,
-  WorkflowExpandedContent,
-} from './WorkflowExpandableRow';
+import { ExpandButton, WorkflowExpandedContent } from './WorkflowExpandableRow';
 
 jest.mock('../../hooks', () => ({
   useWorkflowDetail: jest.fn(),
@@ -42,10 +38,7 @@ jest.mock('../DAGCardFlow', () => ({
         <span data-testid="selected-node">{selectedNodeId}</span>
       )}
       {onNodeClick && (
-        <button
-          data-testid="click-node-n1"
-          onClick={() => onNodeClick('n1')}
-        >
+        <button data-testid="click-node-n1" onClick={() => onNodeClick('n1')}>
           click n1
         </button>
       )}
@@ -97,7 +90,7 @@ describe('ExpandButton', () => {
   it('renders expand button in expanded state', () => {
     render(
       <ExpandButton
-        isExpanded={true}
+        isExpanded
         onToggle={jest.fn()}
         workflowId="production/my-workflow"
       />,
@@ -165,7 +158,9 @@ describe('WorkflowExpandedContent', () => {
       <WorkflowExpandedContent workflow={mockWorkflow} />,
     );
     // Skeleton cards should be present
-    expect(container.querySelectorAll('[class*="skeletonCard"]').length).toBeGreaterThan(0);
+    expect(
+      container.querySelectorAll('[class*="skeletonCard"]').length,
+    ).toBeGreaterThan(0);
   });
 
   it('expanded content has role="region" and aria-label', () => {
@@ -346,7 +341,9 @@ describe('WorkflowExpandedContent', () => {
     render(<WorkflowExpandedContent workflow={mockWorkflow} />);
     fireEvent.click(screen.getByTestId('click-node-n1'));
     // The panel wrapper div should have tabIndex=-1 and be focusable
-    const panelWrapper = screen.getByTestId('mock-node-detail-panel').parentElement;
+    const panelWrapper = screen.getByTestId(
+      'mock-node-detail-panel',
+    ).parentElement;
     expect(panelWrapper).toHaveAttribute('tabindex', '-1');
   });
 });

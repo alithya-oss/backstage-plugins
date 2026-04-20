@@ -84,7 +84,11 @@ export async function createRouter(
     } catch (err: any) {
       if (err instanceof NotAllowedError) {
         res.status(403).json({
-          error: { message: err.message, code: 'PERMISSION_DENIED', statusCode: 403 },
+          error: {
+            message: err.message,
+            code: 'PERMISSION_DENIED',
+            statusCode: 403,
+          },
         });
         return;
       }
@@ -107,7 +111,11 @@ export async function createRouter(
     } catch (err: any) {
       if (err instanceof NotAllowedError) {
         res.status(403).json({
-          error: { message: err.message, code: 'PERMISSION_DENIED', statusCode: 403 },
+          error: {
+            message: err.message,
+            code: 'PERMISSION_DENIED',
+            statusCode: 403,
+          },
         });
         return;
       }

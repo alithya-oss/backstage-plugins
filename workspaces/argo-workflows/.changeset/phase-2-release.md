@@ -8,6 +8,7 @@
 Phase 2 release of the Argo Workflows plugin for Backstage.
 
 New features:
+
 - dagre-powered DAG layout with proper node positioning and SVG edge routing
 - Full-page React Flow DAG view with zoom, pan, minimap, and controls
 - Compressed nodes decompression with collapsible template groups

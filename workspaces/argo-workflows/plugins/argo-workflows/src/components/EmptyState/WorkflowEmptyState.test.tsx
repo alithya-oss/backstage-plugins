@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ArgoWorkflowsError } from '../../api';
@@ -46,9 +45,7 @@ describe('WorkflowEmptyState', () => {
     );
 
     expect(
-      screen.getByText(
-        /matching label selector app=my-service/,
-      ),
+      screen.getByText(/matching label selector app=my-service/),
     ).toBeInTheDocument();
   });
 
@@ -76,11 +73,7 @@ describe('WorkflowEmptyState', () => {
   });
 
   it('renders danger alert for 403 error', () => {
-    const error = new ArgoWorkflowsError(
-      'Forbidden',
-      'FORBIDDEN',
-      403,
-    );
+    const error = new ArgoWorkflowsError('Forbidden', 'FORBIDDEN', 403);
 
     render(<WorkflowEmptyState error={error} />);
 
@@ -89,11 +82,7 @@ describe('WorkflowEmptyState', () => {
   });
 
   it('403 alert mentions RBAC permissions', () => {
-    const error = new ArgoWorkflowsError(
-      'Forbidden',
-      'FORBIDDEN',
-      403,
-    );
+    const error = new ArgoWorkflowsError('Forbidden', 'FORBIDDEN', 403);
 
     render(<WorkflowEmptyState error={error} />);
 
@@ -103,11 +92,7 @@ describe('WorkflowEmptyState', () => {
   });
 
   it('renders danger alert for 502 error', () => {
-    const error = new ArgoWorkflowsError(
-      'Bad Gateway',
-      'BAD_GATEWAY',
-      502,
-    );
+    const error = new ArgoWorkflowsError('Bad Gateway', 'BAD_GATEWAY', 502);
 
     render(<WorkflowEmptyState error={error} />);
 
@@ -129,11 +114,7 @@ describe('WorkflowEmptyState', () => {
   });
 
   it('502/504 alert mentions Kubernetes cluster connectivity', () => {
-    const error = new ArgoWorkflowsError(
-      'Bad Gateway',
-      'BAD_GATEWAY',
-      502,
-    );
+    const error = new ArgoWorkflowsError('Bad Gateway', 'BAD_GATEWAY', 502);
 
     render(<WorkflowEmptyState error={error} />);
 

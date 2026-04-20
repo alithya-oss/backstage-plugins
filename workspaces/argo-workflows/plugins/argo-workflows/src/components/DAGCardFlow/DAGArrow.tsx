@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import styles from './DAGArrow.module.css';
 
 /**

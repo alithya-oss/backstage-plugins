@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { render, screen, fireEvent } from '@testing-library/react';
 import type { DAGGroup } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { DAGGroupNode } from './DAGGroupNode';
@@ -35,7 +34,11 @@ function makeGroup(overrides?: Partial<DAGGroup>): DAGGroup {
   };
 }
 
-function renderGroupNode(group: DAGGroup, isCollapsed: boolean, onToggle = jest.fn()) {
+function renderGroupNode(
+  group: DAGGroup,
+  isCollapsed: boolean,
+  onToggle = jest.fn(),
+) {
   return render(
     <DAGGroupNode
       id={group.id}

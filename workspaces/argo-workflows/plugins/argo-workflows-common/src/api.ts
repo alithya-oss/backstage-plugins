@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { createApiRef } from '@backstage/core-plugin-api';
 import { WorkflowDetail, WorkflowSummary } from './types';
 
@@ -30,10 +29,7 @@ export interface ArgoWorkflowsApi {
   ): Promise<WorkflowSummary[]>;
 
   /** Get a single workflow with full status.nodes for DAG rendering. */
-  getWorkflow(
-    namespace: string,
-    name: string,
-  ): Promise<WorkflowDetail>;
+  getWorkflow(namespace: string, name: string): Promise<WorkflowDetail>;
 }
 
 /**

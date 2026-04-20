@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * Entity annotation for the Kubernetes namespace where Argo Workflows are deployed.
  * @public

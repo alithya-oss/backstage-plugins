@@ -34,9 +34,9 @@ kind: ClusterRole
 metadata:
   name: backstage-argo-workflows
 rules:
-  - apiGroups: ["argoproj.io"]
-    resources: ["workflows"]
-    verbs: ["get", "list"]
+  - apiGroups: ['argoproj.io']
+    resources: ['workflows']
+    verbs: ['get', 'list']
 ```
 
 ## Permission Framework
@@ -47,7 +47,10 @@ To restrict access, define a permission policy:
 
 ```typescript
 import { argoWorkflowsReadPermission } from '@alithya-oss/backstage-plugin-argo-workflows-common';
-import { isPermission, AuthorizeResult } from '@backstage/plugin-permission-common';
+import {
+  isPermission,
+  AuthorizeResult,
+} from '@backstage/plugin-permission-common';
 
 class MyPermissionPolicy implements PermissionPolicy {
   async handle(request, user) {
@@ -66,16 +69,16 @@ By default (no policy configured), all authenticated users have access.
 
 All routes require Backstage authentication (except `/health`). All data routes require `argo-workflows.workflow.read` permission.
 
-| Route | Method | Description |
-|-------|--------|-------------|
-| `/health` | GET | Health check — returns `{ status: 'ok' }` |
-| `/workflows/:namespace` | GET | List workflows in namespace |
-| `/workflows/:namespace/:name` | GET | Get single workflow with full node status |
+| Route                         | Method | Description                               |
+| ----------------------------- | ------ | ----------------------------------------- |
+| `/health`                     | GET    | Health check — returns `{ status: 'ok' }` |
+| `/workflows/:namespace`       | GET    | List workflows in namespace               |
+| `/workflows/:namespace/:name` | GET    | Get single workflow with full node status |
 
 ### Query Parameters (list route)
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter       | Type   | Description                            |
+| --------------- | ------ | -------------------------------------- |
 | `labelSelector` | string | K8s label selector to filter workflows |
 
 ## License

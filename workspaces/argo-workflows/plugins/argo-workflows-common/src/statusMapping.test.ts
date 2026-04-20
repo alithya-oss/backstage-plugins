@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { PHASE_STATUS_MAP, PHASE_ICON_MAP } from './statusMapping';
 import { NodePhase } from './types';
 

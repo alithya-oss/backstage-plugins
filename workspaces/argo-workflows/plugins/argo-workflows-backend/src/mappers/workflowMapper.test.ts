@@ -172,7 +172,11 @@ describe('mapCrdToWorkflowSummary', () => {
         startedAt: '2026-04-18T10:00:00Z',
         nodes: {
           root: { displayName: 'root', type: 'Steps', phase: 'Succeeded' },
-          group: { displayName: 'group', type: 'StepGroup', phase: 'Succeeded' },
+          group: {
+            displayName: 'group',
+            type: 'StepGroup',
+            phase: 'Succeeded',
+          },
           pod: { displayName: 'run', type: 'Pod', phase: 'Succeeded' },
         },
       },
@@ -211,7 +215,11 @@ describe('mapCrdToWorkflowSummary', () => {
       status: {
         phase: 'Running',
         startedAt: '2026-04-18T10:00:00Z',
-        nodes: { n1: 'not-an-object', n2: null, n3: { type: 'Pod', displayName: 'ok', phase: 'Succeeded' } },
+        nodes: {
+          n1: 'not-an-object',
+          n2: null,
+          n3: { type: 'Pod', displayName: 'ok', phase: 'Succeeded' },
+        },
       },
     };
     const result = mapCrdToWorkflowSummary(crd);
@@ -328,7 +336,11 @@ describe('mapCrdToWorkflowDetail', () => {
         nodes: {
           root: { displayName: 'root', type: 'DAG', phase: 'Succeeded' },
           steps: { displayName: 'steps', type: 'Steps', phase: 'Succeeded' },
-          group: { displayName: 'group', type: 'StepGroup', phase: 'Succeeded' },
+          group: {
+            displayName: 'group',
+            type: 'StepGroup',
+            phase: 'Succeeded',
+          },
           pod: { displayName: 'run', type: 'Pod', phase: 'Succeeded' },
         },
       },
@@ -355,7 +367,11 @@ describe('mapCrdToWorkflowDetail', () => {
   it('handles empty status.nodes map — returns empty nodes array', () => {
     const crd = {
       metadata: { name: 'wf', namespace: 'ns' },
-      status: { phase: 'Running', startedAt: '2026-04-18T10:00:00Z', nodes: {} },
+      status: {
+        phase: 'Running',
+        startedAt: '2026-04-18T10:00:00Z',
+        nodes: {},
+      },
     };
     const result = mapCrdToWorkflowDetail(crd);
     expect(result.nodes).toEqual([]);

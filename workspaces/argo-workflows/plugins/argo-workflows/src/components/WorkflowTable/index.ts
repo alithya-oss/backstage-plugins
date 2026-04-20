@@ -18,10 +18,7 @@ export { WorkflowTable } from './WorkflowTable';
 export type { WorkflowTableProps } from './WorkflowTable';
 export { WorkflowFilters } from './WorkflowFilters';
 export type { WorkflowFiltersProps } from './WorkflowFilters';
-export {
-  ExpandButton,
-  WorkflowExpandedContent,
-} from './WorkflowExpandableRow';
+export { ExpandButton, WorkflowExpandedContent } from './WorkflowExpandableRow';
 export type { WorkflowExpandableRowProps } from './WorkflowExpandableRow';
 export { NodeStatusDots } from './NodeStatusDots';
 export type { NodeStatusDotsProps } from './NodeStatusDots';

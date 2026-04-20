@@ -33,8 +33,10 @@ jest.mock('./service', () => {
   };
 });
 
-const { __mockListWorkflows: mockListWorkflows, __mockGetWorkflow: mockGetWorkflow } =
-  jest.requireMock('./service');
+const {
+  __mockListWorkflows: mockListWorkflows,
+  __mockGetWorkflow: mockGetWorkflow,
+} = jest.requireMock('./service');
 
 const mockLogger = {
   info: jest.fn(),
@@ -231,8 +233,18 @@ describe('createRouter', () => {
         finishedAt: '2026-04-18T14:05:00Z',
         duration: 300,
         nodes: [
-          { id: 'root', displayName: 'pipeline-abc', type: 'DAG', phase: 'Succeeded' },
-          { id: 'build-1', displayName: 'build', type: 'Pod', phase: 'Succeeded' },
+          {
+            id: 'root',
+            displayName: 'pipeline-abc',
+            type: 'DAG',
+            phase: 'Succeeded',
+          },
+          {
+            id: 'build-1',
+            displayName: 'build',
+            type: 'Pod',
+            phase: 'Succeeded',
+          },
         ],
       };
       mockGetWorkflow.mockResolvedValue(detail);
@@ -250,7 +262,10 @@ describe('createRouter', () => {
 
       await request(app).get('/workflows/my-namespace/my-workflow');
 
-      expect(mockGetWorkflow).toHaveBeenCalledWith('my-namespace', 'my-workflow');
+      expect(mockGetWorkflow).toHaveBeenCalledWith(
+        'my-namespace',
+        'my-workflow',
+      );
     });
 
     it('returns ErrorResponse for service errors', async () => {

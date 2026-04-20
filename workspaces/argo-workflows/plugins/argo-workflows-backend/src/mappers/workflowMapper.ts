@@ -73,7 +73,10 @@ function extractNodeSummaries(
 ): NodeStatusSummary[] {
   if (!nodes || typeof nodes !== 'object') return [];
   return Object.values(nodes)
-    .filter(node => node && typeof node === 'object' && !BOUNDARY_NODE_TYPES.has(node.type))
+    .filter(
+      node =>
+        node && typeof node === 'object' && !BOUNDARY_NODE_TYPES.has(node.type),
+    )
     .map(node => ({
       displayName: String(node.displayName ?? ''),
       phase: VALID_NODE_PHASES.has(node.phase)
@@ -141,9 +144,7 @@ function extractFullNodes(
       return {
         id: String(id),
         displayName: String(node.displayName ?? ''),
-        type: (VALID_NODE_TYPES.has(node.type)
-          ? node.type
-          : 'Pod') as NodeType,
+        type: (VALID_NODE_TYPES.has(node.type) ? node.type : 'Pod') as NodeType,
         phase: (VALID_NODE_PHASES.has(node.phase)
           ? node.phase
           : 'Pending') as NodePhase,
@@ -151,9 +152,7 @@ function extractFullNodes(
         finishedAt: node.finishedAt ? String(node.finishedAt) : undefined,
         duration: computeDuration(node.startedAt, node.finishedAt),
         message: node.message ? String(node.message) : undefined,
-        templateName: node.templateName
-          ? String(node.templateName)
-          : undefined,
+        templateName: node.templateName ? String(node.templateName) : undefined,
         children,
         outboundNodes,
         boundaryID: node.boundaryID ? String(node.boundaryID) : undefined,

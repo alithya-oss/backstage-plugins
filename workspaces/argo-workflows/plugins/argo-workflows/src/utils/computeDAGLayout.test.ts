@@ -17,10 +17,7 @@
 import { computeDAGLayout } from './computeDAGLayout';
 import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 
-function makeNode(
-  id: string,
-  overrides?: Partial<NodeStatus>,
-): NodeStatus {
+function makeNode(id: string, overrides?: Partial<NodeStatus>): NodeStatus {
   return {
     id,
     displayName: id,
@@ -148,10 +145,7 @@ describe('computeDAGLayout', () => {
   });
 
   it('edges have source, target, and points', () => {
-    const nodes = [
-      makeNode('a', { children: ['b'] }),
-      makeNode('b'),
-    ];
+    const nodes = [makeNode('a', { children: ['b'] }), makeNode('b')];
     const result = computeDAGLayout(nodes);
     expect(result.edges).toHaveLength(1);
     expect(result.edges[0].source).toBe('a');

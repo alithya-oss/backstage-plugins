@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * Formats a duration in seconds into a human-readable string.
  *

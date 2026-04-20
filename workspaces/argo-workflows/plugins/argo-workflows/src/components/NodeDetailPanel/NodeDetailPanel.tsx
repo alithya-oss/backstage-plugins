@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import {
   PHASE_ICON_MAP,

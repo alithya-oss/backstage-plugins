@@ -47,9 +47,7 @@ export const EntityArgoWorkflowsContent = argoWorkflowsPlugin.provide(
   createRoutableExtension({
     name: 'EntityArgoWorkflowsContent',
     component: () =>
-      import('./components/ArgoWorkflowsPage').then(
-        m => m.ArgoWorkflowsPage,
-      ),
+      import('./components/ArgoWorkflowsPage').then(m => m.ArgoWorkflowsPage),
     mountPoint: rootRouteRef,
   }),
 );

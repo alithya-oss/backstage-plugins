@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { DAGFullPageView } from './DAGFullPageView';
@@ -114,7 +113,13 @@ describe('DAGFullPageView', () => {
         phase: 'Succeeded',
         startedAt: '2026-04-19T10:00:00Z',
         nodes: [
-          { id: 'a', displayName: 'build', type: 'Pod', phase: 'Succeeded', children: ['b'] },
+          {
+            id: 'a',
+            displayName: 'build',
+            type: 'Pod',
+            phase: 'Succeeded',
+            children: ['b'],
+          },
           { id: 'b', displayName: 'deploy', type: 'Pod', phase: 'Succeeded' },
         ],
       },

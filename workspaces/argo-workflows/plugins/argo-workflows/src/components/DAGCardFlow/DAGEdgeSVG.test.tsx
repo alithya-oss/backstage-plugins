@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-
 import { render, screen } from '@testing-library/react';
-import type { LayoutEdge, NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import type {
+  LayoutEdge,
+  NodeStatus,
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { DAGEdgeSVG } from './DAGEdgeSVG';
 
 function makeNode(id: string, phase: string = 'Succeeded'): NodeStatus {
@@ -26,54 +28,107 @@ function makeNode(id: string, phase: string = 'Succeeded'): NodeStatus {
 describe('DAGEdgeSVG', () => {
   it('renders SVG path for each edge', () => {
     const edges: LayoutEdge[] = [
-      { source: 'a', target: 'b', points: [{ x: 0, y: 0 }, { x: 100, y: 0 }] },
-      { source: 'b', target: 'c', points: [{ x: 100, y: 0 }, { x: 200, y: 0 }] },
+      {
+        source: 'a',
+        target: 'b',
+        points: [
+          { x: 0, y: 0 },
+          { x: 100, y: 0 },
+        ],
+      },
+      {
+        source: 'b',
+        target: 'c',
+        points: [
+          { x: 100, y: 0 },
+          { x: 200, y: 0 },
+        ],
+      },
     ];
     const nodeMap = new Map<string, NodeStatus>([
       ['a', makeNode('a')],
       ['b', makeNode('b')],
     ]);
-    render(<DAGEdgeSVG edges={edges} nodeMap={nodeMap} width={300} height={100} />);
+    render(
+      <DAGEdgeSVG edges={edges} nodeMap={nodeMap} width={300} height={100} />,
+    );
     const paths = screen.getAllByTestId('dag-edge-path');
     expect(paths).toHaveLength(2);
   });
 
   it('applies success class for Succeeded source', () => {
     const edges: LayoutEdge[] = [
-      { source: 'a', target: 'b', points: [{ x: 0, y: 0 }, { x: 100, y: 0 }] },
+      {
+        source: 'a',
+        target: 'b',
+        points: [
+          { x: 0, y: 0 },
+          { x: 100, y: 0 },
+        ],
+      },
     ];
     const nodeMap = new Map([['a', makeNode('a', 'Succeeded')]]);
-    render(<DAGEdgeSVG edges={edges} nodeMap={nodeMap} width={200} height={100} />);
+    render(
+      <DAGEdgeSVG edges={edges} nodeMap={nodeMap} width={200} height={100} />,
+    );
     const path = screen.getByTestId('dag-edge-path');
     expect(path.getAttribute('class')).toContain('success');
   });
 
   it('applies danger class for Failed source', () => {
     const edges: LayoutEdge[] = [
-      { source: 'a', target: 'b', points: [{ x: 0, y: 0 }, { x: 100, y: 0 }] },
+      {
+        source: 'a',
+        target: 'b',
+        points: [
+          { x: 0, y: 0 },
+          { x: 100, y: 0 },
+        ],
+      },
     ];
     const nodeMap = new Map([['a', makeNode('a', 'Failed')]]);
-    render(<DAGEdgeSVG edges={edges} nodeMap={nodeMap} width={200} height={100} />);
+    render(
+      <DAGEdgeSVG edges={edges} nodeMap={nodeMap} width={200} height={100} />,
+    );
     const path = screen.getByTestId('dag-edge-path');
     expect(path.getAttribute('class')).toContain('danger');
   });
 
   it('applies inactive class for Running source', () => {
     const edges: LayoutEdge[] = [
-      { source: 'a', target: 'b', points: [{ x: 0, y: 0 }, { x: 100, y: 0 }] },
+      {
+        source: 'a',
+        target: 'b',
+        points: [
+          { x: 0, y: 0 },
+          { x: 100, y: 0 },
+        ],
+      },
     ];
     const nodeMap = new Map([['a', makeNode('a', 'Running')]]);
-    render(<DAGEdgeSVG edges={edges} nodeMap={nodeMap} width={200} height={100} />);
+    render(
+      <DAGEdgeSVG edges={edges} nodeMap={nodeMap} width={200} height={100} />,
+    );
     const path = screen.getByTestId('dag-edge-path');
     expect(path.getAttribute('class')).toContain('inactive');
   });
 
   it('renders correct SVG path d attribute', () => {
     const edges: LayoutEdge[] = [
-      { source: 'a', target: 'b', points: [{ x: 10, y: 20 }, { x: 50, y: 30 }, { x: 90, y: 20 }] },
+      {
+        source: 'a',
+        target: 'b',
+        points: [
+          { x: 10, y: 20 },
+          { x: 50, y: 30 },
+          { x: 90, y: 20 },
+        ],
+      },
     ];
     const nodeMap = new Map([['a', makeNode('a')]]);
-    render(<DAGEdgeSVG edges={edges} nodeMap={nodeMap} width={200} height={100} />);
+    render(
+      <DAGEdgeSVG edges={edges} nodeMap={nodeMap} width={200} height={100} />,
+    );
     const path = screen.getByTestId('dag-edge-path');
     expect(path.getAttribute('d')).toBe('M 10 20 L 50 30 L 90 20');
   });

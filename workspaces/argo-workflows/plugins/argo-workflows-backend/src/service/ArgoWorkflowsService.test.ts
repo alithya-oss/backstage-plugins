@@ -47,7 +47,11 @@ const k8sListResponse = {
   kind: 'WorkflowList',
   items: [
     {
-      metadata: { name: 'wf-1', namespace: 'production', labels: { app: 'svc' } },
+      metadata: {
+        name: 'wf-1',
+        namespace: 'production',
+        labels: { app: 'svc' },
+      },
       status: {
         phase: 'Succeeded',
         startedAt: '2026-04-18T10:00:00Z',
@@ -316,9 +320,7 @@ describe('ArgoWorkflowsService', () => {
       const mockFetch = createMockFetch({ message: 'not found' }, 404);
       const service = createService(mockFetch);
 
-      await expect(
-        service.getWorkflow('bad-ns', 'wf'),
-      ).rejects.toMatchObject({
+      await expect(service.getWorkflow('bad-ns', 'wf')).rejects.toMatchObject({
         statusCode: 404,
         code: 'NOT_FOUND',
         message: expect.stringContaining("'bad-ns'"),
@@ -329,9 +331,7 @@ describe('ArgoWorkflowsService', () => {
       const mockFetch = createMockFetch({ message: 'internal' }, 500);
       const service = createService(mockFetch);
 
-      await expect(
-        service.getWorkflow('ns', 'wf'),
-      ).rejects.toMatchObject({
+      await expect(service.getWorkflow('ns', 'wf')).rejects.toMatchObject({
         statusCode: 502,
         code: 'BAD_GATEWAY',
       });
@@ -343,9 +343,7 @@ describe('ArgoWorkflowsService', () => {
       const mockFetch = jest.fn().mockRejectedValue(timeoutErr);
       const service = createService(mockFetch);
 
-      await expect(
-        service.getWorkflow('ns', 'wf'),
-      ).rejects.toMatchObject({
+      await expect(service.getWorkflow('ns', 'wf')).rejects.toMatchObject({
         statusCode: 504,
         code: 'GATEWAY_TIMEOUT',
         message: expect.stringContaining('timed out'),
@@ -360,9 +358,7 @@ describe('ArgoWorkflowsService', () => {
       });
       const service = createService(mockFetch);
 
-      await expect(
-        service.getWorkflow('ns', 'wf'),
-      ).rejects.toMatchObject({
+      await expect(service.getWorkflow('ns', 'wf')).rejects.toMatchObject({
         statusCode: 502,
         code: 'BAD_GATEWAY',
         message: expect.stringContaining('Invalid response'),

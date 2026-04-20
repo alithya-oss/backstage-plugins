@@ -23,9 +23,7 @@ import {
   fetchApiRef,
 } from '@backstage/frontend-plugin-api';
 import { EntityContentBlueprint } from '@backstage/plugin-catalog-react/alpha';
-import {
-  argoWorkflowsApiRef,
-} from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import { argoWorkflowsApiRef } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { ArgoWorkflowsApiClient } from './api';
 
 /**

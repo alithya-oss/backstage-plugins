@@ -45,7 +45,11 @@ export const ciPipelineSucceeded: WorkflowSummary = {
   startedAt: iso(-2 * HOUR),
   finishedAt: iso(-2 * HOUR + 12 * MIN),
   duration: 720,
-  labels: { app: 'frontend', branch: 'main', 'workflows.argoproj.io/creator': 'system' },
+  labels: {
+    app: 'frontend',
+    branch: 'main',
+    'workflows.argoproj.io/creator': 'system',
+  },
   nodes: [
     { displayName: 'checkout', phase: 'Succeeded' },
     { displayName: 'lint', phase: 'Succeeded' },
@@ -235,7 +239,12 @@ const deployFailedNodes: NodeStatus[] = [
     startedAt: iso(-5 * HOUR),
     finishedAt: iso(-5 * HOUR + 4 * MIN),
     duration: 240,
-    children: ['pre-check-pod', 'db-migrate-pod', 'rolling-update-pod', 'smoke-test-pod'],
+    children: [
+      'pre-check-pod',
+      'db-migrate-pod',
+      'rolling-update-pod',
+      'smoke-test-pod',
+    ],
   },
   {
     id: 'pre-check-pod',
@@ -270,7 +279,8 @@ const deployFailedNodes: NodeStatus[] = [
     startedAt: iso(-5 * HOUR + 90_000),
     finishedAt: iso(-5 * HOUR + 4 * MIN),
     duration: 150,
-    message: 'Error: ImagePullBackOff - registry.example.com/backend-api:v2.4.1 not found',
+    message:
+      'Error: ImagePullBackOff - registry.example.com/backend-api:v2.4.1 not found',
     children: ['smoke-test-pod'],
     boundaryID: 'deploy-staging-v2.4.1-f7d8',
   },

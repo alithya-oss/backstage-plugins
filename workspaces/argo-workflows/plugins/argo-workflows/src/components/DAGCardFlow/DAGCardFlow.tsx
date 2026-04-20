@@ -15,7 +15,10 @@
  */
 
 import { Fragment } from 'react';
-import type { NodeStatus, DAGColumn } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import type {
+  NodeStatus,
+  DAGColumn,
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { computeDAGColumns } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { DAGNodeCard } from './DAGNodeCard';
 import { DAGArrow, type ArrowStatus } from './DAGArrow';
@@ -51,7 +54,9 @@ function buildFlowAriaLabel(cols: DAGColumn[]): string {
   const parts = Object.entries(counts).map(
     ([phase, count]) => `${count} ${phase.toLowerCase()}`,
   );
-  return `Workflow execution graph with ${allNodes.length} nodes: ${parts.join(', ')}`;
+  return `Workflow execution graph with ${allNodes.length} nodes: ${parts.join(
+    ', ',
+  )}`;
 }
 
 /**

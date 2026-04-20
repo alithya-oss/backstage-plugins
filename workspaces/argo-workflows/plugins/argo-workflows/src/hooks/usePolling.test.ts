@@ -195,7 +195,11 @@ describe('usePolling', () => {
       expect(fetchFn).toHaveBeenCalledTimes(1);
     });
 
-    Object.defineProperty(document, 'hidden', { value: true, writable: true, configurable: true });
+    Object.defineProperty(document, 'hidden', {
+      value: true,
+      writable: true,
+      configurable: true,
+    });
 
     await act(async () => {
       jest.advanceTimersByTime(5000);
@@ -215,10 +219,18 @@ describe('usePolling', () => {
     });
 
     // Tab goes hidden
-    Object.defineProperty(document, 'hidden', { value: true, writable: true, configurable: true });
+    Object.defineProperty(document, 'hidden', {
+      value: true,
+      writable: true,
+      configurable: true,
+    });
 
     // Tab becomes visible again
-    Object.defineProperty(document, 'hidden', { value: false, writable: true, configurable: true });
+    Object.defineProperty(document, 'hidden', {
+      value: false,
+      writable: true,
+      configurable: true,
+    });
 
     await act(async () => {
       document.dispatchEvent(new Event('visibilitychange'));

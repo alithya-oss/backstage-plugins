@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import classNames from 'classnames';
 import type { WorkflowPhase } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import styles from './WorkflowFilters.module.css';

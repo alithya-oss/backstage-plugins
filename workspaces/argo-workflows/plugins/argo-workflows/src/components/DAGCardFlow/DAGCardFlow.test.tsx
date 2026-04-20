@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-
 import { render, screen, fireEvent } from '@testing-library/react';
 import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { DAGCardFlow } from './DAGCardFlow';
 
-function makeNode(
-  id: string,
-  overrides?: Partial<NodeStatus>,
-): NodeStatus {
+function makeNode(id: string, overrides?: Partial<NodeStatus>): NodeStatus {
   return {
     id,
     displayName: id,
@@ -34,10 +30,7 @@ function makeNode(
 
 describe('DAGCardFlow', () => {
   it('renders node cards for each execution node', () => {
-    const nodes = [
-      makeNode('a', { children: ['b'] }),
-      makeNode('b'),
-    ];
+    const nodes = [makeNode('a', { children: ['b'] }), makeNode('b')];
     render(<DAGCardFlow nodes={nodes} />);
     expect(screen.getByTestId('dag-node-a')).toBeInTheDocument();
     expect(screen.getByTestId('dag-node-b')).toBeInTheDocument();
@@ -68,19 +61,13 @@ describe('DAGCardFlow', () => {
   });
 
   it('does not render "parallel" label for single-node columns', () => {
-    const nodes = [
-      makeNode('a', { children: ['b'] }),
-      makeNode('b'),
-    ];
+    const nodes = [makeNode('a', { children: ['b'] }), makeNode('b')];
     render(<DAGCardFlow nodes={nodes} />);
     expect(screen.queryByText('parallel')).not.toBeInTheDocument();
   });
 
   it('renders arrows between columns', () => {
-    const nodes = [
-      makeNode('a', { children: ['b'] }),
-      makeNode('b'),
-    ];
+    const nodes = [makeNode('a', { children: ['b'] }), makeNode('b')];
     render(<DAGCardFlow nodes={nodes} />);
     const arrows = screen.getAllByTestId('dag-arrow');
     expect(arrows).toHaveLength(1);

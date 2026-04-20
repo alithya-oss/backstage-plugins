@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-import type { DAGGroup, DecompressedNodes, NodePhase, NodeStatus } from './types';
+import type {
+  DAGGroup,
+  DecompressedNodes,
+  NodePhase,
+  NodeStatus,
+} from './types';
 
 const BOUNDARY_TYPES = new Set(['DAG', 'Steps', 'StepGroup']);
 
 function aggregatePhase(childNodes: NodeStatus[]): NodePhase {
   if (childNodes.length === 0) return 'Pending';
-  if (childNodes.some(n => n.phase === 'Failed' || n.phase === 'Error')) return 'Failed';
+  if (childNodes.some(n => n.phase === 'Failed' || n.phase === 'Error'))
+    return 'Failed';
   if (childNodes.some(n => n.phase === 'Running')) return 'Running';
   if (childNodes.every(n => n.phase === 'Succeeded')) return 'Succeeded';
   if (childNodes.some(n => n.phase === 'Pending')) return 'Pending';

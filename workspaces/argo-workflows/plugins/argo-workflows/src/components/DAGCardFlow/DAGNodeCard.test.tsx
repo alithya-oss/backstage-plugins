@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { render, screen, fireEvent } from '@testing-library/react';
 import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { DAGNodeCard } from './DAGNodeCard';

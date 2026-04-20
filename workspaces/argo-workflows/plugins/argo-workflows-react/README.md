@@ -21,9 +21,11 @@ const { workflows, loading, error, lastUpdated } = useArgoWorkflows(entity);
 ```
 
 **Parameters:**
+
 - `entity: Entity` — Backstage catalog entity with namespace/label-selector annotations
 
 **Returns:**
+
 - `workflows: WorkflowSummary[]` — List of workflows
 - `loading: boolean` — True during initial fetch only
 - `error: Error | null` — Error if fetch failed
@@ -38,14 +40,19 @@ Fetches a single workflow's full detail with polling.
 ```typescript
 import { useWorkflowDetail } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 
-const { workflow, loading, error } = useWorkflowDetail('production', 'my-workflow');
+const { workflow, loading, error } = useWorkflowDetail(
+  'production',
+  'my-workflow',
+);
 ```
 
 **Parameters:**
+
 - `namespace: string` — Kubernetes namespace
 - `name: string` — Workflow name
 
 **Returns:**
+
 - `workflow: WorkflowDetail | null` — Full workflow with node status
 - `loading: boolean` — True during initial fetch only
 - `error: Error | null` — Error if fetch failed
@@ -67,12 +74,14 @@ const { data, loading, error, lastUpdated } = usePolling(
 ```
 
 **Parameters:**
+
 - `fetchFn: () => Promise<T>` — Async function to call
 - `intervalMs: number` — Polling interval in milliseconds
 - `options.enabled?: boolean` — Enable/disable polling (default: true)
 - `options.stopWhen?: (data: T) => boolean` — Stop condition
 
 **Returns:**
+
 - `data: T | null`, `loading: boolean`, `error: Error | null`, `lastUpdated: Date | null`
 
 ## License

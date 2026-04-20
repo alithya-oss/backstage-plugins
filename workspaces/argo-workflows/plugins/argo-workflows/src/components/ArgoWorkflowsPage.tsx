@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { useEntity } from '@backstage/plugin-catalog-react';
 import {
   ARGO_WORKFLOWS_NAMESPACE_ANNOTATION,
@@ -42,11 +41,13 @@ export const ArgoWorkflowsPage = () => {
   const { workflows, loading, error, lastUpdated } = useArgoWorkflows(entity);
 
   const namespace =
-    entity.metadata.annotations?.[ARGO_WORKFLOWS_NAMESPACE_ANNOTATION]?.trim() ||
-    undefined;
+    entity.metadata.annotations?.[
+      ARGO_WORKFLOWS_NAMESPACE_ANNOTATION
+    ]?.trim() || undefined;
   const labelSelector =
-    entity.metadata.annotations?.[ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION]?.trim() ||
-    undefined;
+    entity.metadata.annotations?.[
+      ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION
+    ]?.trim() || undefined;
 
   if (error) {
     return (

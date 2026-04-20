@@ -16,7 +16,7 @@ import { EntityArgoWorkflowsContent } from '@alithya-oss/backstage-plugin-argo-w
 
 <EntityLayout.Route path="/argo-workflows" title="Argo Workflows">
   <EntityArgoWorkflowsContent />
-</EntityLayout.Route>
+</EntityLayout.Route>;
 ```
 
 ## Setup (New Frontend System)
@@ -26,6 +26,7 @@ The plugin supports the new Backstage frontend system via the `alpha` entry poin
 ## Full-Page DAG View
 
 Click "Full View ↗" on any inline DAG to open the full-page view at `/argo-workflows/:namespace/:name/dag`. This view provides:
+
 - Zoom in/out and fit-to-view controls
 - Minimap for large workflows
 - Mouse wheel zoom and click-drag pan
@@ -47,7 +48,7 @@ const app = createApp({
         ref: argoWorkflowsTranslationRef,
         messages: {
           // Override any message key
-          'nodePanel.phase': 'Phase d\'exécution',
+          'nodePanel.phase': "Phase d'exécution",
         },
       }),
     ],
@@ -70,15 +71,19 @@ metadata:
 ## Troubleshooting
 
 ### "No Argo Workflows annotations found on this entity"
+
 Add `backstage.io/kubernetes-namespace` to your `catalog-info.yaml`.
 
 ### "You don't have permission to view Argo Workflows"
+
 The Backstage permission policy is denying `argo-workflows.workflow.read`. Contact your administrator.
 
 ### "Access denied" (403)
+
 The Backstage service account needs RBAC permissions. See the [backend README](../argo-workflows-backend/README.md).
 
 ### "Unable to connect to the Kubernetes cluster"
+
 Check your Backstage Kubernetes plugin configuration in `app-config.yaml`.
 
 ## License

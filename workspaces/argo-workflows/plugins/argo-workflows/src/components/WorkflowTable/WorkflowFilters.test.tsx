@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
@@ -42,12 +41,8 @@ describe('WorkflowFilters', () => {
       screen.getByRole('button', { name: 'Succeeded' }),
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Failed' })).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Running' }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Pending' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Running' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Pending' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Error' })).toBeInTheDocument();
   });
 
@@ -116,16 +111,10 @@ describe('WorkflowFilters', () => {
     const user = userEvent.setup();
     const onSearchChange = jest.fn();
     render(
-      <WorkflowFilters
-        {...defaultProps}
-        onSearchChange={onSearchChange}
-      />,
+      <WorkflowFilters {...defaultProps} onSearchChange={onSearchChange} />,
     );
 
-    await user.type(
-      screen.getByPlaceholderText('Search by name…'),
-      'd',
-    );
+    await user.type(screen.getByPlaceholderText('Search by name…'), 'd');
 
     expect(onSearchChange).toHaveBeenCalledTimes(1);
     expect(onSearchChange).toHaveBeenCalledWith('d');
@@ -147,10 +136,7 @@ describe('WorkflowFilters', () => {
 
   it('shows "—" in poll indicator when lastUpdated is invalid Date', () => {
     render(
-      <WorkflowFilters
-        {...defaultProps}
-        lastUpdated={new Date('invalid')}
-      />,
+      <WorkflowFilters {...defaultProps} lastUpdated={new Date('invalid')} />,
     );
 
     expect(screen.getByText(/Updated —/)).toBeInTheDocument();

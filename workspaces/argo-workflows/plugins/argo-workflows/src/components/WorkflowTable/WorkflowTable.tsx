@@ -39,10 +39,7 @@ import type {
   WorkflowPhase,
 } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { formatDuration } from '@alithya-oss/backstage-plugin-argo-workflows-common';
-import {
-  ExpandButton,
-  WorkflowExpandedContent,
-} from './WorkflowExpandableRow';
+import { ExpandButton, WorkflowExpandedContent } from './WorkflowExpandableRow';
 import { NodeStatusDots } from './NodeStatusDots';
 import styles from './WorkflowStatusIndicator.module.css';
 import filterStyles from './WorkflowFilters.module.css';
@@ -103,9 +100,7 @@ function WorkflowStatusIndicator({ phase }: { phase: WorkflowPhase }) {
     case 'Running':
       return (
         <span className={styles.status}>
-          <RiRefreshLine
-            className={`${styles.statusIcon} ${styles.running}`}
-          />
+          <RiRefreshLine className={`${styles.statusIcon} ${styles.running}`} />
           Running
         </span>
       );
@@ -218,12 +213,9 @@ export function WorkflowTable({
   const [searchText, setSearchText] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const handleToggleExpand = useCallback(
-    (workflowId: string) => {
-      setExpandedId(prev => (prev === workflowId ? null : workflowId));
-    },
-    [],
-  );
+  const handleToggleExpand = useCallback((workflowId: string) => {
+    setExpandedId(prev => (prev === workflowId ? null : workflowId));
+  }, []);
 
   const expandableColumns = useMemo<ColumnConfig<WorkflowTableItem>[]>(
     () => [
@@ -296,7 +288,7 @@ export function WorkflowTable({
     hasActiveFilters && tableData.length === 0 && workflows.length > 0;
 
   const selectedKeys = useMemo(
-    () => (activePhases.size === 0 ? 'all' as const : activePhases),
+    () => (activePhases.size === 0 ? ('all' as const) : activePhases),
     [activePhases],
   );
 
@@ -325,7 +317,12 @@ export function WorkflowTable({
           onChange={setSearchText}
           placeholder="Search by name…"
         />
-        <Flex gap="1" align="center" style={{ marginLeft: 'auto' }} aria-live="off">
+        <Flex
+          gap="1"
+          align="center"
+          style={{ marginLeft: 'auto' }}
+          aria-live="off"
+        >
           <span className={filterStyles.pollDot} />
           <Text variant="body-x-small" color="secondary">
             Updated {formatPollTime(lastUpdated ?? null)}

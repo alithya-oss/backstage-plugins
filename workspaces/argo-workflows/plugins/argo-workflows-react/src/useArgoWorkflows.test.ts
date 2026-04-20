@@ -27,9 +27,7 @@ jest.mock('@backstage/core-plugin-api', () => ({
 
 const mockUseApi = useApi as jest.MockedFunction<typeof useApi>;
 
-function createMockEntity(
-  annotations: Record<string, string> = {},
-): Entity {
+function createMockEntity(annotations: Record<string, string> = {}): Entity {
   return {
     apiVersion: 'backstage.io/v1alpha1',
     kind: 'Component',
@@ -81,10 +79,7 @@ describe('useArgoWorkflows', () => {
       expect(result.current.loading).toBe(false);
     });
 
-    expect(mockApi.listWorkflows).toHaveBeenCalledWith(
-      'production',
-      undefined,
-    );
+    expect(mockApi.listWorkflows).toHaveBeenCalledWith('production', undefined);
     expect(result.current.workflows).toEqual(mockWorkflows);
   });
 
@@ -266,10 +261,7 @@ describe('useArgoWorkflows', () => {
       expect(result.current.loading).toBe(false);
     });
 
-    expect(mockApi.listWorkflows).toHaveBeenCalledWith(
-      'production',
-      undefined,
-    );
+    expect(mockApi.listWorkflows).toHaveBeenCalledWith('production', undefined);
   });
 
   it('exposes lastUpdated from usePolling after successful fetch', async () => {
