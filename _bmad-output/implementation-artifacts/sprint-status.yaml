@@ -84,8 +84,8 @@ development_status:
   epic-4-retrospective: optional
 
   # Epic 5: Advanced DAG Visualization
-  epic-5: backlog
-  5-1-dagre-layout-engine: backlog
+  epic-5: in-progress
+  5-1-dagre-layout-engine: done
   5-2-react-flow-inline-dag: backlog
   5-3-react-flow-full-page-dag-view: backlog
   5-4-compressed-nodes-decompression: backlog

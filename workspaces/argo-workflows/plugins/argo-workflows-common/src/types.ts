@@ -138,3 +138,47 @@ export interface DAGColumn {
   /** True if this column contains more than one node (parallel execution) */
   isParallel: boolean;
 }
+
+/**
+ * A node with computed x/y position from dagre layout.
+ * Coordinates are top-left (converted from dagre's center coordinates).
+ * @public
+ */
+export interface PositionedNode {
+  /** Node ID */
+  id: string;
+  /** Top-left x coordinate */
+  x: number;
+  /** Top-left y coordinate */
+  y: number;
+  /** Node width in pixels */
+  width: number;
+  /** Node height in pixels */
+  height: number;
+  /** Original node data */
+  data: NodeStatus;
+}
+
+/**
+ * An edge between two nodes with routing points from dagre layout.
+ * @public
+ */
+export interface LayoutEdge {
+  /** Source node ID */
+  source: string;
+  /** Target node ID */
+  target: string;
+  /** Routing points for the edge path */
+  points: Array<{ x: number; y: number }>;
+}
+
+/**
+ * Complete DAG layout with positioned nodes and routed edges.
+ * @public
+ */
+export interface DAGLayout {
+  /** Nodes with computed positions */
+  nodes: PositionedNode[];
+  /** Edges with routing points */
+  edges: LayoutEdge[];
+}

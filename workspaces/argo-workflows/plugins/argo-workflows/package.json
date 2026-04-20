@@ -42,6 +42,7 @@
     "@backstage/plugin-catalog-react": "^2.1.1",
     "@backstage/theme": "^0.7.2",
     "@backstage/ui": "^0.13.3",
+    "@dagrejs/dagre": "^3.0.0",
     "@remixicon/react": "^4.8.0",
     "classnames": "^2.3.2",
     "react-use": "^17.2.4"
@@ -60,6 +61,7 @@
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.0.0",
+    "@types/dagre": "^0.7.54",
     "msw": "^1.0.0",
     "react": "^16.13.1 || ^17.0.0 || ^18.0.0",
     "react-dom": "^16.13.1 || ^17.0.0 || ^18.0.0",

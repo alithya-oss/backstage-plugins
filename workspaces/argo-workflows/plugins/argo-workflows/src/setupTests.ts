@@ -14,3 +14,9 @@
  * limitations under the License.
  */
 import '@testing-library/jest-dom';
+
+// Polyfill structuredClone for test environment (used by @dagrejs/dagre)
+if (typeof globalThis.structuredClone === 'undefined') {
+  (globalThis as any).structuredClone = <T>(val: T): T =>
+    JSON.parse(JSON.stringify(val));
+}

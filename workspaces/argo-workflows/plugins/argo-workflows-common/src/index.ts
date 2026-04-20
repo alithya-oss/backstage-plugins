@@ -30,6 +30,9 @@ export type {
   WorkflowSummary,
   WorkflowDetail,
   DAGColumn,
+  PositionedNode,
+  LayoutEdge,
+  DAGLayout,
 } from './types';
 
 export type { ArgoWorkflowsApi } from './api';

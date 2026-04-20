@@ -1369,11 +1369,13 @@ __metadata:
     "@backstage/test-utils": "npm:^1.7.16"
     "@backstage/theme": "npm:^0.7.2"
     "@backstage/ui": "npm:^0.13.3"
+    "@dagrejs/dagre": "npm:^3.0.0"
     "@remixicon/react": "npm:^4.8.0"
     "@testing-library/dom": "npm:^10.4.0"
     "@testing-library/jest-dom": "npm:^6.0.0"
     "@testing-library/react": "npm:^14.0.0"
     "@testing-library/user-event": "npm:^14.0.0"
+    "@types/dagre": "npm:^0.7.54"
     classnames: "npm:^2.3.2"
     msw: "npm:^1.0.0"
     react: "npm:^16.13.1 || ^17.0.0 || ^18.0.0"
@@ -3187,10 +3189,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dagrejs/dagre@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@dagrejs/dagre@npm:3.0.0"
+  dependencies:
+    "@dagrejs/graphlib": "npm:4.0.1"
+  checksum: 10/4b42954ee1ab0fe041ec70d3fc2d763be98ce0adc90b1ce19bebb309e822ebdf9606548fc1956e32b96b2a9278a077809065dff05bd42d593d7620e363f9d15e
+  languageName: node
+  linkType: hard
+
 "@dagrejs/graphlib@npm:2.2.4":
   version: 2.2.4
   resolution: "@dagrejs/graphlib@npm:2.2.4"
   checksum: 10/1fc5393525a3d666284ca740867d082768bc87ff61f5f181eb5c1a73c1a6e328ad23581f7415c81df2614171b8a4b4a8e6a417eefd7f9fca74a4a625ec3aa848
+  languageName: node
+  linkType: hard
+
+"@dagrejs/graphlib@npm:4.0.1":
+  version: 4.0.1
+  resolution: "@dagrejs/graphlib@npm:4.0.1"
+  checksum: 10/2b013162e42b3d26633e2edc8f83ec36390312d10bb1c57e805708d23229a1b5c59ff95b52b29915b44a84857bfbbe327d502aed0ac1b5326c9235c983015c08
   languageName: node
   linkType: hard
 
@@ -8772,6 +8790,13 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: 10/9545cc532c9218754443f48a0c98c1a9ba4af1fe54a3425c95de75ff3158147bb39e666cb7c6bf98cc56a9c6dc7b4ce5b2cbdae6b55d5942e50c81b76ed6b825
+  languageName: node
+  linkType: hard
+
+"@types/dagre@npm:^0.7.54":
+  version: 0.7.54
+  resolution: "@types/dagre@npm:0.7.54"
+  checksum: 10/4394e64220d341ec0a19f9f35a1d3aff2f5a92279e0393a909b3427c0c71f19ca850587f37c1c3c648ac996789cb700cb40af5ee6368cf14c201e200af1729a8
   languageName: node
   linkType: hard
 
