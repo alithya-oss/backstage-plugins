@@ -27,6 +27,8 @@ import {
   Tag,
   Flex,
   Text,
+  Container,
+  Header,
 } from '@backstage/ui';
 import {
   RiCheckboxCircleLine,
@@ -293,42 +295,47 @@ export function WorkflowTable({
   );
 
   return (
-    <>
-      <Flex gap="3" mb="4" align="center">
-        <TagGroup
-          selectionMode="multiple"
-          selectedKeys={selectedKeys}
-          onSelectionChange={selection => {
-            if (selection === 'all') {
-              setActivePhases(new Set());
-            } else {
-              setActivePhases(selection as Set<WorkflowPhase>);
-            }
-          }}
-        >
-          {PHASE_KEYS.map(({ id }) => (
-            <Tag key={id} id={id}>
-              {id}
-            </Tag>
-          ))}
-        </TagGroup>
-        <SearchField
-          value={searchText}
-          onChange={setSearchText}
-          placeholder="Search by name…"
-        />
-        <Flex
-          gap="1"
-          align="center"
-          style={{ marginLeft: 'auto' }}
-          aria-live="off"
-        >
-          <span className={filterStyles.pollDot} />
-          <Text variant="body-x-small" color="secondary">
-            Updated {formatPollTime(lastUpdated ?? null)}
-          </Text>
-        </Flex>
-      </Flex>
+    <Container>
+      <Header
+        title="Workflows"
+        customActions={
+          <Flex gap="3" mb="4" align="center">
+            <TagGroup
+              selectionMode="multiple"
+              selectedKeys={selectedKeys}
+              onSelectionChange={selection => {
+                if (selection === 'all') {
+                  setActivePhases(new Set());
+                } else {
+                  setActivePhases(selection as Set<WorkflowPhase>);
+                }
+              }}
+            >
+              {PHASE_KEYS.map(({ id }) => (
+                <Tag key={id} id={id}>
+                  {id}
+                </Tag>
+              ))}
+            </TagGroup>
+            <SearchField
+              value={searchText}
+              onChange={setSearchText}
+              placeholder="Search by name…"
+            />
+            <Flex
+              gap="1"
+              align="center"
+              style={{ marginLeft: 'auto' }}
+              aria-live="off"
+            >
+              <span className={filterStyles.pollDot} />
+              <Text variant="body-x-small" color="secondary">
+                Updated {formatPollTime(lastUpdated ?? null)}
+              </Text>
+            </Flex>
+          </Flex>
+        }
+      />
 
       {showEmptyFilterState ? (
         <div className={filterStyles.emptyFilters}>
@@ -353,12 +360,14 @@ export function WorkflowTable({
                 const wf = workflows.find(
                   w => `${w.namespace}/${w.name}` === expandedId,
                 );
-                return wf ? <WorkflowExpandedContent workflow={wf} key={expandedId} /> : null;
+                return wf ? (
+                  <WorkflowExpandedContent workflow={wf} key={expandedId} />
+                ) : null;
               })()}
             </div>
           )}
         </>
       )}
-    </>
+    </Container>
   );
 }
