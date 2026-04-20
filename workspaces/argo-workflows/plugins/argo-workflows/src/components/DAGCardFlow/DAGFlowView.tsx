@@ -64,6 +64,14 @@ export function DAGFlowView({
 }: DAGFlowViewProps) {
   const layout = useMemo(() => computeDAGLayout(nodes), [nodes]);
 
+  const nodeMap = useMemo(() => {
+    const map = new Map<string, NodeStatus>();
+    for (const pn of layout.nodes) {
+      map.set(pn.id, pn.data);
+    }
+    return map;
+  }, [layout]);
+
   if (layout.nodes.length === 0) {
     return (
       <div className={styles.empty} data-testid="dag-empty">
@@ -76,14 +84,6 @@ export function DAGFlowView({
     Math.max(...layout.nodes.map(n => n.x + n.width)) + CONTAINER_PADDING;
   const containerHeight =
     Math.max(...layout.nodes.map(n => n.y + n.height)) + CONTAINER_PADDING;
-
-  const nodeMap = useMemo(() => {
-    const map = new Map<string, NodeStatus>();
-    for (const pn of layout.nodes) {
-      map.set(pn.id, pn.data);
-    }
-    return map;
-  }, [layout]);
 
   return (
     <div className={styles.wrapper}>

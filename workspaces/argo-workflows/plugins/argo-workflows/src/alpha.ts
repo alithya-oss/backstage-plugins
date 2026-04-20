@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import { createElement } from 'react';
 import {
   createFrontendPlugin,
   ApiBlueprint,
@@ -41,7 +41,7 @@ export default createFrontendPlugin({
         title: 'Argo Workflows',
         loader: () =>
           import('./components/ArgoWorkflowsPage').then(m =>
-            React.createElement(m.ArgoWorkflowsPage),
+            createElement(m.ArgoWorkflowsPage),
           ),
       },
     }),

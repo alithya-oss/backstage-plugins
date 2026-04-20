@@ -38,13 +38,14 @@ export class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
-  state: ErrorBoundaryState = { hasError: false };
-
   static getDerivedStateFromError(): ErrorBoundaryState {
     return { hasError: true };
   }
 
+  state: ErrorBoundaryState = { hasError: false };
+
   componentDidCatch(error: Error, info: React.ErrorInfo): void {
+    // eslint-disable-next-line no-console
     console.error(
       '[argo-workflows] Rendering error:',
       error,
