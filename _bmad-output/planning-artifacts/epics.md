@@ -654,3 +654,194 @@ So that I can set up the plugin in my Backstage instance.
 **And** `yarn build:api-reports` passes for all three packages with no diff
 **And** changesets are created for the initial release
 **And** the workspace `README.md` provides an overview with links to each package
+
+
+## Epic 5: Advanced DAG Visualization
+
+After this epic, the DAG visualization uses dagre for proper graph layout and React Flow for interactive rendering with zoom, pan, minimap, and collapsible nested template groups. Replaces the Phase 1 CSS flexbox card flow.
+
+**FRs covered:** FR7, FR8, FR9, FR10, FR11, FR15
+**New dependencies:** `@dagrejs/graphlib`, `dagre`, `@xyflow/react`
+
+### Story 5.1: dagre Layout Engine
+
+As a plugin developer,
+I want the DAG layout computed by dagre instead of the custom Kahn's algorithm,
+So that nodes have proper x/y positions and edges have routed paths for complex topologies.
+
+**Acceptance Criteria:**
+
+**Given** a `NodeStatus[]` array from a workflow detail response
+**When** `computeDAGLayout(nodes)` is called
+**Then** it returns positioned nodes with `{ id, x, y, width, height }` and edges with `{ source, target, points }` using dagre layout
+**And** boundary nodes (DAG, Steps, StepGroup) are filtered out — only execution nodes are positioned
+**And** the layout direction is left-to-right (rankdir: 'LR')
+**And** node dimensions default to 180×60px with configurable spacing
+**And** the function uses `@dagrejs/graphlib` for the graph data structure and `dagre` for layout computation
+**And** the existing `computeDAGColumns` function is deprecated but kept for backward compatibility
+**And** unit tests cover: linear, parallel, fan-out/fan-in, diamond, single node, empty input
+
+### Story 5.2: React Flow Inline DAG
+
+As a service owner,
+I want the expanded row DAG rendered with React Flow instead of CSS flexbox,
+So that I see properly positioned nodes with SVG edge paths.
+
+**Acceptance Criteria:**
+
+**Given** a workflow row is expanded
+**When** the DAG renders using React Flow
+**Then** nodes are positioned using dagre layout coordinates
+**And** custom `DAGNodeCard` renders as a React Flow custom node (preserving existing card design)
+**And** edges render as SVG paths colored by status (success=green, danger=red, inactive=gray)
+**And** the inline view has zoom disabled and auto-fits to container width
+**And** the existing `DAGCardFlow` component is replaced by `DAGFlowView`
+**And** node selection still opens the `NodeDetailPanel`
+**And** unit tests verify node rendering, edge rendering, and node click interaction
+
+### Story 5.3: React Flow Full-Page DAG View
+
+As a service owner,
+I want a full-page DAG view with zoom, pan, minimap, and controls,
+So that I can explore large workflows in detail.
+
+**Acceptance Criteria:**
+
+**Given** the inline DAG is rendered in an expanded row
+**When** the user clicks a "full view" button on the DAG
+**Then** a new route `/argo-workflows/:namespace/:name/dag` opens with the full-page React Flow view
+**And** the view includes zoom controls (zoom in, zoom out, fit-to-view buttons)
+**And** a minimap component shows the overall graph structure in the bottom-right corner
+**And** mouse wheel zooms, click-drag pans the canvas
+**And** the `NodeDetailPanel` appears as a sidebar when a node is clicked
+**And** a back button returns to the entity page workflow list
+**And** the route is registered in `plugin.ts` with a `RouteRef`
+**And** unit tests verify route registration, controls rendering, and navigation
+
+### Story 5.4: Compressed Nodes Decompression
+
+As a plugin developer,
+I want nested DAG/Steps/StepGroup templates resolved into a hierarchical structure,
+So that the DAG can display template groups as collapsible containers.
+
+**Acceptance Criteria:**
+
+**Given** a `NodeStatus[]` array containing boundary nodes with `boundaryID` references
+**When** `decompressNodes(nodes)` is called
+**Then** it returns `{ groups: DAGGroup[], executionNodes: NodeStatus[] }` with parent-child hierarchy
+**And** each `DAGGroup` has `id`, `displayName`, `type`, `parentId`, `childNodeIds`, and `phase`
+**And** execution nodes are associated with their containing group via `boundaryID`
+**And** orphan execution nodes (no `boundaryID`) are placed in a root-level implicit group
+**And** the function handles deeply nested templates (DAG → Steps → StepGroup → Pod)
+**And** unit tests cover: flat workflow, single-level nesting, multi-level nesting, orphan nodes
+
+### Story 5.5: Collapsible Group Nodes in React Flow
+
+As a service owner,
+I want to expand and collapse nested template groups in the DAG,
+So that I can focus on specific parts of complex workflows.
+
+**Acceptance Criteria:**
+
+**Given** the React Flow DAG renders a workflow with nested templates
+**When** group nodes are rendered
+**Then** each group shows as a labeled container with a collapse/expand toggle
+**And** collapsed groups show as a single compact node with the group name and child count
+**And** expanded groups show all child nodes positioned inside the group boundary
+**And** dagre handles groups as compound graph subgraphs for proper layout
+**And** collapsing/expanding a group re-runs dagre layout and animates the transition
+**And** group borders are colored by the aggregate phase of child nodes
+**And** unit tests verify collapse/expand behavior, layout recalculation, and group rendering
+
+
+## Epic 6: Platform Integration & i18n
+
+After this epic, the plugin has a reusable hooks package, fine-grained permissions, new frontend system support, and full i18n translation support. Ready for enterprise adoption.
+
+**FRs covered:** FR32 (permissions), FR33 (i18n), FR34 (new frontend system)
+**New package:** `@backstage-community/plugin-argo-workflows-react`
+
+### Story 6.1: argo-workflows-react Package
+
+As a third-party plugin developer,
+I want reusable Argo Workflows hooks in a separate package,
+So that I can build custom UIs without depending on the full frontend plugin.
+
+**Acceptance Criteria:**
+
+**Given** the hooks exist in the frontend plugin
+**When** the `argo-workflows-react` package is created
+**Then** `useArgoWorkflows`, `useWorkflowDetail`, and `usePolling` are moved to the new package
+**And** the frontend plugin re-exports all hooks from `argo-workflows-react` for backward compatibility
+**And** the package has its own `package.json`, `tsconfig.json`, and `report.api.md`
+**And** `yarn build` succeeds for the new package and the frontend plugin
+**And** all existing tests pass without modification (imports resolve through re-exports)
+
+### Story 6.2: Backstage Permission Framework
+
+As a Backstage administrator,
+I want fine-grained permission control over Argo Workflows data access,
+So that I can restrict workflow visibility based on organizational policies.
+
+**Acceptance Criteria:**
+
+**Given** the Backstage permission framework is configured
+**When** a user accesses workflow data
+**Then** `argoWorkflows.workflow.read` permission is checked on each backend route
+**And** permission is conditional on the entity ref being accessed
+**And** a denied permission returns HTTP 403 with an actionable error message
+**And** the frontend shows a permission-denied empty state for 403 responses
+**And** permissions are defined in `argo-workflows-common/src/permissions.ts`
+**And** the backend uses `permissions` service from `coreServices` for authorization
+**And** unit tests verify permission checks on all routes and the frontend 403 state
+
+### Story 6.3: New Frontend System Support
+
+As a Backstage adopter using the new frontend system,
+I want the Argo Workflows plugin to work with `EntityContentBlueprint`,
+So that I can use it without the legacy `createRoutableExtension` API.
+
+**Acceptance Criteria:**
+
+**Given** a Backstage app using the new frontend system
+**When** the plugin is installed
+**Then** `EntityContentBlueprint` registers the Argo Workflows tab on entity pages
+**And** `ApiBlueprint` registers the API factory
+**And** the old frontend system exports (`createPlugin`, `createRoutableExtension`) continue to work
+**And** the new system entry point is at `src/alpha.ts` or `src/alpha/index.ts`
+**And** `package.json` has an `alpha` field pointing to the new entry point
+**And** unit tests verify both old and new system plugin registration
+
+### Story 6.4: i18n Translation Support
+
+As a Backstage adopter with a non-English user base,
+I want all Argo Workflows UI strings to be translatable,
+So that my users can see the plugin in their preferred language.
+
+**Acceptance Criteria:**
+
+**Given** the plugin is rendered
+**When** a translation override is provided by the app
+**Then** all user-facing strings use the translation ref via `useTranslationRef`
+**And** `argoWorkflowsTranslationRef` is exported from the frontend plugin
+**And** the default messages are in English
+**And** the translation ref covers: table labels, empty states, error messages, panel labels, DAG labels
+**And** interpolation is used for dynamic values (namespace, node counts, timestamps)
+**And** unit tests verify that components use translation keys instead of hardcoded strings
+
+### Story 6.5: Phase 2 Documentation Update
+
+As a plugin consumer,
+I want updated documentation covering all Phase 2 features,
+So that I can configure permissions, use the react package, and set up i18n.
+
+**Acceptance Criteria:**
+
+**Given** all Phase 2 features are implemented
+**When** the documentation is updated
+**Then** the workspace README lists Phase 2 features (React Flow DAG, permissions, i18n)
+**And** the frontend README documents: full-page DAG route, i18n override instructions
+**And** the backend README documents: permission configuration, new RBAC requirements
+**And** the react package has a README with hook API documentation
+**And** changesets are created for the Phase 2 release
+**And** `yarn build` succeeds for all four packages

@@ -82,3 +82,21 @@ development_status:
   4-5-error-boundaries-and-graceful-degradation: done
   4-6-documentation-and-community-release-preparation: done
   epic-4-retrospective: optional
+
+  # Epic 5: Advanced DAG Visualization
+  epic-5: backlog
+  5-1-dagre-layout-engine: backlog
+  5-2-react-flow-inline-dag: backlog
+  5-3-react-flow-full-page-dag-view: backlog
+  5-4-compressed-nodes-decompression: backlog
+  5-5-collapsible-group-nodes-in-react-flow: backlog
+  epic-5-retrospective: optional
+
+  # Epic 6: Platform Integration & i18n
+  epic-6: backlog
+  6-1-argo-workflows-react-package: backlog
+  6-2-backstage-permission-framework: backlog
+  6-3-new-frontend-system-support: backlog
+  6-4-i18n-translation-support: backlog
+  6-5-phase-2-documentation-update: backlog
+  epic-6-retrospective: optional
