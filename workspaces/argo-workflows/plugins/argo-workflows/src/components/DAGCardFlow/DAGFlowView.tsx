@@ -31,6 +31,8 @@ export interface DAGFlowViewProps {
   nodes: NodeStatus[];
   selectedNodeId?: string;
   onNodeClick?: (nodeId: string) => void;
+  /** URL for the full-page DAG view. If provided, a "Full View" link is shown. */
+  fullViewUrl?: string;
 }
 
 function buildAriaLabel(nodes: NodeStatus[]): string {
@@ -56,6 +58,7 @@ export function DAGFlowView({
   nodes,
   selectedNodeId,
   onNodeClick,
+  fullViewUrl,
 }: DAGFlowViewProps) {
   const layout = useMemo(() => computeDAGLayout(nodes), [nodes]);
 
@@ -97,6 +100,15 @@ export function DAGFlowView({
           width={containerWidth}
           height={containerHeight}
         />
+        {fullViewUrl && (
+          <a
+            href={fullViewUrl}
+            className={styles.fullViewLink}
+            data-testid="dag-full-view-link"
+          >
+            Full View ↗
+          </a>
+        )}
         {layout.nodes.map(pn => (
           <div
             key={pn.id}

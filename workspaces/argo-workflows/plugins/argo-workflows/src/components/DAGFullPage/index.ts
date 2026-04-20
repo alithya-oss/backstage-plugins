@@ -14,16 +14,4 @@
  * limitations under the License.
  */
 
-import { createRouteRef, createSubRouteRef } from '@backstage/core-plugin-api';
-
-/** @public */
-export const rootRouteRef = createRouteRef({
-  id: 'argo-workflows',
-});
-
-/** @public */
-export const dagViewRouteRef = createSubRouteRef({
-  id: 'argo-workflows/dag-view',
-  parent: rootRouteRef,
-  path: '/:namespace/:name/dag',
-});
+export { DAGFullPageView } from './DAGFullPageView';

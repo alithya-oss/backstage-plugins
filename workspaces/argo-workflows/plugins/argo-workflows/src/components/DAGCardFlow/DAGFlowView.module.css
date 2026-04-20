@@ -33,4 +33,18 @@
     font-size: 13px;
     padding: var(--bui-space-4);
   }
+
+  .fullViewLink {
+    color: var(--bui-fg-info);
+    font-size: 11px;
+    position: absolute;
+    right: 4px;
+    text-decoration: none;
+    top: 4px;
+    z-index: 1;
+  }
+
+  .fullViewLink:hover {
+    text-decoration: underline;
+  }
 }

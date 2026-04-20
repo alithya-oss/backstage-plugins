@@ -44,6 +44,7 @@
     "@backstage/ui": "^0.13.3",
     "@dagrejs/dagre": "^3.0.0",
     "@remixicon/react": "^4.8.0",
+    "@xyflow/react": "^12.10.2",
     "classnames": "^2.3.2",
     "react-use": "^17.2.4"
   },

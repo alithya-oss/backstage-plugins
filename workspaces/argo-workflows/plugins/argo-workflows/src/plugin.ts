@@ -23,13 +23,14 @@ import {
 } from '@backstage/core-plugin-api';
 import { argoWorkflowsApiRef } from '@backstage-community/plugin-argo-workflows-common';
 import { ArgoWorkflowsApiClient } from './api';
-import { rootRouteRef } from './routes';
+import { rootRouteRef, dagViewRouteRef } from './routes';
 
 /** @public */
 export const argoWorkflowsPlugin = createPlugin({
   id: 'argo-workflows',
   routes: {
     root: rootRouteRef,
+    dagView: dagViewRouteRef,
   },
   apis: [
     createApiFactory({

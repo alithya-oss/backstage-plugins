@@ -1,0 +1,69 @@
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@layer components {
+  .page {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 120px);
+  }
+
+  .toolbar {
+    align-items: center;
+    display: flex;
+    gap: var(--bui-space-3);
+    padding: var(--bui-space-3);
+  }
+
+  .backButton {
+    background: none;
+    border: 1px solid var(--bui-border-default);
+    border-radius: 4px;
+    color: var(--bui-fg-default);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    padding: 4px 12px;
+  }
+
+  .backButton:hover {
+    border-color: var(--bui-fg-info);
+    color: var(--bui-fg-info);
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .content {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .flowContainer {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .loading {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+  }
+}
