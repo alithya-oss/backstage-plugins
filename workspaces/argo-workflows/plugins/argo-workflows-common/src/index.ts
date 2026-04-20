@@ -33,6 +33,8 @@ export type {
   PositionedNode,
   LayoutEdge,
   DAGLayout,
+  DAGGroup,
+  DecompressedNodes,
 } from './types';
 
 export type { ArgoWorkflowsApi } from './api';
@@ -50,3 +52,5 @@ export { PHASE_STATUS_MAP, PHASE_ICON_MAP } from './statusMapping';
 export { formatDuration } from './duration';
 
 export { computeDAGColumns } from './computeDAGColumns';
+
+export { decompressNodes } from './decompressNodes';

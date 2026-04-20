@@ -182,3 +182,34 @@ export interface DAGLayout {
   /** Edges with routing points */
   edges: LayoutEdge[];
 }
+
+/**
+ * A group representing a boundary template node (DAG, Steps, StepGroup)
+ * with its child execution nodes resolved from boundaryID references.
+ * @public
+ */
+export interface DAGGroup {
+  /** Boundary node ID */
+  id: string;
+  /** Human-readable name */
+  displayName: string;
+  /** Boundary node type */
+  type: 'DAG' | 'Steps' | 'StepGroup';
+  /** Parent group ID (for nested templates) */
+  parentId?: string;
+  /** IDs of child execution nodes in this group */
+  childNodeIds: string[];
+  /** Aggregate phase derived from child nodes */
+  phase: NodePhase;
+}
+
+/**
+ * Result of decompressing a flat NodeStatus array into groups and execution nodes.
+ * @public
+ */
+export interface DecompressedNodes {
+  /** Boundary template groups with hierarchy */
+  groups: DAGGroup[];
+  /** Execution nodes (boundary nodes filtered out) */
+  executionNodes: NodeStatus[];
+}
