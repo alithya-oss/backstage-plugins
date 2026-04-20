@@ -38,14 +38,14 @@
   },
   "dependencies": {
     "@backstage-community/plugin-argo-workflows-common": "workspace:^",
-    "@backstage/catalog-model": "^1.7.7",
-    "@backstage/core-plugin-api": "^1.12.4"
+    "@backstage/catalog-model": "backstage:^",
+    "@backstage/core-plugin-api": "backstage:^"
   },
   "peerDependencies": {
     "react": "^16.13.1 || ^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.36.0",
+    "@backstage/cli": "backstage:^",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^14.0.0",
     "react": "^16.13.1 || ^17.0.0 || ^18.0.0",
