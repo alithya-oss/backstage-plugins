@@ -5,10 +5,18 @@
   "private": true,
   "main": "src/index.ts",
   "types": "src/index.ts",
+  "alpha": {
+    "main": "src/alpha.ts",
+    "types": "src/alpha.ts"
+  },
   "publishConfig": {
     "access": "public",
     "main": "dist/index.esm.js",
-    "types": "dist/index.d.ts"
+    "types": "dist/index.d.ts",
+    "alpha": {
+      "main": "dist/alpha.esm.js",
+      "types": "dist/alpha.d.ts"
+    }
   },
   "repository": {
     "type": "git",
@@ -41,6 +49,7 @@
     "@backstage/catalog-model": "^1.7.7",
     "@backstage/core-components": "^0.18.8",
     "@backstage/core-plugin-api": "^1.12.4",
+    "@backstage/frontend-plugin-api": "^0.16.2",
     "@backstage/plugin-catalog-react": "^2.1.1",
     "@backstage/theme": "^0.7.2",
     "@backstage/ui": "^0.13.3",
