@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-export { DAGCardFlow } from './DAGCardFlow';
-export type { DAGCardFlowProps } from './DAGCardFlow';
-export { DAGFlowView } from './DAGFlowView';
-export type { DAGFlowViewProps } from './DAGFlowView';
-export { DAGNodeCard } from './DAGNodeCard';
-export type { DAGNodeCardProps } from './DAGNodeCard';
-export { DAGArrow } from './DAGArrow';
-export type { DAGArrowProps, ArrowStatus } from './DAGArrow';
-export { DAGEdgeSVG } from './DAGEdgeSVG';
-export type { DAGEdgeSVGProps } from './DAGEdgeSVG';
+@layer components {
+  .wrapper {
+    overflow-x: auto;
+    padding: var(--bui-space-2) 0;
+  }
+
+  .container {
+    position: relative;
+  }
+
+  .node {
+    position: absolute;
+  }
+
+  .empty {
+    color: var(--bui-fg-secondary);
+    font-size: 13px;
+    padding: var(--bui-space-4);
+  }
+}

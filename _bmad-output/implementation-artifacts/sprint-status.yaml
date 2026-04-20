@@ -86,7 +86,7 @@ development_status:
   # Epic 5: Advanced DAG Visualization
   epic-5: in-progress
   5-1-dagre-layout-engine: done
-  5-2-react-flow-inline-dag: backlog
+  5-2-react-flow-inline-dag: done
   5-3-react-flow-full-page-dag-view: backlog
   5-4-compressed-nodes-decompression: backlog
   5-5-collapsible-group-nodes-in-react-flow: backlog

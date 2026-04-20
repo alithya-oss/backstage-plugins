@@ -18,7 +18,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import type { WorkflowSummary } from '@backstage-community/plugin-argo-workflows-common';
 import { formatDuration } from '@backstage-community/plugin-argo-workflows-common';
 import { useWorkflowDetail } from '../../hooks';
-import { DAGCardFlow } from '../DAGCardFlow';
+import { DAGFlowView } from '../DAGCardFlow';
 import { NodeDetailPanel } from '../NodeDetailPanel';
 import { ErrorBoundary } from '../ErrorBoundary';
 import styles from './WorkflowExpandableRow.module.css';
@@ -186,7 +186,7 @@ export function WorkflowExpandedContent({
               </div>
             }
           >
-            <DAGCardFlow
+            <DAGFlowView
               nodes={detail.nodes}
               selectedNodeId={selectedNodeId ?? undefined}
               onNodeClick={handleNodeClick}

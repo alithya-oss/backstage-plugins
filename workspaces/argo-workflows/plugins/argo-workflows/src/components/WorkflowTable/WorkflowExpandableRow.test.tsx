@@ -27,7 +27,7 @@ jest.mock('../../hooks', () => ({
 }));
 
 jest.mock('../DAGCardFlow', () => ({
-  DAGCardFlow: ({
+  DAGFlowView: ({
     nodes,
     onNodeClick,
     selectedNodeId,
