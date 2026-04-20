@@ -353,7 +353,7 @@ export function WorkflowTable({
                 const wf = workflows.find(
                   w => `${w.namespace}/${w.name}` === expandedId,
                 );
-                return wf ? <WorkflowExpandedContent workflow={wf} /> : null;
+                return wf ? <WorkflowExpandedContent workflow={wf} key={expandedId} /> : null;
               })()}
             </div>
           )}

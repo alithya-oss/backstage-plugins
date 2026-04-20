@@ -16,6 +16,7 @@
 
 import { createDevApp } from '@backstage/dev-utils';
 import '@backstage/ui/css/styles.css';
+import { DAGPreview } from './DAGPreview';
 import { ApiProvider, ConfigReader } from '@backstage/core-app-api';
 import { TestApiRegistry } from '@backstage/test-utils';
 import { EntityProvider } from '@backstage/plugin-catalog-react';
@@ -127,5 +128,10 @@ createDevApp()
         </EntityProvider>
       </ApiProvider>
     ),
+  })
+  .addPage({
+    path: '/dag-preview',
+    title: 'DAG Preview (React Flow)',
+    element: <DAGPreview />,
   })
   .render();

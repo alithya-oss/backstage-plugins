@@ -15,13 +15,25 @@
  */
 
 import { useMemo } from 'react';
+import {
+  ReactFlow,
+  Controls,
+  Handle,
+  Position,
+  type Node as RFNode,
+  type Edge as RFEdge,
+  type NodeProps,
+  type EdgeProps,
+  getSmoothStepPath,
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
 import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import {
+  PHASE_ICON_MAP,
+  formatDuration,
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { computeDAGLayout } from '../../utils/computeDAGLayout';
-import { DAGNodeCard } from './DAGNodeCard';
-import { DAGEdgeSVG } from './DAGEdgeSVG';
 import styles from './DAGFlowView.module.css';
-
-const CONTAINER_PADDING = 20;
 
 /**
  * Props for the DAGFlowView component.
@@ -35,6 +47,85 @@ export interface DAGFlowViewProps {
   fullViewUrl?: string;
 }
 
+/* ── Pill-shaped custom node ─────────────────────────────────── */
+
+const PILL_COLORS: Record<string, { bg: string; border: string; text: string }> = {
+  Succeeded: { bg: 'var(--bui-bg-success, #dcfce7)', border: 'var(--bui-fg-success, #16a34a)', text: 'var(--bui-fg-success, #15803d)' },
+  Failed:    { bg: 'var(--bui-bg-danger, #fee2e2)', border: 'var(--bui-fg-danger, #dc2626)', text: 'var(--bui-fg-danger, #b91c1c)' },
+  Error:     { bg: 'var(--bui-bg-danger, #fee2e2)', border: 'var(--bui-fg-danger, #dc2626)', text: 'var(--bui-fg-danger, #b91c1c)' },
+  Running:   { bg: 'var(--bui-bg-info, #dbeafe)', border: 'var(--bui-fg-info, #2563eb)', text: 'var(--bui-fg-info, #1d4ed8)' },
+  Pending:   { bg: 'var(--bui-bg-warning, #fef9c3)', border: 'var(--bui-fg-warning, #ca8a04)', text: 'var(--bui-fg-warning, #a16207)' },
+  Skipped:   { bg: 'var(--bui-bg-neutral-2, #f3f4f6)', border: 'var(--bui-fg-tertiary, #9ca3af)', text: 'var(--bui-fg-tertiary, #6b7280)' },
+  Omitted:   { bg: 'var(--bui-bg-neutral-2, #f3f4f6)', border: 'var(--bui-fg-tertiary, #9ca3af)', text: 'var(--bui-fg-tertiary, #6b7280)' },
+};
+
+function PillNode({ data }: NodeProps) {
+  const nodeData = data as unknown as { node: NodeStatus; isSelected: boolean; onNodeClick?: (id: string) => void };
+  const node = nodeData.node;
+  const colors = PILL_COLORS[node.phase] ?? PILL_COLORS.Pending;
+  const icon = PHASE_ICON_MAP[node.phase] ?? '—';
+
+  return (
+    <>
+      <Handle type="target" position={Position.Left} style={{ visibility: 'hidden' }} />
+      <div
+        className={`${styles.pill}${nodeData.isSelected ? ` ${styles.pillSelected}` : ''}`}
+        style={{
+          background: colors.bg,
+          borderColor: colors.border,
+          color: colors.text,
+        }}
+        onClick={nodeData.onNodeClick ? () => nodeData.onNodeClick!(node.id) : undefined}
+        title={`${node.displayName} — ${node.phase} — ${formatDuration(node.duration)}`}
+        data-testid={`dag-node-${node.id}`}
+      >
+        <span className={styles.pillIcon}>{icon}</span>
+        <span className={styles.pillName}>{node.displayName}</span>
+        <span className={styles.pillDuration}>{formatDuration(node.duration)}</span>
+      </div>
+      <Handle type="source" position={Position.Right} style={{ visibility: 'hidden' }} />
+    </>
+  );
+}
+
+/* ── Custom edge ─────────────────────────────────────────────── */
+
+const EDGE_COLORS: Record<string, string> = {
+  Succeeded: 'var(--bui-fg-success, #16a34a)',
+  Failed: 'var(--bui-fg-danger, #dc2626)',
+  Error: 'var(--bui-fg-danger, #dc2626)',
+  Running: 'var(--bui-fg-info, #2563eb)',
+  Pending: 'var(--bui-fg-warning, #ca8a04)',
+  Skipped: 'var(--bui-fg-tertiary, #9ca3af)',
+  Omitted: 'var(--bui-fg-tertiary, #9ca3af)',
+};
+
+function StatusEdge({
+  id, sourceX, sourceY, targetX, targetY,
+  sourcePosition, targetPosition, data,
+}: EdgeProps) {
+  const phase = (data as any)?.phase ?? 'Pending';
+  const [path] = getSmoothStepPath({
+    sourceX, sourceY, targetX, targetY,
+    sourcePosition, targetPosition,
+    borderRadius: 8,
+  });
+  return (
+    <path
+      id={id}
+      d={path}
+      fill="none"
+      stroke={EDGE_COLORS[phase] ?? 'var(--bui-fg-tertiary, #9ca3af)'}
+      strokeWidth={2}
+    />
+  );
+}
+
+const nodeTypes = { pill: PillNode };
+const edgeTypes = { status: StatusEdge };
+
+/* ── Main component ──────────────────────────────────────────── */
+
 function buildAriaLabel(nodes: NodeStatus[]): string {
   const counts: Record<string, number> = {};
   for (const n of nodes) {
@@ -43,16 +134,14 @@ function buildAriaLabel(nodes: NodeStatus[]): string {
   const parts = Object.entries(counts).map(
     ([phase, count]) => `${count} ${phase.toLowerCase()}`,
   );
-  return `Workflow execution graph with ${nodes.length} nodes: ${parts.join(
-    ', ',
-  )}`;
+  return `Workflow execution graph with ${nodes.length} nodes: ${parts.join(', ')}`;
 }
 
 /**
- * DAG visualization using dagre-positioned nodes and SVG edges.
+ * Inline DAG visualization using React Flow with pill-shaped nodes.
  *
- * Renders workflow nodes at absolute positions computed by dagre,
- * with SVG path edges colored by source node phase.
+ * Renders workflow nodes positioned by dagre with smooth step edges,
+ * zoom/fit controls, and phase-colored styling.
  *
  * @public
  */
@@ -62,7 +151,16 @@ export function DAGFlowView({
   onNodeClick,
   fullViewUrl,
 }: DAGFlowViewProps) {
-  const layout = useMemo(() => computeDAGLayout(nodes), [nodes]);
+  // Create a stable key from node IDs so React Flow remounts when the workflow changes
+  const flowKey = useMemo(
+    () => nodes.map(n => n.id).sort().join(','),
+    [nodes],
+  );
+
+  const layout = useMemo(
+    () => computeDAGLayout(nodes, { nodeWidth: 200, nodeHeight: 40 }),
+    [nodes],
+  );
 
   const nodeMap = useMemo(() => {
     const map = new Map<string, NodeStatus>();
@@ -72,6 +170,33 @@ export function DAGFlowView({
     return map;
   }, [layout]);
 
+  const rfNodes: RFNode[] = useMemo(
+    () =>
+      layout.nodes.map(pn => ({
+        id: pn.id,
+        position: { x: pn.x, y: pn.y },
+        type: 'pill',
+        data: {
+          node: pn.data,
+          isSelected: pn.id === selectedNodeId,
+          onNodeClick,
+        },
+      })),
+    [layout, selectedNodeId, onNodeClick],
+  );
+
+  const rfEdges: RFEdge[] = useMemo(
+    () =>
+      layout.edges.map(e => ({
+        id: `${e.source}-${e.target}`,
+        source: e.source,
+        target: e.target,
+        type: 'status',
+        data: { phase: nodeMap.get(e.source)?.phase ?? 'Pending' },
+      })),
+    [layout, nodeMap],
+  );
+
   if (layout.nodes.length === 0) {
     return (
       <div className={styles.empty} data-testid="dag-empty">
@@ -80,49 +205,35 @@ export function DAGFlowView({
     );
   }
 
-  const containerWidth =
-    Math.max(...layout.nodes.map(n => n.x + n.width)) + CONTAINER_PADDING;
-  const containerHeight =
-    Math.max(...layout.nodes.map(n => n.y + n.height)) + CONTAINER_PADDING;
-
   return (
-    <div className={styles.wrapper}>
-      <div
-        className={styles.container}
-        style={{ width: containerWidth, height: containerHeight }}
-        data-testid="dag-flow-view"
-        role="group"
-        aria-label={buildAriaLabel(layout.nodes.map(n => n.data))}
+    <div
+      className={styles.flowContainer}
+      data-testid="dag-flow-view"
+      role="group"
+      aria-label={buildAriaLabel(layout.nodes.map(n => n.data))}
+    >
+      {fullViewUrl && (
+        <a
+          href={fullViewUrl}
+          className={styles.fullViewLink}
+          data-testid="dag-full-view-link"
+        >
+          Full View ↗
+        </a>
+      )}
+      <ReactFlow
+        key={flowKey}
+        nodes={rfNodes}
+        edges={rfEdges}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        fitView
+        nodesDraggable={false}
+        nodesConnectable={false}
+        proOptions={{ hideAttribution: true }}
       >
-        <DAGEdgeSVG
-          edges={layout.edges}
-          nodeMap={nodeMap}
-          width={containerWidth}
-          height={containerHeight}
-        />
-        {fullViewUrl && (
-          <a
-            href={fullViewUrl}
-            className={styles.fullViewLink}
-            data-testid="dag-full-view-link"
-          >
-            Full View ↗
-          </a>
-        )}
-        {layout.nodes.map(pn => (
-          <div
-            key={pn.id}
-            className={styles.node}
-            style={{ left: pn.x, top: pn.y }}
-          >
-            <DAGNodeCard
-              node={pn.data}
-              isSelected={pn.id === selectedNodeId}
-              onClick={onNodeClick ? () => onNodeClick(pn.id) : undefined}
-            />
-          </div>
-        ))}
-      </div>
+        <Controls showInteractive={false} />
+      </ReactFlow>
     </div>
   );
 }

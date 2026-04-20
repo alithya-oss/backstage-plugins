@@ -15,17 +15,10 @@
  */
 
 @layer components {
-  .wrapper {
-    overflow-x: auto;
-    padding: var(--bui-space-2) 0;
-  }
-
-  .container {
+  .flowContainer {
+    height: 300px;
     position: relative;
-  }
-
-  .node {
-    position: absolute;
+    width: 100%;
   }
 
   .empty {
@@ -38,13 +31,50 @@
     color: var(--bui-fg-info);
     font-size: 11px;
     position: absolute;
-    right: 4px;
+    right: 8px;
     text-decoration: none;
-    top: 4px;
-    z-index: 1;
+    top: 8px;
+    z-index: 10;
   }
 
   .fullViewLink:hover {
     text-decoration: underline;
+  }
+
+  .pill {
+    align-items: center;
+    border: 2px solid;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    font-size: 12px;
+    font-weight: 500;
+    gap: 6px;
+    padding: 6px 14px;
+    white-space: nowrap;
+  }
+
+  .pill:hover {
+    filter: brightness(0.95);
+  }
+
+  .pillSelected {
+    box-shadow: 0 0 0 2px var(--bui-fg-info, #2563eb);
+  }
+
+  .pillIcon {
+    font-size: 14px;
+  }
+
+  .pillName {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pillDuration {
+    font-family: var(--bui-font-monospace, monospace);
+    font-size: 10px;
+    opacity: 0.7;
   }
 }
