@@ -43,5 +43,9 @@ export class AWSEnvironmentProviderEntitiesProcessor
 const catalogModuleAwsAppsEntitiesProcessor: BackendFeature;
 export default catalogModuleAwsAppsEntitiesProcessor;
 
+// Warnings were encountered during analysis:
+//
+// src/index.d.ts:2:1 - (ae-misplaced-package-tag) The @packageDocumentation comment must appear at the top of entry point *.d.ts file
+
 // (No @packageDocumentation comment for this package)
 ```

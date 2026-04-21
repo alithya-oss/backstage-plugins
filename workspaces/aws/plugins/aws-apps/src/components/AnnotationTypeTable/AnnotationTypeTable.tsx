@@ -20,6 +20,7 @@ const AnnotationTypeTable = ({
   Object.keys(initAnnotations).forEach(key => {
     // If the annotation is of the correct type, keep it
     if (key.includes(type)) {
+      // console.log(key);
       // Separate out Annotation
       let newKey = key.replace(`${type}/`, '').replace(/-/g, ' ');
       // Capital case the annotation

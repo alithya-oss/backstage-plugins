@@ -296,6 +296,7 @@ const ResourceBindingCard = ({
       .catch(err => {
         setIsBindSuccessful(false);
         setBindResourceMessage(err);
+        // console.log(err);
         setError(err);
         setSpinning(false);
       });
@@ -318,6 +319,7 @@ const ResourceBindingCard = ({
       .catch(err => {
         setIsBindSuccessful(false);
         setBindResourceMessage(err);
+        // console.log(err);
         setError(err);
         setSpinning(false);
       });

@@ -57,6 +57,7 @@ export function AwsAppPage(_props: AwsAppPageProps) {
 
   const { loading: loadingPermission, allowed: canReadAudit } = usePermission({
     permission: readOpaAppAuditPermission,
+    resourceRef: '',
   });
 
   const awsAppLogsContent = (
@@ -109,6 +110,7 @@ export function AwsAppPage(_props: AwsAppPageProps) {
           <EntityLayout.Route path="/audit" title="Audit">
             <RequirePermission
               permission={readOpaAppAuditPermission}
+              resourceRef=""
               errorPage={<></>}
             >
               {auditContent}
@@ -139,6 +141,7 @@ export function AwsAppPage(_props: AwsAppPageProps) {
           <EntityLayout.Route path="/audit" title="Audit">
             <RequirePermission
               permission={readOpaAppAuditPermission}
+              resourceRef=""
               errorPage={<></>}
             >
               {auditContent}
@@ -169,6 +172,7 @@ export function AwsAppPage(_props: AwsAppPageProps) {
           <EntityLayout.Route path="/audit" title="Audit">
             <RequirePermission
               permission={readOpaAppAuditPermission}
+              resourceRef=""
               errorPage={<></>}
             >
               {auditContent}

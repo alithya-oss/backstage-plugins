@@ -40,7 +40,6 @@
     "winston": "^3.11.0"
   },
   "devDependencies": {
-    "@backstage/backend-common": "^0.25.0",
     "@backstage/backend-test-utils": "backstage:^",
     "@backstage/cli": "backstage:^",
     "@types/jest": "^29.5.14",

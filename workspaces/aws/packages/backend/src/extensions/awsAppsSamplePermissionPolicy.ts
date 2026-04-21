@@ -131,7 +131,7 @@ class OpaSamplePermissionPolicy implements PermissionPolicy {
 
 export default createBackendModule({
   pluginId: 'permission',
-  moduleId: 'custom-harmonix-policy',
+  moduleId: 'custom-aws-apps-policy',
   register(reg) {
     reg.registerInit({
       deps: { policy: policyExtensionPoint },

@@ -36,7 +36,6 @@
     "@aws-sdk/client-eventbridge": "^3.1019.0",
     "@aws-sdk/client-s3": "^3.1019.0",
     "@aws-sdk/types": "^3.973.6",
-    "@backstage/backend-common": "^0.25.0",
     "@backstage/backend-plugin-api": "backstage:^",
     "@backstage/errors": "backstage:^",
     "@backstage/integration-aws-node": "backstage:^",

@@ -1,11 +1,8 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-// SPDX-License-Identifier: Apache-2.0
-
-/***/
 /**
- * The opa module for @backstage/plugin-scaffolder-backend.
+ * The aws-apps module for @backstage/plugin-scaffolder-backend.
+ *
+ * @packageDocumentation
  */
 
+export { scaffolderModule as default } from './module';
 export * from './actions';
-export * from './types';
-export { scaffolderModuleAwsApps as default } from './module';

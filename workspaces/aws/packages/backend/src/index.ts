@@ -47,7 +47,7 @@ backend.add(import('@backstage/plugin-permission-backend'));
 backend.add(
   import('@backstage/plugin-permission-backend-module-allow-all-policy'),
 );
-// backend.add(import('./extensions/harmonixSamplePermissionPolicy'));
+// backend.add(import('./extensions/awsAppsSamplePermissionPolicy'));
 
 // search plugin
 backend.add(import('@backstage/plugin-search-backend'));
@@ -99,5 +99,10 @@ backend.add(import('@roadiehq/scaffolder-backend-module-utils'));
 // gitlab third-party plugins
 backend.add(gitlabPlugin);
 backend.add(catalogPluginGitlabFillerProcessorModule);
+
+// events plugin
+backend.add(import('@backstage/plugin-events-backend'));
+backend.add(import('@backstage/plugin-events-backend-module-github'));
+backend.add(import('@backstage/plugin-events-backend-module-gitlab'));
 
 backend.start();

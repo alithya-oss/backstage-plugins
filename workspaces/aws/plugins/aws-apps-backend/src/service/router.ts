@@ -22,12 +22,13 @@ import express from 'express';
 import Router from 'express-promise-router';
 import YAML from 'yaml';
 import {
-  AwsAppsApi,
+  AWSSDKService,
   AwsAuditResponse,
   createAuditRecord,
   getAWScreds,
 } from '../api';
-import { AwsAppsPlatformApi } from '../api/AwsPlatform';
+import { AppsPlatformService } from '../api/AwsPlatform';
+import { GitService } from '../api/GitService';
 import { Config } from '@backstage/config';
 import { CatalogApi } from '@backstage/catalog-client';
 
@@ -60,7 +61,7 @@ export async function createRouter(
   // Async function to get backend API client
   async function getApiClient(
     req: any,
-  ): Promise<{ apiClient: AwsAppsApi; apiClientConfig: ApiClientConfig }> {
+  ): Promise<{ apiClient: AWSSDKService; apiClientConfig: ApiClientConfig }> {
     const awsRegion = req.body.awsRegion?.toString();
 
     const awsAccount = req.body.awsAccount?.toString();
@@ -93,7 +94,13 @@ export async function createRouter(
 
     const roleArn = creds.roleArn;
 
-    const apiClient = new AwsAppsApi(config, logger, awsRegion, awsAccount);
+    const apiClient = new AWSSDKService(
+      config,
+      logger,
+      undefined,
+      awsRegion,
+      awsAccount,
+    );
 
     const requester = identity?.userEntityRef.split('/')[1] || '';
 
@@ -115,7 +122,7 @@ export async function createRouter(
     };
   }
 
-  function getAwsAppsPlatformApi(req: any): AwsAppsPlatformApi {
+  function getAwsAppsPlatformApi(req: any): AppsPlatformService {
     const awsRegion = req.body.awsRegion?.toString();
     const awsAccount = req.body.awsAccount?.toString();
 
@@ -128,22 +135,22 @@ export async function createRouter(
       );
     }
     if (repoInfo === undefined) {
-      return new AwsAppsPlatformApi(
+      return new AppsPlatformService(
         config,
         logger,
         platformRegion,
         awsRegion,
         awsAccount,
-        GitProviders.UNSET,
       );
     }
-    return new AwsAppsPlatformApi(
+    const gitService = new GitService(logger, repoInfo.gitProvider);
+    return new AppsPlatformService(
       config,
       logger,
       platformRegion,
       awsRegion,
       awsAccount,
-      repoInfo.gitProvider,
+      gitService,
     );
   }
 
@@ -706,7 +713,7 @@ export async function createRouter(
     console.log(`Hello there: ${entity?.metadata.name}`);
 
     const decision = await permissions.authorize(
-      [{ permission: readOpaAppAuditPermission }],
+      [{ permission: readOpaAppAuditPermission, resourceRef: '' }],
       { credentials },
     );
 
@@ -982,7 +989,7 @@ export async function createRouter(
 }
 
 type ApiClientConfig = {
-  apiClient: AwsAppsApi;
+  apiClient: AWSSDKService;
   roleArn: string;
   awsAccount: string;
   awsRegion: string;

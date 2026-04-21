@@ -1,6 +1,6 @@
 # [Backstage](https://backstage.io) AWS plugins
 
-This repository contains a copy of [AWS Core]() and [AWS Harmonix]() plugins made for upstream best practices alignment purpose.
+This repository contains a copy of [AWS Core]() and [AWS Apps]() plugins made for upstream best practices alignment purpose.
 It allows publishing artifacts under the `@alithya-oss` namespace, for the time being, to stabilize the CI process.
 
 Once done, the content of the repository is submitted back in the form of pull-requests to the upstream project.

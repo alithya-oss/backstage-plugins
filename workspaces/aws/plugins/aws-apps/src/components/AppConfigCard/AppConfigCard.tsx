@@ -326,7 +326,9 @@ const AppConfigOverview = ({
                       size="small"
                       id={index.toString()}
                       onClick={() => onEdit(containerDetails.containerName!)}
-                      disabled={containerDetails?.env?.length === 0}
+                      disabled={
+                        !containerDetails.env || !containerDetails.env.length
+                      }
                     >
                       Edit
                     </Button>

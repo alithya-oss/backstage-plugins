@@ -50,6 +50,7 @@ const DeleteAppPanel = ({
 
   const appIACType = entity.metadata.iacType?.toString();
   const appSubtype = entity.spec?.subType?.toString() ?? 'undefinedSubtype';
+  // console.log(appIACType);
   const repoInfo = awsComponent.getRepoInfo();
 
   const handleCloseAlert = () => {
@@ -68,6 +69,7 @@ const DeleteAppPanel = ({
         setIsDeleteSuccessful(true);
       })
       .catch(error => {
+        // console.log(error);
         setDeleteResultMessage(`Error deleting Repository ${error}.`);
         setSpinning(false);
         setIsDeleteSuccessful(false);
@@ -279,12 +281,14 @@ const DeleteAppPanel = ({
           // awsComponent.currentEnvironment.providerData.name
         })
         .catch(error => {
+          // console.log(error);
           setSpinning(false);
           setIsDeleteSuccessful(false);
           setDeleteResultMessage(error.toString());
         });
     }
   };
+
   const handleClickDeleteAll = async () => {
     // eslint-disable-next-line no-alert
     if (confirm('Are you sure you want to delete this app?')) {
@@ -306,12 +310,13 @@ const DeleteAppPanel = ({
             await sleep(2000);
           })
           .catch(error => {
+            // console.log(error);
             setSpinning(false);
             setIsDeleteSuccessful(false);
             setDeleteResultMessage(error.toString());
           });
       });
-      if (appIACType === 'cdk') {
+      if (appIACType === 'cdk' || appIACType === 'aws-sam') {
         await sleep(2000);
         // Delete the repo now.
         deleteRepo(repoInfo);
@@ -319,7 +324,7 @@ const DeleteAppPanel = ({
         if (awsComponent.componentType === AWSComponentType.AWSApp) {
           deleteSecret(entity.metadata.repoSecretArn?.toString() ?? '');
         }
-        await deleteFromCatalog();
+        deleteFromCatalog();
         setSpinning(false);
         await sleep(2000);
         setDeleteResultMessage('Redirect to home ....');
@@ -330,7 +335,7 @@ const DeleteAppPanel = ({
         setSpinning(false);
         setDisabled(false);
         setDeleteResultMessage(
-          'Once the pipeline finish executing you may click Delete Repository',
+          'Once the pipeline finishes executing, you may click Delete Repository',
         );
       }
     }

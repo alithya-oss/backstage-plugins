@@ -41,6 +41,7 @@ const DeleteEnvironmentPanel = ({
 
   const [disabled, setDisabled] = useState(false);
   const repoInfo = getRepoInfo(entity);
+  repoInfo.gitProjectGroup = 'aws-environments';
 
   const deleteRepo = () => {
     api
@@ -49,10 +50,13 @@ const DeleteEnvironmentPanel = ({
         gitAdminSecret: getGitCredentailsSecret(repoInfo),
       })
       .then(() => {
+        // .then(results => {
+        // console.log(results);
         setDeleteResultMessage('Gitlab Repository deleted.');
         setIsDeleteSuccessful(true);
       })
       .catch(error => {
+        // console.log(error);
         setDeleteResultMessage(`Error deleting Repository ${error}.`);
         setSpinning(false);
         setIsDeleteSuccessful(false);
@@ -60,6 +64,7 @@ const DeleteEnvironmentPanel = ({
   };
 
   const deleteFromCatalog = async () => {
+    // console.log('Deleting entity from backstage catalog');
     setDeleteResultMessage('Deleting entity from backstage catalog');
     // The entity will be removed from the catalog along with the auto-generated Location kind entity
     // which references the catalog entity
@@ -69,9 +74,11 @@ const DeleteEnvironmentPanel = ({
       entityAnnotations['backstage.io/managed-by-location'] || '';
     const entityLocationRef = await catalogApi.getLocationByRef(entityLocation);
     if (entityLocationRef) {
-      await catalogApi.removeLocationById(entityLocationRef.id);
+      catalogApi.removeLocationById(entityLocationRef.id);
+      // await catalogApi.removeLocationById(entityLocationRef.id);
     }
-    await catalogApi.removeEntityByUid(uid);
+    catalogApi.removeEntityByUid(uid);
+    // await catalogApi.removeEntityByUid(uid);
   };
 
   const isExistingComponents = () => {

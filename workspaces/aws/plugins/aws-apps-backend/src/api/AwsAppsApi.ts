@@ -106,14 +106,15 @@ import {
   SSMClient,
 } from '@aws-sdk/client-ssm';
 
+import { AwsCredentialIdentity } from '@aws-sdk/types';
 import { parse as parseArn } from '@aws-sdk/util-arn-parser';
 import { AWSServiceResources } from '@alithya-oss/backstage-plugin-aws-apps-common';
-import { LoggerService } from '@backstage/backend-plugin-api';
-
+import {
+  LoggerService,
+  RootConfigService,
+} from '@backstage/backend-plugin-api';
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
-import { Config } from '@backstage/config';
 
-/** @public */
 export type DynamoDBTableData = {
   tableName: string;
   recordId: string;
@@ -133,17 +134,115 @@ export type DynamoDBTableData = {
   message: string;
 };
 
-/** @public */
-export class AwsAppsApi {
+import { AwsAuditRequest, AwsAuditResponse } from './AwsAudit';
+import { IAWSSDKService } from '../services/definition';
+
+export class AWSSDKService implements IAWSSDKService {
+  private _awsCredentials: AwsCredentialIdentity;
+  private _awsRegion: string;
+  private _awsAccount: string;
+
   public constructor(
-    private readonly config: Config,
+    private readonly config: RootConfigService,
     private readonly logger: LoggerService,
-    private readonly awsRegion: string,
-    private readonly awsAccount: string,
+    awsCredentials?: AwsCredentialIdentity,
+    awsRegion?: string,
+    awsAccount?: string,
   ) {
+    this._awsCredentials = awsCredentials || {
+      accessKeyId: '',
+      secretAccessKey: '',
+    };
+    this._awsRegion = awsRegion || 'UNSETREGION';
+    this._awsAccount = awsAccount || 'UNSETACCOUNT';
+
     this.logger.info('Instantiating AWS Apps API with:');
-    this.logger.info(`awsAccount: ${this.awsAccount}`);
-    this.logger.info(`awsRegion: ${this.awsRegion}`);
+    this.logger.info(`awsAccount: ${this._awsAccount}`);
+    this.logger.info(`awsRegion: ${this._awsRegion}`);
+  }
+
+  public setAwsCredentials(credentials: AwsCredentialIdentity): void {
+    this._awsCredentials = credentials;
+  }
+
+  public setAwsRegion(region: string): void {
+    this._awsRegion = region;
+  }
+
+  public setAwsAccount(account: string): void {
+    this._awsAccount = account;
+  }
+
+  public get awsCredentials(): AwsCredentialIdentity {
+    return this._awsCredentials;
+  }
+
+  public get awsRegion(): string {
+    return this._awsRegion;
+  }
+
+  public get awsAccount(): string {
+    return this._awsAccount;
+  }
+
+  public async createAuditRecord({
+    envProviderPrefix,
+    envProviderName,
+    appName,
+    apiClient,
+    roleArn,
+    awsRegion,
+    awsAccount,
+    requester,
+    owner,
+    actionType,
+    actionName,
+    requestArgs,
+    status,
+    message,
+  }: AwsAuditRequest): Promise<AwsAuditResponse> {
+    const response: AwsAuditResponse = { status: 'Started', message: '' };
+
+    let tableNameResponse;
+    try {
+      tableNameResponse = await apiClient.getSSMParameter(
+        `/${envProviderPrefix.toLowerCase()}/${envProviderName.toLowerCase()}/${envProviderName.toLowerCase()}-audit`,
+      );
+    } catch (err) {
+      response.status = 'FAILED';
+      response.message = `Audit failed - audit table name was set to FIXME. ${tableNameResponse}`;
+    }
+
+    if (tableNameResponse?.Parameter?.Value) {
+      const recordId = `${awsAccount}#${awsRegion}#${envProviderPrefix}#${envProviderName}#${appName}#${requester}#${actionType}#${new Date().toISOString()}`;
+      const auditResponse = await apiClient.putDynamodbTableData({
+        tableName: tableNameResponse.Parameter.Value,
+        recordId,
+        origin: 'Backstage-SDK',
+        prefix: envProviderPrefix,
+        environmentProviderName: envProviderName,
+        appName: appName,
+        actionType,
+        name: actionName,
+        initiatedBy: requester,
+        owner,
+        assumedRole: roleArn,
+        targetAccount: awsAccount,
+        targetRegion: awsRegion,
+        request: requestArgs ?? '',
+        status,
+        message: message ?? '',
+      });
+
+      if (auditResponse.$metadata.httpStatusCode === 200) {
+        response.status = 'Success';
+      } else {
+        response.status = 'FAILED';
+        response.message = "Audit failed - can't extract audit table name.";
+      }
+    }
+
+    return response;
   }
   /**
    * List tasks of an ECS Service
@@ -370,7 +469,6 @@ export class AwsAppsApi {
     secretValue: string,
   ): Promise<PutSecretValueCommandOutput> {
     this.logger.info('Calling put Secret');
-
     const accountId = this.awsAccount;
     const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
       this.config,
@@ -512,7 +610,6 @@ export class AwsAppsApi {
     logPrefix: string,
   ): Promise<DescribeLogGroupsCommandOutput> {
     this.logger.info('Calling getLogGroups');
-
     const accountId = this.awsAccount;
     const awsCredentialsManager = DefaultAwsCredentialsManager.fromConfig(
       this.config,
@@ -756,8 +853,8 @@ export class AwsAppsApi {
    * Get resources from a named Resource Group, parses them to destructure the ResourceType, and
    * categorizes the resources by service identifier
    *
+   * @param resourceGroupName - The Resource Group name to get a list of resources from.  This can be a string representing an ARN or the name of the Resource Group
    * @returns A ServiceResources object containing the grouped services
-   * @param resourceGroup - the name of the resource group
    */
   public async getCategorizedResources(
     resourceGroup: string,
@@ -889,7 +986,7 @@ export class AwsAppsApi {
    * Register Task Definition
    *
    *
-   * @param taskDefinition - TaskDefinition
+   * @param TaskDefinition
    * @returns The DescribeTaskDefinitionCommandOutput object
    *
    */

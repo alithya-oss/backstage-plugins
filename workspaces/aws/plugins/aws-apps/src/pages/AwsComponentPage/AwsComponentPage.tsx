@@ -23,22 +23,30 @@ export function AwsComponentPage({ componentType }: AwsComponentPageProps) {
   const isResource = componentType === 'aws-resource';
   const isComponentReady = entity.metadata.appData !== undefined;
 
-  return (
-    <AsyncAwsAppProvider {...useAwsComponentFromContext()}>
-      {isComponentReady && isApp && (
+  const renderContent = () => {
+    if (!isComponentReady) {
+      return <AwsPendingPage />;
+    }
+    if (isApp) {
+      return (
         <AwsAppPage>
           <EntityEnvironmentSelector />
         </AwsAppPage>
-      )}
-      {isComponentReady && isResource && (
+      );
+    }
+    if (isResource) {
+      return (
         <AwsResourcePage>
           <EntityEnvironmentSelector />
         </AwsResourcePage>
-      )}
-      {isComponentReady && !isApp && !isResource && (
-        <div>No AWS matching page to render: {componentType}</div>
-      )}
-      {!isComponentReady && <AwsPendingPage />}
+      );
+    }
+    return <div>No AWS matching page to render: {componentType}</div>;
+  };
+
+  return (
+    <AsyncAwsAppProvider {...useAwsComponentFromContext()}>
+      {renderContent()}
     </AsyncAwsAppProvider>
   );
 }

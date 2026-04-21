@@ -1,4 +1,5 @@
 import {
+  GitProviders,
   IGitAPIResult,
   ICommitChange,
   IRepositoryInfo,
@@ -9,8 +10,19 @@ import { Buffer } from 'buffer';
 import { LoggerService } from '@backstage/backend-plugin-api';
 
 export class GitHubAPI implements ISCMBackendAPI {
+  private _gitProvider: GitProviders;
+
+  public get gitProvider(): GitProviders {
+    return this._gitProvider;
+  }
+
+  setGitProvider(provider: GitProviders): void {
+    this._gitProvider = provider;
+  }
+
   public constructor(private readonly logger: LoggerService) {
     this.logger.info('Instantiating GitHubAPI...');
+    this._gitProvider = GitProviders.GITHUB;
   }
 
   public async createRepository(
@@ -127,10 +139,10 @@ export class GitHubAPI implements ISCMBackendAPI {
     repo: IRepositoryInfo,
     accessToken: string,
   ): Promise<IGitAPIResult> {
-    const OctokitCommitMultipleFiles = Octokit.plugin(
+    const OctokitWithPlugins = Octokit.plugin(
       require('octokit-commit-multiple-files'),
     );
-    const octokit = new OctokitCommitMultipleFiles({ auth: accessToken });
+    const octokit = new OctokitWithPlugins({ auth: accessToken });
 
     const url = `https://${repo.gitHost}`;
     console.log(url);

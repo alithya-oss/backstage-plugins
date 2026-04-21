@@ -5,7 +5,7 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { kebabCase } from 'lodash';
 import { stringify } from 'yaml';
 
-const ID = 'opa:get-component-info';
+const ID = 'aws-apps:get-component-info';
 
 const examples = [
   {
@@ -25,11 +25,14 @@ const examples = [
   },
 ];
 
-/** @public */
+/**
+ * @public
+ */
 export function getComponentInfoAction() {
   return createTemplateAction({
     id: ID,
     description: 'Sets useful component info for other actions to use',
+    supportsDryRun: true,
     examples,
     schema: {
       input: {
@@ -40,7 +43,9 @@ export function getComponentInfoAction() {
           z.string().describe('The component name, converted to kebab case'),
       },
     },
-    async handler(ctx) {
+    handler: async ctx => {
+      // Note: no special handling is needed for dry runs
+
       const { componentName } = ctx.input;
 
       const kebabComponentName = kebabCase(componentName);

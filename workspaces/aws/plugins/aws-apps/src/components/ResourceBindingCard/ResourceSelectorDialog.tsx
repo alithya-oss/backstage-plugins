@@ -52,6 +52,7 @@ const useStyles = makeStyles(theme => ({
  * with corresponding table data
  * @param columns An array of Column descriptors.  See material-table.com/#/docs/all-props for available fields
  * @param tableData An array of data objects to display in the table
+ * @param resource The AWS resource type to display its details.  Only SSM Parameters and SecretsManager secrets are supported
  * @returns
  */
 const ResourceSelectorTable = ({
@@ -86,7 +87,7 @@ const ResourceSelectorTable = ({
             <TableCell scope="row">
               <Radio
                 value={index}
-                checked={index === selectedRadio}
+                checked={index !== selectedRadio ? false : true}
                 radioGroup="resourceGroup"
                 onChange={() => selectedRow(row, index)}
               />
@@ -125,8 +126,10 @@ export const ResourceSelectorDialog = ({
   associatedResources: ResourceBinding[];
 }) => {
   const classes = useStyles();
-  const [, setLoading] = useState(true);
-  const [, setError] = useState(false);
+  // @ts-ignore
+  const [loading, setLoading] = useState(true);
+  // @ts-ignore
+  const [error, setError] = useState(false);
   const [tableData, setTableData] = useState<ResourceBinding[]>([]);
   const [selectedResource, setSelectedResource] = useState<ResourceBinding>();
 

@@ -134,6 +134,7 @@ const CloudwatchLogsTable = ({
         setError({ isError: false, errorMsg: '' });
       })
       .catch(e => {
+        // console.log(e); // rejectReason of any first rejected promise
         setLoading(false);
         setError({
           isError: true,

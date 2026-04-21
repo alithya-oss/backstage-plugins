@@ -52,7 +52,6 @@ const EnvironmentSelector = ({
           value={selectedEnv}
           label="Environments"
           onChange={handleChange}
-          variant="outlined"
         >
           {selectorItems}
         </Select>

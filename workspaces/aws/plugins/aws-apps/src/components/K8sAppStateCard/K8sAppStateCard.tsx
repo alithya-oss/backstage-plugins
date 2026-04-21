@@ -22,7 +22,7 @@ import {
   TableCell,
   TableRow,
 } from '@material-ui/core';
-import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput';
+import { Unstable_NumberInput as NumberInput } from '@mui/base';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import Button from '@mui/material/Button';
@@ -31,7 +31,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/system';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { opaApiRef } from '../../api';
 import { base64PayloadConvert } from '../../helpers/util';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
@@ -221,6 +221,7 @@ const OpaAppStateOverview = ({
         body: JSON.stringify(bodyParamVariables),
       }),
     );
+    // console.log(`got configs`);
 
     try {
       if (resultsVariables?.Payload) {
@@ -246,10 +247,12 @@ const OpaAppStateOverview = ({
       clusterNameParam = await cancellablePromise<GetParameterCommandOutput>(
         api.getSSMParameter({ ssmParamName: env.clusterName }),
       );
+      // console.log(`DONE getting cluster name`);
       clusterName =
         clusterNameParam.Parameter?.Value?.toString()
           .split('/')[1]
           .toString() || '';
+      // console.log(`clusterName is ${clusterName}`);
     }
 
     const bodyParam = {
@@ -267,6 +270,8 @@ const OpaAppStateOverview = ({
       },
     };
 
+    //  console.log(bodyParam)
+    // console.log(`calling lambda to get manifests`);
     const results = await cancellablePromise<InvokeCommandOutput>(
       api.invokeLambda({
         functionName: kubectlLambdaArn,
@@ -274,6 +279,7 @@ const OpaAppStateOverview = ({
         body: JSON.stringify(bodyParam),
       }),
     );
+    // console.log(`got manifests`);
 
     try {
       if (results?.Payload) {
@@ -286,6 +292,7 @@ const OpaAppStateOverview = ({
       }
       return null;
     } catch (err) {
+      // console.log(err);
       throw Error("Can't parse json response");
     }
   }
@@ -362,13 +369,12 @@ const OpaAppStateOverview = ({
         deploymentsState.push(appState);
       });
     } catch (err) {
-      // console.log(err)
+      // console.log(err);
     }
     return deploymentsState || [];
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  async function getData(appStateResults?: any) {
+  const getData = useCallback(async (appStateResults?: any) => {
     let isCanceled = false;
     let isError = false;
     let deploymentsJson;
@@ -388,6 +394,7 @@ const OpaAppStateOverview = ({
         // console.log(`got cancellation in getData`);
       } else {
         isError = true;
+        // console.error(e);
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while retrieving event data: ${e}`,
@@ -401,7 +408,8 @@ const OpaAppStateOverview = ({
       setAppStateData(states);
       setVariablesJson(appConfig);
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     setAppStateData([]); // reset existing state
@@ -467,6 +475,7 @@ const OpaAppStateOverview = ({
       if ((e as any).isCanceled) {
         isCanceled = true;
       } else {
+        // console.error(e);
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while starting app: ${e}`,
@@ -507,19 +516,23 @@ const OpaAppStateOverview = ({
         deploymentsJson = appStateJson;
 
         if (localAppStarted || appStarted) {
-          // Breaking from while loop since the app has started.
+          // console.log("breaking from while loop since app was started");
           break;
+        } else {
+          // console.log("not breaking from while loop since appStarted is falsy");
         }
       } catch (e) {
         if ((e as any).isCanceled) {
           isCanceled = true;
         } else {
+          // console.error(e);
           setError({
             isError: true,
             errorMsg: `Unexpected error occurred while retrieving app state: ${e}`,
           });
           setAppStarted(true);
           localAppStarted = true;
+          // console.log(`setting appStarted to true`);
           setLoading(false);
         }
         break;
@@ -554,10 +567,12 @@ const OpaAppStateOverview = ({
           repoInfo,
         }),
       );
+      // console.log(`DONE setting replicas to 0`);
     } catch (e) {
       if ((e as any).isCanceled) {
         isCanceled = true;
       } else {
+        // console.error(e);
         setError({
           isError: true,
           errorMsg: `Unexpected error occurred while stopping app: ${e}`,
@@ -568,16 +583,19 @@ const OpaAppStateOverview = ({
 
     let count = 0;
     let localAppStopped = false;
-
+    // console.log(`isCanceled is ${isCanceled} and localAppStopped is ${localAppStopped} and appStoped is ${appStopped}`);
     while (!isCanceled && !appStopped && !localAppStopped) {
+      // console.log(`sleeping ${count} - waiting for app to be stopped, localAppStopped is ${localAppStopped} and appStoped is ${appStopped}`);
       await sleep(7000);
+      // console.log(`DONE sleeping - app is stopped`);
       count++;
 
       try {
+        // console.log("fetching app state");
         const deploymentsJson = await fetchAppState();
+        // console.log("DONE - fetching app state");
 
-        // eslint-disable-next-line no-loop-func
-        Object.keys(deploymentsJson).forEach(key => {
+        for (const key of Object.keys(deploymentsJson)) {
           const currState = deploymentsJson[key];
           if (currState.metadata.uid === appState.deploymentIdentifier) {
             if (
@@ -592,7 +610,7 @@ const OpaAppStateOverview = ({
               // console.log(`setting appStopped to true and loading to false`);
             }
           }
-        });
+        }
 
         if (localAppStopped || appStopped) {
           // console.log(`breaking from while loop since app was stopped`);
@@ -602,6 +620,7 @@ const OpaAppStateOverview = ({
         if ((e as any).isCanceled) {
           isCanceled = true;
         } else {
+          // console.error(e);
           setError({
             isError: true,
             errorMsg: `Unexpected error occurred while retrieving app state: ${e}`,
@@ -792,7 +811,11 @@ const OpaAppStateOverview = ({
                   sx={{ mr: 2 }}
                   variant="outlined"
                   size="small"
-                  disabled={deploymentState?.appState !== AppStateType.STOPPED}
+                  disabled={
+                    deploymentState?.appState !== AppStateType.STOPPED
+                      ? true
+                      : false
+                  }
                   onClick={() => handleStartTask(deploymentState)}
                 >
                   Start
@@ -801,7 +824,11 @@ const OpaAppStateOverview = ({
                   sx={{ mr: 2 }}
                   variant="outlined"
                   size="small"
-                  disabled={deploymentState?.appState === AppStateType.STOPPED}
+                  disabled={
+                    deploymentState?.appState === AppStateType.STOPPED
+                      ? true
+                      : false
+                  }
                   onClick={() => handleStopTask(deploymentState)}
                 >
                   Stop

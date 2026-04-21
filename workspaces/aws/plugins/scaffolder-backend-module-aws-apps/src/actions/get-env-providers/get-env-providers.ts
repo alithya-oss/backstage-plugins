@@ -18,17 +18,17 @@ import {
   RootConfigService,
 } from '@backstage/backend-plugin-api';
 
-const ID = 'opa:get-env-providers';
+const ID = 'aws-apps:get-env-providers';
 
 const examples = [
   {
     description:
-      'Retrieve AWS environment providers so that their configurations can be used by other template actions',
+      'Retreive AWS environment providers so that their configurations can be used by other template actions',
     example: yaml.stringify({
       steps: [
         {
           action: ID,
-          id: 'opaGetAwsEnvProviders',
+          id: 'awsAppsGetAwsEnvProviders',
           name: 'Get AWS Environment Providers',
           input: {
             environmentRef: 'awsenvironment:Test-Environment',
@@ -56,7 +56,9 @@ interface DeploymentParameters {
   kubectlLambdaRoleArn?: string;
 }
 
-/** @public */
+/**
+ * @public
+ */
 export function getEnvProvidersAction(options: {
   config: RootConfigService;
   logger: LoggerService;
@@ -67,6 +69,7 @@ export function getEnvProvidersAction(options: {
   return createTemplateAction({
     id: ID,
     description: 'Retrieves AWS Environment Provider data',
+    supportsDryRun: true,
     examples,
     schema: {
       input: {
@@ -85,7 +88,7 @@ export function getEnvProvidersAction(options: {
           z.string().describe('The entity reference ID of the environment'),
         envDeployManualApproval: z =>
           z
-            .union([z.boolean(), z.string()])
+            .boolean()
             .describe(
               'Whether manual approval is required for deploying to the environment',
             ),
@@ -93,47 +96,124 @@ export function getEnvProvidersAction(options: {
           z
             .array(
               z.object({
-                envProviderName: z.string(),
-                envProviderType: z.string(),
-                envProviderPrefix: z.string().optional(),
-                account: z.string().optional(),
-                accountId: z.string().optional(),
-                region: z.string(),
-                vpcId: z.string().optional(),
-                publicSubnets: z.string().optional(),
-                privateSubnets: z.string().optional(),
-                clusterArn: z.string().optional(),
-                assumedRoleArn: z.string(),
-                kubectlLambdaArn: z.string().optional(),
-                kubectlLambdaRoleArn: z.string().optional(),
+                envProviderName: z
+                  .string()
+                  .describe('The AWS environment provider name'),
+                envProviderType: z
+                  .string()
+                  .describe('The AWS environment provider type'),
+                envProviderPrefix: z
+                  .string()
+                  .describe('The AWS environment provider prefix'),
+                accountId: z
+                  .string()
+                  .describe(
+                    'The AWS account where infrastructure will be deployed',
+                  ),
+                region: z
+                  .string()
+                  .describe(
+                    'The AWS region where infrastructure will be deployed',
+                  ),
+                vpcId: z
+                  .string()
+                  .describe(
+                    'The VPC identifier where infrastructure will be deployed',
+                  ),
+                publicSubnets: z.string().describe('The VPC public subnet ids'),
+                privateSubnets: z
+                  .string()
+                  .describe('The VPC private subnet ids'),
+                assumedRoleArn: z
+                  .string()
+                  .describe(
+                    'The ARN of AWS IAM role that can be assumed to deploy resources to the environment provider',
+                  ),
+
+                // optional output attributes that are only returned for providers that have compute clusters
+                clusterArn: z
+                  .string()
+                  .optional()
+                  .describe(
+                    'The ARN of the cluster where the service and task are deployed, if needed. A cluster could be ECS or EKS',
+                  ),
+                kubectlLambdaArn: z
+                  .string()
+                  .optional()
+                  .describe(
+                    "EKS Only - The ARN of the lambda function that that can execute kubectl commands against the provider's EKS cluster",
+                  ),
+                kubectlLambdaRoleArn: z
+                  .string()
+                  .optional()
+                  .describe(
+                    "The ARN of the IAM role for the lambda function that that can execute kubectl commands against the provider's EKS cluster",
+                  ),
               }),
             )
             .describe('The AWS environment providers'),
       },
     },
-    async handler(ctx) {
+    handler: async ctx => {
       const { environmentRef } = ctx.input;
       const token = ctx.secrets?.backstageToken;
 
       ctx.logger.info(`environmentRef: ${environmentRef}`);
 
-      // Fail early if there is no user entity
+      // If this is a dry run, return a hardcoded object
+      if (ctx.isDryRun) {
+        ctx.output('envName', 'envName');
+        ctx.output('envRef', environmentRef);
+        ctx.output('envDeployManualApproval', false);
+        ctx.output('envShortName', 'envShortName');
+        ctx.output('envProviders', [
+          {
+            envProviderName: 'envProviderName',
+            envProviderType: 'eks',
+            envProviderPrefix: 'pre',
+            accountId: '123456789123',
+            region: 'us-east-1',
+            vpcId: 'vpc-123123123abc',
+            publicSubnets: 'subnet-123,subnet-456,subnet-789',
+            privateSubnets: 'subnet-023,subnet-056,subnet-089',
+            clusterArn: 'arn:aws:eks:us-east-1:123456789123:cluster/my-cluster',
+            assumedRoleArn: 'arn:aws:iam::123456789123:role/some-role',
+            kubectlLambdaArn:
+              'arn:aws:lambda:us-east-1:123456789123:function:my-function',
+            kubectlLambdaRoleArn: 'arn:aws:iam::123456789123:role/kubectl-role',
+          },
+        ]);
+
+        ctx.logger.info(`Dry run complete`);
+        return;
+      }
+
+      // If there is no user, then look for a context initiator to create a user entity
+      // This can occur when using automation keys
       if (ctx.user?.entity === undefined) {
+        ctx.logger.debug(
+          `No user context provided for ${ID} action.  Setting user based on initiator credentials`,
+        );
+        const initiatorCredentials = await ctx.getInitiatorCredentials();
+        const principal = initiatorCredentials.principal;
+        ctx.logger.debug(
+          `Initiator credentials principal: ${JSON.stringify(principal)}`,
+        );
+        // convert the unknown type 'principal'
+        const typedPrincipal: { type: string; subject: string } =
+          principal as any;
+
         // Verify the automationKey value.  If it matches, set an automation user in the context
-        if (ctx.secrets?.automationKey === process.env.AUTOMATION_KEY) {
-          console.log('Automation key provided to use automation user');
-          ctx.user = {
-            entity: {
-              apiVersion: 'backstage.io/v1alpha1',
-              kind: 'User',
-              metadata: { name: 'automation' },
-              spec: { profile: { displayName: 'Automation User' } },
-            },
-          };
-        } else {
-          ctx.logger.info(`No user context provided for ${ID} action`);
-          throw new Error(`No user context provided for ${ID} action`);
-        }
+        const automationUserName = typedPrincipal.subject || 'Automation User';
+        const automationUserType = typedPrincipal.type || 'automation';
+        ctx.user = {
+          entity: {
+            apiVersion: 'backstage.io/v1alpha1',
+            kind: 'User',
+            metadata: { name: automationUserType },
+            spec: { profile: { displayName: automationUserName } },
+          },
+        };
       }
 
       const awsEnvEntity = await catalogClient.getEntityByRef(environmentRef, {
@@ -222,12 +302,12 @@ export function getEnvProvidersAction(options: {
           region,
           envProviderPrefix,
           envProviderName,
-          ctx.user.entity,
+          ctx.user!.entity!,
         );
         const { credentials } = response;
 
         try {
-          const vpcId = ssmPathVpc
+          const vpcId = !!ssmPathVpc
             ? await getSSMParameterValue(
                 region,
                 credentials,
@@ -235,7 +315,7 @@ export function getEnvProvidersAction(options: {
                 ctx.logger,
               )
             : '';
-          const publicSubnets = ssmPathVpc
+          const publicSubnets = !!ssmPathVpc
             ? await getSSMParameterValue(
                 region,
                 credentials,
@@ -243,7 +323,7 @@ export function getEnvProvidersAction(options: {
                 ctx.logger,
               )
             : '';
-          const privateSubnets = ssmPathVpc
+          const privateSubnets = !!ssmPathVpc
             ? await getSSMParameterValue(
                 region,
                 credentials,

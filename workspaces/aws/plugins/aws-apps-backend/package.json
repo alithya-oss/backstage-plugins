@@ -16,11 +16,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/awslabs/app-development-for-backstage-io-on-aws.git",
-    "directory": "backstage-plugins/plugins/aws-apps-backend"
+    "url": "git+https://github.com/alithya-oss/backstage-plugins.git",
+    "directory": "workspaces/aws/plugins/aws-apps-backend"
   },
   "bugs": {
-    "url": "https://github.com/awslabs/app-development-for-backstage-io-on-aws/issues"
+    "url": "https://github.com/alithya-oss/backstage-plugins/issues"
   },
   "backstage": {
     "role": "backend-plugin",
@@ -30,10 +30,12 @@
     ]
   },
   "scripts": {
+    "tsc": "tsc",
+    "tsc-config": "tsc --showConfig",
     "start": "backstage-cli package start",
     "build": "backstage-cli package build",
     "lint": "backstage-cli package lint",
-    "test": "backstage-cli package test",
+    "test": "backstage-cli package test--all --watchAll=false",
     "clean": "backstage-cli package clean",
     "prepack": "backstage-cli package prepack",
     "postpack": "backstage-cli package postpack"
@@ -54,7 +56,6 @@
     "@aws-sdk/credential-provider-node": "^3.972.27",
     "@aws-sdk/types": "^3.973.6",
     "@aws-sdk/util-arn-parser": "^3.972.3",
-    "@backstage/backend-common": "^0.25.0",
     "@backstage/backend-defaults": "backstage:^",
     "@backstage/backend-plugin-api": "backstage:^",
     "@backstage/catalog-client": "backstage:^",
@@ -72,7 +73,7 @@
     "octokit": "^3.1.2",
     "octokit-commit-multiple-files": "^5.0.2",
     "winston": "^3.2.1",
-    "yaml": "^2.0.0",
+    "yaml": "^2.7.1",
     "yn": "^4.0.0"
   },
   "devDependencies": {
@@ -84,7 +85,8 @@
     "@types/jest": "^29.5.14",
     "@types/supertest": "^2.0.12",
     "msw": "^2.3.1",
-    "supertest": "^6.2.4"
+    "supertest": "^6.2.4",
+    "typescript": "~5.8.0"
   },
   "files": [
     "dist"

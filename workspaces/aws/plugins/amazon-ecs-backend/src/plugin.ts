@@ -16,7 +16,7 @@ import {
   coreServices,
 } from '@backstage/backend-plugin-api';
 import { amazonEcsServiceRef, createRouter } from './service/router';
-import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
+import { catalogServiceRef } from '@backstage/plugin-catalog-node';
 
 /** @public */
 export const amazonEcsPlugin = createBackendPlugin({

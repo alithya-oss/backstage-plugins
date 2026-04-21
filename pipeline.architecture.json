@@ -1,0 +1,491 @@
+{
+  "$schema": "https://calm.finos.org/release/1.2/meta/calm.json",
+  "unique-id": "backstage-plugins-cicd",
+  "name": "Backstage Plugins CI/CD Pipeline",
+  "description": "Architecture CI/CD du depot alithya-oss/backstage-plugins decrivant les workflows GitHub Actions, leurs declencheurs et les services externes impliques.",
+  "metadata": {
+    "owner": "alithya-oss",
+    "version": "1.0.0",
+    "created": "2026-03-28",
+    "tags": ["cicd", "github-actions", "backstage", "monorepo"],
+    "status": "production"
+  },
+  "nodes": [
+    {
+      "unique-id": "developer",
+      "node-type": "actor",
+      "name": "Developpeur",
+      "description": "Contributeur qui ouvre des pull requests et declenche manuellement des workflows."
+    },
+    {
+      "unique-id": "github-events",
+      "node-type": "system",
+      "name": "GitHub Events",
+      "description": "Systeme d evenements GitHub (push, pull_request, pull_request_target, issue_comment, schedule, workflow_dispatch)."
+    },
+    {
+      "unique-id": "github-actions",
+      "node-type": "system",
+      "name": "GitHub Actions",
+      "description": "Plateforme d execution des workflows CI/CD."
+    },
+    {
+      "unique-id": "ci-workflow",
+      "node-type": "service",
+      "name": "CI Workflow",
+      "description": "Workflow d integration continue (ci.yml). Detecte les workspaces modifies puis execute lint, type-check, build, test et verification des changesets par workspace."
+    },
+    {
+      "unique-id": "release-all-workflow",
+      "node-type": "service",
+      "name": "Release All Workspaces",
+      "description": "Workflow de release global (release.yml). Detecte les workspaces modifies sur main et delegue a release_workspace.yml."
+    },
+    {
+      "unique-id": "release-workspace-workflow",
+      "node-type": "service",
+      "name": "Release Workspace",
+      "description": "Workflow de release par workspace (release_workspace.yml). Gere la PR Version Packages, compile, publie sur npm et cree un tag git."
+    },
+    {
+      "unique-id": "version-bump-workflow",
+      "node-type": "service",
+      "name": "Version Bump",
+      "description": "Workflow de montee de version (version-bump.yml). Execute backstage-cli versions:bump, cree une branche et ouvre une PR."
+    },
+    {
+      "unique-id": "pr-sync-workflow",
+      "node-type": "service",
+      "name": "PR Sync",
+      "description": "Workflow de synchronisation des PRs (pr.yml). Gere les labels et assignations via backstage/actions/pr-sync."
+    },
+    {
+      "unique-id": "changeset-feedback-workflow",
+      "node-type": "service",
+      "name": "Changeset Feedback",
+      "description": "Workflow de feedback sur les changesets (automate_changeset_feedback.yml). Genere un commentaire sur les PRs."
+    },
+    {
+      "unique-id": "renovate-changeset-workflow",
+      "node-type": "service",
+      "name": "Renovate Changeset",
+      "description": "Workflow de generation de changesets pour Renovate (automate_renovate_changeset.yml)."
+    },
+    {
+      "unique-id": "codeql-workflow",
+      "node-type": "service",
+      "name": "CodeQL Analysis",
+      "description": "Workflow d analyse de securite statique (codeql.yml). Analyse JavaScript et TypeScript."
+    },
+    {
+      "unique-id": "scorecard-workflow",
+      "node-type": "service",
+      "name": "Scorecard",
+      "description": "Workflow d analyse de securite supply-chain (scorecard.yml) via OSSF Scorecard."
+    },
+    {
+      "unique-id": "cron-workflow",
+      "node-type": "service",
+      "name": "Cron",
+      "description": "Workflow de taches planifiees (cron.yml) via backstage/actions/cron."
+    },
+    {
+      "unique-id": "staleness-workflow",
+      "node-type": "service",
+      "name": "Automate Staleness",
+      "description": "Workflow de gestion de l obsolescence (automate-staleness.yml). Marque et ferme les issues/PRs inactives."
+    },
+    {
+      "unique-id": "renovate-workflow",
+      "node-type": "service",
+      "name": "Renovate",
+      "description": "Workflow Renovate Bot (renovate.yaml). Mise a jour automatique des dependances."
+    },
+    {
+      "unique-id": "npm-registry",
+      "node-type": "service",
+      "name": "npm Registry",
+      "description": "Registre npm public pour la publication des packages.",
+      "interfaces": [
+        {
+          "unique-id": "npm-https",
+          "protocol": "HTTPS",
+          "host": "registry.npmjs.org",
+          "port": 443
+        }
+      ]
+    },
+    {
+      "unique-id": "github-repository",
+      "node-type": "database",
+      "name": "GitHub Repository",
+      "description": "Depot Git alithya-oss/backstage-plugins contenant le code source, les workspaces et les workflows."
+    },
+    {
+      "unique-id": "github-security-dashboard",
+      "node-type": "service",
+      "name": "GitHub Security Dashboard",
+      "description": "Tableau de bord de securite GitHub recevant les resultats SARIF de CodeQL et Scorecard."
+    },
+    {
+      "unique-id": "cicd-platform",
+      "node-type": "system",
+      "name": "CI/CD Platform",
+      "description": "Systeme global regroupant tous les workflows CI/CD et les services associes."
+    }
+  ],
+  "relationships": [
+    {
+      "unique-id": "developer-to-github",
+      "description": "Le developpeur interagit avec le depot GitHub via des push, pull requests et declenchements manuels.",
+      "relationship-type": {
+        "interacts": {
+          "actor": "developer",
+          "nodes": ["github-events"]
+        }
+      }
+    },
+    {
+      "unique-id": "events-to-ci",
+      "description": "Les evenements pull_request declenchent le workflow CI.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-events" },
+          "destination": { "node": "ci-workflow" }
+        }
+      },
+      "metadata": { "trigger": "pull_request" }
+    },
+    {
+      "unique-id": "events-to-release-all",
+      "description": "Un push sur main ou un workflow_dispatch declenche le workflow Release All.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-events" },
+          "destination": { "node": "release-all-workflow" }
+        }
+      },
+      "metadata": { "trigger": "push:main, workflow_dispatch" }
+    },
+    {
+      "unique-id": "release-all-to-release-workspace",
+      "description": "Release All delegue la release de chaque workspace modifie a Release Workspace via workflow_call.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "release-all-workflow" },
+          "destination": { "node": "release-workspace-workflow" }
+        }
+      },
+      "metadata": { "trigger": "workflow_call" }
+    },
+    {
+      "unique-id": "events-to-release-workspace",
+      "description": "Un workflow_dispatch peut declencher directement Release Workspace.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-events" },
+          "destination": { "node": "release-workspace-workflow" }
+        }
+      },
+      "metadata": { "trigger": "workflow_dispatch" }
+    },
+    {
+      "unique-id": "events-to-version-bump",
+      "description": "Un workflow_dispatch declenche le workflow Version Bump.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-events" },
+          "destination": { "node": "version-bump-workflow" }
+        }
+      },
+      "metadata": { "trigger": "workflow_dispatch" }
+    },
+    {
+      "unique-id": "events-to-pr-sync",
+      "description": "Les evenements pull_request_target et issue_comment declenchent PR Sync.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-events" },
+          "destination": { "node": "pr-sync-workflow" }
+        }
+      },
+      "metadata": { "trigger": "pull_request_target, issue_comment" }
+    },
+    {
+      "unique-id": "events-to-changeset-feedback",
+      "description": "Les evenements pull_request_target sur main declenchent Changeset Feedback.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-events" },
+          "destination": { "node": "changeset-feedback-workflow" }
+        }
+      },
+      "metadata": { "trigger": "pull_request_target:main" }
+    },
+    {
+      "unique-id": "events-to-renovate-changeset",
+      "description": "Les modifications de yarn.lock par backstage-goalie[bot] declenchent Renovate Changeset.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-events" },
+          "destination": { "node": "renovate-changeset-workflow" }
+        }
+      },
+      "metadata": {
+        "trigger": "pull_request_target:yarn.lock",
+        "condition": "actor == backstage-goalie[bot]"
+      }
+    },
+    {
+      "unique-id": "events-to-codeql",
+      "description": "Push sur main, pull_request sur main et cron hebdomadaire declenchent CodeQL.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-events" },
+          "destination": { "node": "codeql-workflow" }
+        }
+      },
+      "metadata": { "trigger": "push:main, pull_request:main, schedule:weekly" }
+    },
+    {
+      "unique-id": "events-to-scorecard",
+      "description": "Push sur main, branch_protection_rule et cron hebdomadaire declenchent Scorecard.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-events" },
+          "destination": { "node": "scorecard-workflow" }
+        }
+      },
+      "metadata": {
+        "trigger": "push:main, branch_protection_rule, schedule:weekly"
+      }
+    },
+    {
+      "unique-id": "events-to-cron",
+      "description": "Cron toutes les 5 minutes et workflow_dispatch declenchent le workflow Cron.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-events" },
+          "destination": { "node": "cron-workflow" }
+        }
+      },
+      "metadata": { "trigger": "schedule:*/5, workflow_dispatch" }
+    },
+    {
+      "unique-id": "events-to-staleness",
+      "description": "Cron toutes les 6 heures et workflow_dispatch declenchent Staleness.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-events" },
+          "destination": { "node": "staleness-workflow" }
+        }
+      },
+      "metadata": { "trigger": "schedule:0 */6, workflow_dispatch" }
+    },
+    {
+      "unique-id": "events-to-renovate",
+      "description": "Cron horaire et workflow_dispatch declenchent Renovate.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "github-events" },
+          "destination": { "node": "renovate-workflow" }
+        }
+      },
+      "metadata": { "trigger": "schedule:hourly, workflow_dispatch" }
+    },
+    {
+      "unique-id": "ci-to-repo",
+      "description": "Le workflow CI lit le code source depuis le depot.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "ci-workflow" },
+          "destination": { "node": "github-repository" }
+        }
+      }
+    },
+    {
+      "unique-id": "release-workspace-to-repo",
+      "description": "Release Workspace lit le code et cree des tags dans le depot.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "release-workspace-workflow" },
+          "destination": { "node": "github-repository" }
+        }
+      }
+    },
+    {
+      "unique-id": "release-workspace-to-npm",
+      "description": "Release Workspace publie les packages sur le registre npm.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "release-workspace-workflow" },
+          "destination": { "node": "npm-registry", "interfaces": ["npm-https"] }
+        }
+      },
+      "protocol": "HTTPS"
+    },
+    {
+      "unique-id": "version-bump-to-repo",
+      "description": "Version Bump cree des branches et des PRs dans le depot.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "version-bump-workflow" },
+          "destination": { "node": "github-repository" }
+        }
+      }
+    },
+    {
+      "unique-id": "codeql-to-security",
+      "description": "CodeQL envoie les resultats SARIF au tableau de bord de securite GitHub.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "codeql-workflow" },
+          "destination": { "node": "github-security-dashboard" }
+        }
+      }
+    },
+    {
+      "unique-id": "scorecard-to-security",
+      "description": "Scorecard envoie les resultats SARIF au tableau de bord de securite GitHub.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "scorecard-workflow" },
+          "destination": { "node": "github-security-dashboard" }
+        }
+      }
+    },
+    {
+      "unique-id": "renovate-to-repo",
+      "description": "Renovate cree des PRs de mise a jour de dependances dans le depot.",
+      "relationship-type": {
+        "connects": {
+          "source": { "node": "renovate-workflow" },
+          "destination": { "node": "github-repository" }
+        }
+      }
+    },
+    {
+      "unique-id": "platform-composition",
+      "description": "La plateforme CI/CD regroupe tous les workflows et services.",
+      "relationship-type": {
+        "composed-of": {
+          "container": "cicd-platform",
+          "nodes": [
+            "ci-workflow",
+            "release-all-workflow",
+            "release-workspace-workflow",
+            "version-bump-workflow",
+            "pr-sync-workflow",
+            "changeset-feedback-workflow",
+            "renovate-changeset-workflow",
+            "codeql-workflow",
+            "scorecard-workflow",
+            "cron-workflow",
+            "staleness-workflow",
+            "renovate-workflow"
+          ]
+        }
+      }
+    }
+  ],
+  "flows": [
+    {
+      "unique-id": "ci-flow",
+      "name": "Integration Continue",
+      "description": "Flux CI declenche par une pull request : detection des workspaces modifies, execution des checks CI et verification.",
+      "transitions": [
+        {
+          "relationship-unique-id": "developer-to-github",
+          "sequence-number": 1,
+          "description": "Le developpeur ouvre une pull request."
+        },
+        {
+          "relationship-unique-id": "events-to-ci",
+          "sequence-number": 2,
+          "description": "L evenement pull_request declenche le workflow CI."
+        },
+        {
+          "relationship-unique-id": "ci-to-repo",
+          "sequence-number": 3,
+          "description": "Le workflow CI checkout le code et detecte les workspaces modifies."
+        }
+      ]
+    },
+    {
+      "unique-id": "release-flow",
+      "name": "Release",
+      "description": "Flux de release declenche par un push sur main : detection, compilation, publication npm et creation de tag.",
+      "transitions": [
+        {
+          "relationship-unique-id": "events-to-release-all",
+          "sequence-number": 1,
+          "description": "Un push sur main declenche Release All Workspaces."
+        },
+        {
+          "relationship-unique-id": "release-all-to-release-workspace",
+          "sequence-number": 2,
+          "description": "Release All delegue a Release Workspace pour chaque workspace modifie."
+        },
+        {
+          "relationship-unique-id": "release-workspace-to-repo",
+          "sequence-number": 3,
+          "description": "Release Workspace compile le code et cree un tag git."
+        },
+        {
+          "relationship-unique-id": "release-workspace-to-npm",
+          "sequence-number": 4,
+          "description": "Release Workspace publie les packages sur npm."
+        }
+      ]
+    },
+    {
+      "unique-id": "security-scan-flow",
+      "name": "Analyse de securite",
+      "description": "Flux d analyse de securite : CodeQL et Scorecard envoient leurs resultats au dashboard.",
+      "transitions": [
+        {
+          "relationship-unique-id": "events-to-codeql",
+          "sequence-number": 1,
+          "description": "Push ou cron declenche CodeQL."
+        },
+        {
+          "relationship-unique-id": "codeql-to-security",
+          "sequence-number": 2,
+          "description": "CodeQL envoie les resultats SARIF au dashboard."
+        },
+        {
+          "relationship-unique-id": "events-to-scorecard",
+          "sequence-number": 3,
+          "description": "Push ou cron declenche Scorecard."
+        },
+        {
+          "relationship-unique-id": "scorecard-to-security",
+          "sequence-number": 4,
+          "description": "Scorecard envoie les resultats SARIF au dashboard."
+        }
+      ]
+    },
+    {
+      "unique-id": "dependency-update-flow",
+      "name": "Mise a jour des dependances",
+      "description": "Flux de mise a jour automatique des dependances via Renovate Bot.",
+      "transitions": [
+        {
+          "relationship-unique-id": "events-to-renovate",
+          "sequence-number": 1,
+          "description": "Le cron horaire declenche Renovate."
+        },
+        {
+          "relationship-unique-id": "renovate-to-repo",
+          "sequence-number": 2,
+          "description": "Renovate cree des PRs de mise a jour dans le depot."
+        },
+        {
+          "relationship-unique-id": "events-to-renovate-changeset",
+          "sequence-number": 3,
+          "description": "La PR Renovate declenche la generation automatique de changesets."
+        }
+      ]
+    }
+  ]
+}
