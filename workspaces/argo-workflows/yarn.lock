@@ -2703,7 +2703,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/ui@backstage:^::backstage=1.50.3&npm=0.14.3, @backstage/ui@npm:^0.14.3":
+"@backstage/ui@backstage:^::backstage=1.50.3&npm=0.14.3, @backstage/ui@npm:^0.14.0, @backstage/ui@npm:^0.14.2, @backstage/ui@npm:^0.14.3":
   version: 0.14.3
   resolution: "@backstage/ui@npm:0.14.3"
   dependencies:
@@ -2724,30 +2724,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10/c8815399f0f60c2b87d196d150f4225d50b2f1afaad82ccafe0f7e50cee3f77d2f82a6d76e305fdd559dd456102f7559ba92c41dbe025111f4e91109f3a61a6f
-  languageName: node
-  linkType: hard
-
-"@backstage/ui@npm:^0.14.0, @backstage/ui@npm:^0.14.2":
-  version: 0.14.2
-  resolution: "@backstage/ui@npm:0.14.2"
-  dependencies:
-    "@backstage/version-bridge": "npm:^1.0.12"
-    "@remixicon/react": "npm:^4.6.0"
-    "@tanstack/react-table": "npm:^8.21.3"
-    clsx: "npm:^2.1.1"
-    react-aria: "npm:~3.48.0"
-    react-aria-components: "npm:~1.17.0"
-    react-stately: "npm:~3.46.0"
-    use-sync-external-store: "npm:^1.4.0"
-  peerDependencies:
-    "@types/react": ^18.0.0
-    react: ^18.0.0
-    react-dom: ^18.0.0
-    react-router-dom: ^6.30.2
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: 10/1cbac090edc80f712287b7bfe8cc9f8545039c438b18b4ce7ac07c8f1eae9662ef74a2f396df05665c22ca292204ba680972f6273baf506681015e4fc12c1726
   languageName: node
   linkType: hard
 
