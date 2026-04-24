@@ -49,41 +49,94 @@ export interface DAGFlowViewProps {
 
 /* ── Pill-shaped custom node ─────────────────────────────────── */
 
-const PILL_COLORS: Record<string, { bg: string; border: string; text: string }> = {
-  Succeeded: { bg: 'var(--bui-bg-success, #dcfce7)', border: 'var(--bui-fg-success, #16a34a)', text: 'var(--bui-fg-success, #15803d)' },
-  Failed:    { bg: 'var(--bui-bg-danger, #fee2e2)', border: 'var(--bui-fg-danger, #dc2626)', text: 'var(--bui-fg-danger, #b91c1c)' },
-  Error:     { bg: 'var(--bui-bg-danger, #fee2e2)', border: 'var(--bui-fg-danger, #dc2626)', text: 'var(--bui-fg-danger, #b91c1c)' },
-  Running:   { bg: 'var(--bui-bg-info, #dbeafe)', border: 'var(--bui-fg-info, #2563eb)', text: 'var(--bui-fg-info, #1d4ed8)' },
-  Pending:   { bg: 'var(--bui-bg-warning, #fef9c3)', border: 'var(--bui-fg-warning, #ca8a04)', text: 'var(--bui-fg-warning, #a16207)' },
-  Skipped:   { bg: 'var(--bui-bg-neutral-2, #f3f4f6)', border: 'var(--bui-fg-tertiary, #9ca3af)', text: 'var(--bui-fg-tertiary, #6b7280)' },
-  Omitted:   { bg: 'var(--bui-bg-neutral-2, #f3f4f6)', border: 'var(--bui-fg-tertiary, #9ca3af)', text: 'var(--bui-fg-tertiary, #6b7280)' },
+const PILL_COLORS: Record<
+  string,
+  { bg: string; border: string; text: string }
+> = {
+  Succeeded: {
+    bg: 'var(--bui-bg-success, #dcfce7)',
+    border: 'var(--bui-fg-success, #16a34a)',
+    text: 'var(--bui-fg-success, #15803d)',
+  },
+  Failed: {
+    bg: 'var(--bui-bg-danger, #fee2e2)',
+    border: 'var(--bui-fg-danger, #dc2626)',
+    text: 'var(--bui-fg-danger, #b91c1c)',
+  },
+  Error: {
+    bg: 'var(--bui-bg-danger, #fee2e2)',
+    border: 'var(--bui-fg-danger, #dc2626)',
+    text: 'var(--bui-fg-danger, #b91c1c)',
+  },
+  Running: {
+    bg: 'var(--bui-bg-info, #dbeafe)',
+    border: 'var(--bui-fg-info, #2563eb)',
+    text: 'var(--bui-fg-info, #1d4ed8)',
+  },
+  Pending: {
+    bg: 'var(--bui-bg-warning, #fef9c3)',
+    border: 'var(--bui-fg-warning, #ca8a04)',
+    text: 'var(--bui-fg-warning, #a16207)',
+  },
+  Skipped: {
+    bg: 'var(--bui-bg-neutral-2, #f3f4f6)',
+    border: 'var(--bui-fg-tertiary, #9ca3af)',
+    text: 'var(--bui-fg-tertiary, #6b7280)',
+  },
+  Omitted: {
+    bg: 'var(--bui-bg-neutral-2, #f3f4f6)',
+    border: 'var(--bui-fg-tertiary, #9ca3af)',
+    text: 'var(--bui-fg-tertiary, #6b7280)',
+  },
 };
 
 function PillNode({ data }: NodeProps) {
-  const nodeData = data as unknown as { node: NodeStatus; isSelected: boolean; onNodeClick?: (id: string) => void };
+  const nodeData = data as unknown as {
+    node: NodeStatus;
+    isSelected: boolean;
+    onNodeClick?: (id: string) => void;
+  };
   const node = nodeData.node;
   const colors = PILL_COLORS[node.phase] ?? PILL_COLORS.Pending;
   const icon = PHASE_ICON_MAP[node.phase] ?? '—';
 
   return (
     <>
-      <Handle type="target" position={Position.Left} style={{ visibility: 'hidden' }} />
+      <Handle
+        type="target"
+        position={Position.Left}
+        style={{ visibility: 'hidden' }}
+      />
       <div
-        className={`${styles.pill}${nodeData.isSelected ? ` ${styles.pillSelected}` : ''}`}
+        className={`${styles.pill}${
+          nodeData.isSelected ? ` ${styles.pillSelected}` : ''
+        }`}
         style={{
           background: colors.bg,
           borderColor: colors.border,
           color: colors.text,
         }}
-        onClick={nodeData.onNodeClick ? () => nodeData.onNodeClick!(node.id) : undefined}
-        title={`${node.displayName} — ${node.phase} — ${formatDuration(node.duration)}`}
+        onClick={
+          nodeData.onNodeClick
+            ? () => nodeData.onNodeClick!(node.id)
+            : undefined
+        }
+        title={`${node.displayName} — ${node.phase} — ${formatDuration(
+          node.duration,
+        )}`}
         data-testid={`dag-node-${node.id}`}
       >
         <span className={styles.pillIcon}>{icon}</span>
         <span className={styles.pillName}>{node.displayName}</span>
-        <span className={styles.pillDuration}>{formatDuration(node.duration)}</span>
+        <span className={styles.pillDuration}>
+          {formatDuration(node.duration)}
+        </span>
       </div>
-      <Handle type="source" position={Position.Right} style={{ visibility: 'hidden' }} />
+      <Handle
+        type="source"
+        position={Position.Right}
+        style={{ visibility: 'hidden' }}
+      />
     </>
   );
 }
@@ -101,13 +154,23 @@ const EDGE_COLORS: Record<string, string> = {
 };
 
 function StatusEdge({
-  id, sourceX, sourceY, targetX, targetY,
-  sourcePosition, targetPosition, data,
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  data,
 }: EdgeProps) {
   const phase = (data as any)?.phase ?? 'Pending';
   const [path] = getSmoothStepPath({
-    sourceX, sourceY, targetX, targetY,
-    sourcePosition, targetPosition,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
     borderRadius: 8,
   });
   return (
@@ -134,7 +197,9 @@ function buildAriaLabel(nodes: NodeStatus[]): string {
   const parts = Object.entries(counts).map(
     ([phase, count]) => `${count} ${phase.toLowerCase()}`,
   );
-  return `Workflow execution graph with ${nodes.length} nodes: ${parts.join(', ')}`;
+  return `Workflow execution graph with ${nodes.length} nodes: ${parts.join(
+    ', ',
+  )}`;
 }
 
 /**
@@ -153,7 +218,11 @@ export function DAGFlowView({
 }: DAGFlowViewProps) {
   // Create a stable key from node IDs so React Flow remounts when the workflow changes
   const flowKey = useMemo(
-    () => nodes.map(n => n.id).sort().join(','),
+    () =>
+      nodes
+        .map(n => n.id)
+        .sort()
+        .join(','),
     [nodes],
   );
 

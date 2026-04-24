@@ -78,7 +78,9 @@ function DotsView({ nodes }: { nodes: NodeStatusSummary[] }) {
         <span
           key={i}
           className={styles.dot}
-          style={{ background: PHASE_COLOR[node.phase] ?? 'var(--bui-fg-tertiary)' }}
+          style={{
+            background: PHASE_COLOR[node.phase] ?? 'var(--bui-fg-tertiary)',
+          }}
           title={`${node.displayName}: ${node.phase}`}
           data-testid="node-dot"
         >

@@ -84,11 +84,14 @@ class MockArgoWorkflowsApiClient implements ArgoWorkflowsApi {
 }
 
 const apis = TestApiRegistry.from(
-  [configApiRef, new ConfigReader({
-    argoWorkflows: {
-      nodeStatusStyle: 'bar',
-    },
-  })],
+  [
+    configApiRef,
+    new ConfigReader({
+      argoWorkflows: {
+        nodeStatusStyle: 'bar',
+      },
+    }),
+  ],
   [argoWorkflowsApiRef, new MockArgoWorkflowsApiClient()],
   [discoveryApiRef, { getBaseUrl: async () => 'http://localhost:7007/api' }],
   [fetchApiRef, { fetch: globalThis.fetch.bind(globalThis) }],

@@ -37,7 +37,9 @@ describe('NodeStatusDots (dots mode — default)', () => {
     }));
     render(<NodeStatusDots nodes={nodes} />);
     expect(screen.getAllByTestId('node-dot')).toHaveLength(10);
-    expect(screen.getByTestId('node-dots-overflow')).toHaveTextContent('+5 more');
+    expect(screen.getByTestId('node-dots-overflow')).toHaveTextContent(
+      '+5 more',
+    );
   });
 
   it('shows dash for empty nodes', () => {

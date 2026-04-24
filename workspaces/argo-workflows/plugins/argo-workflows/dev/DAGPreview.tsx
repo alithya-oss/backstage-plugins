@@ -36,21 +36,21 @@ import {
   formatDuration,
 } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { computeDAGLayout } from '../src/utils/computeDAGLayout';
-import {
-  ciPipelineDetail,
-  mockWorkflowDetails,
-} from '../src/__fixtures__';
+import { ciPipelineDetail, mockWorkflowDetails } from '../src/__fixtures__';
 
 /* ── Pill-shaped custom node ─────────────────────────────────── */
 
-const PILL_COLORS: Record<string, { bg: string; border: string; text: string }> = {
+const PILL_COLORS: Record<
+  string,
+  { bg: string; border: string; text: string }
+> = {
   Succeeded: { bg: '#dcfce7', border: '#16a34a', text: '#15803d' },
-  Failed:    { bg: '#fee2e2', border: '#dc2626', text: '#b91c1c' },
-  Error:     { bg: '#fee2e2', border: '#dc2626', text: '#b91c1c' },
-  Running:   { bg: '#dbeafe', border: '#2563eb', text: '#1d4ed8' },
-  Pending:   { bg: '#fef9c3', border: '#ca8a04', text: '#a16207' },
-  Skipped:   { bg: '#f3f4f6', border: '#9ca3af', text: '#6b7280' },
-  Omitted:   { bg: '#f3f4f6', border: '#9ca3af', text: '#6b7280' },
+  Failed: { bg: '#fee2e2', border: '#dc2626', text: '#b91c1c' },
+  Error: { bg: '#fee2e2', border: '#dc2626', text: '#b91c1c' },
+  Running: { bg: '#dbeafe', border: '#2563eb', text: '#1d4ed8' },
+  Pending: { bg: '#fef9c3', border: '#ca8a04', text: '#a16207' },
+  Skipped: { bg: '#f3f4f6', border: '#9ca3af', text: '#6b7280' },
+  Omitted: { bg: '#f3f4f6', border: '#9ca3af', text: '#6b7280' },
 };
 
 function PillNode({ data }: NodeProps) {
@@ -60,7 +60,11 @@ function PillNode({ data }: NodeProps) {
 
   return (
     <>
-      <Handle type="target" position={Position.Left} style={{ visibility: 'hidden' }} />
+      <Handle
+        type="target"
+        position={Position.Left}
+        style={{ visibility: 'hidden' }}
+      />
       <div
         style={{
           alignItems: 'center',
@@ -75,7 +79,9 @@ function PillNode({ data }: NodeProps) {
           padding: '6px 14px',
           whiteSpace: 'nowrap',
         }}
-        title={`${node.displayName} — ${node.phase} — ${formatDuration(node.duration)}`}
+        title={`${node.displayName} — ${node.phase} — ${formatDuration(
+          node.duration,
+        )}`}
       >
         <span style={{ fontSize: 14 }}>{icon}</span>
         <span>{node.displayName}</span>
@@ -83,7 +89,11 @@ function PillNode({ data }: NodeProps) {
           {formatDuration(node.duration)}
         </span>
       </div>
-      <Handle type="source" position={Position.Right} style={{ visibility: 'hidden' }} />
+      <Handle
+        type="source"
+        position={Position.Right}
+        style={{ visibility: 'hidden' }}
+      />
     </>
   );
 }
@@ -101,13 +111,23 @@ const EDGE_COLORS: Record<string, string> = {
 };
 
 function StatusEdge({
-  id, sourceX, sourceY, targetX, targetY,
-  sourcePosition, targetPosition, data,
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  data,
 }: EdgeProps) {
   const phase = (data as any)?.phase ?? 'Pending';
   const [path] = getSmoothStepPath({
-    sourceX, sourceY, targetX, targetY,
-    sourcePosition, targetPosition,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
     borderRadius: 8,
   });
   return (
@@ -127,15 +147,15 @@ const edgeTypes = { status: StatusEdge };
 /* ── Preview component ───────────────────────────────────────── */
 
 export function DAGPreview() {
-  const workflows = [
-    ciPipelineDetail,
-    ...Object.values(mockWorkflowDetails),
-  ];
+  const workflows = [ciPipelineDetail, ...Object.values(mockWorkflowDetails)];
 
   const [selectedIdx, setSelectedIdx] = useState(0);
   const wf = workflows[selectedIdx] ?? ciPipelineDetail;
 
-  const layout = useMemo(() => computeDAGLayout(wf.nodes, { nodeWidth: 200, nodeHeight: 40 }), [wf]);
+  const layout = useMemo(
+    () => computeDAGLayout(wf.nodes, { nodeWidth: 200, nodeHeight: 40 }),
+    [wf],
+  );
 
   const nodeMap = useMemo(() => {
     const m = new Map<string, NodeStatus>();
@@ -143,28 +163,34 @@ export function DAGPreview() {
     return m;
   }, [layout]);
 
-  const rfNodes: RFNode[] = useMemo(() =>
-    layout.nodes.map(pn => ({
-      id: pn.id,
-      position: { x: pn.x, y: pn.y },
-      type: 'pill',
-      data: { node: pn.data },
-    })),
-  [layout]);
+  const rfNodes: RFNode[] = useMemo(
+    () =>
+      layout.nodes.map(pn => ({
+        id: pn.id,
+        position: { x: pn.x, y: pn.y },
+        type: 'pill',
+        data: { node: pn.data },
+      })),
+    [layout],
+  );
 
-  const rfEdges: RFEdge[] = useMemo(() =>
-    layout.edges.map(e => ({
-      id: `${e.source}-${e.target}`,
-      source: e.source,
-      target: e.target,
-      type: 'status',
-      data: { phase: nodeMap.get(e.source)?.phase ?? 'Pending' },
-    })),
-  [layout, nodeMap]);
+  const rfEdges: RFEdge[] = useMemo(
+    () =>
+      layout.edges.map(e => ({
+        id: `${e.source}-${e.target}`,
+        source: e.source,
+        target: e.target,
+        type: 'status',
+        data: { phase: nodeMap.get(e.source)?.phase ?? 'Pending' },
+      })),
+    [layout, nodeMap],
+  );
 
   return (
     <div style={{ padding: 16 }}>
-      <div style={{ marginBottom: 12, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <div
+        style={{ marginBottom: 12, display: 'flex', gap: 8, flexWrap: 'wrap' }}
+      >
         {workflows.map((w, i) => (
           <button
             key={w.name}
@@ -184,7 +210,9 @@ export function DAGPreview() {
           </button>
         ))}
       </div>
-      <div style={{ height: 400, border: '1px solid #e5e7eb', borderRadius: 8 }}>
+      <div
+        style={{ height: 400, border: '1px solid #e5e7eb', borderRadius: 8 }}
+      >
         <ReactFlow
           nodes={rfNodes}
           edges={rfEdges}
