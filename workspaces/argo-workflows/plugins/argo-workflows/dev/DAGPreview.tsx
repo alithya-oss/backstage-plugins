@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import {
   ReactFlow,
   Controls,
@@ -33,7 +33,6 @@ import '@xyflow/react/dist/style.css';
 import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import {
   PHASE_ICON_MAP,
-  PHASE_STATUS_MAP,
   formatDuration,
 } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { computeDAGLayout } from '../src/utils/computeDAGLayout';
