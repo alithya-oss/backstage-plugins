@@ -47,6 +47,7 @@ const k8sListResponse = {
   kind: 'WorkflowList',
   items: [
     {
+      kind: 'Workflow',
       metadata: {
         name: 'wf-1',
         namespace: 'production',
@@ -62,6 +63,7 @@ const k8sListResponse = {
       },
     },
     {
+      kind: 'CronWorkflow',
       metadata: { name: 'wf-2', namespace: 'production' },
       status: { phase: 'Running', startedAt: '2026-04-18T11:00:00Z' },
     },
@@ -96,11 +98,13 @@ describe('ArgoWorkflowsService', () => {
 
       expect(result).toHaveLength(2);
       expect(result[0].name).toBe('wf-1');
+      expect(result[0].kind).toBe('Workflow');
       expect(result[0].phase).toBe('Succeeded');
       expect(result[0].nodes).toEqual([
         { displayName: 'build', phase: 'Succeeded' },
       ]);
       expect(result[1].name).toBe('wf-2');
+      expect(result[1].kind).toBe('CronWorkflow');
       expect(result[1].phase).toBe('Running');
     });
 
@@ -245,6 +249,7 @@ describe('ArgoWorkflowsService', () => {
 
   describe('getWorkflow', () => {
     const k8sDetailResponse = {
+      kind: 'Workflow',
       metadata: {
         name: 'pipeline-abc',
         namespace: 'production',

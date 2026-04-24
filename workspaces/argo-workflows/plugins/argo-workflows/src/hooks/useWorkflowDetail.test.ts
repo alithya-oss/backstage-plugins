@@ -35,6 +35,7 @@ function createMockWorkflowDetail(
   return {
     name: 'my-workflow',
     namespace: 'production',
+    kind: 'Workflow',
     phase,
     startedAt: '2026-04-18T10:00:00Z',
     finishedAt: phase === 'Running' ? undefined : '2026-04-18T10:05:00Z',

@@ -68,6 +68,7 @@ const { useWorkflowDetail } = require('../../hooks');
 const mockWorkflow: WorkflowSummary = {
   name: 'my-workflow',
   namespace: 'production',
+  kind: 'CronWorkflow',
   phase: 'Succeeded',
   startedAt: '2026-04-18T10:00:00Z',
   nodes: [],

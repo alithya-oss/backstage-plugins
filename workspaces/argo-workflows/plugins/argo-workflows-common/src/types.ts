@@ -104,6 +104,8 @@ export interface WorkflowSummary {
   name: string;
   /** Kubernetes namespace */
   namespace: string;
+  /** Kubernetes resource kind (e.g. Workflow, CronWorkflow) */
+  kind: string;
   /** Workflow execution phase */
   phase: WorkflowPhase;
   /** Start time (ISO 8601) */

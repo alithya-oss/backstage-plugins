@@ -21,6 +21,7 @@ import {
 } from './workflowMapper';
 
 const fullCrd = {
+  kind: 'Workflow',
   metadata: {
     name: 'my-workflow-abc',
     namespace: 'production',
@@ -59,6 +60,7 @@ describe('mapCrdToWorkflowSummary', () => {
     const result = mapCrdToWorkflowSummary(fullCrd);
     expect(result.name).toBe('my-workflow-abc');
     expect(result.namespace).toBe('production');
+    expect(result.kind).toBe('Workflow');
     expect(result.phase).toBe('Succeeded');
     expect(result.startedAt).toBe('2026-04-18T14:22:54Z');
     expect(result.finishedAt).toBe('2026-04-18T14:26:41Z');
@@ -154,6 +156,7 @@ describe('mapCrdToWorkflowSummary', () => {
     const result = mapCrdToWorkflowSummary({});
     expect(result.name).toBe('');
     expect(result.namespace).toBe('');
+    expect(result.kind).toBe('Workflow');
     expect(result.phase).toBe('Pending');
     expect(result.nodes).toEqual([]);
   });
@@ -161,6 +164,7 @@ describe('mapCrdToWorkflowSummary', () => {
   it('handles null input', () => {
     const result = mapCrdToWorkflowSummary(null);
     expect(result.name).toBe('');
+    expect(result.kind).toBe('Workflow');
     expect(result.phase).toBe('Pending');
   });
 
@@ -250,6 +254,7 @@ describe('mapCrdListToWorkflowSummaries', () => {
 });
 
 const detailCrd = {
+  kind: 'CronWorkflow',
   metadata: {
     name: 'pipeline-abc',
     namespace: 'production',
@@ -497,6 +502,7 @@ describe('mapCrdToWorkflowDetail', () => {
     const result = mapCrdToWorkflowDetail(detailCrd);
     expect(result.name).toBe('pipeline-abc');
     expect(result.namespace).toBe('production');
+    expect(result.kind).toBe('CronWorkflow');
     expect(result.phase).toBe('Failed');
     expect(result.startedAt).toBe('2026-04-18T14:00:00Z');
     expect(result.finishedAt).toBe('2026-04-18T14:05:30Z');

@@ -193,6 +193,11 @@ const columns: ColumnConfig<WorkflowTableItem>[] = [
     cell: item => <CellText title={formatDuration(item.duration)} />,
   },
   {
+    id: 'kind',
+    label: 'Kind',
+    cell: item => <CellText title={item.kind} />,
+  },
+  {
     id: 'namespace',
     label: 'Namespace',
     cell: item => <CellText title={item.namespace} />,

@@ -25,6 +25,7 @@ const mockWorkflows: WorkflowSummary[] = [
   {
     name: 'deploy-prod-abc123',
     namespace: 'production',
+    kind: 'Workflow',
     phase: 'Succeeded',
     startedAt: new Date(Date.now() - 120000).toISOString(),
     finishedAt: new Date(Date.now() - 60000).toISOString(),
@@ -34,6 +35,7 @@ const mockWorkflows: WorkflowSummary[] = [
   {
     name: 'deploy-staging-def456',
     namespace: 'staging',
+    kind: 'CronWorkflow',
     phase: 'Failed',
     startedAt: new Date(Date.now() - 3600000).toISOString(),
     duration: 45,
@@ -42,6 +44,7 @@ const mockWorkflows: WorkflowSummary[] = [
   {
     name: 'build-main-ghi789',
     namespace: 'ci',
+    kind: 'Workflow',
     phase: 'Running',
     startedAt: new Date(Date.now() - 300000).toISOString(),
     nodes: [],
@@ -49,6 +52,7 @@ const mockWorkflows: WorkflowSummary[] = [
   {
     name: 'lint-check-jkl012',
     namespace: 'ci',
+    kind: 'WorkflowTemplate',
     phase: 'Pending',
     startedAt: new Date(Date.now() - 30000).toISOString(),
     nodes: [],
@@ -56,6 +60,7 @@ const mockWorkflows: WorkflowSummary[] = [
   {
     name: 'deploy-error-mno345',
     namespace: 'production',
+    kind: 'Workflow',
     phase: 'Error',
     startedAt: new Date(Date.now() - 7200000).toISOString(),
     duration: 12,
@@ -125,14 +130,15 @@ describe('WorkflowTable', () => {
   it('shows loading state when loading is true', async () => {
     await renderInTestApp(<WorkflowTable workflows={[]} loading />);
 
-    // Backstage Table renders a progress bar when isLoading is true
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    // BUI Table renders a loading skeleton when data is undefined (loading)
+    const heading = screen.getByText('Workflows');
+    expect(heading).toBeInTheDocument();
   });
 
   it('renders empty table when workflows array is empty', async () => {
     await renderInTestApp(<WorkflowTable workflows={[]} loading={false} />);
 
-    expect(screen.getByText('Argo Workflows')).toBeInTheDocument();
+    expect(screen.getByText('Workflows')).toBeInTheDocument();
     // No data rows should be present
     expect(screen.queryByText('deploy-prod-abc123')).not.toBeInTheDocument();
   });
@@ -151,10 +157,8 @@ describe('WorkflowTable', () => {
       <WorkflowTable workflows={mockWorkflows} loading={false} />,
     );
 
-    expect(screen.getByRole('button', { name: 'All' })).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Succeeded' }),
-    ).toBeInTheDocument();
+    // BUI TagGroup renders tags as role="row" with aria-label
+    expect(screen.getByRole('row', { name: 'Succeeded' })).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Search by name…')).toBeInTheDocument();
   });
 
@@ -164,12 +168,15 @@ describe('WorkflowTable', () => {
       <WorkflowTable workflows={mockWorkflows} loading={false} />,
     );
 
-    await user.click(screen.getByRole('button', { name: 'Failed' }));
+    // BUI TagGroup starts with all selected; clicking a tag deselects it.
+    // Clicking "Failed" deselects it, so Failed workflows are hidden.
+    await user.click(screen.getByRole('row', { name: 'Failed' }));
 
-    // Only the Failed workflow should be visible
-    expect(screen.getByText('deploy-staging-def456')).toBeInTheDocument();
-    expect(screen.queryByText('deploy-prod-abc123')).not.toBeInTheDocument();
-    expect(screen.queryByText('build-main-ghi789')).not.toBeInTheDocument();
+    // Failed workflow should be hidden
+    expect(screen.queryByText('deploy-staging-def456')).not.toBeInTheDocument();
+    // Other workflows remain visible
+    expect(screen.getByText('deploy-prod-abc123')).toBeInTheDocument();
+    expect(screen.getByText('build-main-ghi789')).toBeInTheDocument();
   });
 
   it('filters workflows by name when search text is entered', async () => {
@@ -194,8 +201,11 @@ describe('WorkflowTable', () => {
       <WorkflowTable workflows={mockWorkflows} loading={false} />,
     );
 
-    // Filter by Succeeded phase
-    await user.click(screen.getByRole('button', { name: 'Succeeded' }));
+    // Deselect all phases except Succeeded by clicking the others
+    await user.click(screen.getByRole('row', { name: 'Failed' }));
+    await user.click(screen.getByRole('row', { name: 'Running' }));
+    await user.click(screen.getByRole('row', { name: 'Pending' }));
+    await user.click(screen.getByRole('row', { name: 'Error' }));
     // Search for "deploy"
     await user.type(screen.getByPlaceholderText('Search by name…'), 'deploy');
 

@@ -99,6 +99,7 @@ describe('createRouter', () => {
         {
           name: 'wf-1',
           namespace: 'production',
+          kind: 'CronWorkflow',
           phase: 'Succeeded',
           startedAt: '2026-04-18T10:00:00Z',
           nodes: [],

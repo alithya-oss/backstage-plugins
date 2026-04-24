@@ -15,6 +15,7 @@
  */
 
 import { createDevApp } from '@backstage/dev-utils';
+// eslint-disable-next-line @backstage/no-ui-css-imports-in-non-frontend
 import '@backstage/ui/css/styles.css';
 import { DAGPreview } from './DAGPreview';
 import { ApiProvider, ConfigReader } from '@backstage/core-app-api';

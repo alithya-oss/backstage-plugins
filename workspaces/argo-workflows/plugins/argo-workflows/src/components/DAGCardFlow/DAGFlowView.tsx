@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useMemo } from 'react';
+import { useMemo, type KeyboardEvent } from 'react';
 import {
   ReactFlow,
   Controls,
@@ -116,9 +116,21 @@ function PillNode({ data }: NodeProps) {
           borderColor: colors.border,
           color: colors.text,
         }}
+        role="button"
+        tabIndex={0}
         onClick={
           nodeData.onNodeClick
             ? () => nodeData.onNodeClick!(node.id)
+            : undefined
+        }
+        onKeyDown={
+          nodeData.onNodeClick
+            ? (e: KeyboardEvent) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  nodeData.onNodeClick!(node.id);
+                }
+              }
             : undefined
         }
         title={`${node.displayName} — ${node.phase} — ${formatDuration(

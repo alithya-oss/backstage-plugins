@@ -163,6 +163,7 @@ export type WorkflowPhase =
 export interface WorkflowSummary {
   duration?: number;
   finishedAt?: string;
+  kind: string;
   labels?: Record<string, string>;
   name: string;
   namespace: string;

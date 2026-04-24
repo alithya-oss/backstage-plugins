@@ -41,6 +41,7 @@ const MIN = 60_000;
 export const ciPipelineSucceeded: WorkflowSummary = {
   name: 'ci-pipeline-main-a1b2c',
   namespace: 'argo',
+  kind: 'Workflow',
   phase: 'Succeeded',
   startedAt: iso(-2 * HOUR),
   finishedAt: iso(-2 * HOUR + 12 * MIN),
@@ -62,6 +63,7 @@ export const ciPipelineSucceeded: WorkflowSummary = {
 export const dataProcessingRunning: WorkflowSummary = {
   name: 'data-processing-daily-x9k3',
   namespace: 'argo',
+  kind: 'CronWorkflow',
   phase: 'Running',
   startedAt: iso(-25 * MIN),
   duration: 1500,
@@ -78,6 +80,7 @@ export const dataProcessingRunning: WorkflowSummary = {
 export const deployFailed: WorkflowSummary = {
   name: 'deploy-staging-v2.4.1-f7d8',
   namespace: 'argo',
+  kind: 'Workflow',
   phase: 'Failed',
   startedAt: iso(-5 * HOUR),
   finishedAt: iso(-5 * HOUR + 4 * MIN),
@@ -95,6 +98,7 @@ export const deployFailed: WorkflowSummary = {
 export const mlTrainingPending: WorkflowSummary = {
   name: 'ml-training-resnet-q4w2',
   namespace: 'ml-jobs',
+  kind: 'Workflow',
   phase: 'Pending',
   startedAt: iso(-3 * MIN),
   duration: 180,
@@ -110,6 +114,7 @@ export const mlTrainingPending: WorkflowSummary = {
 export const integrationTestError: WorkflowSummary = {
   name: 'integration-tests-pr-1234-e5r6',
   namespace: 'argo',
+  kind: 'Workflow',
   phase: 'Error',
   startedAt: iso(-1 * HOUR),
   finishedAt: iso(-1 * HOUR + 2 * MIN),
@@ -125,6 +130,7 @@ export const integrationTestError: WorkflowSummary = {
 export const releasePublish: WorkflowSummary = {
   name: 'release-publish-v3.0.0-h8j1',
   namespace: 'argo',
+  kind: 'WorkflowTemplate',
   phase: 'Succeeded',
   startedAt: iso(-8 * HOUR),
   finishedAt: iso(-8 * HOUR + 6 * MIN),
@@ -142,6 +148,7 @@ export const releasePublish: WorkflowSummary = {
 export const batchReportRunning: WorkflowSummary = {
   name: 'batch-report-monthly-m3n4',
   namespace: 'argo',
+  kind: 'CronWorkflow',
   phase: 'Running',
   startedAt: iso(-45 * MIN),
   duration: 2700,

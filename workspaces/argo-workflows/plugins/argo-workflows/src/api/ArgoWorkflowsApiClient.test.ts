@@ -84,6 +84,7 @@ describe('ArgoWorkflowsApiClient', () => {
         {
           name: 'wf-1',
           namespace: 'ns',
+          kind: 'Workflow',
           phase: 'Succeeded',
           startedAt: '2026-04-18T10:00:00Z',
           nodes: [],

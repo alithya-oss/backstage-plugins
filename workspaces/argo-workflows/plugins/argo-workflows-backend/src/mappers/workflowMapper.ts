@@ -100,6 +100,7 @@ export function mapCrdToWorkflowSummary(raw: any): WorkflowSummary {
   return {
     name: String(metadata.name ?? ''),
     namespace: String(metadata.namespace ?? ''),
+    kind: String(raw?.kind ?? 'Workflow'),
     phase,
     startedAt: String(status.startedAt ?? metadata.creationTimestamp ?? ''),
     finishedAt: status.finishedAt ? String(status.finishedAt) : undefined,
