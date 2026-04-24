@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 The Alithya Authors
+ * Copyright 2026 The Alithya Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@ export const createWorkspace = async (opts: { name: string; cwd?: string }) => {
   const templatePath = join(__dirname, 'templates', 'workspace');
 
   execSync(
-    `npx @backstage/create-app --path ${workspacePath} --skip-install --template-path=${templatePath}`,
-    { input: opts.name },
+    `npx @backstage/create-app@latest --path ${workspacePath} --skip-install --template-path=${templatePath}`,
+    { env: { ...process.env, BACKSTAGE_APP_NAME: opts.name } },
   );
 
   // experimental test
