@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import { OptionValues } from 'commander';

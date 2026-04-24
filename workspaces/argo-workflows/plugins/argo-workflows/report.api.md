@@ -13,7 +13,7 @@ import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-co
 import { PathParams } from '@backstage/core-plugin-api';
 import { RouteRef } from '@backstage/core-plugin-api';
 import { SubRouteRef } from '@backstage/core-plugin-api';
-import { TranslationRef } from '@backstage/core-plugin-api/alpha';
+import { TranslationRef } from '@backstage/frontend-plugin-api';
 import { useArgoWorkflows } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import { usePolling } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import type { WorkflowDetail } from '@alithya-oss/backstage-plugin-argo-workflows-common';
