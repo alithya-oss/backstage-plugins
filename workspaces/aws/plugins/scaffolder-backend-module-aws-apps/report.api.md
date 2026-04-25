@@ -38,8 +38,8 @@ export function createSecretAction(options: {
     region?: string | undefined;
     tags?:
       | {
-          Value: string | number | boolean;
           Key: string;
+          Value: string | number | boolean;
         }[]
       | undefined;
   },
