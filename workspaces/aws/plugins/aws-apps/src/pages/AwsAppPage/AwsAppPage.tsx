@@ -37,6 +37,7 @@ const isCicdApplicable = (entity: Entity) => {
   return isGitlabAvailable(entity) || isGithubActionsAvailable(entity);
 };
 
+/** @public */
 export function isAppType(
   appType: string,
   env: GenericAWSEnvironment,
@@ -47,6 +48,7 @@ export function isAppType(
   };
 }
 
+/** @public */
 export const isLogsAvailable = (_entity: Entity): boolean => {
   return true;
 };

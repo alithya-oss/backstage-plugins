@@ -88,10 +88,10 @@ export function getEnvProvidersAction(options: {
     envRef: string;
     envDeployManualApproval: boolean;
     envProviders: {
-      region: string;
-      accountId: string;
       envProviderPrefix: string;
       envProviderName: string;
+      accountId: string;
+      region: string;
       envProviderType: string;
       vpcId: string;
       publicSubnets: string;
@@ -132,8 +132,4 @@ export function getSsmParametersAction(
 // @public
 const scaffolderModule: BackendFeature;
 export default scaffolderModule;
-
-// Warnings were encountered during analysis:
-//
-// src/index.d.ts:2:28 - (tsdoc-characters-after-block-tag) The token "@backstage" looks like a TSDoc tag but contains an invalid character "/"; if it is not a tag, use a backslash to escape the "@"
 ```

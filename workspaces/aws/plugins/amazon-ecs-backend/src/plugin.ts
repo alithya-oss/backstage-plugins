@@ -33,20 +33,11 @@ export const amazonEcsPlugin = createBackendPlugin({
         httpAuth: coreServices.httpAuth,
         amazonEcsApi: amazonEcsServiceRef,
       },
-      async init({
-        logger,
-        httpRouter,
-        auth,
-        httpAuth,
-        discovery,
-        amazonEcsApi,
-      }) {
+      async init({ logger, httpRouter, httpAuth, amazonEcsApi }) {
         httpRouter.use(
           await createRouter({
             logger,
             amazonEcsApi,
-            discovery,
-            auth,
             httpAuth,
           }),
         );

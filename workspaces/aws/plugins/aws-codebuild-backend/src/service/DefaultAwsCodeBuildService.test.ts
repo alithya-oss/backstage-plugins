@@ -96,6 +96,7 @@ describe('DefaultAwsCodeBuildService', () => {
       catalogApi: mockCatalog,
       resourceLocator: mockResourceLocator,
       discovery: mockServices.discovery(),
+      auth: mockServices.auth(),
     });
   }
 

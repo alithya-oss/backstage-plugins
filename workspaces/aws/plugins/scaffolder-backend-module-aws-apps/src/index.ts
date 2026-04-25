@@ -1,5 +1,5 @@
 /**
- * The aws-apps module for @backstage/plugin-scaffolder-backend.
+ * The aws-apps module for the scaffolder-backend.
  *
  * @packageDocumentation
  */

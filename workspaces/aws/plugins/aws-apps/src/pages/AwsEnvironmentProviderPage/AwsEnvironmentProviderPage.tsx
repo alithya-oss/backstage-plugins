@@ -10,10 +10,12 @@ import { Entity } from '@backstage/catalog-model';
 import { ProviderType } from '../../helpers/constants';
 import { AwsEKSEnvironmentProviderPage } from '../AwsEKSEnvironmentProviderPage/AwsEKSEnvironmentProviderPage';
 
+/** @public */
 export interface AwsEnvironmentProviderPageProps {
   children?: ReactNode;
 }
 
+/** @public */
 export function isProviderType(
   providerType: string,
   entity: Entity,

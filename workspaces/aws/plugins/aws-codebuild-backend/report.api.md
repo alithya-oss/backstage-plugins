@@ -8,7 +8,7 @@ import { AwsCredentialsManager } from '@backstage/integration-aws-node';
 import { AwsResourceLocator } from '@alithya-oss/backstage-plugin-aws-core-node';
 import { BackendFeature } from '@backstage/backend-plugin-api';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
-import { CatalogApi } from '@backstage/catalog-client';
+import { CatalogService } from '@backstage/plugin-catalog-node';
 import { CompoundEntityRef } from '@backstage/catalog-model';
 import { Config } from '@backstage/config';
 import { DiscoveryService } from '@backstage/backend-plugin-api';
@@ -46,7 +46,7 @@ export class DefaultAwsCodeBuildService implements AwsCodeBuildService {
   constructor(
     logger: LoggerService,
     auth: AuthService,
-    catalogApi: CatalogApi,
+    catalogApi: CatalogService,
     resourceLocator: AwsResourceLocator,
     credsManager: AwsCredentialsManager,
   );
@@ -54,9 +54,9 @@ export class DefaultAwsCodeBuildService implements AwsCodeBuildService {
   static fromConfig(
     config: Config,
     options: {
-      catalogApi: CatalogApi;
+      catalogApi: CatalogService;
       discovery: DiscoveryService;
-      auth?: AuthService;
+      auth: AuthService;
       httpAuth?: HttpAuthService;
       logger: LoggerService;
       resourceLocator?: AwsResourceLocator;
@@ -72,13 +72,9 @@ export class DefaultAwsCodeBuildService implements AwsCodeBuildService {
 // @public (undocumented)
 export interface RouterOptions {
   // (undocumented)
-  auth?: AuthService;
-  // (undocumented)
   awsCodeBuildApi: AwsCodeBuildService;
   // (undocumented)
-  discovery: DiscoveryService;
-  // (undocumented)
-  httpAuth?: HttpAuthService;
+  httpAuth: HttpAuthService;
   // (undocumented)
   logger: LoggerService;
 }

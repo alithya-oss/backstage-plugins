@@ -45,6 +45,7 @@ const useLogoStyles = makeStyles(theme => ({
   },
 }));
 
+/** @public */
 export const OPAHomePage = () => {
   const classes = useStyles();
   const { container } = useLogoStyles();

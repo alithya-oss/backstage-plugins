@@ -115,6 +115,7 @@ import {
 } from '@backstage/backend-plugin-api';
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 
+/** @public */
 export type DynamoDBTableData = {
   tableName: string;
   recordId: string;
@@ -137,6 +138,7 @@ export type DynamoDBTableData = {
 import { AwsAuditRequest, AwsAuditResponse } from './AwsAudit';
 import { IAWSSDKService } from '../services/definition';
 
+/** @public */
 export class AWSSDKService implements IAWSSDKService {
   private _awsCredentials: AwsCredentialIdentity;
   private _awsRegion: string;
@@ -986,7 +988,7 @@ export class AWSSDKService implements IAWSSDKService {
    * Register Task Definition
    *
    *
-   * @param TaskDefinition
+   * @param TaskDefinition - String describing the name of the task definition
    * @returns The DescribeTaskDefinitionCommandOutput object
    *
    */

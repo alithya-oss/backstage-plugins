@@ -9,10 +9,6 @@ import {
 import { Grid } from '@material-ui/core';
 import { ReactNode } from 'react';
 import { EntityCatalogGraphCard } from '@backstage/plugin-catalog-graph';
-
-export interface AwsEnvironmentPageProps {
-  children?: ReactNode;
-}
 import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
@@ -21,6 +17,11 @@ import {
   EntityDeleteEnvironmentCard,
   EntityEnvironmentInfoCard,
 } from '../../plugin';
+
+/** @public */
+export interface AwsEnvironmentPageProps {
+  children?: ReactNode;
+}
 
 /** @public */
 export function AwsEnvironmentPage(/* {children}: AwsEnvironmentPageProps */) {

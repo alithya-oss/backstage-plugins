@@ -47,6 +47,7 @@ const useLogoStyles = makeStyles(theme => ({
   },
 }));
 
+/** @public */
 export const AwsAppsHomePage = () => {
   const classes = useStyles();
   const { container } = useLogoStyles();

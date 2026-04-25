@@ -11,6 +11,7 @@ import { AwsPendingPage } from '../AwsPendingPage/AwsPendingPage';
 import { EntityEnvironmentSelector } from '../../plugin';
 import { useEntity } from '@backstage/plugin-catalog-react';
 
+/** @public */
 export interface AwsComponentPageProps {
   componentType: string;
 }

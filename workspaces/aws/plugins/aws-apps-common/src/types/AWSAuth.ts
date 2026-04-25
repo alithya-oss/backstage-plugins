@@ -1,5 +1,6 @@
 import { AwsCredentialIdentity } from '@aws-sdk/types';
 
+/** @public */
 export interface AwsAuthResponse {
   credentials: AwsCredentialIdentity;
   requester: string;

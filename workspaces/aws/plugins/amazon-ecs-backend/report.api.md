@@ -8,7 +8,7 @@ import { AwsCredentialsManager } from '@backstage/integration-aws-node';
 import { AwsResourceLocator } from '@alithya-oss/backstage-plugin-aws-core-node';
 import { BackendFeature } from '@backstage/backend-plugin-api';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
-import { CatalogApi } from '@backstage/catalog-client';
+import { CatalogService } from '@backstage/plugin-catalog-node';
 import { ClusterResponse } from '@alithya-oss/backstage-plugin-amazon-ecs-common';
 import { CompoundEntityRef } from '@backstage/catalog-model';
 import { Config } from '@backstage/config';
@@ -47,7 +47,7 @@ export class DefaultAmazonEcsService implements AmazonECSService {
   constructor(
     logger: LoggerService,
     auth: AuthService,
-    catalogApi: CatalogApi,
+    catalogApi: CatalogService,
     resourceLocator: AwsResourceLocator,
     credsManager: AwsCredentialsManager,
   );
@@ -55,9 +55,9 @@ export class DefaultAmazonEcsService implements AmazonECSService {
   static fromConfig(
     config: Config,
     options: {
-      catalogApi: CatalogApi;
+      catalogApi: CatalogService;
       discovery: DiscoveryService;
-      auth?: AuthService;
+      auth: AuthService;
       httpAuth?: HttpAuthService;
       logger: LoggerService;
       resourceLocator?: AwsResourceLocator;
@@ -81,11 +81,7 @@ export interface RouterOptions {
   // (undocumented)
   amazonEcsApi: AmazonECSService;
   // (undocumented)
-  auth?: AuthService;
-  // (undocumented)
-  discovery: DiscoveryService;
-  // (undocumented)
-  httpAuth?: HttpAuthService;
+  httpAuth: HttpAuthService;
   // (undocumented)
   logger: LoggerService;
 }

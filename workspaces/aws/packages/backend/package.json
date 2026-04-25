@@ -50,7 +50,7 @@
     "@backstage/plugin-catalog-common": "backstage:^",
     "@backstage/plugin-catalog-node": "backstage:^",
     "@backstage/plugin-events-backend": "backstage:^",
-    "@backstage/plugin-events-backend-module-github": "^0.4.11",
+    "@backstage/plugin-events-backend-module-github": "backstage:^",
     "@backstage/plugin-events-backend-module-gitlab": "backstage:^",
     "@backstage/plugin-kubernetes-backend": "backstage:^",
     "@backstage/plugin-permission-backend": "backstage:^",

@@ -39,9 +39,7 @@ export const costInsightsAwsPlugin = createBackendPlugin({
         logger,
         httpRouter,
         config,
-        auth,
         httpAuth,
-        discovery,
         cache,
         costInsightsAwsService,
       }) {
@@ -51,8 +49,6 @@ export const costInsightsAwsPlugin = createBackendPlugin({
           await createRouter({
             logger,
             costInsightsAwsService,
-            discovery,
-            auth,
             httpAuth,
             cache,
             config: pluginConfig,

@@ -4,6 +4,7 @@
 import { LoggerService } from '@backstage/backend-plugin-api';
 import { IAWSSDKService } from '../services/definition';
 
+/** @public */
 export interface AwsAuditRequest {
   envProviderPrefix: string;
   envProviderName: string;

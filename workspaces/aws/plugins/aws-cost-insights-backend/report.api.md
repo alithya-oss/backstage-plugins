@@ -8,7 +8,7 @@ import { AwsCredentialsManager } from '@backstage/integration-aws-node';
 import { BackendFeature } from '@backstage/backend-plugin-api';
 import { BackstageCredentials } from '@backstage/backend-plugin-api';
 import { CacheService } from '@backstage/backend-plugin-api';
-import { CatalogApi } from '@backstage/catalog-client';
+import { CatalogService } from '@backstage/plugin-catalog-node';
 import { CompoundEntityRef } from '@backstage/catalog-model';
 import { Cost } from '@backstage-community/plugin-cost-insights-common';
 import { CostExplorerClient } from '@aws-sdk/client-cost-explorer';
@@ -25,7 +25,7 @@ export class CostExplorerCostInsightsAwsService
   constructor(
     logger: LoggerService,
     auth: AuthService,
-    catalogApi: CatalogApi,
+    catalogApi: CatalogService,
     costExplorerClient: CostExplorerClient,
     config: CostInsightsAwsConfig,
   );
@@ -33,9 +33,9 @@ export class CostExplorerCostInsightsAwsService
   static fromConfig(
     config: CostInsightsAwsConfig,
     options: {
-      catalogApi: CatalogApi;
+      catalogApi: CatalogService;
       discovery: DiscoveryService;
-      auth?: AuthService;
+      auth: AuthService;
       httpAuth?: HttpAuthService;
       logger: LoggerService;
       credentialsManager: AwsCredentialsManager;
@@ -109,17 +109,13 @@ export function createRouter(options: RouterOptions): Promise<express.Router>;
 // @public (undocumented)
 export interface RouterOptions {
   // (undocumented)
-  auth?: AuthService;
-  // (undocumented)
   cache: CacheService;
   // (undocumented)
   config: CostInsightsAwsConfig;
   // (undocumented)
   costInsightsAwsService: CostInsightsAwsService;
   // (undocumented)
-  discovery: DiscoveryService;
-  // (undocumented)
-  httpAuth?: HttpAuthService;
+  httpAuth: HttpAuthService;
   // (undocumented)
   logger: LoggerService;
 }

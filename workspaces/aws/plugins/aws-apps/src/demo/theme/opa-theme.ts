@@ -249,6 +249,7 @@ const createCustomThemeOverrides = (
   };
 };
 
+/** @public */
 export const opaTheme: BackstageTheme = {
   ...baseTheme,
   overrides: {

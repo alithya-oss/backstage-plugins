@@ -26,9 +26,11 @@ import { GetLogEventsCommandOutput } from '@aws-sdk/client-cloudwatch-logs';
 import { GetLogRecordCommandOutput } from '@aws-sdk/client-cloudwatch-logs';
 import { GetParameterCommandOutput } from '@aws-sdk/client-ssm';
 import { GetSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
+import { GitProviders } from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { HeadObjectCommandOutput } from '@aws-sdk/client-s3';
 import { HttpAuthService } from '@backstage/backend-plugin-api';
 import { InvokeCommandOutput } from '@aws-sdk/client-lambda';
+import { ISCMBackendAPI } from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { ListGroupResourcesCommandOutput } from '@aws-sdk/client-resource-groups';
 import { ListTasksCommandOutput } from '@aws-sdk/client-ecs';
 import { LoggerService } from '@backstage/backend-plugin-api';
@@ -37,6 +39,7 @@ import { PermissionsService } from '@backstage/backend-plugin-api';
 import { PutItemCommandOutput } from '@aws-sdk/client-dynamodb';
 import { PutSecretValueCommandOutput } from '@aws-sdk/client-secrets-manager';
 import { RegisterTaskDefinitionCommandOutput } from '@aws-sdk/client-ecs';
+import { RootConfigService } from '@backstage/backend-plugin-api';
 import { ScanCommandOutput } from '@aws-sdk/client-dynamodb';
 import { TaskDefinition } from '@aws-sdk/client-ecs';
 import { UpdateServiceCommandOutput } from '@aws-sdk/client-ecs';
@@ -44,16 +47,87 @@ import { UpdateStackCommandOutput } from '@aws-sdk/client-cloudformation';
 import { UserEntity } from '@backstage/catalog-model';
 import { UserInfoService } from '@backstage/backend-plugin-api';
 
+// @public
+const awsAppsPlugin: BackendFeature;
+export default awsAppsPlugin;
+
 // @public (undocumented)
-export class AwsAppsApi {
+export interface AwsAuditRequest {
+  // (undocumented)
+  actionName: string;
+  // (undocumented)
+  actionType: string;
+  // (undocumented)
+  apiClient: IAWSSDKService;
+  // (undocumented)
+  appName: string;
+  // (undocumented)
+  awsAccount: string;
+  // (undocumented)
+  awsRegion: string;
+  // (undocumented)
+  envProviderName: string;
+  // (undocumented)
+  envProviderPrefix: string;
+  // (undocumented)
+  logger: LoggerService;
+  // (undocumented)
+  message?: string;
+  // (undocumented)
+  owner: string;
+  // (undocumented)
+  requestArgs?: string;
+  // (undocumented)
+  requester: string;
+  // (undocumented)
+  roleArn: string;
+  // (undocumented)
+  status: string;
+}
+
+// @public (undocumented)
+export interface AwsAuditResponse {
+  // (undocumented)
+  message: string;
+  // (undocumented)
+  status: string;
+}
+
+// @public (undocumented)
+export interface AwsAuthResponse {
+  // (undocumented)
+  account: string;
+  // (undocumented)
+  credentials: AwsCredentialIdentity;
+  // (undocumented)
+  owner?: string;
+  // (undocumented)
+  region: string;
+  // (undocumented)
+  requester: string;
+  // (undocumented)
+  roleArn: string;
+}
+
+// @public (undocumented)
+export class AWSSDKService implements IAWSSDKService {
   constructor(
-    config: Config,
+    config: RootConfigService,
     logger: LoggerService,
-    awsRegion: string,
-    awsAccount: string,
+    awsCredentials?: AwsCredentialIdentity,
+    awsRegion?: string,
+    awsAccount?: string,
   );
   // (undocumented)
+  get awsAccount(): string;
+  // (undocumented)
+  get awsCredentials(): AwsCredentialIdentity;
+  // (undocumented)
+  get awsRegion(): string;
+  // (undocumented)
   callLambda(functionName: string, body: string): Promise<InvokeCommandOutput>;
+  // (undocumented)
+  createAuditRecord(input: AwsAuditRequest): Promise<AwsAuditResponse>;
   // (undocumented)
   createS3Bucket(
     bucketName: string,
@@ -132,6 +206,12 @@ export class AwsAppsApi {
   registerTaskDefinition(
     taskDefinition: TaskDefinition,
   ): Promise<RegisterTaskDefinitionCommandOutput>;
+  // (undocumented)
+  setAwsAccount(account: string): void;
+  // (undocumented)
+  setAwsCredentials(credentials: AwsCredentialIdentity): void;
+  // (undocumented)
+  setAwsRegion(region: string): void;
   updateServiceTask(
     clusterName: string,
     serviceName: string,
@@ -147,68 +227,6 @@ export class AwsAppsApi {
     providerName: string,
     parameters?: Parameter[],
   ): Promise<UpdateStackCommandOutput>;
-}
-
-// @public
-const awsAppsPlugin: BackendFeature;
-export default awsAppsPlugin;
-
-// @public (undocumented)
-export interface AwsAuditRequest {
-  // (undocumented)
-  actionName: string;
-  // (undocumented)
-  actionType: string;
-  // (undocumented)
-  apiClient: AwsAppsApi;
-  // (undocumented)
-  appName: string;
-  // (undocumented)
-  awsAccount: string;
-  // (undocumented)
-  awsRegion: string;
-  // (undocumented)
-  envProviderName: string;
-  // (undocumented)
-  envProviderPrefix: string;
-  // (undocumented)
-  logger: LoggerService;
-  // (undocumented)
-  message?: string;
-  // (undocumented)
-  owner: string;
-  // (undocumented)
-  requestArgs?: string;
-  // (undocumented)
-  requester: string;
-  // (undocumented)
-  roleArn: string;
-  // (undocumented)
-  status: string;
-}
-
-// @public (undocumented)
-export interface AwsAuditResponse {
-  // (undocumented)
-  message: string;
-  // (undocumented)
-  status: string;
-}
-
-// @public (undocumented)
-export interface AwsAuthResponse {
-  // (undocumented)
-  account: string;
-  // (undocumented)
-  credentials: AwsCredentialIdentity;
-  // (undocumented)
-  owner?: string;
-  // (undocumented)
-  region: string;
-  // (undocumented)
-  requester: string;
-  // (undocumented)
-  roleArn: string;
 }
 
 // @public (undocumented)
@@ -250,6 +268,23 @@ export function getAWScreds(
   user?: UserEntity,
   userIdentity?: BackstageUserInfo,
 ): Promise<AwsAuthResponse>;
+
+// @public (undocumented)
+export class GitService implements IGitService {
+  constructor(
+    logger: LoggerService,
+    gitProvider?: GitProviders,
+    gitProviderImpl?: ISCMBackendAPI,
+  );
+  // (undocumented)
+  get gitProvider(): GitProviders;
+  // (undocumented)
+  get gitProviderImpl(): ISCMBackendAPI;
+  // (undocumented)
+  setGitProvider(provider: GitProviders): void;
+  // (undocumented)
+  setGitProviderImpl(provider: ISCMBackendAPI): void;
+}
 
 // @public (undocumented)
 export interface RouterOptions {

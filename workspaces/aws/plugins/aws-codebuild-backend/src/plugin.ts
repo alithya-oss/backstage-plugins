@@ -34,20 +34,11 @@ export const awsCodebuildPlugin = createBackendPlugin({
         httpAuth: coreServices.httpAuth,
         awsCodeBuildApi: awsCodeBuildServiceRef,
       },
-      async init({
-        logger,
-        httpRouter,
-        auth,
-        httpAuth,
-        discovery,
-        awsCodeBuildApi,
-      }) {
+      async init({ logger, httpRouter, httpAuth, awsCodeBuildApi }) {
         httpRouter.use(
           await createRouter({
             logger,
             awsCodeBuildApi,
-            discovery,
-            auth,
             httpAuth,
           }),
         );

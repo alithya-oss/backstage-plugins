@@ -42,6 +42,7 @@ import { DescribeClusterCommandOutput } from '@aws-sdk/client-eks';
 import { InvokeCommandOutput } from '@aws-sdk/client-lambda';
 import { AwsCredentialIdentity } from '@aws-sdk/types';
 
+/** @public */
 export interface IAWSSDKService {
   readonly awsRegion: string;
   readonly awsAccount: string;

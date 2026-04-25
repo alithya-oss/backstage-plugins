@@ -3,6 +3,7 @@
 
 import { createPermission } from '@backstage/plugin-permission-common';
 
+/** @public */
 export const APP_COMPNENT_RESOURCE_TYPE = 'aws-apps';
 
 /** @public */

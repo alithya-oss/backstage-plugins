@@ -8,6 +8,7 @@ import { GitLabAPI } from './GitlabApiClient';
 import { GitHubAPI } from './GithubApiClient';
 import { GitUnset } from './GitUnset';
 
+/** @public */
 export class GitService implements IGitService {
   private _gitProvider: GitProviders;
   private _gitProviderImpl: ISCMBackendAPI;

@@ -18,6 +18,7 @@ import { ReactNode } from 'react';
 import { CICDContent } from '../../components/CICDContent/CICDContent';
 import { EntityDeleteProviderCard, EntityProviderInfoCard } from '../../plugin';
 
+/** @public */
 export interface AwsEnvironmentProviderPageProps {
   children?: ReactNode;
 }

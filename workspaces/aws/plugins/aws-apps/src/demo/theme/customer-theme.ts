@@ -249,6 +249,7 @@ const createCustomThemeOverrides = (
   };
 };
 
+/** @public */
 export const customerTheme: BackstageTheme = {
   ...baseTheme,
   overrides: {

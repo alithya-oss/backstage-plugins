@@ -28,7 +28,7 @@ describe('createRouter', () => {
     const router = await createRouter({
       logger: mockServices.logger.mock(),
       awsCodeBuildApi: mockService,
-      discovery: mockServices.discovery(),
+      httpAuth: mockServices.httpAuth(),
     });
     app = express().use(router);
   });

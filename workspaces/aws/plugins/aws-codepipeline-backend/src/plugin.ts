@@ -34,20 +34,11 @@ export const awsCodePiplinePlugin = createBackendPlugin({
         httpAuth: coreServices.httpAuth,
         awsCodePipelineApi: awsCodePipelineServiceRef,
       },
-      async init({
-        logger,
-        httpRouter,
-        auth,
-        httpAuth,
-        discovery,
-        awsCodePipelineApi,
-      }) {
+      async init({ logger, httpRouter, httpAuth, awsCodePipelineApi }) {
         httpRouter.use(
           await createRouter({
             logger,
             awsCodePipelineApi,
-            discovery,
-            auth,
             httpAuth,
           }),
         );
