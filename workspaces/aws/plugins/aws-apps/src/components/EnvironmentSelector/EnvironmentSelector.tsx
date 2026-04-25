@@ -3,13 +3,14 @@
 
 import { useState } from 'react';
 import { EmptyState } from '@backstage/core-components';
-import { LinearProgress } from '@material-ui/core';
+import {
+  FormControl,
+  InputLabel,
+  LinearProgress,
+  MenuItem,
+  Select,
+} from '@material-ui/core';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-
-import FormControl from '@mui/material/FormControl';
 import { AWSComponent } from '@alithya-oss/backstage-plugin-aws-apps-common';
 
 const EnvironmentSelector = ({
@@ -36,15 +37,17 @@ const EnvironmentSelector = ({
     );
   });
 
-  const handleChange = (event: SelectChangeEvent) => {
-    const [envName, providerName] = event.target.value.split('|');
+  const handleChange = (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+  ) => {
+    const [envName, providerName] = (event.target.value as string).split('|');
     awsComponent.setCurrentProvider(envName, providerName);
     setSelectedEnv(`${envName}|${providerName}`);
   };
 
   return (
     <div>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
+      <FormControl style={{ margin: 8, minWidth: 120 }}>
         <InputLabel id="lbl-select-aws-environment">Environments</InputLabel>
         <Select
           labelId="select-aws-environment"

@@ -88,10 +88,10 @@ export function getEnvProvidersAction(options: {
     envRef: string;
     envDeployManualApproval: boolean;
     envProviders: {
+      region: string;
+      accountId: string;
       envProviderPrefix: string;
       envProviderName: string;
-      accountId: string;
-      region: string;
       envProviderType: string;
       vpcId: string;
       publicSubnets: string;

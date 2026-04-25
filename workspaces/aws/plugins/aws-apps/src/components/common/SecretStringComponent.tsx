@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { IconButton } from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { useState } from 'react';
 
 /**

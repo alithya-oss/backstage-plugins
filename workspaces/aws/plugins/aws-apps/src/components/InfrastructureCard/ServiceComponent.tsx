@@ -6,8 +6,7 @@ import {
   AWSResource,
   AWSServiceResources,
 } from '@alithya-oss/backstage-plugin-aws-apps-common';
-import { makeStyles, Typography } from '@material-ui/core';
-import Link from '@mui/material/Link';
+import { Link, makeStyles, Typography } from '@material-ui/core';
 import { useState, useCallback } from 'react';
 import { ResourceDetailsDialog } from './ResourceDetailsDialog';
 

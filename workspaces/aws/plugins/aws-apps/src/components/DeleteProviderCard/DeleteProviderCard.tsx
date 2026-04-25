@@ -9,12 +9,15 @@ import {
   catalogApiRef,
   useEntity,
 } from '@backstage/plugin-catalog-react';
-import { Button, CardContent, Grid } from '@material-ui/core';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Typography from '@mui/material/Typography';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import {
+  Backdrop,
+  Button,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Typography,
+} from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { opaApiRef } from '../../api';
@@ -180,7 +183,7 @@ const DeleteProviderPanel = ({
       <CardContent>
         <Grid container spacing={2}>
           <Grid item zeroMinWidth xs={8}>
-            <Typography sx={{ fontWeight: 'bold' }}>
+            <Typography style={{ fontWeight: 'bold' }}>
               Delete this provider
             </Typography>
           </Grid>
@@ -201,7 +204,7 @@ const DeleteProviderPanel = ({
             {isDeleteSuccessful && deleteResultMessage && (
               <Alert
                 id="alertGood"
-                sx={{ mb: 2 }}
+                style={{ marginBottom: 16 }}
                 severity="success"
                 onClose={handleCloseAlert}
               >
@@ -220,7 +223,7 @@ const DeleteProviderPanel = ({
             {!isDeleteSuccessful && deleteResultMessage && (
               <Alert
                 id="alertBad"
-                sx={{ mb: 2 }}
+                style={{ marginBottom: 16 }}
                 severity="error"
                 onClose={handleCloseAlert}
               >
@@ -237,10 +240,7 @@ const DeleteProviderPanel = ({
             )}
           </Grid>
         </Grid>
-        <Backdrop
-          sx={{ color: '#FFFFFF', zIndex: theme => theme.zIndex.drawer + 1 }}
-          open={spinning}
-        >
+        <Backdrop style={{ color: '#FFFFFF', zIndex: 1400 }} open={spinning}>
           <CircularProgress color="inherit" />
         </Backdrop>
       </CardContent>

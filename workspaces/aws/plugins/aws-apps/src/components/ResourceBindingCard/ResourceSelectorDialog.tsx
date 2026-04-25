@@ -22,7 +22,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import { Close } from '@mui/icons-material';
+import Close from '@material-ui/icons/Close';
 import { useEffect, useState } from 'react';
 
 // Declare styles to use in the components

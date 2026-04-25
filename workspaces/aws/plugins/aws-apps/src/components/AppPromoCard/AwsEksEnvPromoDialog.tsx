@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   Grid,
   IconButton,
   InputLabel,
@@ -15,9 +16,8 @@ import {
   TextField,
   makeStyles,
 } from '@material-ui/core';
-import { Close } from '@mui/icons-material';
+import Close from '@material-ui/icons/Close';
 import { useState } from 'react';
-import FormControl from '@mui/material/FormControl';
 
 // Declare styles to use in the components
 const useStyles = makeStyles(theme => ({
@@ -153,7 +153,7 @@ export const AwsEksEnvPromoDialog = ({
       </DialogTitle>
       <DialogContent>
         <Grid container>
-          <FormControl fullWidth sx={{ m: 2 }}>
+          <FormControl fullWidth style={{ margin: 16 }}>
             <InputLabel id="lbl-namespace-entry">K8s Namespace</InputLabel>
             <TextField
               id="namespace-entry"
@@ -172,7 +172,7 @@ export const AwsEksEnvPromoDialog = ({
           </FormControl>
         </Grid>
         <Grid container>
-          <FormControl fullWidth sx={{ m: 2 }}>
+          <FormControl fullWidth style={{ margin: 16 }}>
             <InputLabel id="select-role-behavior-label">
               Namespace-bound Kubectl Admin Access
             </InputLabel>
@@ -199,7 +199,7 @@ export const AwsEksEnvPromoDialog = ({
         </Grid>
         {roleBehavior === 'existing_new_k8s_namespace_admin_iam_role' && (
           <Grid container>
-            <FormControl fullWidth sx={{ m: 2 }}>
+            <FormControl fullWidth style={{ margin: 16 }}>
               <InputLabel id="lbl-iam-role-arn-entry">IAM Role</InputLabel>
               <TextField
                 id="iam-role-arn-entry"

@@ -3,12 +3,14 @@
 
 import { InfoCard, EmptyState } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
-import { LinearProgress } from '@material-ui/core';
-import Button from '@mui/material/Button';
-import CardContent from '@mui/material/CardContent';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import {
+  Button,
+  CardContent,
+  Divider,
+  Grid,
+  LinearProgress,
+  Typography,
+} from '@material-ui/core';
 import { useState, useEffect, useRef } from 'react';
 import {
   DescribeStackEventsCommandOutput,
@@ -319,7 +321,7 @@ const OpaAppStateOverview = ({
             <>Polling for updates...</>
             <br />
             <Button
-              sx={{ mr: 2 }}
+              style={{ marginRight: 16 }}
               variant="outlined"
               size="small"
               disabled={false}
@@ -330,44 +332,57 @@ const OpaAppStateOverview = ({
           </>
         )}
         {!polling && (
-          <Grid container direction="column" rowSpacing={2}>
+          <Grid container direction="column" spacing={2}>
             <Grid container>
               <Grid item xs={4}>
                 <Typography
-                  sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}
+                  style={{ textTransform: 'uppercase', fontWeight: 'bold' }}
                 >
                   Status
                 </Typography>
-                <Typography sx={{ mt: 1 }}>
+                <Typography style={{ marginTop: 8 }}>
                   {getStatus(stack.stackDeployStatus)}
                 </Typography>
               </Grid>
-              <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }} />
-              <Grid item zeroMinWidth xs={4} sx={{ pl: 1, pr: 1 }}>
+              <Divider
+                orientation="vertical"
+                flexItem
+                style={{ marginRight: '-1px' }}
+              />
+              <Grid
+                item
+                zeroMinWidth
+                xs={4}
+                style={{ paddingLeft: 8, paddingRight: 8 }}
+              >
                 <Typography
-                  sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}
+                  style={{ textTransform: 'uppercase', fontWeight: 'bold' }}
                 >
                   Created At
                 </Typography>
-                <Typography sx={{ mt: 1 }}>
+                <Typography style={{ marginTop: 8 }}>
                   {stack.creationTime ?? ''}
                 </Typography>
               </Grid>
-              <Divider orientation="vertical" flexItem sx={{ mr: '-1px' }} />
-              <Grid item xs={4} sx={{ pl: 1 }}>
+              <Divider
+                orientation="vertical"
+                flexItem
+                style={{ marginRight: '-1px' }}
+              />
+              <Grid item xs={4} style={{ paddingLeft: 8 }}>
                 <Typography
-                  sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}
+                  style={{ textTransform: 'uppercase', fontWeight: 'bold' }}
                 >
                   Last Updated
                 </Typography>
-                <Typography sx={{ mt: 1 }}>
+                <Typography style={{ marginTop: 8 }}>
                   {stack.lastUpdatedTime ?? ''}
                 </Typography>
               </Grid>
             </Grid>
             <Grid item>
               <Button
-                sx={{ mr: 2 }}
+                style={{ marginRight: 16 }}
                 variant="outlined"
                 size="small"
                 disabled={false}
@@ -376,7 +391,7 @@ const OpaAppStateOverview = ({
                 Refresh
               </Button>
               <Button
-                sx={{ mr: 2 }}
+                style={{ marginRight: 16 }}
                 variant="outlined"
                 size="small"
                 disabled={stack.stackDeployStatus === 'UNSTAGED'}
@@ -388,7 +403,7 @@ const OpaAppStateOverview = ({
                 App
               </Button>
               <Button
-                sx={{ mr: 2 }}
+                style={{ marginRight: 16 }}
                 variant="outlined"
                 size="small"
                 disabled={!stack.stackDeployStatus.includes('COMPLETE')}

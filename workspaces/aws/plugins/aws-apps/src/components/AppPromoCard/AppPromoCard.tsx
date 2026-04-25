@@ -21,24 +21,23 @@ import {
   useEntity,
 } from '@backstage/plugin-catalog-react';
 import {
+  Backdrop,
   Button,
   CardContent,
+  CircularProgress,
   FormControl,
   FormHelperText,
   Grid,
+  IconButton,
   InputLabel,
   LinearProgress,
   MenuItem,
   Select,
+  Tooltip,
+  Typography,
 } from '@material-ui/core';
-import InfoIcon from '@mui/icons-material/Info';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Typography from '@mui/material/Typography';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@material-ui/icons/Info';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { opaApiRef } from '../../api';
 import { ProviderType } from '../../helpers/constants';
@@ -420,7 +419,7 @@ const AppPromoCard = ({
             <Grid item zeroMinWidth xs={12}>
               {isPromotionSuccessful && !!promotedEnvName && (
                 <Alert
-                  sx={{ mb: 2 }}
+                  style={{ marginBottom: 16 }}
                   severity="success"
                   onClose={handleCloseAlert}
                 >
@@ -438,7 +437,7 @@ const AppPromoCard = ({
               )}
               {!isPromotionSuccessful && !!promotedEnvName && (
                 <Alert
-                  sx={{ mb: 2 }}
+                  style={{ marginBottom: 16 }}
                   severity="error"
                   onClose={handleCloseAlert}
                 >
@@ -454,7 +453,7 @@ const AppPromoCard = ({
                   )}
                 </Alert>
               )}
-              <Typography sx={{ fontWeight: 'bold' }}>
+              <Typography style={{ fontWeight: 'bold' }}>
                 Add Environment:
                 <Tooltip
                   title="Adding a deployment environment will update this app's CICD pipeline so that it will
@@ -506,7 +505,7 @@ const AppPromoCard = ({
             </Grid>
           </Grid>
         </Grid>
-        <Typography margin="10px">
+        <Typography style={{ margin: '10px' }}>
           <AwsEksEnvPromoDialog
             isOpen={openEksDialog}
             submitHandler={submitNewEksEnvironmentHandler}
@@ -516,10 +515,7 @@ const AppPromoCard = ({
             iamRoleArnDefault={suggestedIamRoleArn}
           />
         </Typography>
-        <Backdrop
-          sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
-          open={spinning}
-        >
+        <Backdrop style={{ color: '#fff', zIndex: 1400 }} open={spinning}>
           <CircularProgress color="inherit" />
         </Backdrop>
       </CardContent>

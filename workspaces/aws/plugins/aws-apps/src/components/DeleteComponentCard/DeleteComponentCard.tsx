@@ -19,12 +19,16 @@ import {
   catalogApiRef,
   useEntity,
 } from '@backstage/plugin-catalog-react';
-import { Button, CardContent, Grid, LinearProgress } from '@material-ui/core';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Typography from '@mui/material/Typography';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import {
+  Backdrop,
+  Button,
+  CardContent,
+  CircularProgress,
+  Grid,
+  LinearProgress,
+  Typography,
+} from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OPAApi, opaApiRef } from '../../api';
@@ -346,7 +350,7 @@ const DeleteAppPanel = ({
         <Grid>
           <Grid container spacing={2}>
             <Grid item zeroMinWidth xs={12}>
-              <Typography sx={{ fontWeight: 'bold' }}>
+              <Typography style={{ fontWeight: 'bold' }}>
                 Delete this component from current environment
               </Typography>
             </Grid>
@@ -366,7 +370,7 @@ const DeleteAppPanel = ({
           </Grid>
           <Grid container spacing={2}>
             <Grid item zeroMinWidth xs={12}>
-              <Typography sx={{ fontWeight: 'bold' }}>
+              <Typography style={{ fontWeight: 'bold' }}>
                 Delete this component and all of its resources
               </Typography>
             </Grid>
@@ -388,7 +392,7 @@ const DeleteAppPanel = ({
             {isDeleteSuccessful && deleteResultMessage && (
               <Alert
                 id="alertGood"
-                sx={{ mt: 2, mb: 2 }}
+                style={{ marginTop: 16, marginBottom: 16 }}
                 severity="success"
                 onClose={handleCloseAlert}
               >
@@ -407,7 +411,7 @@ const DeleteAppPanel = ({
             {!isDeleteSuccessful && deleteResultMessage && (
               <Alert
                 id="alertBad"
-                sx={{ mt: 2, mb: 2 }}
+                style={{ marginTop: 16, marginBottom: 16 }}
                 severity="error"
                 onClose={handleCloseAlert}
               >
@@ -424,10 +428,7 @@ const DeleteAppPanel = ({
             )}
           </Grid>
         </Grid>
-        <Backdrop
-          sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
-          open={spinning}
-        >
+        <Backdrop style={{ color: '#fff', zIndex: 1400 }} open={spinning}>
           <CircularProgress color="inherit" />
         </Backdrop>
       </CardContent>
