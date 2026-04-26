@@ -1,9 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "declaration": true,
-    "outDir": "dist",
-    "declarationDir": "../dist-types",
-    "jsx": "react-jsx"
-  }
-}
