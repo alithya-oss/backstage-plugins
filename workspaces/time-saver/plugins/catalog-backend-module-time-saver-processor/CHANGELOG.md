@@ -1,5 +1,11 @@
 # @alithya-oss/backstage-plugin-catalog-backend-module-time-saver-processor
 
+## 1.1.8
+
+### Patch Changes
+
+- f3e3867: bump framework version 1.49.3
+
 ## 1.1.7
 
 ### Patch Changes
