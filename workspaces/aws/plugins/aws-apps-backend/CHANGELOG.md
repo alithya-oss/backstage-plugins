@@ -1,5 +1,13 @@
 # @alithya-oss/backstage-plugin-aws-apps-backend
 
+## 0.4.8
+
+### Patch Changes
+
+- f3e3867: bump framework version 1.49.3
+- Updated dependencies [f3e3867]
+  - @alithya-oss/backstage-plugin-aws-apps-common@0.4.8
+
 ## 0.4.7
 
 ### Patch Changes
