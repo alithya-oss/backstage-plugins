@@ -1,5 +1,16 @@
 # @alithya-oss/backstage-plugin-rag-ai-backend-module-openai
 
+## 0.2.11
+
+### Patch Changes
+
+- f3e3867: bump framework version 1.49.3
+- Updated dependencies [f3e3867]
+  - @alithya-oss/backstage-plugin-rag-ai-backend-retrieval-augmenter@1.0.10
+  - @alithya-oss/backstage-plugin-rag-ai-backend-embeddings-openai@1.1.11
+  - @alithya-oss/backstage-plugin-rag-ai-storage-pgvector@0.2.9
+  - @alithya-oss/backstage-plugin-rag-ai-node@0.2.9
+
 ## 0.2.10
 
 ### Patch Changes
