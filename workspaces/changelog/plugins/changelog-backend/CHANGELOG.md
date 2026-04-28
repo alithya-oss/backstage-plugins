@@ -1,5 +1,11 @@
 # @alithya-oss/backstage-plugin-changelog-backend
 
+## 1.0.4
+
+### Patch Changes
+
+- f3e3867: bump framework version 1.49.3
+
 ## 1.0.3
 
 ### Patch Changes
