@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.3.10
+
+### Patch Changes
+
+- f3e3867: bump framework version 1.49.3
+
 ## 0.3.9
 
 ### Patch Changes

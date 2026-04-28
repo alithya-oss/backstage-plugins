@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.2.17
+
+### Patch Changes
+
+- f3e3867: bump framework version 1.49.3
+- Updated dependencies [f3e3867]
+  - @alithya-oss/backstage-plugin-aws-core-common@0.5.8
+
 ## 0.2.16
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @aws/plugin-aws-apps-common-for-backstage
 
+## 0.4.8
+
+### Patch Changes
+
+- f3e3867: bump framework version 1.49.3
+
 ## 0.4.7
 
 ### Patch Changes
