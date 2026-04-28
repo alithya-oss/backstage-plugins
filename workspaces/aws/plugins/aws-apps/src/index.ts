@@ -6,7 +6,7 @@ export {
   AwsEnvironmentProviderPage,
   AwsComponentPage,
   AwsAppPage,
-  opaPlugin,
+  awsAppsPlugin,
   EntityAnnotationTypeTable,
   EntityAppStateCard,
   EntityK8sAppStateCard,
@@ -28,3 +28,19 @@ export {
   EntityEnvironmentSelector,
   EntityAwsEnvironmentProviderSelectorCard,
 } from './plugin';
+
+export * from './pages/AwsAppPage/AwsAppPage';
+export * from './pages/AwsEnvironmentPage/AwsEnvironmentPage';
+export * from './pages/AwsEnvironmentProviderPage/AwsEnvironmentProviderPage';
+export * from './pages/AwsComponentPage/AwsComponentPage';
+export * from './pages/AwsAppPage/AwsAppPage';
+export * from './pages/AwsPendingPage/AwsPendingPage';
+export * from './pages/AwsECSAppPage/AwsECSAppPage';
+export * from './pages/AwsEKSAppPage/AwsEKSAppPage';
+export * from './pages/AwsRDSResourcePage/AwsRDSResourcePage';
+export * from './pages/AwsResourcePage/AwsResourcePage';
+export * from './pages/AwsS3ResourcePage/AwsS3ResourcePage';
+export * from './pages/AwsSecretsManagerResourcePage/AwsSecretsManagerResourcePage';
+export * from './pages/AwsServerlessAppPage/AwsServerlessAppPage';
+export * from './pages/AwsEnvironmentProviderPage/AwsEnvironmentProviderPage';
+export * from './demo';

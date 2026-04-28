@@ -6,13 +6,13 @@
     "node": "18 || 20"
   },
   "scripts": {
-    "dev": "concurrently \"docker compose up\" \"yarn workspaces foreach -A --include backend --include app --parallel --jobs unlimited -v -i run start\"",
-    "start": "yarn workspace app start",
+    "dev": "dotenv -- concurrently \"docker compose up\" \"yarn workspaces foreach -A --include backend --include app --parallel --jobs unlimited -v -i run start\"",
+    "start": "dotenv -- yarn workspace app start",
     "start-backend": "yarn workspace backend start",
     "build:backend": "yarn workspace backend build",
     "build:all": "backstage-cli repo build --all",
     "build:api-reports": "yarn build:api-reports:only --tsc",
-    "build:api-reports:only": "backstage-repo-tools api-reports -o ae-wrong-input-file-type,ae-undocumented --allow-warnings plugins/aws-apps --validate-release-tags",
+    "build:api-reports:only": "backstage-repo-tools api-reports -o ae-wrong-input-file-type,ae-undocumented,ae-forgotten-export --validate-release-tags",
     "build-image": "yarn workspace backend build-image",
     "tsc": "tsc",
     "tsc:full": "tsc --skipLibCheck false --incremental false",
@@ -39,18 +39,20 @@
     "directory": "workspaces/aws"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.32.1",
-    "@backstage/e2e-test-utils": "^0.1.1",
-    "@backstage/repo-tools": "^0.13.3",
+    "@backstage/cli": "backstage:^",
+    "@backstage/cli-defaults": "backstage:^",
+    "@backstage/e2e-test-utils": "backstage:^",
+    "@backstage/repo-tools": "backstage:^",
     "@changesets/cli": "^2.27.1",
     "@playwright/test": "^1.32.3",
     "@spotify/prettier-config": "^12.0.0",
     "@useoptic/optic": "~0.50.7",
     "concurrently": "^8.0.0",
+    "dotenv-cli": "^11.0.0",
     "lerna": "^7.3.0",
     "node-gyp": "^10.2.0",
     "prettier": "^2.3.2",
-    "typescript": "~5.4.0"
+    "typescript": "~5.8.0"
   },
   "resolutions": {
     "@types/react": "^18",
@@ -68,6 +70,5 @@
   },
   "dependencies": {
     "@mui/styles": "^6.1.2"
-  },
-  "packageManager": "yarn@4.9.1"
+  }
 }

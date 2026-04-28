@@ -9,11 +9,9 @@ import { RoadieVectorStore } from '@alithya-oss/backstage-plugin-rag-ai-node';
 import { RootConfigService } from '@backstage/backend-plugin-api';
 
 // @public (undocumented)
-export function createRoadiePgVectorStore({
-  logger,
-  database,
-  config,
-}: PgVectorStoreInitConfig): Promise<RoadieVectorStore>;
+export function createRoadiePgVectorStore(
+  input: PgVectorStoreInitConfig,
+): Promise<RoadieVectorStore>;
 
 // @public (undocumented)
 export interface PgVectorStoreInitConfig {

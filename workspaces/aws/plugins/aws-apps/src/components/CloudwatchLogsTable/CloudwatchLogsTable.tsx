@@ -13,15 +13,17 @@ import { useApi } from '@backstage/core-plugin-api';
 import { opaApiRef } from '../../api';
 import { formatWithTime } from '../../helpers/date-utils';
 
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Link from '@mui/material/Link';
-import FileDownload from '@mui/icons-material/FileDownload';
-import { LinearProgress } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  LinearProgress,
+  Link,
+  Typography,
+} from '@material-ui/core';
+import GetApp from '@material-ui/icons/GetApp';
 import { saveAs as FileSaver } from 'file-saver';
 import { LogStream } from '@aws-sdk/client-cloudwatch-logs';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
@@ -134,6 +136,7 @@ const CloudwatchLogsTable = ({
         setError({ isError: false, errorMsg: '' });
       })
       .catch(e => {
+        // console.log(e); // rejectReason of any first rejected promise
         setLoading(false);
         setError({
           isError: true,
@@ -211,7 +214,7 @@ const CloudwatchLogsTable = ({
   ];
 
   if (error.isError) {
-    return <Typography sx={{ color: 'red' }}>{error.errorMsg}</Typography>;
+    return <Typography style={{ color: 'red' }}>{error.errorMsg}</Typography>;
   }
 
   const getDialogContent = () => {
@@ -219,7 +222,7 @@ const CloudwatchLogsTable = ({
       return <LinearProgress />;
     } else if (dialogError.isError) {
       return (
-        <Typography sx={{ color: 'red' }}>{dialogError.errorMsg}</Typography>
+        <Typography style={{ color: 'red' }}>{dialogError.errorMsg}</Typography>
       );
     }
     return <LogViewer text={logs} />;
@@ -264,7 +267,7 @@ const CloudwatchLogsTable = ({
             emptyContent={<div className={classes.empty}>No data</div>}
             actions={[
               {
-                icon: () => <FileDownload />,
+                icon: () => <GetApp />,
                 tooltip: 'Download',
                 onClick: (_, rowData) => {
                   const clickedStreamName = (rowData as TableData).name;

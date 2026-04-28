@@ -8,16 +8,16 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   Grid,
   IconButton,
   InputLabel,
   MenuItem,
+  Select,
   makeStyles,
 } from '@material-ui/core';
-import { Close } from '@mui/icons-material';
+import Close from '@material-ui/icons/Close';
 import { useEffect, useState } from 'react';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
 // Declare styles to use in the components
 const useStyles = makeStyles(theme => ({
   container: {
@@ -62,7 +62,9 @@ export const AwsEnvironmentProviderSelectorDialog = ({
   const [selectedProvider, setSelectedProvider] =
     useState<AWSEnvironmentProviderRecord>();
 
-  const handleChangeSelectedProvider = (event: SelectChangeEvent) => {
+  const handleChangeSelectedProvider = (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>,
+  ) => {
     const newProvider = event.target.value as string;
     const matchingProviders = providersInput.filter(providerRecord => {
       return newProvider === `${providerRecord.prefix}:${providerRecord.name}`;
@@ -124,10 +126,10 @@ export const AwsEnvironmentProviderSelectorDialog = ({
       </DialogTitle>
       <DialogContent>
         <Grid container>
-          <FormControl fullWidth sx={{ m: 2 }}>
+          <FormControl fullWidth style={{ margin: 16 }}>
             <InputLabel id="lbl-select-aws-environment">Providers</InputLabel>
             <Select
-              sx={{ width: 300 }}
+              style={{ width: 300 }}
               labelId="select-aws-environment-provider"
               id="select-aws-environment-provider"
               value={getSelectedProvider()}

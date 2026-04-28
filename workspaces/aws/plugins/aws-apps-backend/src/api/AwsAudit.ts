@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { LoggerService } from '@backstage/backend-plugin-api';
-import { AwsAppsApi } from './AwsAppsApi';
+import { IAWSSDKService } from '../services/definition';
 
 /** @public */
 export interface AwsAuditRequest {
   envProviderPrefix: string;
   envProviderName: string;
   appName: string;
-  apiClient: AwsAppsApi;
+  apiClient: IAWSSDKService;
   roleArn: string;
   logger: LoggerService;
   awsRegion: string;

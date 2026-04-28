@@ -1,14 +1,16 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardContent from '@mui/material/CardContent';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  Grid,
+  IconButton,
+  Typography,
+} from '@material-ui/core';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { ReactElement, Children, ReactNode } from 'react';
 import { OPAAppData } from '../../types';
 
@@ -53,12 +55,12 @@ export const AppView = ({ appData }: { appData: OPAAppData }): ReactElement => {
             <CardHeader title={<Typography variant="h5">OPA App</Typography>} />
             <Divider />
             <CardContent>
-              <Grid container columnSpacing={2}>
+              <Grid container spacing={2}>
                 <Grid item xs={4}>
                   <Typography
                     variant="subtitle1"
-                    sx={{
-                      pt: 3,
+                    style={{
+                      paddingTop: 24,
                       color: '#645B59',
                       fontWeight: 'bold',
                     }}
@@ -67,29 +69,29 @@ export const AppView = ({ appData }: { appData: OPAAppData }): ReactElement => {
                   </Typography>
                   <Grid container>
                     <Grid item>
-                      <Typography sx={{ pt: 3, color: '#645B59' }}>
+                      <Typography style={{ paddingTop: 24, color: '#645B59' }}>
                         repo url
                       </Typography>
                       <Typography>
                         <IconButton>
-                          <ContentCopyIcon />
+                          <FileCopyIcon />
                         </IconButton>
                         {details?.repourl}
                       </Typography>
-                      <Typography sx={{ pt: 3, color: '#645B59' }}>
+                      <Typography style={{ paddingTop: 24, color: '#645B59' }}>
                         repo token
                       </Typography>
                       <Typography>
                         <IconButton>
-                          <ContentCopyIcon />
+                          <FileCopyIcon />
                         </IconButton>
                         {details?.repotoken}
                       </Typography>
-                      <Typography sx={{ pt: 3, color: '#645B59' }}>
+                      <Typography style={{ paddingTop: 24, color: '#645B59' }}>
                         Public
                       </Typography>
                       <Typography
-                        sx={
+                        style={
                           details?.public
                             ? { color: 'Green' }
                             : { color: 'Red' }
@@ -103,52 +105,60 @@ export const AppView = ({ appData }: { appData: OPAAppData }): ReactElement => {
                 <Divider
                   orientation="vertical"
                   flexItem
-                  sx={{ mr: '-1px', mt: 2 }}
+                  style={{ marginRight: '-1px', marginTop: 16 }}
                 />
                 <Grid item xs={4}>
                   <Typography
                     variant="subtitle1"
-                    sx={{ pt: 3, color: '#645B59', fontWeight: 'bold' }}
+                    style={{
+                      paddingTop: 24,
+                      color: '#645B59',
+                      fontWeight: 'bold',
+                    }}
                   >
                     Deployment Info
                   </Typography>
                   <Grid container>
                     <Grid item xs={6}>
-                      <Typography sx={{ pt: 3, color: '#645B59' }}>
+                      <Typography style={{ paddingTop: 24, color: '#645B59' }}>
                         Template
                       </Typography>
-                      <Typography sx={{ mt: 1 }}>
+                      <Typography style={{ marginTop: 8 }}>
                         {details?.template}
                       </Typography>
-                      <Typography sx={{ pt: 3, color: '#645B59' }}>
+                      <Typography style={{ paddingTop: 24, color: '#645B59' }}>
                         Account
                       </Typography>
                       <Typography>
                         <IconButton>
-                          <ContentCopyIcon />
+                          <FileCopyIcon />
                         </IconButton>
                         {details?.account}
                       </Typography>
-                      <Typography sx={{ pt: 3, color: '#645B59' }}>
+                      <Typography style={{ paddingTop: 24, color: '#645B59' }}>
                         Region
                       </Typography>
-                      <Typography sx={{ mt: 1 }}>{details?.region}</Typography>
+                      <Typography style={{ marginTop: 8 }}>
+                        {details?.region}
+                      </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                      <Typography sx={{ pt: 3, color: '#645B59' }}>
+                      <Typography style={{ paddingTop: 24, color: '#645B59' }}>
                         Version
                       </Typography>
-                      <Typography sx={{ mt: 1 }}>1.0.0</Typography>
-                      <Typography sx={{ pt: 3, color: '#645B59' }}>
+                      <Typography style={{ marginTop: 8 }}>1.0.0</Typography>
+                      <Typography style={{ paddingTop: 24, color: '#645B59' }}>
                         Environment
                       </Typography>
-                      <Typography sx={{ mt: 1 }}>
+                      <Typography style={{ marginTop: 8 }}>
                         {details?.environment}
                       </Typography>
-                      <Typography sx={{ pt: 3, color: '#645B59' }}>
+                      <Typography style={{ paddingTop: 24, color: '#645B59' }}>
                         Owner
                       </Typography>
-                      <Typography sx={{ mt: 1 }}>{details?.owner}</Typography>
+                      <Typography style={{ marginTop: 8 }}>
+                        {details?.owner}
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Grid>

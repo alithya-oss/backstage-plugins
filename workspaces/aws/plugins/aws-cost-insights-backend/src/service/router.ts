@@ -11,17 +11,11 @@
  * limitations under the License.
  */
 
-import {
-  createLegacyAuthAdapters,
-  errorHandler,
-} from '@backstage/backend-common';
 import express from 'express';
 import Router from 'express-promise-router';
 import { CostInsightsAwsService } from './types';
 import {
-  AuthService,
   CacheService,
-  DiscoveryService,
   HttpAuthService,
   LoggerService,
 } from '@backstage/backend-plugin-api';
@@ -32,9 +26,7 @@ import { CostInsightsAwsConfig } from '../config';
 export interface RouterOptions {
   logger: LoggerService;
   costInsightsAwsService: CostInsightsAwsService;
-  discovery: DiscoveryService;
-  auth?: AuthService;
-  httpAuth?: HttpAuthService;
+  httpAuth: HttpAuthService;
   cache: CacheService;
   config: CostInsightsAwsConfig;
 }
@@ -43,12 +35,10 @@ export interface RouterOptions {
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { logger, costInsightsAwsService, config, cache } = options;
+  const { logger, costInsightsAwsService, config, cache, httpAuth } = options;
 
   const router = Router();
   router.use(express.json());
-
-  const { httpAuth } = createLegacyAuthAdapters(options);
 
   let cacheClient: CostInsightsCache | undefined;
   if (config.cache.enable) {
@@ -101,7 +91,6 @@ export async function createRouter(
     logger.info('PONG!');
     response.json({ status: 'ok' });
   });
-  router.use(errorHandler());
   return router;
 }
 

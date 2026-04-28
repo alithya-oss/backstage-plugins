@@ -37,6 +37,7 @@ const isCicdApplicable = (entity: Entity) => {
   return isGitlabAvailable(entity) || isGithubActionsAvailable(entity);
 };
 
+/** @public */
 export function isAppType(
   appType: string,
   env: GenericAWSEnvironment,
@@ -47,6 +48,7 @@ export function isAppType(
   };
 }
 
+/** @public */
 export const isLogsAvailable = (_entity: Entity): boolean => {
   return true;
 };
@@ -57,6 +59,7 @@ export function AwsAppPage(_props: AwsAppPageProps) {
 
   const { loading: loadingPermission, allowed: canReadAudit } = usePermission({
     permission: readOpaAppAuditPermission,
+    resourceRef: '',
   });
 
   const awsAppLogsContent = (
@@ -109,6 +112,7 @@ export function AwsAppPage(_props: AwsAppPageProps) {
           <EntityLayout.Route path="/audit" title="Audit">
             <RequirePermission
               permission={readOpaAppAuditPermission}
+              resourceRef=""
               errorPage={<></>}
             >
               {auditContent}
@@ -139,6 +143,7 @@ export function AwsAppPage(_props: AwsAppPageProps) {
           <EntityLayout.Route path="/audit" title="Audit">
             <RequirePermission
               permission={readOpaAppAuditPermission}
+              resourceRef=""
               errorPage={<></>}
             >
               {auditContent}
@@ -169,6 +174,7 @@ export function AwsAppPage(_props: AwsAppPageProps) {
           <EntityLayout.Route path="/audit" title="Audit">
             <RequirePermission
               permission={readOpaAppAuditPermission}
+              resourceRef=""
               errorPage={<></>}
             >
               {auditContent}

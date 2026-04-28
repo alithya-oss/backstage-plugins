@@ -3,10 +3,9 @@
 
 import { useEffect, useState } from 'react';
 import { EmptyState, Table, TableColumn } from '@backstage/core-components';
-import { LinearProgress } from '@material-ui/core';
+import { LinearProgress, Typography } from '@material-ui/core';
 import { useApi } from '@backstage/core-plugin-api';
 import { opaApiRef } from '../../api';
-import Typography from '@mui/material/Typography';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
 import { AuditRecord } from '@alithya-oss/backstage-plugin-aws-apps-common';
 
@@ -133,7 +132,7 @@ const AuditTable = () => {
     },
   ];
   if (error.isError) {
-    return <Typography sx={{ color: 'red' }}>{error.errorMsg}</Typography>;
+    return <Typography style={{ color: 'red' }}>{error.errorMsg}</Typography>;
   }
 
   return (

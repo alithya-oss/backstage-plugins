@@ -29,7 +29,7 @@ describe('createRouter', () => {
     const router = await createRouter({
       logger: mockServices.logger.mock(),
       awsCodePipelineApi: mockService,
-      discovery: mockServices.discovery(),
+      httpAuth: mockServices.httpAuth(),
     });
     app = express().use(router);
   });

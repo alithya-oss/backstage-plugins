@@ -1,10 +1,14 @@
 import {
-  BackendPluginRegistrationPoints,
   coreServices,
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
-import { createRouter } from './service/router';
-import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
+import { createRouter } from './router';
+
+import { createAwsSDKService } from './services/AWSSDKService';
+import { createGitProviderService } from './services/GitProviderService';
+import { createAppsPlatformService } from './services/PlatformService';
+import { catalogServiceRef } from '@backstage/plugin-catalog-node';
+import { readOpaAppAuditPermission } from '@alithya-oss/backstage-plugin-aws-apps-common';
 
 /**
  * awsAppsPlugin backend plugin
@@ -13,28 +17,43 @@ import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
  */
 export const awsAppsPlugin = createBackendPlugin({
   pluginId: 'aws-apps-backend',
-  register(env: BackendPluginRegistrationPoints): void {
+  register(env) {
     env.registerInit({
       deps: {
-        config: coreServices.rootConfig,
         logger: coreServices.logger,
-        httpRouter: coreServices.httpRouter,
         userInfo: coreServices.userInfo,
-        catalogApi: catalogServiceRef,
-        permissions: coreServices.permissions,
+        config: coreServices.rootConfig,
         auth: coreServices.auth,
         httpAuth: coreServices.httpAuth,
+        httpRouter: coreServices.httpRouter,
+        catalogApi: catalogServiceRef,
+        permissionsRegistry: coreServices.permissionsRegistry,
+        permissions: coreServices.permissions,
       },
       async init({
-        config,
         logger,
-        httpRouter,
         userInfo,
-        catalogApi,
-        permissions,
+        config,
         auth,
         httpAuth,
+        httpRouter,
+        catalogApi,
+        permissionsRegistry,
+        permissions,
       }) {
+        const awsSDKService = await createAwsSDKService({ config, logger });
+        const gitService = await createGitProviderService({ logger });
+        const platformService = await createAppsPlatformService({
+          config,
+          logger,
+        });
+        platformService.setPlatformRegion(
+          config.getString('backend.platformRegion'),
+        );
+        platformService.setGitProviderService(gitService);
+
+        permissionsRegistry.addPermissions([readOpaAppAuditPermission]);
+
         httpRouter.use(
           await createRouter({
             config,
@@ -44,6 +63,9 @@ export const awsAppsPlugin = createBackendPlugin({
             permissions,
             auth,
             httpAuth,
+            awsSDKService,
+            gitService,
+            platformService,
           }),
         );
         httpRouter.addAuthPolicy({

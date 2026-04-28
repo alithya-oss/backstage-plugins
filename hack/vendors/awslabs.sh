@@ -116,19 +116,19 @@ function sync_harmonix() {
             harmonix-${VERSION/"/"/"-"}/backstage-plugins/plugins
 
     rsync -av \
-        .tmp/harmonix/${VERSION/"/"/"-"}/backstage-plugins/plugins/aws-apps-backend/* \
+        .tmp/harmonix/${VERSION/"/"/"-"}/backstage-plugins/plugins/harmonix-backend/* \
         ./workspaces/aws/plugins/aws-apps-backend
     rsync -av \
-        .tmp/harmonix/${VERSION/"/"/"-"}/backstage-plugins/plugins/aws-apps-common/* \
+        .tmp/harmonix/${VERSION/"/"/"-"}/backstage-plugins/plugins/harmonix-common/* \
         ./workspaces/aws/plugins/aws-apps-common
     rsync -av \
-        .tmp/harmonix/${VERSION/"/"/"-"}/backstage-plugins/plugins/aws-apps/* \
+        .tmp/harmonix/${VERSION/"/"/"-"}/backstage-plugins/plugins/harmonix-frontend/* \
         ./workspaces/aws/plugins/aws-apps
     rsync -av \
-        .tmp/harmonix/${VERSION/"/"/"-"}/backstage-plugins/plugins/catalog-backend-module-aws-apps-entities-processor \
+        .tmp/harmonix/${VERSION/"/"/"-"}/backstage-plugins/plugins/catalog-backend-module-harmonix \
         ./workspaces/aws/plugins/catalog-backend-module-aws-apps-entities-processor
     rsync -av \
-        .tmp/harmonix/${VERSION/"/"/"-"}/backstage-plugins/plugins/scaffolder-backend-module-aws-apps \
+        .tmp/harmonix/${VERSION/"/"/"-"}/backstage-plugins/plugins/scaffolder-backend-module-harmonix \
         ./workspaces/aws/plugins/scaffolder-backend-module-aws-apps
 }
 
@@ -174,11 +174,11 @@ function sync_harmonix_reference_repo() {
 
 function rename_harmonix() {
     changes=(
-        "s#@aws/plugin-aws-apps-for-backstage#@alithya-oss/plugin-aws-apps#g"
-        "s#@aws/plugin-aws-apps-backend-for-backstage#@alithya-oss/plugin-aws-apps-backend#g"
-        "s#@aws/plugin-aws-apps-common-for-backstage#@alithya-oss/plugin-aws-apps-common#g"
-        "s#@aws/backstage-plugin-catalog-backend-module-aws-apps-entities-processor#@alithya-oss/plugin-catalog-backend-module-aws-apps-entities-processor#g"
-        "s#@aws/plugin-scaffolder-backend-aws-apps-for-backstage#@alithya-oss/plugin-scaffolder-backend-aws-apps#g"
+        "s#@aws/plugin-aws-apps-for-backstage#@alithya-oss/backstage-plugin-aws-apps#g"
+        "s#@aws/plugin-aws-apps-backend-for-backstage#@alithya-oss/backstage-plugin-aws-apps-backend#g"
+        "s#@aws/plugin-aws-apps-common-for-backstage#@alithya-oss/backstage-plugin-aws-apps-common#g"
+        "s#@aws/backstage-plugin-catalog-backend-module-aws-apps-entities-processor#@alithya-oss/backstage-plugin-catalog-backend-module-aws-apps-entities-processor#g"
+        "s#@aws/plugin-scaffolder-backend-aws-apps-for-backstage#@alithya-oss/backstage-plugin-scaffolder-backend-aws-apps#g"
     )
 
     for item in "${changes[@]}"; do
@@ -195,10 +195,10 @@ function rename_harmonix() {
 }
 
 # sync_aws_core
-# sync_harmonix
-sync_harmonix_reference_repo
+sync_harmonix
+# sync_harmonix_reference_repo
 cd ./workspaces/aws/
 # rename_aws_core
-# rename_harmonix
+rename_harmonix
 # yarn install
 # yarn backstage-cli versions:bump --release 1.30.4

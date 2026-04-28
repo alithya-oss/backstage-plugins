@@ -12,14 +12,9 @@ import { LoggerService } from '@backstage/backend-plugin-api';
 import { RoadieVectorStore } from '@alithya-oss/backstage-plugin-rag-ai-node';
 
 // @public (undocumented)
-export function initializeOpenAiEmbeddings({
-  logger,
-  auth,
-  vectorStore,
-  catalogApi,
-  discovery,
-  config,
-}: RoadieOpenAiEmbeddingsConfig): Promise<AugmentationIndexer>;
+export function initializeOpenAiEmbeddings(
+  input: RoadieOpenAiEmbeddingsConfig,
+): Promise<AugmentationIndexer>;
 
 // @public
 export interface RoadieOpenAiEmbeddingsConfig {

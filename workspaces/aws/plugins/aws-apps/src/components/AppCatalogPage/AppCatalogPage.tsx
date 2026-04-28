@@ -7,9 +7,11 @@ import {
   CreateButton,
   PageWithHeader,
   SupportButton,
+  TableColumn,
 } from '@backstage/core-components';
 import {
   CatalogTable,
+  CatalogTableRow,
   DefaultCatalogPageProps,
 } from '@backstage/plugin-catalog';
 import {
@@ -33,6 +35,7 @@ export interface AppCatalogPageProps extends DefaultCatalogPageProps {
   kind: string;
 }
 
+/** @public */
 export function AppCatalogPage(props: AppCatalogPageProps) {
   const { actions, tableOptions = {}, emptyContent, kind } = props;
 
@@ -66,8 +69,7 @@ export function AppCatalogPage(props: AppCatalogPageProps) {
     initialKind = 'component';
     initialType = 'aws-app';
   } else if (kind === 'awsenvironment') {
-    // AWS Environment Columns
-    columns = [
+    const awsEnvironmentColumns: TableColumn<CatalogTableRow>[] = [
       columnFactories.createTitleColumn({ hidden: true }),
       columnFactories.createNameColumn({ defaultKind: initialKind }),
       columnFactories.createOwnerColumn(),
@@ -82,6 +84,7 @@ export function AppCatalogPage(props: AppCatalogPageProps) {
       columnFactories.createEnvironmentLevelColumn(),
       columnFactories.createTagsColumn(),
     ];
+    columns = awsEnvironmentColumns;
     allowedTypesResource = [];
     allowedTypesEnvironment = ['environment'];
     initialType = 'environment';
@@ -90,8 +93,7 @@ export function AppCatalogPage(props: AppCatalogPageProps) {
     allowedTypesComponent = [];
     initiallySelectedFilter = 'all';
   } else if (kind === 'awsenvironmentprovider') {
-    // AWS Provider Columns
-    columns = [
+    const awsProviderColumns: TableColumn<CatalogTableRow>[] = [
       columnFactories.createTitleColumn({ hidden: true }),
       columnFactories.createNameColumn({ defaultKind: initialKind }),
       columnFactories.createOwnerColumn(),
@@ -103,6 +105,7 @@ export function AppCatalogPage(props: AppCatalogPageProps) {
       columnFactories.createProviderRegionColumn(),
       columnFactories.createTagsColumn(),
     ];
+    columns = awsProviderColumns;
     allowedKinds = ['AWSEnvironmentProvider'];
     allowedTypesResource = [];
     allowedTypesEnvironment = ['environment-provider'];
@@ -111,8 +114,7 @@ export function AppCatalogPage(props: AppCatalogPageProps) {
     allowedTypesComponent = [];
     initiallySelectedFilter = 'all';
   } else if (kind === 'component' && initialType === 'aws-app') {
-    // AWS Apps Columns
-    columns = [
+    const awsAppsColumns: TableColumn<CatalogTableRow>[] = [
       columnFactories.createTitleColumn({ hidden: true }),
       columnFactories.createNameColumn({ defaultKind: initialKind }),
       columnFactories.createMetadataDescriptionColumn(),
@@ -122,11 +124,11 @@ export function AppCatalogPage(props: AppCatalogPageProps) {
       columnFactories.createMetadataDescriptionColumn(),
       columnFactories.createTagsColumn(),
     ];
+    columns = awsAppsColumns;
     allowedKinds = ['Component'];
     initiallySelectedFilter = 'all';
   } else if (kind === 'resource') {
-    // AWS Resources Columns
-    columns = [
+    const awsResourcesColumns: TableColumn<CatalogTableRow>[] = [
       columnFactories.createTitleColumn({ hidden: true }),
       columnFactories.createNameColumn({ defaultKind: initialKind }),
       columnFactories.createOwnerColumn(),
@@ -136,6 +138,7 @@ export function AppCatalogPage(props: AppCatalogPageProps) {
       columnFactories.createIACColumn(),
       columnFactories.createTagsColumn(),
     ];
+    columns = awsResourcesColumns;
     allowedKinds = ['Resource'];
     allowedTypesResource = ['aws-resource'];
     allowedTypesEnvironment = [];

@@ -2,15 +2,32 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /**
- * Provides shared objects useful for interacting with the aws-apps plugins
+ * Common functionalities for the aws-apps plugin.
  *
  * @packageDocumentation
  */
 
+/**
+ * In this package you might for example declare types that are common
+ * between the frontend and backend plugin packages.
+ *
+ * @public
+ */
+export type CommonType = {
+  field: string;
+};
+
 export * from './types';
 export * from './permissions';
 export * from './utils/git-util';
-export * from './helpers/constants';
+export * from './constants';
+
+/**
+ * Or you might declare some common constants.
+ *
+ * @public
+ */
+export const COMMON_CONSTANT = 1;
 
 export {
   type AWSEnvironmentProviderEntityV1,

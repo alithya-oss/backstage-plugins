@@ -9,12 +9,15 @@ import {
   catalogApiRef,
   useEntity,
 } from '@backstage/plugin-catalog-react';
-import { Button, CardContent, Grid } from '@material-ui/core';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Typography from '@mui/material/Typography';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import {
+  Backdrop,
+  Button,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Typography,
+} from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { opaApiRef } from '../../api';
@@ -52,6 +55,7 @@ const DeleteProviderPanel = ({
 
   const [disabled, setDisabled] = useState(false);
   const repoInfo = getRepoInfo(entity);
+  repoInfo.gitProjectGroup = 'aws-providers';
 
   const deleteRepo = () => {
     api
@@ -60,10 +64,13 @@ const DeleteProviderPanel = ({
         gitAdminSecret: getGitCredentailsSecret(repoInfo),
       })
       .then(() => {
+        // .then(results => {
+        //   console.log(results);
         setDeleteResultMessage('Gitlab Repository deleted.');
         setIsDeleteSuccessful(true);
       })
       .catch(error => {
+        // console.log(error);
         setDeleteResultMessage(`Error deleting Repository ${error}.`);
         setSpinning(false);
         setIsDeleteSuccessful(false);
@@ -71,6 +78,7 @@ const DeleteProviderPanel = ({
   };
 
   const deleteFromCatalog = async () => {
+    // console.log('Deleting entity from backstage catalog');
     setDeleteResultMessage('Deleting entity from backstage catalog');
     // The entity will be removed from the catalog along with the auto-generated Location kind entity
     // which references the catalog entity
@@ -80,9 +88,11 @@ const DeleteProviderPanel = ({
       entityAnnotations['backstage.io/managed-by-location'] || '';
     const entityLocationRef = await catalogApi.getLocationByRef(entityLocation);
     if (entityLocationRef) {
-      await catalogApi.removeLocationById(entityLocationRef.id);
+      catalogApi.removeLocationById(entityLocationRef.id);
+      // await catalogApi.removeLocationById(entityLocationRef.id);
     }
-    await catalogApi.removeEntityByUid(uid);
+    catalogApi.removeEntityByUid(uid);
+    // await catalogApi.removeEntityByUid(uid);
   };
 
   const isExistingComponents = () => {
@@ -173,7 +183,7 @@ const DeleteProviderPanel = ({
       <CardContent>
         <Grid container spacing={2}>
           <Grid item zeroMinWidth xs={8}>
-            <Typography sx={{ fontWeight: 'bold' }}>
+            <Typography style={{ fontWeight: 'bold' }}>
               Delete this provider
             </Typography>
           </Grid>
@@ -194,7 +204,7 @@ const DeleteProviderPanel = ({
             {isDeleteSuccessful && deleteResultMessage && (
               <Alert
                 id="alertGood"
-                sx={{ mb: 2 }}
+                style={{ marginBottom: 16 }}
                 severity="success"
                 onClose={handleCloseAlert}
               >
@@ -213,7 +223,7 @@ const DeleteProviderPanel = ({
             {!isDeleteSuccessful && deleteResultMessage && (
               <Alert
                 id="alertBad"
-                sx={{ mb: 2 }}
+                style={{ marginBottom: 16 }}
                 severity="error"
                 onClose={handleCloseAlert}
               >
@@ -230,10 +240,7 @@ const DeleteProviderPanel = ({
             )}
           </Grid>
         </Grid>
-        <Backdrop
-          sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
-          open={spinning}
-        >
+        <Backdrop style={{ color: '#FFFFFF', zIndex: 1400 }} open={spinning}>
           <CircularProgress color="inherit" />
         </Backdrop>
       </CardContent>

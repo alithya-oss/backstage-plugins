@@ -19,7 +19,7 @@ export const isAnnotationsAvailable = (entity: Entity) =>
 export const isLabelsAvailable = (entity: Entity) => entity?.metadata?.labels;
 
 /** @public */
-export const opaPlugin = createPlugin({
+export const awsAppsPlugin = createPlugin({
   id: 'aws-apps',
   apis: [
     createApiFactory({
@@ -35,7 +35,7 @@ export const opaPlugin = createPlugin({
 });
 
 /** @public */
-export const EntityLabelTable = opaPlugin.provide(
+export const EntityLabelTable = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'EntityLabelTable',
     component: {
@@ -46,7 +46,7 @@ export const EntityLabelTable = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityAuditTable = opaPlugin.provide(
+export const EntityAuditTable = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'EntityAuditTable',
     component: {
@@ -57,7 +57,7 @@ export const EntityAuditTable = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityEnvironmentSelector = opaPlugin.provide(
+export const EntityEnvironmentSelector = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'EnvironmentSelector',
     component: {
@@ -70,7 +70,7 @@ export const EntityEnvironmentSelector = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityAnnotationTypeTable = opaPlugin.provide(
+export const EntityAnnotationTypeTable = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'EntityAnnotationTypeTable',
     component: {
@@ -83,7 +83,7 @@ export const EntityAnnotationTypeTable = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityAppStateCard = opaPlugin.provide(
+export const EntityAppStateCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AppStateCard',
     component: {
@@ -96,7 +96,7 @@ export const EntityAppStateCard = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityK8sAppStateCard = opaPlugin.provide(
+export const EntityK8sAppStateCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'K8sAppStateCard',
     component: {
@@ -109,7 +109,7 @@ export const EntityK8sAppStateCard = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityAppStateCardCloudFormation = opaPlugin.provide(
+export const EntityAppStateCardCloudFormation = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AppStateCardCloudFormation',
     component: {
@@ -122,7 +122,7 @@ export const EntityAppStateCardCloudFormation = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityGeneralInfoCard = opaPlugin.provide(
+export const EntityGeneralInfoCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'GeneralInfoCard',
     component: {
@@ -135,7 +135,7 @@ export const EntityGeneralInfoCard = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityAppPromoCard = opaPlugin.provide(
+export const EntityAppPromoCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AppPromoCard',
     component: {
@@ -148,7 +148,7 @@ export const EntityAppPromoCard = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityAppLinksCard = opaPlugin.provide(
+export const EntityAppLinksCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AppLinksCard',
     component: {
@@ -161,7 +161,7 @@ export const EntityAppLinksCard = opaPlugin.provide(
 );
 
 /** @public */
-export const AppCatalogPage = opaPlugin.provide(
+export const AppCatalogPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AppCatalogPage',
     component: {
@@ -174,7 +174,7 @@ export const AppCatalogPage = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityCloudwatchLogsTable = opaPlugin.provide(
+export const EntityCloudwatchLogsTable = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'EntityCloudwatchLogsTable',
     component: {
@@ -187,7 +187,7 @@ export const EntityCloudwatchLogsTable = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityInfrastructureInfoCard = opaPlugin.provide(
+export const EntityInfrastructureInfoCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'InfrastructureInfoCard',
     component: {
@@ -200,7 +200,7 @@ export const EntityInfrastructureInfoCard = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityProviderInfoCard = opaPlugin.provide(
+export const EntityProviderInfoCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'ProviderInfoCard',
     component: {
@@ -213,7 +213,7 @@ export const EntityProviderInfoCard = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityEnvironmentInfoCard = opaPlugin.provide(
+export const EntityEnvironmentInfoCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'EnvironmentInfoCard',
     component: {
@@ -226,7 +226,7 @@ export const EntityEnvironmentInfoCard = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityAppConfigCard = opaPlugin.provide(
+export const EntityAppConfigCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AppConfigCard',
     component: {
@@ -239,7 +239,7 @@ export const EntityAppConfigCard = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityDeleteAppCard = opaPlugin.provide(
+export const EntityDeleteAppCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'DeleteAppCard',
     component: {
@@ -252,7 +252,7 @@ export const EntityDeleteAppCard = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityDeleteProviderCard = opaPlugin.provide(
+export const EntityDeleteProviderCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'DeleteProviderCard',
     component: {
@@ -265,7 +265,7 @@ export const EntityDeleteProviderCard = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityDeleteEnvironmentCard = opaPlugin.provide(
+export const EntityDeleteEnvironmentCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'DeleteEnvironmentCard',
     component: {
@@ -278,7 +278,7 @@ export const EntityDeleteEnvironmentCard = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityResourceBindingCard = opaPlugin.provide(
+export const EntityResourceBindingCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'ResourceBindingCard',
     component: {
@@ -291,7 +291,7 @@ export const EntityResourceBindingCard = opaPlugin.provide(
 );
 
 /** @public */
-export const EntityAwsEnvironmentProviderSelectorCard = opaPlugin.provide(
+export const EntityAwsEnvironmentProviderSelectorCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsEnvironmentProviderSelectorCard',
     component: {
@@ -304,7 +304,7 @@ export const EntityAwsEnvironmentProviderSelectorCard = opaPlugin.provide(
 );
 
 /** @public */
-export const AwsAppPage = opaPlugin.provide(
+export const AwsAppPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsAppPage',
     component: {
@@ -315,7 +315,7 @@ export const AwsAppPage = opaPlugin.provide(
 );
 
 /** @public */
-export const AwsComponentPage = opaPlugin.provide(
+export const AwsComponentPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsComponentPage',
     component: {
@@ -328,7 +328,7 @@ export const AwsComponentPage = opaPlugin.provide(
 );
 
 /** @public */
-export const AwsEnvironmentPage = opaPlugin.provide(
+export const AwsEnvironmentPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsEnvironmentPage',
     component: {
@@ -341,7 +341,7 @@ export const AwsEnvironmentPage = opaPlugin.provide(
 );
 
 /** @public */
-export const AwsEnvironmentProviderPage = opaPlugin.provide(
+export const AwsEnvironmentProviderPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsEnvironmentProviderPage',
     component: {
@@ -349,6 +349,258 @@ export const AwsEnvironmentProviderPage = opaPlugin.provide(
         import(
           './pages/AwsEnvironmentProviderPage/AwsEnvironmentProviderPage'
         ).then(m => m.AwsEnvironmentProviderPage),
+    },
+  }),
+);
+
+/** @public */
+export const AwsECSAppPage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AwsECSAppPage',
+    component: {
+      lazy: () =>
+        import('./pages/AwsECSAppPage/AwsECSAppPage').then(
+          m => m.AwsECSAppPage,
+        ),
+    },
+  }),
+);
+
+/** @public */
+export const AwsECSEnvironmentProviderPage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AwsECSEnvironmentProviderPage',
+    component: {
+      lazy: () =>
+        import(
+          './pages/AwsECSEnvironmentProviderPage/AwsECSEnvironmentProviderPage'
+        ).then(m => m.AwsECSEnvironmentProviderPage),
+    },
+  }),
+);
+
+/** @public */
+export const AwsEKSAppPage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AwsEKSAppPage',
+    component: {
+      lazy: () =>
+        import('./pages/AwsEKSAppPage/AwsEKSAppPage').then(
+          m => m.AwsEKSAppPage,
+        ),
+    },
+  }),
+);
+
+/** @public */
+export const AwsEKSEnvironmentProviderPage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AwsEKSEnvironmentProviderPage',
+    component: {
+      lazy: () =>
+        import(
+          './pages/AwsEKSEnvironmentProviderPage/AwsEKSEnvironmentProviderPage'
+        ).then(m => m.AwsEKSEnvironmentProviderPage),
+    },
+  }),
+);
+
+/** @public */
+export const AwsPendingPage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AwsPendingPage',
+    component: {
+      lazy: () =>
+        import('./pages/AwsPendingPage/AwsPendingPage').then(
+          m => m.AwsPendingPage,
+        ),
+    },
+  }),
+);
+
+/** @public */
+export const AwsRDSResourcePage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AwsRDSResourcePage',
+    component: {
+      lazy: () =>
+        import('./pages/AwsRDSResourcePage/AwsRDSResourcePage').then(
+          m => m.AwsRDSResourcePage,
+        ),
+    },
+  }),
+);
+
+/** @public */
+export const AwsResourcePage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AwsResourcePage',
+    component: {
+      lazy: () =>
+        import('./pages/AwsResourcePage/AwsResourcePage').then(
+          m => m.AwsResourcePage,
+        ),
+    },
+  }),
+);
+
+/** @public */
+export const AwsS3ResourcePage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AwsS3ResourcePage',
+    component: {
+      lazy: () =>
+        import('./pages/AwsS3ResourcePage/AwsS3ResourcePage').then(
+          m => m.AwsS3ResourcePage,
+        ),
+    },
+  }),
+);
+
+/** @public */
+export const AwsSecretsManagerResourcePage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AwsSecretsManagerResourcePage',
+    component: {
+      lazy: () =>
+        import(
+          './pages/AwsSecretsManagerResourcePage/AwsSecretsManagerResourcePage'
+        ).then(m => m.AwsSecretsManagerResourcePage),
+    },
+  }),
+);
+
+/** @public */
+export const AwsServerlessAppPage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AwsServerlessAppPage',
+    component: {
+      lazy: () =>
+        import('./pages/AwsServerlessAppPage/AwsServerlessAppPage').then(
+          m => m.AwsServerlessAppPage,
+        ),
+    },
+  }),
+);
+
+/** @public */
+export const AwsServerlessEnvironmentProviderPage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AwsServerlessEnvironmentProviderPage',
+    component: {
+      lazy: () =>
+        import(
+          './pages/AwsServerlessEnvironmentProviderPage/AwsServerlessEnvironmentProviderPage'
+        ).then(m => m.AwsServerlessEnvironmentProviderPage),
+    },
+  }),
+);
+
+/** @public */
+export const AWSLogoFull = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AWSLogoFull',
+    component: {
+      lazy: () =>
+        import('../../aws-apps/src/demo/AWSLogoFull').then(m => m.AWSLogoFull),
+    },
+  }),
+);
+
+/** @public */
+export const AWSLogoIcon = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AWSLogoIcon',
+    component: {
+      lazy: () =>
+        import('../../aws-apps/src/demo/AWSLogoIcon').then(m => m.AWSLogoIcon),
+    },
+  }),
+);
+
+/** @public */
+export const OPALogoFull = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'OPALogoFull',
+    component: {
+      lazy: () =>
+        import('../../aws-apps/src/demo/OPALogoFull').then(m => m.OPALogoFull),
+    },
+  }),
+);
+
+/** @public */
+export const OPALogoIcon = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'OPALogoIcon',
+    component: {
+      lazy: () =>
+        import('../../aws-apps/src/demo/OPALogoIcon').then(m => m.OPALogoIcon),
+    },
+  }),
+);
+
+/** @public */
+export const CustomerLogoIcon = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'CustomerLogoIcon',
+    component: {
+      lazy: () =>
+        import('../../aws-apps/src/demo/CustomerLogoIcon').then(
+          m => m.CustomerLogoIcon,
+        ),
+    },
+  }),
+);
+
+/** @public */
+export const CustomerLogoFullTitleLight = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'CustomerLogoFullTitleLight',
+    component: {
+      lazy: () =>
+        import('../../aws-apps/src/demo/CustomerLogoFullTitleLight').then(
+          m => m.CustomerLogoFullTitleLight,
+        ),
+    },
+  }),
+);
+
+/** @public */
+export const CustomerLogoFullLight = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'CustomerLogoFullLight',
+    component: {
+      lazy: () =>
+        import('../../aws-apps/src/demo/CustomerLogoFullLight').then(
+          m => m.CustomerLogoFullLight,
+        ),
+    },
+  }),
+);
+
+/** @public */
+export const AWSAppsHomePage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AwsAppsHomePage',
+    component: {
+      lazy: () =>
+        import('../../aws-apps/src/demo/AwsAppsHomePage/AwsAppsHomePage').then(
+          m => m.AwsAppsHomePage,
+        ),
+    },
+  }),
+);
+
+/** @public */
+export const OPAHomePage = awsAppsPlugin.provide(
+  createComponentExtension({
+    name: 'AWSAppsHomePage',
+    component: {
+      lazy: () =>
+        import('../../aws-apps/src/demo/OPAHomePage/OPAHomePage').then(
+          m => m.OPAHomePage,
+        ),
     },
   }),
 );

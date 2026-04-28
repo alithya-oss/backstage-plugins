@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { program } from 'commander';
 import chalk from 'chalk';
 import { exitWithError } from './lib/errors';

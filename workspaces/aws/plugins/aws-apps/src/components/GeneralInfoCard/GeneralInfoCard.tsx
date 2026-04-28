@@ -3,14 +3,16 @@
 
 import { useEffect, useState } from 'react';
 import { CodeSnippet, InfoCard, EmptyState } from '@backstage/core-components';
-import { LinearProgress } from '@material-ui/core';
+import {
+  CardContent,
+  Grid,
+  IconButton,
+  LinearProgress,
+  Typography,
+} from '@material-ui/core';
 import { useApi } from '@backstage/core-plugin-api';
 import { OPAApi, opaApiRef } from '../../api';
-import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { SecretStringComponent } from '../common';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
 import {
@@ -104,19 +106,22 @@ const OpaAppGeneralInfo = ({
   return (
     <InfoCard title="General Information">
       <CardContent>
-        <Grid container direction="column" rowSpacing={2}>
+        <Grid container direction="column" spacing={2}>
           <Grid container>
             <Grid item zeroMinWidth xs={8}>
               {repoSecretArn ? (
                 <>
                   <Typography
-                    sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}
+                    style={{ textTransform: 'uppercase', fontWeight: 'bold' }}
                   >
                     Repository Access Token
                   </Typography>
                   <Typography noWrap>
-                    <IconButton sx={{ p: 0 }} onClick={HandleCopySecret}>
-                      <ContentCopyIcon />
+                    <IconButton
+                      style={{ padding: 0 }}
+                      onClick={HandleCopySecret}
+                    >
+                      <FileCopyIcon />
                     </IconButton>
                     <SecretStringComponent secret={secretData ?? ''} />
                   </Typography>
@@ -125,9 +130,13 @@ const OpaAppGeneralInfo = ({
                 <></>
               )}
             </Grid>
-            <Grid item zeroMinWidth xs={16}>
+            <Grid item zeroMinWidth xs={12}>
               <Typography
-                sx={{ textTransform: 'uppercase', fontWeight: 'bold', mt: 1 }}
+                style={{
+                  textTransform: 'uppercase',
+                  fontWeight: 'bold',
+                  marginTop: 8,
+                }}
               >
                 Clone url
               </Typography>
@@ -136,8 +145,11 @@ const OpaAppGeneralInfo = ({
                   <tbody>
                     <tr>
                       <td>
-                        <IconButton sx={{ p: 0 }} onClick={HandleCopyGitClone}>
-                          <ContentCopyIcon />
+                        <IconButton
+                          style={{ padding: 0 }}
+                          onClick={HandleCopyGitClone}
+                        >
+                          <FileCopyIcon />
                         </IconButton>
                       </td>
                       <td>

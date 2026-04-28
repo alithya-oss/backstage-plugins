@@ -8,6 +8,7 @@
     "plugins/*/dev",
     "plugins/*/migrations"
   ],
+  "skipLibCheck": true,
   "files": ["node_modules/@backstage/cli/asset-types/asset-types.d.ts"],
   "exclude": ["node_modules"],
   "compilerOptions": {

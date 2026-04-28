@@ -16,7 +16,7 @@ import {
   coreServices,
 } from '@backstage/backend-plugin-api';
 import { costInsightsAwsServiceRef, createRouter } from './service/router';
-import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
+import { catalogServiceRef } from '@backstage/plugin-catalog-node';
 import { readCostInsightsAwsConfig } from './config';
 
 /** @public */
@@ -39,9 +39,7 @@ export const costInsightsAwsPlugin = createBackendPlugin({
         logger,
         httpRouter,
         config,
-        auth,
         httpAuth,
-        discovery,
         cache,
         costInsightsAwsService,
       }) {
@@ -51,8 +49,6 @@ export const costInsightsAwsPlugin = createBackendPlugin({
           await createRouter({
             logger,
             costInsightsAwsService,
-            discovery,
-            auth,
             httpAuth,
             cache,
             config: pluginConfig,

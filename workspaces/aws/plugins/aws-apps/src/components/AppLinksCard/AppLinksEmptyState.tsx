@@ -1,8 +1,9 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { BackstageTheme } from '@backstage/theme';
 import { Button, makeStyles, Typography } from '@material-ui/core';
+import type { Theme } from '@material-ui/core/styles';
+
 import { CodeSnippet } from '@backstage/core-components';
 
 const ENTITY_YAML = `metadata:
@@ -15,7 +16,7 @@ const ENTITY_YAML = `metadata:
 /** @public */
 export type AppLinksEmptyStateClassKey = 'code';
 
-const useStyles = makeStyles<BackstageTheme>(
+const useStyles = makeStyles<Theme>(
   theme => ({
     code: {
       borderRadius: 6,

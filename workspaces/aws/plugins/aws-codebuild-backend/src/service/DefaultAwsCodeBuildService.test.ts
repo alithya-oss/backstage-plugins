@@ -11,11 +11,10 @@
  * limitations under the License.
  */
 
-import { CatalogApi } from '@backstage/catalog-client';
+import { CatalogService } from '@backstage/plugin-catalog-node';
 import { Entity, CompoundEntityRef } from '@backstage/catalog-model';
 import { ConfigReader } from '@backstage/config';
 import { mockClient } from 'aws-sdk-client-mock';
-import { getVoidLogger } from '@backstage/backend-common';
 import { DefaultAwsCodeBuildService } from './DefaultAwsCodeBuildService';
 import { AwsResourceLocator } from '@alithya-oss/backstage-plugin-aws-core-node';
 import {
@@ -53,9 +52,9 @@ const getCredProviderMock = jest.spyOn(
   'getCredentialProvider',
 );
 
-const mockCatalog: jest.Mocked<CatalogApi> = {
+const mockCatalog: jest.Mocked<CatalogService> = {
   getEntityByRef: jest.fn(),
-} as any as jest.Mocked<CatalogApi>;
+} as any as jest.Mocked<CatalogService>;
 
 const entityRef: CompoundEntityRef = {
   kind: 'Component',
@@ -70,7 +69,7 @@ const mockResourceLocator: jest.Mocked<AwsResourceLocator> = {
   getResourceArns: jest.fn(),
 } as any as jest.Mocked<AwsResourceLocator>;
 
-const logger = getVoidLogger();
+const logger = mockServices.logger.mock();
 
 describe('DefaultAwsCodeBuildService', () => {
   beforeAll(async () => {});
@@ -97,6 +96,7 @@ describe('DefaultAwsCodeBuildService', () => {
       catalogApi: mockCatalog,
       resourceLocator: mockResourceLocator,
       discovery: mockServices.discovery(),
+      auth: mockServices.auth(),
     });
   }
 

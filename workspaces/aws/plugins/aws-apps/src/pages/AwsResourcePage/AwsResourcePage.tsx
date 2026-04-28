@@ -17,6 +17,7 @@ interface AwsResourcePageProps {
   children: ReactNode;
 }
 
+/** @public */
 export function isResourceType(
   resourceType: string,
 ): (entity: Entity) => boolean {

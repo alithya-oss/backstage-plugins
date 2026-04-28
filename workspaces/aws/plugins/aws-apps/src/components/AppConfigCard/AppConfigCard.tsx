@@ -2,13 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0
 import { InfoCard, EmptyState } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
-import { IconButton, LinearProgress, Tooltip } from '@material-ui/core';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import CardContent from '@mui/material/CardContent';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import DeleteIcon from '@mui/icons-material/Delete';
+import {
+  Button,
+  CardContent,
+  Grid,
+  IconButton,
+  LinearProgress,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { useEffect, useState } from 'react';
 import { opaApiRef } from '../../api';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
@@ -295,22 +299,22 @@ const AppConfigOverview = ({
 
   return (
     <InfoCard title="Application Configuration">
-      <CardContent sx={{ mt: 2 }}>
-        <Grid container direction="column" rowSpacing={4}>
+      <CardContent style={{ marginTop: 16 }}>
+        <Grid container direction="column" spacing={4}>
           {envVariables.map((containerDetails, index) => {
             return (
               <div key={containerDetails.containerName}>
                 <Grid
                   key={`${containerDetails.containerName!}Grid`}
                   container
-                  sx={index === 0 ? { mt: 0 } : { mt: 5 }}
+                  style={index === 0 ? { marginTop: 0 } : { marginTop: 40 }}
                 >
                   <Grid item xs={12}>
-                    <Typography sx={{ fontWeight: 'bold' }}>
+                    <Typography style={{ fontWeight: 'bold' }}>
                       ENVIRONMENT VARIABLES: "{containerDetails.containerName}"
                     </Typography>
                     <Button
-                      sx={{ mt: 1 }}
+                      style={{ marginTop: 8 }}
                       variant="outlined"
                       size="small"
                       id={index.toString()}
@@ -321,17 +325,19 @@ const AppConfigOverview = ({
                       Add
                     </Button>
                     <Button
-                      sx={{ mt: 1, ml: 1 }}
+                      style={{ marginTop: 8, marginLeft: 8 }}
                       variant="outlined"
                       size="small"
                       id={index.toString()}
                       onClick={() => onEdit(containerDetails.containerName!)}
-                      disabled={containerDetails?.env?.length === 0}
+                      disabled={
+                        !containerDetails.env || !containerDetails.env.length
+                      }
                     >
                       Edit
                     </Button>
                     <Button
-                      sx={{ mt: 1, ml: 1 }}
+                      style={{ marginTop: 8, marginLeft: 8 }}
                       variant="outlined"
                       size="small"
                       id={index.toString()}
@@ -344,12 +350,12 @@ const AppConfigOverview = ({
                       <Grid
                         container
                         direction="row"
-                        sx={{ mt: 1 }}
+                        style={{ marginTop: 8 }}
                         spacing={1}
                       >
                         <Grid item xs={edit ? 5 : 6}>
                           <Typography
-                            sx={{
+                            style={{
                               textTransform: 'uppercase',
                               fontWeight: 'bold',
                             }}
@@ -359,7 +365,7 @@ const AppConfigOverview = ({
                         </Grid>
                         <Grid item xs={6}>
                           <Typography
-                            sx={{
+                            style={{
                               textTransform: 'uppercase',
                               fontWeight: 'bold',
                             }}
@@ -370,7 +376,7 @@ const AppConfigOverview = ({
                         </Grid>
                       </Grid>
                     ) : (
-                      <Typography sx={{ mt: 1 }}>
+                      <Typography style={{ marginTop: 8 }}>
                         {' '}
                         No environment variables defined for container{' '}
                         {containerDetails.containerName}
@@ -382,7 +388,7 @@ const AppConfigOverview = ({
                         container
                         key={`${containerDetails.containerName}${envVarIndex}`}
                         direction="row"
-                        sx={{ mt: 1 }}
+                        style={{ marginTop: 8 }}
                         spacing={1}
                       >
                         <Grid item xs={edit ? 5 : 6}>

@@ -30,7 +30,7 @@ import {
   DateAggregation,
   Trendline,
 } from '@backstage-community/plugin-cost-insights-common';
-import { CatalogApi } from '@backstage/catalog-client';
+
 import {
   AWS_SDK_CUSTOM_USER_AGENT,
   getOneOfEntityAnnotations,
@@ -54,12 +54,14 @@ import {
   HttpAuthService,
   LoggerService,
 } from '@backstage/backend-plugin-api';
-import { createLegacyAuthAdapters } from '@backstage/backend-common';
 import { AwsCredentialIdentityProvider } from '@aws-sdk/types';
 import regression, { DataPoint } from 'regression';
 import { CostInsightsAwsConfig, readCostInsightsAwsConfig } from '../config';
 import { DateTime, Duration as LuxonDuration } from 'luxon';
-import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
+import {
+  catalogServiceRef,
+  CatalogService,
+} from '@backstage/plugin-catalog-node';
 
 /** @public */
 export class CostExplorerCostInsightsAwsService
@@ -68,7 +70,7 @@ export class CostExplorerCostInsightsAwsService
   public constructor(
     private readonly logger: LoggerService,
     private readonly auth: AuthService,
-    private readonly catalogApi: CatalogApi,
+    private readonly catalogApi: CatalogService,
     private readonly costExplorerClient: CostExplorerClient,
     private readonly config: CostInsightsAwsConfig,
   ) {}
@@ -76,16 +78,14 @@ export class CostExplorerCostInsightsAwsService
   static async fromConfig(
     config: CostInsightsAwsConfig,
     options: {
-      catalogApi: CatalogApi;
+      catalogApi: CatalogService;
       discovery: DiscoveryService;
-      auth?: AuthService;
+      auth: AuthService;
       httpAuth?: HttpAuthService;
       logger: LoggerService;
       credentialsManager: AwsCredentialsManager;
     },
   ) {
-    const { auth } = createLegacyAuthAdapters(options);
-
     const { region, accountId } = config.costExplorer;
 
     const { credentialsManager } = options;
@@ -109,7 +109,7 @@ export class CostExplorerCostInsightsAwsService
 
     return new CostExplorerCostInsightsAwsService(
       options.logger,
-      auth,
+      options.auth,
       options.catalogApi,
       costExplorerClient,
       config,
@@ -123,14 +123,10 @@ export class CostExplorerCostInsightsAwsService
   }): Promise<Cost> {
     this.logger.debug(`Fetch daily costs for ${options.entityRef.name}`);
 
-    const entity = await this.catalogApi.getEntityByRef(
-      options.entityRef,
-      options.credentials &&
-        (await this.auth.getPluginRequestToken({
-          onBehalfOf: options.credentials,
-          targetPluginId: 'catalog',
-        })),
-    );
+    const entity = await this.catalogApi.getEntityByRef(options.entityRef, {
+      credentials:
+        options.credentials ?? (await this.auth.getOwnServiceCredentials()),
+    });
 
     if (!entity) {
       throw new Error(

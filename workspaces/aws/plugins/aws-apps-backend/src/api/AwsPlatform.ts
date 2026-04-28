@@ -17,8 +17,8 @@ import {
   SSMClient,
 } from '@aws-sdk/client-ssm';
 import {
-  AppPromoParams,
   AWSEnvironmentProviderRecord,
+  AppPromoParams,
   BindResourceParams,
   GitProviders,
   ICommitChange,
@@ -26,10 +26,14 @@ import {
   IRepositoryInfo,
 } from '@alithya-oss/backstage-plugin-aws-apps-common';
 import YAML from 'yaml';
-import { GitAPI } from './GitApiClient';
-import { LoggerService } from '@backstage/backend-plugin-api';
+import {
+  LoggerService,
+  RootConfigService,
+} from '@backstage/backend-plugin-api';
+import { IAppsPlatformService } from '../services/definition/IAppsPlatformService';
+import { IGitService } from '../services/definition/IGitService';
+import { GitService } from './GitService';
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
-import { Config } from '@backstage/config';
 
 export type GitLabDownloadFileResponse = {
   file_name: string;
@@ -45,23 +49,63 @@ export type GitLabDownloadFileResponse = {
   execute_filemode: boolean;
 };
 
-export class AwsAppsPlatformApi {
-  public git: GitAPI;
+export class AppsPlatformService implements IAppsPlatformService {
+  private _awsRegion: string;
+  private _platformRegion: string;
+  private _gitProvider: IGitService;
+  private _awsAccount: string;
 
   public constructor(
-    private readonly config: Config,
+    private readonly config: RootConfigService,
     private readonly logger: LoggerService,
-    private readonly platformRegion: string,
-    private readonly awsRegion: string,
-    private readonly awsAccount: string,
-    private readonly gitProvider: GitProviders,
+    platformRegion?: string,
+    awsRegion?: string,
+    awsAccount?: string,
+    gitProvider?: IGitService,
   ) {
+    this._awsRegion = awsRegion || 'UNSETREGION';
+    this._awsAccount = awsAccount || 'UNSETACCOUNT';
+    this._platformRegion = platformRegion || 'UNSETREGION';
+    this._gitProvider = gitProvider || new GitService(this.logger);
+
     this.logger.info('Instantiating AWS Apps Platform API with:');
-    this.logger.info(`platformRegion: ${this.platformRegion}`);
-    this.logger.info(`awsAccount: ${this.awsAccount}`);
-    this.logger.info(`awsRegion: ${this.awsRegion}`);
-    this.logger.info(`gitProvider: ${this.gitProvider}`);
-    this.git = new GitAPI(logger, gitProvider);
+    this.logger.info(`platformRegion: ${this._platformRegion}`);
+    this.logger.info(`awsAccount: ${this._awsAccount}`);
+    this.logger.info(`awsRegion: ${this._awsRegion}`);
+    this.logger.info(`gitProvider: ${this._gitProvider}`);
+  }
+
+  public get git(): IGitService {
+    return this._gitProvider;
+  }
+
+  public get gitProviderService(): IGitService {
+    return this._gitProvider;
+  }
+
+  public get awsRegion(): string {
+    return this._awsRegion;
+  }
+
+  public get platformRegion(): string {
+    return this._platformRegion;
+  }
+
+  public get awsAccount(): string {
+    return this._awsAccount;
+  }
+
+  setGitProviderService(provider: IGitService): void {
+    this._gitProvider = provider;
+  }
+  setAwsRegion(region: string): void {
+    this._awsRegion = region;
+  }
+  setPlatformRegion(region: string): void {
+    this._platformRegion = region;
+  }
+  setAwsAccount(account: string): void {
+    this._awsAccount = account;
   }
 
   /**
@@ -186,9 +230,11 @@ export class AwsAppsPlatformApi {
       ],
     };
 
-    const result = await this.git
-      .getGitProvider()
-      .commitContent(change, repo, gitToken);
+    const result = await this.git.gitProviderImpl.commitContent(
+      change,
+      repo,
+      gitToken,
+    );
 
     if (!result.isSuccess) {
       console.error(`ERROR: Failed to Destroy ${envName}. Response: ${result}`);
@@ -211,17 +257,18 @@ export class AwsAppsPlatformApi {
     gitSecretName: string,
   ): Promise<IGitAPIResult> {
     const gitToken = await this.getGitToken(gitSecretName);
-    const result = await this.git
-      .getGitProvider()
-      .deleteRepository(repo, gitToken);
+    const result = await this.git.gitProviderImpl.deleteRepository(
+      repo,
+      gitToken,
+    );
 
     console.log(result);
     return result;
   }
 
-  private async getGitToken(gitSecretName: string): Promise<string> {
+  public async getGitToken(gitSecretName: string): Promise<string> {
     const gitAdminSecret = await this.getPlatformSecretValue(gitSecretName);
-    const gitAdminSecretObj = JSON.parse(gitAdminSecret.SecretString ?? '');
+    const gitAdminSecretObj = JSON.parse(gitAdminSecret.SecretString || '');
     return gitAdminSecretObj.apiToken;
   }
 
@@ -232,9 +279,11 @@ export class AwsAppsPlatformApi {
   ): Promise<string> {
     const gitToken = await this.getGitToken(gitSecretName);
 
-    const result = await this.git
-      .getGitProvider()
-      .getFileContent(filePath, repo, gitToken);
+    const result = await this.git.gitProviderImpl.getFileContent(
+      filePath,
+      repo,
+      gitToken,
+    );
 
     const resultBody = await result.value;
     if (!result.isSuccess) {
@@ -244,9 +293,8 @@ export class AwsAppsPlatformApi {
       throw new Error(
         `Failed to retrieve ${filePath} for ${repo.gitRepoName}. Response: ${result}`,
       );
-    } else {
-      return resultBody;
     }
+    return resultBody;
   }
 
   public async promoteAppToGit(
@@ -286,9 +334,11 @@ export class AwsAppsPlatformApi {
       actions,
     };
 
-    const result = await this.git
-      .getGitProvider()
-      .commitContent(change, repo, gitToken);
+    const result = await this.git.gitProviderImpl.commitContent(
+      change,
+      repo,
+      gitToken,
+    );
 
     const resultBody = result.value;
     if (!result.isSuccess) {
@@ -343,9 +393,11 @@ export class AwsAppsPlatformApi {
       actions,
     };
 
-    const result = await this.git
-      .getGitProvider()
-      .commitContent(change, repo, gitToken);
+    const result = await this.git.gitProviderImpl.commitContent(
+      change,
+      repo,
+      gitToken,
+    );
     const resultBody = result.value;
     if (!result.isSuccess) {
       console.error(
@@ -399,9 +451,11 @@ export class AwsAppsPlatformApi {
       actions,
     };
 
-    const result = await this.git
-      .getGitProvider()
-      .commitContent(change, repo, gitToken);
+    const result = await this.git.gitProviderImpl.commitContent(
+      change,
+      repo,
+      gitToken,
+    );
 
     const resultBody = await result.value.json();
     if (!result.isSuccess) {
@@ -479,15 +533,17 @@ export class AwsAppsPlatformApi {
       actions,
     };
 
-    const result = await this.git
-      .getGitProvider()
-      .commitContent(change, repo, gitToken);
+    const result = await this.git.gitProviderImpl.commitContent(
+      change,
+      repo,
+      gitToken,
+    );
     console.log(result);
     let resultBody;
 
-    if (this.gitProvider === GitProviders.GITLAB) {
-      resultBody = result.value;
-    } else if (this.gitProvider === GitProviders.GITHUB) {
+    if (this.git.gitProvider === GitProviders.GITLAB) {
+      resultBody = await result.value.json();
+    } else if (this.git.gitProvider === GitProviders.GITHUB) {
       resultBody = result.message;
     }
 

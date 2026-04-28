@@ -27,10 +27,7 @@ export class AwsConfigResourceLocator implements AwsResourceLocator {
     },
   ): Promise<AwsConfigResourceLocator>;
   // (undocumented)
-  getResourceArns({
-    resourceType,
-    tagString,
-  }: {
+  getResourceArns(input: {
     resourceType: string;
     tagString: string;
   }): Promise<string[]>;
@@ -51,10 +48,7 @@ export class AwsResourceExplorerLocator implements AwsResourceLocator {
     },
   ): Promise<AwsResourceExplorerLocator>;
   // (undocumented)
-  getResourceArns({
-    resourceType,
-    tagString,
-  }: {
+  getResourceArns(input: {
     resourceType: string;
     tagString: string;
   }): Promise<string[]>;
@@ -63,10 +57,7 @@ export class AwsResourceExplorerLocator implements AwsResourceLocator {
 // @public (undocumented)
 export interface AwsResourceLocator {
   // (undocumented)
-  getResourceArns({
-    resourceType,
-    tagString,
-  }: {
+  getResourceArns(input: {
     resourceType: string;
     tagString: string;
   }): Promise<string[]>;
@@ -92,10 +83,7 @@ export class AwsResourceTaggingApiLocator implements AwsResourceLocator {
     },
   ): Promise<AwsResourceTaggingApiLocator>;
   // (undocumented)
-  getResourceArns({
-    resourceType,
-    tagString,
-  }: {
+  getResourceArns(input: {
     resourceType: string;
     tagString: string;
   }): Promise<string[]>;
@@ -112,10 +100,7 @@ export class AwsResourceTaggingApiLocatorInstance {
     logger: LoggerService;
   }): Promise<AwsResourceTaggingApiLocatorInstance>;
   // (undocumented)
-  getResourceArns({
-    resourceType,
-    tagString,
-  }: {
+  getResourceArns(input: {
     resourceType: string;
     tagString: string;
   }): Promise<string[]>;

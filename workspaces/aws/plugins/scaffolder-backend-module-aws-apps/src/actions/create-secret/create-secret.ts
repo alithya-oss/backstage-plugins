@@ -4,68 +4,86 @@
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { createSecret } from '../../helpers/action-context';
 import { Config } from '@backstage/config';
+import yaml from 'yaml';
 
-/** @public */
+const ID = 'aws-apps:create-secret';
+
+const examples = [
+  {
+    description: 'Create a new AWS Secrets Manager Secret',
+    example: yaml.stringify({
+      steps: [
+        {
+          action: ID,
+          id: 'createSecretManager',
+          name: 'Create a Secret',
+          input: {
+            secretName: 'mySecretName',
+          },
+        },
+      ],
+    }),
+  },
+];
+
+/**
+ * @public
+ */
 export function createSecretAction(options: { envConfig: Config }) {
   const { envConfig } = options;
-  return createTemplateAction<{
-    secretName: string;
-    description?: string;
-    region?: string;
-    tags?: { Key: string; Value: string | number | boolean }[];
-  }>({
-    id: 'opa:create-secret',
-    description: 'Creates secret in Secret Manager',
+
+  return createTemplateAction({
+    id: ID,
+    description: 'Creates secret in Secrets Manager',
+    supportsDryRun: true,
+    examples,
     schema: {
       input: {
-        type: 'object',
-        required: ['secretName'],
-        properties: {
-          secretName: {
-            title: 'Secret Name',
-            description: 'The name of the secret to create in SecretsManager',
-            type: 'string',
-          },
-          description: {
-            title: 'Description',
-            description: 'An optional description of the secret',
-            type: 'string',
-          },
-          region: {
-            title: 'AWS Region',
-            description:
-              'The AWS region where the new secret should be created',
-            type: 'string',
-          },
-          tags: {
-            title: 'AWS Tags',
-            description:
-              'key/value pairs to apply as tags to any created AWS resources',
-            type: 'array',
-            minProperties: 1,
-            items: [
-              {
-                type: 'object',
-                properties: {
-                  Key: { type: 'string' },
-                  Value: { type: ['string', 'number', 'boolean'] },
-                },
-              },
-            ],
-          },
-        },
+        secretName: z =>
+          z
+            .string()
+            .describe('The name of the secret to create in SecretsManager'),
+
+        // optional params
+        description: z =>
+          z
+            .string()
+            .optional()
+            .describe('An optional description of the secret'),
+        region: z =>
+          z
+            .string()
+            .optional()
+            .describe('The AWS region where the new secret should be created'),
+        tags: z =>
+          z
+            .array(
+              z.object({
+                Key: z.string().describe('The tag name'),
+                Value: z
+                  .string()
+                  .or(z.number())
+                  .or(z.boolean())
+                  .describe('The tag value'),
+              }),
+            )
+            .optional(),
       },
       output: {
-        type: 'object',
-        properties: {
-          secretARN: {
-            title: 'SecretARN',
-            type: 'string',
-          },
-        },
+        awsSecretArn: z => z.string().describe('The ARN of the created secret'),
       },
     },
-    async handler(ctx) {
+    handler: async ctx => {
+      // If this is a dry run, return a hardcoded object
+      if (ctx.isDryRun) {
+        ctx.output(
+          'awsSecretArn',
+          'arn:aws:secretsmanager:us-east-1:123456789123:secret:my-secret',
+        );
+        ctx.logger.info(`Dry run complete`);
+        return;
+      }
+
       const { secretName, description, tags } = ctx.input;
       let { region } = ctx.input;
 

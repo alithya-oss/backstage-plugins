@@ -16,7 +16,7 @@ import {
   coreServices,
 } from '@backstage/backend-plugin-api';
 import { amazonEcsServiceRef, createRouter } from './service/router';
-import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
+import { catalogServiceRef } from '@backstage/plugin-catalog-node';
 
 /** @public */
 export const amazonEcsPlugin = createBackendPlugin({
@@ -33,20 +33,11 @@ export const amazonEcsPlugin = createBackendPlugin({
         httpAuth: coreServices.httpAuth,
         amazonEcsApi: amazonEcsServiceRef,
       },
-      async init({
-        logger,
-        httpRouter,
-        auth,
-        httpAuth,
-        discovery,
-        amazonEcsApi,
-      }) {
+      async init({ logger, httpRouter, httpAuth, amazonEcsApi }) {
         httpRouter.use(
           await createRouter({
             logger,
             amazonEcsApi,
-            discovery,
-            auth,
             httpAuth,
           }),
         );

@@ -1,6 +1,22 @@
 app:
   title: Scaffolded Backstage App
   baseUrl: http://localhost:3000
+  # Enable all packages by default, this will discover packages from packages/app/package.json
+  packages: all
+  extensions:
+    # Disable auto-generated nav items for plugins rendered manually in Sidebar.tsx
+    - nav-item:search: false
+    - nav-item:user-settings: false
+    - nav-item:catalog: false
+    - nav-item:scaffolder: false
+    - nav-item:api-docs: false
+    - nav-item:techdocs: false
+    - nav-item:kubernetes: false
+    - entity-content:kubernetes/kubernetes:
+        config:
+          filter:
+            metadata.annotations.backstage.io/kubernetes-id:
+              $exists: true
 
 organization:
   name: My Company

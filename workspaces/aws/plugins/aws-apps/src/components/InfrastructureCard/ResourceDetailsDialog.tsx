@@ -16,7 +16,7 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import { Close } from '@mui/icons-material';
+import Close from '@material-ui/icons/Close';
 import { useEffect, useState } from 'react';
 import { opaApiRef } from '../../api';
 import { SecretStringComponent } from '../common';

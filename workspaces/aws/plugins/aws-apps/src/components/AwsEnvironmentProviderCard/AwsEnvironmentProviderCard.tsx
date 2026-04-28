@@ -4,8 +4,10 @@
 import { useEffect, useState } from 'react';
 import { InfoCard } from '@backstage/core-components';
 import {
+  Backdrop,
   Button,
   CardContent,
+  CircularProgress,
   Grid,
   IconButton,
   Table,
@@ -13,13 +15,12 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from '@material-ui/core';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { useApi } from '@backstage/core-plugin-api';
 import { opaApiRef } from '../../api';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Typography from '@mui/material/Typography';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import {
   AWSEnvironmentProviderRecord,
   getGitCredentailsSecret,
@@ -38,8 +39,6 @@ import {
   EntityRefLink,
   useEntity,
 } from '@backstage/plugin-catalog-react';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
 import { AwsEnvironmentProviderSelectorDialog } from './AwsEnvironmentProviderSelectorDialog';
 
 const AwsEnvironmentProviderCard = ({
@@ -254,7 +253,7 @@ const AwsEnvironmentProviderCard = ({
   );
 
   if (error.isError) {
-    return <Typography sx={{ color: 'red' }}>{error.errorMsg}</Typography>;
+    return <Typography style={{ color: 'red' }}>{error.errorMsg}</Typography>;
   }
 
   return (
@@ -299,7 +298,11 @@ const AwsEnvironmentProviderCard = ({
         </Table>
         <Grid item zeroMinWidth xs={12}>
           {isAddProviderSuccessful && !!addProviderMessage && (
-            <Alert sx={{ mb: 2 }} severity="success" onClose={handleCloseAlert}>
+            <Alert
+              style={{ marginBottom: 16 }}
+              severity="success"
+              onClose={handleCloseAlert}
+            >
               <AlertTitle>Success</AlertTitle>
               <strong>{providerRequest?.name}</strong> Updated Provider
               successfully!
@@ -313,7 +316,11 @@ const AwsEnvironmentProviderCard = ({
             </Alert>
           )}
           {!isAddProviderSuccessful && !!addProviderMessage && (
-            <Alert sx={{ mb: 2 }} severity="error" onClose={handleCloseAlert}>
+            <Alert
+              style={{ marginBottom: 16 }}
+              severity="error"
+              onClose={handleCloseAlert}
+            >
               <AlertTitle>Error</AlertTitle>
               Failed to Update provider <strong>{providerRequest?.name}</strong>
               {!!addProviderMessage && (
@@ -326,7 +333,7 @@ const AwsEnvironmentProviderCard = ({
             </Alert>
           )}
         </Grid>
-        <Typography margin="10px">
+        <Typography style={{ margin: '10px' }}>
           <Button variant="contained" onClick={handleClickAdd}>
             Add
           </Button>
@@ -337,10 +344,7 @@ const AwsEnvironmentProviderCard = ({
             closeDialogHandler={closeDialog}
           />
         </Typography>
-        <Backdrop
-          sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
-          open={spinning}
-        >
+        <Backdrop style={{ color: '#fff', zIndex: 1400 }} open={spinning}>
           <CircularProgress color="inherit" />
         </Backdrop>
       </CardContent>

@@ -1,4 +1,5 @@
 import {
+  GitProviders,
   IGitAPIResult,
   ICommitChange,
   IRepositoryInfo,
@@ -7,8 +8,19 @@ import {
 import { LoggerService } from '@backstage/backend-plugin-api';
 
 export class GitLabAPI implements ISCMBackendAPI {
+  private _gitProvider: GitProviders;
+
+  public get gitProvider(): GitProviders {
+    return this._gitProvider;
+  }
+
+  setGitProvider(provider: GitProviders): void {
+    this._gitProvider = provider;
+  }
+
   public constructor(private readonly logger: LoggerService) {
     this.logger.info('Instantiating GitLabAPI...');
+    this._gitProvider = GitProviders.GITLAB;
   }
 
   private async getGitProjectId(
@@ -24,7 +36,7 @@ export class GitLabAPI implements ISCMBackendAPI {
       groupName = gitRepoName.split('/')[0];
       repoName = gitRepoName.split('/')[1];
     } else {
-      groupName = gitProjectGroup;
+      groupName = '';
       repoName = gitRepoName;
     }
     const url = `https://${gitHost}/api/v4/projects?search=${repoName}`;
@@ -182,7 +194,7 @@ export class GitLabAPI implements ISCMBackendAPI {
       isSuccess: true,
       message: `Retrieved file content successfully`,
       httpResponse: result.status,
-      value: Buffer.from(resultBody.content, 'base64').toString(),
+      value: resultBody.content,
     };
   }
 
@@ -208,6 +220,7 @@ export class GitLabAPI implements ISCMBackendAPI {
       branch: change.branch,
       commit_message: change.commitMessage,
       actions: change.actions,
+      owner: repo.owner,
     };
 
     const url = `https://${repo.gitHost}/api/v4/projects/${gitProjectId}/repository/commits`;

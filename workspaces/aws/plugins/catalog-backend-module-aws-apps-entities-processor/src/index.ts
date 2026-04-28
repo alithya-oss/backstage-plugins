@@ -1,6 +1,7 @@
-/***/
 /**
- * The aws-apps-entities-processor backend module for the catalog plugin.
+ * The aws-apps backend module for the catalog plugin.
+ *
+ * @packageDocumentation
  */
 
 export { catalogModuleAwsAppsEntitiesProcessor as default } from './module';

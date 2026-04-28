@@ -19,12 +19,16 @@ import {
   catalogApiRef,
   useEntity,
 } from '@backstage/plugin-catalog-react';
-import { Button, CardContent, Grid, LinearProgress } from '@material-ui/core';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Typography from '@mui/material/Typography';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import {
+  Backdrop,
+  Button,
+  CardContent,
+  CircularProgress,
+  Grid,
+  LinearProgress,
+  Typography,
+} from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OPAApi, opaApiRef } from '../../api';
@@ -50,6 +54,7 @@ const DeleteAppPanel = ({
 
   const appIACType = entity.metadata.iacType?.toString();
   const appSubtype = entity.spec?.subType?.toString() ?? 'undefinedSubtype';
+  // console.log(appIACType);
   const repoInfo = awsComponent.getRepoInfo();
 
   const handleCloseAlert = () => {
@@ -68,6 +73,7 @@ const DeleteAppPanel = ({
         setIsDeleteSuccessful(true);
       })
       .catch(error => {
+        // console.log(error);
         setDeleteResultMessage(`Error deleting Repository ${error}.`);
         setSpinning(false);
         setIsDeleteSuccessful(false);
@@ -279,12 +285,14 @@ const DeleteAppPanel = ({
           // awsComponent.currentEnvironment.providerData.name
         })
         .catch(error => {
+          // console.log(error);
           setSpinning(false);
           setIsDeleteSuccessful(false);
           setDeleteResultMessage(error.toString());
         });
     }
   };
+
   const handleClickDeleteAll = async () => {
     // eslint-disable-next-line no-alert
     if (confirm('Are you sure you want to delete this app?')) {
@@ -306,12 +314,13 @@ const DeleteAppPanel = ({
             await sleep(2000);
           })
           .catch(error => {
+            // console.log(error);
             setSpinning(false);
             setIsDeleteSuccessful(false);
             setDeleteResultMessage(error.toString());
           });
       });
-      if (appIACType === 'cdk') {
+      if (appIACType === 'cdk' || appIACType === 'aws-sam') {
         await sleep(2000);
         // Delete the repo now.
         deleteRepo(repoInfo);
@@ -319,7 +328,7 @@ const DeleteAppPanel = ({
         if (awsComponent.componentType === AWSComponentType.AWSApp) {
           deleteSecret(entity.metadata.repoSecretArn?.toString() ?? '');
         }
-        await deleteFromCatalog();
+        deleteFromCatalog();
         setSpinning(false);
         await sleep(2000);
         setDeleteResultMessage('Redirect to home ....');
@@ -330,7 +339,7 @@ const DeleteAppPanel = ({
         setSpinning(false);
         setDisabled(false);
         setDeleteResultMessage(
-          'Once the pipeline finish executing you may click Delete Repository',
+          'Once the pipeline finishes executing, you may click Delete Repository',
         );
       }
     }
@@ -341,7 +350,7 @@ const DeleteAppPanel = ({
         <Grid>
           <Grid container spacing={2}>
             <Grid item zeroMinWidth xs={12}>
-              <Typography sx={{ fontWeight: 'bold' }}>
+              <Typography style={{ fontWeight: 'bold' }}>
                 Delete this component from current environment
               </Typography>
             </Grid>
@@ -361,7 +370,7 @@ const DeleteAppPanel = ({
           </Grid>
           <Grid container spacing={2}>
             <Grid item zeroMinWidth xs={12}>
-              <Typography sx={{ fontWeight: 'bold' }}>
+              <Typography style={{ fontWeight: 'bold' }}>
                 Delete this component and all of its resources
               </Typography>
             </Grid>
@@ -383,7 +392,7 @@ const DeleteAppPanel = ({
             {isDeleteSuccessful && deleteResultMessage && (
               <Alert
                 id="alertGood"
-                sx={{ mt: 2, mb: 2 }}
+                style={{ marginTop: 16, marginBottom: 16 }}
                 severity="success"
                 onClose={handleCloseAlert}
               >
@@ -402,7 +411,7 @@ const DeleteAppPanel = ({
             {!isDeleteSuccessful && deleteResultMessage && (
               <Alert
                 id="alertBad"
-                sx={{ mt: 2, mb: 2 }}
+                style={{ marginTop: 16, marginBottom: 16 }}
                 severity="error"
                 onClose={handleCloseAlert}
               >
@@ -419,10 +428,7 @@ const DeleteAppPanel = ({
             )}
           </Grid>
         </Grid>
-        <Backdrop
-          sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
-          open={spinning}
-        >
+        <Backdrop style={{ color: '#fff', zIndex: 1400 }} open={spinning}>
           <CircularProgress color="inherit" />
         </Backdrop>
       </CardContent>

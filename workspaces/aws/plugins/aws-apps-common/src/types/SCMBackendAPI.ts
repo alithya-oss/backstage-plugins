@@ -38,6 +38,7 @@ export interface IRepositoryInfo {
   gitJobID?: string;
   projectID?: string;
   description?: string;
+  owner?: string;
   isPrivate: boolean;
   visibility?: GitVisibility;
   gitProvider: GitProviders;
@@ -46,6 +47,9 @@ export interface IRepositoryInfo {
 // Source Control Management API
 /** @public */
 export interface ISCMBackendAPI {
+  gitProvider: GitProviders;
+  setGitProvider(provider: GitProviders): void;
+
   deleteRepository: (
     repo: IRepositoryInfo,
     accessToken: string,

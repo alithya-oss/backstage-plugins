@@ -4,40 +4,114 @@
 
 ```ts
 import { BackstagePlugin } from '@backstage/core-plugin-api';
+import { BackstageTheme } from '@backstage/theme';
 import { DefaultCatalogPageProps } from '@backstage/plugin-catalog';
+import { Entity } from '@backstage/catalog-model';
+import { GenericAWSEnvironment } from '@alithya-oss/backstage-plugin-aws-apps-common';
 import { JSX as JSX_2 } from 'react/jsx-runtime';
 import { ReactNode } from 'react';
 import { RouteRef } from '@backstage/core-plugin-api';
 
-// Warning: (ae-forgotten-export) The symbol "AppCatalogPage_2" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export const AppCatalogPage: AppCatalogPage_2;
 
-// Warning: (ae-forgotten-export) The symbol "AwsAppPage_2" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export const AwsAppPage: AwsAppPage_2;
 
-// Warning: (ae-forgotten-export) The symbol "AwsComponentPage_2" needs to be exported by the entry point index.d.ts
-//
+// @public (undocumented)
+export const AwsAppsHomePage: () => JSX_2.Element;
+
+// @public (undocumented)
+export const awsAppsPlugin: BackstagePlugin<
+  {
+    root: RouteRef<undefined>;
+  },
+  {},
+  {}
+>;
+
 // @public (undocumented)
 export const AwsComponentPage: AwsComponentPage_2;
 
-// Warning: (ae-forgotten-export) The symbol "AwsEnvironmentPage_2" needs to be exported by the entry point index.d.ts
-//
+// @public (undocumented)
+export interface AwsComponentPageProps {
+  // (undocumented)
+  componentType: string;
+}
+
+// @public (undocumented)
+export function AwsECSAppPage(_props: AwsECSAppPageProps): JSX_2.Element;
+
+// @public (undocumented)
+export function AwsEKSAppPage(_props: AwsEKSAppPageProps): JSX_2.Element;
+
 // @public (undocumented)
 export const AwsEnvironmentPage: AwsEnvironmentPage_2;
 
-// Warning: (ae-forgotten-export) The symbol "AwsEnvironmentProviderPage_2" needs to be exported by the entry point index.d.ts
-//
+// @public (undocumented)
+export interface AwsEnvironmentPageProps {
+  // (undocumented)
+  children?: ReactNode;
+}
+
 // @public (undocumented)
 export const AwsEnvironmentProviderPage: AwsEnvironmentProviderPage_2;
 
 // @public (undocumented)
-export const EntityAnnotationTypeTable: ({
-  type,
-}: {
+export interface AwsEnvironmentProviderPageProps {
+  // (undocumented)
+  children?: ReactNode;
+}
+
+// @public (undocumented)
+export const AWSLogoFull: () => JSX_2.Element;
+
+// @public (undocumented)
+export const AWSLogoIcon: () => JSX_2.Element;
+
+// @public (undocumented)
+export function AwsPendingPage(_props: AwsPendingPageProps): JSX_2.Element;
+
+// @public (undocumented)
+export function AwsRDSResourcePage(
+  _props: AwsRDSResourcePageProps,
+): JSX_2.Element;
+
+// @public (undocumented)
+export function AwsResourcePage(_props: AwsResourcePageProps): JSX_2.Element;
+
+// @public (undocumented)
+export function AwsS3ResourcePage(
+  _props: AwsS3ResourcePageProps,
+): JSX_2.Element;
+
+// @public (undocumented)
+export function AwsSecretsManagerResourcePage(
+  _props: AwsSecretsManagerResourcePageProps,
+): JSX_2.Element;
+
+// @public (undocumented)
+export function AwsServerlessAppPage(
+  _props: AwsServerlessAppPageProps,
+): JSX_2.Element;
+
+// @public (undocumented)
+export const awsTheme: BackstageTheme;
+
+// @public (undocumented)
+export const CustomerLogoFullLight: () => JSX_2.Element;
+
+// @public (undocumented)
+export const CustomerLogoFullTitleLight: () => JSX_2.Element;
+
+// @public (undocumented)
+export const CustomerLogoIcon: () => JSX_2.Element;
+
+// @public (undocumented)
+export const customerTheme: BackstageTheme;
+
+// @public (undocumented)
+export const EntityAnnotationTypeTable: (input: {
   type: string;
 }) => JSX_2.Element;
 
@@ -78,9 +152,7 @@ export const EntityEnvironmentInfoCard: () => JSX_2.Element;
 export const EntityEnvironmentSelector: () => JSX_2.Element;
 
 // @public (undocumented)
-export const EntityGeneralInfoCard: ({
-  appPending,
-}: {
+export const EntityGeneralInfoCard: (input: {
   appPending: boolean;
 }) => JSX_2.Element;
 
@@ -100,13 +172,36 @@ export const EntityProviderInfoCard: () => JSX_2.Element;
 export const EntityResourceBindingCard: () => JSX_2.Element;
 
 // @public (undocumented)
-export const opaPlugin: BackstagePlugin<
-  {
-    root: RouteRef<undefined>;
-  },
-  {},
-  {}
->;
+export function isAppType(
+  appType: string,
+  env: GenericAWSEnvironment,
+): (entity: Entity) => boolean;
+
+// @public (undocumented)
+export const isLogsAvailable: (_entity: Entity) => boolean;
+
+// @public (undocumented)
+export function isProviderType(
+  providerType: string,
+  entity: Entity,
+): (entity: Entity) => boolean;
+
+// @public (undocumented)
+export function isResourceType(
+  resourceType: string,
+): (entity: Entity) => boolean;
+
+// @public (undocumented)
+export const OPAHomePage: () => JSX_2.Element;
+
+// @public (undocumented)
+export const OPALogoFull: () => JSX_2.Element;
+
+// @public (undocumented)
+export const OPALogoIcon: () => JSX_2.Element;
+
+// @public (undocumented)
+export const opaTheme: BackstageTheme;
 
 // (No @packageDocumentation comment for this package)
 ```

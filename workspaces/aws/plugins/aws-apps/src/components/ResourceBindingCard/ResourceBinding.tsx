@@ -4,8 +4,10 @@
 import { useEffect, useState } from 'react';
 import { EmptyState, InfoCard } from '@backstage/core-components';
 import {
+  Backdrop,
   Button,
   CardContent,
+  CircularProgress,
   Grid,
   IconButton,
   LinearProgress,
@@ -14,13 +16,12 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from '@material-ui/core';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { useApi } from '@backstage/core-plugin-api';
 import { opaApiRef } from '../../api';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Typography from '@mui/material/Typography';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import { useAsyncAwsApp } from '../../hooks/useAwsApp';
 import {
   AssociatedResources,
@@ -43,8 +44,6 @@ import {
   useEntity,
 } from '@backstage/plugin-catalog-react';
 import { ResourceSelectorDialog } from './ResourceSelectorDialog';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
 
 // TODO: Externalize policy templates to a repo path for easy updates and access control
 const RDS_POLICY = `{
@@ -296,6 +295,7 @@ const ResourceBindingCard = ({
       .catch(err => {
         setIsBindSuccessful(false);
         setBindResourceMessage(err);
+        // console.log(err);
         setError(err);
         setSpinning(false);
       });
@@ -318,6 +318,7 @@ const ResourceBindingCard = ({
       .catch(err => {
         setIsBindSuccessful(false);
         setBindResourceMessage(err);
+        // console.log(err);
         setError(err);
         setSpinning(false);
       });
@@ -334,7 +335,7 @@ const ResourceBindingCard = ({
   );
 
   if (error.isError) {
-    return <Typography sx={{ color: 'red' }}>{error.errorMsg}</Typography>;
+    return <Typography style={{ color: 'red' }}>{error.errorMsg}</Typography>;
   }
 
   return (
@@ -376,7 +377,11 @@ const ResourceBindingCard = ({
         </Table>
         <Grid item zeroMinWidth xs={12}>
           {isBindSuccessful && !!bindResourceMessage && (
-            <Alert sx={{ mb: 2 }} severity="success" onClose={handleCloseAlert}>
+            <Alert
+              style={{ marginBottom: 16 }}
+              severity="success"
+              onClose={handleCloseAlert}
+            >
               <AlertTitle>Success</AlertTitle>
               <strong>{bindResourceRequest?.resourceName!}</strong> was
               successfully scheduled!
@@ -390,7 +395,11 @@ const ResourceBindingCard = ({
             </Alert>
           )}
           {!isBindSuccessful && !!bindResourceMessage && (
-            <Alert sx={{ mb: 2 }} severity="error" onClose={handleCloseAlert}>
+            <Alert
+              style={{ marginBottom: 16 }}
+              severity="error"
+              onClose={handleCloseAlert}
+            >
               <AlertTitle>Error</AlertTitle>
               Failed to schedule{' '}
               <strong>{bindResourceRequest?.resourceName!}</strong> Binding.
@@ -404,7 +413,7 @@ const ResourceBindingCard = ({
             </Alert>
           )}
         </Grid>
-        <Typography margin="10px">
+        <Typography style={{ margin: '10px' }}>
           <Button variant="contained" onClick={handleClickAdd}>
             Add
           </Button>
@@ -419,10 +428,7 @@ const ResourceBindingCard = ({
             closeDialogHandler={closeDialog}
           />
         </Typography>
-        <Backdrop
-          sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
-          open={spinning}
-        >
+        <Backdrop style={{ color: '#fff', zIndex: 1400 }} open={spinning}>
           <CircularProgress color="inherit" />
         </Backdrop>
       </CardContent>

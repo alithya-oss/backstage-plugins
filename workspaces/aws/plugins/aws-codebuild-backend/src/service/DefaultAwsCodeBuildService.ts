@@ -12,7 +12,7 @@
  */
 
 import { parse } from '@aws-sdk/util-arn-parser';
-import { CatalogApi } from '@backstage/catalog-client';
+
 import {
   AwsResourceLocator,
   AwsResourceLocatorFactory,
@@ -54,15 +54,17 @@ import {
   HttpAuthService,
   LoggerService,
 } from '@backstage/backend-plugin-api';
-import { createLegacyAuthAdapters } from '@backstage/backend-common';
-import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
+import {
+  catalogServiceRef,
+  CatalogService,
+} from '@backstage/plugin-catalog-node';
 
 /** @public */
 export class DefaultAwsCodeBuildService implements AwsCodeBuildService {
   public constructor(
     private readonly logger: LoggerService,
     private readonly auth: AuthService,
-    private readonly catalogApi: CatalogApi,
+    private readonly catalogApi: CatalogService,
     private readonly resourceLocator: AwsResourceLocator,
     private readonly credsManager: AwsCredentialsManager,
   ) {}
@@ -70,9 +72,9 @@ export class DefaultAwsCodeBuildService implements AwsCodeBuildService {
   static async fromConfig(
     config: Config,
     options: {
-      catalogApi: CatalogApi;
+      catalogApi: CatalogService;
       discovery: DiscoveryService;
-      auth?: AuthService;
+      auth: AuthService;
       httpAuth?: HttpAuthService;
       logger: LoggerService;
       resourceLocator?: AwsResourceLocator;
@@ -80,15 +82,13 @@ export class DefaultAwsCodeBuildService implements AwsCodeBuildService {
   ) {
     const credsManager = DefaultAwsCredentialsManager.fromConfig(config);
 
-    const { auth } = createLegacyAuthAdapters(options);
-
     const resourceLocator =
       options?.resourceLocator ??
       (await AwsResourceLocatorFactory.fromConfig(config, options.logger));
 
     return new DefaultAwsCodeBuildService(
       options.logger,
-      auth,
+      options.auth,
       options.catalogApi,
       resourceLocator,
       credsManager,
@@ -154,14 +154,10 @@ export class DefaultAwsCodeBuildService implements AwsCodeBuildService {
     entityRef: CompoundEntityRef;
     credentials?: BackstageCredentials;
   }): Promise<string[]> {
-    const entity = await this.catalogApi.getEntityByRef(
-      options.entityRef,
-      options.credentials &&
-        (await this.auth.getPluginRequestToken({
-          onBehalfOf: options.credentials,
-          targetPluginId: 'catalog',
-        })),
-    );
+    const entity = await this.catalogApi.getEntityByRef(options.entityRef, {
+      credentials:
+        options.credentials ?? (await this.auth.getOwnServiceCredentials()),
+    });
 
     if (!entity) {
       throw new Error(
