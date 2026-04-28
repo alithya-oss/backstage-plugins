@@ -1,5 +1,12 @@
 # @backstage-community/cli
 
+## 0.3.0
+
+### Minor Changes
+
+- c6222f3: Backstage version bump to v1.48.2
+- 07557db: Backstage version bump to v1.49.2
+
 ## 0.2.0
 
 ### Minor Changes
