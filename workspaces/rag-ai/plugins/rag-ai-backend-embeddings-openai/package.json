@@ -47,7 +47,7 @@
     "@backstage/backend-plugin-api": "backstage:^",
     "@backstage/catalog-client": "backstage:^",
     "@backstage/config": "backstage:^",
-    "@langchain/community": "^0.3.26",
+    "@langchain/community": "^1.0.0",
     "@langchain/core": "^0.3.32",
     "@langchain/openai": "^0.3.17",
     "langchain": "^0.3.12"
