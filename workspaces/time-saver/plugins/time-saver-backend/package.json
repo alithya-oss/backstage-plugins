@@ -45,7 +45,7 @@
     "knex": "^3.1.0",
     "luxon": "^3.5.0",
     "node-fetch": "^2.6.7",
-    "uuid": "^9.0.0",
+    "uuid": "^14.0.0",
     "yn": "^4.0.0"
   },
   "devDependencies": {
