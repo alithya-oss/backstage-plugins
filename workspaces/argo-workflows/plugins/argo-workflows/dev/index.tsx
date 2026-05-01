@@ -15,11 +15,12 @@
  */
 
 import { Entity } from '@backstage/catalog-model';
-import { Page, Header, TabbedLayout } from '@backstage/core-components';
 import { discoveryApiRef, fetchApiRef } from '@backstage/core-plugin-api';
 import { createDevApp } from '@backstage/dev-utils';
 import { EntityProvider } from '@backstage/plugin-catalog-react';
 import { TestApiProvider } from '@backstage/test-utils';
+import { FullPage, PluginHeader } from '@backstage/ui';
+import { RiFlowChart } from '@remixicon/react';
 
 import { argoWorkflowsPlugin, ArgoWorkflowsCI } from '../src/plugin';
 import { allWorkflows } from '../src/__fixtures__';
@@ -112,18 +113,20 @@ createDevApp()
         ]}
       >
         <EntityProvider entity={mockEntity}>
-          <Page themeId="service">
-            <Header
-              type="component — service"
-              title="my-service"
-              subtitle="Argo Workflows CI/CD"
+          <FullPage>
+            <PluginHeader
+              title="Argo Workflows"
+              icon={<RiFlowChart />}
+              tabs={[
+                {
+                  id: 'ci-cd',
+                  label: 'CI/CD',
+                  href: '/argo-workflows',
+                },
+              ]}
             />
-            <TabbedLayout>
-              <TabbedLayout.Route path="/" title="CI/CD">
-                <ArgoWorkflowsCI />
-              </TabbedLayout.Route>
-            </TabbedLayout>
-          </Page>
+            <ArgoWorkflowsCI />
+          </FullPage>
         </EntityProvider>
       </TestApiProvider>
     ),
