@@ -31,6 +31,7 @@ import {
   WorkflowStatusIcon,
 } from '@backstage-community/plugin-argo-workflows-react';
 import type { Workflow } from '@backstage-community/plugin-argo-workflows-common';
+import { TaskStatusBar } from './TaskStatusBar';
 import { WorkflowDAGInline } from './WorkflowDAGInline';
 import styles from './WorkflowRunsTable.module.css';
 
@@ -93,6 +94,15 @@ const columns: ColumnConfig<WorkflowItem>[] = [
           <WorkflowStatusIcon status={item.status.phase} size="small" />
           <Text variant="body-small">{item.status.phase}</Text>
         </Flex>
+      </Cell>
+    ),
+  },
+  {
+    id: 'taskStatus',
+    label: 'Task Status',
+    cell: item => (
+      <Cell>
+        <TaskStatusBar nodes={item.status.nodes} />
       </Cell>
     ),
   },
