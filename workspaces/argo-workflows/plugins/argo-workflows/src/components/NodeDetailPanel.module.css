@@ -1,0 +1,32 @@
+.panel {
+  border: 1px solid var(--bui-border-1);
+  border-radius: var(--bui-radius-2);
+  background-color: var(--bui-bg-neutral-1, #fff);
+  overflow: hidden;
+  min-width: 280px;
+  max-width: 360px;
+}
+
+.header {
+  padding: var(--bui-space-3) var(--bui-space-4);
+  border-bottom: 1px solid var(--bui-border-1);
+  background-color: var(--bui-bg-neutral-1);
+}
+
+.body {
+  padding: var(--bui-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--bui-space-3);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bui-space-1);
+}
+
+.label {
+  color: var(--bui-fg-secondary);
+  font-weight: var(--bui-font-weight-bold);
+}

@@ -17,7 +17,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { WheelEvent, MouseEvent } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, Skeleton, Text } from '@backstage/ui';
+import { Alert, Flex, Skeleton, Text } from '@backstage/ui';
 import {
   useArgoWorkflowDetail,
   buildDAG,
@@ -28,6 +28,7 @@ import type {
 } from '@backstage-community/plugin-argo-workflows-react';
 import type { WorkflowStatus } from '@backstage-community/plugin-argo-workflows-common';
 import dagre from 'dagre';
+import { NodeDetailPanel } from './NodeDetailPanel';
 import styles from './WorkflowDAGView.module.css';
 
 /**
@@ -76,14 +77,6 @@ function formatDuration(seconds?: number): string {
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
   return `${hours}h ${remainingMinutes}m ${remainingSeconds}s`;
-}
-
-/**
- * Formats an ISO date string into a localized date/time string.
- */
-function formatDate(isoDate?: string): string {
-  if (!isoDate) return '—';
-  return new Date(isoDate).toLocaleString();
 }
 
 /** Positioned node after dagre layout */
@@ -168,7 +161,7 @@ interface TooltipState {
  *
  * Loads the workflow detail, constructs the graph with `buildDAG`,
  * computes layout with `dagre`, and renders an interactive SVG with
- * zoom/pan support and status-colored nodes.
+ * zoom/pan support, status-colored nodes, and a detail panel on click.
  */
 export const WorkflowDAGView = ({ instanceName }: WorkflowDAGViewProps) => {
   const { namespace = '', name = '' } = useParams<{
@@ -196,6 +189,7 @@ export const WorkflowDAGView = ({ instanceName }: WorkflowDAGViewProps) => {
     y: 0,
     node: null,
   });
+  const [selectedNode, setSelectedNode] = useState<DAGNode | null>(null);
 
   const handleWheel = useCallback((e: WheelEvent<SVGSVGElement>) => {
     e.preventDefault();
@@ -216,7 +210,10 @@ export const WorkflowDAGView = ({ instanceName }: WorkflowDAGViewProps) => {
     (e: MouseEvent<SVGSVGElement>) => {
       if (e.button === 0) {
         setIsPanning(true);
-        setPanStart({ x: e.clientX - transform.x, y: e.clientY - transform.y });
+        setPanStart({
+          x: e.clientX - transform.x,
+          y: e.clientY - transform.y,
+        });
       }
     },
     [transform.x, transform.y],
@@ -272,6 +269,20 @@ export const WorkflowDAGView = ({ instanceName }: WorkflowDAGViewProps) => {
     setTooltip(prev => ({ ...prev, visible: false }));
   }, []);
 
+  const handleNodeClick = useCallback((node: DAGNode) => {
+    setSelectedNode(prev => (prev?.id === node.id ? null : node));
+  }, []);
+
+  const handleNodeKeyDown = useCallback(
+    (e: React.KeyboardEvent, node: DAGNode) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleNodeClick(node);
+      }
+    },
+    [handleNodeClick],
+  );
+
   const layout = useMemo(() => {
     if (!workflow) return null;
     const workflowNodes = workflow.status.nodes ?? {};
@@ -325,138 +336,141 @@ export const WorkflowDAGView = ({ instanceName }: WorkflowDAGViewProps) => {
   const { nodes, edges } = layout;
 
   return (
-    <div data-testid="workflow-dag-view" className={styles.container}>
-      <svg
-        ref={svgRef}
-        width="100%"
-        height="100%"
-        className={`${styles.svg} ${isPanning ? styles.panning : ''}`}
-        onWheel={handleWheel}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseLeave}
-        role="img"
-        aria-label={`DAG for workflow ${name}`}
-        aria-describedby="workflow-dag-text-description"
-      >
-        <defs>
-          <marker
-            id="arrowhead"
-            markerWidth="10"
-            markerHeight="7"
-            refX="10"
-            refY="3.5"
-            orient="auto"
+    <div data-testid="workflow-dag-view" className={styles.root}>
+      <Flex style={{ gap: 'var(--bui-space-4)' }}>
+        <div className={styles.container}>
+          <svg
+            ref={svgRef}
+            width="100%"
+            height="100%"
+            className={`${styles.svg} ${isPanning ? styles.panning : ''}`}
+            onWheel={handleWheel}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+            role="img"
+            aria-label={`DAG for workflow ${name}`}
+            aria-describedby="workflow-dag-text-description"
           >
-            <polygon
-              points="0 0, 10 3.5, 0 7"
-              fill="var(--bui-color-neutral-7, #757575)"
-            />
-          </marker>
-        </defs>
-
-        <g
-          transform={`translate(${transform.x}, ${transform.y}) scale(${transform.scale})`}
-        >
-          {edges.map(edge => (
-            <path
-              key={`${edge.source}-${edge.target}`}
-              d={buildEdgePath(edge.points)}
-              fill="none"
-              stroke="var(--bui-color-neutral-7, #757575)"
-              strokeWidth={1.5}
-              markerEnd="url(#arrowhead)"
-            />
-          ))}
-
-          {nodes.map(node => (
-            <g
-              key={node.id}
-              transform={`translate(${node.x - NODE_WIDTH / 2}, ${
-                node.y - NODE_HEIGHT / 2
-              })`}
-              onMouseEnter={e => handleNodeMouseEnter(e, node)}
-              onMouseLeave={handleNodeMouseLeave}
-              onFocus={() => handleNodeFocus(node)}
-              onBlur={handleNodeBlur}
-              className={styles.node}
-              role="button"
-              aria-label={`${node.label}: ${node.status}`}
-              aria-describedby={
-                tooltip.visible && tooltip.node?.id === node.id
-                  ? 'workflow-dag-tooltip'
-                  : undefined
-              }
-              tabIndex={0}
-            >
-              <rect
-                width={NODE_WIDTH}
-                height={NODE_HEIGHT}
-                rx={NODE_RX}
-                ry={NODE_RX}
-                fill={statusColor(node.status)}
-              />
-              <text
-                x={NODE_WIDTH / 2}
-                y={NODE_HEIGHT / 2}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fill="#ffffff"
-                fontSize={12}
-                fontFamily="sans-serif"
+            <defs>
+              <marker
+                id="arrowhead"
+                markerWidth="10"
+                markerHeight="7"
+                refX="10"
+                refY="3.5"
+                orient="auto"
               >
-                {node.label.length > 20
-                  ? `${node.label.substring(0, 18)}…`
-                  : node.label}
-              </text>
-            </g>
-          ))}
-        </g>
-      </svg>
+                <polygon
+                  points="0 0, 10 3.5, 0 7"
+                  fill="var(--bui-color-neutral-7, #757575)"
+                />
+              </marker>
+            </defs>
 
-      {/* Tooltip */}
-      {tooltip.visible && tooltip.node && (
-        <div
-          id="workflow-dag-tooltip"
-          data-testid="workflow-dag-tooltip"
-          role="tooltip"
-          className={styles.tooltip}
-          style={{ left: tooltip.x + 12, top: tooltip.y - 10 }}
-        >
-          <div className={styles.tooltipTitle}>{tooltip.node.label}</div>
-          <div>
-            <Text variant="body-x-small" className={styles.tooltipLabel}>
-              Status:
-            </Text>{' '}
-            <Text
-              variant="body-x-small"
-              className={styles.tooltipStatus}
-              style={{ color: statusColor(tooltip.node.status) }}
+            <g
+              transform={`translate(${transform.x}, ${transform.y}) scale(${transform.scale})`}
             >
-              {tooltip.node.status}
-            </Text>
-          </div>
-          <div>
-            <Text variant="body-x-small" className={styles.tooltipLabel}>
-              Duration:
-            </Text>{' '}
-            {formatDuration(tooltip.node.duration)}
-          </div>
-          <div>
-            <Text variant="body-x-small" className={styles.tooltipLabel}>
-              Started:
-            </Text>{' '}
-            {formatDate(tooltip.node.startedAt)}
-          </div>
-          <div>
-            <Text variant="body-x-small" className={styles.tooltipLabel}>
-              Finished:
-            </Text>{' '}
-            {formatDate(tooltip.node.finishedAt)}
-          </div>
+              {edges.map(edge => (
+                <path
+                  key={`${edge.source}-${edge.target}`}
+                  d={buildEdgePath(edge.points)}
+                  fill="none"
+                  stroke="var(--bui-color-neutral-7, #757575)"
+                  strokeWidth={1.5}
+                  markerEnd="url(#arrowhead)"
+                />
+              ))}
+
+              {nodes.map(node => {
+                const isSelected = selectedNode?.id === node.id;
+                return (
+                  <g
+                    key={node.id}
+                    transform={`translate(${node.x - NODE_WIDTH / 2}, ${
+                      node.y - NODE_HEIGHT / 2
+                    })`}
+                    onMouseEnter={e => handleNodeMouseEnter(e, node)}
+                    onMouseLeave={handleNodeMouseLeave}
+                    onFocus={() => handleNodeFocus(node)}
+                    onBlur={handleNodeBlur}
+                    onClick={() => handleNodeClick(node)}
+                    onKeyDown={e => handleNodeKeyDown(e, node)}
+                    className={styles.node}
+                    role="button"
+                    aria-label={`${node.label}: ${node.status}`}
+                    aria-pressed={isSelected}
+                    tabIndex={0}
+                  >
+                    <rect
+                      width={NODE_WIDTH}
+                      height={NODE_HEIGHT}
+                      rx={NODE_RX}
+                      ry={NODE_RX}
+                      fill={statusColor(node.status)}
+                      stroke={isSelected ? '#ffffff' : 'none'}
+                      strokeWidth={isSelected ? 3 : 0}
+                    />
+                    <text
+                      x={NODE_WIDTH / 2}
+                      y={NODE_HEIGHT / 2}
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fill="#ffffff"
+                      fontSize={12}
+                      fontFamily="sans-serif"
+                    >
+                      {node.label.length > 20
+                        ? `${node.label.substring(0, 18)}…`
+                        : node.label}
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+          </svg>
+
+          {/* Hover tooltip */}
+          {tooltip.visible && tooltip.node && (
+            <div
+              id="workflow-dag-tooltip"
+              data-testid="workflow-dag-tooltip"
+              role="tooltip"
+              className={styles.tooltip}
+              style={{ left: tooltip.x + 12, top: tooltip.y - 10 }}
+            >
+              <div className={styles.tooltipTitle}>{tooltip.node.label}</div>
+              <div>
+                <Text variant="body-x-small" className={styles.tooltipLabel}>
+                  Status:
+                </Text>{' '}
+                <Text
+                  variant="body-x-small"
+                  className={styles.tooltipStatus}
+                  style={{ color: statusColor(tooltip.node.status) }}
+                >
+                  {tooltip.node.status}
+                </Text>
+              </div>
+              <div>
+                <Text variant="body-x-small" className={styles.tooltipLabel}>
+                  Duration:
+                </Text>{' '}
+                {formatDuration(tooltip.node.duration)}
+              </div>
+            </div>
+          )}
         </div>
-      )}
+
+        {/* Detail panel — shown when a node is selected */}
+        {selectedNode && (
+          <NodeDetailPanel
+            node={selectedNode}
+            onClose={() => setSelectedNode(null)}
+          />
+        )}
+      </Flex>
 
       {/* Accessible text alternative for the DAG */}
       <details
@@ -480,23 +494,6 @@ export const WorkflowDAGView = ({ instanceName }: WorkflowDAGViewProps) => {
             </li>
           ))}
         </ul>
-        {edges.length > 0 && (
-          <>
-            <Text variant="body-small">Dependencies:</Text>
-            <ul>
-              {edges.map(edge => {
-                const sourceNode = nodes.find(n => n.id === edge.source);
-                const targetNode = nodes.find(n => n.id === edge.target);
-                return (
-                  <li key={`${edge.source}-${edge.target}`}>
-                    {sourceNode?.label ?? edge.source} →{' '}
-                    {targetNode?.label ?? edge.target}
-                  </li>
-                );
-              })}
-            </ul>
-          </>
-        )}
       </details>
     </div>
   );

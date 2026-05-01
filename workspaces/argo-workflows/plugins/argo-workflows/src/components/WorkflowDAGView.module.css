@@ -1,6 +1,11 @@
+.root {
+  width: 100%;
+}
+
 .container {
   position: relative;
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   height: 600px;
   overflow: hidden;
 }
