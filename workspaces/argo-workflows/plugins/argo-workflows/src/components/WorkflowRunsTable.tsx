@@ -15,13 +15,22 @@
  */
 
 import { useState } from 'react';
-import { Alert, Button, ButtonIcon, Flex, Skeleton, Text } from '@backstage/ui';
+import {
+  Alert,
+  Button,
+  Cell,
+  CellText,
+  Flex,
+  Table,
+  Text,
+  useTable,
+} from '@backstage/ui';
+import type { ColumnConfig } from '@backstage/ui';
 import {
   useArgoWorkflows,
   WorkflowStatusIcon,
 } from '@backstage-community/plugin-argo-workflows-react';
 import type { Workflow } from '@backstage-community/plugin-argo-workflows-common';
-import { RiArrowDownSLine, RiArrowUpSLine } from '@remixicon/react';
 import { WorkflowDAGInline } from './WorkflowDAGInline';
 import styles from './WorkflowRunsTable.module.css';
 
@@ -33,6 +42,11 @@ export interface WorkflowRunsTableProps {
   labelSelector: string;
   /** Optional Argo Workflows instance name */
   instanceName?: string;
+}
+
+/** Table item type — extends Workflow with a required `id` for BUI Table. */
+interface WorkflowItem extends Workflow {
+  id: string;
 }
 
 /**
@@ -61,9 +75,47 @@ function formatDate(isoDate?: string): string {
   return new Date(isoDate).toLocaleString();
 }
 
+/** Column definitions for the workflow runs table. */
+const columns: ColumnConfig<WorkflowItem>[] = [
+  {
+    id: 'name',
+    label: 'Name',
+    isRowHeader: true,
+    isSortable: true,
+    cell: item => <CellText title={item.metadata.name} />,
+  },
+  {
+    id: 'status',
+    label: 'Status',
+    cell: item => (
+      <Cell>
+        <Flex align="center" style={{ gap: 'var(--bui-space-2)' }}>
+          <WorkflowStatusIcon status={item.status.phase} size="small" />
+          <Text variant="body-small">{item.status.phase}</Text>
+        </Flex>
+      </Cell>
+    ),
+  },
+  {
+    id: 'duration',
+    label: 'Duration',
+    cell: item => (
+      <CellText
+        title={formatDuration(item.status.startedAt, item.status.finishedAt)}
+      />
+    ),
+  },
+  {
+    id: 'startDate',
+    label: 'Start Date',
+    isSortable: true,
+    cell: item => <CellText title={formatDate(item.status.startedAt)} />,
+  },
+];
+
 /**
- * Displays a table of Argo Workflow runs with expandable rows.
- * Clicking the expand button on a row reveals the DAG visualization inline.
+ * Displays a table of Argo Workflow runs with expandable DAG views.
+ * Clicking a row reveals the DAG visualization inline below the table.
  */
 export const WorkflowRunsTable = ({
   labelSelector,
@@ -75,22 +127,39 @@ export const WorkflowRunsTable = ({
   });
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
 
-  if (loading) {
-    return (
-      <div
-        data-testid="workflow-runs-table-loading"
-        role="status"
-        aria-live="polite"
-        aria-busy="true"
-      >
-        <Flex direction="column" style={{ gap: 'var(--bui-space-4)' }}>
-          <Skeleton style={{ height: 40, width: '100%' }} />
-          <Skeleton style={{ height: 40, width: '100%' }} />
-          <Skeleton style={{ height: 40, width: '100%' }} />
-        </Flex>
-      </div>
-    );
-  }
+  const data: WorkflowItem[] = (workflows ?? []).map(wf => ({
+    ...wf,
+    id: wf.metadata.name,
+  }));
+
+  const { tableProps } = useTable({
+    mode: 'complete',
+    data,
+    sortFn: (items, sort) => {
+      if (!sort) return items;
+      const sorted = [...items].sort((a, b) => {
+        if (sort.column === 'name') {
+          return a.metadata.name.localeCompare(b.metadata.name);
+        }
+        if (sort.column === 'startDate') {
+          const dateA = a.status.startedAt
+            ? new Date(a.status.startedAt).getTime()
+            : 0;
+          const dateB = b.status.startedAt
+            ? new Date(b.status.startedAt).getTime()
+            : 0;
+          return dateA - dateB;
+        }
+        return 0;
+      });
+      return sort.direction === 'descending' ? sorted.reverse() : sorted;
+    },
+    initialSort: { column: 'startDate', direction: 'descending' },
+    paginationOptions: {
+      pageSize: 10,
+      pageSizeOptions: [10, 25, 50],
+    },
+  });
 
   if (error) {
     return (
@@ -110,136 +179,40 @@ export const WorkflowRunsTable = ({
     );
   }
 
-  // Sort workflows by startedAt descending
-  const sortedWorkflows = [...workflows].sort((a, b) => {
-    const dateA = a.status.startedAt
-      ? new Date(a.status.startedAt).getTime()
-      : 0;
-    const dateB = b.status.startedAt
-      ? new Date(b.status.startedAt).getTime()
-      : 0;
-    return dateB - dateA;
-  });
-
-  if (sortedWorkflows.length === 0) {
-    return (
-      <div data-testid="workflow-runs-table-empty" role="status">
-        <Alert
-          status="info"
-          icon
-          title="No workflow runs found"
-          description="No Argo Workflow executions were found for this entity."
-        />
-      </div>
-    );
-  }
-
-  const toggleRow = (name: string) => {
-    setExpandedRow(prev => (prev === name ? null : name));
-  };
+  const selectedWorkflow = expandedRow
+    ? data.find(wf => wf.metadata.name === expandedRow)
+    : undefined;
 
   return (
-    <div
-      data-testid="workflow-runs-table"
-      role="region"
-      aria-label="Argo Workflow Runs"
-    >
-      <Text variant="title-small" className={styles.title}>
-        Argo Workflow Runs
-      </Text>
-      <table className={styles.table} role="table">
-        <thead>
-          <tr className={styles.headerRow}>
-            <th className={styles.headerCell} scope="col" aria-label="Expand" />
-            <th className={styles.headerCell} scope="col">
-              Name
-            </th>
-            <th className={styles.headerCell} scope="col">
-              Status
-            </th>
-            <th className={styles.headerCell} scope="col">
-              Duration
-            </th>
-            <th className={styles.headerCell} scope="col">
-              Start Date
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedWorkflows.map((wf: Workflow) => {
-            const isExpanded = expandedRow === wf.metadata.name;
-            return (
-              <WorkflowRow
-                key={wf.metadata.name}
-                workflow={wf}
-                isExpanded={isExpanded}
-                onToggle={() => toggleRow(wf.metadata.name)}
-              />
+    <div data-testid="workflow-runs-table" aria-label="Argo Workflow Runs">
+      <Table
+        columnConfig={columns}
+        {...tableProps}
+        loading={loading}
+        emptyState={
+          <Alert
+            status="info"
+            icon
+            title="No workflow runs found"
+            description="No Argo Workflow executions were found for this entity."
+          />
+        }
+        rowConfig={{
+          onClick: item => {
+            setExpandedRow(prev =>
+              prev === item.metadata.name ? null : item.metadata.name,
             );
-          })}
-        </tbody>
-      </table>
+          },
+        }}
+      />
+      {selectedWorkflow && (
+        <div className={styles.detailPanel}>
+          <Text variant="title-x-small" className={styles.detailTitle}>
+            DAG — {selectedWorkflow.metadata.name}
+          </Text>
+          <WorkflowDAGInline workflow={selectedWorkflow} />
+        </div>
+      )}
     </div>
   );
 };
-
-interface WorkflowRowProps {
-  workflow: Workflow;
-  isExpanded: boolean;
-  onToggle: () => void;
-}
-
-function WorkflowRow({ workflow, isExpanded, onToggle }: WorkflowRowProps) {
-  return (
-    <>
-      <tr className={styles.row}>
-        <td className={styles.cell}>
-          <ButtonIcon
-            variant="tertiary"
-            icon={
-              isExpanded ? (
-                <RiArrowUpSLine size={18} />
-              ) : (
-                <RiArrowDownSLine size={18} />
-              )
-            }
-            onPress={onToggle}
-            aria-expanded={isExpanded}
-            aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${
-              workflow.metadata.name
-            }`}
-          />
-        </td>
-        <td className={styles.cell}>
-          <Text variant="body-small">{workflow.metadata.name}</Text>
-        </td>
-        <td className={styles.cell}>
-          <Flex align="center" style={{ gap: 'var(--bui-space-2)' }}>
-            <WorkflowStatusIcon status={workflow.status.phase} size="small" />
-            <Text variant="body-small">{workflow.status.phase}</Text>
-          </Flex>
-        </td>
-        <td className={styles.cell}>
-          <Text variant="body-small">
-            {formatDuration(
-              workflow.status.startedAt,
-              workflow.status.finishedAt,
-            )}
-          </Text>
-        </td>
-        <td className={styles.cell}>
-          <Text variant="body-small">
-            {formatDate(workflow.status.startedAt)}
-          </Text>
-        </td>
-      </tr>
-      {isExpanded && (
-        <tr className={styles.detailRow}>
-          <td colSpan={5} className={styles.detailCell}>
-            <WorkflowDAGInline workflow={workflow} />
-          </td>
-        </tr>
-      )}
-    </>
-  );
-}

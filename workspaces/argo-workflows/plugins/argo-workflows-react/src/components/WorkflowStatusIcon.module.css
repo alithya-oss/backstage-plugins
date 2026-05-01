@@ -1,40 +1,38 @@
-@layer components {
-  .wrapper {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .pending {
-    color: var(--bui-color-neutral-7, #616161);
-  }
+.pending {
+  color: var(--bui-color-neutral-7, #616161);
+}
 
-  .running {
-    color: var(--bui-color-warning-7, #b45309);
-  }
+.running {
+  color: var(--bui-color-warning-7, #b45309);
+}
 
-  .succeeded {
-    color: var(--bui-color-success-7, #1b6d1f);
-  }
+.succeeded {
+  color: var(--bui-color-success-7, #1b6d1f);
+}
 
-  .failed {
-    color: var(--bui-color-danger-7, #c62828);
-  }
+.failed {
+  color: var(--bui-color-danger-7, #c62828);
+}
 
-  .error {
-    color: var(--bui-color-danger-9, #b71c1c);
-  }
+.error {
+  color: var(--bui-color-danger-9, #b71c1c);
+}
 
-  .spin {
-    animation: workflow-status-spin 1.5s linear infinite;
-  }
+.spin {
+  animation: workflow-status-spin 1.5s linear infinite;
+}
 
-  @keyframes workflow-status-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+@keyframes workflow-status-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
