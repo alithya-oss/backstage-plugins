@@ -15,23 +15,23 @@
 }
 
 .succeeded {
-  background-color: var(--bui-color-success-7, #1b6d1f);
+  background-color: var(--bui-fg-success);
 }
 
 .running {
-  background-color: var(--bui-color-info-7, #1d4ed8);
+  background-color: var(--bui-fg-info);
 }
 
 .pending {
-  background-color: var(--bui-color-neutral-5, #a3a3a3);
+  background-color: var(--bui-fg-secondary);
 }
 
 .failed {
-  background-color: var(--bui-color-danger-7, #c62828);
+  background-color: var(--bui-fg-danger);
 }
 
 .error {
-  background-color: var(--bui-color-danger-9, #b71c1c);
+  background-color: var(--bui-fg-danger);
 }
 
 .count {

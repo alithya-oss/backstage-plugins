@@ -51,17 +51,17 @@ const PADDING = 40;
 function statusColor(status: WorkflowStatus): string {
   switch (status) {
     case 'Succeeded':
-      return 'var(--bui-color-success-7, #1b6d1f)';
+      return 'var(--bui-fg-success)';
     case 'Failed':
-      return 'var(--bui-color-danger-7, #c62828)';
+      return 'var(--bui-fg-danger)';
     case 'Running':
-      return 'var(--bui-color-warning-7, #b45309)';
+      return 'var(--bui-fg-info)';
     case 'Pending':
-      return 'var(--bui-color-neutral-7, #616161)';
+      return 'var(--bui-fg-secondary)';
     case 'Error':
-      return 'var(--bui-color-danger-9, #b71c1c)';
+      return 'var(--bui-fg-danger)';
     default:
-      return 'var(--bui-color-neutral-7, #616161)';
+      return 'var(--bui-fg-secondary)';
   }
 }
 
@@ -364,7 +364,7 @@ export const WorkflowDAGView = ({ instanceName }: WorkflowDAGViewProps) => {
               >
                 <polygon
                   points="0 0, 10 3.5, 0 7"
-                  fill="var(--bui-color-neutral-7, #757575)"
+                  fill="var(--bui-fg-secondary)"
                 />
               </marker>
             </defs>
@@ -377,7 +377,7 @@ export const WorkflowDAGView = ({ instanceName }: WorkflowDAGViewProps) => {
                   key={`${edge.source}-${edge.target}`}
                   d={buildEdgePath(edge.points)}
                   fill="none"
-                  stroke="var(--bui-color-neutral-7, #757575)"
+                  stroke="var(--bui-fg-secondary)"
                   strokeWidth={1.5}
                   markerEnd="url(#arrowhead)"
                 />

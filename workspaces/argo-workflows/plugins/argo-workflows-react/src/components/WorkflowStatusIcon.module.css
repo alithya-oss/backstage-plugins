@@ -5,23 +5,23 @@
 }
 
 .pending {
-  color: var(--bui-color-neutral-7, #616161);
+  color: var(--bui-fg-secondary);
 }
 
 .running {
-  color: var(--bui-color-warning-7, #b45309);
+  color: var(--bui-fg-info);
 }
 
 .succeeded {
-  color: var(--bui-color-success-7, #1b6d1f);
+  color: var(--bui-fg-success);
 }
 
 .failed {
-  color: var(--bui-color-danger-7, #c62828);
+  color: var(--bui-fg-danger);
 }
 
 .error {
-  color: var(--bui-color-danger-9, #b71c1c);
+  color: var(--bui-fg-danger);
 }
 
 .spin {
