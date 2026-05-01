@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "skills": {
+    "app-frontend-system-migration": {
+      "source": "backstage.io",
+      "sourceType": "well-known",
+      "computedHash": "9f8da6c9011bc5279f5ebd3dcaa86c63cd1611788d5d7edcc0805b5ccd935952"
+    },
+    "mui-to-bui-migration": {
+      "source": "backstage.io",
+      "sourceType": "well-known",
+      "computedHash": "ed4c9624426bd34a68871b45313b8cda7345fb36db10978f6737a9e2af424bf5"
+    },
+    "plugin-full-frontend-system-migration": {
+      "source": "backstage.io",
+      "sourceType": "well-known",
+      "computedHash": "736da168b02ec38123ef7e15d268c8ca1ce513825477041249c59331a54ad83c"
+    },
+    "plugin-new-frontend-system-support": {
+      "source": "backstage.io",
+      "sourceType": "well-known",
+      "computedHash": "334795204db9f7447d085cf413035bf2b3399a3265353c5a2ef456cf755eed5d"
+    }
+  }
+}
