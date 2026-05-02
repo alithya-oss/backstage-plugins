@@ -9,3 +9,13 @@
 .detailTitle {
   margin-bottom: var(--bui-space-2);
 }
+
+.expandIndicator {
+  display: inline-block;
+  transition: transform 0.2s ease;
+  color: var(--bui-text-2);
+}
+
+.expandIndicator[data-expanded] {
+  transform: rotate(90deg);
+}

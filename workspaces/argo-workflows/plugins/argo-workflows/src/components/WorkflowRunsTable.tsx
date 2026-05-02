@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Alert,
   Button,
@@ -31,6 +31,7 @@ import {
   WorkflowStatusIcon,
 } from '@backstage-community/plugin-argo-workflows-react';
 import type { Workflow } from '@backstage-community/plugin-argo-workflows-common';
+import { RiArrowRightSLine } from '@remixicon/react';
 import { TaskStatusBar } from './TaskStatusBar';
 import { WorkflowDAGInline } from './WorkflowDAGInline';
 import styles from './WorkflowRunsTable.module.css';
@@ -76,8 +77,8 @@ function formatDate(isoDate?: string): string {
   return new Date(isoDate).toLocaleString();
 }
 
-/** Column definitions for the workflow runs table. */
-const columns: ColumnConfig<WorkflowItem>[] = [
+/** Base column definitions for the workflow runs table. */
+const baseColumns: ColumnConfig<WorkflowItem>[] = [
   {
     id: 'name',
     label: 'Name',
@@ -129,6 +130,32 @@ const columns: ColumnConfig<WorkflowItem>[] = [
   },
 ];
 
+/** Builds the full column config including the expand indicator. */
+function buildColumns(
+  expandedRow: string | null,
+): ColumnConfig<WorkflowItem>[] {
+  return [
+    {
+      id: 'expand',
+      label: '',
+      cell: item => {
+        const isExpanded = expandedRow === item.metadata.name;
+        return (
+          <Cell>
+            <RiArrowRightSLine
+              aria-label={isExpanded ? 'Collapse row' : 'Expand row'}
+              className={styles.expandIndicator}
+              data-expanded={isExpanded || undefined}
+              size={20}
+            />
+          </Cell>
+        );
+      },
+    },
+    ...baseColumns,
+  ];
+}
+
 /**
  * Displays a table of Argo Workflow runs with expandable DAG views.
  * Clicking a row reveals the DAG visualization inline below the table.
@@ -142,6 +169,7 @@ export const WorkflowRunsTable = ({
     instanceName,
   });
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
+  const columns = useMemo(() => buildColumns(expandedRow), [expandedRow]);
 
   const data: WorkflowItem[] = (workflows ?? []).map(wf => ({
     ...wf,
