@@ -30,9 +30,6 @@ import type { Workflow } from '@backstage-community/plugin-argo-workflows-common
  * provided parameters.
  *
  * @param options - The query options
- * @param options.namespace - The Kubernetes namespace of the workflow
- * @param options.name - The name of the workflow
- * @param options.instanceName - Optional Argo Workflows instance name
  * @returns An object with the workflow, loading state, and error
  *
  * @public

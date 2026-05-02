@@ -88,7 +88,7 @@ describe('ArgoWorkflowsService', () => {
   describe('constructor', () => {
     it('logs a warning when no argoWorkflows config is present', () => {
       const config = createConfig({});
-      const _service = new ArgoWorkflowsService(config, mockLogger);
+      void new ArgoWorkflowsService(config, mockLogger);
       expect(mockLogger.warn).toHaveBeenCalledWith(
         expect.stringContaining('Aucune configuration argoWorkflows'),
       );
@@ -98,7 +98,7 @@ describe('ArgoWorkflowsService', () => {
       const config = createConfig({
         argoWorkflows: { instances: [] },
       });
-      const _service = new ArgoWorkflowsService(config, mockLogger);
+      void new ArgoWorkflowsService(config, mockLogger);
       expect(mockLogger.warn).toHaveBeenCalledWith(
         expect.stringContaining('Aucune instance Argo Workflows configurée'),
       );

@@ -29,7 +29,11 @@ import express from 'express';
 import Router from 'express-promise-router';
 import { ArgoWorkflowsService } from './service/ArgoWorkflowsService';
 
-/** Options for creating the Argo Workflows backend router. */
+/**
+ * Options for creating the Argo Workflows backend router.
+ *
+ * @public
+ */
 export interface RouterOptions {
   config: RootConfigService;
   httpAuth: HttpAuthService;
@@ -69,6 +73,8 @@ function getStatusCodeForError(error: unknown): number {
  *
  * @param options - Router dependencies including config, httpAuth, and logger
  * @returns An Express router with Argo Workflows API routes
+ *
+ * @public
  */
 export async function createRouter(
   options: RouterOptions,

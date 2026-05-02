@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+/**
+ * Annotation used to specify the Kubernetes label selector for
+ * filtering Argo Workflows associated with a catalog entity.
+ *
+ * @public
+ */
 export const ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION =
   'argoworkflows.argoproj.io/workflow-selector';
 

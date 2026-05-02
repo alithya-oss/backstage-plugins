@@ -19,10 +19,7 @@
       "@backstage-community/plugin-argo-workflows-react"
     ]
   },
-  "sideEffects": [
-    "./**/*.css",
-    "./**/*.css.esm.js"
-  ],
+  "sideEffects": false,
   "scripts": {
     "start": "backstage-cli package start",
     "build": "backstage-cli package build",
@@ -35,11 +32,11 @@
   "dependencies": {
     "@backstage-community/plugin-argo-workflows-common": "workspace:^",
     "@backstage-community/plugin-argo-workflows-react": "workspace:^",
-    "@backstage/catalog-model": "^1.7.7",
-    "@backstage/core-plugin-api": "^1.12.4",
-    "@backstage/plugin-catalog-react": "^2.1.0",
-    "@backstage/ui": "^0.14.3",
-    "@remixicon/react": "^4.6.0",
+    "@backstage/catalog-model": "backstage:^",
+    "@backstage/core-plugin-api": "backstage:^",
+    "@backstage/plugin-catalog-react": "backstage:^",
+    "@backstage/ui": "backstage:^",
+    "@remixicon/react": "^4.9.0",
     "dagre": "^0.8.5"
   },
   "peerDependencies": {
@@ -48,9 +45,9 @@
     "react-router-dom": "^6.0.0"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.36.1",
-    "@backstage/dev-utils": "^1.1.21",
-    "@backstage/test-utils": "^1.7.16",
+    "@backstage/cli": "backstage:^",
+    "@backstage/dev-utils": "backstage:^",
+    "@backstage/test-utils": "backstage:^",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",

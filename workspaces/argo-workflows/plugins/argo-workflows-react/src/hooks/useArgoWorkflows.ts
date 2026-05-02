@@ -29,8 +29,6 @@ import type { Workflow } from '@backstage-community/plugin-argo-workflows-common
  * Calls `GET /api/argo-workflows/workflows` with the provided parameters.
  *
  * @param options - The query options
- * @param options.labelSelector - Kubernetes label selector to filter workflows
- * @param options.instanceName - Optional Argo Workflows instance name
  * @returns An object with workflows, loading state, error, and retry function
  *
  * @public

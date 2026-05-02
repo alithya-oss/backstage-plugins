@@ -20,7 +20,11 @@ import type { WorkflowStatus } from '@backstage-community/plugin-argo-workflows-
 import { WorkflowStatusIcon } from './WorkflowStatusIcon';
 import styles from './WorkflowStatusBadge.module.css';
 
-/** Props for the WorkflowStatusBadge component */
+/**
+ * Props for the WorkflowStatusBadge component.
+ *
+ * @public
+ */
 export interface WorkflowStatusBadgeProps {
   /** The workflow execution status to display */
   status: WorkflowStatus;
@@ -46,6 +50,8 @@ const statusLabelMap: Record<WorkflowStatus, string> = {
  * Displays a workflow status as a badge containing an icon and a text label.
  *
  * Uses BUI components and CSS modules with BUI tokens for styling.
+ *
+ * @public
  */
 export const WorkflowStatusBadge: FC<WorkflowStatusBadgeProps> = ({
   status,
@@ -60,7 +66,7 @@ export const WorkflowStatusBadge: FC<WorkflowStatusBadgeProps> = ({
     >
       <Flex align="center" style={{ gap: 'var(--bui-space-1)' }}>
         <WorkflowStatusIcon status={status} size="small" />
-        <Text variant="body-small" weight="medium">
+        <Text variant="body-small" weight="bold">
           {label}
         </Text>
       </Flex>

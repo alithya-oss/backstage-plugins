@@ -19,7 +19,11 @@ import type {
   WorkflowStatus,
 } from '@backstage-community/plugin-argo-workflows-common';
 
-/** A node in the DAG representation of a workflow */
+/**
+ * A node in the DAG representation of a workflow.
+ *
+ * @public
+ */
 export interface DAGNode {
   id: string;
   label: string;
@@ -30,13 +34,21 @@ export interface DAGNode {
   type: string;
 }
 
-/** A directed edge in the DAG */
+/**
+ * A directed edge in the DAG.
+ *
+ * @public
+ */
 export interface DAGEdge {
   source: string;
   target: string;
 }
 
-/** The complete DAG graph for a workflow */
+/**
+ * The complete DAG graph for a workflow.
+ *
+ * @public
+ */
 export interface DAGGraph {
   nodes: DAGNode[];
   edges: DAGEdge[];
@@ -113,6 +125,8 @@ function detectCycles(adjacency: Map<string, string[]>): void {
  * @param workflow - The Argo Workflow object
  * @returns The DAG graph with nodes and edges
  * @throws Error if the workflow DAG contains a cycle
+ *
+ * @public
  */
 export function buildDAG(workflow: Workflow): DAGGraph {
   const workflowNodes = workflow.status.nodes ?? {};

@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import type { ComponentType, FC } from 'react';
+import type { FC } from 'react';
+import type { RemixiconComponentType } from '@remixicon/react';
 import type { WorkflowStatus } from '@backstage-community/plugin-argo-workflows-common';
 import { Box } from '@backstage/ui';
 import {
@@ -26,7 +27,11 @@ import {
 } from '@remixicon/react';
 import styles from './WorkflowStatusIcon.module.css';
 
-/** Props for the WorkflowStatusIcon component */
+/**
+ * Props for the WorkflowStatusIcon component.
+ *
+ * @public
+ */
 export interface WorkflowStatusIconProps {
   /** The workflow execution status to display */
   status: WorkflowStatus;
@@ -56,7 +61,7 @@ const statusClassMap: Record<WorkflowStatus, string> = {
   Error: styles.error,
 };
 
-const statusIconMap: Record<WorkflowStatus, ComponentType<{ size: number }>> = {
+const statusIconMap: Record<WorkflowStatus, RemixiconComponentType> = {
   Pending: RiTimeLine,
   Running: RiLoader4Line,
   Succeeded: RiCheckboxCircleLine,
@@ -68,6 +73,8 @@ const statusIconMap: Record<WorkflowStatus, ComponentType<{ size: number }>> = {
  * Displays a colored icon representing a workflow execution status.
  *
  * Uses Remix Icons with BUI CSS custom-property tokens for colors.
+ *
+ * @public
  */
 export const WorkflowStatusIcon: FC<WorkflowStatusIconProps> = ({
   status,

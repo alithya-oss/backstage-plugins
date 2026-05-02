@@ -22,7 +22,6 @@
       "@backstage-community/plugin-argo-workflows-react"
     ]
   },
-  "sideEffects": false,
   "scripts": {
     "build": "backstage-cli package build",
     "lint": "backstage-cli package lint",
@@ -32,10 +31,10 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage/catalog-model": "^1.7.7"
+    "@backstage/catalog-model": "backstage:^"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.36.1"
+    "@backstage/cli": "backstage:^"
   },
   "files": [
     "dist"

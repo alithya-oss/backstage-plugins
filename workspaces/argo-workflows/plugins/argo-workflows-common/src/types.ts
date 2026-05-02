@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-/** Statut d'exécution d'un workflow ou d'un nœud */
+/**
+ * Workflow or node execution status.
+ *
+ * @public
+ */
 export type WorkflowStatus =
   | 'Pending'
   | 'Running'
@@ -22,7 +26,11 @@ export type WorkflowStatus =
   | 'Failed'
   | 'Error';
 
-/** Métadonnées Kubernetes d'un workflow */
+/**
+ * Kubernetes metadata for a workflow.
+ *
+ * @public
+ */
 export interface WorkflowMetadata {
   name: string;
   namespace: string;
@@ -32,7 +40,11 @@ export interface WorkflowMetadata {
   creationTimestamp: string;
 }
 
-/** Nœud individuel dans le DAG d'un workflow */
+/**
+ * Individual node in a workflow DAG.
+ *
+ * @public
+ */
 export interface WorkflowNode {
   id: string;
   name: string;
@@ -46,7 +58,11 @@ export interface WorkflowNode {
   templateName?: string;
 }
 
-/** Statut global d'un workflow */
+/**
+ * Overall status of a workflow.
+ *
+ * @public
+ */
 export interface WorkflowStatusDetail {
   phase: WorkflowStatus;
   startedAt?: string;
@@ -55,13 +71,21 @@ export interface WorkflowStatusDetail {
   message?: string;
 }
 
-/** Modèle principal d'un workflow Argo */
+/**
+ * Main Argo Workflow model.
+ *
+ * @public
+ */
 export interface Workflow {
   metadata: WorkflowMetadata;
   status: WorkflowStatusDetail;
 }
 
-/** Réponse de la liste des workflows */
+/**
+ * Response from the workflow list API.
+ *
+ * @public
+ */
 export interface WorkflowListResponse {
   workflows: Workflow[];
 }

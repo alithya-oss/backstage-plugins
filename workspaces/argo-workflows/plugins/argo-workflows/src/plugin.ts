@@ -19,10 +19,21 @@ import {
   createComponentExtension,
 } from '@backstage/core-plugin-api';
 
+/**
+ * The Argo Workflows frontend plugin.
+ *
+ * @public
+ */
 export const argoWorkflowsPlugin = createPlugin({
   id: 'argo-workflows',
 });
 
+/**
+ * Component extension that renders the Argo Workflows CI/CD view
+ * for a catalog entity.
+ *
+ * @public
+ */
 export const ArgoWorkflowsCI = argoWorkflowsPlugin.provide(
   createComponentExtension({
     name: 'ArgoWorkflowsCI',
