@@ -357,6 +357,9 @@ export function WorkflowTable({
         <>
           <Table<WorkflowTableItem>
             columnConfig={expandableColumns}
+            rowConfig={{
+              onClick: item => handleToggleExpand(String(item.id)),
+            }}
             {...tableProps}
           />
           {expandedId && (
