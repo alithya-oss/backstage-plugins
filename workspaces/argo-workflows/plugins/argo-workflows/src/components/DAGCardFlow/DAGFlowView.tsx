@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-import { useMemo, type KeyboardEvent } from 'react';
+import { useMemo, useEffect, type KeyboardEvent } from 'react';
 import {
   ReactFlow,
   Controls,
   Handle,
   Position,
+  useReactFlow,
   type Node as RFNode,
   type Edge as RFEdge,
   type NodeProps,
@@ -199,6 +200,21 @@ function StatusEdge({
 const nodeTypes = { pill: PillNode };
 const edgeTypes = { status: StatusEdge };
 
+/* ── Auto-fit helper ─────────────────────────────────────────── */
+
+/**
+ * Triggers fitView whenever `selectedNodeId` changes (panel open/close),
+ * giving the container a moment to resize first.
+ */
+function FitViewOnChange({ selectedNodeId }: { selectedNodeId?: string }) {
+  const { fitView } = useReactFlow();
+  useEffect(() => {
+    const timer = setTimeout(() => fitView({ duration: 200 }), 50);
+    return () => clearTimeout(timer);
+  }, [selectedNodeId, fitView]);
+  return null;
+}
+
 /* ── Main component ──────────────────────────────────────────── */
 
 function buildAriaLabel(nodes: NodeStatus[]): string {
@@ -314,6 +330,7 @@ export function DAGFlowView({
         proOptions={{ hideAttribution: true }}
       >
         <Controls showInteractive={false} />
+        <FitViewOnChange selectedNodeId={selectedNodeId} />
       </ReactFlow>
     </div>
   );

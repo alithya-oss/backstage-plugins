@@ -16,7 +16,7 @@
 
 @layer components {
   .panel {
-    background: var(--bui-bg-default);
+    background: #ffffff;
     border-left: 3px solid var(--bui-border-default);
     flex-shrink: 0;
     overflow-y: auto;
