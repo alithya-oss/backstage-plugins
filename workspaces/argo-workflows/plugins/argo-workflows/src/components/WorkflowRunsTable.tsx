@@ -86,6 +86,12 @@ const columns: ColumnConfig<WorkflowItem>[] = [
     cell: item => <CellText title={item.metadata.name} />,
   },
   {
+    id: 'namespace',
+    label: 'Namespace',
+    isSortable: true,
+    cell: item => <CellText title={item.metadata.namespace} />,
+  },
+  {
     id: 'status',
     label: 'Status',
     cell: item => (
@@ -150,6 +156,9 @@ export const WorkflowRunsTable = ({
       const sorted = [...items].sort((a, b) => {
         if (sort.column === 'name') {
           return a.metadata.name.localeCompare(b.metadata.name);
+        }
+        if (sort.column === 'namespace') {
+          return a.metadata.namespace.localeCompare(b.metadata.namespace);
         }
         if (sort.column === 'startDate') {
           const dateA = a.status.startedAt
