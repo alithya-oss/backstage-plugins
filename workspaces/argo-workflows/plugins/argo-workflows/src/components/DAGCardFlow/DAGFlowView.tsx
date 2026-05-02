@@ -28,11 +28,19 @@ import {
   getSmoothStepPath,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import type { NodeStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import {
-  PHASE_ICON_MAP,
-  formatDuration,
+  RiCheckboxCircleLine,
+  RiErrorWarningLine,
+  RiRefreshLine,
+  RiTimeLine,
+  RiIndeterminateCircleLine,
+  RiSubtractLine,
+} from '@remixicon/react';
+import type {
+  NodeStatus,
+  NodePhase,
 } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import { formatDuration } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { computeDAGLayout } from '../../utils/computeDAGLayout';
 import styles from './DAGFlowView.module.css';
 
@@ -50,45 +58,52 @@ export interface DAGFlowViewProps {
 
 /* ── Pill-shaped custom node ─────────────────────────────────── */
 
-const PILL_COLORS: Record<
-  string,
-  { bg: string; border: string; text: string }
-> = {
-  Succeeded: {
-    bg: 'var(--bui-bg-success, #dcfce7)',
-    border: 'var(--bui-fg-success, #16a34a)',
-    text: 'var(--bui-fg-success, #15803d)',
-  },
-  Failed: {
-    bg: 'var(--bui-bg-danger, #fee2e2)',
-    border: 'var(--bui-fg-danger, #dc2626)',
-    text: 'var(--bui-fg-danger, #b91c1c)',
-  },
-  Error: {
-    bg: 'var(--bui-bg-danger, #fee2e2)',
-    border: 'var(--bui-fg-danger, #dc2626)',
-    text: 'var(--bui-fg-danger, #b91c1c)',
-  },
-  Running: {
-    bg: 'var(--bui-bg-info, #dbeafe)',
-    border: 'var(--bui-fg-info, #2563eb)',
-    text: 'var(--bui-fg-info, #1d4ed8)',
-  },
-  Pending: {
-    bg: 'var(--bui-bg-warning, #fef9c3)',
-    border: 'var(--bui-fg-warning, #ca8a04)',
-    text: 'var(--bui-fg-warning, #a16207)',
-  },
-  Skipped: {
-    bg: 'var(--bui-bg-neutral-2, #f3f4f6)',
-    border: 'var(--bui-fg-tertiary, #9ca3af)',
-    text: 'var(--bui-fg-tertiary, #6b7280)',
-  },
-  Omitted: {
-    bg: 'var(--bui-bg-neutral-2, #f3f4f6)',
-    border: 'var(--bui-fg-tertiary, #9ca3af)',
-    text: 'var(--bui-fg-tertiary, #6b7280)',
-  },
+/* ── Phase icon mapping (same remix icons as the table) ───────── */
+
+const ICON_SIZE = 16;
+
+function PhaseIcon({ phase }: { phase: NodePhase }) {
+  switch (phase) {
+    case 'Succeeded':
+      return (
+        <RiCheckboxCircleLine size={ICON_SIZE} className={styles.iconSuccess} />
+      );
+    case 'Failed':
+      return (
+        <RiErrorWarningLine size={ICON_SIZE} className={styles.iconDanger} />
+      );
+    case 'Error':
+      return (
+        <RiErrorWarningLine size={ICON_SIZE} className={styles.iconDanger} />
+      );
+    case 'Running':
+      return <RiRefreshLine size={ICON_SIZE} className={styles.iconInfo} />;
+    case 'Pending':
+      return <RiTimeLine size={ICON_SIZE} className={styles.iconWarning} />;
+    case 'Skipped':
+      return (
+        <RiIndeterminateCircleLine
+          size={ICON_SIZE}
+          className={styles.iconNeutral}
+        />
+      );
+    case 'Omitted':
+      return <RiSubtractLine size={ICON_SIZE} className={styles.iconNeutral} />;
+    default:
+      return <RiTimeLine size={ICON_SIZE} className={styles.iconNeutral} />;
+  }
+}
+
+/* ── Border color per phase ──────────────────────────────────── */
+
+const PILL_BORDER: Record<string, string> = {
+  Succeeded: 'var(--bui-fg-success, #16a34a)',
+  Failed: 'var(--bui-fg-danger, #dc2626)',
+  Error: 'var(--bui-fg-danger, #dc2626)',
+  Running: 'var(--bui-fg-info, #2563eb)',
+  Pending: 'var(--bui-fg-warning, #ca8a04)',
+  Skipped: 'var(--bui-fg-tertiary, #9ca3af)',
+  Omitted: 'var(--bui-fg-tertiary, #9ca3af)',
 };
 
 function PillNode({ data }: NodeProps) {
@@ -98,8 +113,7 @@ function PillNode({ data }: NodeProps) {
     onNodeClick?: (id: string) => void;
   };
   const node = nodeData.node;
-  const colors = PILL_COLORS[node.phase] ?? PILL_COLORS.Pending;
-  const icon = PHASE_ICON_MAP[node.phase] ?? '—';
+  const borderColor = PILL_BORDER[node.phase] ?? PILL_BORDER.Pending;
 
   return (
     <>
@@ -113,9 +127,7 @@ function PillNode({ data }: NodeProps) {
           nodeData.isSelected ? ` ${styles.pillSelected}` : ''
         }`}
         style={{
-          background: colors.bg,
-          borderColor: colors.border,
-          color: colors.text,
+          borderColor,
         }}
         role="button"
         tabIndex={0}
@@ -139,7 +151,7 @@ function PillNode({ data }: NodeProps) {
         )}`}
         data-testid={`dag-node-${node.id}`}
       >
-        <span className={styles.pillIcon}>{icon}</span>
+        <PhaseIcon phase={node.phase} />
         <span className={styles.pillName}>{node.displayName}</span>
         <span className={styles.pillDuration}>
           {formatDuration(node.duration)}

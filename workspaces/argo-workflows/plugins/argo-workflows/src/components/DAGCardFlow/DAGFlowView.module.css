@@ -23,7 +23,7 @@
 
   .empty {
     color: var(--bui-fg-secondary);
-    font-size: 13px;
+    font-size: 14px;
     padding: var(--bui-space-4);
   }
 
@@ -43,38 +43,61 @@
 
   .pill {
     align-items: center;
+    background: #ffffff;
     border: 2px solid;
     border-radius: 20px;
+    color: var(--bui-fg-default);
     cursor: pointer;
     display: flex;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 14px;
     gap: 6px;
     padding: 6px 14px;
     white-space: nowrap;
   }
 
   .pill:hover {
-    filter: brightness(0.95);
+    filter: brightness(0.97);
   }
 
   .pillSelected {
     box-shadow: 0 0 0 2px var(--bui-fg-info, #2563eb);
   }
 
-  .pillIcon {
-    font-size: 14px;
-  }
-
   .pillName {
-    max-width: 120px;
+    max-width: 140px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .pillDuration {
+    color: var(--bui-fg-secondary);
     font-family: var(--bui-font-monospace, monospace);
-    font-size: 10px;
-    opacity: 0.7;
+    font-size: 12px;
+  }
+
+  /* Phase icon colors — matching the table status indicators */
+  .iconSuccess {
+    color: var(--bui-fg-success, #16a34a);
+    flex-shrink: 0;
+  }
+
+  .iconDanger {
+    color: var(--bui-fg-danger, #dc2626);
+    flex-shrink: 0;
+  }
+
+  .iconInfo {
+    color: var(--bui-fg-info, #2563eb);
+    flex-shrink: 0;
+  }
+
+  .iconWarning {
+    color: var(--bui-fg-warning, #ca8a04);
+    flex-shrink: 0;
+  }
+
+  .iconNeutral {
+    color: var(--bui-fg-tertiary, #9ca3af);
+    flex-shrink: 0;
   }
 }
