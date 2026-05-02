@@ -32,6 +32,7 @@ export interface DAGNode {
   finishedAt?: string;
   duration?: number;
   type: string;
+  message?: string;
 }
 
 /**
@@ -150,6 +151,7 @@ export function buildDAG(workflow: Workflow): DAGGraph {
       finishedAt: wfNode.finishedAt,
       duration: calculateDuration(wfNode.startedAt, wfNode.finishedAt),
       type: wfNode.type,
+      message: wfNode.message,
     });
 
     if (wfNode.children) {

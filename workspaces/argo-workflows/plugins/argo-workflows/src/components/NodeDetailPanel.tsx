@@ -107,6 +107,25 @@ export function NodeDetailPanel({ node, onClose }: NodeDetailPanelProps) {
           </Text>
           <Text variant="body-small">{formatDate(node.finishedAt)}</Text>
         </div>
+
+        {node.message && (
+          <div className={styles.row}>
+            <Text variant="body-small" className={styles.label}>
+              Message
+            </Text>
+            <div
+              className={
+                node.status === 'Failed' || node.status === 'Error'
+                  ? styles.messageBoxDanger
+                  : styles.messageBox
+              }
+            >
+              <Text variant="body-small" className={styles.messageText}>
+                {node.message}
+              </Text>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
