@@ -25,6 +25,7 @@
     font-size: 14px;
     justify-content: center;
     padding: 4px;
+    transform: rotate(90deg);
     transition: transform 0.15s ease, color 0.15s ease;
   }
 
@@ -39,7 +40,7 @@
 
   .expandButtonExpanded {
     color: var(--bui-fg-info);
-    transform: rotate(90deg);
+    transform: rotate(180deg);
   }
 
   .expandedContent {

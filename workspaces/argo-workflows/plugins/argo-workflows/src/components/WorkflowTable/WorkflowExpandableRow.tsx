@@ -17,6 +17,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import type { WorkflowSummary } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { formatDuration } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import { RiArrowUpSLine } from '@remixicon/react';
 import { useWorkflowDetail } from '../../hooks';
 import { DAGFlowView } from '../DAGCardFlow';
 import { NodeDetailPanel } from '../NodeDetailPanel';
@@ -56,7 +57,7 @@ export function ExpandButton({
       aria-expanded={isExpanded}
       aria-controls={`expanded-content-${workflowId}`}
     >
-      ▶
+      <RiArrowUpSLine size={18} />
     </button>
   );
 }

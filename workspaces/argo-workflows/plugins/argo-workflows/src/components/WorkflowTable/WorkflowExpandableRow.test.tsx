@@ -85,7 +85,6 @@ describe('ExpandButton', () => {
     );
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('aria-expanded', 'false');
-    expect(button).toHaveTextContent('▶');
   });
 
   it('renders expand button in expanded state', () => {
