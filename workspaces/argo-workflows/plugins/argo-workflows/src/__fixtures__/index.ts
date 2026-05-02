@@ -15,6 +15,16 @@
  */
 
 export {
+  succeededWorkflow,
+  runningWorkflow,
+  failedWorkflow,
+  errorWorkflow,
+  pendingWorkflow,
+  mockWorkflowSummaries,
+  succeededDetail,
+  failedDetail,
+  mockWorkflowDetails,
+  // Legacy aliases
   ciPipelineSucceeded,
   dataProcessingRunning,
   deployFailed,
@@ -22,15 +32,15 @@ export {
   integrationTestError,
   releasePublish,
   batchReportRunning,
-  mockWorkflowSummaries,
   ciPipelineDetail,
   deployFailedDetail,
-  mockWorkflowDetails,
 } from './mockWorkflows';
 
 export {
   entityWithAnnotations,
   entityNamespaceOnly,
+  entityProduction,
+  entityOps,
   entityWithCluster,
   entityWithoutAnnotations,
 } from './mockEntities';

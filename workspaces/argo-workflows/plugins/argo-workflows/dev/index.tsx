@@ -17,7 +17,6 @@
 import { createDevApp } from '@backstage/dev-utils';
 // eslint-disable-next-line @backstage/no-ui-css-imports-in-non-frontend
 import '@backstage/ui/css/styles.css';
-import { DAGPreview } from './DAGPreview';
 import { ApiProvider, ConfigReader } from '@backstage/core-app-api';
 import { TestApiRegistry } from '@backstage/test-utils';
 import { EntityProvider } from '@backstage/plugin-catalog-react';
@@ -36,39 +35,30 @@ import { argoWorkflowsApiRef } from '@alithya-oss/backstage-plugin-argo-workflow
 import {
   mockWorkflowSummaries,
   mockWorkflowDetails,
-  ciPipelineDetail,
-  entityWithAnnotations,
+  succeededDetail,
   entityNamespaceOnly,
   entityWithoutAnnotations,
 } from '../src/__fixtures__';
 
 /**
- * Mock API client backed by fixture data.
+ * Mock API client that returns all fixtures regardless of namespace,
+ * so every workflow phase and kind is visible on a single page.
  */
 class MockArgoWorkflowsApiClient implements ArgoWorkflowsApi {
   async listWorkflows(
-    namespace: string,
-    labelSelector?: string,
+    _namespace: string,
+    _labelSelector?: string,
   ): Promise<WorkflowSummary[]> {
-    let results = mockWorkflowSummaries.filter(w => w.namespace === namespace);
-
-    if (labelSelector) {
-      const [key, value] = labelSelector.split('=');
-      results = results.filter(w => w.labels?.[key] === value);
-    }
-
-    return results;
+    return mockWorkflowSummaries;
   }
 
-  async getWorkflow(namespace: string, name: string): Promise<WorkflowDetail> {
+  async getWorkflow(_namespace: string, name: string): Promise<WorkflowDetail> {
     const detail = mockWorkflowDetails[name];
-    if (detail && detail.namespace === namespace) {
+    if (detail) {
       return detail;
     }
-    // Fallback: wrap the summary as a detail with the same nodes
-    const summary = mockWorkflowSummaries.find(
-      w => w.name === name && w.namespace === namespace,
-    );
+    // Fallback: wrap the summary as a detail with synthetic nodes
+    const summary = mockWorkflowSummaries.find(w => w.name === name);
     if (summary) {
       return {
         ...summary,
@@ -80,7 +70,7 @@ class MockArgoWorkflowsApiClient implements ArgoWorkflowsApi {
         })),
       };
     }
-    return ciPipelineDetail;
+    return succeededDetail;
   }
 }
 
@@ -102,18 +92,7 @@ createDevApp()
   .registerPlugin(argoWorkflowsPlugin)
   .addPage({
     path: '/argo-workflows',
-    title: 'Workflows (with labels)',
-    element: (
-      <ApiProvider apis={apis}>
-        <EntityProvider entity={entityWithAnnotations} key="with-labels">
-          <EntityArgoWorkflowsContent />
-        </EntityProvider>
-      </ApiProvider>
-    ),
-  })
-  .addPage({
-    path: '/argo-workflows-all',
-    title: 'Workflows (all)',
+    title: 'All Workflows',
     element: (
       <ApiProvider apis={apis}>
         <EntityProvider entity={entityNamespaceOnly} key="all">
@@ -124,7 +103,7 @@ createDevApp()
   })
   .addPage({
     path: '/argo-workflows-empty',
-    title: 'Workflows (empty)',
+    title: 'No Annotations',
     element: (
       <ApiProvider apis={apis}>
         <EntityProvider entity={entityWithoutAnnotations} key="empty">
@@ -132,10 +111,5 @@ createDevApp()
         </EntityProvider>
       </ApiProvider>
     ),
-  })
-  .addPage({
-    path: '/dag-preview',
-    title: 'DAG Preview (React Flow)',
-    element: <DAGPreview />,
   })
   .render();

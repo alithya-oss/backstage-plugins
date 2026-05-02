@@ -21,301 +21,240 @@ import type {
 } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 
 /* ------------------------------------------------------------------ */
-/*  Helper: deterministic ISO timestamps relative to a fixed anchor   */
-/* ------------------------------------------------------------------ */
-
-const ANCHOR = new Date('2026-04-19T10:00:00Z').getTime();
-
-function iso(offsetMs: number): string {
-  return new Date(ANCHOR + offsetMs).toISOString();
-}
-
-const HOUR = 3_600_000;
-const MIN = 60_000;
-
-/* ------------------------------------------------------------------ */
 /*  Workflow summaries (list view)                                    */
+/*  Adapted from alithya-oss/backstage-plugins feature branch         */
 /* ------------------------------------------------------------------ */
 
-/** A successful CI pipeline with 4 steps. */
-export const ciPipelineSucceeded: WorkflowSummary = {
-  name: 'ci-pipeline-main-a1b2c',
-  namespace: 'argo',
+/**
+ * A succeeded build-and-deploy workflow with a DAG of 4 nodes.
+ * Checkout and Lint run in parallel, then Build, then Deploy.
+ */
+export const succeededWorkflow: WorkflowSummary = {
+  name: 'build-and-deploy-v42',
+  namespace: 'default',
   kind: 'Workflow',
   phase: 'Succeeded',
-  startedAt: iso(-2 * HOUR),
-  finishedAt: iso(-2 * HOUR + 12 * MIN),
-  duration: 720,
-  labels: {
-    app: 'frontend',
-    branch: 'main',
-    'workflows.argoproj.io/creator': 'system',
-  },
+  startedAt: '2026-04-28T10:00:05Z',
+  finishedAt: '2026-04-28T10:04:32Z',
+  duration: 267,
+  labels: { app: 'my-service', env: 'production' },
   nodes: [
-    { displayName: 'checkout', phase: 'Succeeded' },
-    { displayName: 'lint', phase: 'Succeeded' },
-    { displayName: 'test', phase: 'Succeeded' },
-    { displayName: 'build-image', phase: 'Succeeded' },
+    { displayName: 'Checkout', phase: 'Succeeded' },
+    { displayName: 'Lint', phase: 'Succeeded' },
+    { displayName: 'Build & Push', phase: 'Succeeded' },
+    { displayName: 'Deploy to K8s', phase: 'Succeeded' },
   ],
 };
 
-/** A running data-processing workflow. */
-export const dataProcessingRunning: WorkflowSummary = {
-  name: 'data-processing-daily-x9k3',
-  namespace: 'argo',
-  kind: 'CronWorkflow',
+/**
+ * A currently running integration-test workflow.
+ * Setup done, API tests running, UI tests pending.
+ */
+export const runningWorkflow: WorkflowSummary = {
+  name: 'integration-tests-v43',
+  namespace: 'default',
+  kind: 'Workflow',
   phase: 'Running',
-  startedAt: iso(-25 * MIN),
-  duration: 1500,
-  labels: { app: 'data-pipeline', schedule: 'daily' },
+  startedAt: '2026-04-29T14:30:05Z',
+  labels: { app: 'my-service', env: 'staging' },
   nodes: [
-    { displayName: 'extract', phase: 'Succeeded' },
-    { displayName: 'transform', phase: 'Running' },
-    { displayName: 'load', phase: 'Pending' },
-    { displayName: 'validate', phase: 'Pending' },
+    { displayName: 'Setup Environment', phase: 'Succeeded' },
+    { displayName: 'API Tests', phase: 'Running' },
+    { displayName: 'UI Tests', phase: 'Pending' },
   ],
 };
 
-/** A failed deployment workflow. */
-export const deployFailed: WorkflowSummary = {
-  name: 'deploy-staging-v2.4.1-f7d8',
-  namespace: 'argo',
+/**
+ * A failed canary deployment — image pull error on the deploy step.
+ */
+export const failedWorkflow: WorkflowSummary = {
+  name: 'deploy-canary-v41',
+  namespace: 'production',
   kind: 'Workflow',
   phase: 'Failed',
-  startedAt: iso(-5 * HOUR),
-  finishedAt: iso(-5 * HOUR + 4 * MIN),
-  duration: 240,
-  labels: { app: 'backend-api', env: 'staging' },
+  startedAt: '2026-04-27T08:15:05Z',
+  finishedAt: '2026-04-27T08:18:42Z',
+  duration: 217,
+  labels: { app: 'my-service', env: 'production' },
   nodes: [
-    { displayName: 'pre-check', phase: 'Succeeded' },
-    { displayName: 'db-migrate', phase: 'Succeeded' },
-    { displayName: 'rolling-update', phase: 'Failed' },
-    { displayName: 'smoke-test', phase: 'Skipped' },
+    { displayName: 'Validate Config', phase: 'Succeeded' },
+    { displayName: 'Deploy Canary', phase: 'Failed' },
   ],
 };
 
-/** A pending workflow waiting for resources. */
-export const mlTrainingPending: WorkflowSummary = {
-  name: 'ml-training-resnet-q4w2',
-  namespace: 'ml-jobs',
+/**
+ * A workflow in error state — infrastructure issue prevented pod creation.
+ */
+export const errorWorkflow: WorkflowSummary = {
+  name: 'nightly-backup-20260429',
+  namespace: 'ops',
+  kind: 'CronWorkflow',
+  phase: 'Error',
+  startedAt: '2026-04-29T02:00:05Z',
+  finishedAt: '2026-04-29T02:00:12Z',
+  duration: 7,
+  labels: { app: 'my-service', type: 'backup' },
+  nodes: [{ displayName: 'nightly-backup', phase: 'Error' }],
+};
+
+/**
+ * A pending workflow that hasn't started executing yet.
+ */
+export const pendingWorkflow: WorkflowSummary = {
+  name: 'scheduled-scan-v5',
+  namespace: 'default',
   kind: 'Workflow',
   phase: 'Pending',
-  startedAt: iso(-3 * MIN),
-  duration: 180,
-  labels: { app: 'ml-platform', model: 'resnet-50' },
-  nodes: [
-    { displayName: 'prepare-data', phase: 'Pending' },
-    { displayName: 'train', phase: 'Pending' },
-    { displayName: 'evaluate', phase: 'Pending' },
-  ],
-};
-
-/** A workflow in error state. */
-export const integrationTestError: WorkflowSummary = {
-  name: 'integration-tests-pr-1234-e5r6',
-  namespace: 'argo',
-  kind: 'Workflow',
-  phase: 'Error',
-  startedAt: iso(-1 * HOUR),
-  finishedAt: iso(-1 * HOUR + 2 * MIN),
-  duration: 120,
-  labels: { app: 'frontend', trigger: 'pull-request' },
-  nodes: [
-    { displayName: 'setup-env', phase: 'Succeeded' },
-    { displayName: 'run-tests', phase: 'Error' },
-  ],
-};
-
-/** A second succeeded workflow for variety. */
-export const releasePublish: WorkflowSummary = {
-  name: 'release-publish-v3.0.0-h8j1',
-  namespace: 'argo',
-  kind: 'WorkflowTemplate',
-  phase: 'Succeeded',
-  startedAt: iso(-8 * HOUR),
-  finishedAt: iso(-8 * HOUR + 6 * MIN),
-  duration: 360,
-  labels: { app: 'backend-api', release: 'v3.0.0' },
-  nodes: [
-    { displayName: 'build', phase: 'Succeeded' },
-    { displayName: 'sign', phase: 'Succeeded' },
-    { displayName: 'publish-registry', phase: 'Succeeded' },
-    { displayName: 'notify-slack', phase: 'Succeeded' },
-  ],
-};
-
-/** A long-running batch job still in progress. */
-export const batchReportRunning: WorkflowSummary = {
-  name: 'batch-report-monthly-m3n4',
-  namespace: 'argo',
-  kind: 'CronWorkflow',
-  phase: 'Running',
-  startedAt: iso(-45 * MIN),
-  duration: 2700,
-  labels: { app: 'reporting', schedule: 'monthly' },
-  nodes: [
-    { displayName: 'fetch-metrics', phase: 'Succeeded' },
-    { displayName: 'aggregate', phase: 'Succeeded' },
-    { displayName: 'generate-pdf', phase: 'Running' },
-    { displayName: 'upload-s3', phase: 'Pending' },
-    { displayName: 'send-email', phase: 'Pending' },
-  ],
+  startedAt: '2026-04-30T06:00:00Z',
+  labels: { app: 'my-service', type: 'security' },
+  nodes: [{ displayName: 'Security Scan', phase: 'Pending' }],
 };
 
 /** All workflow summaries as a single list. */
 export const mockWorkflowSummaries: WorkflowSummary[] = [
-  ciPipelineSucceeded,
-  dataProcessingRunning,
-  deployFailed,
-  mlTrainingPending,
-  integrationTestError,
-  releasePublish,
-  batchReportRunning,
+  succeededWorkflow,
+  runningWorkflow,
+  failedWorkflow,
+  errorWorkflow,
+  pendingWorkflow,
 ];
+
+/* ---- Legacy aliases for backward compatibility ---- */
+export const ciPipelineSucceeded = succeededWorkflow;
+export const dataProcessingRunning = runningWorkflow;
+export const deployFailed = failedWorkflow;
+export const integrationTestError = errorWorkflow;
+export const mlTrainingPending = pendingWorkflow;
+export const releasePublish = succeededWorkflow;
+export const batchReportRunning = runningWorkflow;
 
 /* ------------------------------------------------------------------ */
 /*  Workflow details (DAG view)                                       */
 /* ------------------------------------------------------------------ */
 
-const ciPipelineNodes: NodeStatus[] = [
+/**
+ * Succeeded build-and-deploy detail with full DAG nodes.
+ * DAG root → Checkout + Lint (parallel) → Build → Deploy.
+ */
+const succeededNodes: NodeStatus[] = [
   {
-    id: 'ci-pipeline-main-a1b2c',
-    displayName: 'ci-pipeline-main-a1b2c',
+    id: 'build-and-deploy-v42',
+    displayName: 'build-and-deploy-v42',
     type: 'DAG',
     phase: 'Succeeded',
-    startedAt: iso(-2 * HOUR),
-    finishedAt: iso(-2 * HOUR + 12 * MIN),
-    duration: 720,
-    children: ['checkout-pod', 'lint-pod', 'test-pod', 'build-image-pod'],
+    startedAt: '2026-04-28T10:00:05Z',
+    finishedAt: '2026-04-28T10:04:32Z',
+    duration: 267,
+    children: ['checkout-step', 'lint-step'],
   },
   {
-    id: 'checkout-pod',
-    displayName: 'checkout',
+    id: 'checkout-step',
+    displayName: 'Checkout',
     type: 'Pod',
     phase: 'Succeeded',
     templateName: 'git-checkout',
-    startedAt: iso(-2 * HOUR),
-    finishedAt: iso(-2 * HOUR + 1 * MIN),
-    duration: 60,
-    children: ['lint-pod'],
-    boundaryID: 'ci-pipeline-main-a1b2c',
+    startedAt: '2026-04-28T10:00:10Z',
+    finishedAt: '2026-04-28T10:00:45Z',
+    duration: 35,
+    children: ['build-step'],
+    boundaryID: 'build-and-deploy-v42',
   },
   {
-    id: 'lint-pod',
-    displayName: 'lint',
+    id: 'lint-step',
+    displayName: 'Lint',
     type: 'Pod',
     phase: 'Succeeded',
     templateName: 'eslint',
-    startedAt: iso(-2 * HOUR + 1 * MIN),
-    finishedAt: iso(-2 * HOUR + 4 * MIN),
-    duration: 180,
-    children: ['test-pod'],
-    boundaryID: 'ci-pipeline-main-a1b2c',
+    startedAt: '2026-04-28T10:00:10Z',
+    finishedAt: '2026-04-28T10:01:20Z',
+    duration: 70,
+    children: ['build-step'],
+    boundaryID: 'build-and-deploy-v42',
   },
   {
-    id: 'test-pod',
-    displayName: 'test',
+    id: 'build-step',
+    displayName: 'Build & Push',
     type: 'Pod',
     phase: 'Succeeded',
-    templateName: 'jest-runner',
-    startedAt: iso(-2 * HOUR + 4 * MIN),
-    finishedAt: iso(-2 * HOUR + 9 * MIN),
-    duration: 300,
-    children: ['build-image-pod'],
-    boundaryID: 'ci-pipeline-main-a1b2c',
+    templateName: 'docker-build',
+    startedAt: '2026-04-28T10:01:25Z',
+    finishedAt: '2026-04-28T10:03:10Z',
+    duration: 105,
+    children: ['deploy-step'],
+    boundaryID: 'build-and-deploy-v42',
   },
   {
-    id: 'build-image-pod',
-    displayName: 'build-image',
+    id: 'deploy-step',
+    displayName: 'Deploy to K8s',
     type: 'Pod',
     phase: 'Succeeded',
-    templateName: 'kaniko-build',
-    startedAt: iso(-2 * HOUR + 9 * MIN),
-    finishedAt: iso(-2 * HOUR + 12 * MIN),
-    duration: 180,
-    boundaryID: 'ci-pipeline-main-a1b2c',
+    templateName: 'kubectl-apply',
+    startedAt: '2026-04-28T10:03:15Z',
+    finishedAt: '2026-04-28T10:04:32Z',
+    duration: 77,
+    boundaryID: 'build-and-deploy-v42',
   },
 ];
 
-const deployFailedNodes: NodeStatus[] = [
+/**
+ * Failed canary deployment detail with error messages.
+ * DAG root → Validate → Deploy Canary (failed with ImagePullBackOff).
+ */
+const failedNodes: NodeStatus[] = [
   {
-    id: 'deploy-staging-v2.4.1-f7d8',
-    displayName: 'deploy-staging-v2.4.1-f7d8',
-    type: 'Steps',
+    id: 'deploy-canary-v41',
+    displayName: 'deploy-canary-v41',
+    type: 'DAG',
     phase: 'Failed',
-    startedAt: iso(-5 * HOUR),
-    finishedAt: iso(-5 * HOUR + 4 * MIN),
-    duration: 240,
-    children: [
-      'pre-check-pod',
-      'db-migrate-pod',
-      'rolling-update-pod',
-      'smoke-test-pod',
-    ],
+    startedAt: '2026-04-27T08:15:05Z',
+    finishedAt: '2026-04-27T08:18:42Z',
+    duration: 217,
+    children: ['validate-step'],
   },
   {
-    id: 'pre-check-pod',
-    displayName: 'pre-check',
+    id: 'validate-step',
+    displayName: 'Validate Config',
     type: 'Pod',
     phase: 'Succeeded',
-    templateName: 'health-check',
-    startedAt: iso(-5 * HOUR),
-    finishedAt: iso(-5 * HOUR + 30_000),
-    duration: 30,
-    children: ['db-migrate-pod'],
-    boundaryID: 'deploy-staging-v2.4.1-f7d8',
+    templateName: 'validate-k8s',
+    startedAt: '2026-04-27T08:15:10Z',
+    finishedAt: '2026-04-27T08:15:55Z',
+    duration: 45,
+    children: ['deploy-canary-step'],
+    boundaryID: 'deploy-canary-v41',
   },
   {
-    id: 'db-migrate-pod',
-    displayName: 'db-migrate',
-    type: 'Pod',
-    phase: 'Succeeded',
-    templateName: 'flyway-migrate',
-    startedAt: iso(-5 * HOUR + 30_000),
-    finishedAt: iso(-5 * HOUR + 90_000),
-    duration: 60,
-    children: ['rolling-update-pod'],
-    boundaryID: 'deploy-staging-v2.4.1-f7d8',
-  },
-  {
-    id: 'rolling-update-pod',
-    displayName: 'rolling-update',
+    id: 'deploy-canary-step',
+    displayName: 'Deploy Canary',
     type: 'Pod',
     phase: 'Failed',
-    templateName: 'kubectl-rollout',
-    startedAt: iso(-5 * HOUR + 90_000),
-    finishedAt: iso(-5 * HOUR + 4 * MIN),
-    duration: 150,
-    message:
-      'Error: ImagePullBackOff - registry.example.com/backend-api:v2.4.1 not found',
-    children: ['smoke-test-pod'],
-    boundaryID: 'deploy-staging-v2.4.1-f7d8',
-  },
-  {
-    id: 'smoke-test-pod',
-    displayName: 'smoke-test',
-    type: 'Pod',
-    phase: 'Skipped',
-    templateName: 'curl-smoke',
-    message: 'Skipped: previous step failed',
-    boundaryID: 'deploy-staging-v2.4.1-f7d8',
+    templateName: 'canary-deploy',
+    startedAt: '2026-04-27T08:16:00Z',
+    finishedAt: '2026-04-27T08:18:42Z',
+    duration: 162,
+    message: 'ImagePullBackOff: registry.example.com/my-service:v41',
+    boundaryID: 'deploy-canary-v41',
   },
 ];
 
-/** CI pipeline detail with full DAG nodes. */
-export const ciPipelineDetail: WorkflowDetail = {
-  ...ciPipelineSucceeded,
-  nodes: ciPipelineNodes,
+/** Succeeded build-and-deploy detail. */
+export const succeededDetail: WorkflowDetail = {
+  ...succeededWorkflow,
+  nodes: succeededNodes,
 };
 
-/** Failed deployment detail with error messages. */
-export const deployFailedDetail: WorkflowDetail = {
-  ...deployFailed,
-  nodes: deployFailedNodes,
+/** Failed canary deployment detail. */
+export const failedDetail: WorkflowDetail = {
+  ...failedWorkflow,
+  nodes: failedNodes,
 };
+
+/* ---- Legacy aliases ---- */
+export const ciPipelineDetail = succeededDetail;
+export const deployFailedDetail = failedDetail;
 
 /** Map of workflow name → detail for mock API lookups. */
 export const mockWorkflowDetails: Record<string, WorkflowDetail> = {
-  [ciPipelineDetail.name]: ciPipelineDetail,
-  [deployFailedDetail.name]: deployFailedDetail,
+  [succeededDetail.name]: succeededDetail,
+  [failedDetail.name]: failedDetail,
 };

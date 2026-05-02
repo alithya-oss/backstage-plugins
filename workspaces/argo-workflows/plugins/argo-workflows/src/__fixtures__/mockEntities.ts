@@ -17,17 +17,18 @@
 import { Entity } from '@backstage/catalog-model';
 
 /**
- * Entity with namespace + label-selector annotations (typical use case).
+ * Entity with namespace + label-selector annotations.
+ * Matches fixtures in the "default" namespace with label app=my-service.
  */
 export const entityWithAnnotations: Entity = {
   apiVersion: 'backstage.io/v1alpha1',
   kind: 'Component',
   metadata: {
-    name: 'frontend-app',
+    name: 'my-service',
     namespace: 'default',
     annotations: {
-      'backstage.io/kubernetes-namespace': 'argo',
-      'backstage.io/kubernetes-label-selector': 'app=frontend',
+      'backstage.io/kubernetes-namespace': 'default',
+      'backstage.io/kubernetes-label-selector': 'app=my-service',
     },
   },
   spec: {
@@ -39,20 +40,63 @@ export const entityWithAnnotations: Entity = {
 
 /**
  * Entity with namespace annotation only (no label selector).
+ * Shows all workflows across the "default" namespace.
  */
 export const entityNamespaceOnly: Entity = {
   apiVersion: 'backstage.io/v1alpha1',
   kind: 'Component',
   metadata: {
-    name: 'backend-api',
+    name: 'all-workflows',
     namespace: 'default',
     annotations: {
-      'backstage.io/kubernetes-namespace': 'argo',
+      'backstage.io/kubernetes-namespace': 'default',
     },
   },
   spec: {
     type: 'service',
     owner: 'team-backend',
+    lifecycle: 'production',
+  },
+};
+
+/**
+ * Entity targeting the "production" namespace.
+ * Matches the failed canary deployment fixture.
+ */
+export const entityProduction: Entity = {
+  apiVersion: 'backstage.io/v1alpha1',
+  kind: 'Component',
+  metadata: {
+    name: 'production-deploys',
+    namespace: 'default',
+    annotations: {
+      'backstage.io/kubernetes-namespace': 'production',
+    },
+  },
+  spec: {
+    type: 'service',
+    owner: 'team-sre',
+    lifecycle: 'production',
+  },
+};
+
+/**
+ * Entity targeting the "ops" namespace.
+ * Matches the nightly backup (error) fixture.
+ */
+export const entityOps: Entity = {
+  apiVersion: 'backstage.io/v1alpha1',
+  kind: 'Component',
+  metadata: {
+    name: 'ops-jobs',
+    namespace: 'default',
+    annotations: {
+      'backstage.io/kubernetes-namespace': 'ops',
+    },
+  },
+  spec: {
+    type: 'service',
+    owner: 'team-ops',
     lifecycle: 'production',
   },
 };
@@ -67,8 +111,8 @@ export const entityWithCluster: Entity = {
     name: 'ml-service',
     namespace: 'default',
     annotations: {
-      'backstage.io/kubernetes-namespace': 'ml-jobs',
-      'backstage.io/kubernetes-label-selector': 'app=ml-platform',
+      'backstage.io/kubernetes-namespace': 'default',
+      'backstage.io/kubernetes-label-selector': 'type=security',
       'argoworkflows.io/cluster-name': 'gpu-cluster',
     },
   },
