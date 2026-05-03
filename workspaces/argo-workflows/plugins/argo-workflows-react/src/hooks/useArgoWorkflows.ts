@@ -26,7 +26,8 @@ import type { Workflow } from '@backstage-community/plugin-argo-workflows-common
 /**
  * Hook to fetch the list of Argo Workflows filtered by label selector.
  *
- * Calls `GET /api/argo-workflows/workflows` with the provided parameters.
+ * Supports querying a single instance, multiple instances (fetched in
+ * parallel and merged), or no instance (uses the backend default).
  *
  * @param options - The query options
  * @returns An object with workflows, loading state, error, and retry function
@@ -35,7 +36,10 @@ import type { Workflow } from '@backstage-community/plugin-argo-workflows-common
  */
 export function useArgoWorkflows(options: {
   labelSelector: string;
+  /** Single instance name (backward compat). */
   instanceName?: string;
+  /** Multiple instance names — fetched in parallel and merged. Takes precedence over instanceName. */
+  instanceNames?: string[];
   namespace?: string;
 }): {
   workflows: Workflow[];
@@ -43,7 +47,7 @@ export function useArgoWorkflows(options: {
   error: Error | undefined;
   retry: () => void;
 } {
-  const { labelSelector, instanceName, namespace } = options;
+  const { labelSelector, instanceName, instanceNames, namespace } = options;
   const fetchApi = useApi(fetchApiRef);
   const discoveryApi = useApi(discoveryApiRef);
 
@@ -52,6 +56,11 @@ export function useArgoWorkflows(options: {
   const [error, setError] = useState<Error | undefined>(undefined);
   const [retryCount, setRetryCount] = useState<number>(0);
 
+  // Stable serialized key for the instance list to use in the dep array
+  const instanceKey = instanceNames
+    ? instanceNames.slice().sort().join(',')
+    : instanceName ?? '';
+
   const retry = useCallback(() => {
     setRetryCount(prev => prev + 1);
   }, []);
@@ -59,45 +68,74 @@ export function useArgoWorkflows(options: {
   useEffect(() => {
     let cancelled = false;
 
+    async function fetchForInstance(
+      baseUrl: string,
+      name?: string,
+    ): Promise<Workflow[]> {
+      const params = new URLSearchParams();
+      params.set('labelSelector', labelSelector);
+      if (name) {
+        params.set('instanceName', name);
+      }
+      if (namespace) {
+        params.set('namespace', namespace);
+      }
+
+      const response = await fetchApi.fetch(
+        `${baseUrl}/workflows?${params.toString()}`,
+      );
+
+      if (!response.ok) {
+        const body = await response.text();
+        throw new Error(
+          `Failed to fetch workflows: ${response.status} ${
+            response.statusText
+          }${body ? ` - ${body}` : ''}`,
+        );
+      }
+
+      const data = await response.json();
+      const rawWorkflows: Record<string, unknown>[] = Array.isArray(
+        data.workflows,
+      )
+        ? data.workflows
+        : [];
+
+      return rawWorkflows.map(raw => parseWorkflow(raw));
+    }
+
     async function fetchWorkflows() {
       setLoading(true);
       setError(undefined);
 
       try {
         const baseUrl = await discoveryApi.getBaseUrl('argo-workflows');
-        const params = new URLSearchParams();
-        params.set('labelSelector', labelSelector);
-        if (instanceName) {
-          params.set('instanceName', instanceName);
-        }
-        if (namespace) {
-          params.set('namespace', namespace);
-        }
 
-        const response = await fetchApi.fetch(
-          `${baseUrl}/workflows?${params.toString()}`,
+        // Determine which instances to query
+        const names =
+          instanceNames && instanceNames.length > 0
+            ? instanceNames
+            : [instanceName];
+
+        // Fetch all instances in parallel
+        const results = await Promise.all(
+          names.map(name => fetchForInstance(baseUrl, name)),
         );
 
-        if (!response.ok) {
-          const body = await response.text();
-          throw new Error(
-            `Failed to fetch workflows: ${response.status} ${
-              response.statusText
-            }${body ? ` - ${body}` : ''}`,
-          );
+        // Merge and deduplicate by uid
+        const seen = new Set<string>();
+        const merged: Workflow[] = [];
+        for (const batch of results) {
+          for (const wf of batch) {
+            if (!seen.has(wf.metadata.uid)) {
+              seen.add(wf.metadata.uid);
+              merged.push(wf);
+            }
+          }
         }
 
-        const data = await response.json();
-        const rawWorkflows: Record<string, unknown>[] = Array.isArray(
-          data.workflows,
-        )
-          ? data.workflows
-          : [];
-
-        const parsed = rawWorkflows.map(raw => parseWorkflow(raw));
-
         if (!cancelled) {
-          setWorkflows(parsed);
+          setWorkflows(merged);
         }
       } catch (err) {
         if (!cancelled) {
@@ -116,9 +154,10 @@ export function useArgoWorkflows(options: {
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     labelSelector,
-    instanceName,
+    instanceKey,
     namespace,
     fetchApi,
     discoveryApi,

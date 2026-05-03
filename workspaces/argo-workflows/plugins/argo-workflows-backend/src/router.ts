@@ -103,6 +103,17 @@ export async function createRouter(
   const router = Router();
   router.use(express.json());
 
+  // GET /instances — list configured instance names
+  router.get(
+    '/instances',
+    async (_req: express.Request, res: express.Response) => {
+      res.json({
+        instances: service.getInstanceNames(),
+        defaultInstance: service.getDefaultInstance(),
+      });
+    },
+  );
+
   // GET /workflows — list workflows filtered by label selector
   router.get(
     '/workflows',

@@ -19,12 +19,34 @@ catalog:
       target: ../../examples/entities.yaml
 
 kubernetes:
+  clusters:
+    - name: production
+      url: https://k8s-prod.example.com
+      serviceAccountToken: ${K8S_PROD_TOKEN}
+      authProvider: serviceAccount
+    - name: staging
+      url: https://k8s-staging.example.com
+      serviceAccountToken: ${K8S_STAGING_TOKEN}
+      authProvider: serviceAccount
   customResources:
     - group: 'argoproj.io'
       apiVersion: 'v1alpha1'
       plural: 'workflows'
 
 argoWorkflows:
+  defaultInstance: argo-server
+  instances:
+    # Option A: Argo Workflows server API (direct)
+    - name: argo-server
+      baseUrl: https://argo.example.com
+      token: ${ARGO_TOKEN}
+    # Option B: Kubernetes API via Backstage K8s plugin
+    - name: k8s-production
+      kubernetes:
+        clusterName: production
+    - name: k8s-staging
+      kubernetes:
+        clusterName: staging
   # Node status visualization style in the workflow table.
   # 'dots' (default): colored squares, one per node
   # 'bar': horizontal stacked bar proportional to phase counts

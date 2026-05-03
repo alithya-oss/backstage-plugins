@@ -19,6 +19,7 @@ import {
   isArgoWorkflowsAvailable,
   ArgoWorkflowsAnnotations,
 } from '@backstage-community/plugin-argo-workflows-common';
+import { useArgoInstances } from '@backstage-community/plugin-argo-workflows-react';
 import { WorkflowRunsTable } from './WorkflowRunsTable';
 
 /**
@@ -35,6 +36,7 @@ import { WorkflowRunsTable } from './WorkflowRunsTable';
  */
 export const Router = () => {
   const { entity } = useEntity();
+  const { instances: availableInstances } = useArgoInstances();
 
   if (!isArgoWorkflowsAvailable(entity)) {
     return null;
@@ -65,6 +67,7 @@ export const Router = () => {
       labelSelector={labelSelector}
       instanceName={instanceName}
       namespace={namespace}
+      availableInstances={availableInstances}
     />
   );
 };

@@ -217,6 +217,16 @@ export class ArgoWorkflowsService {
     }
   }
 
+  /** Returns the names of all configured instances. */
+  getInstanceNames(): string[] {
+    return this.instances.map(i => i.name);
+  }
+
+  /** Returns the default instance name, if configured. */
+  getDefaultInstance(): string | undefined {
+    return this.defaultInstance;
+  }
+
   /**
    * Lists workflows filtered by a label selector.
    *

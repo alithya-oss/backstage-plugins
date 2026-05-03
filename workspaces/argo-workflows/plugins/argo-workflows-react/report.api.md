@@ -47,6 +47,13 @@ export interface DAGNode {
 }
 
 // @public
+export function useArgoInstances(): {
+  instances: string[];
+  defaultInstance?: string;
+  loading: boolean;
+};
+
+// @public
 export function useArgoWorkflowDetail(options: {
   namespace: string;
   name: string;

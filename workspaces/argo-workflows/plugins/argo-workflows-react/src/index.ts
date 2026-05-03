@@ -27,7 +27,11 @@ export type {
   WorkflowStatusBadgeProps,
 } from './components';
 
-export { useArgoWorkflows, useArgoWorkflowDetail } from './hooks';
+export {
+  useArgoWorkflows,
+  useArgoWorkflowDetail,
+  useArgoInstances,
+} from './hooks';
 
 export { buildDAG } from './utils';
 export type { DAGNode, DAGEdge, DAGGraph } from './utils';

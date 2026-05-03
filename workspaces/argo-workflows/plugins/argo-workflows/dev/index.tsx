@@ -23,43 +23,64 @@ import { FullPage, PluginHeader } from '@backstage/ui';
 import { RiFlowChart } from '@remixicon/react';
 
 import { argoWorkflowsPlugin, ArgoWorkflowsCI } from '../src/plugin';
-import { allWorkflows } from '../src/__fixtures__';
+import {
+  succeededWorkflow,
+  runningWorkflow,
+  failedWorkflow,
+  errorWorkflow,
+  pendingWorkflow,
+  lintCheckWorkflow,
+  e2eTestsWorkflow,
+  dockerBuildWorkflow,
+  dbMigrationWorkflow,
+  securityScanWorkflow,
+  allWorkflows,
+} from '../src/__fixtures__';
 
-// ─── Mock Entity ────────────────────────────────────────────────────────────
+// ─── Per-instance workflow sets ─────────────────────────────────────────────
 
-/** Entity using plugin-specific annotations. */
-const mockEntity: Entity = {
+/** Workflows returned by the Argo server instance (CI/CD pipelines). */
+const argoServerWorkflows = [
+  succeededWorkflow,
+  runningWorkflow,
+  failedWorkflow,
+  lintCheckWorkflow,
+  dockerBuildWorkflow,
+];
+
+/** Workflows returned by the K8s production instance (prod operations). */
+const k8sProductionWorkflows = [
+  dbMigrationWorkflow,
+  errorWorkflow,
+  securityScanWorkflow,
+];
+
+/** Workflows returned by the K8s staging instance (test runs). */
+const k8sStagingWorkflows = [e2eTestsWorkflow, pendingWorkflow];
+
+/** Map instance name → workflow list. Falls back to all workflows. */
+const workflowsByInstance: Record<string, typeof allWorkflows> = {
+  'argo-server': argoServerWorkflows,
+  'k8s-production': k8sProductionWorkflows,
+  'k8s-staging': k8sStagingWorkflows,
+};
+
+// ─── Mock Entities ──────────────────────────────────────────────────────────
+
+/**
+ * Entity with multiple instances available — no specific instance pinned,
+ * so the user can switch between them via the instance selector dropdown.
+ */
+const multiInstanceEntity: Entity = {
   apiVersion: 'backstage.io/v1alpha1',
   kind: 'Component',
   metadata: {
-    name: 'my-service',
-    description: 'A demo service with Argo Workflows CI/CD',
+    name: 'multi-cluster-service',
+    description:
+      'Service deployed across Argo server and multiple K8s clusters',
     annotations: {
       'argoworkflows.argoproj.io/workflow': 'true',
       'argoworkflows.argoproj.io/workflow-selector': 'app=my-service',
-      'argoworkflows.argoproj.io/instance-name': 'main',
-    },
-  },
-  spec: {
-    lifecycle: 'production',
-    type: 'service',
-    owner: 'user:guest',
-  },
-};
-
-/** Entity using standard Backstage Kubernetes annotations (Tekton-style). */
-const mockK8sEntity: Entity = {
-  apiVersion: 'backstage.io/v1alpha1',
-  kind: 'Component',
-  metadata: {
-    name: 'my-k8s-service',
-    description:
-      'A demo service using standard Kubernetes annotations for Argo Workflows',
-    annotations: {
-      'argoworkflows.argoproj.io/workflow': 'true',
-      'backstage.io/kubernetes-id': 'my-k8s-service',
-      'backstage.io/kubernetes-namespace': 'default',
-      'argoworkflows.argoproj.io/instance-name': 'main',
     },
   },
   spec: {
@@ -71,16 +92,13 @@ const mockK8sEntity: Entity = {
 
 // ─── Mock APIs ──────────────────────────────────────────────────────────────
 
-/**
- * Mock discovery API that returns a base URL for the argo-workflows plugin.
- */
 const mockDiscoveryApi = {
   getBaseUrl: async (_pluginId: string) => '/api/argo-workflows',
 };
 
 /**
- * Mock fetch API that intercepts calls to the argo-workflows backend
- * and returns fixture data.
+ * Mock fetch API that returns fixture data regardless of instance.
+ * In a real setup, different instances would return different workflows.
  */
 const mockFetchApi = {
   fetch: async (
@@ -88,9 +106,24 @@ const mockFetchApi = {
     _init?: RequestInit,
   ): Promise<Response> => {
     const url = typeof input === 'string' ? input : input.toString();
+
+    // GET /api/argo-workflows/instances — list configured instances
+    if (url.endsWith('/instances')) {
+      return new Response(
+        JSON.stringify({
+          instances: ['argo-server', 'k8s-production', 'k8s-staging'],
+          defaultInstance: 'argo-server',
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
+      );
+    }
+
     // GET /api/argo-workflows/workflows — list workflows
     if (url.includes('/workflows') && !url.match(/\/workflows\/[^?]/)) {
-      return new Response(JSON.stringify({ workflows: allWorkflows }), {
+      const params = new URL(url, 'http://localhost').searchParams;
+      const instance = params.get('instanceName') ?? '';
+      const workflows = workflowsByInstance[instance] ?? allWorkflows;
+      return new Response(JSON.stringify({ workflows }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       });
@@ -124,66 +157,37 @@ const mockFetchApi = {
   },
 };
 
+// ─── Shared wrapper ─────────────────────────────────────────────────────────
+
+function DevPage({ entity, title }: { entity: Entity; title: string }) {
+  return (
+    <TestApiProvider
+      apis={[
+        [discoveryApiRef, mockDiscoveryApi],
+        [fetchApiRef, mockFetchApi],
+      ]}
+    >
+      <EntityProvider entity={entity}>
+        <FullPage>
+          <PluginHeader
+            title={title}
+            icon={<RiFlowChart />}
+            tabs={[{ id: 'ci-cd', label: 'CI/CD', href: '#' }]}
+          />
+          <ArgoWorkflowsCI />
+        </FullPage>
+      </EntityProvider>
+    </TestApiProvider>
+  );
+}
+
 // ─── Dev App ────────────────────────────────────────────────────────────────
 
 createDevApp()
   .registerPlugin(argoWorkflowsPlugin)
   .addPage({
-    element: (
-      <TestApiProvider
-        apis={[
-          [discoveryApiRef, mockDiscoveryApi],
-          [fetchApiRef, mockFetchApi],
-        ]}
-      >
-        <EntityProvider entity={mockEntity}>
-          <FullPage>
-            <PluginHeader
-              title="Argo Workflows"
-              icon={<RiFlowChart />}
-              tabs={[
-                {
-                  id: 'ci-cd',
-                  label: 'CI/CD',
-                  href: '/argo-workflows',
-                },
-              ]}
-            />
-            <ArgoWorkflowsCI />
-          </FullPage>
-        </EntityProvider>
-      </TestApiProvider>
-    ),
-    title: 'Workflow Runs',
+    element: <DevPage entity={multiInstanceEntity} title="Argo Workflows" />,
+    title: 'Workflows',
     path: '/argo-workflows',
-  })
-  .addPage({
-    element: (
-      <TestApiProvider
-        apis={[
-          [discoveryApiRef, mockDiscoveryApi],
-          [fetchApiRef, mockFetchApi],
-        ]}
-      >
-        <EntityProvider entity={mockK8sEntity}>
-          <FullPage>
-            <PluginHeader
-              title="Argo Workflows (K8s annotations)"
-              icon={<RiFlowChart />}
-              tabs={[
-                {
-                  id: 'ci-cd',
-                  label: 'CI/CD',
-                  href: '/argo-workflows-k8s',
-                },
-              ]}
-            />
-            <ArgoWorkflowsCI />
-          </FullPage>
-        </EntityProvider>
-      </TestApiProvider>
-    ),
-    title: 'Workflow Runs (K8s)',
-    path: '/argo-workflows-k8s',
   })
   .render();

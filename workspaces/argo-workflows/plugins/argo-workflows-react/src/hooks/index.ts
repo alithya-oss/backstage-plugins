@@ -16,3 +16,4 @@
 
 export { useArgoWorkflows } from './useArgoWorkflows';
 export { useArgoWorkflowDetail } from './useArgoWorkflowDetail';
+export { useArgoInstances } from './useArgoInstances';

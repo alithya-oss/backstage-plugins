@@ -22,6 +22,7 @@ import {
   CellText,
   Flex,
   SearchField,
+  Select,
   Table,
   Text,
   ToggleButton,
@@ -52,6 +53,8 @@ export interface WorkflowRunsTableProps {
   instanceName?: string;
   /** Optional Kubernetes namespace to scope the query */
   namespace?: string;
+  /** Available instance names for the instance selector. When provided, a dropdown is shown. */
+  availableInstances?: string[];
 }
 
 /** Table item type — extends Workflow with a required `id` for BUI Table. */
@@ -194,10 +197,15 @@ export const WorkflowRunsTable = ({
   labelSelector,
   instanceName,
   namespace,
+  availableInstances,
 }: WorkflowRunsTableProps) => {
+  const [selectedInstances, setSelectedInstances] = useState<string[]>(
+    instanceName ? [instanceName] : availableInstances ?? [],
+  );
   const { workflows, loading, error, retry } = useArgoWorkflows({
     labelSelector,
-    instanceName,
+    instanceNames: selectedInstances.length > 0 ? selectedInstances : undefined,
+    instanceName: selectedInstances.length === 0 ? instanceName : undefined,
     namespace,
   });
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
@@ -288,6 +296,24 @@ export const WorkflowRunsTable = ({
       <Flex align="center" justify="between" className={styles.toolbar}>
         <Text variant="title-small">Workflows</Text>
         <Flex align="center" style={{ gap: 'var(--bui-space-3)' }}>
+          {availableInstances && availableInstances.length > 1 && (
+            <Select
+              selectionMode="multiple"
+              placeholder="Select instances"
+              options={availableInstances.map(name => ({
+                value: name,
+                label: name,
+              }))}
+              value={selectedInstances}
+              onChange={keys => {
+                const values = Array.isArray(keys) ? keys : [keys];
+                setSelectedInstances(
+                  values.filter((v): v is string => typeof v === 'string'),
+                );
+              }}
+              size="small"
+            />
+          )}
           <ToggleButtonGroup
             selectionMode="multiple"
             selectedKeys={statusFilters}
