@@ -18,6 +18,7 @@ import { ButtonIcon, Flex, Text } from '@backstage/ui';
 import { WorkflowStatusIcon } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import type { DAGNode } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import { RiCloseLine } from '@remixicon/react';
+import { formatDurationSeconds } from './dagHelpers';
 import styles from './NodeDetailPanel.module.css';
 
 /** Props for the NodeDetailPanel component. */
@@ -26,17 +27,6 @@ export interface NodeDetailPanelProps {
   node: DAGNode;
   /** Callback when the panel is dismissed. */
   onClose: () => void;
-}
-
-function formatDuration(seconds?: number): string {
-  if (seconds === undefined || seconds === null) return '—';
-  if (seconds < 60) return `${seconds}s`;
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  if (minutes < 60) return `${minutes}m ${remainingSeconds}s`;
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-  return `${hours}h ${remainingMinutes}m ${remainingSeconds}s`;
 }
 
 function formatDate(isoDate?: string): string {
@@ -81,7 +71,9 @@ export function NodeDetailPanel({ node, onClose }: NodeDetailPanelProps) {
           <Text variant="body-small" className={styles.label}>
             Duration
           </Text>
-          <Text variant="body-small">{formatDuration(node.duration)}</Text>
+          <Text variant="body-small">
+            {formatDurationSeconds(node.duration)}
+          </Text>
         </div>
 
         <div className={styles.row}>
