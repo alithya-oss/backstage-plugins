@@ -20,6 +20,11 @@ import runningData from './running-workflow.json';
 import failedData from './failed-workflow.json';
 import errorData from './error-workflow.json';
 import pendingData from './pending-workflow.json';
+import lintCheckData from './lint-check-workflow.json';
+import e2eTestsData from './e2e-tests-workflow.json';
+import dockerBuildData from './docker-build-workflow.json';
+import dbMigrationData from './db-migration-workflow.json';
+import securityScanData from './security-scan-workflow.json';
 
 /** A succeeded workflow with a complete DAG of 4 nodes. */
 export const succeededWorkflow: Workflow = succeededData as Workflow;
@@ -36,11 +41,31 @@ export const errorWorkflow: Workflow = errorData as Workflow;
 /** A pending workflow that hasn't started yet. */
 export const pendingWorkflow: Workflow = pendingData as Workflow;
 
+/** A succeeded lint check workflow. */
+export const lintCheckWorkflow: Workflow = lintCheckData as Workflow;
+
+/** A failed E2E test workflow. */
+export const e2eTestsWorkflow: Workflow = e2eTestsData as Workflow;
+
+/** A currently running Docker build workflow. */
+export const dockerBuildWorkflow: Workflow = dockerBuildData as Workflow;
+
+/** A succeeded database migration workflow. */
+export const dbMigrationWorkflow: Workflow = dbMigrationData as Workflow;
+
+/** A security scan workflow that errored out. */
+export const securityScanWorkflow: Workflow = securityScanData as Workflow;
+
 /** All fixture workflows as a list, useful for the list view. */
 export const allWorkflows: Workflow[] = [
+  succeededWorkflow,
   runningWorkflow,
   failedWorkflow,
   errorWorkflow,
   pendingWorkflow,
-  succeededWorkflow,
+  lintCheckWorkflow,
+  e2eTestsWorkflow,
+  dockerBuildWorkflow,
+  dbMigrationWorkflow,
+  securityScanWorkflow,
 ];

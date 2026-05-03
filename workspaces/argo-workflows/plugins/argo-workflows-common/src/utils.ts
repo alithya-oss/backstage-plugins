@@ -14,16 +14,50 @@
  * limitations under the License.
  */
 import { Entity } from '@backstage/catalog-model';
-import { ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION } from './annotations';
+import { ArgoWorkflowsAnnotations } from './annotations';
 
 /**
- * Returns true if the given entity has the Argo Workflows label selector
- * annotation with a non-empty value (after trimming whitespace).
+ * Returns true if the given entity supports the Argo Workflows CI/CD feature
+ * and the plugin UI should be shown.
+ *
+ * This means that the catalog entity has one of these annotations set:
+ *
+ * 1. `argoworkflows.argoproj.io/cicd: "true"` (preferred), or
+ * 2. `argoworkflows.argoproj.io/workflow-selector` is defined with a
+ *    non-empty value, or
+ * 3. `backstage.io/kubernetes-label-selector` is defined with a
+ *    non-empty value, or
+ * 4. `backstage.io/kubernetes-id` is defined with a non-empty value.
  *
  * @public
  */
 export function isArgoWorkflowsAvailable(entity: Entity): boolean {
-  const annotation =
-    entity.metadata.annotations?.[ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION];
-  return typeof annotation === 'string' && annotation.trim().length > 0;
+  const annotations = entity.metadata.annotations;
+  if (!annotations) return false;
+
+  // Primary gate: explicit CI/CD opt-in (Tekton-style)
+  if (annotations[ArgoWorkflowsAnnotations.CICD] === 'true') {
+    return true;
+  }
+
+  // Plugin-specific label selector
+  const selector = annotations[ArgoWorkflowsAnnotations.LABEL_SELECTOR];
+  if (typeof selector === 'string' && selector.trim().length > 0) {
+    return true;
+  }
+
+  // Standard Kubernetes label selector
+  const k8sSelector =
+    annotations[ArgoWorkflowsAnnotations.KUBERNETES_LABEL_SELECTOR];
+  if (typeof k8sSelector === 'string' && k8sSelector.trim().length > 0) {
+    return true;
+  }
+
+  // Standard Kubernetes ID
+  const k8sId = annotations[ArgoWorkflowsAnnotations.KUBERNETES_ID];
+  if (typeof k8sId === 'string' && k8sId.trim().length > 0) {
+    return true;
+  }
+
+  return false;
 }

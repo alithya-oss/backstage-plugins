@@ -20,5 +20,10 @@ export {
   failedWorkflow,
   errorWorkflow,
   pendingWorkflow,
+  lintCheckWorkflow,
+  e2eTestsWorkflow,
+  dockerBuildWorkflow,
+  dbMigrationWorkflow,
+  securityScanWorkflow,
   allWorkflows,
 } from './workflows';

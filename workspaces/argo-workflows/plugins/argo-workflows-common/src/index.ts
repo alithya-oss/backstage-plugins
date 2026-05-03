@@ -15,6 +15,7 @@
  */
 
 export {
+  ArgoWorkflowsAnnotations,
   ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION,
   ARGO_WORKFLOWS_INSTANCE_ANNOTATION,
 } from './annotations';

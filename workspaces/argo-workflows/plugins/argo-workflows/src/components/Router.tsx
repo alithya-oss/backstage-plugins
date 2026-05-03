@@ -17,17 +17,21 @@
 import { useEntity } from '@backstage/plugin-catalog-react';
 import {
   isArgoWorkflowsAvailable,
-  ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION,
-  ARGO_WORKFLOWS_INSTANCE_ANNOTATION,
+  ArgoWorkflowsAnnotations,
 } from '@backstage-community/plugin-argo-workflows-common';
 import { WorkflowRunsTable } from './WorkflowRunsTable';
 
 /**
  * Router component for the Argo Workflows plugin.
  *
- * Uses the entity context to check if the Argo Workflows annotation is present.
- * If the annotation is present, renders the workflow runs table with inline
- * expandable DAG views. Returns null if the annotation is absent.
+ * Uses the entity context to check if the Argo Workflows CI/CD annotation
+ * is present. If the annotation is present, renders the workflow runs table
+ * with inline expandable DAG views. Returns null if the annotation is absent.
+ *
+ * Label selector resolution order:
+ * 1. `backstage.io/kubernetes-label-selector` (custom label selector, highest priority)
+ * 2. `argoworkflows.argoproj.io/workflow-selector` (plugin-specific selector)
+ * 3. `backstage.io/kubernetes-id` (converted to `backstage.io/kubernetes-id=<value>`)
  */
 export const Router = () => {
   const { entity } = useEntity();
@@ -36,11 +40,24 @@ export const Router = () => {
     return null;
   }
 
-  const labelSelector =
-    entity.metadata.annotations?.[ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION] ??
-    '';
-  const instanceName =
-    entity.metadata.annotations?.[ARGO_WORKFLOWS_INSTANCE_ANNOTATION];
+  const annotations = entity.metadata.annotations ?? {};
+
+  // Resolve label selector with Tekton-style precedence
+  const k8sLabelSelector =
+    annotations[ArgoWorkflowsAnnotations.KUBERNETES_LABEL_SELECTOR];
+  const workflowSelector = annotations[ArgoWorkflowsAnnotations.LABEL_SELECTOR];
+  const k8sId = annotations[ArgoWorkflowsAnnotations.KUBERNETES_ID];
+
+  let labelSelector = '';
+  if (k8sLabelSelector) {
+    labelSelector = k8sLabelSelector;
+  } else if (workflowSelector) {
+    labelSelector = workflowSelector;
+  } else if (k8sId) {
+    labelSelector = `backstage.io/kubernetes-id=${k8sId}`;
+  }
+
+  const instanceName = annotations[ArgoWorkflowsAnnotations.INSTANCE_NAME];
 
   return (
     <WorkflowRunsTable

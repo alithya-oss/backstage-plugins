@@ -5,13 +5,23 @@
 ```ts
 import { Entity } from '@backstage/catalog-model';
 
-// @public
+// @public @deprecated
 export const ARGO_WORKFLOWS_INSTANCE_ANNOTATION =
-  'argoworkflows.argoproj.io/instance-name';
+  ArgoWorkflowsAnnotations.INSTANCE_NAME;
+
+// @public @deprecated
+export const ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION =
+  ArgoWorkflowsAnnotations.LABEL_SELECTOR;
 
 // @public
-export const ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION =
-  'argoworkflows.argoproj.io/workflow-selector';
+export enum ArgoWorkflowsAnnotations {
+  CICD = 'argoworkflows.argoproj.io/cicd',
+  INSTANCE_NAME = 'argoworkflows.argoproj.io/instance-name',
+  KUBERNETES_ID = 'backstage.io/kubernetes-id',
+  KUBERNETES_LABEL_SELECTOR = 'backstage.io/kubernetes-label-selector',
+  KUBERNETES_NAMESPACE = 'backstage.io/kubernetes-namespace',
+  LABEL_SELECTOR = 'argoworkflows.argoproj.io/workflow-selector',
+}
 
 // @public
 export function formatWorkflow(workflow: Workflow): Record<string, unknown>;

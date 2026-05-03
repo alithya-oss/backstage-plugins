@@ -27,6 +27,7 @@ import { allWorkflows } from '../src/__fixtures__';
 
 // ─── Mock Entity ────────────────────────────────────────────────────────────
 
+/** Entity using plugin-specific annotations. */
 const mockEntity: Entity = {
   apiVersion: 'backstage.io/v1alpha1',
   kind: 'Component',
@@ -34,7 +35,30 @@ const mockEntity: Entity = {
     name: 'my-service',
     description: 'A demo service with Argo Workflows CI/CD',
     annotations: {
+      'argoworkflows.argoproj.io/workflow': 'true',
       'argoworkflows.argoproj.io/workflow-selector': 'app=my-service',
+      'argoworkflows.argoproj.io/instance-name': 'main',
+    },
+  },
+  spec: {
+    lifecycle: 'production',
+    type: 'service',
+    owner: 'user:guest',
+  },
+};
+
+/** Entity using standard Backstage Kubernetes annotations (Tekton-style). */
+const mockK8sEntity: Entity = {
+  apiVersion: 'backstage.io/v1alpha1',
+  kind: 'Component',
+  metadata: {
+    name: 'my-k8s-service',
+    description:
+      'A demo service using standard Kubernetes annotations for Argo Workflows',
+    annotations: {
+      'argoworkflows.argoproj.io/workflow': 'true',
+      'backstage.io/kubernetes-id': 'my-k8s-service',
+      'backstage.io/kubernetes-namespace': 'default',
       'argoworkflows.argoproj.io/instance-name': 'main',
     },
   },
@@ -132,5 +156,34 @@ createDevApp()
     ),
     title: 'Workflow Runs',
     path: '/argo-workflows',
+  })
+  .addPage({
+    element: (
+      <TestApiProvider
+        apis={[
+          [discoveryApiRef, mockDiscoveryApi],
+          [fetchApiRef, mockFetchApi],
+        ]}
+      >
+        <EntityProvider entity={mockK8sEntity}>
+          <FullPage>
+            <PluginHeader
+              title="Argo Workflows (K8s annotations)"
+              icon={<RiFlowChart />}
+              tabs={[
+                {
+                  id: 'ci-cd',
+                  label: 'CI/CD',
+                  href: '/argo-workflows-k8s',
+                },
+              ]}
+            />
+            <ArgoWorkflowsCI />
+          </FullPage>
+        </EntityProvider>
+      </TestApiProvider>
+    ),
+    title: 'Workflow Runs (K8s)',
+    path: '/argo-workflows-k8s',
   })
   .render();
