@@ -17,7 +17,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { WheelEvent, MouseEvent } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, Flex, Skeleton, Text } from '@backstage/ui';
+import { Alert, ButtonIcon, Flex, Skeleton, Text } from '@backstage/ui';
 import {
   useArgoWorkflowDetail,
   buildDAG,
@@ -29,6 +29,7 @@ import type {
 import type { WorkflowStatus } from '@backstage-community/plugin-argo-workflows-common';
 import dagre from 'dagre';
 import { NodeDetailPanel } from './NodeDetailPanel';
+import { RiAddLine, RiSubtractLine, RiFullscreenLine } from '@remixicon/react';
 import styles from './WorkflowDAGView.module.css';
 
 /**
@@ -295,6 +296,31 @@ export const WorkflowDAGView = ({ instanceName }: WorkflowDAGViewProps) => {
     }
   }, [workflow]);
 
+  const handleZoomIn = useCallback(() => {
+    setTransform(prev => ({
+      ...prev,
+      scale: Math.min(prev.scale * 1.25, 5),
+    }));
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    setTransform(prev => ({
+      ...prev,
+      scale: Math.max(prev.scale * 0.8, 0.1),
+    }));
+  }, []);
+
+  const handleFit = useCallback(() => {
+    if (!layout || !svgRef.current) return;
+    const svgRect = svgRef.current.getBoundingClientRect();
+    const scaleX = svgRect.width / layout.width;
+    const scaleY = svgRect.height / layout.height;
+    const newScale = Math.min(scaleX, scaleY, 1) * 0.9;
+    const newX = (svgRect.width - layout.width * newScale) / 2;
+    const newY = (svgRect.height - layout.height * newScale) / 2;
+    setTransform({ x: newX, y: newY, scale: newScale });
+  }, [layout]);
+
   if (loading) {
     return (
       <div
@@ -430,6 +456,28 @@ export const WorkflowDAGView = ({ instanceName }: WorkflowDAGViewProps) => {
               })}
             </g>
           </svg>
+
+          {/* Zoom & fit controls */}
+          <div className={styles.controls}>
+            <ButtonIcon
+              variant="secondary"
+              icon={<RiAddLine size={16} />}
+              onPress={handleZoomIn}
+              aria-label="Zoom in"
+            />
+            <ButtonIcon
+              variant="secondary"
+              icon={<RiSubtractLine size={16} />}
+              onPress={handleZoomOut}
+              aria-label="Zoom out"
+            />
+            <ButtonIcon
+              variant="secondary"
+              icon={<RiFullscreenLine size={16} />}
+              onPress={handleFit}
+              aria-label="Fit to view"
+            />
+          </div>
 
           {/* Hover tooltip */}
           {tooltip.visible && tooltip.node && (
