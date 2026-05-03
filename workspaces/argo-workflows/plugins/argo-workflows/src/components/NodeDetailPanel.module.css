@@ -22,13 +22,16 @@
 
 .row {
   display: flex;
-  flex-direction: column;
-  gap: var(--bui-space-1);
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--bui-space-2);
 }
 
 .label {
   color: var(--bui-fg-secondary);
   font-weight: var(--bui-font-weight-bold);
+  min-width: 5rem;
+  flex-shrink: 0;
 }
 
 .messageDanger {

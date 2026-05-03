@@ -15,10 +15,7 @@
  */
 
 import { ButtonIcon, Flex, Text } from '@backstage/ui';
-import {
-  WorkflowStatusBadge,
-  WorkflowStatusIcon,
-} from '@backstage-community/plugin-argo-workflows-react';
+import { WorkflowStatusIcon } from '@backstage-community/plugin-argo-workflows-react';
 import type { DAGNode } from '@backstage-community/plugin-argo-workflows-react';
 import { RiCloseLine } from '@remixicon/react';
 import styles from './NodeDetailPanel.module.css';
@@ -75,13 +72,6 @@ export function NodeDetailPanel({ node, onClose }: NodeDetailPanelProps) {
       <div className={styles.body}>
         <div className={styles.row}>
           <Text variant="body-small" className={styles.label}>
-            Status
-          </Text>
-          <WorkflowStatusBadge status={node.status} />
-        </div>
-
-        <div className={styles.row}>
-          <Text variant="body-small" className={styles.label}>
             Type
           </Text>
           <Text variant="body-small">{node.type || '—'}</Text>
@@ -109,21 +99,16 @@ export function NodeDetailPanel({ node, onClose }: NodeDetailPanelProps) {
         </div>
 
         {node.message && (
-          <div className={styles.row}>
-            <Text variant="body-small" className={styles.label}>
-              Message
+          <div
+            className={
+              node.status === 'Failed' || node.status === 'Error'
+                ? styles.messageBoxDanger
+                : styles.messageBox
+            }
+          >
+            <Text variant="body-small" className={styles.messageText}>
+              {node.message}
             </Text>
-            <div
-              className={
-                node.status === 'Failed' || node.status === 'Error'
-                  ? styles.messageBoxDanger
-                  : styles.messageBox
-              }
-            >
-              <Text variant="body-small" className={styles.messageText}>
-                {node.message}
-              </Text>
-            </div>
           </div>
         )}
       </div>
