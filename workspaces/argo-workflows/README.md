@@ -1,28 +1,47 @@
-# [Backstage](https://backstage.io)
+# Argo Workflows plugins for Backstage
 
-This is your newly scaffolded Backstage App, Good Luck!
+This workspace contains the Backstage plugins for [Argo Workflows](https://argoproj.github.io/workflows/), providing CI/CD visibility directly in the Backstage catalog.
 
-> [!IMPORTANT] > **TODO**: Consider updating your README text with relevant documentation for your plugin. See some suggested text below.
+## Features
 
-# argo-worflows
-
-This workspace contains plugins for \[brief description of purpose, e.g. exposing data from a service].
+- **Workflow runs table** — Lists workflow executions with status, task status bar, duration, and start date.
+- **Task status bar** — Horizontal stacked bar showing the proportion of task statuses (similar to the Tekton plugin).
+- **Interactive DAG visualization** — Directed acyclic graph of workflow tasks with pan, zoom, and click-to-inspect.
+- **Node detail panel** — Click a DAG node to see task type, duration, timestamps, and error messages.
+- **Multi-instance support** — Connect to multiple Argo Workflows servers and query them by name.
+- **Search and filter** — Filter workflows by name and status.
 
 ## Plugins
 
-- \[plugin-backend](./plugins/plugin-backend/README): Backend plugin that provides...
+| Package                                                              | Role            | Description                                   |
+| -------------------------------------------------------------------- | --------------- | --------------------------------------------- |
+| [`plugin-argo-workflows`](./plugins/argo-workflows/)                 | Frontend plugin | CI/CD tab with workflow table and DAG views.  |
+| [`plugin-argo-workflows-backend`](./plugins/argo-workflows-backend/) | Backend plugin  | Proxies requests to the Argo Workflows API.   |
+| [`plugin-argo-workflows-common`](./plugins/argo-workflows-common/)   | Common library  | Shared types, annotations, and serialization. |
+| [`plugin-argo-workflows-react`](./plugins/argo-workflows-react/)     | React library   | Reusable hooks and components.                |
 
-## Getting Started
-
-To start the app, run:
+## Getting started
 
 ```sh
 yarn install
 yarn start
 ```
 
-To generate knip reports for this app, run:
+## Development
 
 ```sh
-yarn backstage-repo-tools knip-reports
+# Start the dev app
+yarn start
+
+# Run tests
+yarn test
+
+# Run linting
+yarn lint:all
+
+# Type check
+yarn tsc
+
+# Generate API reports
+yarn build:api-reports
 ```
