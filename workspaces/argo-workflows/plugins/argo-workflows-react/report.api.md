@@ -37,6 +37,8 @@ export interface DAGNode {
   // (undocumented)
   label: string;
   // (undocumented)
+  message?: string;
+  // (undocumented)
   startedAt?: string;
   // (undocumented)
   status: WorkflowStatus;
