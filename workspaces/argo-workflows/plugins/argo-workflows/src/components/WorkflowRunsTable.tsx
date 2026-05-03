@@ -18,7 +18,9 @@ import { useCallback, useMemo, useState } from 'react';
 import {
   Alert,
   Button,
+  Container,
   Flex,
+  Header,
   SearchField,
   Select,
   Table,
@@ -154,65 +156,71 @@ export const WorkflowRunsTable = ({
     : undefined;
 
   return (
-    <div data-testid="workflow-runs-table" aria-label="Argo Workflow Runs">
-      <Flex align="center" justify="between" className={styles.toolbar}>
-        <Text variant="title-small">Workflows</Text>
-        <Flex align="center" style={{ gap: 'var(--bui-space-3)' }}>
-          {availableInstances && availableInstances.length > 1 && (
-            <Flex align="center" style={{ gap: 'var(--bui-space-1)' }}>
-              <Select
-                selectionMode="multiple"
-                aria-label="Select instances"
-                options={availableInstances.map(inst => ({
-                  value: inst.name,
-                  label: inst.name,
-                }))}
-                value={selectedInstances}
-                onChange={keys => {
-                  const values = Array.isArray(keys) ? keys : [keys];
-                  setSelectedInstances(
-                    values.filter((v): v is string => typeof v === 'string'),
-                  );
-                }}
-                size="small"
-              />
-              {selectedInstances.length < availableInstances.length && (
-                <Button
-                  variant="tertiary"
-                  size="small"
-                  onPress={() => setSelectedInstances(allInstanceNames)}
-                >
-                  All
-                </Button>
+    <Container>
+      <Header
+        title="Workflow runs"
+        customActions={
+          <>
+            <Flex align="center" style={{ gap: 'var(--bui-space-3)' }}>
+              {availableInstances && availableInstances.length > 1 && (
+                <Flex align="center" style={{ gap: 'var(--bui-space-1)' }}>
+                  <Select
+                    selectionMode="multiple"
+                    aria-label="Select instances"
+                    options={availableInstances.map(inst => ({
+                      value: inst.name,
+                      label: inst.name,
+                    }))}
+                    value={selectedInstances}
+                    onChange={keys => {
+                      const values = Array.isArray(keys) ? keys : [keys];
+                      setSelectedInstances(
+                        values.filter(
+                          (v): v is string => typeof v === 'string',
+                        ),
+                      );
+                    }}
+                    size="small"
+                  />
+                  {selectedInstances.length < availableInstances.length && (
+                    <Button
+                      variant="tertiary"
+                      size="small"
+                      onPress={() => setSelectedInstances(allInstanceNames)}
+                    >
+                      All
+                    </Button>
+                  )}
+                </Flex>
               )}
+              <ToggleButtonGroup
+                selectionMode="multiple"
+                selectedKeys={statusFilters}
+                onSelectionChange={handleSelectionChange}
+                aria-label="Filter by status"
+              >
+                {ALL_STATUSES.map(status => (
+                  <ToggleButton key={status} id={status}>
+                    {status}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+              <SearchField
+                placeholder="Search by name…"
+                aria-label="Search workflows by name"
+                value={searchQuery}
+                onChange={setSearchQuery}
+              />
+              <Flex align="center" style={{ gap: 'var(--bui-space-1)' }}>
+                <div className={styles.updatedDot} />
+                <Text variant="body-small" className={styles.updatedText}>
+                  {formatTimeAgo(lastUpdated)}
+                </Text>
+              </Flex>
             </Flex>
-          )}
-          <ToggleButtonGroup
-            selectionMode="multiple"
-            selectedKeys={statusFilters}
-            onSelectionChange={handleSelectionChange}
-            aria-label="Filter by status"
-          >
-            {ALL_STATUSES.map(status => (
-              <ToggleButton key={status} id={status}>
-                {status}
-              </ToggleButton>
-            ))}
-          </ToggleButtonGroup>
-          <SearchField
-            placeholder="Search by name…"
-            aria-label="Search workflows by name"
-            value={searchQuery}
-            onChange={setSearchQuery}
-          />
-          <Flex align="center" style={{ gap: 'var(--bui-space-1)' }}>
-            <div className={styles.updatedDot} />
-            <Text variant="body-small" className={styles.updatedText}>
-              {formatTimeAgo(lastUpdated)}
-            </Text>
-          </Flex>
-        </Flex>
-      </Flex>
+          </>
+        }
+      />
       <Table
         columnConfig={columns}
         {...tableProps}
@@ -241,6 +249,6 @@ export const WorkflowRunsTable = ({
           <WorkflowDAGInline workflow={selectedWorkflow} />
         </div>
       )}
-    </div>
+    </Container>
   );
 };

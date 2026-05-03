@@ -101,7 +101,7 @@ export const expandColumn = (
 ): ColumnConfig<WorkflowItem> => ({
   id: 'expand',
   label: '',
-  width: 30,
+  width: 25,
   cell: item => {
     const isExpanded = expandedRow === item.metadata.name;
     return (
@@ -122,6 +122,7 @@ export const instanceTypeColumn = (
 ): ColumnConfig<WorkflowItem> => ({
   id: 'instanceType',
   label: '',
+  width: 25,
   cell: item => {
     const instanceType = item.sourceInstance
       ? instanceTypeMap.get(item.sourceInstance)
