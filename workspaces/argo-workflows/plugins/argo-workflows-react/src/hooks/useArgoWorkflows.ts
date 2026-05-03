@@ -119,12 +119,15 @@ export function useArgoWorkflows(options: {
 
         // Fetch all instances in parallel
         const results = await Promise.all(
-          names.map(name => fetchForInstance(baseUrl, name)),
+          names.map(async name => {
+            const wfs = await fetchForInstance(baseUrl, name);
+            return wfs.map(wf => ({ ...wf, _sourceInstance: name }));
+          }),
         );
 
         // Merge and deduplicate by uid
         const seen = new Set<string>();
-        const merged: Workflow[] = [];
+        const merged: Array<Workflow & { _sourceInstance?: string }> = [];
         for (const batch of results) {
           for (const wf of batch) {
             if (!seen.has(wf.metadata.uid)) {

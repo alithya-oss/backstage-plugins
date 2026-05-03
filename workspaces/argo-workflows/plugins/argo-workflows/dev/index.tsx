@@ -111,7 +111,11 @@ const mockFetchApi = {
     if (url.endsWith('/instances')) {
       return new Response(
         JSON.stringify({
-          instances: ['argo-server', 'k8s-production', 'k8s-staging'],
+          instances: [
+            { name: 'argo-server', type: 'argo-server' },
+            { name: 'k8s-production', type: 'kubernetes' },
+            { name: 'k8s-staging', type: 'kubernetes' },
+          ],
           defaultInstance: 'argo-server',
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } },

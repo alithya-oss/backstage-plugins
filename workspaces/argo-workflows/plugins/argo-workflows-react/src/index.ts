@@ -33,5 +33,10 @@ export {
   useArgoInstances,
 } from './hooks';
 
+export type {
+  ArgoInstanceType,
+  ArgoInstanceDetail,
+} from './hooks/useArgoInstances';
+
 export { buildDAG } from './utils';
 export type { DAGNode, DAGEdge, DAGGraph } from './utils';

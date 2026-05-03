@@ -43,7 +43,7 @@ import fetch from 'node-fetch';
 
 /** Instance configured to talk to the Argo Workflows server API. */
 interface ArgoApiInstance {
-  kind: 'argo-api';
+  kind: 'argo-server';
   name: string;
   baseUrl: string;
   token: string;
@@ -208,7 +208,7 @@ export class ArgoWorkflowsService {
         });
       } else {
         this.instances.push({
-          kind: 'argo-api',
+          kind: 'argo-server',
           name,
           baseUrl: instanceConfig.getString('baseUrl'),
           token: instanceConfig.getString('token'),
@@ -220,6 +220,17 @@ export class ArgoWorkflowsService {
   /** Returns the names of all configured instances. */
   getInstanceNames(): string[] {
     return this.instances.map(i => i.name);
+  }
+
+  /** Returns instance details (name + type) for all configured instances. */
+  getInstanceDetails(): Array<{
+    name: string;
+    type: 'argo-server' | 'kubernetes';
+  }> {
+    return this.instances.map(i => ({
+      name: i.name,
+      type: i.kind === 'argo-server' ? 'argo-server' : 'kubernetes',
+    }));
   }
 
   /** Returns the default instance name, if configured. */

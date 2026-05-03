@@ -22,34 +22,51 @@ import {
 } from '@backstage/core-plugin-api';
 
 /**
+ * Instance type returned by the backend.
+ *
+ * @public
+ */
+export type ArgoInstanceType = 'argo-server' | 'kubernetes';
+
+/**
+ * Instance detail returned by the backend.
+ *
+ * @public
+ */
+export interface ArgoInstanceDetail {
+  name: string;
+  type: ArgoInstanceType;
+}
+
+/**
  * Response shape from the `GET /instances` backend endpoint.
  *
  * @public
  */
 export interface ArgoInstancesResponse {
-  instances: string[];
+  instances: ArgoInstanceDetail[];
   defaultInstance?: string;
 }
 
 /**
- * Hook to fetch the list of configured Argo Workflows instance names
+ * Hook to fetch the list of configured Argo Workflows instances
  * from the backend.
  *
  * Calls `GET /api/argo-workflows/instances`.
  *
- * @returns An object with instance names, default instance, and loading state
+ * @returns An object with instance details, default instance, and loading state
  *
  * @public
  */
 export function useArgoInstances(): {
-  instances: string[];
+  instances: ArgoInstanceDetail[];
   defaultInstance?: string;
   loading: boolean;
 } {
   const fetchApi = useApi(fetchApiRef);
   const discoveryApi = useApi(discoveryApiRef);
 
-  const [instances, setInstances] = useState<string[]>([]);
+  const [instances, setInstances] = useState<ArgoInstanceDetail[]>([]);
   const [defaultInstance, setDefaultInstance] = useState<string | undefined>();
   const [loading, setLoading] = useState(true);
 

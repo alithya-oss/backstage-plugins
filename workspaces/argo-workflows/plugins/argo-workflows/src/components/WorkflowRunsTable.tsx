@@ -34,6 +34,7 @@ import {
   useArgoWorkflows,
   WorkflowStatusIcon,
 } from '@backstage-community/plugin-argo-workflows-react';
+import type { ArgoInstanceDetail } from '@backstage-community/plugin-argo-workflows-react';
 import type {
   Workflow,
   WorkflowStatus,
@@ -41,6 +42,7 @@ import type {
 import { RiArrowRightSLine } from '@remixicon/react';
 import { TaskStatusBar } from './TaskStatusBar';
 import { WorkflowDAGInline } from './WorkflowDAGInline';
+import { getInstanceTypeIcon } from '../images/icons';
 import styles from './WorkflowRunsTable.module.css';
 
 /**
@@ -53,13 +55,15 @@ export interface WorkflowRunsTableProps {
   instanceName?: string;
   /** Optional Kubernetes namespace to scope the query */
   namespace?: string;
-  /** Available instance names for the instance selector. When provided, a dropdown is shown. */
-  availableInstances?: string[];
+  /** Available instances for the instance selector. When provided, a dropdown is shown. */
+  availableInstances?: ArgoInstanceDetail[];
 }
 
-/** Table item type — extends Workflow with a required `id` for BUI Table. */
+/** Table item type — extends Workflow with a required `id` and source instance for BUI Table. */
 interface WorkflowItem extends Workflow {
   id: string;
+  /** The instance this workflow was fetched from. */
+  sourceInstance?: string;
 }
 
 /**
@@ -163,14 +167,16 @@ function formatTimeAgo(date: Date): string {
   return `Updated ${hours}h ago`;
 }
 
-/** Builds the full column config including the expand indicator. */
+/** Builds the full column config including the expand indicator and instance type. */
 function buildColumns(
   expandedRow: string | null,
+  instanceTypeMap: Map<string, string>,
 ): ColumnConfig<WorkflowItem>[] {
-  return [
+  const cols: ColumnConfig<WorkflowItem>[] = [
     {
       id: 'expand',
       label: '',
+      width: 30,
       cell: item => {
         const isExpanded = expandedRow === item.metadata.name;
         return (
@@ -185,8 +191,29 @@ function buildColumns(
         );
       },
     },
-    ...baseColumns,
   ];
+
+  // Only show the instance type column when there are multiple instances
+  if (instanceTypeMap.size > 1) {
+    cols.push({
+      id: 'instanceType',
+      label: '',
+      cell: item => {
+        const instanceType = item.sourceInstance
+          ? instanceTypeMap.get(item.sourceInstance)
+          : undefined;
+        const icon = getInstanceTypeIcon(instanceType);
+        return (
+          <Cell>
+            <div className={styles.instanceIcon}>{icon}</div>
+          </Cell>
+        );
+      },
+    });
+  }
+
+  cols.push(...baseColumns);
+  return cols;
 }
 
 /**
@@ -199,20 +226,43 @@ export const WorkflowRunsTable = ({
   namespace,
   availableInstances,
 }: WorkflowRunsTableProps) => {
-  const [selectedInstances, setSelectedInstances] = useState<string[]>(
-    instanceName ? [instanceName] : availableInstances ?? [],
+  const allInstanceNames = useMemo(
+    () => (availableInstances ?? []).map(i => i.name),
+    [availableInstances],
   );
+  const [selectedInstances, setSelectedInstances] = useState<string[]>(
+    instanceName ? [instanceName] : allInstanceNames,
+  );
+
+  // Always query with instanceNames so _sourceInstance is tagged
+  const effectiveInstances =
+    selectedInstances.length > 0 ? selectedInstances : allInstanceNames;
+
   const { workflows, loading, error, retry } = useArgoWorkflows({
     labelSelector,
-    instanceNames: selectedInstances.length > 0 ? selectedInstances : undefined,
-    instanceName: selectedInstances.length === 0 ? instanceName : undefined,
+    instanceNames:
+      effectiveInstances.length > 0 ? effectiveInstances : undefined,
+    instanceName: effectiveInstances.length === 0 ? instanceName : undefined,
     namespace,
   });
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [statusFilters, setStatusFilters] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
   const [lastUpdated] = useState(() => new Date());
-  const columns = useMemo(() => buildColumns(expandedRow), [expandedRow]);
+
+  // Build a map of instance name → type for the icon column
+  const instanceTypeMap = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const inst of availableInstances ?? []) {
+      map.set(inst.name, inst.type);
+    }
+    return map;
+  }, [availableInstances]);
+
+  const columns = useMemo(
+    () => buildColumns(expandedRow, instanceTypeMap),
+    [expandedRow, instanceTypeMap],
+  );
 
   const handleSelectionChange = useCallback((keys: Set<string | number>) => {
     setStatusFilters(new Set([...keys].map(String)));
@@ -235,6 +285,7 @@ export const WorkflowRunsTable = ({
   const data: WorkflowItem[] = filteredWorkflows.map(wf => ({
     ...wf,
     id: wf.metadata.name,
+    sourceInstance: (wf as any)._sourceInstance,
   }));
 
   const { tableProps } = useTable({
@@ -297,22 +348,33 @@ export const WorkflowRunsTable = ({
         <Text variant="title-small">Workflows</Text>
         <Flex align="center" style={{ gap: 'var(--bui-space-3)' }}>
           {availableInstances && availableInstances.length > 1 && (
-            <Select
-              selectionMode="multiple"
-              placeholder="Select instances"
-              options={availableInstances.map(name => ({
-                value: name,
-                label: name,
-              }))}
-              value={selectedInstances}
-              onChange={keys => {
-                const values = Array.isArray(keys) ? keys : [keys];
-                setSelectedInstances(
-                  values.filter((v): v is string => typeof v === 'string'),
-                );
-              }}
-              size="small"
-            />
+            <Flex align="center" style={{ gap: 'var(--bui-space-1)' }}>
+              <Select
+                selectionMode="multiple"
+                aria-label="Select instances"
+                options={availableInstances.map(inst => ({
+                  value: inst.name,
+                  label: inst.name,
+                }))}
+                value={selectedInstances}
+                onChange={keys => {
+                  const values = Array.isArray(keys) ? keys : [keys];
+                  setSelectedInstances(
+                    values.filter((v): v is string => typeof v === 'string'),
+                  );
+                }}
+                size="small"
+              />
+              {selectedInstances.length < availableInstances.length && (
+                <Button
+                  variant="tertiary"
+                  size="small"
+                  onPress={() => setSelectedInstances(allInstanceNames)}
+                >
+                  All
+                </Button>
+              )}
+            </Flex>
           )}
           <ToggleButtonGroup
             selectionMode="multiple"

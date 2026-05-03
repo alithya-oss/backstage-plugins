@@ -40,3 +40,10 @@
 .expandIndicator[data-expanded] {
   transform: rotate(90deg);
 }
+
+.instanceIcon {
+  color: var(--bui-fg-primary);
+  display: flex;
+  align-items: center;
+  line-height: 0;
+}

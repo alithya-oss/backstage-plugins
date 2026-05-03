@@ -108,7 +108,7 @@ export async function createRouter(
     '/instances',
     async (_req: express.Request, res: express.Response) => {
       res.json({
-        instances: service.getInstanceNames(),
+        instances: service.getInstanceDetails(),
         defaultInstance: service.getDefaultInstance(),
       });
     },
