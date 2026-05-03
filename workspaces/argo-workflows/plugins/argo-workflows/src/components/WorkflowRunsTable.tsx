@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-import classNames from 'classnames';
 import { useCallback, useMemo, useState } from 'react';
 import {
   Alert,
   Button,
-  Cell,
-  CellText,
   Flex,
   SearchField,
   Select,
@@ -30,20 +27,12 @@ import {
   ToggleButtonGroup,
   useTable,
 } from '@backstage/ui';
-import type { ColumnConfig } from '@backstage/ui';
-import {
-  useArgoWorkflows,
-  WorkflowStatusIcon,
-} from '@backstage-community/plugin-argo-workflows-react';
+import { useArgoWorkflows } from '@backstage-community/plugin-argo-workflows-react';
 import type { ArgoInstanceDetail } from '@backstage-community/plugin-argo-workflows-react';
-import type {
-  Workflow,
-  WorkflowStatus,
-} from '@backstage-community/plugin-argo-workflows-common';
-import { RiArrowRightSLine } from '@remixicon/react';
-import { TaskStatusBar } from './TaskStatusBar';
 import { WorkflowDAGInline } from './WorkflowDAGInline';
-import { getInstanceTypeIcon } from '../images/icons';
+import { buildColumns, workflowSortFn } from './helpers';
+import { ALL_STATUSES, formatTimeAgo } from './utils';
+import type { WorkflowItem } from './utils';
 import styles from './WorkflowRunsTable.module.css';
 
 /**
@@ -58,170 +47,6 @@ export interface WorkflowRunsTableProps {
   namespace?: string;
   /** Available instances for the instance selector. When provided, a dropdown is shown. */
   availableInstances?: ArgoInstanceDetail[];
-}
-
-/** Table item type — extends Workflow with a required `id` and source instance for BUI Table. */
-interface WorkflowItem extends Workflow {
-  id: string;
-  /** The instance this workflow was fetched from. */
-  sourceInstance?: string;
-}
-
-/**
- * Formats a duration between two ISO date strings into a human-readable string.
- */
-function formatDuration(startedAt?: string, finishedAt?: string): string {
-  if (!startedAt || !finishedAt) return '—';
-  const start = new Date(startedAt).getTime();
-  const end = new Date(finishedAt).getTime();
-  const diffMs = end - start;
-  if (diffMs < 0 || Number.isNaN(diffMs)) return '—';
-  const totalSeconds = Math.floor(diffMs / 1000);
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
-  if (minutes > 0) return `${minutes}m ${seconds}s`;
-  return `${seconds}s`;
-}
-
-/**
- * Formats an ISO date string into a localized date/time string.
- */
-function formatDate(isoDate?: string): string {
-  if (!isoDate) return '—';
-  return new Date(isoDate).toLocaleString();
-}
-
-/** Base column definitions for the workflow runs table. */
-const baseColumns: ColumnConfig<WorkflowItem>[] = [
-  {
-    id: 'name',
-    label: 'Name',
-    isRowHeader: true,
-    isSortable: true,
-    cell: item => (
-      <Cell>
-        <Flex align="start" direction="column">
-          <Text
-            weight="bold"
-            className={classNames(styles.textOverflow, styles.nameLabel)}
-          >
-            {`${item.metadata.namespace}/${item.metadata.name}`}
-          </Text>
-          {item.sourceInstance && (
-            <Text variant="body-small" color="secondary">
-              {item.sourceInstance}
-            </Text>
-          )}
-        </Flex>
-      </Cell>
-    ),
-  },
-  {
-    id: 'status',
-    label: 'Status',
-    cell: item => (
-      <Cell>
-        <WorkflowStatusIcon status={item.status.phase} />
-      </Cell>
-    ),
-  },
-  {
-    id: 'taskStatus',
-    label: 'Task Status',
-    cell: item => (
-      <Cell>
-        <TaskStatusBar nodes={item.status.nodes} />
-      </Cell>
-    ),
-  },
-  {
-    id: 'duration',
-    label: 'Duration',
-    cell: item => (
-      <CellText
-        title={formatDuration(item.status.startedAt, item.status.finishedAt)}
-      />
-    ),
-  },
-  {
-    id: 'startDate',
-    label: 'Start Date',
-    isSortable: true,
-    cell: item => <CellText title={formatDate(item.status.startedAt)} />,
-  },
-];
-
-/** All possible workflow status values for the filter toggles. */
-const ALL_STATUSES: WorkflowStatus[] = [
-  'Succeeded',
-  'Failed',
-  'Running',
-  'Pending',
-  'Error',
-];
-
-/**
- * Returns a human-readable relative time string (e.g. "Updated just now").
- */
-function formatTimeAgo(date: Date): string {
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-  if (seconds < 10) return 'Updated just now';
-  if (seconds < 60) return `Updated ${seconds}s ago`;
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `Updated ${minutes}m ago`;
-  const hours = Math.floor(minutes / 60);
-  return `Updated ${hours}h ago`;
-}
-
-/** Builds the full column config including the expand indicator and instance type. */
-function buildColumns(
-  expandedRow: string | null,
-  instanceTypeMap: Map<string, string>,
-): ColumnConfig<WorkflowItem>[] {
-  const cols: ColumnConfig<WorkflowItem>[] = [
-    {
-      id: 'expand',
-      label: '',
-      width: 30,
-      cell: item => {
-        const isExpanded = expandedRow === item.metadata.name;
-        return (
-          <Cell>
-            <RiArrowRightSLine
-              aria-label={isExpanded ? 'Collapse row' : 'Expand row'}
-              className={styles.expandIndicator}
-              data-expanded={isExpanded || undefined}
-              size={20}
-            />
-          </Cell>
-        );
-      },
-    },
-  ];
-
-  // Only show the instance type column when there are multiple instances
-  if (instanceTypeMap.size > 1) {
-    cols.push({
-      id: 'instanceType',
-      label: '',
-      cell: item => {
-        const instanceType = item.sourceInstance
-          ? instanceTypeMap.get(item.sourceInstance)
-          : undefined;
-        const icon = getInstanceTypeIcon(instanceType);
-        return (
-          <Cell>
-            <div className={styles.instanceIcon}>{icon}</div>
-          </Cell>
-        );
-      },
-    });
-  }
-
-  cols.push(...baseColumns);
-  return cols;
 }
 
 /**
@@ -242,7 +67,6 @@ export const WorkflowRunsTable = ({
     instanceName ? [instanceName] : allInstanceNames,
   );
 
-  // Always query with instanceNames so _sourceInstance is tagged
   const effectiveInstances =
     selectedInstances.length > 0 ? selectedInstances : allInstanceNames;
 
@@ -253,12 +77,12 @@ export const WorkflowRunsTable = ({
     instanceName: effectiveInstances.length === 0 ? instanceName : undefined,
     namespace,
   });
+
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [statusFilters, setStatusFilters] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
   const [lastUpdated] = useState(() => new Date());
 
-  // Build a map of instance name → type for the icon column
   const instanceTypeMap = useMemo(() => {
     const map = new Map<string, string>();
     for (const inst of availableInstances ?? []) {
@@ -299,27 +123,7 @@ export const WorkflowRunsTable = ({
   const { tableProps } = useTable({
     mode: 'complete',
     data,
-    sortFn: (items, sort) => {
-      if (!sort) return items;
-      const sorted = [...items].sort((a, b) => {
-        if (sort.column === 'name') {
-          return `${a.metadata.namespace}/${a.metadata.name}`.localeCompare(
-            `${b.metadata.namespace}/${b.metadata.name}`,
-          );
-        }
-        if (sort.column === 'startDate') {
-          const dateA = a.status.startedAt
-            ? new Date(a.status.startedAt).getTime()
-            : 0;
-          const dateB = b.status.startedAt
-            ? new Date(b.status.startedAt).getTime()
-            : 0;
-          return dateA - dateB;
-        }
-        return 0;
-      });
-      return sort.direction === 'descending' ? sorted.reverse() : sorted;
-    },
+    sortFn: workflowSortFn,
     initialSort: { column: 'startDate', direction: 'descending' },
     paginationOptions: {
       pageSize: 5,
