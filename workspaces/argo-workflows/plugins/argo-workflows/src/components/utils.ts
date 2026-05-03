@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import type { Workflow } from '@backstage-community/plugin-argo-workflows-common';
-import type { WorkflowStatus } from '@backstage-community/plugin-argo-workflows-common';
+import type { Workflow } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import type { WorkflowStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 
 /** Table item type — extends Workflow with a required `id` and source instance. */
 export interface WorkflowItem extends Workflow {

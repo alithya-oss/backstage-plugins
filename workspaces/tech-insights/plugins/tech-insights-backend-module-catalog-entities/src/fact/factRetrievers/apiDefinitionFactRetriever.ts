@@ -3,7 +3,7 @@ import { Entity, ApiEntityV1alpha1 } from '@backstage/catalog-model';
 import {
   FactRetriever,
   FactRetrieverContext,
-} from '@backstage-community/plugin-tech-insights-node';
+} from '@alithya-oss/backstage-plugin-tech-insights-node';
 
 /**
  * Generates facts which indicate the quality of data in the spec.definition field of API entities.

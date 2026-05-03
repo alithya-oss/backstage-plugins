@@ -28,7 +28,7 @@ import {
 import {
   parseWorkflow,
   type Workflow,
-} from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import type {
   KubernetesClustersSupplier,
   KubernetesFetcher,

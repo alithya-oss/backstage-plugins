@@ -17,7 +17,7 @@
 import type {
   Workflow,
   WorkflowStatus,
-} from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 
 /**
  * A node in the DAG representation of a workflow.

@@ -1,4 +1,4 @@
-# @backstage-community/plugin-argo-workflows-common
+# @alithya-oss/backstage-plugin-argo-workflows-common
 
 Common functionalities for the argo-workflows plugin.
 

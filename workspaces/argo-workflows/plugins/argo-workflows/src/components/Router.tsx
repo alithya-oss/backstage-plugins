@@ -18,8 +18,8 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import {
   isArgoWorkflowsAvailable,
   ArgoWorkflowsAnnotations,
-} from '@backstage-community/plugin-argo-workflows-common';
-import { useArgoInstances } from '@backstage-community/plugin-argo-workflows-react';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import { useArgoInstances } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import { WorkflowRunsTable } from './WorkflowRunsTable';
 
 /**

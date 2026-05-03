@@ -15,7 +15,7 @@
  */
 
 import type { FC, PropsWithChildren } from 'react';
-import type { WorkflowStatus } from '@backstage-community/plugin-argo-workflows-common';
+import type { WorkflowStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { Text } from '@backstage/ui';
 import {
   RiTimeLine,

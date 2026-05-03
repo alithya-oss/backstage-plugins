@@ -1,4 +1,4 @@
-# @backstage-community/plugin-argo-workflows-backend
+# @alithya-oss/backstage-plugin-argo-workflows-backend
 
 Backend plugin for the argo-workflows plugin.
 

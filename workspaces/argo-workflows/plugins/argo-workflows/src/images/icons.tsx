@@ -27,7 +27,7 @@ export const kubernetes = (
     xmlns="http://www.w3.org/2000/svg"
     role="img"
     viewBox="9.70 9.20 210.86 204.86"
-    height="25px"
+    height="20px"
   >
     <path
       fill="currentColor"
@@ -45,7 +45,7 @@ export const argo = (
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 522 673"
-    height="25px"
+    height="20px"
   >
     <path
       fill="currentColor"

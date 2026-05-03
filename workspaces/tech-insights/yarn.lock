@@ -16,7 +16,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-tech-insights-backend-module-catalog-entities@workspace:plugins/tech-insights-backend-module-catalog-entities"
   dependencies:
-    "@backstage-community/plugin-tech-insights-node": "npm:^2.4.0"
+    "@alithya-oss/backstage-plugin-tech-insights-node": "npm:^2.4.0"
     "@backstage/backend-plugin-api": "backstage:^"
     "@backstage/backend-test-utils": "backstage:^"
     "@backstage/catalog-client": "backstage:^"
@@ -1805,12 +1805,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-tech-insights-backend-module-jsonfc@npm:^0.5.1":
+"@alithya-oss/backstage-plugin-tech-insights-backend-module-jsonfc@npm:^0.5.1":
   version: 0.5.1
-  resolution: "@backstage-community/plugin-tech-insights-backend-module-jsonfc@npm:0.5.1"
+  resolution: "@alithya-oss/backstage-plugin-tech-insights-backend-module-jsonfc@npm:0.5.1"
   dependencies:
-    "@backstage-community/plugin-tech-insights-common": "npm:^0.6.0"
-    "@backstage-community/plugin-tech-insights-node": "npm:^2.4.0"
+    "@alithya-oss/backstage-plugin-tech-insights-common": "npm:^0.6.0"
+    "@alithya-oss/backstage-plugin-tech-insights-node": "npm:^2.4.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/config": "npm:^1.3.2"
     "@backstage/errors": "npm:^1.2.7"
@@ -1823,12 +1823,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-tech-insights-backend@npm:^2.3.0":
+"@alithya-oss/backstage-plugin-tech-insights-backend@npm:^2.3.0":
   version: 2.3.0
-  resolution: "@backstage-community/plugin-tech-insights-backend@npm:2.3.0"
+  resolution: "@alithya-oss/backstage-plugin-tech-insights-backend@npm:2.3.0"
   dependencies:
-    "@backstage-community/plugin-tech-insights-common": "npm:^0.6.0"
-    "@backstage-community/plugin-tech-insights-node": "npm:^2.4.0"
+    "@alithya-oss/backstage-plugin-tech-insights-common": "npm:^0.6.0"
+    "@alithya-oss/backstage-plugin-tech-insights-node": "npm:^2.4.0"
     "@backstage/backend-defaults": "npm:^0.7.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/backend-test-utils": "npm:^1.3.0"
@@ -1853,9 +1853,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-tech-insights-common@npm:^0.6.0":
+"@alithya-oss/backstage-plugin-tech-insights-common@npm:^0.6.0":
   version: 0.6.0
-  resolution: "@backstage-community/plugin-tech-insights-common@npm:0.6.0"
+  resolution: "@alithya-oss/backstage-plugin-tech-insights-common@npm:0.6.0"
   dependencies:
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/catalog-model": "npm:^1.7.3"
@@ -1870,24 +1870,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-tech-insights-maturity-common@npm:^0.2.1":
+"@alithya-oss/backstage-plugin-tech-insights-maturity-common@npm:^0.2.1":
   version: 0.2.1
-  resolution: "@backstage-community/plugin-tech-insights-maturity-common@npm:0.2.1"
+  resolution: "@alithya-oss/backstage-plugin-tech-insights-maturity-common@npm:0.2.1"
   dependencies:
-    "@backstage-community/plugin-tech-insights-common": "npm:^0.6.0"
+    "@alithya-oss/backstage-plugin-tech-insights-common": "npm:^0.6.0"
     "@backstage/repo-tools": "npm:^0.13.0"
     msw: "npm:2.7.0"
   checksum: 10/7c54cc7216b24e395a94e7246b9dbbf77dd2f6140f7435d731b2be0ffab13c9323fcbf3cc7ae68d66ba6757e6320fe5ce7c48e591c8533641b6082db823895a7
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-tech-insights-maturity@npm:^0.2.2":
+"@alithya-oss/backstage-plugin-tech-insights-maturity@npm:^0.2.2":
   version: 0.2.2
-  resolution: "@backstage-community/plugin-tech-insights-maturity@npm:0.2.2"
+  resolution: "@alithya-oss/backstage-plugin-tech-insights-maturity@npm:0.2.2"
   dependencies:
-    "@backstage-community/plugin-tech-insights-common": "npm:^0.6.0"
-    "@backstage-community/plugin-tech-insights-maturity-common": "npm:^0.2.1"
-    "@backstage-community/plugin-tech-insights-react": "npm:^1.1.1"
+    "@alithya-oss/backstage-plugin-tech-insights-common": "npm:^0.6.0"
+    "@alithya-oss/backstage-plugin-tech-insights-maturity-common": "npm:^0.2.1"
+    "@alithya-oss/backstage-plugin-tech-insights-react": "npm:^1.1.1"
     "@backstage/catalog-client": "npm:^1.9.1"
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/core-components": "npm:^0.16.3"
@@ -1915,11 +1915,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-tech-insights-node@npm:^2.4.0":
+"@alithya-oss/backstage-plugin-tech-insights-node@npm:^2.4.0":
   version: 2.4.0
-  resolution: "@backstage-community/plugin-tech-insights-node@npm:2.4.0"
+  resolution: "@alithya-oss/backstage-plugin-tech-insights-node@npm:2.4.0"
   dependencies:
-    "@backstage-community/plugin-tech-insights-common": "npm:^0.6.0"
+    "@alithya-oss/backstage-plugin-tech-insights-common": "npm:^0.6.0"
     "@backstage/backend-plugin-api": "npm:^1.1.1"
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/config": "npm:^1.3.2"
@@ -1930,11 +1930,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage-community/plugin-tech-insights-react@npm:^1.1.1":
+"@alithya-oss/backstage-plugin-tech-insights-react@npm:^1.1.1":
   version: 1.1.1
-  resolution: "@backstage-community/plugin-tech-insights-react@npm:1.1.1"
+  resolution: "@alithya-oss/backstage-plugin-tech-insights-react@npm:1.1.1"
   dependencies:
-    "@backstage-community/plugin-tech-insights-common": "npm:^0.6.0"
+    "@alithya-oss/backstage-plugin-tech-insights-common": "npm:^0.6.0"
     "@backstage/catalog-model": "npm:^1.7.3"
     "@backstage/core-plugin-api": "npm:^1.10.3"
     "@backstage/types": "npm:^1.2.1"
@@ -14415,7 +14415,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "app@workspace:packages/app"
   dependencies:
-    "@backstage-community/plugin-tech-insights-maturity": "npm:^0.2.2"
+    "@alithya-oss/backstage-plugin-tech-insights-maturity": "npm:^0.2.2"
     "@backstage/app-defaults": "backstage:^"
     "@backstage/catalog-model": "backstage:^"
     "@backstage/cli": "backstage:^"
@@ -14970,8 +14970,8 @@ __metadata:
   resolution: "backend@workspace:packages/backend"
   dependencies:
     "@alithya-oss/backstage-plugin-tech-insights-backend-module-catalog-entities": "workspace:^"
-    "@backstage-community/plugin-tech-insights-backend": "npm:^2.3.0"
-    "@backstage-community/plugin-tech-insights-backend-module-jsonfc": "npm:^0.5.1"
+    "@alithya-oss/backstage-plugin-tech-insights-backend": "npm:^2.3.0"
+    "@alithya-oss/backstage-plugin-tech-insights-backend-module-jsonfc": "npm:^0.5.1"
     "@backstage/backend-defaults": "backstage:^"
     "@backstage/cli": "backstage:^"
     "@backstage/config": "backstage:^"

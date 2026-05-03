@@ -20,8 +20,8 @@ import {
   fetchApiRef,
   discoveryApiRef,
 } from '@backstage/core-plugin-api';
-import { parseWorkflow } from '@backstage-community/plugin-argo-workflows-common';
-import type { Workflow } from '@backstage-community/plugin-argo-workflows-common';
+import { parseWorkflow } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import type { Workflow } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 
 /**
  * Hook to fetch the detail of a single Argo Workflow by namespace and name.

@@ -21,12 +21,12 @@ import { Alert, ButtonIcon, Flex, Skeleton, Text } from '@backstage/ui';
 import {
   useArgoWorkflowDetail,
   buildDAG,
-} from '@backstage-community/plugin-argo-workflows-react';
+} from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import type {
   DAGNode,
   DAGGraph,
-} from '@backstage-community/plugin-argo-workflows-react';
-import type { WorkflowStatus } from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-react';
+import type { WorkflowStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import dagre from 'dagre';
 import { NodeDetailPanel } from './NodeDetailPanel';
 import { RiAddLine, RiSubtractLine, RiFullscreenLine } from '@remixicon/react';

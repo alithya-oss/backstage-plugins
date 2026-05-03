@@ -21,4 +21,4 @@
  */
 
 export { argoWorkflowsPlugin, ArgoWorkflowsCI } from './plugin';
-export { isArgoWorkflowsAvailable } from '@backstage-community/plugin-argo-workflows-common';
+export { isArgoWorkflowsAvailable } from '@alithya-oss/backstage-plugin-argo-workflows-common';

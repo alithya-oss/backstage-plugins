@@ -52,12 +52,12 @@ graph TD
     BE --> K8SNODE["@backstage/plugin-kubernetes-node"]
 ```
 
-| Package                  | Rôle Backstage    | Nom npm                                              | Responsabilité                                                          |
-| ------------------------ | ----------------- | ---------------------------------------------------- | ----------------------------------------------------------------------- |
-| `argo-workflows`         | `frontend-plugin` | `@backstage-community/plugin-argo-workflows`         | Plugin UI principal, onglet entité, routage, tableau, DAG inline        |
-| `argo-workflows-backend` | `backend-plugin`  | `@backstage-community/plugin-argo-workflows-backend` | Proxy API dual (Argo API + K8s API), authentification, routage REST     |
-| `argo-workflows-common`  | `common-library`  | `@backstage-community/plugin-argo-workflows-common`  | Enum annotations, types partagés, fonctions de sérialisation            |
-| `argo-workflows-react`   | `web-library`     | `@backstage-community/plugin-argo-workflows-react`   | Composants React réutilisables, hooks (instances, workflows), DAG build |
+| Package                  | Rôle Backstage    | Nom npm                                                | Responsabilité                                                          |
+| ------------------------ | ----------------- | ------------------------------------------------------ | ----------------------------------------------------------------------- |
+| `argo-workflows`         | `frontend-plugin` | `@alithya-oss/backstage-plugin-argo-workflows`         | Plugin UI principal, onglet entité, routage, tableau, DAG inline        |
+| `argo-workflows-backend` | `backend-plugin`  | `@alithya-oss/backstage-plugin-argo-workflows-backend` | Proxy API dual (Argo API + K8s API), authentification, routage REST     |
+| `argo-workflows-common`  | `common-library`  | `@alithya-oss/backstage-plugin-argo-workflows-common`  | Enum annotations, types partagés, fonctions de sérialisation            |
+| `argo-workflows-react`   | `web-library`     | `@alithya-oss/backstage-plugin-argo-workflows-react`   | Composants React réutilisables, hooks (instances, workflows), DAG build |
 
 ### Flux de données
 

@@ -18,7 +18,7 @@ import classNames from 'classnames';
 import { Cell, CellText, Flex, Text } from '@backstage/ui';
 import type { ColumnConfig } from '@backstage/ui';
 import type { SortDescriptor } from 'react-stately';
-import { WorkflowStatusIcon } from '@backstage-community/plugin-argo-workflows-react';
+import { WorkflowStatusIcon } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import { RiArrowRightSLine } from '@remixicon/react';
 import { TaskStatusBar } from './TaskStatusBar';
 import { getInstanceTypeIcon } from '../images/icons';
@@ -30,7 +30,7 @@ import styles from './WorkflowRunsTable.module.css';
 
 /** Name cell: bold namespace/name with optional instance name below. */
 export const NameLabel = ({ item }: { item: WorkflowItem }): JSX.Element => (
-  <Flex align="start" direction="column">
+  <Flex align="start" direction="column" style={{ gap: 3 }}>
     <Text
       weight="bold"
       className={classNames(styles.textOverflow, styles.nameLabel)}
@@ -39,7 +39,7 @@ export const NameLabel = ({ item }: { item: WorkflowItem }): JSX.Element => (
     </Text>
     {item.sourceInstance && (
       <Text variant="body-small" color="secondary">
-        {item.sourceInstance}
+        instance: {item.sourceInstance}
       </Text>
     )}
   </Flex>

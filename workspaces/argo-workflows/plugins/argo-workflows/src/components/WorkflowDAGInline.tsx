@@ -17,15 +17,15 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { WheelEvent, MouseEvent } from 'react';
 import { ButtonIcon, Flex, Text } from '@backstage/ui';
-import { buildDAG } from '@backstage-community/plugin-argo-workflows-react';
+import { buildDAG } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import type {
   DAGNode,
   DAGGraph,
-} from '@backstage-community/plugin-argo-workflows-react';
+} from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import type {
   Workflow,
   WorkflowStatus,
-} from '@backstage-community/plugin-argo-workflows-common';
+} from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import dagre from 'dagre';
 import { NodeDetailPanel } from './NodeDetailPanel';
 import { RiAddLine, RiSubtractLine, RiFullscreenLine } from '@remixicon/react';

@@ -16,7 +16,7 @@
 
 import type { FC } from 'react';
 import { Box, Flex, Text } from '@backstage/ui';
-import type { WorkflowStatus } from '@backstage-community/plugin-argo-workflows-common';
+import type { WorkflowStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { WorkflowStatusIcon } from './WorkflowStatusIcon';
 import styles from './WorkflowStatusBadge.module.css';
 

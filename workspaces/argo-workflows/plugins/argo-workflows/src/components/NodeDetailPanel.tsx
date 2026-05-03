@@ -15,8 +15,8 @@
  */
 
 import { ButtonIcon, Flex, Text } from '@backstage/ui';
-import { WorkflowStatusIcon } from '@backstage-community/plugin-argo-workflows-react';
-import type { DAGNode } from '@backstage-community/plugin-argo-workflows-react';
+import { WorkflowStatusIcon } from '@alithya-oss/backstage-plugin-argo-workflows-react';
+import type { DAGNode } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import { RiCloseLine } from '@remixicon/react';
 import styles from './NodeDetailPanel.module.css';
 

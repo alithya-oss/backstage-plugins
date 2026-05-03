@@ -20,7 +20,7 @@ import { EntitySwitch } from '@backstage/plugin-catalog';
 import {
   isGithubActionsAvailable,
   EntityGithubActionsContent,
-} from '@backstage-community/plugin-github-actions';
+} from '@alithya-oss/backstage-plugin-github-actions';
 import {
   isGitlabAvailable,
   EntityGitlabContent,

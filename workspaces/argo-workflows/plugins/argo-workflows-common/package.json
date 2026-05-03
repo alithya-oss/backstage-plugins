@@ -1,5 +1,5 @@
 {
-  "name": "@backstage-community/plugin-argo-workflows-common",
+  "name": "@alithya-oss/backstage-plugin-argo-workflows-common",
   "description": "Common functionalities for the argo-workflows plugin",
   "version": "0.1.0",
   "main": "src/index.ts",
@@ -14,12 +14,12 @@
   "backstage": {
     "role": "common-library",
     "pluginId": "argo-workflows",
-    "pluginPackage": "@backstage-community/plugin-argo-workflows-common",
+    "pluginPackage": "@alithya-oss/backstage-plugin-argo-workflows-common",
     "pluginPackages": [
-      "@backstage-community/plugin-argo-workflows",
-      "@backstage-community/plugin-argo-workflows-backend",
-      "@backstage-community/plugin-argo-workflows-common",
-      "@backstage-community/plugin-argo-workflows-react"
+      "@alithya-oss/backstage-plugin-argo-workflows",
+      "@alithya-oss/backstage-plugin-argo-workflows-backend",
+      "@alithya-oss/backstage-plugin-argo-workflows-common",
+      "@alithya-oss/backstage-plugin-argo-workflows-react"
     ]
   },
   "sideEffects": false,

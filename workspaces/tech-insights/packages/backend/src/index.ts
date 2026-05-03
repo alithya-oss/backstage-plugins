@@ -53,9 +53,9 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 backend.add(import('@backstage/plugin-kubernetes-backend'));
 
 // tech-insights
-backend.add(import('@backstage-community/plugin-tech-insights-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-tech-insights-backend'));
 backend.add(
-  import('@backstage-community/plugin-tech-insights-backend-module-jsonfc'),
+  import('@alithya-oss/backstage-plugin-tech-insights-backend-module-jsonfc'),
 );
 backend.add(
   import(

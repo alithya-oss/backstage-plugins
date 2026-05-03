@@ -15,8 +15,8 @@
  */
 
 import { Flex, Text, Tooltip, TooltipTrigger } from '@backstage/ui';
-import type { WorkflowStatus } from '@backstage-community/plugin-argo-workflows-common';
-import type { WorkflowNode } from '@backstage-community/plugin-argo-workflows-common';
+import type { WorkflowStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+import type { WorkflowNode } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import styles from './TaskStatusBar.module.css';
 
 /** Props for the TaskStatusBar component. */

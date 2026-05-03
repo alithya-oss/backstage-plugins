@@ -1,5 +1,5 @@
 {
-  "name": "@backstage-community/plugin-argo-workflows-backend",
+  "name": "@alithya-oss/backstage-plugin-argo-workflows-backend",
   "description": "Backend plugin for the argo-workflows plugin",
   "version": "0.1.0",
   "main": "src/index.ts",
@@ -13,12 +13,12 @@
   "backstage": {
     "role": "backend-plugin",
     "pluginId": "argo-workflows",
-    "pluginPackage": "@backstage-community/plugin-argo-workflows-backend",
+    "pluginPackage": "@alithya-oss/backstage-plugin-argo-workflows-backend",
     "pluginPackages": [
-      "@backstage-community/plugin-argo-workflows",
-      "@backstage-community/plugin-argo-workflows-backend",
-      "@backstage-community/plugin-argo-workflows-common",
-      "@backstage-community/plugin-argo-workflows-react"
+      "@alithya-oss/backstage-plugin-argo-workflows",
+      "@alithya-oss/backstage-plugin-argo-workflows-backend",
+      "@alithya-oss/backstage-plugin-argo-workflows-common",
+      "@alithya-oss/backstage-plugin-argo-workflows-react"
     ]
   },
   "configSchema": "config.d.ts",
@@ -32,7 +32,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage-community/plugin-argo-workflows-common": "workspace:^",
+    "@alithya-oss/backstage-plugin-argo-workflows-common": "workspace:^",
     "@backstage/backend-plugin-api": "backstage:^",
     "@backstage/config": "backstage:^",
     "@backstage/errors": "backstage:^",

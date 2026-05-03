@@ -49,7 +49,7 @@ import { isGitlabAvailable, EntityGitlabContent } from '@immobiliarelabs/backsta
 import {
   EntityGithubActionsContent,
   isGithubActionsAvailable,
-} from '@backstage-community/plugin-github-actions';
+} from '@alithya-oss/backstage-plugin-github-actions';
 
 
 [...]
@@ -307,7 +307,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
 +import {
 +  EntityGithubActionsContent,
 +  isGithubActionsAvailable,
-+} from '@backstage-community/plugin-github-actions';
++} from '@alithya-oss/backstage-plugin-github-actions';
 +
 +const isCicdApplicable = (entity: Entity) => {
 +  return isGitlabAvailable(entity) || isGithubActionsAvailable(entity);

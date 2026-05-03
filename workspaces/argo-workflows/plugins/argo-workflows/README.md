@@ -1,4 +1,4 @@
-# @backstage-community/plugin-argo-workflows
+# @alithya-oss/backstage-plugin-argo-workflows
 
 Frontend plugin for Argo Workflows in Backstage.
 

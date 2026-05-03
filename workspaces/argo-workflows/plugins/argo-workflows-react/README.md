@@ -1,4 +1,4 @@
-# @backstage-community/plugin-argo-workflows-react
+# @alithya-oss/backstage-plugin-argo-workflows-react
 
 Web library for the argo-workflows plugin.
 

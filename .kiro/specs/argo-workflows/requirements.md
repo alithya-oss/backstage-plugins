@@ -6,10 +6,10 @@ Ce document décrit les exigences pour un plugin Backstage communautaire permett
 
 ## Glossaire
 
-- **Plugin_Frontend** : Le package principal du plugin (`@backstage-community/plugin-argo-workflows`) qui fournit les composants UI intégrés dans le portail Backstage.
-- **Plugin_Backend** : Le package backend (`@backstage-community/plugin-argo-workflows-backend`) qui sert de proxy API entre Backstage et le serveur Argo Workflows ou l'API Kubernetes.
-- **Package_Common** : Le package isomorphe (`@backstage-community/plugin-argo-workflows-common`) contenant les modèles partagés, annotations et utilitaires.
-- **Package_React** : Le package de widgets React partagés (`@backstage-community/plugin-argo-workflows-react`) contenant les hooks, types et composants réutilisables par des plugins tiers.
+- **Plugin_Frontend** : Le package principal du plugin (`@alithya-oss/backstage-plugin-argo-workflows`) qui fournit les composants UI intégrés dans le portail Backstage.
+- **Plugin_Backend** : Le package backend (`@alithya-oss/backstage-plugin-argo-workflows-backend`) qui sert de proxy API entre Backstage et le serveur Argo Workflows ou l'API Kubernetes.
+- **Package_Common** : Le package isomorphe (`@alithya-oss/backstage-plugin-argo-workflows-common`) contenant les modèles partagés, annotations et utilitaires.
+- **Package_React** : Le package de widgets React partagés (`@alithya-oss/backstage-plugin-argo-workflows-react`) contenant les hooks, types et composants réutilisables par des plugins tiers.
 - **Serveur_Argo** : L'instance du serveur Argo Workflows exposant l'API REST/gRPC pour la gestion des workflows.
 - **Entité_Catalogue** : Une entité enregistrée dans le catalogue Backstage (composant, service, etc.) pouvant être associée à des workflows Argo via des annotations.
 - **Workflow** : Une ressource CRD Kubernetes Argo Workflows définissant un graphe de tâches/étapes avec leurs dépendances.

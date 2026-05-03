@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import type { Workflow } from '@backstage-community/plugin-argo-workflows-common';
+import type { Workflow } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import succeededData from './succeeded-workflow.json';
 import runningData from './running-workflow.json';
 import failedData from './failed-workflow.json';
