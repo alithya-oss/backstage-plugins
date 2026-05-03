@@ -68,6 +68,7 @@ export function useArgoWorkflowDetail(options: {
 export function useArgoWorkflows(options: {
   labelSelector: string;
   instanceName?: string;
+  instanceNames?: string[];
   namespace?: string;
 }): {
   workflows: Workflow[];
