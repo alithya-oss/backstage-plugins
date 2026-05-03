@@ -18,7 +18,7 @@
 
 import { Entity } from '@backstage/catalog-model';
 import { EntityLayout, EntitySwitch } from '@backstage/plugin-catalog';
-import { isGithubActionsAvailable } from '@alithya-oss/backstage-plugin-github-actions';
+import { isGithubActionsAvailable } from '@backstage-community/plugin-github-actions';
 import { isGitlabAvailable } from '@immobiliarelabs/backstage-plugin-gitlab';
 import { Grid } from '@material-ui/core';
 import { ReactNode } from 'react';

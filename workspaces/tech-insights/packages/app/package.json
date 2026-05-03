@@ -19,7 +19,7 @@
     "lint": "backstage-cli package lint"
   },
   "dependencies": {
-    "@alithya-oss/backstage-plugin-tech-insights-maturity": "^0.2.2",
+    "@backstage-community/plugin-tech-insights-maturity": "^0.2.2",
     "@backstage/app-defaults": "backstage:^",
     "@backstage/catalog-model": "backstage:^",
     "@backstage/cli": "backstage:^",

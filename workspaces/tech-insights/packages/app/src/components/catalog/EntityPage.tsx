@@ -62,7 +62,7 @@ import {
   EntityMaturitySummaryCard,
   EntityMaturityScorecardContent,
   EntityMaturitySummaryContent,
-} from '@alithya-oss/backstage-plugin-tech-insights-maturity';
+} from '@backstage-community/plugin-tech-insights-maturity';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -78,7 +78,7 @@ const cicdContent = (
   <EntitySwitch>
     {/*
       Here you can add support for different CI/CD services, for example
-      using @alithya-oss/backstage-plugin-github-actions as follows:
+      using @backstage-community/plugin-github-actions as follows:
       <EntitySwitch.Case if={isGithubActionsAvailable}>
         <EntityGithubActionsContent />
       </EntitySwitch.Case>

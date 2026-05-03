@@ -41,7 +41,7 @@ const getPaths = async (options: {
       const hasPackageJson = await findUp.exists(packageJsonPath);
       if (hasPackageJson) {
         const packageJsonContents = require(packageJsonPath);
-        if (packageJsonContents.name === '@alithya-oss/backstage-plugins') {
+        if (packageJsonContents.name === '@backstage-community/plugins') {
           return packageJsonPath;
         }
       }

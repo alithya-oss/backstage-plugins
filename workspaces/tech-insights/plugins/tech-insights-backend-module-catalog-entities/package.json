@@ -30,7 +30,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@alithya-oss/backstage-plugin-tech-insights-node": "^2.4.0",
+    "@backstage-community/plugin-tech-insights-node": "^2.4.0",
     "@backstage/backend-plugin-api": "backstage:^",
     "@backstage/catalog-client": "backstage:^",
     "@backstage/catalog-model": "backstage:^"

@@ -2,7 +2,7 @@ import {
   coreServices,
   createBackendModule,
 } from '@backstage/backend-plugin-api';
-import { techInsightsFactRetrieversExtensionPoint } from '@alithya-oss/backstage-plugin-tech-insights-node';
+import { techInsightsFactRetrieversExtensionPoint } from '@backstage-community/plugin-tech-insights-node';
 import { apiDefinitionFactRetriever } from './fact';
 
 /**
