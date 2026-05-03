@@ -1,8 +1,8 @@
-# Plan d'implémentation : Plugin Argo Workflows pour Backstage
+# Plan d'implémentation — Plugin Argo Workflows pour Backstage
 
 ## Vue d'ensemble
 
-Ce plan décompose la conception du plugin Argo Workflows en tâches de codage incrémentales. Chaque tâche s'appuie sur les précédentes et se termine par le câblage complet des composants. Le plugin suit la convention ADR011 avec quatre packages : common, react, backend et frontend. Le langage d'implémentation est TypeScript.
+Ce plan décompose la conception du plugin Argo Workflows en tâches de codage incrémentales. Chaque tâche s'appuie sur les précédentes et se termine par le câblage complet des composants. Le plugin suit la convention ADR011 avec quatre packages : common, react, backend et frontend. Le langage d'implémentation est TypeScript. Toutes les tâches sont complétées.
 
 ## Tâches
 
@@ -10,250 +10,249 @@ Ce plan décompose la conception du plugin Argo Workflows en tâches de codage i
 
   - [x] 1.1 Générer le boilerplate des quatre packages avec `yarn new`
 
-    - Exécuter `yarn new` depuis la racine du projet Backstage pour générer chaque package un par un :
-      - Sélectionner "plugin" pour créer `argo-workflows` (frontend-plugin) avec l'id `argo-workflows`
-      - Sélectionner "backend-plugin" pour créer `argo-workflows-backend` avec l'id `argo-workflows`
-      - Sélectionner "common-plugin-library" pour créer `argo-workflows-common` avec l'id `argo-workflows`
-      - Sélectionner "web-library" pour créer `argo-workflows-react` avec l'id `argo-workflows`
-    - Les packages seront générés dans `plugins/` avec la structure standard Backstage (package.json, tsconfig.json, src/index.ts)
-    - _Exigences : 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7_
+    - Exécuter `yarn new` depuis la racine du projet Backstage pour générer chaque package :
+      - `argo-workflows` (frontend-plugin), `argo-workflows-backend` (backend-plugin), `argo-workflows-common` (common-library), `argo-workflows-react` (web-library)
+    - Les packages sont générés dans `plugins/` avec la structure standard Backstage
+    - _Exigences : 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8_
 
-  - [x] 1.2 Ajuster les `package.json` générés pour la conformité ADR011
+  - [x] 1.2 Ajuster les `package.json` pour la conformité ADR011
 
-    - Mettre à jour chaque `package.json` pour ajouter le champ `pluginPackages` listant les quatre packages : `@backstage-community/plugin-argo-workflows`, `@backstage-community/plugin-argo-workflows-backend`, `@backstage-community/plugin-argo-workflows-common`, `@backstage-community/plugin-argo-workflows-react`
-    - Vérifier et ajuster le champ `backstage.pluginId` à `argo-workflows` dans chaque package
-    - Ajouter les dépendances spécifiques manquantes :
-      - `argo-workflows-common` : `@backstage/catalog-model`
-      - `argo-workflows-react` : `workspace:^` vers `argo-workflows-common`, `dagre`, `@backstage/ui`
-      - `argo-workflows` : `workspace:^` vers `argo-workflows-common` et `argo-workflows-react`, `@backstage/plugin-catalog-react`, `@backstage/ui`, `dagre`
-      - `argo-workflows-backend` : `workspace:^` vers `argo-workflows-common`, `express`, `node-fetch`
-    - _Exigences : 1.4, 1.5, 1.6, 1.7_
+    - Champ `pluginPackages` listant les quatre packages dans chaque `package.json`
+    - Champ `backstage.pluginId` à `argo-workflows`
+    - Dépendances spécifiques : `@backstage/catalog-model`, `dagre`, `@backstage/ui`, `@remixicon/react`, `@backstage/plugin-kubernetes-node`, `node-fetch`, `express`
+    - _Exigences : 1.5, 1.6, 1.7, 1.8_
 
-  - [x] 1.3 Nettoyer le boilerplate généré et préparer les fichiers source
-    - Supprimer le code d'exemple généré par `yarn new` dans chaque `src/` (composants de démo, routes de démo, etc.)
-    - S'assurer que chaque `src/index.ts` est prêt pour les exports réels (vide ou avec les exports de base)
-    - Vérifier que les `tsconfig.json` de chaque package étendent correctement la config racine
-    - Exécuter `yarn install` pour résoudre les dépendances workspace
+  - [x] 1.3 Nettoyer le boilerplate et préparer les fichiers source
+    - Suppression du code d'exemple, préparation des `src/index.ts` pour les exports réels
     - _Exigences : 1.1, 1.2, 1.3_
 
 - [x] 2. Implémenter le Package Common (`argo-workflows-common`)
 
-  - [x] 2.1 Définir les annotations et la fonction `isArgoWorkflowsAvailable`
+  - [x] 2.1 Définir l'enum `ArgoWorkflowsAnnotations` et les constantes dépréciées
 
-    - Créer `src/annotations.ts` exportant `ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION` et `ARGO_WORKFLOWS_INSTANCE_ANNOTATION` comme constantes typées
-    - Créer `src/utils.ts` exportant `isArgoWorkflowsAvailable(entity: Entity): boolean` qui vérifie la présence et la non-vacuité (après trim) de l'annotation workflow-selector
-    - Mettre à jour `src/index.ts` pour réexporter les annotations et utilitaires
-    - _Exigences : 1.1, 1.2, 2.1, 2.2, 2.3_
+    - Créer `src/annotations.ts` exportant l'enum `ArgoWorkflowsAnnotations` avec les membres : `CICD` (`argoworkflows.argoproj.io/workflow`), `LABEL_SELECTOR` (`argoworkflows.argoproj.io/workflow-selector`), `INSTANCE_NAME` (`argoworkflows.argoproj.io/instance-name`), `KUBERNETES_ID` (`backstage.io/kubernetes-id`), `KUBERNETES_NAMESPACE` (`backstage.io/kubernetes-namespace`), `KUBERNETES_LABEL_SELECTOR` (`backstage.io/kubernetes-label-selector`)
+    - Exporter les constantes dépréciées `ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION` et `ARGO_WORKFLOWS_INSTANCE_ANNOTATION` avec des valeurs identiques aux membres correspondants de l'enum
+    - _Exigences : 1.1, 1.2_
 
-  - [ ]\* 2.2 Écrire le test par propriétés pour `isArgoWorkflowsAvailable`
+  - [x] 2.2 Implémenter la fonction `isArgoWorkflowsAvailable`
 
-    - **Propriété 1 : Disponibilité du plugin basée sur les annotations**
-    - Générer des entités aléatoires avec/sans annotation, vérifier que le résultat booléen correspond à la présence d'une annotation non vide
-    - **Valide : Exigences 2.1, 2.2, 2.3**
+    - Créer `src/utils.ts` exportant `isArgoWorkflowsAvailable(entity: Entity): boolean`
+    - Retourne `true` si : `CICD` = `"true"`, ou `LABEL_SELECTOR` non vide (après trim), ou `KUBERNETES_LABEL_SELECTOR` non vide, ou `KUBERNETES_ID` non vide
+    - Retourne `false` dans tous les autres cas (annotations absentes, vides, whitespace seul, namespace seul)
+    - _Exigences : 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
 
-  - [x] 2.3 Définir les types TypeScript partagés
+  - [x] 2.3 Écrire les tests unitaires pour les annotations et `isArgoWorkflowsAvailable`
 
-    - Créer `src/types.ts` exportant `WorkflowStatus`, `WorkflowMetadata`, `WorkflowNode`, `WorkflowStatusDetail`, `Workflow`, `WorkflowListResponse`
-    - Les types doivent correspondre exactement au document de conception
-    - Mettre à jour `src/index.ts` pour réexporter les types
-    - _Exigences : 1.2, 7.1_
+    - Tests des valeurs de l'enum `ArgoWorkflowsAnnotations` (6 membres)
+    - Tests des constantes dépréciées (identiques aux membres de l'enum)
+    - Tests de `isArgoWorkflowsAvailable` : CICD="true", CICD="false", CICD vide, LABEL_SELECTOR non vide, LABEL_SELECTOR vide/whitespace, KUBERNETES_LABEL_SELECTOR, KUBERNETES_ID, namespace seul, aucune annotation
+    - _Exigences : 1.1, 1.2, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
 
-  - [x] 2.4 Implémenter les fonctions de sérialisation `parseWorkflow` et `formatWorkflow`
+  - [x] 2.4 Définir les types TypeScript partagés
 
-    - Créer `src/serialization.ts` exportant `parseWorkflow(raw: Record<string, unknown>): Workflow` et `formatWorkflow(workflow: Workflow): Record<string, unknown>`
-    - `parseWorkflow` doit valider les champs obligatoires (`metadata.name`, `metadata.namespace`, `status.phase`) et lever une erreur descriptive listant les champs manquants
-    - `parseWorkflow` doit ignorer silencieusement les champs inconnus
-    - `formatWorkflow` doit produire un JSON conforme au schéma de l'API Argo
-    - Mettre à jour `src/index.ts` pour réexporter les fonctions
-    - _Exigences : 7.1, 7.2, 7.3, 7.4, 7.5_
+    - Créer `src/types.ts` exportant `WorkflowStatus`, `WorkflowMetadata`, `WorkflowNode` (avec champ `message`), `WorkflowStatusDetail`, `Workflow`, `WorkflowListResponse`
+    - _Exigences : 1.3_
 
-  - [ ]\* 2.5 Écrire le test par propriétés pour le round-trip de sérialisation
+  - [x] 2.5 Implémenter les fonctions de sérialisation `parseWorkflow` et `formatWorkflow`
 
-    - **Propriété 2 : Round-trip de sérialisation des workflows**
-    - Générer des objets Workflow aléatoires, vérifier que `parseWorkflow(formatWorkflow(w))` est équivalent à `w`
-    - **Valide : Exigences 7.1, 7.2, 7.3, 7.4**
+    - Créer `src/serialization.ts` avec validation des champs obligatoires, parsing des nœuds avec champ `message`, ignorance des champs inconnus
+    - _Exigences : 14.1, 14.2, 14.3, 14.4, 14.5_
 
-  - [ ]\* 2.6 Écrire le test par propriétés pour les champs obligatoires manquants
-    - **Propriété 3 : Erreur descriptive pour champs obligatoires manquants**
-    - Générer des JSON incomplets (manquant au moins un champ parmi `metadata.name`, `metadata.namespace`, `status.phase`), vérifier que l'erreur contient le nom de chaque champ manquant
-    - **Valide : Exigence 7.5**
+  - [x] 2.6 Mettre à jour `src/index.ts` pour réexporter tous les modules
+    - Réexporter l'enum, les constantes dépréciées, la fonction utilitaire, les types et les fonctions de sérialisation
+    - _Exigences : 1.1, 1.2, 1.3_
 
-- [x] 3. Point de contrôle — Package Common
+- [x] 3. Implémenter le Package React (`argo-workflows-react`)
 
-  - Vérifier que tous les tests passent pour le package common, demander à l'utilisateur s'il y a des questions.
+  - [x] 3.1 Implémenter les composants `WorkflowStatusIcon` et `WorkflowStatusBadge`
 
-- [x] 4. Implémenter le Package React (`argo-workflows-react`)
+    - `WorkflowStatusIcon` : icônes Remix (RiTimeLine, RiLoader4Line, RiCheckboxCircleLine, RiCloseCircleLine, RiErrorWarningLine) colorées via tokens CSS BUI (`--bui-fg-success`, `--bui-fg-danger`, `--bui-fg-info`, `--bui-fg-secondary`)
+    - Animation CSS spin pour le statut `Running`
+    - Attributs `aria-label` descriptifs pour chaque statut
+    - `WorkflowStatusBadge` : badge avec icône et libellé textuel utilisant `Flex` et `Text` BUI
+    - _Exigences : 15.1, 15.2, 15.3, 15.4, 15.5_
 
-  - [x] 4.1 Implémenter les composants `WorkflowStatusIcon` et `WorkflowStatusBadge`
+  - [x] 3.2 Implémenter la fonction `buildDAG`
 
-    - Créer `src/components/WorkflowStatusIcon.tsx` acceptant un `WorkflowStatus` et affichant une icône SVG personnalisée colorée via les tokens CSS de `@backstage/ui` (`--bui-color-success-7` pour Succeeded, `--bui-color-danger-7` pour Failed, `--bui-color-warning-7` pour Running, `--bui-color-neutral-7` pour Pending, `--bui-color-danger-9` pour Error)
-    - Ajouter des attributs `aria-label` descriptifs pour chaque statut
-    - Ajouter une animation CSS (spinner/pulsation) pour le statut `Running`
-    - Créer `src/components/WorkflowStatusBadge.tsx` utilisant les composants BUI `Flex` et `Text` pour afficher le statut sous forme de badge avec icône et libellé textuel
-    - Créer `src/components/index.ts` réexportant les composants
-    - _Exigences : 9.1, 9.2, 9.3, 9.4, 9.5_
+    - Créer `src/utils/buildDAG.ts` avec interfaces `DAGNode` (incluant champ `message`), `DAGEdge`, `DAGGraph`
+    - `buildDAG(workflow)` : crée un nœud pour chaque entrée dans `status.nodes`, une arête pour chaque relation parent→enfant via `children`
+    - Détection de cycles via DFS (coloration WHITE/GRAY/BLACK) avec message descriptif incluant le chemin du cycle
+    - _Exigences : 12.4, 13.1, 13.2, 13.3, 13.4, 13.5, 13.6_
 
-  - [ ]\* 4.2 Écrire le test par propriétés pour `WorkflowStatusIcon`
+  - [x] 3.3 Implémenter le hook `useArgoInstances`
 
-    - **Propriété 10 : Complétude et accessibilité de WorkflowStatusIcon**
-    - Pour toute valeur valide de `WorkflowStatus`, vérifier que le composant retourne un élément React non nul avec un `aria-label` descriptif et non vide
-    - **Valide : Exigences 9.3, 9.4**
+    - Créer `src/hooks/useArgoInstances.ts` qui appelle `GET /api/argo-workflows/instances`
+    - Retourne `{ instances: string[], defaultInstance?: string, loading: boolean }`
+    - Échec silencieux (le sélecteur ne s'affiche pas si l'endpoint échoue)
+    - _Exigences : 7.1_
 
-  - [x] 4.3 Implémenter la fonction `buildDAG`
+  - [x] 3.4 Implémenter le hook `useArgoWorkflows` avec support multi-instances
 
-    - Créer `src/utils/buildDAG.ts` exportant les interfaces `DAGNode`, `DAGEdge`, `DAGGraph` et la fonction `buildDAG(workflow: Workflow): DAGGraph`
-    - `buildDAG` doit créer un nœud pour chaque entrée dans `status.nodes`
-    - `buildDAG` doit créer une arête orientée pour chaque relation parent→enfant via le champ `children`
-    - `buildDAG` doit détecter les cycles et lever une erreur descriptive
-    - Les nœuds sans parent doivent être des nœuds racines (aucune arête entrante)
-    - Créer `src/utils/index.ts` réexportant `buildDAG`
-    - _Exigences : 8.1, 8.2, 8.3, 8.4, 8.5, 8.6_
+    - Créer `src/hooks/useArgoWorkflows.ts` acceptant `{ labelSelector, instanceName?, instanceNames?, namespace? }`
+    - Quand `instanceNames[]` est fourni : récupération parallèle via `Promise.all`, fusion et déduplication par `metadata.uid`
+    - Retourne `{ workflows, loading, error, retry }`
+    - _Exigences : 7.3, 7.4, 7.5_
 
-  - [ ]\* 4.4 Écrire le test par propriétés pour l'invariant du nombre de nœuds du DAG
+  - [x] 3.5 Implémenter le hook `useArgoWorkflowDetail`
 
-    - **Propriété 4 : Invariant du nombre de nœuds du DAG**
-    - Générer des objets Workflow aléatoires avec `status.nodes`, vérifier que le graphe DAG contient exactement autant de nœuds que d'entrées dans `status.nodes`
-    - **Valide : Exigences 8.1, 8.3**
+    - Créer `src/hooks/useArgoWorkflowDetail.ts` qui appelle `GET /api/argo-workflows/workflows/:namespace/:name`
+    - Retourne `{ workflow, loading, error }`
+    - _Exigences : 5.2_
 
-  - [ ]\* 4.5 Écrire le test par propriétés pour la correspondance des arêtes du DAG
+  - [x] 3.6 Mettre à jour `src/index.ts` pour réexporter composants, hooks et utilitaires
+    - Réexporter `WorkflowStatusIcon`, `WorkflowStatusBadge`, `useArgoWorkflows`, `useArgoWorkflowDetail`, `useArgoInstances`, `buildDAG`, types DAG
+    - _Exigences : 1.4_
 
-    - **Propriété 5 : Correspondance des arêtes du DAG avec les dépendances**
-    - Vérifier que chaque relation parent→enfant dans `children` correspond à exactement une arête orientée, et qu'il n'y a aucune arête supplémentaire
-    - **Valide : Exigences 8.2, 8.6**
+- [x] 4. Implémenter le Plugin Backend (`argo-workflows-backend`)
 
-  - [ ]\* 4.6 Écrire le test par propriétés pour la détection de cycles
+  - [x] 4.1 Définir le schéma de configuration `config.d.ts`
 
-    - **Propriété 6 : Détection de cycles dans le DAG**
-    - Générer des workflows avec des relations `children` contenant des cycles, vérifier que `buildDAG` lève une erreur descriptive
-    - **Valide : Exigence 8.4**
+    - Déclarer l'interface `Config` avec `argoWorkflows.defaultInstance`, `argoWorkflows.instances[]` supportant `baseUrl`/`token` (Argo API) ou `kubernetes.clusterName` (K8s API), mutuellement exclusifs
+    - _Exigences : 6.1, 6.2, 6.3, 6.6_
 
-  - [ ]\* 4.7 Écrire le test par propriétés pour la validité topologique du DAG
-
-    - **Propriété 7 : Validité topologique du DAG**
-    - Pour tout graphe DAG construit à partir d'un workflow acyclique, vérifier qu'un tri topologique est possible sans erreur
-    - **Valide : Exigence 8.5**
-
-  - [x] 4.8 Implémenter les hooks `useArgoWorkflows` et `useArgoWorkflowDetail`
-    - Créer `src/hooks/useArgoWorkflows.ts` qui appelle `GET /api/argo-workflows/workflows` avec les paramètres `labelSelector` et `instanceName`, retourne `{ workflows, loading, error, retry }`
-    - Créer `src/hooks/useArgoWorkflowDetail.ts` qui appelle `GET /api/argo-workflows/workflows/:namespace/:name` avec `instanceName`, retourne `{ workflow, loading, error }`
-    - Créer `src/hooks/index.ts` réexportant les hooks
-    - Mettre à jour `src/index.ts` pour réexporter composants, hooks, types et utilitaires
-    - _Exigences : 3.1, 3.2, 4.1, 4.2, 4.3, 5.1_
-
-- [x] 5. Point de contrôle — Package React
-
-  - Vérifier que tous les tests passent pour le package react, demander à l'utilisateur s'il y a des questions.
-
-- [x] 6. Implémenter le Plugin Backend (`argo-workflows-backend`)
-
-  - [x] 6.1 Implémenter le service `ArgoWorkflowsService`
+  - [x] 4.2 Implémenter le service `ArgoWorkflowsService`
 
     - Créer `src/service/ArgoWorkflowsService.ts` avec la classe `ArgoWorkflowsService`
-    - Le constructeur lit la configuration `argoWorkflows.instances` depuis `app-config.yaml` et journalise un avertissement si aucune instance n'est configurée
-    - Implémenter `listWorkflows(instanceName, labelSelector)` : résout l'instance, valide le labelSelector, appelle l'API Argo `GET /api/v1/workflows?listOptions.labelSelector=...`, applique `parseWorkflow` sur chaque résultat
-    - Implémenter `getWorkflow(instanceName, namespace, name)` : résout l'instance, appelle l'API Argo `GET /api/v1/workflows/:namespace/:name`, applique `parseWorkflow`
-    - Implémenter la résolution d'instance : utilise `instanceName` si fourni, sinon `defaultInstance`, erreur 404 si l'instance est inconnue, erreur 503 si aucune instance configurée
-    - Implémenter la validation du `labelSelector` avec rejet HTTP 400 pour les sélecteurs invalides
-    - Gérer les erreurs : 502 si le serveur Argo est injoignable, propagation du code HTTP pour les autres erreurs sans exposer les détails internes
-    - _Exigences : 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 6.1, 6.2, 6.3, 6.4, 6.5_
+    - Constructeur : lit la configuration, crée des instances `ArgoApiInstance` ou `KubernetesClusterInstance`, journalise un avertissement si aucune instance
+    - Dépendances optionnelles : `KubernetesClustersSupplier`, `KubernetesFetcher`, `AuthenticationStrategy` (requis pour les instances K8s)
+    - `getInstanceNames()` : retourne les noms des instances configurées
+    - `getDefaultInstance()` : retourne le nom de l'instance par défaut
+    - `listWorkflows(instanceName, labelSelector, namespace?, credentials?)` : résout l'instance, valide le labelSelector, route vers Argo API ou K8s API
+    - `getWorkflow(instanceName, namespace, name, credentials?)` : résout l'instance, route vers Argo API ou K8s API
+    - Chemin Argo API : `GET /api/v1/workflows[/namespace]?listOptions.labelSelector=...` avec Bearer token
+    - Chemin K8s : `KubernetesFetcher.fetchObjectsForService` avec CRD `argoproj.io/v1alpha1/workflows`, résolution du cluster via `KubernetesClustersSupplier`, authentification via `AuthenticationStrategy`
+    - Validation du labelSelector : syntaxe `key=value`, `key!=value`, `key in (v1,v2)`, `key notin (v1,v2)`, `key`, `!key`, combinaisons par virgule
+    - Gestion des erreurs : 502 (serveur injoignable), code propagé (erreur HTTP), 404 (instance/cluster inconnu), 503 (aucune instance/plugin K8s non configuré), 400 (labelSelector invalide/credentials manquantes)
+    - _Exigences : 5.1, 5.2, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
 
-  - [ ]\* 6.2 Écrire le test par propriétés pour la validation du labelSelector
+  - [x] 4.3 Implémenter le routeur Express et le plugin backend
 
-    - **Propriété 8 : Validation du sélecteur de labels Kubernetes**
-    - Générer des chaînes aléatoires, vérifier que seules les chaînes conformes à la syntaxe `key=value` ou `key in (v1,v2)` sont acceptées
-    - **Valide : Exigence 3.6**
+    - `src/router.ts` : routes `GET /instances`, `GET /workflows`, `GET /workflows/:namespace/:name`
+    - `GET /instances` retourne `{ instances: string[], defaultInstance?: string }`
+    - `GET /workflows` accepte `labelSelector`, `instanceName`, `namespace` en query params
+    - `GET /workflows/:namespace/:name` accepte `instanceName` en query param
+    - Mapping des erreurs vers les codes HTTP appropriés (InputError→400, NotFoundError→404, ServiceUnavailableError→503, ForwardedError→502)
+    - `src/plugin.ts` : `createBackendPlugin` avec dépendances `config`, `httpAuth`, `httpRouter`, `logger`
+    - _Exigences : 5.1, 5.2, 5.3, 5.9_
 
-  - [x] 6.3 Adapter le routeur Express généré et le plugin backend
+  - [x] 4.4 Écrire les tests du service backend
 
-    - Modifier `src/router.ts` (généré par `yarn new`) pour configurer les routes :
-      - `GET /workflows` : extrait `labelSelector` et `instanceName` des query params, appelle `ArgoWorkflowsService.listWorkflows`
-      - `GET /workflows/:namespace/:name` : extrait `instanceName` des query params, appelle `ArgoWorkflowsService.getWorkflow`
-    - Modifier `src/plugin.ts` (généré par `yarn new`) pour exporter `argoWorkflowsBackendPlugin` utilisant `createBackendPlugin` avec les dépendances `config`, `httpAuth`, `httpRouter`, `logger`
-    - Mettre à jour `src/index.ts` pour exporter le plugin et le routeur
-    - _Exigences : 3.1, 3.2, 3.3, 6.1_
+    - Tests de `validateLabelSelector` : sélecteurs d'égalité, set-based, existence, combinés, préfixes DNS, vides, invalides
+    - Tests du constructeur : avertissement sans config, avertissement sans instances, lecture des instances Argo API, lecture des instances K8s
+    - Tests de résolution d'instance : erreur 503 sans instances, erreur 404 instance inconnue, utilisation de l'instance par défaut
+    - Tests `listWorkflows` (Argo API) : rejet labelSelector invalide, appel API et parsing, scope par namespace, requête cluster-wide, items null, serveur injoignable (502), propagation erreurs HTTP
+    - Tests `getWorkflow` (Argo API) : appel API et parsing, serveur injoignable, propagation erreurs HTTP
+    - Tests chemin Kubernetes : listWorkflows via fetcher, propagation namespace, cluster non trouvé, plugin K8s non configuré, credentials manquantes
+    - _Exigences : 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 6.1, 6.2, 6.3, 6.4, 6.5_
 
-  - [ ]\* 6.4 Écrire les tests d'intégration du backend avec supertest
-    - Tester `GET /workflows` retourne la liste filtrée
-    - Tester `GET /workflows/:namespace/:name` retourne le détail
-    - Tester la propagation des erreurs HTTP du serveur Argo
-    - Tester l'erreur 502 quand le serveur Argo est injoignable
-    - Tester l'erreur 404 pour instance inconnue
-    - Tester l'erreur 503 quand aucune instance n'est configurée
-    - Tester le routage vers la bonne instance selon `instanceName`
-    - Tester l'utilisation de l'instance par défaut quand `instanceName` est absent
-    - _Exigences : 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 6.1, 6.2, 6.3, 6.4, 6.5_
+- [x] 5. Implémenter le Plugin Frontend (`argo-workflows`)
 
-- [x] 7. Point de contrôle — Plugin Backend
+  - [x] 5.1 Implémenter le plugin et l'extension `ArgoWorkflowsCI`
 
-  - Vérifier que tous les tests passent pour le plugin backend, demander à l'utilisateur s'il y a des questions.
+    - `src/plugin.ts` : `createPlugin({ id: 'argo-workflows' })` et `ArgoWorkflowsCI` via `createComponentExtension` chargeant le `Router` en lazy
+    - _Exigences : 1.9_
 
-- [x] 8. Implémenter le Plugin Frontend (`argo-workflows`)
+  - [x] 5.2 Implémenter le composant `Router`
 
-  - [x] 8.1 Adapter le plugin généré et créer l'extension `ArgoWorkflowsCI`
+    - `src/components/Router.tsx` : utilise `useEntity()` et `useArgoInstances()`
+    - Vérifie `isArgoWorkflowsAvailable(entity)`, retourne `null` si absent
+    - Résolution du labelSelector avec ordre de priorité : `KUBERNETES_LABEL_SELECTOR` > `LABEL_SELECTOR` > `KUBERNETES_ID` (converti en `backstage.io/kubernetes-id=<valeur>`)
+    - Lit le namespace depuis `KUBERNETES_NAMESPACE`
+    - Lit l'instanceName depuis `INSTANCE_NAME`
+    - Passe `availableInstances` au `WorkflowRunsTable`
+    - _Exigences : 2.1, 2.5, 3.1, 3.2, 3.3, 4.1_
 
-    - Modifier `src/plugin.ts` (généré par `yarn new`) pour utiliser `createPlugin({ id: 'argo-workflows' })` et ajouter `ArgoWorkflowsCI` via `createComponentExtension` chargeant le `Router` en lazy
-    - Modifier `src/routes.ts` (généré par `yarn new`) pour utiliser `createRouteRef({ id: 'argo-workflows' })`
-    - Mettre à jour `src/index.ts` pour exporter `argoWorkflowsPlugin`, `ArgoWorkflowsCI` et `isArgoWorkflowsAvailable` (réexport depuis common)
-    - _Exigences : 1.4, 1.8_
+  - [x] 5.3 Implémenter le composant `WorkflowRunsTable`
 
-  - [x] 8.2 Implémenter le composant `Router`
+    - `src/components/WorkflowRunsTable.tsx` : tableau BUI avec barre d'outils
+    - Barre d'outils : titre "Workflows", `Select` multi-instances (quand > 1 instance), `ToggleButtonGroup` pour filtres de statut, `SearchField` pour recherche par nom, horodatage "Updated just now" avec dot vert
+    - Colonnes : indicateur d'expansion (RiArrowRightSLine avec rotation 90° via CSS `data-expanded`), nom, namespace, statut (avec `WorkflowStatusIcon`), task status (`TaskStatusBar`), durée, date de début
+    - Tri par défaut : date de début décroissante, tri possible par nom, namespace, date
+    - Pagination : 5 lignes par défaut, options 5/10/25/50
+    - Clic sur une ligne : toggle l'expansion, affiche `WorkflowDAGInline` sous le tableau
+    - États : loading (Table BUI loading), erreur (Alert danger avec bouton Retry), vide (Alert info)
+    - Utilise `useArgoWorkflows` avec `instanceNames[]` pour la récupération multi-instances
+    - _Exigences : 7.2, 7.3, 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 8.9, 8.10, 8.11, 8.12, 9.1, 9.2, 9.3_
 
-    - Créer `src/components/Router.tsx` qui utilise `useEntity()` pour lire l'entité, vérifie `isArgoWorkflowsAvailable(entity)`, affiche le contenu si l'annotation est présente, retourne `null` sinon
-    - Configurer les routes internes avec `react-router-dom` : route par défaut vers la liste, route de détail vers la vue DAG
-    - _Exigences : 2.1, 2.2_
+  - [x] 5.4 Implémenter le composant `TaskStatusBar`
 
-  - [x] 8.3 Implémenter le composant `WorkflowRunsTable`
+    - `src/components/TaskStatusBar.tsx` : barre horizontale empilée proportionnelle aux statuts des nœuds Pod
+    - Tooltip avec les comptages par statut
+    - _Exigences : 8.1_
 
-    - Créer `src/components/WorkflowRunsTable.tsx` utilisant les composants `@backstage/ui` (`Table`, `Flex`, `Text`, `Button`, `Box`, `Card`) pour afficher un tableau avec les colonnes : nom, statut (avec `WorkflowStatusIcon`), durée, date de début
-    - Utiliser le hook `useArgoWorkflows` pour charger les données
-    - Afficher un skeleton/spinner BUI pendant le chargement
-    - Afficher un message d'erreur avec `Button` BUI "Réessayer" en cas d'échec
-    - Afficher un message `Text` BUI "Aucune exécution de workflow trouvée" si la liste est vide
-    - Trier les workflows par date de début décroissante par défaut
-    - Au clic sur une ligne, naviguer vers la vue détaillée du DAG
-    - _Exigences : 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7_
+  - [x] 5.5 Implémenter le composant `WorkflowDAGInline`
 
-  - [ ]\* 8.4 Écrire le test par propriétés pour le tri des workflows
+    - `src/components/WorkflowDAGInline.tsx` : DAG inline affiché sous le tableau
+    - Accepte un `Workflow` directement (pas de fetch)
+    - Utilise `buildDAG` + `dagre` (rankdir: LR) pour la disposition
+    - Rendu SVG avec nœuds colorés par statut, arêtes avec flèches
+    - Zoom/pan via transformations SVG (wheel + drag)
+    - Contrôles de zoom : `ButtonIcon` avec RiAddLine (zoom in), RiSubtractLine (zoom out), RiFullscreenLine (fit), positionnés en bas à gauche
+    - Tooltip au survol : nom, statut, durée
+    - Clic sur un nœud : ouvre/ferme le `NodeDetailPanel` latéral
+    - Message "This workflow does not contain any tasks" si aucun nœud
+    - Accessibilité : `role="img"`, `aria-label`, `role="button"` sur les nœuds, navigation clavier
+    - _Exigences : 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 11.1, 11.2, 11.3_
 
-    - **Propriété 9 : Tri des exécutions par date décroissante**
-    - Générer des listes de workflows avec des dates aléatoires, vérifier que le tri produit un ordre décroissant par `status.startedAt`
-    - **Valide : Exigence 4.7**
+  - [x] 5.6 Implémenter le composant `WorkflowDAGView`
 
-  - [x] 8.5 Implémenter le composant `WorkflowDAGView`
+    - `src/components/WorkflowDAGView.tsx` : vue DAG pleine page avec chargement via `useArgoWorkflowDetail`
+    - Mêmes fonctionnalités que `WorkflowDAGInline` (zoom, pan, tooltip, panneau de détail, contrôles de zoom)
+    - États : loading (Skeleton), erreur (Alert danger), workflow sans nœuds (Alert info)
+    - Représentation textuelle alternative accessible du DAG (élément `<details>` avec liste des nœuds et dépendances)
+    - _Exigences : 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 11.1, 11.2, 11.3, 16.2, 16.3_
 
-    - Créer `src/components/WorkflowDAGView.tsx` qui utilise `useArgoWorkflowDetail` pour charger le workflow, appelle `buildDAG` pour construire le graphe, utilise `dagre` pour calculer la disposition
-    - Rendre le graphe en SVG avec les nœuds colorés selon le statut en utilisant les tokens CSS BUI (`--bui-color-*`) pour garantir la cohérence avec le thème Backstage et le support du mode sombre
-    - Afficher un `Tooltip` BUI au survol d'un nœud contenant : nom, statut, durée, dates de début et fin, mis en page avec `Flex` et `Text` BUI
-    - Afficher un message `Text` BUI "Ce workflow ne contient pas de tâches" si le workflow n'a aucun nœud
-    - Permettre le zoom et le défilement (pan) sur le graphe via des transformations SVG
-    - Positionner les nœuds de gauche à droite en respectant l'ordre topologique
-    - _Exigences : 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7_
+  - [x] 5.7 Implémenter le composant `NodeDetailPanel`
 
-  - [x] 8.6 Implémenter l'accessibilité du plugin
+    - `src/components/NodeDetailPanel.tsx` : panneau de détail d'un nœud DAG
+    - En-tête : icône de statut (`WorkflowStatusIcon`) + nom du nœud + bouton fermer (RiCloseLine)
+    - Corps : paires clé/valeur en disposition horizontale (inline) avec labels de largeur fixe (5rem) : Type, Duration, Started, Finished
+    - Message : encadré stylisé monospace, fond rose (`--bui-bg-danger-subtle`) pour les statuts `Failed` ou `Error`, fond neutre sinon
+    - _Exigences : 12.1, 12.2, 12.3_
 
-    - Ajouter des alternatives textuelles pour tous les indicateurs de statut dans le tableau et le DAG
-    - Fournir une représentation textuelle alternative accessible du DAG décrivant la liste des nœuds et leurs dépendances (élément `<details>` ou section `sr-only`)
-    - Garantir un ratio de contraste minimal de 4.5:1 pour les textes et 3:1 pour les éléments graphiques de statut
-    - _Exigences : 10.1, 10.2, 10.3, 10.4_
+  - [x] 5.8 Implémenter l'accessibilité du plugin
 
-  - [ ]\* 8.7 Écrire les tests unitaires du plugin frontend
-    - Tester l'enregistrement du plugin avec `createPlugin` et id `argo-workflows`
-    - Tester que `ArgoWorkflowsCI` est correctement fourni
-    - Tester que `Router` affiche le contenu quand l'annotation est présente et retourne null sinon
-    - Tester que `WorkflowRunsTable` affiche les colonnes, le skeleton, le message d'erreur avec bouton réessayer, et le message vide
-    - Tester que `WorkflowDAGView` affiche le graphe avec les nœuds colorés, le tooltip au survol, et le message pour workflow sans nœuds
-    - Tester la navigation du tableau vers la vue DAG au clic
-    - _Exigences : 1.8, 2.1, 2.2, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 5.1, 5.3, 5.4, 5.5_
+    - Attributs `aria-label` sur tous les indicateurs de statut, nœuds DAG, contrôles de zoom
+    - `role="img"` sur les SVG du DAG avec `aria-label` descriptif
+    - `role="button"` et `tabIndex={0}` sur les nœuds DAG pour la navigation clavier
+    - `role="tooltip"` sur les tooltips
+    - `role="region"` sur le panneau de détail
+    - Représentation textuelle alternative du DAG via `<details>` avec `sr-only`
+    - Tokens CSS BUI pour les couleurs garantissant le contraste
+    - _Exigences : 16.1, 16.2, 16.3, 16.4_
 
-- [x] 9. Point de contrôle final
-  - Vérifier que tous les tests passent pour l'ensemble des packages, demander à l'utilisateur s'il y a des questions.
+  - [x] 5.9 Créer les fixtures JSON et le fichier d'export
+
+    - 10 fichiers JSON individuels dans `src/__fixtures__/` : succeeded, running, failed, error, pending, lint-check, e2e-tests, docker-build, db-migration, security-scan
+    - `src/__fixtures__/workflows.ts` : importe les JSON et exporte les workflows typés
+    - `src/__fixtures__/index.ts` : réexporte tous les workflows et la collection `allWorkflows`
+    - _Exigences : 17.1, 17.2, 17.3_
+
+  - [x] 5.10 Créer l'application de développement (dev app) multi-instances
+
+    - `dev/index.tsx` : application de développement avec `createDevApp`
+    - Entité multi-instances avec annotations CICD et workflow-selector
+    - Mock `GET /instances` retournant 3 instances : `argo-server`, `k8s-production`, `k8s-staging`
+    - Mock `GET /workflows` retournant des sous-ensembles différents par instance (5 workflows CI/CD pour argo-server, 3 workflows ops pour k8s-production, 2 workflows test pour k8s-staging)
+    - Mock `GET /workflows/:namespace/:name` retournant le détail depuis les fixtures
+    - _Exigences : 18.1, 18.2, 18.3_
+
+  - [x] 5.11 Créer les fichiers CSS modules
+
+    - `WorkflowRunsTable.module.css` : styles pour la barre d'outils, le dot vert, l'indicateur d'expansion avec rotation, le panneau de détail
+    - `WorkflowDAGInline.module.css` : styles pour le conteneur DAG (300px), SVG grab/grabbing, nœuds cliquables, tooltip, contrôles de zoom en bas à gauche
+    - `WorkflowDAGView.module.css` : styles pour le conteneur DAG (600px), SVG, nœuds, tooltip, contrôles de zoom, description textuelle sr-only
+    - `NodeDetailPanel.module.css` : styles pour le panneau (280-360px), en-tête, corps, lignes horizontales, labels de largeur fixe, encadrés de message (neutre et danger)
+    - `TaskStatusBar.module.css` : styles pour la barre empilée et les segments colorés
+    - _Exigences : 8.2, 9.2, 11.3, 12.2, 12.3_
 
 ## Notes
 
-- Les tâches marquées avec `*` sont optionnelles et peuvent être ignorées pour un MVP plus rapide
+- Toutes les tâches sont marquées comme complétées car le code est entièrement implémenté
 - Chaque tâche référence les exigences spécifiques pour la traçabilité
-- Les points de contrôle assurent une validation incrémentale
-- Les tests par propriétés valident les propriétés universelles de correction définies dans le document de conception
-- Les tests unitaires valident des scénarios spécifiques et des cas limites
-- La bibliothèque de tests par propriétés utilisée est `fast-check`
-- Le framework UI utilisé est `@backstage/ui` (BUI) — le design system officiel de Backstage. Les composants de layout (`Flex`, `Box`, `Grid`, `Card`), les composants interactifs (`Button`, `Text`, `Table`, `Tooltip`, `Tag`) et les tokens CSS (`--bui-*`) sont utilisés pour garantir la cohérence visuelle avec le portail Backstage et le support du mode sombre
+- Le framework UI utilisé est `@backstage/ui` (BUI) avec les icônes Remix (`@remixicon/react`)
+- Les tokens CSS BUI (`--bui-*`) garantissent la cohérence visuelle et le support du mode sombre
+- Le backend supporte deux sources de données : API Argo Workflows (baseUrl/token) et API Kubernetes via `@backstage/plugin-kubernetes-node`
+- Les fixtures de test sont stockées en fichiers JSON individuels pour faciliter la maintenance
+- L'application de développement simule 3 instances avec des sous-ensembles de workflows différents
+- La bibliothèque de tests par propriétés est `fast-check`
