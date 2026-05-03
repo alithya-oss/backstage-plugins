@@ -1322,6 +1322,7 @@ __metadata:
     "@remixicon/react": "npm:^4.9.0"
     "@testing-library/jest-dom": "npm:^6.0.0"
     "@types/dagre": "npm:^0.7.52"
+    classnames: "npm:^2.5.1"
     dagre: "npm:^0.8.5"
   peerDependencies:
     "@backstage/core-plugin-api": ^1.12.5
@@ -1349,6 +1350,7 @@ __metadata:
     "@types/dagre": "npm:^0.7.52"
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
+    classnames: "npm:^2.5.1"
     cross-fetch: "npm:4.1.0"
     dagre: "npm:^0.8.5"
     react: "npm:^18.0.0"
@@ -10546,7 +10548,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.6":
+"classnames@npm:^2.2.6, classnames@npm:^2.5.1":
   version: 2.5.1
   resolution: "classnames@npm:2.5.1"
   checksum: 10/58eb394e8817021b153bb6e7d782cfb667e4ab390cb2e9dac2fc7c6b979d1cc2b2a733093955fc5c94aa79ef5c8c89f11ab77780894509be6afbb91dddd79d15

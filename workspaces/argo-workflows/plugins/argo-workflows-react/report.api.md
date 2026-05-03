@@ -8,6 +8,17 @@ import type { Workflow } from '@backstage-community/plugin-argo-workflows-common
 import type { WorkflowStatus } from '@backstage-community/plugin-argo-workflows-common';
 
 // @public
+export interface ArgoInstanceDetail {
+  // (undocumented)
+  name: string;
+  // (undocumented)
+  type: ArgoInstanceType;
+}
+
+// @public
+export type ArgoInstanceType = 'argo-server' | 'kubernetes';
+
+// @public
 export function buildDAG(workflow: Workflow): DAGGraph;
 
 // @public
@@ -48,7 +59,7 @@ export interface DAGNode {
 
 // @public
 export function useArgoInstances(): {
-  instances: string[];
+  instances: ArgoInstanceDetail[];
   defaultInstance?: string;
   loading: boolean;
 };

@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import type { FC } from 'react';
-import type { RemixiconComponentType } from '@remixicon/react';
+import type { FC, PropsWithChildren } from 'react';
 import type { WorkflowStatus } from '@backstage-community/plugin-argo-workflows-common';
-import { Box } from '@backstage/ui';
+import { Text } from '@backstage/ui';
 import {
   RiTimeLine,
   RiLoader4Line,
@@ -25,6 +24,7 @@ import {
   RiCloseCircleLine,
   RiErrorWarningLine,
 } from '@remixicon/react';
+import classNames from 'classnames';
 import styles from './WorkflowStatusIcon.module.css';
 
 /**
@@ -35,67 +35,112 @@ import styles from './WorkflowStatusIcon.module.css';
 export interface WorkflowStatusIconProps {
   /** The workflow execution status to display */
   status: WorkflowStatus;
-  /** Icon size variant */
+  /** Icon size variant — ignored in the Flux-style layout, kept for API compat */
   size?: 'small' | 'medium' | 'large';
 }
 
-const sizeMap: Record<string, number> = {
-  small: 16,
-  medium: 24,
-  large: 32,
-};
+function StatusSucceeded(props: PropsWithChildren<{}>) {
+  const { children, ...rest } = props;
+  return (
+    <Text className={styles.status} aria-label="Status: Succeeded" {...rest}>
+      <RiCheckboxCircleLine
+        className={classNames(
+          styles.succeeded,
+          styles.statusIcon,
+          styles.statusIconSize,
+        )}
+      />
+      {children}
+    </Text>
+  );
+}
 
-const statusAriaLabelMap: Record<WorkflowStatus, string> = {
-  Pending: 'Status: Pending – workflow is waiting to start',
-  Running: 'Status: Running – workflow is currently executing',
-  Succeeded: 'Status: Succeeded – workflow completed successfully',
-  Failed: 'Status: Failed – workflow execution failed',
-  Error: 'Status: Error – workflow encountered an error',
-};
+function StatusFailed(props: PropsWithChildren<{}>) {
+  const { children, ...rest } = props;
+  return (
+    <Text className={styles.status} aria-label="Status: Failed" {...rest}>
+      <RiCloseCircleLine
+        className={classNames(
+          styles.failed,
+          styles.statusIcon,
+          styles.statusIconSize,
+        )}
+      />
+      {children}
+    </Text>
+  );
+}
 
-const statusClassMap: Record<WorkflowStatus, string> = {
-  Pending: styles.pending,
-  Running: styles.running,
-  Succeeded: styles.succeeded,
-  Failed: styles.failed,
-  Error: styles.error,
-};
+function StatusRunning(props: PropsWithChildren<{}>) {
+  const { children, ...rest } = props;
+  return (
+    <Text className={styles.status} aria-label="Status: Running" {...rest}>
+      <RiLoader4Line
+        className={classNames(
+          styles.running,
+          styles.statusIcon,
+          styles.statusIconSize,
+          styles.spin,
+        )}
+      />
+      {children}
+    </Text>
+  );
+}
 
-const statusIconMap: Record<WorkflowStatus, RemixiconComponentType> = {
-  Pending: RiTimeLine,
-  Running: RiLoader4Line,
-  Succeeded: RiCheckboxCircleLine,
-  Failed: RiCloseCircleLine,
-  Error: RiErrorWarningLine,
-};
+function StatusPending(props: PropsWithChildren<{}>) {
+  const { children, ...rest } = props;
+  return (
+    <Text className={styles.status} aria-label="Status: Pending" {...rest}>
+      <RiTimeLine
+        className={classNames(
+          styles.pending,
+          styles.statusIcon,
+          styles.statusIconSize,
+        )}
+      />
+      {children}
+    </Text>
+  );
+}
+
+function StatusError(props: PropsWithChildren<{}>) {
+  const { children, ...rest } = props;
+  return (
+    <Text className={styles.status} aria-label="Status: Error" {...rest}>
+      <RiErrorWarningLine
+        className={classNames(
+          styles.error,
+          styles.statusIcon,
+          styles.statusIconSize,
+        )}
+      />
+      {children}
+    </Text>
+  );
+}
 
 /**
  * Displays a colored icon representing a workflow execution status.
  *
- * Uses Remix Icons with BUI CSS custom-property tokens for colors.
+ * Uses Remix Icons with BUI CSS custom-property tokens for colors,
+ * following the same pattern as the Flux plugin's KubeStatusIndicator.
  *
  * @public
  */
-export const WorkflowStatusIcon: FC<WorkflowStatusIconProps> = ({
-  status,
-  size = 'medium',
-}) => {
-  const px = sizeMap[size] ?? sizeMap.medium;
-  const ariaLabel = statusAriaLabelMap[status] ?? `Status: ${status}`;
-  const colorClass = statusClassMap[status] ?? styles.pending;
-  const IconComponent = statusIconMap[status] ?? RiTimeLine;
-  const isRunning = status === 'Running';
-
-  return (
-    <Box
-      role="img"
-      aria-label={ariaLabel}
-      className={`${styles.wrapper} ${colorClass} ${
-        isRunning ? styles.spin : ''
-      }`}
-      data-testid={`workflow-status-icon-${status.toLowerCase()}`}
-    >
-      <IconComponent size={px} />
-    </Box>
-  );
+export const WorkflowStatusIcon: FC<WorkflowStatusIconProps> = ({ status }) => {
+  switch (status) {
+    case 'Succeeded':
+      return <StatusSucceeded>{status}</StatusSucceeded>;
+    case 'Failed':
+      return <StatusFailed>{status}</StatusFailed>;
+    case 'Running':
+      return <StatusRunning>{status}</StatusRunning>;
+    case 'Pending':
+      return <StatusPending>{status}</StatusPending>;
+    case 'Error':
+      return <StatusError>{status}</StatusError>;
+    default:
+      return <StatusPending>{status}</StatusPending>;
+  }
 };

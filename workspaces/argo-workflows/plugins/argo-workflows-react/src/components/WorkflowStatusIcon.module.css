@@ -1,27 +1,38 @@
-.wrapper {
-  display: inline-flex;
+.status {
   align-items: center;
-  justify-content: center;
+  display: flex;
+}
+
+.statusIcon {
+  flex-shrink: 0;
+  position: relative;
+  top: 0.125em;
+  margin-right: var(--bui-space-2);
+}
+
+.statusIconSize {
+  width: 20px;
+  height: 20px;
 }
 
 .pending {
-  color: var(--bui-fg-secondary);
+  fill: var(--bui-fg-disabled);
 }
 
 .running {
-  color: var(--bui-fg-info);
+  fill: var(--bui-fg-info);
 }
 
 .succeeded {
-  color: var(--bui-fg-success);
+  fill: var(--bui-fg-success);
 }
 
 .failed {
-  color: var(--bui-fg-danger);
+  fill: var(--bui-fg-danger);
 }
 
 .error {
-  color: var(--bui-fg-danger);
+  fill: var(--bui-fg-danger);
 }
 
 .spin {

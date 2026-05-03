@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import classNames from 'classnames';
 import { useCallback, useMemo, useState } from 'react';
 import {
   Alert,
@@ -99,23 +100,30 @@ const baseColumns: ColumnConfig<WorkflowItem>[] = [
     label: 'Name',
     isRowHeader: true,
     isSortable: true,
-    cell: item => <CellText title={item.metadata.name} />,
-  },
-  {
-    id: 'namespace',
-    label: 'Namespace',
-    isSortable: true,
-    cell: item => <CellText title={item.metadata.namespace} />,
+    cell: item => (
+      <Cell>
+        <Flex align="start" direction="column">
+          <Text
+            weight="bold"
+            className={classNames(styles.textOverflow, styles.nameLabel)}
+          >
+            {`${item.metadata.namespace}/${item.metadata.name}`}
+          </Text>
+          {item.sourceInstance && (
+            <Text variant="body-small" color="secondary">
+              {item.sourceInstance}
+            </Text>
+          )}
+        </Flex>
+      </Cell>
+    ),
   },
   {
     id: 'status',
     label: 'Status',
     cell: item => (
       <Cell>
-        <Flex align="center" style={{ gap: 'var(--bui-space-2)' }}>
-          <WorkflowStatusIcon status={item.status.phase} size="small" />
-          <Text variant="body-small">{item.status.phase}</Text>
-        </Flex>
+        <WorkflowStatusIcon status={item.status.phase} />
       </Cell>
     ),
   },
@@ -295,10 +303,9 @@ export const WorkflowRunsTable = ({
       if (!sort) return items;
       const sorted = [...items].sort((a, b) => {
         if (sort.column === 'name') {
-          return a.metadata.name.localeCompare(b.metadata.name);
-        }
-        if (sort.column === 'namespace') {
-          return a.metadata.namespace.localeCompare(b.metadata.namespace);
+          return `${a.metadata.namespace}/${a.metadata.name}`.localeCompare(
+            `${b.metadata.namespace}/${b.metadata.name}`,
+          );
         }
         if (sort.column === 'startDate') {
           const dateA = a.status.startedAt
