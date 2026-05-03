@@ -58,11 +58,13 @@ export const Router = () => {
   }
 
   const instanceName = annotations[ArgoWorkflowsAnnotations.INSTANCE_NAME];
+  const namespace = annotations[ArgoWorkflowsAnnotations.KUBERNETES_NAMESPACE];
 
   return (
     <WorkflowRunsTable
       labelSelector={labelSelector}
       instanceName={instanceName}
+      namespace={namespace}
     />
   );
 };

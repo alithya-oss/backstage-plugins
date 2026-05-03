@@ -36,13 +36,14 @@ import type { Workflow } from '@backstage-community/plugin-argo-workflows-common
 export function useArgoWorkflows(options: {
   labelSelector: string;
   instanceName?: string;
+  namespace?: string;
 }): {
   workflows: Workflow[];
   loading: boolean;
   error: Error | undefined;
   retry: () => void;
 } {
-  const { labelSelector, instanceName } = options;
+  const { labelSelector, instanceName, namespace } = options;
   const fetchApi = useApi(fetchApiRef);
   const discoveryApi = useApi(discoveryApiRef);
 
@@ -68,6 +69,9 @@ export function useArgoWorkflows(options: {
         params.set('labelSelector', labelSelector);
         if (instanceName) {
           params.set('instanceName', instanceName);
+        }
+        if (namespace) {
+          params.set('namespace', namespace);
         }
 
         const response = await fetchApi.fetch(
@@ -112,7 +116,14 @@ export function useArgoWorkflows(options: {
     return () => {
       cancelled = true;
     };
-  }, [labelSelector, instanceName, fetchApi, discoveryApi, retryCount]);
+  }, [
+    labelSelector,
+    instanceName,
+    namespace,
+    fetchApi,
+    discoveryApi,
+    retryCount,
+  ]);
 
   return { workflows, loading, error, retry };
 }

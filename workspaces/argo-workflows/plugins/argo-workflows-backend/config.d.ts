@@ -40,17 +40,37 @@ export interface Config {
       /**
        * The base URL of the Argo Workflows server API
        * (e.g. `https://argo.example.com`).
+       * Required when using the Argo Workflows server API directly.
+       * Mutually exclusive with `kubernetes`.
        * @visibility backend
        */
-      baseUrl: string;
+      baseUrl?: string;
 
       /**
        * A bearer token used to authenticate with the Argo Workflows API.
        * Typically a Kubernetes service account token with read access
        * to the Argo Workflows resources.
+       * Required when `baseUrl` is set.
        * @visibility secret
        */
-      token: string;
+      token?: string;
+
+      /**
+       * Configuration for querying Argo Workflow CRDs via the
+       * Kubernetes API using a cluster already configured in the
+       * Backstage Kubernetes plugin.
+       * Mutually exclusive with `baseUrl`/`token`.
+       * @visibility backend
+       */
+      kubernetes?: {
+        /**
+         * Name of a cluster configured in the Backstage Kubernetes
+         * plugin (`kubernetes.clusters[].name`). The API server URL
+         * and credentials are resolved from that configuration.
+         * @visibility backend
+         */
+        clusterName: string;
+      };
     }>;
   };
 }

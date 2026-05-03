@@ -15,7 +15,7 @@ export const ARGO_WORKFLOWS_LABEL_SELECTOR_ANNOTATION =
 
 // @public
 export enum ArgoWorkflowsAnnotations {
-  CICD = 'argoworkflows.argoproj.io/cicd',
+  CICD = 'argoworkflows.argoproj.io/workflow',
   INSTANCE_NAME = 'argoworkflows.argoproj.io/instance-name',
   KUBERNETES_ID = 'backstage.io/kubernetes-id',
   KUBERNETES_LABEL_SELECTOR = 'backstage.io/kubernetes-label-selector',

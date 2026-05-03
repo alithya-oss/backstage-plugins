@@ -25,6 +25,11 @@ import {
   ServiceUnavailableError,
   ForwardedError,
 } from '@backstage/errors';
+import type {
+  KubernetesClustersSupplier,
+  KubernetesFetcher,
+  AuthenticationStrategy,
+} from '@backstage/plugin-kubernetes-node';
 import express from 'express';
 import Router from 'express-promise-router';
 import { ArgoWorkflowsService } from './service/ArgoWorkflowsService';
@@ -38,6 +43,12 @@ export interface RouterOptions {
   config: RootConfigService;
   httpAuth: HttpAuthService;
   logger: LoggerService;
+  /** Optional — required when any instance uses `kubernetes.clusterName`. */
+  clusterSupplier?: KubernetesClustersSupplier;
+  /** Optional — required when any instance uses `kubernetes.clusterName`. */
+  fetcher?: KubernetesFetcher;
+  /** Optional — required when any instance uses `kubernetes.clusterName`. */
+  authStrategy?: AuthenticationStrategy;
 }
 
 /**
@@ -56,7 +67,6 @@ function getStatusCodeForError(error: unknown): number {
   if (error instanceof ForwardedError) {
     return 502;
   }
-  // Check for statusCode set by the service (propagated Argo HTTP errors)
   if (
     typeof error === 'object' &&
     error !== null &&
@@ -71,7 +81,7 @@ function getStatusCodeForError(error: unknown): number {
 /**
  * Creates the Express router for the Argo Workflows backend plugin.
  *
- * @param options - Router dependencies including config, httpAuth, and logger
+ * @param options - Router dependencies
  * @returns An Express router with Argo Workflows API routes
  *
  * @public
@@ -79,9 +89,16 @@ function getStatusCodeForError(error: unknown): number {
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { config, logger } = options;
+  const { config, httpAuth, logger, clusterSupplier, fetcher, authStrategy } =
+    options;
 
-  const service = new ArgoWorkflowsService(config, logger);
+  const service = new ArgoWorkflowsService({
+    config,
+    logger,
+    clusterSupplier,
+    fetcher,
+    authStrategy,
+  });
 
   const router = Router();
   router.use(express.json());
@@ -92,11 +109,15 @@ export async function createRouter(
     async (req: express.Request, res: express.Response) => {
       const labelSelector = (req.query.labelSelector as string) ?? '';
       const instanceName = (req.query.instanceName as string) ?? '';
+      const namespace = (req.query.namespace as string) || undefined;
 
       try {
+        const credentials = await httpAuth.credentials(req);
         const workflows = await service.listWorkflows(
           instanceName,
           labelSelector,
+          namespace,
+          credentials,
         );
         res.json({ workflows });
       } catch (error) {
@@ -117,10 +138,12 @@ export async function createRouter(
       const instanceName = (req.query.instanceName as string) ?? '';
 
       try {
+        const credentials = await httpAuth.credentials(req);
         const workflow = await service.getWorkflow(
           instanceName,
           namespace,
           name,
+          credentials,
         );
         res.json(workflow);
       } catch (error) {

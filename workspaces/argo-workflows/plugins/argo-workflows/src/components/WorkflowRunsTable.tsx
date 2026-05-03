@@ -50,6 +50,8 @@ export interface WorkflowRunsTableProps {
   labelSelector: string;
   /** Optional Argo Workflows instance name */
   instanceName?: string;
+  /** Optional Kubernetes namespace to scope the query */
+  namespace?: string;
 }
 
 /** Table item type — extends Workflow with a required `id` for BUI Table. */
@@ -191,10 +193,12 @@ function buildColumns(
 export const WorkflowRunsTable = ({
   labelSelector,
   instanceName,
+  namespace,
 }: WorkflowRunsTableProps) => {
   const { workflows, loading, error, retry } = useArgoWorkflows({
     labelSelector,
     instanceName,
+    namespace,
   });
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [statusFilters, setStatusFilters] = useState<Set<string>>(new Set());
