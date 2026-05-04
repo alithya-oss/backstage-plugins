@@ -21334,13 +21334,13 @@ __metadata:
   linkType: hard
 
 "express-rate-limit@npm:^8.2.2":
-  version: 8.4.1
-  resolution: "express-rate-limit@npm:8.4.1"
+  version: 8.5.0
+  resolution: "express-rate-limit@npm:8.5.0"
   dependencies:
     ip-address: "npm:10.1.0"
   peerDependencies:
     express: ">= 4.11"
-  checksum: 10/2f979a261e6c95e31a62f2ce1cb9621566b0061706d0337091c8399617d6f09b28402ba4383aa3d72518374a7eec35be24f9703de59e563cc127ba14e2748a4d
+  checksum: 10/e6905dcc8ac8eb0e094fc72f672ff99beb07210f6da9e8e48942dc8123161f4c220e7066b7a09b7bd8218d0f1c2cd8d2675cdf8e661701cb0ed000a58dc3c3f5
   languageName: node
   linkType: hard
 
