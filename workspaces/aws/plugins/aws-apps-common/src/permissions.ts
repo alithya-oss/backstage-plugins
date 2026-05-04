@@ -3,10 +3,18 @@
 
 import { createPermission } from '@backstage/plugin-permission-common';
 
-/** @public */
+/**
+ * Resource type identifier for AWS app components used in permission rules.
+ *
+ * @public
+ */
 export const APP_COMPNENT_RESOURCE_TYPE = 'aws-apps';
 
-/** @public */
+/**
+ * Permission to read audit records for AWS app components.
+ *
+ * @public
+ */
 export const readOpaAppAuditPermission = createPermission({
   name: 'opa.app.audit.read',
   attributes: {
@@ -15,5 +23,9 @@ export const readOpaAppAuditPermission = createPermission({
   resourceType: APP_COMPNENT_RESOURCE_TYPE,
 });
 
-/** @public */
+/**
+ * Collection of all OPA-related permissions.
+ *
+ * @public
+ */
 export const opaPermissions = [readOpaAppAuditPermission];

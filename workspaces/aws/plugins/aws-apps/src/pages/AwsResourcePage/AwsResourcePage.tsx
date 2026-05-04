@@ -17,7 +17,11 @@ interface AwsResourcePageProps {
   children: ReactNode;
 }
 
-/** @public */
+/**
+ * Condition function that checks if an entity matches a specific resource type.
+ *
+ * @public
+ */
 export function isResourceType(
   resourceType: string,
 ): (entity: Entity) => boolean {
@@ -33,7 +37,11 @@ const isCicdApplicable = (entity: Entity) => {
   return isGitlabAvailable(entity) || isGithubActionsAvailable(entity);
 };
 
-/** @public */
+/**
+ * Entity page for generic AWS resources.
+ *
+ * @public
+ */
 export function AwsResourcePage(_props: AwsResourcePageProps) {
   const managementContent = (
     <Grid container spacing={1} alignItems="stretch">

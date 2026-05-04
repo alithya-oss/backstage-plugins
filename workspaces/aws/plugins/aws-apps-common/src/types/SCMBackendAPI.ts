@@ -1,6 +1,10 @@
 import { GitProviders } from './git-providers';
 
-/** @public */
+/**
+ * Result of a Git API operation.
+ *
+ * @public
+ */
 export interface IGitAPIResult {
   isSuccess: boolean;
   message: string;
@@ -8,27 +12,43 @@ export interface IGitAPIResult {
   value: any;
 }
 
-/** @public */
+/**
+ * Parameters for committing changes to a repository.
+ *
+ * @public
+ */
 export interface ICommitChange {
   actions: ICommitAction[];
   branch: string;
   commitMessage: string;
 }
 
-/** @public */
+/**
+ * A single file action within a commit.
+ *
+ * @public
+ */
 export interface ICommitAction {
   action: string;
   file_path: string;
   content: string;
 }
 
-/** @public */
+/**
+ * Repository visibility options.
+ *
+ * @public
+ */
 export enum GitVisibility {
   PRIVATE = 'private',
   PUBIC = 'public',
 }
 
-/** @public */
+/**
+ * Information describing a Git repository.
+ *
+ * @public
+ */
 export interface IRepositoryInfo {
   rawIdentifier?: string;
   gitHost: string;
@@ -44,8 +64,11 @@ export interface IRepositoryInfo {
   gitProvider: GitProviders;
 }
 
-// Source Control Management API
-/** @public */
+/**
+ * Backend API interface for source control management operations.
+ *
+ * @public
+ */
 export interface ISCMBackendAPI {
   gitProvider: GitProviders;
   setGitProvider(provider: GitProviders): void;

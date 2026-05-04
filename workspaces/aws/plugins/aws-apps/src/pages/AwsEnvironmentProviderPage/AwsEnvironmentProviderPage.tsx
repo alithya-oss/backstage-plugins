@@ -10,12 +10,21 @@ import { Entity } from '@backstage/catalog-model';
 import { ProviderType } from '../../helpers/constants';
 import { AwsEKSEnvironmentProviderPage } from '../AwsEKSEnvironmentProviderPage/AwsEKSEnvironmentProviderPage';
 
-/** @public */
+/**
+ * Props for the AWS environment provider page.
+ *
+ * @public
+ */
 export interface AwsEnvironmentProviderPageProps {
+  /** Optional child content to render. */
   children?: ReactNode;
 }
 
-/** @public */
+/**
+ * Condition function that checks if an entity matches a specific provider type.
+ *
+ * @public
+ */
 export function isProviderType(
   providerType: string,
   entity: Entity,
@@ -25,7 +34,11 @@ export function isProviderType(
   };
 }
 
-/** @public */
+/**
+ * Entity page for AWS environment providers.
+ *
+ * @public
+ */
 export function AwsEnvironmentProviderPage(/* {children}: AwsEnvironmentProviderPageProps */) {
   const { entity } = useEntity();
 

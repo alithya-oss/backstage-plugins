@@ -14,7 +14,11 @@ import { EntityCatalogGraphCard } from '@backstage/plugin-catalog-graph';
 
 interface AwsECSAppPageProps {}
 
-/** @public */
+/**
+ * Entity page for ECS-based AWS applications.
+ *
+ * @public
+ */
 export function AwsECSAppPage(_props: AwsECSAppPageProps) {
   // Add plugin UI cards and page
   const awsEcsAppViewContent = (

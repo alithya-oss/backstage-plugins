@@ -13,7 +13,11 @@ import { EntityCatalogGraphCard } from '@backstage/plugin-catalog-graph';
 
 interface AwsServerlessAppPageProps {}
 
-/** @public */
+/**
+ * Entity page for serverless AWS applications.
+ *
+ * @public
+ */
 export function AwsServerlessAppPage(_props: AwsServerlessAppPageProps) {
   const awsServerlessRestApiAppViewContent = (
     <Grid container spacing={3} alignItems="stretch">

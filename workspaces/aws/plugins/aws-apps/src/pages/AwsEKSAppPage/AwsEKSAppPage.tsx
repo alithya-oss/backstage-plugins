@@ -10,7 +10,11 @@ import { EntityCatalogGraphCard } from '@backstage/plugin-catalog-graph';
 
 interface AwsEKSAppPageProps {}
 
-/** @public */
+/**
+ * Entity page for EKS-based AWS applications.
+ *
+ * @public
+ */
 export function AwsEKSAppPage(_props: AwsEKSAppPageProps) {
   const awsEKSAppViewContent = (
     <Grid container spacing={3} alignItems="stretch">

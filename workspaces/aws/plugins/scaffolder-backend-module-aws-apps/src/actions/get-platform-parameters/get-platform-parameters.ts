@@ -32,6 +32,9 @@ const examples = [
 ];
 
 /**
+ * Creates a scaffolder action that retrieves AWS SSM parameter values
+ * for the platform account so they can be used by other template steps.
+ *
  * @public
  */
 export function getPlatformParametersAction(options: {

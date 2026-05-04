@@ -3,11 +3,19 @@
 
 import { StackStatus } from '@aws-sdk/client-cloudformation';
 
-/** @public */
+/**
+ * Additional deployment statuses beyond CloudFormation stack statuses.
+ *
+ * @public
+ */
 export enum ExtraStackDeployStatus {
   STAGED = 'STAGED',
   UNSTAGED = 'UNSTAGED',
 }
 
-/** @public */
+/**
+ * Union of CloudFormation stack statuses and custom deployment statuses.
+ *
+ * @public
+ */
 export type DeployStackStatus = StackStatus | ExtraStackDeployStatus;

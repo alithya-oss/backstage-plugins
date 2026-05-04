@@ -37,7 +37,11 @@ const isCicdApplicable = (entity: Entity) => {
   return isGitlabAvailable(entity) || isGithubActionsAvailable(entity);
 };
 
-/** @public */
+/**
+ * Condition function that checks if an entity matches a specific AWS app type.
+ *
+ * @public
+ */
 export function isAppType(
   appType: string,
   env: GenericAWSEnvironment,
@@ -48,12 +52,20 @@ export function isAppType(
   };
 }
 
-/** @public */
+/**
+ * Condition function that checks if CloudWatch logs are available for an entity.
+ *
+ * @public
+ */
 export const isLogsAvailable = (_entity: Entity): boolean => {
   return true;
 };
 
-/** @public */
+/**
+ * Entity page layout for AWS applications.
+ *
+ * @public
+ */
 export function AwsAppPage(_props: AwsAppPageProps) {
   const awsAppLoadingStatus = useAsyncAwsApp();
 

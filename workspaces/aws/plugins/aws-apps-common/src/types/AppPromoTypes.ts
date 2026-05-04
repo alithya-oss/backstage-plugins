@@ -1,7 +1,11 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-/** @public */
+/**
+ * Parameters for promoting an application across environments.
+ *
+ * @public
+ */
 export type AppPromoParams = {
   envName: string;
   envRequiresManualApproval: boolean;
@@ -9,7 +13,11 @@ export type AppPromoParams = {
   providers: AWSProviderParams[];
 };
 
-/** @public */
+/**
+ * AWS provider configuration for an application deployment.
+ *
+ * @public
+ */
 export type AWSProviderParams = {
   awsAccount: string;
   awsRegion: string;

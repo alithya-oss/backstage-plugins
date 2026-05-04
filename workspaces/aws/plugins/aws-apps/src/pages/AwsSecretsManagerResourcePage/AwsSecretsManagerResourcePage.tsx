@@ -11,7 +11,11 @@ interface AwsSecretsManagerResourcePageProps {
   children?: ReactNode;
 }
 
-/** @public */
+/**
+ * Entity page for AWS Secrets Manager resources.
+ *
+ * @public
+ */
 export function AwsSecretsManagerResourcePage(
   _props: AwsSecretsManagerResourcePageProps,
 ) {

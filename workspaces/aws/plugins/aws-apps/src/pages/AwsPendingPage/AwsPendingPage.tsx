@@ -21,7 +21,11 @@ const isCicdApplicable = (entity: Entity) => {
   return isGitlabAvailable(entity) || isGithubActionsAvailable(entity);
 };
 
-/** @public */
+/**
+ * Entity page for AWS applications in pending state.
+ *
+ * @public
+ */
 export function AwsPendingPage(_props: AwsPendingPageProps) {
   const { entity } = useEntity();
   let isResource: boolean = false;

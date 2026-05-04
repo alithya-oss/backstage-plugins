@@ -32,18 +32,33 @@ import { GitService } from '../api/GitService';
 import { Config } from '@backstage/config';
 import { CatalogApi } from '@backstage/catalog-client';
 
-/** @public */
+/**
+ * Options for creating the AWS Apps backend router.
+ *
+ * @public
+ */
 export interface RouterOptions {
+  /** The Backstage configuration. */
   config: Config;
+  /** Logger service instance. */
   logger: LoggerService;
+  /** User info service for resolving user details. */
   userInfo: UserInfoService;
+  /** Catalog API client. */
   catalogApi: CatalogApi;
+  /** Permissions service for authorization checks. */
   permissions: PermissionsService;
+  /** Authentication service. */
   auth: AuthService;
+  /** HTTP authentication service. */
   httpAuth: HttpAuthService;
 }
 
-/** @public */
+/**
+ * Creates the Express router for the AWS Apps backend API.
+ *
+ * @public
+ */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {

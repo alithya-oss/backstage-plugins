@@ -8,7 +8,11 @@ import { GitLabAPI } from './GitlabApiClient';
 import { GitHubAPI } from './GithubApiClient';
 import { GitUnset } from './GitUnset';
 
-/** @public */
+/**
+ * Service for managing Git provider operations.
+ *
+ * @public
+ */
 export class GitService implements IGitService {
   private _gitProvider: GitProviders;
   private _gitProviderImpl: ISCMBackendAPI;
@@ -23,18 +27,22 @@ export class GitService implements IGitService {
     this._gitProviderImpl = gitProviderImpl || new GitUnset(this.logger);
   }
 
+  /** The current Git provider type. */
   public get gitProvider(): GitProviders {
     return this._gitProvider;
   }
 
+  /** The current Git provider implementation. */
   public get gitProviderImpl(): ISCMBackendAPI {
     return this._gitProviderImpl;
   }
 
+  /** Sets the Git provider type. */
   setGitProvider(provider: GitProviders): void {
     this._gitProvider = provider;
     this.instatiateGitProvider();
   }
+  /** Sets the Git provider implementation. */
   setGitProviderImpl(provider: ISCMBackendAPI): void {
     this._gitProviderImpl = provider;
   }

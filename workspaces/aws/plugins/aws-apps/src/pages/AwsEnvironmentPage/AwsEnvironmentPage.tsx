@@ -18,12 +18,21 @@ import {
   EntityEnvironmentInfoCard,
 } from '../../plugin';
 
-/** @public */
+/**
+ * Props for the AWS environment page.
+ *
+ * @public
+ */
 export interface AwsEnvironmentPageProps {
+  /** Optional child content to render. */
   children?: ReactNode;
 }
 
-/** @public */
+/**
+ * Entity page for AWS environments.
+ *
+ * @public
+ */
 export function AwsEnvironmentPage(/* {children}: AwsEnvironmentPageProps */) {
   const managementContent = (
     <Grid container spacing={1} alignItems="stretch">

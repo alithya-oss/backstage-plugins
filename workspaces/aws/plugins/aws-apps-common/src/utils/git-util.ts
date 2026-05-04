@@ -1,7 +1,11 @@
 import { GitProviders, IRepositoryInfo } from '../types';
 import { Entity } from '@backstage/catalog-model';
 
-/** @public */
+/**
+ * Constructs the full Git clone URL for a repository.
+ *
+ * @public
+ */
 export const getRepoUrl = (repoInfo: IRepositoryInfo): string => {
   const gitRepoClean = repoInfo.gitRepoName.includes('/')
     ? repoInfo.gitRepoName.split('/')[1]
@@ -24,7 +28,11 @@ export const getRepoUrl = (repoInfo: IRepositoryInfo): string => {
   throw Error(`Unsupported git provider ${repoInfo.gitProvider}`);
 };
 
-/** @public */
+/**
+ * Extracts repository information from a Backstage catalog entity.
+ *
+ * @public
+ */
 export const getRepoInfo = (entity: Entity): IRepositoryInfo => {
   const gitProvider = entity.metadata.gitProvider ?? GitProviders.GITLAB;
 
@@ -78,7 +86,11 @@ export const getRepoInfo = (entity: Entity): IRepositoryInfo => {
   }
 };
 
-/** @public */
+/**
+ * Returns the Secrets Manager secret name for Git credentials.
+ *
+ * @public
+ */
 export const getGitCredentailsSecret = (repoInfo: IRepositoryInfo): string => {
   if (repoInfo.gitProvider === GitProviders.GITLAB) {
     return 'opa-admin-gitlab-secrets';

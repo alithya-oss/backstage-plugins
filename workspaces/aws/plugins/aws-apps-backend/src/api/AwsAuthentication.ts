@@ -9,7 +9,11 @@ import {
 } from '@backstage/backend-plugin-api';
 import { parseEntityRef, UserEntity } from '@backstage/catalog-model';
 
-/** @public */
+/**
+ * Response containing AWS credentials and metadata for an assumed role.
+ *
+ * @public
+ */
 export interface AwsAuthResponse {
   credentials: AwsCredentialIdentity;
   requester: string;
@@ -144,7 +148,11 @@ async function fetchCreds(
   }
 }
 
-/** @public */
+/**
+ * Assumes an AWS IAM role and returns temporary credentials for a given account and region.
+ *
+ * @public
+ */
 export async function getAWScreds(
   config: Config,
   logger: LoggerService,

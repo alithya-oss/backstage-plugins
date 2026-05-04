@@ -35,7 +35,11 @@ export interface AppCatalogPageProps extends DefaultCatalogPageProps {
   kind: string;
 }
 
-/** @public */
+/**
+ * Custom catalog page for AWS applications.
+ *
+ * @public
+ */
 export function AppCatalogPage(props: AppCatalogPageProps) {
   const { actions, tableOptions = {}, emptyContent, kind } = props;
 

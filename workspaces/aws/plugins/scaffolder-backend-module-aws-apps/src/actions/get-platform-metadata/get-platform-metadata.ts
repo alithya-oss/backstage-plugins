@@ -23,6 +23,9 @@ const examples = [
 ];
 
 /**
+ * Creates a scaffolder action that retrieves metadata about the
+ * AWS Apps platform deployment, such as the platform region.
+ *
  * @public
  */
 export function getPlatformMetadataAction(options: {

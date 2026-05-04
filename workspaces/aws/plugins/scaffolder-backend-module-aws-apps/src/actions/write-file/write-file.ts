@@ -28,6 +28,8 @@ const examples = [
 ];
 
 /**
+ * Creates a scaffolder action that writes content to a file in the workspace.
+ *
  * @public
  */
 export function createWriteFileAction() {

@@ -51,7 +51,7 @@ import { UserInfoService } from '@backstage/backend-plugin-api';
 const awsAppsPlugin: BackendFeature;
 export default awsAppsPlugin;
 
-// @public (undocumented)
+// @public
 export interface AwsAuditRequest {
   // (undocumented)
   actionName: string;
@@ -85,7 +85,7 @@ export interface AwsAuditRequest {
   status: string;
 }
 
-// @public (undocumented)
+// @public
 export interface AwsAuditResponse {
   // (undocumented)
   message: string;
@@ -93,7 +93,7 @@ export interface AwsAuditResponse {
   status: string;
 }
 
-// @public (undocumented)
+// @public
 export interface AwsAuthResponse {
   // (undocumented)
   account: string;
@@ -109,7 +109,7 @@ export interface AwsAuthResponse {
   roleArn: string;
 }
 
-// @public (undocumented)
+// @public
 export class AWSSDKService implements IAWSSDKService {
   constructor(
     config: RootConfigService,
@@ -118,17 +118,11 @@ export class AWSSDKService implements IAWSSDKService {
     awsRegion?: string,
     awsAccount?: string,
   );
-  // (undocumented)
   get awsAccount(): string;
-  // (undocumented)
   get awsCredentials(): AwsCredentialIdentity;
-  // (undocumented)
   get awsRegion(): string;
-  // (undocumented)
   callLambda(functionName: string, body: string): Promise<InvokeCommandOutput>;
-  // (undocumented)
   createAuditRecord(input: AwsAuditRequest): Promise<AwsAuditResponse>;
-  // (undocumented)
   createS3Bucket(
     bucketName: string,
     tags?: {
@@ -136,7 +130,6 @@ export class AWSSDKService implements IAWSSDKService {
       Value: string | number | boolean;
     }[],
   ): Promise<CreateBucketCommandOutput>;
-  // (undocumented)
   createSecret(
     secretName: string,
     description: string,
@@ -165,13 +158,11 @@ export class AWSSDKService implements IAWSSDKService {
   describeTaskDefinition(
     taskDefinitionArn: string,
   ): Promise<DescribeTaskDefinitionCommandOutput>;
-  // (undocumented)
   doesS3FileExist(
     bucketName: string,
     fileName: string,
   ): Promise<HeadObjectCommandOutput>;
   getCategorizedResources(resourceGroup: string): Promise<AWSServiceResources>;
-  // (undocumented)
   getDynamodbTable(
     tableName: string,
     appName: string,
@@ -188,7 +179,6 @@ export class AWSSDKService implements IAWSSDKService {
     startFromHead?: boolean,
   ): Promise<GetLogEventsCommandOutput>;
   getLogGroups(logPrefix: string): Promise<DescribeLogGroupsCommandOutput>;
-  // (undocumented)
   getLogRecord(logRecordPointer: string): Promise<GetLogRecordCommandOutput>;
   getLogStreams(logGroupName: string): Promise<DescribeLogStreamsCommandOutput>;
   getResourceGroupResources(
@@ -196,9 +186,7 @@ export class AWSSDKService implements IAWSSDKService {
   ): Promise<ListGroupResourcesCommandOutput>;
   getSecretValue(secretArn: string): Promise<GetSecretValueCommandOutput>;
   getSSMParameter(ssmParamName: string): Promise<GetParameterCommandOutput>;
-  // (undocumented)
   putDynamodbTableData(data: DynamoDBTableData): Promise<PutItemCommandOutput>;
-  // (undocumented)
   putSecretValue(
     secretArn: string,
     secretValue: string,
@@ -206,11 +194,8 @@ export class AWSSDKService implements IAWSSDKService {
   registerTaskDefinition(
     taskDefinition: TaskDefinition,
   ): Promise<RegisterTaskDefinitionCommandOutput>;
-  // (undocumented)
   setAwsAccount(account: string): void;
-  // (undocumented)
   setAwsCredentials(credentials: AwsCredentialIdentity): void;
-  // (undocumented)
   setAwsRegion(region: string): void;
   updateServiceTask(
     clusterName: string,
@@ -229,15 +214,15 @@ export class AWSSDKService implements IAWSSDKService {
   ): Promise<UpdateStackCommandOutput>;
 }
 
-// @public (undocumented)
+// @public
 export function createAuditRecord(
   input: AwsAuditRequest,
 ): Promise<AwsAuditResponse>;
 
-// @public (undocumented)
+// @public
 export function createRouter(options: RouterOptions): Promise<express.Router>;
 
-// @public (undocumented)
+// @public
 export type DynamoDBTableData = {
   tableName: string;
   recordId: string;
@@ -257,7 +242,7 @@ export type DynamoDBTableData = {
   message: string;
 };
 
-// @public (undocumented)
+// @public
 export function getAWScreds(
   config: Config,
   logger: LoggerService,
@@ -269,38 +254,27 @@ export function getAWScreds(
   userIdentity?: BackstageUserInfo,
 ): Promise<AwsAuthResponse>;
 
-// @public (undocumented)
+// @public
 export class GitService implements IGitService {
   constructor(
     logger: LoggerService,
     gitProvider?: GitProviders,
     gitProviderImpl?: ISCMBackendAPI,
   );
-  // (undocumented)
   get gitProvider(): GitProviders;
-  // (undocumented)
   get gitProviderImpl(): ISCMBackendAPI;
-  // (undocumented)
   setGitProvider(provider: GitProviders): void;
-  // (undocumented)
   setGitProviderImpl(provider: ISCMBackendAPI): void;
 }
 
-// @public (undocumented)
+// @public
 export interface RouterOptions {
-  // (undocumented)
   auth: AuthService;
-  // (undocumented)
   catalogApi: CatalogApi;
-  // (undocumented)
   config: Config;
-  // (undocumented)
   httpAuth: HttpAuthService;
-  // (undocumented)
   logger: LoggerService;
-  // (undocumented)
   permissions: PermissionsService;
-  // (undocumented)
   userInfo: UserInfoService;
 }
 

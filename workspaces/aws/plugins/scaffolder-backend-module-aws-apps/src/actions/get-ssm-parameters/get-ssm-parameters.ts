@@ -45,6 +45,10 @@ const examples = [
 ];
 
 /**
+ * Creates a scaffolder action that retrieves AWS SSM parameter values
+ * for each environment provider so their configurations can be used
+ * by other template steps.
+ *
  * @public
  */
 export function getSsmParametersAction(

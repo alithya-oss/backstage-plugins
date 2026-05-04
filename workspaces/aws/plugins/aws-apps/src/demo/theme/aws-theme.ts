@@ -249,7 +249,11 @@ const createCustomThemeOverrides = (
   };
 };
 
-/** @public */
+/**
+ * AWS-branded Backstage theme.
+ *
+ * @public
+ */
 export const awsTheme: BackstageTheme = {
   ...baseTheme,
   overrides: {

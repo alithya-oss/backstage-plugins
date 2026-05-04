@@ -21,7 +21,12 @@ import {
   awsEnvironmentEntityV1Validator,
 } from '@alithya-oss/backstage-plugin-aws-apps-common';
 
-/** @public */
+/**
+ * Catalog processor that handles AWS Environment entities and establishes
+ * relationships between environments and their providers.
+ *
+ * @public
+ */
 export class AWSEnvironmentEntitiesProcessor implements CatalogProcessor {
   getProcessorName(): string {
     return 'AWSEnvironmentEntitiesProcessor';

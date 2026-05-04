@@ -36,6 +36,9 @@ const examples = [
 ];
 
 /**
+ * Creates a scaffolder action that generates a GitLab repository access token
+ * and stores it in AWS Secrets Manager.
+ *
  * @public
  */
 export function createRepoAccessTokenAction(options: {

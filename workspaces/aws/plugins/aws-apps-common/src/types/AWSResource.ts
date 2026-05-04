@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /**
+ * An AWS resource identified by ARN and type.
+ *
  * @public
  */
 export interface AWSResource {
@@ -11,7 +13,11 @@ export interface AWSResource {
   resourceArn: string;
 }
 
-/** @public */
+/**
+ * A recorded audit event for an AWS operation.
+ *
+ * @public
+ */
 export interface AuditRecord {
   id: string;
   origin: string;
@@ -32,7 +38,11 @@ export interface AuditRecord {
   message: string;
 }
 
-/** @public */
+/**
+ * A binding between an application and an AWS resource.
+ *
+ * @public
+ */
 export interface ResourceBinding {
   id: string;
   resourceType: string;
@@ -43,14 +53,22 @@ export interface ResourceBinding {
   entityRef?: string;
 }
 
-/** @public */
+/**
+ * Resources associated with a resource binding.
+ *
+ * @public
+ */
 export interface AssociatedResources {
   resourceName: string;
   resourceType: string;
   resourceArn: string;
 }
 
-/** @public */
+/**
+ * Parameters for binding a resource to an application.
+ *
+ * @public
+ */
 export interface BindResourceParams {
   envName: string;
   providerName: string;
@@ -60,7 +78,11 @@ export interface BindResourceParams {
   appName: string;
 }
 
-/** @public */
+/**
+ * An IAM policy associated with a resource binding.
+ *
+ * @public
+ */
 export interface ResourcePolicy {
   policyFileName: string;
   policyContent: string;

@@ -45,7 +45,11 @@ const useLogoStyles = makeStyles(theme => ({
   },
 }));
 
-/** @public */
+/**
+ * Home page component for OPA on AWS.
+ *
+ * @public
+ */
 export const OPAHomePage = () => {
   const classes = useStyles();
   const { container } = useLogoStyles();

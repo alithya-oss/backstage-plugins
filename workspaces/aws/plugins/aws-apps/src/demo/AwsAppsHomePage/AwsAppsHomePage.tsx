@@ -47,7 +47,11 @@ const useLogoStyles = makeStyles(theme => ({
   },
 }));
 
-/** @public */
+/**
+ * Home page for the AWS Apps plugin.
+ *
+ * @public
+ */
 export const AwsAppsHomePage = () => {
   const classes = useStyles();
   const { container } = useLogoStyles();

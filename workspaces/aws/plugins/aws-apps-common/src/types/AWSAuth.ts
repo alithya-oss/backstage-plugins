@@ -1,6 +1,10 @@
 import { AwsCredentialIdentity } from '@aws-sdk/types';
 
-/** @public */
+/**
+ * Response containing AWS credentials and metadata for an assumed role.
+ *
+ * @public
+ */
 export interface AwsAuthResponse {
   credentials: AwsCredentialIdentity;
   requester: string;

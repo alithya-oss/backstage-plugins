@@ -11,7 +11,11 @@ interface AwsS3ResourcePageProps {
   children?: ReactNode;
 }
 
-/** @public */
+/**
+ * Entity page for AWS S3 resources.
+ *
+ * @public
+ */
 export function AwsS3ResourcePage(_props: AwsS3ResourcePageProps) {
   const rdsContent = (
     <Grid container spacing={3} alignItems="stretch">

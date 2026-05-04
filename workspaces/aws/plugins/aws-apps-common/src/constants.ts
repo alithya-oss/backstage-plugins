@@ -3,13 +3,21 @@
 
 import { StackStatus } from '@aws-sdk/client-cloudformation';
 
-/** @public */
+/**
+ * Additional deployment statuses beyond CloudFormation stack statuses.
+ *
+ * @public
+ */
 export enum ExtraStackDeployStatus {
   STAGED = 'STAGED',
   UNSTAGED = 'UNSTAGED',
 }
 
-/** @public */
+/**
+ * Supported AWS environment provider types.
+ *
+ * @public
+ */
 export enum ProviderType {
   ECS = 'ecs',
   EKS = 'eks',
@@ -17,17 +25,29 @@ export enum ProviderType {
   GENAI_SERVERLESS = 'gen-ai-serverless',
 }
 
-/** @public */
+/**
+ * Union of CloudFormation stack statuses and custom deployment statuses.
+ *
+ * @public
+ */
 export type DeployStackStatus = StackStatus | ExtraStackDeployStatus;
 
-/** @public */
+/**
+ * Application subtypes for AWS deployments.
+ *
+ * @public
+ */
 export enum APP_SUBTYPE {
   ECS = 'aws-ecs',
   EKS = 'aws-eks',
   SERVERLESS = 'aws-serverless',
 }
 
-/** @public */
+/**
+ * HTTP method constants.
+ *
+ * @public
+ */
 export enum HTTP {
   GET = 'GET',
   POST = 'POST',

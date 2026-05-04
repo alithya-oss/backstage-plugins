@@ -18,8 +18,11 @@ export type BackendParams = {
   appName: string;
 };
 
-// Create providers definition for the different providers types: eks, ecs, and serverless
-/** @public */
+/**
+ * Union type representing any AWS deployment environment variant.
+ *
+ * @public
+ */
 export type GenericAWSEnvironment =
   | AWSDeploymentEnvironment
   | AWSECSAppDeploymentEnvironment
@@ -36,7 +39,11 @@ export type AwsDeploymentEnvironments = {
   [key: string]: GenericAWSEnvironment;
 };
 
-/** @public */
+/**
+ * Component metadata within an AWS deployment environment.
+ *
+ * @public
+ */
 export type AWSDeploymentEnvironmentComponent = {
   cloudFormationStackName: string;
   links: { title: string; url: string; icon?: string }[];
@@ -81,7 +88,11 @@ export type AWSDeploymentEnvironment = {
   resource: {};
 };
 
-/** @public */
+/**
+ * Type guard for ECS deployment environments.
+ *
+ * @public
+ */
 export function isAWSECSAppDeploymentEnvironment(
   variable: any,
 ): variable is AWSECSAppDeploymentEnvironment {
@@ -99,7 +110,11 @@ export function isAWSECSAppDeploymentEnvironment(
   );
 }
 
-/** @public */
+/**
+ * Deployment environment for ECS-based applications.
+ *
+ * @public
+ */
 export type AWSECSAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   clusterName: string;
   app: AWSDeploymentEnvironmentComponent & {
@@ -112,7 +127,11 @@ export type AWSECSAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   };
 };
 
-/** @public */
+/**
+ * Type guard for EKS deployment environments.
+ *
+ * @public
+ */
 export function isAWSEKSAppDeploymentEnvironment(
   variable: any,
 ): variable is AWSEKSAppDeploymentEnvironment {
@@ -128,7 +147,11 @@ export function isAWSEKSAppDeploymentEnvironment(
   );
 }
 
-/** @public */
+/**
+ * Deployment environment for EKS-based applications.
+ *
+ * @public
+ */
 export type AWSEKSAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   clusterName: string;
   app: AWSDeploymentEnvironmentComponent & {
@@ -151,7 +174,11 @@ export type CloudFormationStack = {
   lastUpdatedTime?: string;
 };
 
-/** @public */
+/**
+ * Type guard for serverless deployment environments.
+ *
+ * @public
+ */
 export function isAWSServerlessAppDeploymentEnvironment(
   variable: any,
 ): variable is AWSServerlessAppDeploymentEnvironment {
@@ -165,7 +192,11 @@ export function isAWSServerlessAppDeploymentEnvironment(
   );
 }
 
-/** @public */
+/**
+ * Deployment environment for serverless applications.
+ *
+ * @public
+ */
 export type AWSServerlessAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   app: {
     appStack: CloudFormationStack; // non-IaC stack that defines serverless resources like lambdas
@@ -175,8 +206,11 @@ export type AWSServerlessAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   };
 };
 
-// capture an AWS resource withing a particular AWS Provider
-/** @public */
+/**
+ * Deployment environment for standalone AWS resources.
+ *
+ * @public
+ */
 export type AWSResourceDeploymentEnvironment = AWSDeploymentEnvironment & {
   resource: {
     arn: string;
@@ -187,14 +221,22 @@ export type AWSResourceDeploymentEnvironment = AWSDeploymentEnvironment & {
   };
 };
 
-/** @public */
+/**
+ * Infrastructure-as-code state management types.
+ *
+ * @public
+ */
 export enum ComponentStateType {
   CLOUDFORMATION = 'cloudformation',
   TERRAFORM_CLOUD = 'terraform-cloud',
   TERRAFORM_AWS = 'terraform-aws',
 }
 
-/** @public */
+/**
+ * Types of AWS components managed in the catalog.
+ *
+ * @public
+ */
 export enum AWSComponentType {
   AWSApp = 'aws-app',
   AWSResource = 'aws-resource',
@@ -223,7 +265,11 @@ export type AWSComponent = {
   getRepoInfo: () => IRepositoryInfo;
 };
 
-/** @public */
+/**
+ * Record describing an AWS environment provider.
+ *
+ * @public
+ */
 export type AWSEnvironmentProviderRecord = {
   id: string;
   name: string;
@@ -234,7 +280,11 @@ export type AWSEnvironmentProviderRecord = {
   region: string;
 };
 
-/** @public */
+/**
+ * Possible runtime states of an application.
+ *
+ * @public
+ */
 export enum AppStateType {
   RUNNING = 'Running',
   STOPPED = 'Stopped',
@@ -242,7 +292,11 @@ export enum AppStateType {
   PROVISIONING = 'Provisioning',
 }
 
-/** @public */
+/**
+ * Runtime state of a deployed application.
+ *
+ * @public
+ */
 export type AppState = {
   appID?: string;
   appState?: AppStateType;
@@ -255,14 +309,22 @@ export type AppState = {
   additionalInfo?: KeyValue[];
 };
 
-/** @public */
+/**
+ * A simple key-value pair with an identifier.
+ *
+ * @public
+ */
 export interface KeyValue {
   id: string;
   key: string;
   value: string;
 }
 
-/** @public */
+/**
+ * A key-value structure with two key-value pairs and an identifier.
+ *
+ * @public
+ */
 export interface KeyValueDouble {
   id: string;
   key: string;

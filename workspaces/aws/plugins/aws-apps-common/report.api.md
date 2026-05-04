@@ -10,10 +10,10 @@ import { KindValidator } from '@backstage/catalog-model';
 import { ResourcePermission } from '@backstage/plugin-permission-common';
 import { StackStatus } from '@aws-sdk/client-cloudformation';
 
-// @public (undocumented)
+// @public
 export const APP_COMPNENT_RESOURCE_TYPE = 'aws-apps';
 
-// @public (undocumented)
+// @public
 export enum APP_SUBTYPE {
   // (undocumented)
   ECS = 'aws-ecs',
@@ -23,7 +23,7 @@ export enum APP_SUBTYPE {
   SERVERLESS = 'aws-serverless',
 }
 
-// @public (undocumented)
+// @public
 export type AppPromoParams = {
   envName: string;
   envRequiresManualApproval: boolean;
@@ -31,7 +31,7 @@ export type AppPromoParams = {
   providers: AWSProviderParams[];
 };
 
-// @public (undocumented)
+// @public
 export type AppState = {
   appID?: string;
   appState?: AppStateType;
@@ -44,7 +44,7 @@ export type AppState = {
   additionalInfo?: KeyValue[];
 };
 
-// @public (undocumented)
+// @public
 export enum AppStateType {
   // (undocumented)
   PROVISIONING = 'Provisioning',
@@ -56,7 +56,7 @@ export enum AppStateType {
   UPDATING = 'Updating',
 }
 
-// @public (undocumented)
+// @public
 export interface AssociatedResources {
   // (undocumented)
   resourceArn: string;
@@ -66,7 +66,7 @@ export interface AssociatedResources {
   resourceType: string;
 }
 
-// @public (undocumented)
+// @public
 export interface AuditRecord {
   // (undocumented)
   actionName: string;
@@ -104,7 +104,7 @@ export interface AuditRecord {
   targetRegion: string;
 }
 
-// @public (undocumented)
+// @public
 export interface AwsAuthResponse {
   // (undocumented)
   account: string;
@@ -135,7 +135,7 @@ export type AWSComponent = {
   getRepoInfo: () => IRepositoryInfo;
 };
 
-// @public (undocumented)
+// @public
 export enum AWSComponentType {
   // (undocumented)
   AWSApp = 'aws-app',
@@ -187,7 +187,7 @@ export type AWSDeploymentEnvironment = {
   resource: {};
 };
 
-// @public (undocumented)
+// @public
 export type AWSDeploymentEnvironmentComponent = {
   cloudFormationStackName: string;
   links: {
@@ -202,7 +202,7 @@ export type AwsDeploymentEnvironments = {
   [key: string]: GenericAWSEnvironment;
 };
 
-// @public (undocumented)
+// @public
 export type AWSECSAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   clusterName: string;
   app: AWSDeploymentEnvironmentComponent & {
@@ -215,7 +215,7 @@ export type AWSECSAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   };
 };
 
-// @public (undocumented)
+// @public
 export type AWSEKSAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   clusterName: string;
   app: AWSDeploymentEnvironmentComponent & {
@@ -266,7 +266,7 @@ export interface AWSEnvironmentProviderEntityV1 extends Entity {
 // @public
 export const awsEnvironmentProviderEntityV1Validator: KindValidator;
 
-// @public (undocumented)
+// @public
 export type AWSEnvironmentProviderRecord = {
   id: string;
   name: string;
@@ -277,7 +277,7 @@ export type AWSEnvironmentProviderRecord = {
   region: string;
 };
 
-// @public (undocumented)
+// @public
 export type AWSProviderParams = {
   awsAccount: string;
   awsRegion: string;
@@ -291,7 +291,7 @@ export type AWSProviderParams = {
   };
 };
 
-// @public (undocumented)
+// @public
 export interface AWSResource {
   // (undocumented)
   resourceArn: string;
@@ -303,7 +303,7 @@ export interface AWSResource {
   resourceTypeName: string;
 }
 
-// @public (undocumented)
+// @public
 export type AWSResourceDeploymentEnvironment = AWSDeploymentEnvironment & {
   resource: {
     arn: string;
@@ -314,7 +314,7 @@ export type AWSResourceDeploymentEnvironment = AWSDeploymentEnvironment & {
   };
 };
 
-// @public (undocumented)
+// @public
 export type AWSServerlessAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   app: {
     appStack: CloudFormationStack;
@@ -324,7 +324,7 @@ export type AWSServerlessAppDeploymentEnvironment = AWSDeploymentEnvironment & {
   };
 };
 
-// @public (undocumented)
+// @public
 export interface AWSServiceResources {
   // (undocumented)
   [k: string]: Array<AWSResource>;
@@ -339,7 +339,7 @@ export type BackendParams = {
   appName: string;
 };
 
-// @public (undocumented)
+// @public
 export interface BindResourceParams {
   // (undocumented)
   appName: string;
@@ -371,7 +371,7 @@ export type CommonType = {
   field: string;
 };
 
-// @public (undocumented)
+// @public
 export enum ComponentStateType {
   // (undocumented)
   CLOUDFORMATION = 'cloudformation',
@@ -381,10 +381,10 @@ export enum ComponentStateType {
   TERRAFORM_CLOUD = 'terraform-cloud',
 }
 
-// @public (undocumented)
+// @public
 export type DeployStackStatus = StackStatus | ExtraStackDeployStatus;
 
-// @public (undocumented)
+// @public
 export enum ExtraStackDeployStatus {
   // (undocumented)
   STAGED = 'STAGED',
@@ -392,7 +392,7 @@ export enum ExtraStackDeployStatus {
   UNSTAGED = 'UNSTAGED',
 }
 
-// @public (undocumented)
+// @public
 export type GenericAWSEnvironment =
   | AWSDeploymentEnvironment
   | AWSECSAppDeploymentEnvironment
@@ -400,16 +400,16 @@ export type GenericAWSEnvironment =
   | AWSServerlessAppDeploymentEnvironment
   | AWSResourceDeploymentEnvironment;
 
-// @public (undocumented)
+// @public
 export const getGitCredentailsSecret: (repoInfo: IRepositoryInfo) => string;
 
-// @public (undocumented)
+// @public
 export const getRepoInfo: (entity: Entity) => IRepositoryInfo;
 
-// @public (undocumented)
+// @public
 export const getRepoUrl: (repoInfo: IRepositoryInfo) => string;
 
-// @public (undocumented)
+// @public
 export enum GitProviders {
   // (undocumented)
   GITHUB = 'github',
@@ -419,7 +419,7 @@ export enum GitProviders {
   UNSET = 'unset',
 }
 
-// @public (undocumented)
+// @public
 export enum GitVisibility {
   // (undocumented)
   PRIVATE = 'private',
@@ -427,7 +427,7 @@ export enum GitVisibility {
   PUBIC = 'public',
 }
 
-// @public (undocumented)
+// @public
 export enum HTTP {
   // (undocumented)
   DELETE = 'DELETE',
@@ -445,7 +445,7 @@ export enum HTTP {
   PUT = 'PUT',
 }
 
-// @public (undocumented)
+// @public
 export interface ICommitAction {
   // (undocumented)
   action: string;
@@ -455,7 +455,7 @@ export interface ICommitAction {
   file_path: string;
 }
 
-// @public (undocumented)
+// @public
 export interface ICommitChange {
   // (undocumented)
   actions: ICommitAction[];
@@ -465,7 +465,7 @@ export interface ICommitChange {
   commitMessage: string;
 }
 
-// @public (undocumented)
+// @public
 export interface IGitAPIResult {
   // (undocumented)
   httpResponse: number;
@@ -477,7 +477,7 @@ export interface IGitAPIResult {
   value: any;
 }
 
-// @public (undocumented)
+// @public
 export interface IRepositoryInfo {
   // (undocumented)
   description?: string;
@@ -505,22 +505,22 @@ export interface IRepositoryInfo {
   visibility?: GitVisibility;
 }
 
-// @public (undocumented)
+// @public
 export function isAWSECSAppDeploymentEnvironment(
   variable: any,
 ): variable is AWSECSAppDeploymentEnvironment;
 
-// @public (undocumented)
+// @public
 export function isAWSEKSAppDeploymentEnvironment(
   variable: any,
 ): variable is AWSEKSAppDeploymentEnvironment;
 
-// @public (undocumented)
+// @public
 export function isAWSServerlessAppDeploymentEnvironment(
   variable: any,
 ): variable is AWSServerlessAppDeploymentEnvironment;
 
-// @public (undocumented)
+// @public
 export interface ISCMBackendAPI {
   // (undocumented)
   commitContent: (
@@ -550,7 +550,7 @@ export interface ISCMBackendAPI {
   setGitProvider(provider: GitProviders): void;
 }
 
-// @public (undocumented)
+// @public
 export interface KeyValue {
   // (undocumented)
   id: string;
@@ -560,7 +560,7 @@ export interface KeyValue {
   value: string;
 }
 
-// @public (undocumented)
+// @public
 export interface KeyValueDouble {
   // (undocumented)
   id: string;
@@ -574,10 +574,10 @@ export interface KeyValueDouble {
   value2: string;
 }
 
-// @public (undocumented)
+// @public
 export const opaPermissions: ResourcePermission<'aws-apps'>[];
 
-// @public (undocumented)
+// @public
 export enum ProviderType {
   // (undocumented)
   ECS = 'ecs',
@@ -589,10 +589,10 @@ export enum ProviderType {
   SERVERLESS = 'serverless',
 }
 
-// @public (undocumented)
+// @public
 export const readOpaAppAuditPermission: ResourcePermission<'aws-apps'>;
 
-// @public (undocumented)
+// @public
 export interface ResourceBinding {
   // (undocumented)
   associatedResources?: AssociatedResources[];
@@ -610,7 +610,7 @@ export interface ResourceBinding {
   resourceType: string;
 }
 
-// @public (undocumented)
+// @public
 export interface ResourcePolicy {
   // (undocumented)
   policyContent: string;

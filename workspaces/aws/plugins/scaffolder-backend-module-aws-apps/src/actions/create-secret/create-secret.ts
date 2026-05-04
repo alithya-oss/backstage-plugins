@@ -27,6 +27,8 @@ const examples = [
 ];
 
 /**
+ * Creates a scaffolder action that provisions a new secret in AWS Secrets Manager.
+ *
  * @public
  */
 export function createSecretAction(options: { envConfig: Config }) {

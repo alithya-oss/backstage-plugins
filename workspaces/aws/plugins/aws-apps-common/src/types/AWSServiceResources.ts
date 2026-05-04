@@ -4,6 +4,8 @@
 import { AWSResource } from './AWSResource';
 
 /**
+ * A map of AWS service types to their associated resources.
+ *
  * @public
  */
 export interface AWSServiceResources {

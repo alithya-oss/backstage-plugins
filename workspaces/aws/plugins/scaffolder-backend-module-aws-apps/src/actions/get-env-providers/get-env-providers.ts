@@ -57,6 +57,9 @@ interface DeploymentParameters {
 }
 
 /**
+ * Creates a scaffolder action that retrieves AWS environment provider
+ * configurations from the Backstage catalog for use in deployment workflows.
+ *
  * @public
  */
 export function getEnvProvidersAction(options: {

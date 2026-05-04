@@ -26,6 +26,9 @@ const examples = [
 ];
 
 /**
+ * Creates a scaffolder action that derives useful component metadata
+ * such as a kebab-case name for use by subsequent template steps.
+ *
  * @public
  */
 export function getComponentInfoAction() {

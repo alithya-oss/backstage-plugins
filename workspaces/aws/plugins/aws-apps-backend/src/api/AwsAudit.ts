@@ -4,7 +4,11 @@
 import { LoggerService } from '@backstage/backend-plugin-api';
 import { IAWSSDKService } from '../services/definition';
 
-/** @public */
+/**
+ * Request parameters for recording an AWS audit event.
+ *
+ * @public
+ */
 export interface AwsAuditRequest {
   envProviderPrefix: string;
   envProviderName: string;
@@ -23,13 +27,21 @@ export interface AwsAuditRequest {
   message?: string;
 }
 
-/** @public */
+/**
+ * Response from recording an AWS audit event.
+ *
+ * @public
+ */
 export interface AwsAuditResponse {
   status: string;
   message: string;
 }
 
-/** @public */
+/**
+ * Records an audit event to the DynamoDB audit table.
+ *
+ * @public
+ */
 export async function createAuditRecord({
   envProviderPrefix,
   envProviderName,
