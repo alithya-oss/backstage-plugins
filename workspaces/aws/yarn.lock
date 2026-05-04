@@ -9968,10 +9968,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@protobufjs/inquire@npm:^1.1.0, @protobufjs/inquire@npm:^1.1.1":
+"@protobufjs/inquire@npm:1.1.1":
   version: 1.1.1
   resolution: "@protobufjs/inquire@npm:1.1.1"
   checksum: 10/504740e8ac348f70b33bcf6a20c83d5b9679901654c1a96b18c0491ec2f2f7ac580e74019b6d1bce16113bfb9746bc6e7dfd4e12a717deed699675b7f230ce9e
+  languageName: node
+  linkType: hard
+
+"@protobufjs/inquire@patch:@protobufjs/inquire@npm%3A1.1.1#./.yarn/patches/@protobufjs-inquire-npm-1.1.1-1f267bc97f.patch::locator=%40internal%2Faws%40workspace%3A.":
+  version: 1.1.1
+  resolution: "@protobufjs/inquire@patch:@protobufjs/inquire@npm%3A1.1.1#./.yarn/patches/@protobufjs-inquire-npm-1.1.1-1f267bc97f.patch::version=1.1.1&hash=0bf80c&locator=%40internal%2Faws%40workspace%3A."
+  checksum: 10/e30421bb2f2791c3127ccca5593218872a9e88cfab71882a028aab62acb041a10c69c2ee7098bbadbf8db0b04c2e8c79cfd69bacd139153a5b19aeb278d388aa
   languageName: node
   linkType: hard
 
@@ -32013,7 +32020,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"protobufjs@npm:^7.0.0, protobufjs@npm:^7.2.5, protobufjs@npm:^7.2.6, protobufjs@npm:^7.3.2, protobufjs@npm:^7.4.0, protobufjs@npm:^7.5.3":
+"protobufjs@npm:^7.5.4":
   version: 7.5.6
   resolution: "protobufjs@npm:7.5.6"
   dependencies:
