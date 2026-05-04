@@ -18,12 +18,12 @@ jobs:
     if: github.repository == 'alithya-oss/backstage-plugins' && ( github.event.pull_request || github.event.issue.pull_request )
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # v2.12.0
+        uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
         with:
           egress-policy: audit
 
       - name: PR sync
-        uses: backstage/actions/pr-sync@b3c1841fd69e1658ac631afafd0fb140a2309024 # v0.6.17
+        uses: backstage/actions/pr-sync@2cd6978b476cbdc39fec48346f8b6ca13199dd6a # v0.7.8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN  }}
           app-id: ${{ secrets.BACKSTAGE_GOALIE_APPLICATION_ID }}
