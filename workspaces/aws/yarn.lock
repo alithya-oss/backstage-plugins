@@ -24,19 +24,19 @@ __metadata:
   resolution: "@alithya-oss/backstage-plugin-aws-apps-backend@workspace:plugins/aws-apps-backend"
   dependencies:
     "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^"
-    "@aws-sdk/client-cloudformation": "npm:^3.1019.0"
-    "@aws-sdk/client-cloudwatch-logs": "npm:^3.1019.0"
-    "@aws-sdk/client-dynamodb": "npm:^3.1019.0"
-    "@aws-sdk/client-ecs": "npm:^3.1019.0"
-    "@aws-sdk/client-eks": "npm:^3.1019.0"
-    "@aws-sdk/client-lambda": "npm:^3.1019.0"
-    "@aws-sdk/client-resource-groups": "npm:^3.1019.0"
-    "@aws-sdk/client-s3": "npm:^3.1019.0"
-    "@aws-sdk/client-secrets-manager": "npm:^3.1019.0"
-    "@aws-sdk/client-ssm": "npm:^3.1019.0"
-    "@aws-sdk/client-sts": "npm:^3.1019.0"
-    "@aws-sdk/credential-provider-node": "npm:^3.972.27"
-    "@aws-sdk/types": "npm:^3.973.6"
+    "@aws-sdk/client-cloudformation": "npm:^3.1042.0"
+    "@aws-sdk/client-cloudwatch-logs": "npm:^3.1042.0"
+    "@aws-sdk/client-dynamodb": "npm:^3.1042.0"
+    "@aws-sdk/client-ecs": "npm:^3.1042.0"
+    "@aws-sdk/client-eks": "npm:^3.1042.0"
+    "@aws-sdk/client-lambda": "npm:^3.1042.0"
+    "@aws-sdk/client-resource-groups": "npm:^3.1042.0"
+    "@aws-sdk/client-s3": "npm:^3.1042.0"
+    "@aws-sdk/client-secrets-manager": "npm:^3.1042.0"
+    "@aws-sdk/client-ssm": "npm:^3.1042.0"
+    "@aws-sdk/client-sts": "npm:^3.1042.0"
+    "@aws-sdk/credential-provider-node": "npm:^3.972.39"
+    "@aws-sdk/types": "npm:^3.973.8"
     "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage/backend-defaults": "backstage:^"
     "@backstage/backend-plugin-api": "backstage:^"
@@ -74,8 +74,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-aws-apps-common@workspace:plugins/aws-apps-common"
   dependencies:
-    "@aws-sdk/client-cloudformation": "npm:^3.1019.0"
-    "@aws-sdk/types": "npm:^3.973.6"
+    "@aws-sdk/client-cloudformation": "npm:^3.1042.0"
+    "@aws-sdk/types": "npm:^3.973.8"
     "@backstage/catalog-model": "backstage:^"
     "@backstage/cli": "backstage:^"
     "@backstage/plugin-permission-common": "backstage:^"
@@ -89,15 +89,15 @@ __metadata:
   resolution: "@alithya-oss/backstage-plugin-aws-apps@workspace:plugins/aws-apps"
   dependencies:
     "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^"
-    "@aws-sdk/client-cloudformation": "npm:^3.1019.0"
-    "@aws-sdk/client-cloudwatch-logs": "npm:^3.1019.0"
-    "@aws-sdk/client-dynamodb": "npm:^3.1019.0"
-    "@aws-sdk/client-ecs": "npm:^3.1019.0"
-    "@aws-sdk/client-eks": "npm:^3.1019.0"
-    "@aws-sdk/client-lambda": "npm:^3.1019.0"
-    "@aws-sdk/client-s3": "npm:^3.1019.0"
-    "@aws-sdk/client-secrets-manager": "npm:^3.1019.0"
-    "@aws-sdk/client-ssm": "npm:^3.1019.0"
+    "@aws-sdk/client-cloudformation": "npm:^3.1042.0"
+    "@aws-sdk/client-cloudwatch-logs": "npm:^3.1042.0"
+    "@aws-sdk/client-dynamodb": "npm:^3.1042.0"
+    "@aws-sdk/client-ecs": "npm:^3.1042.0"
+    "@aws-sdk/client-eks": "npm:^3.1042.0"
+    "@aws-sdk/client-lambda": "npm:^3.1042.0"
+    "@aws-sdk/client-s3": "npm:^3.1042.0"
+    "@aws-sdk/client-secrets-manager": "npm:^3.1042.0"
+    "@aws-sdk/client-ssm": "npm:^3.1042.0"
     "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage-community/plugin-github-actions": "npm:^1.0.0"
     "@backstage/catalog-model": "backstage:^"
@@ -169,10 +169,10 @@ __metadata:
   dependencies:
     "@alithya-oss/backstage-plugin-aws-apps-backend": "workspace:^"
     "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^"
-    "@aws-sdk/client-secrets-manager": "npm:^3.1019.0"
-    "@aws-sdk/client-sfn": "npm:^3.1019.0"
-    "@aws-sdk/client-ssm": "npm:^3.1019.0"
-    "@aws-sdk/types": "npm:^3.973.6"
+    "@aws-sdk/client-secrets-manager": "npm:^3.1042.0"
+    "@aws-sdk/client-sfn": "npm:^3.1042.0"
+    "@aws-sdk/client-ssm": "npm:^3.1042.0"
+    "@aws-sdk/types": "npm:^3.973.8"
     "@aws-sdk/util-arn-parser": "npm:^3.972.3"
     "@backstage/backend-plugin-api": "backstage:^"
     "@backstage/backend-test-utils": "backstage:^"
@@ -499,7 +499,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-cloudformation@npm:^3.1019.0":
+"@aws-sdk/client-cloudformation@npm:^3.1042.0":
   version: 3.1042.0
   resolution: "@aws-sdk/client-cloudformation@npm:3.1042.0"
   dependencies:
@@ -547,7 +547,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-cloudwatch-logs@npm:^3.1019.0":
+"@aws-sdk/client-cloudwatch-logs@npm:^3.1042.0":
   version: 3.1042.0
   resolution: "@aws-sdk/client-cloudwatch-logs@npm:3.1042.0"
   dependencies:
@@ -691,7 +691,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-dynamodb@npm:^3.1019.0":
+"@aws-sdk/client-dynamodb@npm:^3.1042.0":
   version: 3.1042.0
   resolution: "@aws-sdk/client-dynamodb@npm:3.1042.0"
   dependencies:
@@ -741,7 +741,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-ecs@npm:^3.1019.0":
+"@aws-sdk/client-ecs@npm:^3.1042.0":
   version: 3.1042.0
   resolution: "@aws-sdk/client-ecs@npm:3.1042.0"
   dependencies:
@@ -789,7 +789,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-eks@npm:^3.1019.0":
+"@aws-sdk/client-eks@npm:^3.1042.0":
   version: 3.1042.0
   resolution: "@aws-sdk/client-eks@npm:3.1042.0"
   dependencies:
@@ -837,7 +837,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-lambda@npm:^3.1019.0":
+"@aws-sdk/client-lambda@npm:^3.1042.0":
   version: 3.1042.0
   resolution: "@aws-sdk/client-lambda@npm:3.1042.0"
   dependencies:
@@ -889,7 +889,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-resource-groups@npm:^3.1019.0":
+"@aws-sdk/client-resource-groups@npm:^3.1042.0":
   version: 3.1042.0
   resolution: "@aws-sdk/client-resource-groups@npm:3.1042.0"
   dependencies:
@@ -936,7 +936,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-s3@npm:^3.1019.0, @aws-sdk/client-s3@npm:^3.350.0":
+"@aws-sdk/client-s3@npm:^3.1042.0, @aws-sdk/client-s3@npm:^3.350.0":
   version: 3.1042.0
   resolution: "@aws-sdk/client-s3@npm:3.1042.0"
   dependencies:
@@ -999,7 +999,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-secrets-manager@npm:^3.1019.0":
+"@aws-sdk/client-secrets-manager@npm:^3.1042.0":
   version: 3.1042.0
   resolution: "@aws-sdk/client-secrets-manager@npm:3.1042.0"
   dependencies:
@@ -1046,7 +1046,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-sfn@npm:^3.1019.0":
+"@aws-sdk/client-sfn@npm:^3.1042.0":
   version: 3.1042.0
   resolution: "@aws-sdk/client-sfn@npm:3.1042.0"
   dependencies:
@@ -1093,7 +1093,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-ssm@npm:^3.1019.0":
+"@aws-sdk/client-ssm@npm:^3.1042.0":
   version: 3.1042.0
   resolution: "@aws-sdk/client-ssm@npm:3.1042.0"
   dependencies:
@@ -1141,7 +1141,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-sts@npm:^3.1019.0, @aws-sdk/client-sts@npm:^3.350.0":
+"@aws-sdk/client-sts@npm:^3.1042.0, @aws-sdk/client-sts@npm:^3.350.0":
   version: 3.1042.0
   resolution: "@aws-sdk/client-sts@npm:3.1042.0"
   dependencies:
@@ -1303,7 +1303,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/credential-provider-node@npm:^3.350.0, @aws-sdk/credential-provider-node@npm:^3.972.27, @aws-sdk/credential-provider-node@npm:^3.972.39":
+"@aws-sdk/credential-provider-node@npm:^3.350.0, @aws-sdk/credential-provider-node@npm:^3.972.39":
   version: 3.972.39
   resolution: "@aws-sdk/credential-provider-node@npm:3.972.39"
   dependencies:
@@ -1715,7 +1715,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/types@npm:^3.222.0, @aws-sdk/types@npm:^3.347.0, @aws-sdk/types@npm:^3.973.6, @aws-sdk/types@npm:^3.973.8":
+"@aws-sdk/types@npm:^3.222.0, @aws-sdk/types@npm:^3.347.0, @aws-sdk/types@npm:^3.973.8":
   version: 3.973.8
   resolution: "@aws-sdk/types@npm:3.973.8"
   dependencies:

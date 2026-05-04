@@ -51,8 +51,8 @@
   ],
   "configSchema": "config.d.ts",
   "dependencies": {
-    "@aws-sdk/client-cloudformation": "^3.1019.0",
-    "@aws-sdk/types": "^3.973.6",
+    "@aws-sdk/client-cloudformation": "^3.1042.0",
+    "@aws-sdk/types": "^3.973.8",
     "@backstage/catalog-model": "backstage:^",
     "@backstage/plugin-permission-common": "backstage:^",
     "@backstage/types": "backstage:^"
