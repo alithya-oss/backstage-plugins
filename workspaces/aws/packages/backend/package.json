@@ -21,15 +21,10 @@
     "build-image": "docker build ../.. -f Dockerfile --tag backstage"
   },
   "dependencies": {
-    "@alithya-oss/backstage-plugin-amazon-ecs-backend": "workspace:^",
     "@alithya-oss/backstage-plugin-aws-apps-backend": "workspace:^",
     "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^",
-    "@alithya-oss/backstage-plugin-aws-codebuild-backend": "workspace:^",
-    "@alithya-oss/backstage-plugin-aws-codepipeline-backend": "workspace:^",
     "@alithya-oss/backstage-plugin-catalog-backend-module-aws-apps-entities-processor": "workspace:^",
-    "@alithya-oss/backstage-plugin-cost-insights-aws-backend": "workspace:^",
     "@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps": "workspace:^",
-    "@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-core": "workspace:^",
     "@backstage/backend-defaults": "backstage:^",
     "@backstage/backend-plugin-api": "backstage:^",
     "@backstage/catalog-model": "backstage:^",
