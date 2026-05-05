@@ -1,4 +1,19 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // SPDX-License-Identifier: Apache-2.0
 
 import {
@@ -18,7 +33,11 @@ export const isAnnotationsAvailable = (entity: Entity) =>
   entity?.metadata?.annotations;
 export const isLabelsAvailable = (entity: Entity) => entity?.metadata?.labels;
 
-/** @public */
+/**
+ * The AWS Apps frontend plugin for Backstage.
+ *
+ * @public
+ */
 export const awsAppsPlugin = createPlugin({
   id: 'aws-apps',
   apis: [
@@ -34,7 +53,11 @@ export const awsAppsPlugin = createPlugin({
   },
 });
 
-/** @public */
+/**
+ * Displays Kubernetes labels for an AWS application entity.
+ *
+ * @public
+ */
 export const EntityLabelTable = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'EntityLabelTable',
@@ -45,7 +68,11 @@ export const EntityLabelTable = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Displays audit records for an AWS application entity.
+ *
+ * @public
+ */
 export const EntityAuditTable = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'EntityAuditTable',
@@ -56,7 +83,11 @@ export const EntityAuditTable = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Dropdown selector for choosing an AWS environment and provider.
+ *
+ * @public
+ */
 export const EntityEnvironmentSelector = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'EnvironmentSelector',
@@ -69,7 +100,11 @@ export const EntityEnvironmentSelector = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Displays entity annotations filtered by type.
+ *
+ * @public
+ */
 export const EntityAnnotationTypeTable = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'EntityAnnotationTypeTable',
@@ -82,7 +117,11 @@ export const EntityAnnotationTypeTable = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Displays the current runtime state of an ECS application.
+ *
+ * @public
+ */
 export const EntityAppStateCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AppStateCard',
@@ -95,7 +134,11 @@ export const EntityAppStateCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Displays the current runtime state of an EKS application.
+ *
+ * @public
+ */
 export const EntityK8sAppStateCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'K8sAppStateCard',
@@ -108,7 +151,11 @@ export const EntityK8sAppStateCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Displays the CloudFormation stack state of an application.
+ *
+ * @public
+ */
 export const EntityAppStateCardCloudFormation = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AppStateCardCloudFormation',
@@ -121,7 +168,11 @@ export const EntityAppStateCardCloudFormation = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Displays general information about an AWS application entity.
+ *
+ * @public
+ */
 export const EntityGeneralInfoCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'GeneralInfoCard',
@@ -134,7 +185,11 @@ export const EntityGeneralInfoCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Provides application promotion controls across environments.
+ *
+ * @public
+ */
 export const EntityAppPromoCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AppPromoCard',
@@ -160,7 +215,11 @@ export const EntityAppLinksCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Custom catalog page for AWS applications.
+ *
+ * @public
+ */
 export const AppCatalogPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AppCatalogPage',
@@ -173,7 +232,11 @@ export const AppCatalogPage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Displays CloudWatch log streams for an application.
+ *
+ * @public
+ */
 export const EntityCloudwatchLogsTable = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'EntityCloudwatchLogsTable',
@@ -186,7 +249,11 @@ export const EntityCloudwatchLogsTable = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Displays infrastructure details for an AWS application.
+ *
+ * @public
+ */
 export const EntityInfrastructureInfoCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'InfrastructureInfoCard',
@@ -199,7 +266,11 @@ export const EntityInfrastructureInfoCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Displays information about an AWS environment provider.
+ *
+ * @public
+ */
 export const EntityProviderInfoCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'ProviderInfoCard',
@@ -212,7 +283,11 @@ export const EntityProviderInfoCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Displays information about an AWS environment.
+ *
+ * @public
+ */
 export const EntityEnvironmentInfoCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'EnvironmentInfoCard',
@@ -225,7 +300,11 @@ export const EntityEnvironmentInfoCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Displays application configuration details.
+ *
+ * @public
+ */
 export const EntityAppConfigCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AppConfigCard',
@@ -238,7 +317,11 @@ export const EntityAppConfigCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Provides controls to delete an AWS application.
+ *
+ * @public
+ */
 export const EntityDeleteAppCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'DeleteAppCard',
@@ -251,7 +334,11 @@ export const EntityDeleteAppCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Provides controls to delete an AWS environment provider.
+ *
+ * @public
+ */
 export const EntityDeleteProviderCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'DeleteProviderCard',
@@ -264,7 +351,11 @@ export const EntityDeleteProviderCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Provides controls to delete an AWS environment.
+ *
+ * @public
+ */
 export const EntityDeleteEnvironmentCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'DeleteEnvironmentCard',
@@ -277,7 +368,11 @@ export const EntityDeleteEnvironmentCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Displays and manages resource bindings for an application.
+ *
+ * @public
+ */
 export const EntityResourceBindingCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'ResourceBindingCard',
@@ -290,7 +385,11 @@ export const EntityResourceBindingCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Card for selecting AWS environment providers.
+ *
+ * @public
+ */
 export const EntityAwsEnvironmentProviderSelectorCard = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsEnvironmentProviderSelectorCard',
@@ -303,7 +402,11 @@ export const EntityAwsEnvironmentProviderSelectorCard = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Entity page layout for AWS applications.
+ *
+ * @public
+ */
 export const AwsAppPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsAppPage',
@@ -314,7 +417,11 @@ export const AwsAppPage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Entity page layout for AWS components.
+ *
+ * @public
+ */
 export const AwsComponentPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsComponentPage',
@@ -327,7 +434,11 @@ export const AwsComponentPage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Entity page for AWS environments.
+ *
+ * @public
+ */
 export const AwsEnvironmentPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsEnvironmentPage',
@@ -340,7 +451,11 @@ export const AwsEnvironmentPage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Entity page for AWS environment providers.
+ *
+ * @public
+ */
 export const AwsEnvironmentProviderPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsEnvironmentProviderPage',
@@ -353,7 +468,11 @@ export const AwsEnvironmentProviderPage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Entity page for ECS-based AWS applications.
+ *
+ * @public
+ */
 export const AwsECSAppPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsECSAppPage',
@@ -379,7 +498,11 @@ export const AwsECSEnvironmentProviderPage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Entity page for EKS-based AWS applications.
+ *
+ * @public
+ */
 export const AwsEKSAppPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsEKSAppPage',
@@ -405,7 +528,11 @@ export const AwsEKSEnvironmentProviderPage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Entity page for AWS applications in pending state.
+ *
+ * @public
+ */
 export const AwsPendingPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsPendingPage',
@@ -418,7 +545,11 @@ export const AwsPendingPage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Entity page for AWS RDS resources.
+ *
+ * @public
+ */
 export const AwsRDSResourcePage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsRDSResourcePage',
@@ -431,7 +562,11 @@ export const AwsRDSResourcePage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Entity page for generic AWS resources.
+ *
+ * @public
+ */
 export const AwsResourcePage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsResourcePage',
@@ -444,7 +579,11 @@ export const AwsResourcePage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Entity page for AWS S3 resources.
+ *
+ * @public
+ */
 export const AwsS3ResourcePage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsS3ResourcePage',
@@ -457,7 +596,11 @@ export const AwsS3ResourcePage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Entity page for AWS Secrets Manager resources.
+ *
+ * @public
+ */
 export const AwsSecretsManagerResourcePage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsSecretsManagerResourcePage',
@@ -470,7 +613,11 @@ export const AwsSecretsManagerResourcePage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Entity page for serverless AWS applications.
+ *
+ * @public
+ */
 export const AwsServerlessAppPage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsServerlessAppPage',
@@ -496,7 +643,11 @@ export const AwsServerlessEnvironmentProviderPage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Full-width AWS logo component.
+ *
+ * @public
+ */
 export const AWSLogoFull = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AWSLogoFull',
@@ -507,7 +658,11 @@ export const AWSLogoFull = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Icon-sized AWS logo component.
+ *
+ * @public
+ */
 export const AWSLogoIcon = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AWSLogoIcon',
@@ -518,7 +673,11 @@ export const AWSLogoIcon = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Full-width OPA logo component.
+ *
+ * @public
+ */
 export const OPALogoFull = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'OPALogoFull',
@@ -529,7 +688,11 @@ export const OPALogoFull = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Icon-sized OPA logo component.
+ *
+ * @public
+ */
 export const OPALogoIcon = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'OPALogoIcon',
@@ -540,7 +703,11 @@ export const OPALogoIcon = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Icon-sized customer logo component.
+ *
+ * @public
+ */
 export const CustomerLogoIcon = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'CustomerLogoIcon',
@@ -553,7 +720,11 @@ export const CustomerLogoIcon = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Full-width customer logo with title for light theme.
+ *
+ * @public
+ */
 export const CustomerLogoFullTitleLight = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'CustomerLogoFullTitleLight',
@@ -566,7 +737,11 @@ export const CustomerLogoFullTitleLight = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Full-width customer logo component for light theme.
+ *
+ * @public
+ */
 export const CustomerLogoFullLight = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'CustomerLogoFullLight',
@@ -579,7 +754,11 @@ export const CustomerLogoFullLight = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Home page for the AWS Apps plugin.
+ *
+ * @public
+ */
 export const AWSAppsHomePage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AwsAppsHomePage',
@@ -592,7 +771,11 @@ export const AWSAppsHomePage = awsAppsPlugin.provide(
   }),
 );
 
-/** @public */
+/**
+ * Home page component for OPA on AWS.
+ *
+ * @public
+ */
 export const OPAHomePage = awsAppsPlugin.provide(
   createComponentExtension({
     name: 'AWSAppsHomePage',

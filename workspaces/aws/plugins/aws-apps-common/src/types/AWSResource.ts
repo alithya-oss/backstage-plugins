@@ -1,7 +1,24 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // SPDX-License-Identifier: Apache-2.0
 
 /**
+ * An AWS resource identified by ARN and type.
+ *
  * @public
  */
 export interface AWSResource {
@@ -11,7 +28,11 @@ export interface AWSResource {
   resourceArn: string;
 }
 
-/** @public */
+/**
+ * A recorded audit event for an AWS operation.
+ *
+ * @public
+ */
 export interface AuditRecord {
   id: string;
   origin: string;
@@ -32,7 +53,11 @@ export interface AuditRecord {
   message: string;
 }
 
-/** @public */
+/**
+ * A binding between an application and an AWS resource.
+ *
+ * @public
+ */
 export interface ResourceBinding {
   id: string;
   resourceType: string;
@@ -43,14 +68,22 @@ export interface ResourceBinding {
   entityRef?: string;
 }
 
-/** @public */
+/**
+ * Resources associated with a resource binding.
+ *
+ * @public
+ */
 export interface AssociatedResources {
   resourceName: string;
   resourceType: string;
   resourceArn: string;
 }
 
-/** @public */
+/**
+ * Parameters for binding a resource to an application.
+ *
+ * @public
+ */
 export interface BindResourceParams {
   envName: string;
   providerName: string;
@@ -60,7 +93,11 @@ export interface BindResourceParams {
   appName: string;
 }
 
-/** @public */
+/**
+ * An IAM policy associated with a resource binding.
+ *
+ * @public
+ */
 export interface ResourcePolicy {
   policyFileName: string;
   policyContent: string;

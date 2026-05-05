@@ -11,7 +11,7 @@ import { RootConfigService } from '@backstage/backend-plugin-api';
 import { ScmIntegrationRegistry } from '@backstage/integration';
 import { TemplateAction } from '@backstage/plugin-scaffolder-node';
 
-// @public (undocumented)
+// @public
 export function createRepoAccessTokenAction(options: {
   integrations: ScmIntegrationRegistry;
   envConfig: RootConfigService;
@@ -28,7 +28,7 @@ export function createRepoAccessTokenAction(options: {
   'v2'
 >;
 
-// @public (undocumented)
+// @public
 export function createSecretAction(options: {
   envConfig: Config;
 }): TemplateAction<
@@ -38,8 +38,8 @@ export function createSecretAction(options: {
     region?: string | undefined;
     tags?:
       | {
-          Key: string;
           Value: string | number | boolean;
+          Key: string;
         }[]
       | undefined;
   },
@@ -49,7 +49,7 @@ export function createSecretAction(options: {
   'v2'
 >;
 
-// @public (undocumented)
+// @public
 export function createWriteFileAction(): TemplateAction<
   {
     path: string;
@@ -62,7 +62,7 @@ export function createWriteFileAction(): TemplateAction<
   'v2'
 >;
 
-// @public (undocumented)
+// @public
 export function getComponentInfoAction(): TemplateAction<
   {
     componentName: string;
@@ -73,7 +73,7 @@ export function getComponentInfoAction(): TemplateAction<
   'v2'
 >;
 
-// @public (undocumented)
+// @public
 export function getEnvProvidersAction(options: {
   config: RootConfigService;
   logger: LoggerService;
@@ -89,9 +89,9 @@ export function getEnvProvidersAction(options: {
     envDeployManualApproval: boolean;
     envProviders: {
       region: string;
-      accountId: string;
       envProviderPrefix: string;
       envProviderName: string;
+      accountId: string;
       envProviderType: string;
       vpcId: string;
       publicSubnets: string;
@@ -105,7 +105,7 @@ export function getEnvProvidersAction(options: {
   'v2'
 >;
 
-// @public (undocumented)
+// @public
 export function getPlatformMetadataAction(options: {
   envConfig: RootConfigService;
 }): TemplateAction<
@@ -118,12 +118,12 @@ export function getPlatformMetadataAction(options: {
   'v2'
 >;
 
-// @public (undocumented)
+// @public
 export function getPlatformParametersAction(options: {
   envConfig: RootConfigService;
 }): TemplateAction<any, any>;
 
-// @public (undocumented)
+// @public
 export function getSsmParametersAction(
   config: RootConfigService,
   logger: LoggerService,
@@ -132,4 +132,6 @@ export function getSsmParametersAction(
 // @public
 const scaffolderModule: BackendFeature;
 export default scaffolderModule;
+
+// (No @packageDocumentation comment for this package)
 ```

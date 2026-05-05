@@ -12,16 +12,16 @@ import { JSX as JSX_2 } from 'react/jsx-runtime';
 import { ReactNode } from 'react';
 import { RouteRef } from '@backstage/core-plugin-api';
 
-// @public (undocumented)
+// @public
 export const AppCatalogPage: AppCatalogPage_2;
 
-// @public (undocumented)
+// @public
 export const AwsAppPage: AwsAppPage_2;
 
-// @public (undocumented)
+// @public
 export const AwsAppsHomePage: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const awsAppsPlugin: BackstagePlugin<
   {
     root: RouteRef<undefined>;
@@ -30,177 +30,174 @@ export const awsAppsPlugin: BackstagePlugin<
   {}
 >;
 
-// @public (undocumented)
+// @public
 export const AwsComponentPage: AwsComponentPage_2;
 
-// @public (undocumented)
+// @public
 export interface AwsComponentPageProps {
-  // (undocumented)
   componentType: string;
 }
 
-// @public (undocumented)
+// @public
 export function AwsECSAppPage(_props: AwsECSAppPageProps): JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export function AwsEKSAppPage(_props: AwsEKSAppPageProps): JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const AwsEnvironmentPage: AwsEnvironmentPage_2;
 
-// @public (undocumented)
+// @public
 export interface AwsEnvironmentPageProps {
-  // (undocumented)
   children?: ReactNode;
 }
 
-// @public (undocumented)
+// @public
 export const AwsEnvironmentProviderPage: AwsEnvironmentProviderPage_2;
 
-// @public (undocumented)
+// @public
 export interface AwsEnvironmentProviderPageProps {
-  // (undocumented)
   children?: ReactNode;
 }
 
-// @public (undocumented)
+// @public
 export const AWSLogoFull: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const AWSLogoIcon: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export function AwsPendingPage(_props: AwsPendingPageProps): JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export function AwsRDSResourcePage(
   _props: AwsRDSResourcePageProps,
 ): JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export function AwsResourcePage(_props: AwsResourcePageProps): JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export function AwsS3ResourcePage(
   _props: AwsS3ResourcePageProps,
 ): JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export function AwsSecretsManagerResourcePage(
   _props: AwsSecretsManagerResourcePageProps,
 ): JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export function AwsServerlessAppPage(
   _props: AwsServerlessAppPageProps,
 ): JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const awsTheme: BackstageTheme;
 
-// @public (undocumented)
+// @public
 export const CustomerLogoFullLight: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const CustomerLogoFullTitleLight: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const CustomerLogoIcon: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const customerTheme: BackstageTheme;
 
-// @public (undocumented)
+// @public
 export const EntityAnnotationTypeTable: (input: {
   type: string;
 }) => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityAppConfigCard: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityAppPromoCard: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityAppStateCard: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityAppStateCardCloudFormation: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityAuditTable: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityAwsEnvironmentProviderSelectorCard: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityCloudwatchLogsTable: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityDeleteAppCard: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityDeleteEnvironmentCard: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityDeleteProviderCard: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityEnvironmentInfoCard: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityEnvironmentSelector: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityGeneralInfoCard: (input: {
   appPending: boolean;
 }) => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityInfrastructureInfoCard: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityK8sAppStateCard: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityLabelTable: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityProviderInfoCard: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const EntityResourceBindingCard: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export function isAppType(
   appType: string,
   env: GenericAWSEnvironment,
 ): (entity: Entity) => boolean;
 
-// @public (undocumented)
+// @public
 export const isLogsAvailable: (_entity: Entity) => boolean;
 
-// @public (undocumented)
+// @public
 export function isProviderType(
   providerType: string,
   entity: Entity,
 ): (entity: Entity) => boolean;
 
-// @public (undocumented)
+// @public
 export function isResourceType(
   resourceType: string,
 ): (entity: Entity) => boolean;
 
-// @public (undocumented)
+// @public
 export const OPAHomePage: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const OPALogoFull: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const OPALogoIcon: () => JSX_2.Element;
 
-// @public (undocumented)
+// @public
 export const opaTheme: BackstageTheme;
 
 // (No @packageDocumentation comment for this package)

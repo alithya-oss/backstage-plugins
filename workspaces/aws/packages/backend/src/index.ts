@@ -1,16 +1,20 @@
 /*
- * Hi!
+ * Copyright 2026 The Alithya Authors
  *
- * Note that this is an EXAMPLE Backstage backend. Please check the README.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Happy hacking!
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 import { createBackend } from '@backstage/backend-defaults';
-import {
-  gitlabPlugin,
-  catalogPluginGitlabFillerProcessorModule,
-} from '@immobiliarelabs/backstage-plugin-gitlab-backend';
 
 const backend = createBackend();
 
@@ -63,23 +67,6 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 // kubernetes
 backend.add(import('@backstage/plugin-kubernetes-backend'));
 
-// amazon ecs plugin
-backend.add(import('@alithya-oss/backstage-plugin-amazon-ecs-backend'));
-
-// aws codebuild plugin
-backend.add(import('@alithya-oss/backstage-plugin-aws-codebuild-backend'));
-
-// aws codepipeline plugin
-backend.add(import('@alithya-oss/backstage-plugin-aws-codepipeline-backend'));
-
-// aws cost-insights plugin
-backend.add(import('@alithya-oss/backstage-plugin-cost-insights-aws-backend'));
-
-// scaffolder
-backend.add(
-  import('@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-core'),
-);
-
 // awsapps
 backend.add(import('@alithya-oss/backstage-plugin-aws-apps-backend'));
 backend.add(
@@ -95,10 +82,6 @@ backend.add(
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-gitlab'));
 backend.add(import('@roadiehq/scaffolder-backend-module-utils'));
-
-// gitlab third-party plugins
-backend.add(gitlabPlugin);
-backend.add(catalogPluginGitlabFillerProcessorModule);
 
 // events plugin
 backend.add(import('@backstage/plugin-events-backend'));

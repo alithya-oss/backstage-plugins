@@ -1,7 +1,26 @@
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { GitProviders, IRepositoryInfo } from '../types';
 import { Entity } from '@backstage/catalog-model';
 
-/** @public */
+/**
+ * Constructs the full Git clone URL for a repository.
+ *
+ * @public
+ */
 export const getRepoUrl = (repoInfo: IRepositoryInfo): string => {
   const gitRepoClean = repoInfo.gitRepoName.includes('/')
     ? repoInfo.gitRepoName.split('/')[1]
@@ -24,7 +43,11 @@ export const getRepoUrl = (repoInfo: IRepositoryInfo): string => {
   throw Error(`Unsupported git provider ${repoInfo.gitProvider}`);
 };
 
-/** @public */
+/**
+ * Extracts repository information from a Backstage catalog entity.
+ *
+ * @public
+ */
 export const getRepoInfo = (entity: Entity): IRepositoryInfo => {
   const gitProvider = entity.metadata.gitProvider ?? GitProviders.GITLAB;
 
@@ -78,7 +101,11 @@ export const getRepoInfo = (entity: Entity): IRepositoryInfo => {
   }
 };
 
-/** @public */
+/**
+ * Returns the Secrets Manager secret name for Git credentials.
+ *
+ * @public
+ */
 export const getGitCredentailsSecret = (repoInfo: IRepositoryInfo): string => {
   if (repoInfo.gitProvider === GitProviders.GITLAB) {
     return 'opa-admin-gitlab-secrets';

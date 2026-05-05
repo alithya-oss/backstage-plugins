@@ -1,3 +1,18 @@
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 import { Config } from '@backstage/config';
 
@@ -9,7 +24,11 @@ import {
 } from '@backstage/backend-plugin-api';
 import { parseEntityRef, UserEntity } from '@backstage/catalog-model';
 
-/** @public */
+/**
+ * Response containing AWS credentials and metadata for an assumed role.
+ *
+ * @public
+ */
 export interface AwsAuthResponse {
   credentials: AwsCredentialIdentity;
   requester: string;
@@ -144,7 +163,11 @@ async function fetchCreds(
   }
 }
 
-/** @public */
+/**
+ * Assumes an AWS IAM role and returns temporary credentials for a given account and region.
+ *
+ * @public
+ */
 export async function getAWScreds(
   config: Config,
   logger: LoggerService,

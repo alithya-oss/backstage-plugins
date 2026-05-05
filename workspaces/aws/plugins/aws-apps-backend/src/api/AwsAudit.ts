@@ -1,10 +1,29 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // SPDX-License-Identifier: Apache-2.0
 
 import { LoggerService } from '@backstage/backend-plugin-api';
 import { IAWSSDKService } from '../services/definition';
 
-/** @public */
+/**
+ * Request parameters for recording an AWS audit event.
+ *
+ * @public
+ */
 export interface AwsAuditRequest {
   envProviderPrefix: string;
   envProviderName: string;
@@ -23,13 +42,21 @@ export interface AwsAuditRequest {
   message?: string;
 }
 
-/** @public */
+/**
+ * Response from recording an AWS audit event.
+ *
+ * @public
+ */
 export interface AwsAuditResponse {
   status: string;
   message: string;
 }
 
-/** @public */
+/**
+ * Records an audit event to the DynamoDB audit table.
+ *
+ * @public
+ */
 export async function createAuditRecord({
   envProviderPrefix,
   envProviderName,

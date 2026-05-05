@@ -1,4 +1,19 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // SPDX-License-Identifier: Apache-2.0
 
 import {
@@ -32,18 +47,33 @@ import { GitService } from '../api/GitService';
 import { Config } from '@backstage/config';
 import { CatalogApi } from '@backstage/catalog-client';
 
-/** @public */
+/**
+ * Options for creating the AWS Apps backend router.
+ *
+ * @public
+ */
 export interface RouterOptions {
+  /** The Backstage configuration. */
   config: Config;
+  /** Logger service instance. */
   logger: LoggerService;
+  /** User info service for resolving user details. */
   userInfo: UserInfoService;
+  /** Catalog API client. */
   catalogApi: CatalogApi;
+  /** Permissions service for authorization checks. */
   permissions: PermissionsService;
+  /** Authentication service. */
   auth: AuthService;
+  /** HTTP authentication service. */
   httpAuth: HttpAuthService;
 }
 
-/** @public */
+/**
+ * Creates the Express router for the AWS Apps backend API.
+ *
+ * @public
+ */
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {

@@ -1,4 +1,19 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // SPDX-License-Identifier: Apache-2.0
 
 import {
@@ -115,7 +130,11 @@ import {
 } from '@backstage/backend-plugin-api';
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
 
-/** @public */
+/**
+ * Data structure representing a DynamoDB audit record.
+ *
+ * @public
+ */
 export type DynamoDBTableData = {
   tableName: string;
   recordId: string;
@@ -138,7 +157,11 @@ export type DynamoDBTableData = {
 import { AwsAuditRequest, AwsAuditResponse } from './AwsAudit';
 import { IAWSSDKService } from '../services/definition';
 
-/** @public */
+/**
+ * Service class providing AWS SDK operations for managing cloud resources.
+ *
+ * @public
+ */
 export class AWSSDKService implements IAWSSDKService {
   private _awsCredentials: AwsCredentialIdentity;
   private _awsRegion: string;
@@ -163,30 +186,37 @@ export class AWSSDKService implements IAWSSDKService {
     this.logger.info(`awsRegion: ${this._awsRegion}`);
   }
 
+  /** Sets the AWS credentials. */
   public setAwsCredentials(credentials: AwsCredentialIdentity): void {
     this._awsCredentials = credentials;
   }
 
+  /** Sets the AWS region. */
   public setAwsRegion(region: string): void {
     this._awsRegion = region;
   }
 
+  /** Sets the AWS account ID. */
   public setAwsAccount(account: string): void {
     this._awsAccount = account;
   }
 
+  /** The AWS credentials. */
   public get awsCredentials(): AwsCredentialIdentity {
     return this._awsCredentials;
   }
 
+  /** The AWS region. */
   public get awsRegion(): string {
     return this._awsRegion;
   }
 
+  /** The AWS account ID. */
   public get awsAccount(): string {
     return this._awsAccount;
   }
 
+  /** Creates an audit record in DynamoDB. */
   public async createAuditRecord({
     envProviderPrefix,
     envProviderName,
@@ -408,6 +438,7 @@ export class AWSSDKService implements IAWSSDKService {
   }
 
   /**
+   * Creates a secret in AWS Secrets Manager.
    *
    * @remarks
    * create SecretsManager Secret.
@@ -457,6 +488,7 @@ export class AWSSDKService implements IAWSSDKService {
     }
   }
   /**
+   * Updates the value of a secret in Secrets Manager.
    *
    * @remarks
    * put SecretsManager Secret value.
@@ -496,6 +528,7 @@ export class AWSSDKService implements IAWSSDKService {
     }
   }
   /**
+   * Creates an S3 bucket.
    *
    * @remarks
    * create an S3 bucket.
@@ -562,6 +595,7 @@ export class AWSSDKService implements IAWSSDKService {
     return response;
   }
   /**
+   * Checks if a file exists in an S3 bucket.
    *
    * @remarks
    * checks if a file exists in an S3 bucket.
@@ -707,6 +741,7 @@ export class AWSSDKService implements IAWSSDKService {
     const command = new GetLogEventsCommand(params);
     return client.send(command);
   }
+  /** Retrieves a single CloudWatch log record. */
   public async getLogRecord(
     logRecordPointer: string,
   ): Promise<GetLogRecordCommandOutput> {
@@ -732,6 +767,7 @@ export class AWSSDKService implements IAWSSDKService {
     return client.send(command);
   }
 
+  /** Scans a DynamoDB table for audit records. */
   public async getDynamodbTable(
     tableName: string,
     appName: string,
@@ -769,6 +805,7 @@ export class AWSSDKService implements IAWSSDKService {
     return client.send(command);
   }
 
+  /** Writes a record to a DynamoDB table. */
   public async putDynamodbTableData(
     data: DynamoDBTableData,
   ): Promise<PutItemCommandOutput> {
@@ -1284,6 +1321,7 @@ export class AWSSDKService implements IAWSSDKService {
     return client.send(command);
   }
 
+  /** Invokes an AWS Lambda function. */
   public async callLambda(
     functionName: string,
     body: string,

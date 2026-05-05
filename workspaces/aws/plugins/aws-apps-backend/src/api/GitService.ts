@@ -1,3 +1,18 @@
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import {
   GitProviders,
   ISCMBackendAPI,
@@ -8,7 +23,11 @@ import { GitLabAPI } from './GitlabApiClient';
 import { GitHubAPI } from './GithubApiClient';
 import { GitUnset } from './GitUnset';
 
-/** @public */
+/**
+ * Service for managing Git provider operations.
+ *
+ * @public
+ */
 export class GitService implements IGitService {
   private _gitProvider: GitProviders;
   private _gitProviderImpl: ISCMBackendAPI;
@@ -23,18 +42,22 @@ export class GitService implements IGitService {
     this._gitProviderImpl = gitProviderImpl || new GitUnset(this.logger);
   }
 
+  /** The current Git provider type. */
   public get gitProvider(): GitProviders {
     return this._gitProvider;
   }
 
+  /** The current Git provider implementation. */
   public get gitProviderImpl(): ISCMBackendAPI {
     return this._gitProviderImpl;
   }
 
+  /** Sets the Git provider type. */
   setGitProvider(provider: GitProviders): void {
     this._gitProvider = provider;
     this.instatiateGitProvider();
   }
+  /** Sets the Git provider implementation. */
   setGitProviderImpl(provider: ISCMBackendAPI): void {
     this._gitProviderImpl = provider;
   }

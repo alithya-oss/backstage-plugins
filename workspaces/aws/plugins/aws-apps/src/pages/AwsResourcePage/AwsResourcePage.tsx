@@ -1,4 +1,19 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // SPDX-License-Identifier: Apache-2.0
 
 import { Entity } from '@backstage/catalog-model';
@@ -17,7 +32,11 @@ interface AwsResourcePageProps {
   children: ReactNode;
 }
 
-/** @public */
+/**
+ * Condition function that checks if an entity matches a specific resource type.
+ *
+ * @public
+ */
 export function isResourceType(
   resourceType: string,
 ): (entity: Entity) => boolean {
@@ -33,7 +52,11 @@ const isCicdApplicable = (entity: Entity) => {
   return isGitlabAvailable(entity) || isGithubActionsAvailable(entity);
 };
 
-/** @public */
+/**
+ * Entity page for generic AWS resources.
+ *
+ * @public
+ */
 export function AwsResourcePage(_props: AwsResourcePageProps) {
   const managementContent = (
     <Grid container spacing={1} alignItems="stretch">

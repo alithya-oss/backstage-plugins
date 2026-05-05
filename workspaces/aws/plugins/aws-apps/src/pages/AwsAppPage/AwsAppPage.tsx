@@ -1,4 +1,19 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // SPDX-License-Identifier: Apache-2.0
 
 import {
@@ -37,7 +52,11 @@ const isCicdApplicable = (entity: Entity) => {
   return isGitlabAvailable(entity) || isGithubActionsAvailable(entity);
 };
 
-/** @public */
+/**
+ * Condition function that checks if an entity matches a specific AWS app type.
+ *
+ * @public
+ */
 export function isAppType(
   appType: string,
   env: GenericAWSEnvironment,
@@ -48,12 +67,20 @@ export function isAppType(
   };
 }
 
-/** @public */
+/**
+ * Condition function that checks if CloudWatch logs are available for an entity.
+ *
+ * @public
+ */
 export const isLogsAvailable = (_entity: Entity): boolean => {
   return true;
 };
 
-/** @public */
+/**
+ * Entity page layout for AWS applications.
+ *
+ * @public
+ */
 export function AwsAppPage(_props: AwsAppPageProps) {
   const awsAppLoadingStatus = useAsyncAwsApp();
 

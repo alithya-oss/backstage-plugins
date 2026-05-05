@@ -9,7 +9,7 @@ import { CatalogProcessorEmit } from '@backstage/plugin-catalog-node';
 import { Entity } from '@backstage/catalog-model';
 import { LocationSpec } from '@backstage/plugin-catalog-common';
 
-// @public (undocumented)
+// @public
 export class AWSEnvironmentEntitiesProcessor implements CatalogProcessor {
   // (undocumented)
   getProcessorName(): string;
@@ -23,7 +23,7 @@ export class AWSEnvironmentEntitiesProcessor implements CatalogProcessor {
   validateEntityKind(entity: Entity): Promise<boolean>;
 }
 
-// @public (undocumented)
+// @public
 export class AWSEnvironmentProviderEntitiesProcessor
   implements CatalogProcessor
 {
@@ -39,7 +39,9 @@ export class AWSEnvironmentProviderEntitiesProcessor
   validateEntityKind(entity: Entity): Promise<boolean>;
 }
 
-// @public (undocumented)
+// @public
 const catalogModuleAwsAppsEntitiesProcessor: BackendFeature;
 export default catalogModuleAwsAppsEntitiesProcessor;
+
+// (No @packageDocumentation comment for this package)
 ```
