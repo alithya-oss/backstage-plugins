@@ -1,5 +1,15 @@
 # @alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps
 
+## 0.4.3
+
+### Patch Changes
+
+- 79133f1: bump framework version 1.50.4
+- 21b64e7: bump aws-sdk dependencies
+- Updated dependencies [21b64e7]
+  - @alithya-oss/backstage-plugin-aws-apps-backend@0.4.9
+  - @alithya-oss/backstage-plugin-aws-apps-common@0.4.9
+
 ## 0.4.2
 
 ### Patch Changes

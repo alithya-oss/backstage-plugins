@@ -1,5 +1,13 @@
 # @alithya-oss/backstage-plugin-aws-apps-backend
 
+## 0.4.9
+
+### Patch Changes
+
+- 21b64e7: bump aws-sdk dependencies
+- Updated dependencies [21b64e7]
+  - @alithya-oss/backstage-plugin-aws-apps-common@0.4.9
+
 ## 0.4.8
 
 ### Patch Changes

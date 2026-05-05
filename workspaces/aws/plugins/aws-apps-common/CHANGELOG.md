@@ -1,5 +1,11 @@
 # @aws/plugin-aws-apps-common-for-backstage
 
+## 0.4.9
+
+### Patch Changes
+
+- 21b64e7: bump aws-sdk dependencies
+
 ## 0.4.8
 
 ### Patch Changes
