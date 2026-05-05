@@ -42,4 +42,6 @@ export class AWSEnvironmentProviderEntitiesProcessor
 // @public
 const catalogModuleAwsAppsEntitiesProcessor: BackendFeature;
 export default catalogModuleAwsAppsEntitiesProcessor;
+
+// (No @packageDocumentation comment for this package)
 ```

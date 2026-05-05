@@ -132,4 +132,6 @@ export function getSsmParametersAction(
 // @public
 const scaffolderModule: BackendFeature;
 export default scaffolderModule;
+
+// (No @packageDocumentation comment for this package)
 ```

@@ -409,7 +409,7 @@ export const getRepoInfo: (entity: Entity) => IRepositoryInfo;
 // @public
 export const getRepoUrl: (repoInfo: IRepositoryInfo) => string;
 
-// @public
+// @public (undocumented)
 export enum GitProviders {
   // (undocumented)
   GITHUB = 'github',

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/** @public */
 export enum GitProviders {
   GITLAB = 'gitlab',
   GITHUB = 'github',
