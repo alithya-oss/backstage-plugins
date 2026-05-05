@@ -59,9 +59,7 @@
   "resolutions": {
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "protobufjs": "^7.5.4",
-    "@protobufjs/inquire@npm:^1.1.1": "patch:@protobufjs/inquire@npm%3A1.1.1#./.yarn/patches/@protobufjs-inquire-npm-1.1.1-1f267bc97f.patch",
-    "@protobufjs/inquire@npm:^1.1.0": "patch:@protobufjs/inquire@npm%3A1.1.1#./.yarn/patches/@protobufjs-inquire-npm-1.1.1-1f267bc97f.patch"
+    "@protobufjs/inquire": "1.1.0"
   },
   "prettier": "@spotify/prettier-config",
   "lint-staged": {
