@@ -7,10 +7,6 @@
  */
 
 import { createBackend } from '@backstage/backend-defaults';
-import {
-  gitlabPlugin,
-  catalogPluginGitlabFillerProcessorModule,
-} from '@immobiliarelabs/backstage-plugin-gitlab-backend';
 
 const backend = createBackend();
 
@@ -78,10 +74,6 @@ backend.add(
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-gitlab'));
 backend.add(import('@roadiehq/scaffolder-backend-module-utils'));
-
-// gitlab third-party plugins
-backend.add(gitlabPlugin);
-backend.add(catalogPluginGitlabFillerProcessorModule);
 
 // events plugin
 backend.add(import('@backstage/plugin-events-backend'));
