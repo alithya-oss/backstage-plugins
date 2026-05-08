@@ -17,35 +17,15 @@
 import {
   ALL_STATUSES,
   formatDuration,
+  formatDurationSeconds,
   formatDate,
   formatTimeAgo,
+  statusColor,
   workflowFullName,
 } from './utils';
 import type { WorkflowItem } from './utils';
-
-function makeItem(
-  overrides: Partial<{
-    name: string;
-    namespace: string;
-    startedAt: string;
-    finishedAt: string;
-  }> = {},
-): WorkflowItem {
-  return {
-    id: overrides.name ?? 'wf-1',
-    metadata: {
-      name: overrides.name ?? 'wf-1',
-      namespace: overrides.namespace ?? 'default',
-      uid: 'uid-1',
-      creationTimestamp: '2024-01-01T00:00:00Z',
-    },
-    status: {
-      phase: 'Succeeded',
-      startedAt: overrides.startedAt,
-      finishedAt: overrides.finishedAt,
-    },
-  };
-}
+import { makeWorkflowItem } from './testUtils';
+import { succeededWorkflow } from '../__fixtures__';
 
 describe('ALL_STATUSES', () => {
   it('contains all five workflow statuses', () => {
@@ -60,6 +40,7 @@ describe('ALL_STATUSES', () => {
 });
 
 describe('formatDuration', () => {
+  // Invalid inputs
   it('returns dash when startedAt is missing', () => {
     expect(formatDuration(undefined, '2024-01-01T00:01:00Z')).toBe('—');
   });
@@ -75,6 +56,13 @@ describe('formatDuration', () => {
   it('returns dash for negative duration', () => {
     expect(formatDuration('2024-01-01T00:01:00Z', '2024-01-01T00:00:00Z')).toBe(
       '—',
+    );
+  });
+
+  // Valid inputs — increasing complexity
+  it('formats zero seconds as 0s', () => {
+    expect(formatDuration('2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z')).toBe(
+      '0s',
     );
   });
 
@@ -96,10 +84,41 @@ describe('formatDuration', () => {
     );
   });
 
-  it('formats zero seconds as 0s', () => {
-    expect(formatDuration('2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z')).toBe(
-      '0s',
+  it('computes duration from a real fixture', () => {
+    // succeededWorkflow ran from 14:33:18 to 14:57:34 = 24m 16s
+    const result = formatDuration(
+      succeededWorkflow.status.startedAt,
+      succeededWorkflow.status.finishedAt,
     );
+    expect(result).toBe('24m 16s');
+  });
+});
+
+describe('formatDurationSeconds', () => {
+  // Invalid inputs
+  it('returns dash when undefined', () => {
+    expect(formatDurationSeconds(undefined)).toBe('—');
+  });
+
+  it('returns dash when null', () => {
+    expect(formatDurationSeconds(null)).toBe('—');
+  });
+
+  // Valid inputs — increasing complexity
+  it('formats zero seconds', () => {
+    expect(formatDurationSeconds(0)).toBe('0s');
+  });
+
+  it('formats seconds only', () => {
+    expect(formatDurationSeconds(45)).toBe('45s');
+  });
+
+  it('formats minutes and seconds', () => {
+    expect(formatDurationSeconds(150)).toBe('2m 30s');
+  });
+
+  it('formats hours, minutes and seconds', () => {
+    expect(formatDurationSeconds(4505)).toBe('1h 15m 5s');
   });
 });
 
@@ -108,9 +127,8 @@ describe('formatDate', () => {
     expect(formatDate()).toBe('—');
   });
 
-  it('returns a localized string for a valid ISO date', () => {
-    const result = formatDate('2024-06-15T10:30:00Z');
-    // The exact format depends on locale, but it should be a non-empty string
+  it('returns a non-empty localized string for a fixture date', () => {
+    const result = formatDate(succeededWorkflow.status.startedAt);
     expect(result).not.toBe('—');
     expect(result.length).toBeGreaterThan(0);
   });
@@ -138,14 +156,48 @@ describe('formatTimeAgo', () => {
   });
 });
 
-describe('workflowFullName', () => {
-  it('returns namespace/name', () => {
-    const item = makeItem({ namespace: 'production', name: 'deploy-v42' });
-    expect(workflowFullName(item)).toBe('production/deploy-v42');
+describe('statusColor', () => {
+  it('returns success color for Succeeded', () => {
+    expect(statusColor('Succeeded')).toBe('var(--bui-fg-success)');
   });
 
-  it('uses default namespace', () => {
-    const item = makeItem({ name: 'my-wf' });
-    expect(workflowFullName(item)).toBe('default/my-wf');
+  it('returns danger color for Failed', () => {
+    expect(statusColor('Failed')).toBe('var(--bui-fg-danger)');
+  });
+
+  it('returns danger color for Error', () => {
+    expect(statusColor('Error')).toBe('var(--bui-fg-danger)');
+  });
+
+  it('returns info color for Running', () => {
+    expect(statusColor('Running')).toBe('var(--bui-fg-info)');
+  });
+
+  it('returns secondary color for Pending', () => {
+    expect(statusColor('Pending')).toBe('var(--bui-fg-secondary)');
+  });
+
+  it('returns secondary color for unknown status', () => {
+    expect(statusColor('Unknown' as any)).toBe('var(--bui-fg-secondary)');
+  });
+});
+
+describe('workflowFullName', () => {
+  it('returns namespace/name from a fixture-based item', () => {
+    const item: WorkflowItem = {
+      ...succeededWorkflow,
+      id: succeededWorkflow.metadata.name,
+    };
+    expect(workflowFullName(item)).toBe(
+      `${succeededWorkflow.metadata.namespace}/${succeededWorkflow.metadata.name}`,
+    );
+  });
+
+  it('returns namespace/name with overrides', () => {
+    const item = makeWorkflowItem({
+      namespace: 'production',
+      name: 'deploy-v42',
+    });
+    expect(workflowFullName(item)).toBe('production/deploy-v42');
   });
 });

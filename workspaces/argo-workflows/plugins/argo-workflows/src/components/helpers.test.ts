@@ -15,31 +15,7 @@
  */
 
 import { buildColumns, workflowSortFn, baseColumns } from './helpers';
-import type { WorkflowItem } from './utils';
-
-function makeItem(
-  overrides: Partial<{
-    name: string;
-    namespace: string;
-    startedAt: string;
-    sourceInstance: string;
-  }> = {},
-): WorkflowItem {
-  return {
-    id: overrides.name ?? 'wf-1',
-    metadata: {
-      name: overrides.name ?? 'wf-1',
-      namespace: overrides.namespace ?? 'default',
-      uid: `uid-${overrides.name ?? 'wf-1'}`,
-      creationTimestamp: '2024-01-01T00:00:00Z',
-    },
-    status: {
-      phase: 'Succeeded',
-      startedAt: overrides.startedAt ?? '2024-01-01T00:00:00Z',
-    },
-    sourceInstance: overrides.sourceInstance,
-  };
-}
+import { makeWorkflowItem } from './testUtils';
 
 describe('baseColumns', () => {
   it('contains 5 data columns', () => {
@@ -99,25 +75,25 @@ describe('buildColumns', () => {
 });
 
 describe('workflowSortFn', () => {
-  const items: WorkflowItem[] = [
-    makeItem({
+  const items = [
+    makeWorkflowItem({
       name: 'beta',
       namespace: 'ns-b',
       startedAt: '2024-01-02T00:00:00Z',
     }),
-    makeItem({
+    makeWorkflowItem({
       name: 'alpha',
       namespace: 'ns-a',
       startedAt: '2024-01-01T00:00:00Z',
     }),
-    makeItem({
+    makeWorkflowItem({
       name: 'gamma',
       namespace: 'ns-a',
       startedAt: '2024-01-03T00:00:00Z',
     }),
   ];
 
-  it('sorts by name ascending', () => {
+  it('sorts by name ascending (uses full namespace/name)', () => {
     const sorted = workflowSortFn(items, {
       column: 'name',
       direction: 'ascending',
@@ -166,10 +142,10 @@ describe('workflowSortFn', () => {
     ]);
   });
 
-  it('sorts by name using full namespace/name', () => {
+  it('sorts by name using full namespace/name for disambiguation', () => {
     const nsItems = [
-      makeItem({ name: 'wf', namespace: 'z-ns' }),
-      makeItem({ name: 'wf', namespace: 'a-ns' }),
+      makeWorkflowItem({ name: 'wf', namespace: 'z-ns' }),
+      makeWorkflowItem({ name: 'wf', namespace: 'a-ns' }),
     ];
     const sorted = workflowSortFn(nsItems, {
       column: 'name',

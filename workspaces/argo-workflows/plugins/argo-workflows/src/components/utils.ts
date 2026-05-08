@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
+import { DateTime, Duration } from 'luxon';
 import type { Workflow } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import type { WorkflowStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
+
+/** Table item type — extends Workflow with a required `id` and source instance. */
+export interface WorkflowItem extends Workflow {
+  id: string;
+  /** The instance this workflow was fetched from. */
+  sourceInstance?: string;
+}
 
 /** All possible workflow status values for the filter toggles. */
 export const ALL_STATUSES: WorkflowStatus[] = [
@@ -26,84 +34,57 @@ export const ALL_STATUSES: WorkflowStatus[] = [
   'Error',
 ];
 
-/** Table item type — extends Workflow with a required `id` and source instance. */
-export interface WorkflowItem extends Workflow {
-  id: string;
-  /** The instance this workflow was fetched from. */
-  sourceInstance?: string;
-}
-
-/**
- * Returns a BUI CSS custom property color for a given workflow status.
- * Used consistently across DAG nodes, status icons, and tooltips.
- */
-export function statusColor(status: WorkflowStatus): string {
-  switch (status) {
-    case 'Succeeded':
-      return 'var(--bui-fg-success)';
-    case 'Failed':
-      return 'var(--bui-fg-danger)';
-    case 'Running':
-      return 'var(--bui-fg-info)';
-    case 'Pending':
-      return 'var(--bui-fg-secondary)';
-    case 'Error':
-      return 'var(--bui-fg-danger)';
-    default:
-      return 'var(--bui-fg-secondary)';
-  }
-}
+/** Placeholder for missing/invalid values. */
+const EMPTY_VALUE = '—';
 
 /**
  * Formats a duration between two ISO date strings into a human-readable string.
+ * Uses Luxon Duration for consistent formatting per ADR010.
  * Returns '—' if either date is missing or the duration is negative.
  */
 export function formatDuration(
   startedAt?: string,
   finishedAt?: string,
 ): string {
-  if (!startedAt || !finishedAt) return '—';
-  const start = new Date(startedAt).getTime();
-  const end = new Date(finishedAt).getTime();
-  const diffMs = end - start;
-  if (diffMs < 0 || Number.isNaN(diffMs)) return '—';
-  const totalSeconds = Math.floor(diffMs / 1000);
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
-  if (minutes > 0) return `${minutes}m ${seconds}s`;
-  return `${seconds}s`;
+  if (!startedAt || !finishedAt) return EMPTY_VALUE;
+  const start = DateTime.fromISO(startedAt);
+  const end = DateTime.fromISO(finishedAt);
+  if (!start.isValid || !end.isValid) return EMPTY_VALUE;
+  const diffMs = end.toMillis() - start.toMillis();
+  if (diffMs < 0) return EMPTY_VALUE;
+  return formatMilliseconds(diffMs);
 }
 
 /**
  * Formats a duration given in seconds into a human-readable string.
+ * Uses Luxon Duration for consistent formatting per ADR010.
  * Returns '—' if the value is undefined or null.
  */
 export function formatDurationSeconds(seconds?: number | null): string {
-  if (seconds === undefined || seconds === null) return '—';
-  if (seconds < 60) return `${seconds}s`;
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  if (minutes < 60) return `${minutes}m ${remainingSeconds}s`;
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-  return `${hours}h ${remainingMinutes}m ${remainingSeconds}s`;
+  if (seconds === undefined || seconds === null) return EMPTY_VALUE;
+  return formatMilliseconds(seconds * 1000);
 }
 
 /**
  * Formats an ISO date string into a localized date/time string.
+ * Uses Luxon DateTime.toLocaleString with DATETIME_SHORT preset per ADR012.
  */
 export function formatDate(isoDate?: string): string {
-  if (!isoDate) return '—';
-  return new Date(isoDate).toLocaleString();
+  if (!isoDate) return EMPTY_VALUE;
+  const dt = DateTime.fromISO(isoDate);
+  if (!dt.isValid) return EMPTY_VALUE;
+  return dt.toLocaleString(DateTime.DATETIME_SHORT);
 }
 
 /**
  * Returns a human-readable relative time string (e.g. "Updated just now").
+ * Uses Luxon Duration for the time difference calculation.
  */
 export function formatTimeAgo(date: Date): string {
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  const now = DateTime.now();
+  const then = DateTime.fromJSDate(date);
+  const diff = now.diff(then, 'seconds');
+  const seconds = Math.floor(diff.seconds);
   if (seconds < 10) return 'Updated just now';
   if (seconds < 60) return `Updated ${seconds}s ago`;
   const minutes = Math.floor(seconds / 60);
@@ -117,4 +98,42 @@ export function formatTimeAgo(date: Date): string {
  */
 export function workflowFullName(item: WorkflowItem): string {
   return `${item.metadata.namespace}/${item.metadata.name}`;
+}
+
+/**
+ * Returns a BUI CSS custom property color for a given workflow status.
+ * Used consistently across DAG nodes, status icons, and tooltips.
+ */
+export function statusColor(status: WorkflowStatus): string {
+  switch (status) {
+    case 'Succeeded':
+      return 'var(--bui-fg-success)';
+    case 'Failed':
+    case 'Error':
+      return 'var(--bui-fg-danger)';
+    case 'Running':
+      return 'var(--bui-fg-info)';
+    case 'Pending':
+    default:
+      return 'var(--bui-fg-secondary)';
+  }
+}
+
+/**
+ * Formats milliseconds into a compact human-readable duration string.
+ * Uses Luxon Duration.shiftTo for proper unit decomposition.
+ */
+function formatMilliseconds(ms: number): string {
+  const duration = Duration.fromMillis(ms).shiftTo(
+    'hours',
+    'minutes',
+    'seconds',
+  );
+  const hours = Math.floor(duration.hours);
+  const minutes = Math.floor(duration.minutes);
+  const seconds = Math.floor(duration.seconds);
+
+  if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+  if (minutes > 0) return `${minutes}m ${seconds}s`;
+  return `${seconds}s`;
 }
