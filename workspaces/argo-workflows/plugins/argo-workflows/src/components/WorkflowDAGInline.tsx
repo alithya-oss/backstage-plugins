@@ -14,24 +14,32 @@
  * limitations under the License.
  */
 
-import { useMemo } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import type { WheelEvent, MouseEvent } from 'react';
 import { ButtonIcon, Flex, Text } from '@backstage/ui';
 import { buildDAG } from '@alithya-oss/backstage-plugin-argo-workflows-react';
+import type {
+  DAGNode,
+  DAGGraph,
+} from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import type { Workflow } from '@alithya-oss/backstage-plugin-argo-workflows-common';
-import { RiAddLine, RiSubtractLine, RiFullscreenLine } from '@remixicon/react';
+import dagre from 'dagre';
 import { NodeDetailPanel } from './NodeDetailPanel';
-import {
-  DAG_INLINE_CONFIG,
-  statusColor,
-  formatDurationSeconds,
-  computeLayout,
-  buildEdgePath,
-  truncateLabel,
-  useDAGInteraction,
-} from './dagHelpers';
+import { RiAddLine, RiSubtractLine, RiFullscreenLine } from '@remixicon/react';
+import { formatDurationSeconds, statusColor } from './utils';
 import styles from './WorkflowDAGInline.module.css';
 
-const cfg = DAG_INLINE_CONFIG;
+const NODE_WIDTH = 160;
+const NODE_HEIGHT = 36;
+const NODE_RX = 6;
+const PADDING = 30;
+const LABEL_MAX_CHARS = 18;
+const FONT_SIZE = 11;
+
+const MIN_ZOOM = 0.3;
+const MAX_ZOOM = 3;
+const ZOOM_FACTOR = 1.25;
+const FIT_SCALE_MARGIN = 0.9;
 
 /**
  * Props for the WorkflowDAGInline component.
@@ -41,6 +49,79 @@ export interface WorkflowDAGInlineProps {
   workflow: Workflow;
 }
 
+interface LayoutNode extends DAGNode {
+  x: number;
+  y: number;
+}
+
+interface LayoutEdge {
+  source: string;
+  target: string;
+  points: Array<{ x: number; y: number }>;
+}
+
+interface TooltipState {
+  visible: boolean;
+  x: number;
+  y: number;
+  node: DAGNode | null;
+}
+
+function computeLayout(graph: DAGGraph): {
+  nodes: LayoutNode[];
+  edges: LayoutEdge[];
+  width: number;
+  height: number;
+} {
+  const g = new dagre.graphlib.Graph();
+  g.setGraph({ rankdir: 'LR', nodesep: 40, ranksep: 60 });
+  g.setDefaultEdgeLabel(() => ({}));
+
+  for (const node of graph.nodes) {
+    g.setNode(node.id, { width: NODE_WIDTH, height: NODE_HEIGHT });
+  }
+  for (const edge of graph.edges) {
+    g.setEdge(edge.source, edge.target);
+  }
+
+  dagre.layout(g);
+
+  const layoutNodes: LayoutNode[] = graph.nodes.map(node => {
+    const pos = g.node(node.id);
+    return { ...node, x: pos.x, y: pos.y };
+  });
+
+  const layoutEdges: LayoutEdge[] = graph.edges.map(edge => {
+    const dagreEdge = g.edge(edge.source, edge.target);
+    return {
+      source: edge.source,
+      target: edge.target,
+      points: dagreEdge.points as Array<{ x: number; y: number }>,
+    };
+  });
+
+  const dagreGraph = g.graph();
+  const width = (dagreGraph.width ?? 0) + PADDING * 2;
+  const height = (dagreGraph.height ?? 0) + PADDING * 2;
+
+  return { nodes: layoutNodes, edges: layoutEdges, width, height };
+}
+
+function buildEdgePath(points: Array<{ x: number; y: number }>): string {
+  if (points.length === 0) return '';
+  let d = `M ${points[0].x} ${points[0].y}`;
+  for (let i = 1; i < points.length; i++) {
+    d += ` L ${points[i].x} ${points[i].y}`;
+  }
+  return d;
+}
+
+function truncateLabel(label: string): string {
+  return label.length > LABEL_MAX_CHARS
+    ? `${label.substring(0, LABEL_MAX_CHARS - 2)}…`
+    : label;
+}
+
 /**
  * Inline DAG visualization for a workflow.
  * Renders directly from a Workflow object without fetching or routing.
@@ -48,17 +129,137 @@ export interface WorkflowDAGInlineProps {
  * Clicking a node opens a detail panel alongside the graph.
  */
 export const WorkflowDAGInline = ({ workflow }: WorkflowDAGInlineProps) => {
-  const dag = useDAGInteraction(cfg);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [transform, setTransform] = useState({
+    x: PADDING,
+    y: PADDING,
+    scale: 1,
+  });
+  const [isPanning, setIsPanning] = useState(false);
+  const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+  const [tooltip, setTooltip] = useState<TooltipState>({
+    visible: false,
+    x: 0,
+    y: 0,
+    node: null,
+  });
+  const [selectedNode, setSelectedNode] = useState<DAGNode | null>(null);
+
+  const handleWheel = useCallback((e: WheelEvent<SVGSVGElement>) => {
+    e.preventDefault();
+    const scaleFactor = e.deltaY < 0 ? ZOOM_FACTOR : 1 / ZOOM_FACTOR;
+    setTransform(prev => {
+      const newScale = Math.min(
+        Math.max(prev.scale * scaleFactor, MIN_ZOOM),
+        MAX_ZOOM,
+      );
+      const svgRect = svgRef.current?.getBoundingClientRect();
+      if (!svgRect) return { ...prev, scale: newScale };
+      const mouseX = e.clientX - svgRect.left;
+      const mouseY = e.clientY - svgRect.top;
+      const newX = mouseX - (mouseX - prev.x) * (newScale / prev.scale);
+      const newY = mouseY - (mouseY - prev.y) * (newScale / prev.scale);
+      return { x: newX, y: newY, scale: newScale };
+    });
+  }, []);
+
+  const handleMouseDown = useCallback(
+    (e: MouseEvent<SVGSVGElement>) => {
+      if (e.button === 0) {
+        setIsPanning(true);
+        setPanStart({
+          x: e.clientX - transform.x,
+          y: e.clientY - transform.y,
+        });
+      }
+    },
+    [transform.x, transform.y],
+  );
+
+  const handleMouseMove = useCallback(
+    (e: MouseEvent<SVGSVGElement>) => {
+      if (isPanning) {
+        setTransform(prev => ({
+          ...prev,
+          x: e.clientX - panStart.x,
+          y: e.clientY - panStart.y,
+        }));
+      }
+    },
+    [isPanning, panStart.x, panStart.y],
+  );
+
+  const handleMouseUp = useCallback(() => setIsPanning(false), []);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsPanning(false);
+    setTooltip(prev => ({ ...prev, visible: false }));
+  }, []);
+
+  const handleNodeMouseEnter = useCallback((e: MouseEvent, node: DAGNode) => {
+    const svgRect = svgRef.current?.getBoundingClientRect();
+    if (!svgRect) return;
+    setTooltip({
+      visible: true,
+      x: e.clientX - svgRect.left,
+      y: e.clientY - svgRect.top,
+      node,
+    });
+  }, []);
+
+  const handleNodeMouseLeave = useCallback(() => {
+    setTooltip(prev => ({ ...prev, visible: false }));
+  }, []);
+
+  const handleNodeClick = useCallback((node: DAGNode) => {
+    setSelectedNode(prev => (prev?.id === node.id ? null : node));
+  }, []);
+
+  const handleNodeKeyDown = useCallback(
+    (e: React.KeyboardEvent, node: DAGNode) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleNodeClick(node);
+      }
+    },
+    [handleNodeClick],
+  );
 
   const layout = useMemo(() => {
     const workflowNodes = workflow.status.nodes ?? {};
     if (Object.keys(workflowNodes).length === 0) return null;
     try {
-      return computeLayout(buildDAG(workflow), cfg);
+      const graph = buildDAG(workflow);
+      return computeLayout(graph);
     } catch {
       return null;
     }
   }, [workflow]);
+
+  const handleZoomIn = useCallback(() => {
+    setTransform(prev => ({
+      ...prev,
+      scale: Math.min(prev.scale * ZOOM_FACTOR, MAX_ZOOM),
+    }));
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    setTransform(prev => ({
+      ...prev,
+      scale: Math.max(prev.scale / ZOOM_FACTOR, MIN_ZOOM),
+    }));
+  }, []);
+
+  const handleFit = useCallback(() => {
+    if (!layout || !svgRef.current) return;
+    const svgRect = svgRef.current.getBoundingClientRect();
+    const scaleX = svgRect.width / layout.width;
+    const scaleY = svgRect.height / layout.height;
+    const newScale = Math.min(scaleX, scaleY, 1) * FIT_SCALE_MARGIN;
+    const newX = (svgRect.width - layout.width * newScale) / 2;
+    const newY = (svgRect.height - layout.height * newScale) / 2;
+    setTransform({ x: newX, y: newY, scale: newScale });
+  }, [layout]);
 
   if (!layout) {
     return (
@@ -77,15 +278,15 @@ export const WorkflowDAGInline = ({ workflow }: WorkflowDAGInlineProps) => {
       <Flex style={{ gap: 'var(--bui-space-4)' }}>
         <div className={styles.container}>
           <svg
-            ref={dag.svgRef}
+            ref={svgRef}
             width="100%"
             height="100%"
-            className={`${styles.svg} ${dag.isPanning ? styles.panning : ''}`}
-            onWheel={dag.handlers.onWheel}
-            onMouseDown={dag.handlers.onMouseDown}
-            onMouseMove={dag.handlers.onMouseMove}
-            onMouseUp={dag.handlers.onMouseUp}
-            onMouseLeave={dag.handlers.onMouseLeave}
+            className={`${styles.svg} ${isPanning ? styles.panning : ''}`}
+            onWheel={handleWheel}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
             role="img"
             aria-label={`DAG for workflow ${workflow.metadata.name}`}
           >
@@ -106,7 +307,7 @@ export const WorkflowDAGInline = ({ workflow }: WorkflowDAGInlineProps) => {
             </defs>
 
             <g
-              transform={`translate(${dag.transform.x}, ${dag.transform.y}) scale(${dag.transform.scale})`}
+              transform={`translate(${transform.x}, ${transform.y}) scale(${transform.scale})`}
             >
               {edges.map(edge => (
                 <path
@@ -120,17 +321,17 @@ export const WorkflowDAGInline = ({ workflow }: WorkflowDAGInlineProps) => {
               ))}
 
               {nodes.map(node => {
-                const isSelected = dag.selectedNode?.id === node.id;
+                const isSelected = selectedNode?.id === node.id;
                 return (
                   <g
                     key={node.id}
-                    transform={`translate(${node.x - cfg.nodeWidth / 2}, ${
-                      node.y - cfg.nodeHeight / 2
+                    transform={`translate(${node.x - NODE_WIDTH / 2}, ${
+                      node.y - NODE_HEIGHT / 2
                     })`}
-                    onMouseEnter={e => dag.nodeHandlers.onMouseEnter(e, node)}
-                    onMouseLeave={dag.nodeHandlers.onMouseLeave}
-                    onClick={() => dag.nodeHandlers.onClick(node)}
-                    onKeyDown={e => dag.nodeHandlers.onKeyDown(e, node)}
+                    onMouseEnter={e => handleNodeMouseEnter(e, node)}
+                    onMouseLeave={handleNodeMouseLeave}
+                    onClick={() => handleNodeClick(node)}
+                    onKeyDown={e => handleNodeKeyDown(e, node)}
                     className={styles.node}
                     role="button"
                     aria-label={`${node.label}: ${node.status}`}
@@ -138,24 +339,24 @@ export const WorkflowDAGInline = ({ workflow }: WorkflowDAGInlineProps) => {
                     tabIndex={0}
                   >
                     <rect
-                      width={cfg.nodeWidth}
-                      height={cfg.nodeHeight}
-                      rx={cfg.nodeRx}
-                      ry={cfg.nodeRx}
+                      width={NODE_WIDTH}
+                      height={NODE_HEIGHT}
+                      rx={NODE_RX}
+                      ry={NODE_RX}
                       fill={statusColor(node.status)}
                       stroke={isSelected ? '#ffffff' : 'none'}
                       strokeWidth={isSelected ? 3 : 0}
                     />
                     <text
-                      x={cfg.nodeWidth / 2}
-                      y={cfg.nodeHeight / 2}
+                      x={NODE_WIDTH / 2}
+                      y={NODE_HEIGHT / 2}
                       textAnchor="middle"
                       dominantBaseline="central"
                       fill="#ffffff"
-                      fontSize={cfg.fontSize}
+                      fontSize={FONT_SIZE}
                       fontFamily="sans-serif"
                     >
-                      {truncateLabel(node.label, cfg.labelMaxChars)}
+                      {truncateLabel(node.label)}
                     </text>
                   </g>
                 );
@@ -168,34 +369,32 @@ export const WorkflowDAGInline = ({ workflow }: WorkflowDAGInlineProps) => {
             <ButtonIcon
               variant="secondary"
               icon={<RiAddLine size={16} />}
-              onPress={dag.zoomIn}
+              onPress={handleZoomIn}
               aria-label="Zoom in"
             />
             <ButtonIcon
               variant="secondary"
               icon={<RiSubtractLine size={16} />}
-              onPress={dag.zoomOut}
+              onPress={handleZoomOut}
               aria-label="Zoom out"
             />
             <ButtonIcon
               variant="secondary"
               icon={<RiFullscreenLine size={16} />}
-              onPress={() => dag.fitToView(layout)}
+              onPress={handleFit}
               aria-label="Fit to view"
             />
           </div>
 
           {/* Hover tooltip */}
-          {dag.tooltip.visible && dag.tooltip.node && (
+          {tooltip.visible && tooltip.node && (
             <div
               data-testid="workflow-dag-inline-tooltip"
               role="tooltip"
               className={styles.tooltip}
-              style={{ left: dag.tooltip.x + 12, top: dag.tooltip.y - 10 }}
+              style={{ left: tooltip.x + 12, top: tooltip.y - 10 }}
             >
-              <div className={styles.tooltipTitle}>
-                {dag.tooltip.node.label}
-              </div>
+              <div className={styles.tooltipTitle}>{tooltip.node.label}</div>
               <div>
                 <Text variant="body-x-small" className={styles.tooltipLabel}>
                   Status:
@@ -203,25 +402,26 @@ export const WorkflowDAGInline = ({ workflow }: WorkflowDAGInlineProps) => {
                 <Text
                   variant="body-x-small"
                   className={styles.tooltipStatus}
-                  style={{ color: statusColor(dag.tooltip.node.status) }}
+                  style={{ color: statusColor(tooltip.node.status) }}
                 >
-                  {dag.tooltip.node.status}
+                  {tooltip.node.status}
                 </Text>
               </div>
               <div>
                 <Text variant="body-x-small" className={styles.tooltipLabel}>
                   Duration:
                 </Text>{' '}
-                {formatDurationSeconds(dag.tooltip.node.duration)}
+                {formatDurationSeconds(tooltip.node.duration)}
               </div>
             </div>
           )}
         </div>
 
-        {dag.selectedNode && (
+        {/* Detail panel — shown when a node is selected */}
+        {selectedNode && (
           <NodeDetailPanel
-            node={dag.selectedNode}
-            onClose={() => dag.setSelectedNode(null)}
+            node={selectedNode}
+            onClose={() => setSelectedNode(null)}
           />
         )}
       </Flex>

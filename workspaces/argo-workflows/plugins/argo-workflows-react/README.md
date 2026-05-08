@@ -7,7 +7,7 @@ This package provides the building blocks used by the frontend plugin and can be
 ## Installation
 
 ```console
-yarn add @backstage-community/plugin-argo-workflows-react
+yarn add @alithya-oss/backstage-plugin-argo-workflows-react
 ```
 
 ## Components
@@ -17,7 +17,7 @@ yarn add @backstage-community/plugin-argo-workflows-react
 Displays a colored Remix Icon representing a workflow execution status.
 
 ```tsx
-import { WorkflowStatusIcon } from '@backstage-community/plugin-argo-workflows-react';
+import { WorkflowStatusIcon } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 
 <WorkflowStatusIcon status="Succeeded" size="medium" />;
 ```
@@ -32,7 +32,7 @@ import { WorkflowStatusIcon } from '@backstage-community/plugin-argo-workflows-r
 Displays a workflow status as a badge with an icon and text label.
 
 ```tsx
-import { WorkflowStatusBadge } from '@backstage-community/plugin-argo-workflows-react';
+import { WorkflowStatusBadge } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 
 <WorkflowStatusBadge status="Running" />;
 ```
@@ -48,7 +48,7 @@ import { WorkflowStatusBadge } from '@backstage-community/plugin-argo-workflows-
 Fetches a list of Argo Workflows filtered by label selector.
 
 ```tsx
-import { useArgoWorkflows } from '@backstage-community/plugin-argo-workflows-react';
+import { useArgoWorkflows } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 
 const { workflows, loading, error, retry } = useArgoWorkflows({
   labelSelector: 'app=my-service',
@@ -61,7 +61,7 @@ const { workflows, loading, error, retry } = useArgoWorkflows({
 Fetches a single workflow by namespace and name.
 
 ```tsx
-import { useArgoWorkflowDetail } from '@backstage-community/plugin-argo-workflows-react';
+import { useArgoWorkflowDetail } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 
 const { workflow, loading, error } = useArgoWorkflowDetail({
   namespace: 'default',
@@ -77,7 +77,7 @@ const { workflow, loading, error } = useArgoWorkflowDetail({
 Builds a DAG graph from a Workflow object for visualization.
 
 ```tsx
-import { buildDAG } from '@backstage-community/plugin-argo-workflows-react';
+import { buildDAG } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 
 const graph = buildDAG(workflow);
 // graph.nodes: DAGNode[]

@@ -18,7 +18,7 @@ import { ButtonIcon, Flex, Text } from '@backstage/ui';
 import { WorkflowStatusIcon } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import type { DAGNode } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import { RiCloseLine } from '@remixicon/react';
-import { formatDurationSeconds } from './dagHelpers';
+import { formatDurationSeconds, formatDate } from './utils';
 import styles from './NodeDetailPanel.module.css';
 
 /** Props for the NodeDetailPanel component. */
@@ -27,11 +27,6 @@ export interface NodeDetailPanelProps {
   node: DAGNode;
   /** Callback when the panel is dismissed. */
   onClose: () => void;
-}
-
-function formatDate(isoDate?: string): string {
-  if (!isoDate) return '—';
-  return new Date(isoDate).toLocaleString();
 }
 
 /**

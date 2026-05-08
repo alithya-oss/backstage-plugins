@@ -15,7 +15,7 @@ The Argo Workflows plugin enables you to visualize Argo Workflow executions dire
 
 - An Argo Workflows server is deployed and accessible from the Backstage backend.
 - A service account token with read access to the Argo Workflows API is available.
-- The `@backstage-community/plugin-argo-workflows-backend` backend plugin is installed and configured (see the [backend plugin README](../argo-workflows-backend/README.md)).
+- The `@alithya-oss/backstage-plugin-argo-workflows-backend` backend plugin is installed and configured (see the [backend plugin README](../argo-workflows-backend/README.md)).
 
 #### Backend configuration
 
@@ -84,7 +84,7 @@ annotations:
 1. Install the frontend plugin:
 
    ```console
-   yarn workspace app add @backstage-community/plugin-argo-workflows
+   yarn workspace app add @alithya-oss/backstage-plugin-argo-workflows
    ```
 
 2. Add the CI/CD tab to your entity page in `packages/app/src/components/catalog/EntityPage.tsx`:
@@ -93,7 +93,7 @@ annotations:
    import {
      isArgoWorkflowsAvailable,
      ArgoWorkflowsCI,
-   } from '@backstage-community/plugin-argo-workflows';
+   } from '@alithya-oss/backstage-plugin-argo-workflows';
 
    const cicdContent = (
      <EntitySwitch>
@@ -148,9 +148,9 @@ annotations:
 
 ## Packages
 
-| Package                                                                                     | Description                                                           |
-| ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| [`@backstage-community/plugin-argo-workflows`](./README.md)                                 | Frontend plugin — CI/CD tab with workflow table and DAG views.        |
-| [`@backstage-community/plugin-argo-workflows-backend`](../argo-workflows-backend/README.md) | Backend plugin — proxies requests to the Argo Workflows API.          |
-| [`@backstage-community/plugin-argo-workflows-common`](../argo-workflows-common/README.md)   | Shared types, annotations, and serialization utilities.               |
-| [`@backstage-community/plugin-argo-workflows-react`](../argo-workflows-react/README.md)     | React library — reusable hooks and components (status icons, badges). |
+| Package                                                                                       | Description                                                           |
+| --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [`@alithya-oss/backstage-plugin-argo-workflows`](./README.md)                                 | Frontend plugin — CI/CD tab with workflow table and DAG views.        |
+| [`@alithya-oss/backstage-plugin-argo-workflows-backend`](../argo-workflows-backend/README.md) | Backend plugin — proxies requests to the Argo Workflows API.          |
+| [`@alithya-oss/backstage-plugin-argo-workflows-common`](../argo-workflows-common/README.md)   | Shared types, annotations, and serialization utilities.               |
+| [`@alithya-oss/backstage-plugin-argo-workflows-react`](../argo-workflows-react/README.md)     | React library — reusable hooks and components (status icons, badges). |

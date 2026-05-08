@@ -7,7 +7,7 @@ This package is used by both the frontend and backend plugins. It contains no ru
 ## Installation
 
 ```console
-yarn add @backstage-community/plugin-argo-workflows-common
+yarn add @alithya-oss/backstage-plugin-argo-workflows-common
 ```
 
 ## Exports

@@ -5,7 +5,7 @@ Backend plugin that proxies requests from the Backstage frontend to one or more 
 ## Installation
 
 ```console
-yarn workspace backend add @backstage-community/plugin-argo-workflows-backend
+yarn workspace backend add @alithya-oss/backstage-plugin-argo-workflows-backend
 ```
 
 ## Configuration
@@ -51,7 +51,7 @@ The plugin is compatible with the Backstage new backend system. Register it in y
 ```ts
 // packages/backend/src/index.ts
 const backend = createBackend();
-backend.add(import('@backstage-community/plugin-argo-workflows-backend'));
+backend.add(import('@alithya-oss/backstage-plugin-argo-workflows-backend'));
 backend.start();
 ```
 
@@ -60,7 +60,7 @@ backend.start();
 For the legacy backend system, use the `createRouter` export:
 
 ```ts
-import { createRouter } from '@backstage-community/plugin-argo-workflows-backend';
+import { createRouter } from '@alithya-oss/backstage-plugin-argo-workflows-backend';
 
 const router = await createRouter({
   config: env.config,

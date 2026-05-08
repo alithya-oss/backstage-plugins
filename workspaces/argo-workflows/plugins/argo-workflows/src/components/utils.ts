@@ -17,13 +17,6 @@
 import type { Workflow } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import type { WorkflowStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 
-/** Table item type — extends Workflow with a required `id` and source instance. */
-export interface WorkflowItem extends Workflow {
-  id: string;
-  /** The instance this workflow was fetched from. */
-  sourceInstance?: string;
-}
-
 /** All possible workflow status values for the filter toggles. */
 export const ALL_STATUSES: WorkflowStatus[] = [
   'Succeeded',
@@ -33,8 +26,37 @@ export const ALL_STATUSES: WorkflowStatus[] = [
   'Error',
 ];
 
+/** Table item type — extends Workflow with a required `id` and source instance. */
+export interface WorkflowItem extends Workflow {
+  id: string;
+  /** The instance this workflow was fetched from. */
+  sourceInstance?: string;
+}
+
+/**
+ * Returns a BUI CSS custom property color for a given workflow status.
+ * Used consistently across DAG nodes, status icons, and tooltips.
+ */
+export function statusColor(status: WorkflowStatus): string {
+  switch (status) {
+    case 'Succeeded':
+      return 'var(--bui-fg-success)';
+    case 'Failed':
+      return 'var(--bui-fg-danger)';
+    case 'Running':
+      return 'var(--bui-fg-info)';
+    case 'Pending':
+      return 'var(--bui-fg-secondary)';
+    case 'Error':
+      return 'var(--bui-fg-danger)';
+    default:
+      return 'var(--bui-fg-secondary)';
+  }
+}
+
 /**
  * Formats a duration between two ISO date strings into a human-readable string.
+ * Returns '—' if either date is missing or the duration is negative.
  */
 export function formatDuration(
   startedAt?: string,
@@ -52,6 +74,21 @@ export function formatDuration(
   if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
   if (minutes > 0) return `${minutes}m ${seconds}s`;
   return `${seconds}s`;
+}
+
+/**
+ * Formats a duration given in seconds into a human-readable string.
+ * Returns '—' if the value is undefined or null.
+ */
+export function formatDurationSeconds(seconds?: number | null): string {
+  if (seconds === undefined || seconds === null) return '—';
+  if (seconds < 60) return `${seconds}s`;
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  if (minutes < 60) return `${minutes}m ${remainingSeconds}s`;
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  return `${hours}h ${remainingMinutes}m ${remainingSeconds}s`;
 }
 
 /**

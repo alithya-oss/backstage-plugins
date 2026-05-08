@@ -33,8 +33,7 @@ import { useArgoWorkflows } from '@alithya-oss/backstage-plugin-argo-workflows-r
 import type { ArgoInstanceDetail } from '@alithya-oss/backstage-plugin-argo-workflows-react';
 import { WorkflowDAGInline } from './WorkflowDAGInline';
 import { buildColumns, workflowSortFn } from './helpers';
-import { ALL_STATUSES, formatTimeAgo } from './utils';
-import type { WorkflowItem } from './utils';
+import { ALL_STATUSES, formatTimeAgo, type WorkflowItem } from './utils';
 import styles from './WorkflowRunsTable.module.css';
 
 /**
