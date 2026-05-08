@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import type { FC } from 'react';
 import { Box, Flex, Text } from '@backstage/ui';
 import type { WorkflowStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { WorkflowStatusIcon } from './WorkflowStatusIcon';
@@ -53,9 +52,7 @@ const statusLabelMap: Record<WorkflowStatus, string> = {
  *
  * @public
  */
-export const WorkflowStatusBadge: FC<WorkflowStatusBadgeProps> = ({
-  status,
-}) => {
+export const WorkflowStatusBadge = ({ status }: WorkflowStatusBadgeProps) => {
   const label = statusLabelMap[status] ?? status;
   const colorClass = statusClassMap[status] ?? styles.pending;
 

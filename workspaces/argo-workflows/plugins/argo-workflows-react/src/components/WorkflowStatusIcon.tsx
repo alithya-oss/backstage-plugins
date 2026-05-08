@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import type { FC, PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import type { WorkflowStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import { Text } from '@backstage/ui';
 import {
@@ -128,7 +128,7 @@ function StatusError(props: PropsWithChildren<{}>) {
  *
  * @public
  */
-export const WorkflowStatusIcon: FC<WorkflowStatusIconProps> = ({ status }) => {
+export const WorkflowStatusIcon = ({ status }: WorkflowStatusIconProps) => {
   switch (status) {
     case 'Succeeded':
       return <StatusSucceeded>{status}</StatusSucceeded>;
