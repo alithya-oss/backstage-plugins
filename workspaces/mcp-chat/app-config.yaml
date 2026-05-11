@@ -1,0 +1,149 @@
+app:
+  title: MCP Chat
+  baseUrl: http://localhost:3000
+
+organization:
+  name: 'MCP Chat'
+
+backend:
+  baseUrl: http://localhost:7007
+  listen:
+    port: 7007
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+  cors:
+    origin: http://localhost:3000
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: better-sqlite3
+    connection: ':memory:'
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+# --------- MCP Chat Configuration ---------
+mcpChat:
+  toolCallTimeout: 60000
+  providers:
+    - id: openai
+      baseUrl: 'https://any-openai-compatible-url/v1'
+      token: ${OPENAI_API_KEY}
+      model: gpt-4o-mini
+      # Optional: Customize max tokens (default: 1000 for OpenAI)
+      # maxTokens: 1000
+      # Optional: Customize temperature 0-1 (default: 0.7)
+      # temperature: 0.7
+    - id: azure-openai # Azure OpenAI – deployment-based routing
+      baseUrl: 'https://<resource>.openai.azure.com/openai/v1'
+      token: ${AZURE_OPENAI_API_KEY}
+      model: gpt-5.1
+      deploymentName: my-gpt-5.1-deployment
+      # Optional: Customize max tokens (default: 1000)
+      # maxTokens: 1000
+      # Optional: Customize temperature 0-1 (default: 0.7)
+      # temperature: 0.7
+    - id: openai-responses # OpenAI Responses API
+      baseUrl: 'http://your-responses-api-endpoint.com/v1/openai/v1'
+      model: 'gemini/models/gemini-2.5-flash'
+      token: ${API_TOKEN} # Optional
+    - id: gemini
+      token: ${GEMINI_API_KEY}
+      model: gemini-2.5-flash
+      # Optional: Customize max tokens (default: 8192 for Gemini)
+      # maxTokens: 8192
+      # Optional: Customize temperature 0-1 (default: 0.7)
+      # temperature: 0.7
+    - id: claude
+      token: ${CLAUDE_API_KEY}
+      model: claude-sonnet-4-20250514
+      # Optional: Customize max tokens (default: 4096 for Claude)
+      # maxTokens: 4096
+      # Optional: Customize temperature 0-1 (default: not set, uses Claude API default)
+      # temperature: 0.8
+    - id: ollama
+      baseUrl: 'http://localhost:11434'
+      model: llama3.1:8b
+      # Optional: Customize max tokens (default: 1000)
+      # maxTokens: 1000
+      # Optional: Customize temperature 0-1 (default: 0.7)
+      # temperature: 0.7
+    - id: litellm
+      baseUrl: 'http://localhost:4000'
+      token: ${LITELLM_API_KEY}
+      model: gpt-4o-mini
+      # Optional: Customize max tokens (default: 1000)
+      # maxTokens: 1000
+      # Optional: Customize temperature 0-1 (default: 0.7)
+      # temperature: 0.7
+  mcpServers:
+    - id: brave-search-server
+      name: Brave Search Server
+      npxCommand: '@modelcontextprotocol/server-brave-search'
+      env:
+        BRAVE_API_KEY: ${BRAVE_API_KEY}
+    - id: kubernetes-server
+      name: Kubernetes Server
+      npxCommand: 'kubernetes-mcp-server@latest'
+      env:
+        KUBECONFIG: ${KUBECONFIG}
+    - id: backstage-server
+      name: Backstage Server
+      url: 'http://localhost:7007/api/mcp-actions/v1'
+      headers:
+        Authorization: 'Bearer ${BACKSTAGE_API_TOKEN}'
+  systemPrompt: "You are a helpful assistant. When using tools, provide a clear, readable summary of the results rather than showing raw data. Focus on answering the user's question with the information gathered."
+  quickPrompts:
+    - title: 'Web Search & Research'
+      description: 'Find the latest information, documentation, and best practices'
+      prompt: 'Search for the latest developments in Model Context Protocol and its applications'
+      category: Research
+    - title: 'Kubernetes & Cloud'
+      description: 'Query cloud resources, containers, and deployment status'
+      prompt: 'Show me the current Kubernetes deployments, pods status, and resource utilization in a nicely formatted text with bullet points'
+      category: Infrastructure
+    - title: 'Backstage Insights'
+      description: 'Get insights from Backstage, including catalog entities and documentation'
+      prompt: 'Describe the "example-app" microservice in our Backstage catalog'
+      category: Portals
+# ------------------------------------------------
+
+proxy:
+
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: 'docker'
+  publisher:
+    type: 'local'
+
+auth:
+  providers:
+    guest: {}
+
+scaffolder:
+
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow: [Component, System, API, Resource, Location]
+  locations:
+    - type: file
+      target: ../../examples/entities.yaml
+    - type: file
+      target: ../../examples/template/template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../examples/org.yaml
+      rules:
+        - allow: [User, Group]
+
+kubernetes:
+
+permission:
+  enabled: true
