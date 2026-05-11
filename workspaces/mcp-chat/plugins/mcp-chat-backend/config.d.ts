@@ -1,0 +1,157 @@
+/*
+ * Copyright 2026 The Alithya Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+export interface Config {
+  /** Configuration options for the MCP Chat plugin */
+  mcpChat?: {
+    /**
+     * AI/LLM providers configuration
+     * @visibility backend
+     */
+    providers: Array<{
+      /**
+       * Unique identifier for the provider
+       * @visibility backend
+       */
+      id: string;
+      /**
+       * API token for the provider
+       * @visibility secret
+       */
+      token?: string;
+      /**
+       * Model name to use for this provider.
+       * For `azure-openai` this should be the underlying model name (e.g. `gpt-4o-mini`),
+       * used only for capability detection. The actual API calls use `deploymentName`.
+       * @visibility backend
+       */
+      model: string;
+      /**
+       * Azure OpenAI deployment name.
+       * Required for the `azure-openai` provider.
+       * @visibility backend
+       */
+      deploymentName?: string;
+      /**
+       * Base URL for the provider's API
+       * @visibility backend
+       */
+      baseUrl?: string;
+      /**
+       * Provider-specific authentication parameters (IAM, session tokens, etc.)
+       * @visibility secret
+       */
+      auth?: { [key: string]: string };
+    }>;
+    /**
+     * MCP (Model Context Protocol) servers configuration
+     * @visibility backend
+     */
+    mcpServers?: Array<{
+      /**
+       * Unique identifier for the MCP server
+       * @visibility backend
+       */
+      id: string;
+      /**
+       * Display name for the MCP server
+       * @visibility backend
+       */
+      name: string;
+      /**
+       * NPX command to run the MCP server (for npm packages)
+       * @visibility backend
+       */
+      npxCommand?: string;
+      /**
+       * Path to a local script to run as the MCP server
+       * @visibility backend
+       */
+      scriptPath?: string;
+      /**
+       * URL endpoint for the MCP server (for streamable HTTP connections)
+       * @visibility backend
+       */
+      url?: string;
+      /**
+       * HTTP headers to include when connecting to the MCP server
+       * @visibility backend
+       */
+      headers?: { [key: string]: string };
+      /**
+       * Environment variables to set when running the MCP server
+       * @visibility backend
+       */
+      env?: { [key: string]: string };
+      /**
+       * Arguments to pass to the MCP server command
+       * @visibility backend
+       */
+      args?: string[];
+      /**
+       * List of tool names to disable for this MCP server.
+       * Disabled tools are filtered out at discovery time and never exposed to the LLM or frontend.
+       * @visibility backend
+       */
+      disabledTools?: string[];
+      /**
+       * Type of MCP server connection
+       * @visibility backend
+       * @enum { 'stdio' | 'streamable-http' }
+       */
+      type?: 'stdio' | 'streamable-http'; // Note: Use MCPServerType enum in code
+    }>;
+    /**
+     * Timeout in milliseconds for MCP tool call requests.
+     * Increase this for long-running tools such as scaffolder templates.
+     * @visibility backend
+     * @default 60000
+     */
+    toolCallTimeout?: number;
+    /**
+     * Custom system prompt for the AI assistant
+     * @visibility backend
+     */
+    systemPrompt?: string;
+    /**
+     * Conversation history settings
+     * @visibility backend
+     */
+    conversationHistory?: {
+      /**
+       * Number of recent conversations to display in the UI.
+       * All conversations are stored in the database; this only controls what's displayed.
+       * @visibility backend
+       * @default 10
+       */
+      displayLimit?: number;
+      /**
+       * Whether to automatically generate titles for conversations using the LLM.
+       * When disabled, falls back to using the first user message as the title.
+       * @visibility backend
+       * @default true
+       */
+      autoSummarize?: boolean;
+      /**
+       * Timeout in milliseconds for title generation requests.
+       * If the LLM takes longer than this, falls back to the first user message.
+       * @visibility backend
+       * @default 3000
+       */
+      summarizeTimeout?: number;
+    };
+  };
+}

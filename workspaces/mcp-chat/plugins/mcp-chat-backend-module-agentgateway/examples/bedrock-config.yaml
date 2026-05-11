@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=https://agentgateway.dev/schema/config
+
+binds:
+  # https://agentgateway.dev/docs/standalone/latest/quickstart/mcp/
+  - port: 34000
+    listeners:
+      - routes:
+          - policies:
+              cors:
+                allowOrigins:
+                  - '*'
+                allowHeaders:
+                  - mcp-protocol-version
+                  - content-type
+                  - cache-control
+                exposeHeaders:
+                  - 'Mcp-Session-Id'
+            backends:
+              - mcp:
+                  targets:
+                    - name: everything
+                      stdio:
+                        cmd: npx
+                        args: ['@modelcontextprotocol/server-everything']
+                    - name: kubernetes
+                      stdio:
+                        cmd: npx
+                        args: ['kubernetes-mcp-server@latest']
+
+llm:
+  # policies:
+  #   # https://agentgateway.dev/docs/standalone/latest/llm/spending/
+  #   localRateLimit:
+  #     - maxTokens: 10
+  #       tokensPerFill: 1
+  #       fillInterval: 60s
+  #       type: tokens
+  models:
+    - name: nova-lite
+      provider: bedrock
+      params:
+        model: global.amazon.nova-2-lite-v1:0
+        awsRegion: ca-central-1
