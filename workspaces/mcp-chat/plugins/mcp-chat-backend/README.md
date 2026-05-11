@@ -10,26 +10,32 @@ The MCP Chat plugin brings conversational AI capabilities directly into your Bac
 
 ## Features
 
-- 🤖 **Multi-Provider AI Support**: Works with OpenAI, Claude, Gemini, Ollama, LiteLLM, and OpenAI Responses API
+- 🤖 **Multi-Provider AI Support**: Works with OpenAI, Claude, Gemini, Ollama, LiteLLM, Amazon Bedrock, and more
+- 🧩 **Modular Provider Architecture**: Each LLM provider is a separate backend module — install only what you need
 - 🔧 **Multi-Server Support**: Connect multiple MCP servers (STDIO, Streamable HTTP)
 - 🛠️ **Tool Management**: Browse and dynamically enable/disable tools from connected MCP servers
 - 💬 **Rich Chat Interface**: Beautiful, responsive chat UI with markdown support
 - ⚡ **Quick Setup**: Configurable QuickStart prompts for common use cases
 - 📜 **Conversation History**: Automatic saving, starring, search, and management of chat sessions
+- 🔌 **Extensible**: Create custom provider modules using the `llmProviderExtensionPoint`
 
 ## Supported AI Providers
 
 The following AI providers and models have been thoroughly tested:
 
-| Provider                 | Model              | Status          | Notes                                                         |
-| ------------------------ | ------------------ | --------------- | ------------------------------------------------------------- |
-| **OpenAI**               | `gpt-4o-mini`      | ✅ Fully Tested | Recommended for production use                                |
-| **OpenAI Responses API** | Various            | ✅ Tested       | Handles MCP tool execution internally (see below)             |
-| **Gemini**               | `gemini-2.5-flash` | ✅ Fully Tested | Excellent performance with tool calling                       |
-| **Ollama**               | `llama3.1:8b`      | ✅ Tested       | Works well, but `llama3.1:30b` recommended for better results |
-| **LiteLLM**              | Various            | ✅ Tested       | Proxy for 100+ LLMs with unified API interface                |
+| Provider                 | Module Package                | Model                      | Status          | Notes                                                         |
+| ------------------------ | ----------------------------- | -------------------------- | --------------- | ------------------------------------------------------------- |
+| **OpenAI**               | `...-module-openai`           | `gpt-4o-mini`              | ✅ Fully Tested | Recommended for production use                                |
+| **OpenAI Responses API** | `...-module-openai-responses` | Various                    | ✅ Tested       | Handles MCP tool execution internally (see below)             |
+| **Azure OpenAI**         | `...-module-azure-openai`     | `gpt-5.1`                  | ✅ Tested       | Requires v1 API endpoint                                      |
+| **Gemini**               | `...-module-gemini`           | `gemini-2.5-flash`         | ✅ Fully Tested | Excellent performance with tool calling                       |
+| **Anthropic (Claude)**   | `...-module-anthropic`        | `claude-sonnet-4-20250514` | ✅ Tested       | High-quality responses with tool calling                      |
+| **Ollama**               | `...-module-ollama`           | `llama3.1:8b`              | ✅ Tested       | Works well, but `llama3.1:30b` recommended for better results |
+| **LiteLLM**              | `...-module-litellm`          | Various                    | ✅ Tested       | Proxy for 100+ LLMs with unified API interface                |
+| **Amazon Bedrock**       | `...-module-amazon-bedrock`   | Various                    | ✅ Tested       | AWS-native LLM access via Bedrock                             |
+| **Agent Gateway**        | `...-module-agentgateway`     | Various                    | ✅ Tested       | Gateway for agent-based workflows                             |
 
-> **Note**: While other providers and models may work, they have not been extensively tested. The plugin supports any provider that implements tool calling functionality, but compatibility is not guaranteed for untested configurations.
+> **Note**: Each provider is installed as a separate backend module. Only install the modules for providers you intend to use. The plugin supports any provider that implements tool calling functionality via the `llmProviderExtensionPoint`.
 
 ### OpenAI Responses API Provider
 
@@ -166,30 +172,74 @@ To quickly test this plugin, we recommend using Gemini's free API:
 - One or more AI provider API keys (OpenAI, Gemini, etc.)
 - (Optional) MCP server dependencies
 
+## Architecture
+
+The MCP Chat plugin follows a **modular architecture** using Backstage's backend module system. LLM providers are implemented as separate backend modules that register themselves via an extension point, allowing you to install only the providers you need.
+
+### Package Overview
+
+| Package                                          | Role            | Description                                          |
+| ------------------------------------------------ | --------------- | ---------------------------------------------------- |
+| `@alithya-oss/backstage-plugin-mcp-chat`         | Frontend plugin | Chat UI, tool management panel, conversation history |
+| `@alithya-oss/backstage-plugin-mcp-chat-backend` | Backend plugin  | Core backend: router, MCP client, conversation store |
+| `@alithya-oss/backstage-plugin-mcp-chat-common`  | Common library  | Shared types, `LLMProvider` base class, enums        |
+| `@alithya-oss/backstage-plugin-mcp-chat-node`    | Node library    | `llmProviderExtensionPoint` for module registration  |
+
+### Provider Modules
+
+Each LLM provider is a standalone backend module that registers itself with the core plugin via the `llmProviderExtensionPoint`:
+
+| Module Package                                                           | Provider ID        | Description                       |
+| ------------------------------------------------------------------------ | ------------------ | --------------------------------- |
+| `@alithya-oss/backstage-plugin-mcp-chat-backend-module-openai`           | `openai`           | OpenAI Chat Completions API       |
+| `@alithya-oss/backstage-plugin-mcp-chat-backend-module-openai-responses` | `openai-responses` | OpenAI Responses API (native MCP) |
+| `@alithya-oss/backstage-plugin-mcp-chat-backend-module-azure-openai`     | `azure-openai`     | Azure OpenAI Service              |
+| `@alithya-oss/backstage-plugin-mcp-chat-backend-module-anthropic`        | `claude`           | Anthropic Claude                  |
+| `@alithya-oss/backstage-plugin-mcp-chat-backend-module-gemini`           | `gemini`           | Google Gemini                     |
+| `@alithya-oss/backstage-plugin-mcp-chat-backend-module-ollama`           | `ollama`           | Local Ollama models               |
+| `@alithya-oss/backstage-plugin-mcp-chat-backend-module-litellm`          | `litellm`          | LiteLLM proxy (100+ LLMs)         |
+| `@alithya-oss/backstage-plugin-mcp-chat-backend-module-amazon-bedrock`   | `amazon-bedrock`   | Amazon Bedrock                    |
+| `@alithya-oss/backstage-plugin-mcp-chat-backend-module-agentgateway`     | `agentgateway`     | Agent Gateway                     |
+
 ## Installation
-
-This plugin consists of two packages:
-
-- `@alithya-oss/backstage-plugin-mcp-chat` - Frontend plugin
-- `@alithya-oss/backstage-plugin-mcp-chat-backend` - Backend plugin
 
 ### Backend Installation
 
-1. **Install the backend plugin**:
+1. **Install the core backend plugin**:
 
    ```bash
    # From your Backstage root directory
    yarn --cwd packages/backend add @alithya-oss/backstage-plugin-mcp-chat-backend
    ```
 
-2. **Add to your backend**:
+2. **Install the provider module(s) you need**:
+
+   ```bash
+   # Example: Install Gemini and OpenAI providers
+   yarn --cwd packages/backend add @alithya-oss/backstage-plugin-mcp-chat-backend-module-gemini
+   yarn --cwd packages/backend add @alithya-oss/backstage-plugin-mcp-chat-backend-module-openai
+   ```
+
+3. **Register the plugin and modules in your backend**:
 
    ```ts
    // In packages/backend/src/index.ts
    const backend = createBackend();
    // ... other plugins
+
+   // Core MCP Chat plugin
    backend.add(import('@alithya-oss/backstage-plugin-mcp-chat-backend'));
+
+   // Add the provider module(s) you installed
+   backend.add(
+     import('@alithya-oss/backstage-plugin-mcp-chat-backend-module-gemini'),
+   );
+   backend.add(
+     import('@alithya-oss/backstage-plugin-mcp-chat-backend-module-openai'),
+   );
    ```
+
+> **Note**: Only the first configured provider in `app-config.yaml` is used at runtime. You can install multiple modules but only one will be active based on your configuration.
 
 ### Frontend Installation
 
@@ -224,51 +274,51 @@ This plugin consists of two packages:
 
 ## Configuration
 
-Add the following configuration to your `app-config.yaml`:
+Add the following configuration to your `app-config.yaml`. Only configure the provider(s) whose module you have installed:
 
 ```yaml
 mcpChat:
-  # Configure AI providers (currently only the first provider is used)
-  # Supported Providers: OpenAI, OpenAI Responses API, Azure OpenAI, Gemini, Claude, Ollama, and LiteLLM
+  # Configure AI providers (only the first provider is used at runtime)
+  # Each provider requires its corresponding backend module to be installed
   providers:
-    - id: openai # OpenAI provider
+    - id: openai # Requires: @alithya-oss/backstage-plugin-mcp-chat-backend-module-openai
       token: ${OPENAI_API_KEY}
       model: gpt-4o-mini # or gpt-4, gpt-3.5-turbo, etc.
       # Optional: Customize max tokens (default: 1000)
       # maxTokens: 1000
       # Optional: Customize temperature 0-1 (default: 0.7)
       # temperature: 0.7
-    - id: openai-responses # OpenAI Responses API provider (handles MCP internally)
+    - id: openai-responses # Requires: @alithya-oss/backstage-plugin-mcp-chat-backend-module-openai-responses
       baseUrl: 'http://your-responses-api-endpoint.com/v1/openai/v1'
       model: 'gemini/models/gemini-2.5-flash'
       token: ${API_TOKEN} # Optional, depends on your API setup
-    - id: azure-openai # Azure OpenAI provider, requires the v1 API endpoint (not the older /openai/deployments/NAME/...?api-version=... format)
+    - id: azure-openai # Requires: @alithya-oss/backstage-plugin-mcp-chat-backend-module-azure-openai
       baseUrl: 'https://your-api-endpoint.openai.azure.com/openai/v1'
       token: ${AZURE_OPENAI_API_KEY}
       model: 'gpt-5.1'
       deploymentName: 'your-deployment-name'
-    - id: claude # Claude provider
+    - id: claude # Requires: @alithya-oss/backstage-plugin-mcp-chat-backend-module-anthropic
       token: ${CLAUDE_API_KEY}
       model: claude-sonnet-4-20250514 # or claude-3-7-sonnet-latest
       # Optional: Customize max tokens (default: 4096)
       # maxTokens: 4096
       # Optional: Customize temperature 0-1
       # temperature: 0.7
-    - id: gemini # Gemini provider
+    - id: gemini # Requires: @alithya-oss/backstage-plugin-mcp-chat-backend-module-gemini
       token: ${GEMINI_API_KEY}
       model: gemini-2.5-flash # or gemini-2.0-pro, etc.
       # Optional: Customize max tokens (default: 8192)
       # maxTokens: 8192
       # Optional: Customize temperature 0-1 (default: 0.7)
       # temperature: 0.7
-    - id: ollama # Ollama provider
+    - id: ollama # Requires: @alithya-oss/backstage-plugin-mcp-chat-backend-module-ollama
       baseUrl: 'http://localhost:11434'
       model: llama3.1:8b # or any model you have locally
       # Optional: Customize max tokens (default: 1000)
       # maxTokens: 1000
       # Optional: Customize temperature 0-1 (default: 0.7)
       # temperature: 0.7
-    - id: litellm # LiteLLM proxy provider
+    - id: litellm # Requires: @alithya-oss/backstage-plugin-mcp-chat-backend-module-litellm
       baseUrl: 'http://localhost:4000' # LiteLLM proxy URL
       token: ${LITELLM_API_KEY} # Optional, depends on your LiteLLM setup
       model: gpt-4o-mini # Model name configured in LiteLLM
@@ -276,6 +326,14 @@ mcpChat:
       # maxTokens: 1000
       # Optional: Customize temperature 0-1 (default: 0.7)
       # temperature: 0.7
+    - id: amazon-bedrock # Requires: @alithya-oss/backstage-plugin-mcp-chat-backend-module-amazon-bedrock
+      model: anthropic.claude-sonnet-4-20250514-v1:0 # or any Bedrock model ID
+      # Optional: AWS region (defaults to AWS_REGION env var)
+      # region: us-east-1
+    - id: agentgateway # Requires: @alithya-oss/backstage-plugin-mcp-chat-backend-module-agentgateway
+      baseUrl: 'http://your-agent-gateway.example.com'
+      model: 'default'
+      token: ${AGENTGATEWAY_TOKEN} # Optional
 
   # Configure MCP servers
   mcpServers:
@@ -627,23 +685,21 @@ backend:
 
 ## Using as a Library
 
-This plugin can be used as a **reusable library** in your own Backstage backend plugins. Instead of building your own LLM integration, you can import the provider system, MCP client service, and utilities directly.
+This plugin ecosystem can be used as a **reusable library** in your own Backstage backend plugins. The modular architecture provides clean separation of concerns:
+
+- **`@alithya-oss/backstage-plugin-mcp-chat-common`** — Import shared types and the `LLMProvider` base class
+- **`@alithya-oss/backstage-plugin-mcp-chat-node`** — Import the `llmProviderExtensionPoint` to build custom provider modules
+- **`@alithya-oss/backstage-plugin-mcp-chat-backend`** — Import services, utilities, and the router
 
 ### Quick Example
 
 ```typescript
 import {
-  ProviderFactory,
-  getProviderConfig,
   MCPClientServiceImpl,
   type ChatMessage,
 } from '@alithya-oss/backstage-plugin-mcp-chat-backend';
 
-// Create an LLM provider from config
-const providerConfig = getProviderConfig(config);
-const provider = ProviderFactory.createProvider(providerConfig);
-
-// Or use the full MCP service with tool support
+// Use the full MCP service with tool support
 const mcpService = new MCPClientServiceImpl({ logger, config });
 await mcpService.initializeMCPServers();
 
@@ -652,15 +708,63 @@ const result = await mcpService.processQuery([
 ]);
 ```
 
+### Creating a Custom Provider Module
+
+You can create your own LLM provider module by extending the `LLMProvider` base class from the common package and registering it via the extension point from the node package:
+
+```typescript
+import {
+  createBackendModule,
+  coreServices,
+} from '@backstage/backend-plugin-api';
+import { llmProviderExtensionPoint } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+
+class MyCustomProvider extends LLMProvider {
+  // Implement the required methods...
+}
+
+export default createBackendModule({
+  pluginId: 'mcp-chat',
+  moduleId: 'my-custom-provider',
+  register(reg) {
+    reg.registerInit({
+      deps: {
+        config: coreServices.rootConfig,
+        llmProviders: llmProviderExtensionPoint,
+      },
+      async init({ config, llmProviders }) {
+        const providers =
+          config.getOptionalConfigArray('mcpChat.providers') || [];
+        const entry = providers.find(p => p.getString('id') === 'my-custom');
+        if (!entry) return;
+
+        llmProviders.registerProvider(
+          'my-custom',
+          new MyCustomProvider({
+            type: 'my-custom',
+            apiKey: entry.getOptionalString('token'),
+            baseUrl: entry.getString('baseUrl'),
+            model: entry.getString('model'),
+          }),
+        );
+      },
+    });
+  },
+});
+```
+
 ### What's Exported
 
-| Category      | Exports                                                                                                                                                |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Providers** | `LLMProvider`, `ProviderFactory`, `OpenAIProvider`, `ClaudeProvider`, `GeminiProvider`, `OllamaProvider`, `LiteLLMProvider`, `OpenAIResponsesProvider` |
-| **Services**  | `MCPClientService`, `MCPClientServiceImpl`, `ChatConversationStore`, `SummarizationService`                                                            |
-| **Types**     | `ChatMessage`, `ChatResponse`, `ConversationRecord`, `ProviderConfig`, `Tool`, `ToolCall`, and more                                                    |
-| **Utilities** | `validateConfig`, `validateMessages`, `loadServerConfigs`, `executeToolCall`                                                                           |
-| **Router**    | `createRouter` - reuse the standard API endpoints                                                                                                      |
+| Package     | Category        | Exports                                                                                                                |
+| ----------- | --------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| **common**  | Base Class      | `LLMProvider`                                                                                                          |
+| **common**  | Types           | `ChatMessage`, `ChatResponse`, `ProviderConfig`, `Tool`, `ToolCall`, `MCPServerConfig`, `ConversationRecord`, and more |
+| **common**  | Enums           | `MCPServerType`, `VALID_ROLES`                                                                                         |
+| **node**    | Extension Point | `llmProviderExtensionPoint`, `LlmProviderExtensionPoint`                                                               |
+| **backend** | Services        | `MCPClientService`, `MCPClientServiceImpl`, `ChatConversationStore`, `SummarizationService`                            |
+| **backend** | Utilities       | `validateConfig`, `validateMessages`, `loadServerConfigs`, `executeToolCall`                                           |
+| **backend** | Router          | `createRouter` — reuse the standard API endpoints                                                                      |
 
 ### Full Documentation
 
