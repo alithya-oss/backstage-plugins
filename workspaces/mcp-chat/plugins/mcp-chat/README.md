@@ -253,7 +253,7 @@ export KUBECONFIG="/path/to/your/kubeconfig.yaml"
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/backstage/community-plugins.git
+   git clone https://github.com/alithya-oss/backstage-plugins.git
    cd workspaces/mcp-chat
    ```
 
@@ -371,7 +371,7 @@ Please see our [Contributing Guidelines](../../CONTRIBUTING.md) for detailed inf
 
 ## Support and Community
 
-- **Issues**: [Create an issue](https://github.com/backstage/community-plugins/issues)
+- **Issues**: [Create an issue](https://github.com/alithya-oss/backstage-plugins/issues)
 - **Discord**: [Join our Discord](https://discord.gg/backstage)
 - **Documentation**: [Backstage Documentation](https://backstage.io/docs)
 - **Community**: [Backstage Community](https://backstage.io/community)

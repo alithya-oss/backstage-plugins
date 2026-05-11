@@ -805,7 +805,7 @@ import { OpenAIProvider } from '@alithya-oss/backstage-plugin-mcp-chat-backend';
 
 ## Support
 
-- [GitHub Issues](https://github.com/backstage/community-plugins/issues)
+- [GitHub Issues](https://github.com/alithya-oss/backstage-plugins/issues)
 - [Backstage Discord](https://discord.gg/backstage-687207715902193673)
 
 ## License

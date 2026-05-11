@@ -46,7 +46,7 @@
   "configSchema": "config.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/backstage/community-plugins",
+    "url": "https://github.com/alithya-oss/backstage-plugins",
     "directory": "workspaces/mcp-chat/plugins/mcp-chat-backend-module-amazon-bedrock"
   },
   "keywords": [
@@ -60,6 +60,6 @@
     "mcp",
     "mcp-chat"
   ],
-  "homepage": "https://github.com/backstage/community-plugins/tree/main/workspaces/mcp-chat/plugins/mcp-chat-backend-module-amazon-bedrock",
-  "bugs": "https://github.com/backstage/community-plugins/issues"
+  "homepage": "https://github.com/alithya-oss/backstage-plugins/tree/main/workspaces/mcp-chat/plugins/mcp-chat-backend-module-amazon-bedrock",
+  "bugs": "https://github.com/alithya-oss/backstage-plugins/issues"
 }
