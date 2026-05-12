@@ -37,8 +37,6 @@ import {
   allWorkflows,
 } from '../src/__fixtures__';
 
-// ─── Per-instance workflow sets ─────────────────────────────────────────────
-
 /** Workflows returned by the Argo server instance (CI/CD pipelines). */
 const argoServerWorkflows = [
   succeededWorkflow,
@@ -65,8 +63,6 @@ const workflowsByInstance: Record<string, typeof allWorkflows> = {
   'k8s-staging': k8sStagingWorkflows,
 };
 
-// ─── Mock Entities ──────────────────────────────────────────────────────────
-
 /**
  * Entity with multiple instances available — no specific instance pinned,
  * so the user can switch between them via the instance selector dropdown.
@@ -89,8 +85,6 @@ const multiInstanceEntity: Entity = {
     owner: 'user:guest',
   },
 };
-
-// ─── Mock APIs ──────────────────────────────────────────────────────────────
 
 const mockDiscoveryApi = {
   getBaseUrl: async (_pluginId: string) => '/api/argo-workflows',
@@ -161,8 +155,6 @@ const mockFetchApi = {
   },
 };
 
-// ─── Shared wrapper ─────────────────────────────────────────────────────────
-
 function DevPage({ entity, title }: { entity: Entity; title: string }) {
   return (
     <TestApiProvider
@@ -184,8 +176,6 @@ function DevPage({ entity, title }: { entity: Entity; title: string }) {
     </TestApiProvider>
   );
 }
-
-// ─── Dev App ────────────────────────────────────────────────────────────────
 
 createDevApp()
   .registerPlugin(argoWorkflowsPlugin)

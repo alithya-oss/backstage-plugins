@@ -39,8 +39,6 @@ import type {
 } from '@backstage/plugin-kubernetes-node';
 import fetch from 'node-fetch';
 
-// ─── Instance types ─────────────────────────────────────────────────────────
-
 /** Instance configured to talk to the Argo Workflows server API. */
 interface ArgoApiInstance {
   kind: 'argo-server';
@@ -57,8 +55,6 @@ interface KubernetesClusterInstance {
 }
 
 type ArgoInstance = ArgoApiInstance | KubernetesClusterInstance;
-
-// ─── Label selector validation ──────────────────────────────────────────────
 
 const LABEL_KEY_PATTERN =
   '([a-zA-Z]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\\.[a-zA-Z]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\\/)?[a-zA-Z_]([a-zA-Z0-9._-]*[a-zA-Z0-9_])?';
@@ -122,16 +118,12 @@ export function validateLabelSelector(selector: string): string | undefined {
   return undefined;
 }
 
-// ─── Kubernetes CRD definition ──────────────────────────────────────────────
-
 const WORKFLOW_CUSTOM_RESOURCE: CustomResource = {
   objectType: 'customresources',
   group: 'argoproj.io',
   apiVersion: 'v1alpha1',
   plural: 'workflows',
 };
-
-// ─── Service options ────────────────────────────────────────────────────────
 
 /**
  * Options for constructing the ArgoWorkflowsService.
@@ -148,8 +140,6 @@ export interface ArgoWorkflowsServiceOptions {
   /** Optional — required when any instance uses `kubernetes.clusterName`. */
   authStrategy?: AuthenticationStrategy;
 }
-
-// ─── Service ────────────────────────────────────────────────────────────────
 
 /**
  * Service that communicates with Argo Workflows server instances or
@@ -299,8 +289,6 @@ export class ArgoWorkflowsService {
     return this.getWorkflowViaArgo(instance, namespace, name);
   }
 
-  // ─── Argo Workflows server API ──────────────────────────────────────────
-
   private async listWorkflowsViaArgo(
     instance: ArgoApiInstance,
     labelSelector: string,
@@ -350,8 +338,6 @@ export class ArgoWorkflowsService {
       );
     }
   }
-
-  // ─── Kubernetes CRD via Backstage K8s plugin ────────────────────────────
 
   private async listWorkflowsViaKubernetes(
     instance: KubernetesClusterInstance,
@@ -418,8 +404,6 @@ export class ArgoWorkflowsService {
 
     return workflow;
   }
-
-  // ─── Shared helpers ─────────────────────────────────────────────────────
 
   private async resolveCluster(
     instance: KubernetesClusterInstance,

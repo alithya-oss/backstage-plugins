@@ -20,25 +20,22 @@ import type {
   DAGNode,
   DAGGraph,
 } from '@alithya-oss/backstage-plugin-argo-workflows-react';
-import type { WorkflowStatus } from '@alithya-oss/backstage-plugin-argo-workflows-common';
 import dagre from 'dagre';
 
-// ─── Types ──────────────────────────────────────────────────────────────────
-
-/** Positioned node after dagre layout. */
+/** Node with computed x/y position from dagre layout. */
 export interface LayoutNode extends DAGNode {
   x: number;
   y: number;
 }
 
-/** Positioned edge after dagre layout. */
+/** Edge with computed path points from dagre layout. */
 export interface LayoutEdge {
   source: string;
   target: string;
   points: Array<{ x: number; y: number }>;
 }
 
-/** Result of a dagre layout computation. */
+/** Complete layout result from dagre computation. */
 export interface LayoutResult {
   nodes: LayoutNode[];
   edges: LayoutEdge[];
@@ -79,8 +76,6 @@ export interface DAGLayoutConfig {
   maxScale: number;
 }
 
-// ─── Preset configs ─────────────────────────────────────────────────────────
-
 /** Layout config for the full-page DAG view. */
 export const DAG_VIEW_CONFIG: DAGLayoutConfig = {
   nodeWidth: 180,
@@ -108,42 +103,6 @@ export const DAG_INLINE_CONFIG: DAGLayoutConfig = {
   minScale: 0.3,
   maxScale: 3,
 };
-
-// ─── Pure functions ─────────────────────────────────────────────────────────
-
-/**
- * Returns a BUI CSS variable for a given workflow status.
- */
-export function statusColor(status: WorkflowStatus): string {
-  switch (status) {
-    case 'Succeeded':
-      return 'var(--bui-fg-success)';
-    case 'Failed':
-      return 'var(--bui-fg-danger)';
-    case 'Running':
-      return 'var(--bui-fg-info)';
-    case 'Pending':
-      return 'var(--bui-fg-secondary)';
-    case 'Error':
-      return 'var(--bui-fg-danger)';
-    default:
-      return 'var(--bui-fg-secondary)';
-  }
-}
-
-/**
- * Formats a duration in seconds into a human-readable string.
- */
-export function formatDurationSeconds(seconds?: number): string {
-  if (seconds === undefined || seconds === null) return '—';
-  if (seconds < 60) return `${seconds}s`;
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  if (minutes < 60) return `${minutes}m ${remainingSeconds}s`;
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-  return `${hours}h ${remainingMinutes}m ${remainingSeconds}s`;
-}
 
 /**
  * Computes the dagre layout for a DAG graph using the given config.
@@ -193,9 +152,7 @@ export function computeLayout(
   return { nodes, edges, width, height };
 }
 
-/**
- * Builds an SVG path string from an array of points.
- */
+/** Builds an SVG path string from an array of points. */
 export function buildEdgePath(points: Array<{ x: number; y: number }>): string {
   if (points.length === 0) return '';
   if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
@@ -206,16 +163,12 @@ export function buildEdgePath(points: Array<{ x: number; y: number }>): string {
   return d;
 }
 
-/**
- * Truncates a label to the configured max length with an ellipsis.
- */
+/** Truncates a label to the configured max length with an ellipsis. */
 export function truncateLabel(label: string, maxChars: number): string {
   return label.length > maxChars
     ? `${label.substring(0, maxChars - 2)}…`
     : label;
 }
-
-// ─── Interaction hook ───────────────────────────────────────────────────────
 
 /** Return type of the `useDAGInteraction` hook. */
 export interface DAGInteraction {
@@ -245,9 +198,12 @@ export interface DAGInteraction {
   fitToView: (layout: LayoutResult) => void;
 }
 
+const ZOOM_FACTOR = 1.25;
+const FIT_SCALE_MARGIN = 0.9;
+
 /**
  * Hook that encapsulates all DAG pan/zoom, tooltip, and node selection logic.
- * Both `WorkflowDAGView` and `WorkflowDAGInline` use this hook.
+ * Used by both `WorkflowDAGView` and `WorkflowDAGInline`.
  */
 export function useDAGInteraction(config: DAGLayoutConfig): DAGInteraction {
   const svgRef = useRef<SVGSVGElement>(null) as RefObject<SVGSVGElement>;
@@ -266,12 +222,10 @@ export function useDAGInteraction(config: DAGLayoutConfig): DAGInteraction {
   });
   const [selectedNode, setSelectedNode] = useState<DAGNode | null>(null);
 
-  // ── SVG-level handlers ──
-
   const onWheel = useCallback(
     (e: WheelEvent<SVGSVGElement>) => {
       e.preventDefault();
-      const scaleFactor = e.deltaY < 0 ? 1.1 : 0.9;
+      const scaleFactor = e.deltaY < 0 ? ZOOM_FACTOR : 1 / ZOOM_FACTOR;
       setTransform(prev => {
         const newScale = Math.min(
           Math.max(prev.scale * scaleFactor, config.minScale),
@@ -322,8 +276,6 @@ export function useDAGInteraction(config: DAGLayoutConfig): DAGInteraction {
     setTooltip(prev => ({ ...prev, visible: false }));
   }, []);
 
-  // ── Node-level handlers ──
-
   const onNodeMouseEnter = useCallback((e: MouseEvent, node: DAGNode) => {
     const svgRect = svgRef.current?.getBoundingClientRect();
     if (!svgRect) return;
@@ -368,19 +320,17 @@ export function useDAGInteraction(config: DAGLayoutConfig): DAGInteraction {
     setTooltip(prev => ({ ...prev, visible: false }));
   }, []);
 
-  // ── Zoom controls ──
-
   const zoomIn = useCallback(() => {
     setTransform(prev => ({
       ...prev,
-      scale: Math.min(prev.scale * 1.25, config.maxScale),
+      scale: Math.min(prev.scale * ZOOM_FACTOR, config.maxScale),
     }));
   }, [config.maxScale]);
 
   const zoomOut = useCallback(() => {
     setTransform(prev => ({
       ...prev,
-      scale: Math.max(prev.scale * 0.8, config.minScale),
+      scale: Math.max(prev.scale / ZOOM_FACTOR, config.minScale),
     }));
   }, [config.minScale]);
 
@@ -389,7 +339,7 @@ export function useDAGInteraction(config: DAGLayoutConfig): DAGInteraction {
     const svgRect = svgRef.current.getBoundingClientRect();
     const scaleX = svgRect.width / layout.width;
     const scaleY = svgRect.height / layout.height;
-    const newScale = Math.min(scaleX, scaleY, 1) * 0.9;
+    const newScale = Math.min(scaleX, scaleY, 1) * FIT_SCALE_MARGIN;
     const newX = (svgRect.width - layout.width * newScale) / 2;
     const newY = (svgRect.height - layout.height * newScale) / 2;
     setTransform({ x: newX, y: newY, scale: newScale });

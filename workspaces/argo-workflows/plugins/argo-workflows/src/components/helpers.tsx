@@ -26,8 +26,6 @@ import { formatDuration, formatDate, workflowFullName } from './utils';
 import type { WorkflowItem } from './utils';
 import styles from './WorkflowRunsTable.module.css';
 
-// ─── Reusable cell renderers ────────────────────────────────────────────────
-
 /** Name cell: bold namespace/name with optional instance name below. */
 export const NameLabel = ({ item }: { item: WorkflowItem }): JSX.Element => (
   <Flex align="start" direction="column" style={{ gap: 3 }}>
@@ -44,8 +42,6 @@ export const NameLabel = ({ item }: { item: WorkflowItem }): JSX.Element => (
     )}
   </Flex>
 );
-
-// ─── Column definitions ─────────────────────────────────────────────────────
 
 export const nameColumn: ColumnConfig<WorkflowItem> = {
   id: 'name',
