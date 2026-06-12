@@ -55,7 +55,7 @@
   "devDependencies": {
     "@backstage/backend-test-utils": "backstage:^",
     "@backstage/cli": "backstage:^",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.28.0",
     "tsx": "^4.6.2"
   },
   "files": [
