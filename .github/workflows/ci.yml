@@ -15,7 +15,7 @@ jobs:
       workspaces: ${{ steps.find-changed-workspaces.outputs.workspaces }}
     steps:
       - name: Checkout base branch for diff purposes
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.event.pull_request.base.ref }}
 
@@ -25,7 +25,7 @@ jobs:
           COMMITS: ${{ github.event.pull_request.commits }}
         run: echo "NUMBER_OF_COMMITS=$(($COMMITS + 1))" >> $GITHUB_ENV
       - name: Checkout head branch
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           # Needed for diff
           fetch-depth: ${{ env.NUMBER_OF_COMMITS }}
@@ -61,11 +61,11 @@ jobs:
 
     steps:
       - name: Checkout main branch for tests purposes
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: main
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
 
@@ -130,7 +130,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout head branch
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
       - name: Setup node
