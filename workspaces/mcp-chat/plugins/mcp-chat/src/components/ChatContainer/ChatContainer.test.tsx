@@ -69,6 +69,7 @@ const defaultProps = {
       hasUrl: false,
       hasNpxCommand: true,
       hasScriptPath: false,
+      status: { valid: true, connected: true },
     },
   ],
   messages: [],

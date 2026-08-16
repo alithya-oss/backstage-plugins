@@ -20,11 +20,14 @@ import { GeminiProvider } from '@alithya-oss/backstage-plugin-mcp-chat-backend-m
 import { LiteLLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-backend-module-litellm';
 import { OllamaProvider } from '@alithya-oss/backstage-plugin-mcp-chat-backend-module-ollama';
 import { ChatMessage } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { mockServices } from '@backstage/backend-test-utils';
 
 describe('Provider maxTokens and temperature configuration', () => {
   const testMessages: ChatMessage[] = [
     { role: 'user', content: 'Hello, how are you?' },
   ];
+
+  const logger = mockServices.logger.mock();
 
   describe('OpenAIProvider', () => {
     it('should use custom maxTokens and temperature in requests', () => {
@@ -35,6 +38,7 @@ describe('Provider maxTokens and temperature configuration', () => {
         model: 'gpt-4',
         maxTokens: 2000,
         temperature: 0.3,
+        logger,
       });
 
       const request = (provider as any).formatRequest(testMessages);
@@ -50,6 +54,7 @@ describe('Provider maxTokens and temperature configuration', () => {
         apiKey: 'test-key',
         baseUrl: 'https://api.openai.com/v1',
         model: 'gpt-4',
+        logger,
       });
 
       const request = (provider as any).formatRequest(testMessages);
@@ -68,6 +73,7 @@ describe('Provider maxTokens and temperature configuration', () => {
         model: 'claude-3',
         maxTokens: 2048,
         temperature: 0.9,
+        logger,
       });
 
       const request = (provider as any).formatRequest(testMessages);
@@ -82,6 +88,7 @@ describe('Provider maxTokens and temperature configuration', () => {
         apiKey: 'test-key',
         baseUrl: 'https://api.anthropic.com/v1',
         model: 'claude-3',
+        logger,
       });
 
       const request = (provider as any).formatRequest(testMessages);
@@ -101,6 +108,7 @@ describe('Provider maxTokens and temperature configuration', () => {
         model: 'gemini-pro',
         maxTokens: 4096,
         temperature: 0.8,
+        logger,
       });
 
       // Check that the values are stored in the model config
@@ -114,6 +122,7 @@ describe('Provider maxTokens and temperature configuration', () => {
         apiKey: 'test-key',
         baseUrl: 'https://generativelanguage.googleapis.com',
         model: 'gemini-pro',
+        logger,
       });
 
       expect((provider as any).maxTokens).toBeUndefined();
@@ -130,6 +139,7 @@ describe('Provider maxTokens and temperature configuration', () => {
         model: 'gpt-4',
         maxTokens: 1500,
         temperature: 0.4,
+        logger,
       });
 
       const request = (provider as any).formatRequest(testMessages);
@@ -144,6 +154,7 @@ describe('Provider maxTokens and temperature configuration', () => {
         apiKey: 'test-key',
         baseUrl: 'http://localhost:4000',
         model: 'gpt-4',
+        logger,
       });
 
       const request = (provider as any).formatRequest(testMessages);
@@ -161,6 +172,7 @@ describe('Provider maxTokens and temperature configuration', () => {
         model: 'llama2',
         maxTokens: 1500,
         temperature: 0.6,
+        logger,
       });
 
       expect((provider as any).maxTokens).toBe(1500);
@@ -172,6 +184,7 @@ describe('Provider maxTokens and temperature configuration', () => {
         type: 'ollama',
         baseUrl: 'http://localhost:11434',
         model: 'llama2',
+        logger,
       });
 
       expect((provider as any).maxTokens).toBeUndefined();
@@ -189,6 +202,7 @@ describe('Provider maxTokens and temperature configuration', () => {
             apiKey: 'test',
             baseUrl: 'https://api.openai.com/v1',
             model: 'gpt-4',
+            logger,
           }),
           expectedMaxTokens: 1000,
           expectedTemperature: 0.7,
@@ -200,6 +214,7 @@ describe('Provider maxTokens and temperature configuration', () => {
             apiKey: 'test',
             baseUrl: 'https://api.anthropic.com/v1',
             model: 'claude-3',
+            logger,
           }),
           expectedMaxTokens: 4096,
           expectedTemperature: undefined,
@@ -211,6 +226,7 @@ describe('Provider maxTokens and temperature configuration', () => {
             apiKey: 'test',
             baseUrl: 'http://localhost:4000',
             model: 'gpt-4',
+            logger,
           }),
           expectedMaxTokens: 1000,
           expectedTemperature: 0.7,

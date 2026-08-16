@@ -15,7 +15,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useApi, identityApiRef } from '@backstage/core-plugin-api';
+import { useApi, identityApiRef } from '@backstage/frontend-plugin-api';
 import useAsync from 'react-use/esm/useAsync';
 import { mcpChatApiRef } from '../api';
 import type { ConversationRecord } from '../types';
@@ -63,8 +63,8 @@ export interface UseConversationsReturn {
   recentConversations: ConversationRecord[];
   /** Whether conversations are currently loading */
   loading: boolean;
-  /** Error message if loading failed */
-  error?: string;
+  /** Error instance if loading failed */
+  error?: Error;
   /** Current search query */
   searchQuery: string;
   /** Set the search query */
@@ -205,7 +205,7 @@ export function useConversations(): UseConversationsReturn {
     starredConversations,
     recentConversations,
     loading,
-    error: error?.message,
+    error,
     searchQuery,
     setSearchQuery,
     clearSearch,

@@ -561,7 +561,7 @@ describe('MCPClientServiceImpl', () => {
       await service.initializeMCPServers();
 
       expect(mockLogger.warn).toHaveBeenCalledWith(
-        expect.stringContaining('Available tools are: tool_a, tool_b, tool_c'),
+        expect.stringContaining('Available: tool_a, tool_b, tool_c'),
       );
     });
 

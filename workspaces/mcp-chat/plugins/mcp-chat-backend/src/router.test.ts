@@ -15,7 +15,7 @@
  */
 
 import { mockServices } from '@backstage/backend-test-utils';
-import { InputError } from '@backstage/errors';
+import { NotAllowedError } from '@backstage/errors';
 import express from 'express';
 import request from 'supertest';
 import { createRouter } from './router';
@@ -29,6 +29,7 @@ describe('createRouter', () => {
   let mcpClientService: jest.Mocked<MCPClientService>;
   let conversationStore: jest.Mocked<ChatConversationStore>;
   let summarizationService: jest.Mocked<SummarizationService>;
+  let httpAuth: ReturnType<typeof mockServices.httpAuth.mock>;
 
   beforeEach(async () => {
     mcpClientService = {
@@ -53,33 +54,24 @@ describe('createRouter', () => {
       summarizeConversation: jest.fn().mockResolvedValue('Test Title'),
     } as unknown as jest.Mocked<SummarizationService>;
 
+    httpAuth = mockServices.httpAuth.mock();
+    httpAuth.credentials.mockResolvedValue({
+      principal: {
+        type: 'user',
+        userEntityRef: 'user:default/mock',
+      },
+    } as any);
+
     const router = await createRouter({
       logger: mockServices.logger.mock(),
       mcpClientService,
       conversationStore,
-      httpAuth: mockServices.httpAuth.mock(),
+      httpAuth,
       summarizationService,
     });
 
     app = express();
     app.use(router);
-
-    // Add error handling middleware
-    app.use(
-      (
-        err: any,
-        _req: express.Request,
-        res: express.Response,
-        _next: express.NextFunction,
-      ) => {
-        if (err instanceof InputError) {
-          return res
-            .status(400)
-            .json({ error: { name: err.name, message: err.message } });
-        }
-        return res.status(500).json({ error: err.message });
-      },
-    );
   });
 
   describe('GET /provider/status', () => {
@@ -395,9 +387,8 @@ describe('createRouter', () => {
         .send({ messages: validMessages, enabledTools: 'not-array' });
 
       expect(response.status).toBe(400);
-      expect(response.body.error).toMatchObject({
-        name: 'InputError',
-        message: 'enabledTools must be an array',
+      expect(response.body).toEqual({
+        error: 'enabledTools must be an array',
       });
     });
 
@@ -407,9 +398,8 @@ describe('createRouter', () => {
         .send({ messages: validMessages, enabledTools: [123, 'valid'] });
 
       expect(response.status).toBe(400);
-      expect(response.body.error).toMatchObject({
-        name: 'InputError',
-        message: 'All enabledTools must be strings',
+      expect(response.body).toEqual({
+        error: 'All enabledTools must be strings',
       });
     });
 
@@ -443,6 +433,245 @@ describe('createRouter', () => {
         validMessages,
         undefined,
       );
+    });
+  });
+
+  /**
+   * Property 8: Backend route paths preserved
+   *
+   * For any HTTP method+path pair served by the router, the refactored router
+   * SHALL handle requests at that same method+path without returning 404.
+   *
+   * **Validates: Requirements 12.1**
+   */
+  describe('GET /conversations', () => {
+    it('should return conversations list for authenticated user', async () => {
+      const mockConversations = [
+        {
+          id: '550e8400-e29b-41d4-a716-446655440000',
+          userId: 'user:default/mock',
+          messages: [{ role: 'user' as const, content: 'Hello' }],
+          title: 'Test Conversation',
+          isStarred: false,
+          createdAt: new Date('2025-01-01'),
+          updatedAt: new Date('2025-01-01'),
+        },
+      ];
+      conversationStore.getConversations.mockResolvedValue(mockConversations);
+
+      const response = await request(app).get('/conversations');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('conversations');
+      expect(response.body).toHaveProperty('count');
+      expect(response.body.count).toBe(1);
+    });
+
+    it('should return 400 for invalid limit parameter', async () => {
+      const response = await request(app).get('/conversations?limit=0');
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
+        error: expect.stringContaining('Limit must be between'),
+      });
+    });
+
+    it('should return empty list when table is missing', async () => {
+      const missingTableError: any = new Error('no such table');
+      missingTableError.code = 'SQLITE_ERROR';
+      conversationStore.getConversations.mockRejectedValue(missingTableError);
+
+      const response = await request(app).get('/conversations');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ conversations: [], count: 0 });
+    });
+  });
+
+  describe('GET /conversations/:id', () => {
+    const validUuid = '550e8400-e29b-41d4-a716-446655440000';
+
+    it('should return a conversation by ID', async () => {
+      const mockConversation = {
+        id: validUuid,
+        userId: 'user:default/mock',
+        messages: [{ role: 'user' as const, content: 'Hello' }],
+        title: 'Test',
+        isStarred: false,
+        createdAt: new Date('2025-01-01'),
+        updatedAt: new Date('2025-01-01'),
+      };
+      conversationStore.getConversationById.mockResolvedValue(mockConversation);
+
+      const response = await request(app).get(`/conversations/${validUuid}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.id).toBe(validUuid);
+    });
+
+    it('should return 404 when conversation not found', async () => {
+      conversationStore.getConversationById.mockResolvedValue(null);
+
+      const response = await request(app).get(`/conversations/${validUuid}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ error: 'Conversation not found' });
+    });
+
+    it('should return 400 for invalid UUID format', async () => {
+      const response = await request(app).get('/conversations/not-a-uuid');
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({ error: 'Invalid id format' });
+    });
+  });
+
+  describe('DELETE /conversations/:id', () => {
+    const validUuid = '550e8400-e29b-41d4-a716-446655440000';
+
+    it('should delete a conversation and return 204', async () => {
+      conversationStore.deleteConversation.mockResolvedValue(true);
+
+      const response = await request(app).delete(`/conversations/${validUuid}`);
+
+      expect(response.status).toBe(204);
+      expect(response.body).toEqual({});
+    });
+
+    it('should return 404 when conversation to delete is not found', async () => {
+      conversationStore.deleteConversation.mockResolvedValue(false);
+
+      const response = await request(app).delete(`/conversations/${validUuid}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ error: 'Conversation not found' });
+    });
+  });
+
+  describe('PATCH /conversations/:id/star', () => {
+    const validUuid = '550e8400-e29b-41d4-a716-446655440000';
+
+    it('should toggle star and return new status', async () => {
+      conversationStore.toggleStarred.mockResolvedValue(true);
+
+      const response = await request(app).patch(
+        `/conversations/${validUuid}/star`,
+      );
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ isStarred: true });
+    });
+  });
+
+  describe('PATCH /conversations/:id/title', () => {
+    const validUuid = '550e8400-e29b-41d4-a716-446655440000';
+
+    it('should update title and return it', async () => {
+      conversationStore.updateTitle.mockResolvedValue(undefined);
+
+      const response = await request(app)
+        .patch(`/conversations/${validUuid}/title`)
+        .send({ title: 'New Title' });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ title: 'New Title' });
+    });
+
+    it('should return 400 when title is not a string', async () => {
+      const response = await request(app)
+        .patch(`/conversations/${validUuid}/title`)
+        .send({ title: 123 });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({ error: 'Title must be a string' });
+    });
+
+    it('should return 400 when title exceeds 255 characters', async () => {
+      const response = await request(app)
+        .patch(`/conversations/${validUuid}/title`)
+        .send({ title: 'x'.repeat(256) });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
+        error: 'Title too long (max 255 characters)',
+      });
+    });
+  });
+
+  /**
+   * Property 7: Route handlers throw @backstage/errors types on failure
+   *
+   * For any invalid request payload delivered to a route handler, the handler
+   * SHALL throw an error that is an instance of a class from @backstage/errors
+   * (InputError, NotFoundError, NotAllowedError), and the error middleware
+   * SHALL map these to the correct HTTP status codes with { error: string } body.
+   *
+   * **Validates: Requirements 7.2, 7.5**
+   */
+  describe('Error handler middleware', () => {
+    it('should map InputError to 400 with { error: string } body', async () => {
+      // InputError is triggered by invalid chat messages
+      const response = await request(app)
+        .post('/chat')
+        .send({ messages: [], enabledTools: [] });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty('error');
+      expect(typeof response.body.error).toBe('string');
+    });
+
+    it('should map NotFoundError to 404 with { error: string } body', async () => {
+      const validUuid = '550e8400-e29b-41d4-a716-446655440000';
+      conversationStore.getConversationById.mockResolvedValue(null);
+
+      const response = await request(app).get(`/conversations/${validUuid}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty('error');
+      expect(typeof response.body.error).toBe('string');
+    });
+
+    it('should map NotAllowedError to 403 with { error: string } body', async () => {
+      // Create a separate app that forces a NotAllowedError to be thrown
+      const errorRouter = express.Router();
+      errorRouter.use(express.json());
+      errorRouter.get('/test-forbidden', (_req, _res) => {
+        throw new NotAllowedError('Access denied');
+      });
+      const { createErrorHandler } = require('./middleware');
+      errorRouter.use(createErrorHandler(mockServices.logger.mock()));
+
+      const errorApp = express();
+      errorApp.use(errorRouter);
+
+      const response = await request(errorApp).get('/test-forbidden');
+
+      expect(response.status).toBe(403);
+      expect(response.body).toEqual({ error: 'Access denied' });
+    });
+
+    it('should map untyped Error to 500 with { error: string } body', async () => {
+      mcpClientService.getProviderStatus.mockRejectedValue(
+        new Error('Something broke unexpectedly'),
+      );
+
+      const response = await request(app).get('/provider/status');
+
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('error');
+      expect(typeof response.body.error).toBe('string');
+    });
+
+    it('should map SyntaxError from malformed JSON to 400 with specific message', async () => {
+      const response = await request(app)
+        .post('/chat')
+        .set('Content-Type', 'application/json')
+        .send('{invalid json}');
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
+        error: 'Invalid JSON in request body',
+      });
     });
   });
 });

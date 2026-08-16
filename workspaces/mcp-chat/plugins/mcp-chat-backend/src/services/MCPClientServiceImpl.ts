@@ -18,25 +18,20 @@ import {
   LoggerService,
   RootConfigService,
 } from '@backstage/backend-plugin-api';
-import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
-import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import * as path from 'path';
-import { executeToolCall, findNpxPath, loadServerConfigs } from '../utils';
-import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-node';
 import { MCPClientService } from './MCPClientService';
 import {
-  ChatMessage,
-  Tool,
   MCPServer,
   MCPServerStatusData,
   ProviderStatusData,
   QueryResponse,
   ServerTool,
-  MCPServerType,
-  MCPServerFullConfig,
-  ResponsesApiMcpCall,
 } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { McpServerLifecycle } from './McpServerLifecycle';
+import { McpTransportFactory } from './McpTransportFactory';
+import { QueryProcessor } from './QueryProcessor';
+import { ProviderStatusReporter } from './ProviderStatusReporter';
+import { McpServerStatusReporter } from './McpServerStatusReporter';
 
 /**
  * Options for creating an MCPClientServiceImpl instance.
@@ -50,651 +45,80 @@ export type Options = {
 };
 
 /**
- * Implementation of the MCP Client Service.
- * Provides full MCP integration with LLM providers.
+ * Thin facade implementing the MCPClientService interface.
+ * Delegates all responsibilities to dedicated service units.
  *
  * @public
  */
 export class MCPClientServiceImpl implements MCPClientService {
-  private readonly logger: LoggerService;
-  private readonly config: RootConfigService;
-  private llmProvider: LLMProvider;
-  private readonly mcpClients: Map<string, Client> = new Map();
-  private tools: ServerTool[] = [];
-  private connected = false;
-  private mcpServers: Promise<MCPServer[]> | null = null;
-  private readonly systemPrompt: string;
-  private serverConfigs: MCPServerFullConfig[] = [];
-  private allowedToolsByServer: Map<string, string[]> = new Map();
-  private readonly toolCallTimeout: number;
+  private readonly lifecycle: McpServerLifecycle;
+  private readonly queryProcessor: QueryProcessor;
+  private readonly providerStatusReporter: ProviderStatusReporter;
+  private readonly mcpServerStatusReporter: McpServerStatusReporter;
 
   constructor(options: Options) {
-    this.logger = options.logger;
-    this.config = options.config;
-    this.llmProvider = options.provider;
-    this.toolCallTimeout =
-      this.config.getOptionalNumber('mcpChat.toolCallTimeout') ?? 60000;
-    this.mcpServers = this.initializeMCPServers();
-    this.systemPrompt =
-      this.config.getOptionalString('mcpChat.systemPrompt') ||
+    const { logger, config, provider } = options;
+
+    const transportFactory = new McpTransportFactory();
+
+    this.lifecycle = new McpServerLifecycle({
+      logger,
+      config,
+      llmProvider: provider,
+      transportFactory,
+    });
+
+    const systemPrompt =
+      config.getOptionalString('mcpChat.systemPrompt') ||
       "You are a helpful assistant. When using tools, provide a clear, readable summary of the results rather than showing raw data. Focus on answering the user's question with the information gathered.";
+
+    const toolCallTimeout =
+      config.getOptionalNumber('mcpChat.toolCallTimeout') ?? 60000;
+
+    this.queryProcessor = new QueryProcessor({
+      logger,
+      llmProvider: provider,
+      systemPrompt,
+      toolCallTimeout,
+      getTools: () => this.lifecycle.getTools(),
+      getMcpClients: () => this.lifecycle.getMcpClients(),
+      getServerConfigs: () => this.lifecycle.getServerConfigs(),
+    });
+
+    this.providerStatusReporter = new ProviderStatusReporter({
+      logger,
+      llmProvider: provider,
+    });
+
+    this.mcpServerStatusReporter = new McpServerStatusReporter({
+      getMcpServersPromise: () => this.lifecycle.getMcpServersPromise(),
+      getTools: () => this.lifecycle.getTools(),
+    });
+
+    // Trigger server initialization
+    this.lifecycle.initializeMCPServers();
   }
 
   async initializeMCPServers(): Promise<MCPServer[]> {
-    // If initialization is already in progress or completed, return the same promise
-    if (this.mcpServers) {
-      return this.mcpServers;
-    }
-
-    this.mcpServers = this.mcpServerInit();
-    return this.mcpServers;
-  }
-
-  private async mcpServerInit(): Promise<MCPServer[]> {
-    if (this.connected) {
-      // Return current status if already connected
-      return this.mcpServers ? await this.mcpServers : [];
-    }
-
-    const allTools: ServerTool[] = [];
-    const serverResults: MCPServer[] = [];
-    const serverConfigs = loadServerConfigs(this.config);
-
-    // Store server configs for Responses API provider
-    this.serverConfigs = serverConfigs;
-
-    // Check if using native MCP provider - initialize local MCP for tool discovery
-    if (this.llmProvider.supportsNativeMcp()) {
-      this.logger.info(
-        'Using OpenAI Responses API - initializing local MCP for tool discovery',
-      );
-
-      // Note: We don't set MCP configs on provider here - they will be set per-request
-      // in processQueryWithResponsesApi() with only the enabled servers
-
-      // Initialize local MCP clients ONLY for tool discovery
-      // Filter to only URL-based servers (Responses API requirement)
-      const urlBasedServers = serverConfigs.filter(config => config.url);
-
-      for (const serverConfig of urlBasedServers) {
-        try {
-          const client = new Client({
-            name: `${serverConfig.name}-client`,
-            version: '1.0.0',
-          });
-
-          // Create transport for Streamable HTTP
-          const transportOptions: any = {};
-          if (serverConfig.headers) {
-            transportOptions.requestInit = {
-              headers: serverConfig.headers,
-            };
-          }
-          const transport = new StreamableHTTPClientTransport(
-            new URL(serverConfig.url!),
-            transportOptions,
-          );
-
-          await client.connect(transport);
-          this.mcpClients.set(serverConfig.id, client);
-
-          // List tools from this server
-          const { tools } = await client.listTools();
-
-          const { serverTools, allowedTools } = this.filterDiscoveredTools(
-            tools,
-            serverConfig,
-          );
-
-          // Store the computed allowed tool names in a separate map
-          // for use by the Responses API provider
-          if (allowedTools) {
-            this.allowedToolsByServer.set(serverConfig.id, allowedTools);
-          }
-
-          allTools.push(...serverTools);
-
-          serverResults.push({
-            id: serverConfig.id,
-            name: serverConfig.name,
-            type: serverConfig.type,
-            url: serverConfig.url,
-            status: {
-              valid: true,
-              connected: true,
-            },
-          });
-
-          this.logger.info(
-            `Connected to ${serverConfig.name}: ${serverTools.length} tools`,
-          );
-        } catch (error) {
-          this.logger.warn(
-            `Failed to connect to ${serverConfig.name}: ${
-              error instanceof Error ? error.message : error
-            }`,
-          );
-          serverResults.push({
-            id: serverConfig.id,
-            name: serverConfig.name,
-            type: serverConfig.type,
-            url: serverConfig.url,
-            status: {
-              valid: true,
-              connected: false,
-              error: error instanceof Error ? error.message : String(error),
-            },
-          });
-        }
-      }
-
-      // Add status for STDIO servers (not supported by Responses API)
-      const stdioServers = serverConfigs.filter(config => !config.url);
-      for (const serverConfig of stdioServers) {
-        serverResults.push({
-          id: serverConfig.id,
-          name: serverConfig.name,
-          type: serverConfig.type,
-          npxCommand: serverConfig.npxCommand,
-          scriptPath: serverConfig.scriptPath,
-          args: serverConfig.args,
-          status: {
-            valid: false,
-            connected: false,
-            error: 'Responses API only supports URL-based MCP servers',
-          },
-        });
-      }
-
-      this.tools = allTools;
-      this.connected = true;
-
-      this.logger.info(
-        `Discovered ${this.tools.length} tools from ${
-          serverResults.filter(s => s.status.connected).length
-        } connected servers`,
-      );
-
-      return serverResults;
-    }
-
-    for (const serverConfig of serverConfigs) {
-      const isValid = !!(
-        serverConfig?.url ||
-        serverConfig?.npxCommand ||
-        serverConfig?.scriptPath
-      );
-
-      const baseServerConfig = {
-        id: serverConfig.id,
-        name: serverConfig.name,
-        type: serverConfig.type,
-        url: serverConfig?.url,
-        npxCommand: serverConfig?.npxCommand,
-        scriptPath: serverConfig?.scriptPath,
-        args: serverConfig?.args,
-      };
-
-      try {
-        const client = new Client({
-          name: `${serverConfig.name}-client`,
-          version: '1.0.0',
-        });
-
-        let transport;
-
-        if (serverConfig.type === MCPServerType.STREAMABLE_HTTP) {
-          // Streamable HTTP connection
-          if (!serverConfig.url) {
-            throw new Error(
-              `Server config for '${serverConfig.name}' with streamable-http type must have a url`,
-            );
-          }
-
-          const transportOptions: any = {};
-
-          // Add headers if provided
-          if (serverConfig.headers) {
-            transportOptions.requestInit = {
-              headers: serverConfig.headers,
-            };
-          }
-
-          transport = new StreamableHTTPClientTransport(
-            new URL(serverConfig.url),
-            transportOptions,
-          );
-        } else {
-          // STDIO connection (default)
-          let command: string;
-          let args: string[];
-
-          if (serverConfig.npxCommand) {
-            // Use npm command - find npx executable
-            try {
-              command = await findNpxPath();
-              args = [
-                '-y',
-                serverConfig.npxCommand,
-                ...(serverConfig.args || []),
-              ];
-            } catch (error) {
-              throw new Error(
-                `Failed to find npx for server '${serverConfig.name}': ${
-                  error instanceof Error ? error.message : error
-                }. Please ensure Node.js is properly installed with npx available.`,
-              );
-            }
-          } else if (serverConfig.scriptPath) {
-            // Use script path
-            const isPythonScript = serverConfig.scriptPath.endsWith('.py');
-            const isWindows = process.platform === 'win32';
-
-            if (isPythonScript) {
-              command = isWindows ? 'python' : 'python3';
-            } else {
-              command = process.execPath;
-            }
-            args = [serverConfig.scriptPath, ...(serverConfig.args || [])];
-          } else {
-            throw new Error(
-              `Server config for '${serverConfig.name}' must have either scriptPath, npxCommand, or url`,
-            );
-          }
-
-          transport = new StdioClientTransport({
-            command,
-            args,
-            env: {
-              ...process.env, // Inherit current environment
-              ...serverConfig.env, // Add config-specific env vars
-              // Ensure node is in PATH when using npx
-              ...(serverConfig.npxCommand && {
-                PATH: `${path.dirname(process.execPath)}:${
-                  process.env.PATH || ''
-                }`,
-              }),
-            },
-          });
-        }
-
-        // Connect the client with the appropriate transport
-        await client.connect(transport);
-
-        const { tools } = await client.listTools();
-
-        const { serverTools } = this.filterDiscoveredTools(tools, serverConfig);
-
-        allTools.push(...serverTools);
-        this.mcpClients.set(serverConfig.id, client);
-
-        // Record successful connection
-        serverResults.push({
-          ...baseServerConfig,
-          status: {
-            valid: isValid,
-            connected: true,
-          },
-        });
-
-        this.logger.info(
-          `MCP Server '${serverConfig.name}' connected via ${
-            serverConfig.type
-          } with tools: ${serverTools.map(t => t.function.name).join(', ')}`,
-        );
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : String(error);
-
-        // Record failed connection
-        serverResults.push({
-          ...baseServerConfig,
-          status: {
-            valid: isValid,
-            connected: false,
-            error: errorMessage,
-          },
-        });
-
-        this.logger.warn(
-          `Failed to connect to MCP server '${serverConfig.name}': ${errorMessage}`,
-        );
-      }
-    }
-
-    this.tools = allTools;
-    this.connected = true;
-
-    const connectedServers = serverResults.filter(
-      s => s.status.connected,
-    ).length;
-    const totalServers = serverConfigs.length;
-    const failedServers = serverResults.filter(s => !s.status.connected);
-
-    if (failedServers.length > 0) {
-      this.logger.info(
-        `MCP initialization completed: ${connectedServers}/${totalServers} servers connected successfully. Failed servers: ${failedServers
-          .map(s => s.name)
-          .join(', ')}`,
-      );
-    } else {
-      this.logger.info(
-        `All MCP servers connected successfully. Total tools: ${this.tools.length}`,
-      );
-    }
-
-    return serverResults;
-  }
-
-  /**
-   * Filters discovered tools based on the server's disabledTools config.
-   * Validates disabled tool names and logs warnings for invalid ones.
-   * Returns the filtered ServerTool[] and, if any tools were disabled,
-   * the list of allowed tool names (for use with the Responses API).
-   */
-  private filterDiscoveredTools(
-    tools: {
-      name: string;
-      description?: string;
-      inputSchema: Record<string, unknown>;
-    }[],
-    serverConfig: MCPServerFullConfig,
-  ): { serverTools: ServerTool[]; allowedTools?: string[] } {
-    const disabledToolsSet = new Set(serverConfig.disabledTools || []);
-    const allToolNames = tools.map(t => t.name);
-
-    // Validate disabled tool names and warn about invalid ones
-    if (disabledToolsSet.size > 0) {
-      const invalidDisabledTools = [...disabledToolsSet].filter(
-        t => !allToolNames.includes(t),
-      );
-      for (const invalidTool of invalidDisabledTools) {
-        const maxShown = 5;
-        const toolsSummary =
-          allToolNames.length <= maxShown
-            ? allToolNames.join(', ')
-            : `${allToolNames.slice(0, maxShown).join(', ')} and ${
-                allToolNames.length - maxShown
-              } others`;
-        this.logger.warn(
-          `Unable to exclude tool '${invalidTool}' from MCP Server '${serverConfig.name}': tool not found among discovered tools. Available tools are: ${toolsSummary}`,
-        );
-      }
-    }
-
-    // Filter out disabled tools
-    const enabledToolsList = tools.filter(
-      tool => !disabledToolsSet.has(tool.name),
-    );
-
-    const actuallyDisabled = [...disabledToolsSet].filter(t =>
-      allToolNames.includes(t),
-    );
-    if (actuallyDisabled.length > 0) {
-      this.logger.info(
-        `MCP Server '${
-          serverConfig.name
-        }': disabled tools: ${actuallyDisabled.join(', ')}`,
-      );
-    }
-
-    const serverTools: ServerTool[] = enabledToolsList.map(tool => ({
-      type: 'function',
-      function: {
-        name: tool.name,
-        description: tool.description || '',
-        parameters: tool.inputSchema,
-      },
-      serverId: serverConfig.id,
-    }));
-
-    return {
-      serverTools,
-      allowedTools:
-        actuallyDisabled.length > 0
-          ? enabledToolsList.map(t => t.name)
-          : undefined,
-    };
+    return this.lifecycle.initializeMCPServers();
   }
 
   async processQuery(
     messagesInput: any[],
     enabledTools?: string[],
   ): Promise<QueryResponse> {
-    // Only add system message if one doesn't already exist
-    const messages: ChatMessage[] = [...messagesInput];
-    if (messages.length === 0 || messages[0].role !== 'system') {
-      messages.unshift({
-        role: 'system',
-        content: this.systemPrompt,
-      });
-    }
-
-    // Check if using native MCP provider
-    if (this.llmProvider.supportsNativeMcp()) {
-      return this.processQueryWithResponsesApi(messages, enabledTools);
-    }
-
-    // Filter tools based on enabled servers
-    // - If enabledTools is undefined/null: use all tools (default)
-    // - If enabledTools is empty array []: use no tools (all disabled)
-    // - If enabledTools has items: use only those tools
-    const filteredTools =
-      enabledTools !== undefined && enabledTools !== null
-        ? this.tools.filter(tool => enabledTools.includes(tool.serverId))
-        : this.tools;
-
-    // Remove serverId from tools when sending to LLM
-    const llmTools: Tool[] = filteredTools.map(({ serverId, ...tool }) => tool);
-
-    const response = await this.llmProvider.sendMessage(messages, llmTools);
-    const replyMessage = response.choices[0].message;
-    this.logger.info(
-      `LLM response received with ${
-        replyMessage.tool_calls?.length || 0
-      } tool calls`,
-    );
-    const toolCalls = replyMessage.tool_calls || [];
-
-    if (toolCalls.length > 0) {
-      const toolResponses = [];
-
-      for (const toolCall of toolCalls) {
-        try {
-          const toolResponse = await executeToolCall(
-            toolCall,
-            this.tools,
-            this.mcpClients,
-            this.toolCallTimeout,
-          );
-          toolResponses.push(toolResponse);
-
-          messages.push({
-            role: 'assistant',
-            content: null,
-            tool_calls: [toolCall],
-          });
-
-          messages.push({
-            role: 'tool',
-            content: toolResponse.result,
-            tool_call_id: toolCall.id,
-          });
-        } catch (error) {
-          const errorMessage = `Error executing tool '${
-            toolCall.function.name
-          }': ${error instanceof Error ? error.message : error}`;
-
-          this.logger.warn(errorMessage);
-
-          // Still add the tool call and error response to maintain conversation flow
-          const errorResponse = {
-            id: toolCall.id,
-            name: toolCall.function.name,
-            arguments: JSON.parse(toolCall.function.arguments || '{}'),
-            result: errorMessage,
-            serverId: 'error',
-          };
-
-          toolResponses.push(errorResponse);
-
-          messages.push({
-            role: 'assistant',
-            content: null,
-            tool_calls: [toolCall],
-          });
-
-          messages.push({
-            role: 'tool',
-            content: errorMessage,
-            tool_call_id: toolCall.id,
-          });
-        }
-      }
-
-      const followUp = await this.llmProvider.sendMessage(messages);
-
-      return {
-        reply: followUp.choices[0].message.content || '',
-        toolCalls,
-        toolResponses,
-      };
-    }
-
-    return {
-      reply: replyMessage.content || '',
-      toolCalls: [],
-      toolResponses: [],
-    };
-  }
-
-  /**
-   * Process query using OpenAI Responses API
-   * The API handles tool discovery and execution internally
-   */
-  private async processQueryWithResponsesApi(
-    messages: ChatMessage[],
-    enabledTools?: string[],
-  ): Promise<QueryResponse> {
-    // Filter server configs based on enabled tools
-    // - If enabledTools is undefined/null: use all servers (default)
-    // - If enabledTools is empty array []: use no servers (all disabled)
-    // - If enabledTools has items: use only those servers
-    const enabledServerConfigs =
-      enabledTools !== undefined && enabledTools !== null
-        ? this.serverConfigs.filter(config => enabledTools.includes(config.id))
-        : this.serverConfigs;
-
-    // Set the filtered configs on the provider
-    this.llmProvider.setMcpServerConfigs(enabledServerConfigs);
-
-    // Send message - the provider handles MCP tool configuration internally
-    const response = await this.llmProvider.sendMessage(messages);
-    const replyMessage = response.choices[0].message;
-
-    // Extract tool calls and responses from the Responses API output
-    const toolCalls = replyMessage.tool_calls || [];
-    const toolResponses: any[] = [];
-
-    // Get the raw output from the provider to extract tool execution details
-    const output = this.llmProvider.getLastResponseOutput();
-    if (output) {
-      for (const event of output) {
-        if (event.type === 'mcp_call') {
-          const mcpCall = event as ResponsesApiMcpCall;
-          // Build tool response in the format expected by the UI
-          toolResponses.push({
-            id: mcpCall.id,
-            name: mcpCall.name,
-            arguments: JSON.parse(mcpCall.arguments || '{}'),
-            result: mcpCall.error || mcpCall.output,
-            serverId: mcpCall.server_label,
-            error: mcpCall.error,
-          });
-        }
-      }
-    }
-
-    this.logger.info(
-      `Responses API completed with ${toolCalls.length} tool calls`,
-    );
-
-    return {
-      reply: replyMessage.content || '',
-      toolCalls,
-      toolResponses,
-    };
+    return this.queryProcessor.processQuery(messagesInput, enabledTools);
   }
 
   getAvailableTools(): ServerTool[] {
-    return this.tools;
+    return this.mcpServerStatusReporter.getAvailableTools();
   }
 
   async getProviderStatus(): Promise<ProviderStatusData> {
-    try {
-      const status = await this.llmProvider.testConnection();
-
-      // Derive provider info from the injected provider instance
-      const providers = [
-        {
-          id: this.llmProvider.getType(),
-          model: this.llmProvider.getModel(),
-          baseUrl: this.llmProvider.getBaseUrl(),
-          connection: {
-            connected: status.connected,
-            models: status.models || [],
-            error: status.error,
-          },
-        },
-      ];
-
-      const summary = {
-        totalProviders: providers.length,
-        healthyProviders: providers.filter(
-          p => p.connection?.connected === true,
-        ).length,
-      };
-
-      return {
-        providers,
-        summary,
-        timestamp: new Date().toISOString(),
-      };
-    } catch (error) {
-      this.logger.warn(
-        `Failed to test provider connection: ${
-          error instanceof Error ? error.message : error
-        }`,
-      );
-      return {
-        providers: [],
-        summary: {
-          totalProviders: 0,
-          healthyProviders: 0,
-          error: error instanceof Error ? error.message : 'Unknown error',
-        },
-        timestamp: new Date().toISOString(),
-      };
-    }
+    return this.providerStatusReporter.getProviderStatus();
   }
 
   async getMCPServerStatus(): Promise<MCPServerStatusData> {
-    if (!this.mcpServers) {
-      return {
-        total: 0,
-        valid: 0,
-        active: 0,
-        servers: [],
-        timestamp: new Date().toISOString(),
-      };
-    }
-    const servers = await this.mcpServers;
-    return {
-      total: servers.length,
-      valid: servers.filter(s => s.status.valid).length,
-      active: servers.filter(s => s.status.connected).length,
-      servers,
-      timestamp: new Date().toISOString(),
-    };
+    return this.mcpServerStatusReporter.getMCPServerStatus();
   }
 }

@@ -15,105 +15,30 @@
  */
 
 import {
-  LLMProvider,
+  OpenAICompatibleBase,
   type ChatMessage,
   type Tool,
-  type ChatResponse,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 /**
  * OpenAI Chat Completions API provider.
  *
+ * Extends the shared OpenAI-compatible base with vendor-specific request
+ * formatting for o-series and gpt-5 models that require
+ * `max_completion_tokens` instead of `max_tokens`.
+ *
  * @public
  */
-export class OpenAIProvider extends LLMProvider {
+export class OpenAIProvider extends OpenAICompatibleBase {
   protected get providerName(): string {
     return 'OpenAI';
   }
 
-  async sendMessage(
-    messages: ChatMessage[],
-    tools?: Tool[],
-  ): Promise<ChatResponse> {
-    const requestBody = this.formatRequest(messages, tools);
-    const response = await this.makeRequest('/chat/completions', requestBody);
-    return this.parseResponse(response);
-  }
-
-  async testConnection(): Promise<{
-    connected: boolean;
-    models?: string[];
-    error?: string;
-  }> {
-    try {
-      const response = await fetch(`${this.baseUrl}/models`, {
-        method: 'GET',
-        headers: this.getHeaders(),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        let errorMessage = `${this.providerName} API error (${response.status})`;
-
-        try {
-          const errorData = JSON.parse(errorText);
-          if (errorData.error?.message) {
-            errorMessage = errorData.error.message;
-          }
-        } catch {
-          errorMessage =
-            errorText.length > 100
-              ? `${errorText.substring(0, 100)}...`
-              : errorText;
-        }
-
-        if (response.status === 401) {
-          errorMessage = `Invalid API key. Please check your ${this.providerName} API key configuration.`;
-        } else if (response.status === 429) {
-          errorMessage = `Rate limit exceeded. Please try again later or check your ${this.providerName} usage limits.`;
-        } else if (response.status === 403) {
-          errorMessage =
-            'Access forbidden. Please check your API key permissions.';
-        }
-
-        return {
-          connected: false,
-          error: errorMessage,
-        };
-      }
-
-      const data = await response.json();
-      const models = data.data?.map((model: any) => model.id) || [];
-
-      return {
-        connected: true,
-        models,
-      };
-    } catch (error) {
-      return {
-        connected: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      };
-    }
-  }
-
-  protected getHeaders(): Record<string, string> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    if (this.apiKey) {
-      headers.Authorization = `Bearer ${this.apiKey}`;
-    }
-
-    return headers;
-  }
-
-  protected formatRequest(messages: ChatMessage[], tools?: Tool[]): any {
+  protected formatRequest(messages: ChatMessage[], tools?: Tool[]): unknown {
     const maxTokens = this.maxTokens ?? 1000;
     const useMaxCompletionTokens = /^(o[0-9]|gpt-5)/.test(this.model);
 
-    const request: any = {
+    const request: Record<string, unknown> = {
       model: this.model,
       messages,
       ...(useMaxCompletionTokens
@@ -131,9 +56,5 @@ export class OpenAIProvider extends LLMProvider {
     }
 
     return request;
-  }
-
-  protected parseResponse(response: any): ChatResponse {
-    return response; // OpenAI format is our standard
   }
 }

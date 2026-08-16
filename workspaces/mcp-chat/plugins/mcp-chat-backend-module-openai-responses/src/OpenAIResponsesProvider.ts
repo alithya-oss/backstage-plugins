@@ -25,7 +25,7 @@ import {
   type ResponsesApiMcpCall,
   type ResponsesApiMessage,
   type ToolCall,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 /**
  * OpenAI Responses API provider with native MCP support.

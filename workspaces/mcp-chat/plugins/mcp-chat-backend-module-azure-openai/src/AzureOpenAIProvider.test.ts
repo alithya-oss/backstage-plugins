@@ -18,7 +18,7 @@ import { AzureOpenAIProvider } from './AzureOpenAIProvider';
 import {
   type ProviderConfig,
   type ChatMessage,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 global.fetch = jest.fn();
 
@@ -28,6 +28,13 @@ const config: ProviderConfig = {
   baseUrl: 'https://my-resource.openai.azure.com/openai/v1',
   model: 'gpt-4o-mini',
   deploymentName: 'my-gpt-4o-mini-deployment',
+  logger: {
+    debug: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+    child: jest.fn(),
+  } as any,
 };
 
 describe('AzureOpenAIProvider', () => {

@@ -15,7 +15,23 @@
  */
 
 /**
- * Re-exports LLMProvider from the common package for backward compatibility.
- * New consumers should import directly from `@alithya-oss/backstage-plugin-mcp-chat-common`.
+ * Options for creating a Streamable HTTP MCP transport.
+ *
+ * @public
  */
-export { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+export interface StreamableHttpTransportOptions {
+  requestInit?: {
+    headers: Record<string, string>;
+  };
+}
+
+/**
+ * Options for creating a stdio MCP transport.
+ *
+ * @public
+ */
+export interface StdioTransportOptions {
+  command: string;
+  args: string[];
+  env: Record<string, string>;
+}

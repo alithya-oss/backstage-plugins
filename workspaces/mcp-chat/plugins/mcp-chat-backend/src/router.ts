@@ -20,6 +20,7 @@ import Router from 'express-promise-router';
 import { MCPClientService } from './services/MCPClientService';
 import { ChatConversationStore } from './services/ChatConversationStore';
 import { SummarizationService } from './services/SummarizationService';
+import { createErrorHandler } from './middleware';
 import {
   createStatusRoutes,
   createChatRoutes,
@@ -94,6 +95,9 @@ export async function createRouter(
       logger,
     }),
   );
+
+  // Register error middleware — must be AFTER all route mounts
+  router.use(createErrorHandler(logger));
 
   return router;
 }

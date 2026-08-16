@@ -15,15 +15,10 @@
  */
 
 /**
- * Common types and base classes for the mcp-chat plugin ecosystem.
+ * Common types for the mcp-chat plugin ecosystem.
  *
  * @packageDocumentation
  */
-
-// =============================================================================
-// LLM Provider Base Class
-// =============================================================================
-export { LLMProvider } from './base-provider';
 
 // =============================================================================
 // Types

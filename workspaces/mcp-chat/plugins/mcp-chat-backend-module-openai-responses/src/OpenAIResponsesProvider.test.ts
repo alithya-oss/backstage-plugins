@@ -19,11 +19,19 @@ import type {
   ChatMessage,
   Tool,
   ProviderConfig,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 // Mock global.fetch — OpenAIResponsesProvider overrides makeRequest and uses fetch directly
 const mockFetch = jest.fn() as jest.Mock;
 global.fetch = mockFetch;
+
+const mockLogger = {
+  debug: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+  child: jest.fn().mockReturnThis(),
+} as any;
 
 function createProvider(
   configOverrides?: Partial<ProviderConfig>,
@@ -33,6 +41,7 @@ function createProvider(
     baseUrl: 'https://api.openai.com/v1',
     model: 'gpt-4o',
     apiKey: 'test-api-key',
+    logger: mockLogger,
     ...configOverrides,
   };
   return new OpenAIResponsesProvider(config);

@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-import { OpenAIProvider } from '@alithya-oss/backstage-plugin-mcp-chat-backend-module-openai';
 import {
+  OpenAICompatibleBase,
   type ProviderConfig,
   type ChatMessage,
   type Tool,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 /**
  * Azure OpenAI Chat Completions API provider.
  *
+ * Overrides getHeaders to use the `api-key` header format required by
+ * Azure OpenAI, and formatRequest to route requests through the
+ * configured deployment name.
+ *
  * @public
  */
-export class AzureOpenAIProvider extends OpenAIProvider {
+export class AzureOpenAIProvider extends OpenAICompatibleBase {
   private readonly deploymentName: string;
 
   protected get providerName(): string {
@@ -40,7 +44,6 @@ export class AzureOpenAIProvider extends OpenAIProvider {
         'Deployment name is required for the azure-openai provider.',
       );
     }
-
     this.deploymentName = config.deploymentName;
   }
 
@@ -66,9 +69,39 @@ export class AzureOpenAIProvider extends OpenAIProvider {
     return result;
   }
 
-  protected formatRequest(messages: ChatMessage[], tools?: Tool[]): any {
-    const request = super.formatRequest(messages, tools);
-    request.model = this.deploymentName;
+  protected getHeaders(): Record<string, string> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    if (this.apiKey) {
+      headers['api-key'] = this.apiKey;
+    }
+
+    return headers;
+  }
+
+  protected formatRequest(messages: ChatMessage[], tools?: Tool[]): unknown {
+    const maxTokens = this.maxTokens ?? 1000;
+    const useMaxCompletionTokens = /^(o[0-9]|gpt-5)/.test(this.model);
+
+    const request: Record<string, unknown> = {
+      model: this.deploymentName,
+      messages,
+      ...(useMaxCompletionTokens
+        ? { max_completion_tokens: maxTokens }
+        : { max_tokens: maxTokens }),
+    };
+
+    // O-series and GPT-5 models do not support the temperature parameter
+    if (!useMaxCompletionTokens) {
+      request.temperature = this.temperature ?? 0.7;
+    }
+
+    if (tools && tools.length > 0) {
+      request.tools = tools;
+    }
+
     return request;
   }
 }

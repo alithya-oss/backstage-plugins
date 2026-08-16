@@ -34,7 +34,7 @@ import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-import { configApiRef, useApi } from '@backstage/core-plugin-api';
+import { configApiRef, useApi } from '@backstage/frontend-plugin-api';
 import SpeedIcon from '@mui/icons-material/Speed';
 import ExtensionIcon from '@mui/icons-material/Extension';
 import WebIcon from '@mui/icons-material/Web';

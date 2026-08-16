@@ -135,7 +135,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockConnectedProviderData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 
@@ -147,7 +147,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockConnectedProviderData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 
@@ -159,7 +159,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockConnectedProviderData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 
@@ -174,7 +174,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockConnectedProviderData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 
@@ -189,7 +189,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockConnectedProviderData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 
@@ -198,7 +198,11 @@ describe('ProviderStatus', () => {
 
     it('shows testing status when connection is loading', () => {
       renderWithTheme(
-        <ProviderStatus providerStatusData={null} isLoading error={null} />,
+        <ProviderStatus
+          providerStatusData={null}
+          isLoading
+          error={undefined}
+        />,
       );
 
       expect(screen.getByText('Testing...')).toBeInTheDocument();
@@ -209,7 +213,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockDisconnectedProviderData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 
@@ -218,7 +222,11 @@ describe('ProviderStatus', () => {
 
     it('shows loading text for model and URL when loading', () => {
       renderWithTheme(
-        <ProviderStatus providerStatusData={null} isLoading error={null} />,
+        <ProviderStatus
+          providerStatusData={null}
+          isLoading
+          error={undefined}
+        />,
       );
 
       expect(screen.getAllByText(/Loading\.\.\./)[0]).toBeInTheDocument();
@@ -229,7 +237,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={null}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 
@@ -243,7 +251,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockDisconnectedProviderData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 
@@ -258,7 +266,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockConnectedProviderData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 
@@ -270,7 +278,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={null}
           isLoading={false}
-          error="Provider configuration error"
+          error={new Error('Provider configuration error')}
         />,
       );
 
@@ -285,7 +293,7 @@ describe('ProviderStatus', () => {
           <ProviderStatus
             providerStatusData={null}
             isLoading={false}
-            error={null}
+            error={undefined}
           />,
         ),
       ).not.toThrow();
@@ -295,7 +303,11 @@ describe('ProviderStatus', () => {
   describe('Loading States', () => {
     it('shows loading indicator in status chip', () => {
       renderWithTheme(
-        <ProviderStatus providerStatusData={null} isLoading error={null} />,
+        <ProviderStatus
+          providerStatusData={null}
+          isLoading
+          error={undefined}
+        />,
       );
 
       expect(screen.getByText('Testing...')).toBeInTheDocument();
@@ -303,7 +315,11 @@ describe('ProviderStatus', () => {
 
     it('shows loading text in model field', () => {
       renderWithTheme(
-        <ProviderStatus providerStatusData={null} isLoading error={null} />,
+        <ProviderStatus
+          providerStatusData={null}
+          isLoading
+          error={undefined}
+        />,
       );
 
       expect(screen.getAllByText(/Loading\.\.\./)[0]).toBeInTheDocument();
@@ -316,7 +332,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockConnectedProviderData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
         mockTheme,
       );
@@ -329,7 +345,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockConnectedProviderData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
         darkTheme,
       );
@@ -344,7 +360,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockMultipleModelsData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 
@@ -356,7 +372,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockLongModelNameData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 
@@ -370,7 +386,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockConnectedProviderData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 
@@ -382,7 +398,11 @@ describe('ProviderStatus', () => {
 
     it('shows loading tooltip when testing', () => {
       renderWithTheme(
-        <ProviderStatus providerStatusData={null} isLoading error={null} />,
+        <ProviderStatus
+          providerStatusData={null}
+          isLoading
+          error={undefined}
+        />,
       );
 
       const statusChip = screen
@@ -396,7 +416,7 @@ describe('ProviderStatus', () => {
         <ProviderStatus
           providerStatusData={mockDisconnectedProviderData}
           isLoading={false}
-          error={null}
+          error={undefined}
         />,
       );
 

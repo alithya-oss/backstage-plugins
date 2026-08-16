@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-/**
- * MCP server connection types
- * @public
- */
-export enum MCPServerType {
-  STDIO = 'stdio',
-  STREAMABLE_HTTP = 'streamable-http',
-}
+import type {
+  MCPServer as CommonMCPServer,
+  ProviderInfo,
+  ServerTool,
+} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+
+// Re-export the enum directly from common
+export { MCPServerType } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+
+// Re-export types that are used as-is (no view-model extension needed)
+export type { ProviderConnectionStatus } from '@alithya-oss/backstage-plugin-mcp-chat-common';
 
 /**
+ * Frontend view of provider status data.
+ * Extends the common ProviderInfo type by aliasing it as `Provider`.
  * @public
  */
 export interface ProviderStatusData {
@@ -37,25 +42,13 @@ export interface ProviderStatusData {
 }
 
 /**
+ * Frontend provider view — same shape as ProviderInfo from common.
  * @public
  */
-export interface Provider {
-  id: string;
-  model: string;
-  baseUrl: string;
-  connection: ProviderConnectionStatus;
-}
+export type Provider = ProviderInfo;
 
 /**
- * @public
- */
-export interface ProviderConnectionStatus {
-  connected: boolean;
-  models?: string[];
-  error?: string;
-}
-
-/**
+ * Aggregated MCP server status data for the frontend.
  * @public
  */
 export interface MCPServerStatusData {
@@ -67,42 +60,27 @@ export interface MCPServerStatusData {
 }
 
 /**
+ * Frontend view of an MCP server, extending the common type with a
+ * view-model `enabled` field for UI toggle state.
  * @public
  */
-export interface MCPServer {
-  id: string;
-  name: string;
-  // For STDIO connections
-  scriptPath?: string;
-  npxCommand?: string;
-  args?: string[];
-  // For HTTP connections
-  url?: string;
-  // Connection type
-  type: MCPServerType;
-  status: {
-    valid: boolean;
-    connected: boolean;
-    error?: string;
-  };
-  // Field to indicate if the server is enabled in the UI
+export interface MCPServer extends CommonMCPServer {
+  /** Whether the server is enabled in the UI (view-model field) */
   enabled: boolean;
 }
 
 /**
+ * Frontend view of a tool, extending the common ServerTool type.
+ * The `type` field is widened to `string` for compatibility with
+ * various tool type values the backend may return.
  * @public
  */
-export interface Tool {
+export interface Tool extends Omit<ServerTool, 'type'> {
   type: string;
-  function: {
-    name: string;
-    description: string;
-    parameters: any;
-  };
-  serverId: string;
 }
 
 /**
+ * Response from the /tools endpoint.
  * @public
  */
 export interface ToolsResponse {
@@ -120,6 +98,8 @@ export interface ToolsResponse {
 }
 
 /**
+ * A simplified chat message for the frontend view.
+ * The frontend only displays user and assistant messages.
  * @public
  */
 export interface ChatMessage {
@@ -128,6 +108,7 @@ export interface ChatMessage {
 }
 
 /**
+ * Response from the /chat endpoint.
  * @public
  */
 export interface ChatResponse {
@@ -140,6 +121,7 @@ export interface ChatResponse {
 
 /**
  * A stored conversation record from the backend.
+ * The frontend uses string dates (ISO format from JSON serialization).
  * @public
  */
 export interface ConversationRecord {

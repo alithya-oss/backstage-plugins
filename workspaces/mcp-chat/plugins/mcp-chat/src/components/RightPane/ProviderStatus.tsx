@@ -27,7 +27,7 @@ import { ProviderStatusData } from '../../types';
 interface ProviderStatusProps {
   providerStatusData: ProviderStatusData | null;
   isLoading: boolean;
-  error: string | null;
+  error: Error | undefined;
 }
 
 export const ProviderStatus = ({
@@ -119,7 +119,7 @@ export const ProviderStatus = ({
       return `Successfully connected. ${modelsText}`;
     }
     return `Connection failed: ${
-      connectionInfo?.error || error || 'Unknown error'
+      connectionInfo?.error || error?.message || 'Unknown error'
     }`;
   }, [isLoading, isConnected, connectionInfo, error]);
 
@@ -135,7 +135,7 @@ export const ProviderStatus = ({
     return primaryProvider?.baseUrl || 'Not available';
   }, [isLoading, error, providerStatusData, primaryProvider?.baseUrl]);
 
-  const errorMessage = connectionInfo?.error || error;
+  const errorMessage = connectionInfo?.error || error?.message;
 
   return (
     <Box

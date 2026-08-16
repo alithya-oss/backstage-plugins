@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useApi } from '@backstage/core-plugin-api';
+import { useApi } from '@backstage/frontend-plugin-api';
 import useAsyncRetry from 'react-use/esm/useAsyncRetry';
 import { ProviderStatusData } from '../types';
 import { mcpChatApiRef } from '../api';
@@ -22,7 +22,7 @@ import { mcpChatApiRef } from '../api';
 export interface UseProviderStatusReturn {
   providerStatusData: ProviderStatusData | null;
   isLoading: boolean;
-  error: string | null;
+  error: Error | undefined;
   refetch: () => void;
 }
 
@@ -39,7 +39,7 @@ export const useProviderStatus = (): UseProviderStatusReturn => {
   return {
     providerStatusData: providerStatusData || null,
     isLoading,
-    error: error?.message || null,
+    error,
     refetch,
   };
 };

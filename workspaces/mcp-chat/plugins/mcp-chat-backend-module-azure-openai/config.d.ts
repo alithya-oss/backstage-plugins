@@ -38,15 +38,25 @@ export interface Config {
        */
       model: string;
       /**
-       * Base URL for the provider's API
+       * Base URL for the Azure OpenAI resource endpoint
        * @visibility backend
        */
       baseUrl?: string;
       /**
-       * Provider-specific authentication parameters (IAM, session tokens, etc.)
-       * @visibility secret
+       * Azure OpenAI deployment name
+       * @visibility backend
        */
-      auth?: { [key: string]: string };
+      deploymentName?: string;
+      /**
+       * Maximum number of tokens to generate in the response
+       * @visibility backend
+       */
+      maxTokens?: number;
+      /**
+       * Sampling temperature for response generation (0.0 to 2.0)
+       * @visibility backend
+       */
+      temperature?: number;
     }>;
   };
 }

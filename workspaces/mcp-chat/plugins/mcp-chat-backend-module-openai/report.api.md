@@ -4,32 +4,19 @@
 
 ```ts
 import { BackendFeature } from '@backstage/backend-plugin-api';
-import { ChatMessage } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { ChatResponse } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { Tool } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { ChatMessage } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { OpenAICompatibleBase } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { Tool } from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 // @public
 const _default: BackendFeature;
 export default _default;
 
 // @public
-export class OpenAIProvider extends LLMProvider {
+export class OpenAIProvider extends OpenAICompatibleBase {
   // (undocumented)
-  protected formatRequest(messages: ChatMessage[], tools?: Tool[]): any;
-  // (undocumented)
-  protected getHeaders(): Record<string, string>;
-  // (undocumented)
-  protected parseResponse(response: any): ChatResponse;
+  protected formatRequest(messages: ChatMessage[], tools?: Tool[]): unknown;
   // (undocumented)
   protected get providerName(): string;
-  // (undocumented)
-  sendMessage(messages: ChatMessage[], tools?: Tool[]): Promise<ChatResponse>;
-  // (undocumented)
-  testConnection(): Promise<{
-    connected: boolean;
-    models?: string[];
-    error?: string;
-  }>;
 }
 ```

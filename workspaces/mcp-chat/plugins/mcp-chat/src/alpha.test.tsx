@@ -16,7 +16,7 @@
 
 import mcpChatPlugin from './alpha';
 import { mcpChatApiRef } from './api';
-import { rootRouteRef } from './routes';
+import { rootRouteRef } from './wiring';
 import { McpChat } from './api/McpChatApi';
 
 jest.mock('./components/BotIcon', () => ({

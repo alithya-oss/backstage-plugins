@@ -24,13 +24,16 @@ import {
 } from './types';
 
 /**
- * Abstract base class for all LLM providers.
- * Extend this class to create custom LLM provider implementations.
+ * Abstract base class for LLM provider implementations.
+ *
+ * Owns the `fetch` interaction pattern and accepts a `LoggerService` instance
+ * for structured diagnostic output. Provider modules extend this class to
+ * implement vendor-specific request formatting and response parsing.
  *
  * @public
  */
 export abstract class LLMProvider {
-  protected apiKey?: string; // Made optional
+  protected apiKey?: string;
   protected baseUrl: string;
   protected model: string;
   protected type: string;
@@ -48,17 +51,14 @@ export abstract class LLMProvider {
     this.temperature = config.temperature;
   }
 
-  /** Returns the provider type identifier. */
   getType(): string {
     return this.type;
   }
 
-  /** Returns the model identifier. */
   getModel(): string {
     return this.model;
   }
 
-  /** Returns the base URL for the provider's API. */
   getBaseUrl(): string {
     return this.baseUrl;
   }
@@ -75,41 +75,38 @@ export abstract class LLMProvider {
   }>;
 
   protected abstract getHeaders(): Record<string, string>;
+
   protected abstract formatRequest(
     messages: ChatMessage[],
     tools?: Tool[],
   ): any;
+
   protected abstract parseResponse(response: any): ChatResponse;
 
-  /** Override to return `true` in providers that handle MCP natively. */
   supportsNativeMcp(): boolean {
     return false;
   }
 
-  /** Set MCP server configs for native MCP providers. No-op by default. */
   setMcpServerConfigs(_configs: MCPServerFullConfig[]): void {
-    // no-op
+    /* no-op by default */
   }
 
-  /** Get last response output for native MCP providers. Returns `null` by default. */
   getLastResponseOutput(): any {
     return null;
   }
 
   protected truncateForLogging(data: string, maxLength = 4096): string {
-    if (data.length <= maxLength) {
-      return data;
-    }
+    if (data.length <= maxLength) return data;
     const truncated = data.length - maxLength;
     return `${data.slice(0, maxLength)}... [truncated ${truncated} chars]`;
   }
 
   protected async makeRequest(endpoint: string, body: any): Promise<any> {
     const url = `${this.baseUrl}${endpoint}`;
-
     this.logger?.debug(`[${this.type}] Request to ${url}`, {
       body: this.truncateForLogging(JSON.stringify(body)),
     });
+
     const startTime = Date.now();
     const response = await fetch(url, {
       method: 'POST',
@@ -130,17 +127,14 @@ export abstract class LLMProvider {
     }
 
     const responseData = await response.json();
-
     this.logger?.debug(`[${this.type}] Response received in ${duration}ms`, {
       data: this.truncateForLogging(JSON.stringify(responseData)),
     });
 
-    // Warn if response was truncated due to token limits
     const finishReason = responseData.choices?.[0]?.finish_reason;
     if (finishReason === 'length' || finishReason === 'max_tokens') {
       this.logger?.warn(
-        `[${this.type}] Response was truncated due to token limit (finish_reason: ${finishReason}). ` +
-          `Consider increasing max_tokens in your provider configuration.`,
+        `[${this.type}] Response was truncated due to token limit (finish_reason: ${finishReason}). Consider increasing max_tokens in your provider configuration.`,
       );
     }
 

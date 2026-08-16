@@ -21,7 +21,7 @@ import {
   type ChatResponse,
   type ToolCall,
   type ProviderConfig,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 import {
   GenerateContentConfig,
   GoogleGenAI,

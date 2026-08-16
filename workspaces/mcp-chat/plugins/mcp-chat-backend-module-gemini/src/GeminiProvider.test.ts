@@ -20,11 +20,19 @@ import type {
   ChatMessage,
   Tool,
   ProviderConfig,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 jest.mock('@google/genai');
 
 const MockGoogleGenAI = GoogleGenAI as jest.MockedClass<typeof GoogleGenAI>;
+
+const mockLogger = {
+  debug: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+  child: jest.fn().mockReturnThis(),
+} as any;
 
 describe('GeminiProvider', () => {
   let provider: GeminiProvider;
@@ -35,6 +43,7 @@ describe('GeminiProvider', () => {
     apiKey: 'test-api-key',
     baseUrl: 'https://generativelanguage.googleapis.com',
     model: 'gemini-pro',
+    logger: mockLogger,
   };
 
   beforeEach(() => {

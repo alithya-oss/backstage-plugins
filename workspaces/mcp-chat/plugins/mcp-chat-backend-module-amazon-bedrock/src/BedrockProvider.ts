@@ -29,7 +29,7 @@ import {
   type ChatResponse,
   type ProviderConfig,
   type ToolCall,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 /**
  * Options for constructing a BedrockProvider with AWS credentials

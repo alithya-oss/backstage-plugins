@@ -19,7 +19,7 @@ import type {
   ChatMessage,
   Tool,
   ProviderConfig,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 import type { BedrockProviderOptions } from './BedrockProvider';
 
 // Mock the AWS SDK
@@ -35,6 +35,14 @@ jest.mock('@aws-sdk/client-bedrock-runtime', () => {
   };
 });
 
+const mockLogger = {
+  debug: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+  child: jest.fn().mockReturnThis(),
+} as any;
+
 const mockCredentialProvider = jest.fn().mockResolvedValue({
   accessKeyId: 'AKIAV3RY1N53CUR3MOCK',
   secretAccessKey: 's4kv3rY1ns3CUR353cr3t4cC355k3y+mocked',
@@ -48,6 +56,7 @@ function createProvider(
     type: 'amazon-bedrock',
     baseUrl: '',
     model: 'us.anthropic.claude-sonnet-4-20250514-v1:0',
+    logger: mockLogger,
     ...configOverrides,
   };
   const options: BedrockProviderOptions = {

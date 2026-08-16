@@ -193,8 +193,6 @@ export interface ProviderConfig {
   model: string;
   /** Azure OpenAI deployment name. Required when using the `azure-openai` provider type. */
   deploymentName?: string;
-  /** Logger for debugging */
-  logger?: import('@backstage/backend-plugin-api').LoggerService;
   /** Maximum number of tokens to generate */
   maxTokens?: number;
   /** Temperature for response randomness, between 0 and 2 */

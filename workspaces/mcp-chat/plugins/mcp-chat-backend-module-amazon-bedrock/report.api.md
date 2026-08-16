@@ -5,11 +5,11 @@
 ```ts
 import type { AwsCredentialIdentityProvider } from '@aws-sdk/types';
 import { BackendFeature } from '@backstage/backend-plugin-api';
-import { ChatMessage } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { ChatResponse } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { ProviderConfig } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { Tool } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { ChatMessage } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { ChatResponse } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { ProviderConfig } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { Tool } from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 // @public
 export class BedrockProvider extends LLMProvider {

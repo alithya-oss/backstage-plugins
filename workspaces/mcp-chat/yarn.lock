@@ -23,11 +23,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-mcp-chat-backend-module-agentgateway@workspace:plugins/mcp-chat-backend-module-agentgateway"
   dependencies:
-    "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^"
     "@alithya-oss/backstage-plugin-mcp-chat-node": "workspace:^"
-    "@backstage/backend-plugin-api": "npm:^1.4.0"
+    "@backstage/backend-test-utils": "npm:^1.6.0"
     "@backstage/cli": "npm:^0.33.0"
-    "@backstage/config": "npm:^1.3.0"
   languageName: unknown
   linkType: soft
 
@@ -35,13 +33,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-mcp-chat-backend-module-amazon-bedrock@workspace:plugins/mcp-chat-backend-module-amazon-bedrock"
   dependencies:
-    "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^"
     "@alithya-oss/backstage-plugin-mcp-chat-node": "workspace:^"
     "@aws-sdk/client-bedrock-runtime": "npm:^3.0.0"
     "@aws-sdk/types": "npm:^3.0.0"
     "@backstage/backend-plugin-api": "npm:^1.4.0"
+    "@backstage/backend-test-utils": "npm:^1.6.0"
     "@backstage/cli": "npm:^0.33.0"
-    "@backstage/config": "npm:^1.3.0"
     "@backstage/integration-aws-node": "npm:^0.1.20"
   languageName: unknown
   linkType: soft
@@ -50,11 +47,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-mcp-chat-backend-module-anthropic@workspace:plugins/mcp-chat-backend-module-anthropic"
   dependencies:
-    "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^"
     "@alithya-oss/backstage-plugin-mcp-chat-node": "workspace:^"
-    "@backstage/backend-plugin-api": "npm:^1.4.0"
+    "@backstage/backend-test-utils": "npm:^1.6.0"
     "@backstage/cli": "npm:^0.33.0"
-    "@backstage/config": "npm:^1.3.0"
   languageName: unknown
   linkType: soft
 
@@ -62,12 +57,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-mcp-chat-backend-module-azure-openai@workspace:plugins/mcp-chat-backend-module-azure-openai"
   dependencies:
-    "@alithya-oss/backstage-plugin-mcp-chat-backend-module-openai": "workspace:^"
-    "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^"
     "@alithya-oss/backstage-plugin-mcp-chat-node": "workspace:^"
-    "@backstage/backend-plugin-api": "npm:^1.4.0"
+    "@backstage/backend-test-utils": "npm:^1.6.0"
     "@backstage/cli": "npm:^0.33.0"
-    "@backstage/config": "npm:^1.3.0"
   languageName: unknown
   linkType: soft
 
@@ -75,11 +67,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-mcp-chat-backend-module-gemini@workspace:plugins/mcp-chat-backend-module-gemini"
   dependencies:
-    "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^"
     "@alithya-oss/backstage-plugin-mcp-chat-node": "workspace:^"
-    "@backstage/backend-plugin-api": "npm:^1.4.0"
+    "@backstage/backend-test-utils": "npm:^1.6.0"
     "@backstage/cli": "npm:^0.33.0"
-    "@backstage/config": "npm:^1.3.0"
     "@google/genai": "npm:^1.41.0"
   languageName: unknown
   linkType: soft
@@ -88,11 +78,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-mcp-chat-backend-module-litellm@workspace:plugins/mcp-chat-backend-module-litellm"
   dependencies:
-    "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^"
     "@alithya-oss/backstage-plugin-mcp-chat-node": "workspace:^"
-    "@backstage/backend-plugin-api": "npm:^1.4.0"
+    "@backstage/backend-test-utils": "npm:^1.6.0"
     "@backstage/cli": "npm:^0.33.0"
-    "@backstage/config": "npm:^1.3.0"
   languageName: unknown
   linkType: soft
 
@@ -100,11 +88,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-mcp-chat-backend-module-ollama@workspace:plugins/mcp-chat-backend-module-ollama"
   dependencies:
-    "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^"
     "@alithya-oss/backstage-plugin-mcp-chat-node": "workspace:^"
-    "@backstage/backend-plugin-api": "npm:^1.4.0"
+    "@backstage/backend-test-utils": "npm:^1.6.0"
     "@backstage/cli": "npm:^0.33.0"
-    "@backstage/config": "npm:^1.3.0"
     ollama: "npm:^0.6.0"
   languageName: unknown
   linkType: soft
@@ -113,11 +99,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-mcp-chat-backend-module-openai-responses@workspace:plugins/mcp-chat-backend-module-openai-responses"
   dependencies:
-    "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^"
     "@alithya-oss/backstage-plugin-mcp-chat-node": "workspace:^"
-    "@backstage/backend-plugin-api": "npm:^1.4.0"
+    "@backstage/backend-test-utils": "npm:^1.6.0"
     "@backstage/cli": "npm:^0.33.0"
-    "@backstage/config": "npm:^1.3.0"
   languageName: unknown
   linkType: soft
 
@@ -125,11 +109,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-mcp-chat-backend-module-openai@workspace:plugins/mcp-chat-backend-module-openai"
   dependencies:
-    "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^"
     "@alithya-oss/backstage-plugin-mcp-chat-node": "workspace:^"
-    "@backstage/backend-plugin-api": "npm:^1.4.0"
+    "@backstage/backend-test-utils": "npm:^1.6.0"
     "@backstage/cli": "npm:^0.33.0"
-    "@backstage/config": "npm:^1.3.0"
   languageName: unknown
   linkType: soft
 
@@ -160,6 +142,7 @@ __metadata:
     "@types/uuid": "npm:^11.0.0"
     express: "npm:^4.22.0"
     express-promise-router: "npm:^4.1.0"
+    fast-check: "npm:^3.22.0"
     knex: "npm:^3.1.0"
     supertest: "npm:^7.0.0"
     uuid: "npm:^11.0.0"
@@ -170,7 +153,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-mcp-chat-common@workspace:plugins/mcp-chat-common"
   dependencies:
-    "@backstage/backend-plugin-api": "npm:^1.4.0"
     "@backstage/cli": "npm:^0.33.0"
     "@backstage/errors": "npm:^1.2.7"
   languageName: unknown
@@ -184,6 +166,7 @@ __metadata:
     "@backstage/backend-plugin-api": "npm:^1.4.0"
     "@backstage/backend-test-utils": "npm:^1.6.0"
     "@backstage/cli": "npm:^0.33.0"
+    fast-check: "npm:^3.22.0"
   languageName: unknown
   linkType: soft
 
@@ -191,6 +174,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugin-mcp-chat@workspace:plugins/mcp-chat"
   dependencies:
+    "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^"
     "@backstage/cli": "npm:^0.36.1"
     "@backstage/core-components": "npm:^0.18.9"
     "@backstage/core-plugin-api": "npm:^1.12.5"
@@ -206,6 +190,7 @@ __metadata:
     "@testing-library/react": "npm:^16.0.0"
     "@types/react": "npm:^17.0.0 || ^18.0.0"
     "@types/react-dom": "npm:^18"
+    fast-check: "npm:^3.22.0"
     react: "npm:^17.0.0 || ^18.0.0"
     react-dom: "npm:^17.0.0 || ^18.0.0"
     react-markdown: "npm:^10.1.0"
@@ -17276,6 +17261,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-check@npm:^3.22.0":
+  version: 3.23.2
+  resolution: "fast-check@npm:3.23.2"
+  dependencies:
+    pure-rand: "npm:^6.1.0"
+  checksum: 10/dab344146b778e8bc2973366ea55528d1b58d3e3037270262b877c54241e800c4d744957722c24705c787020d702aece11e57c9e3dbd5ea19c3e10926bf1f3fe
+  languageName: node
+  linkType: hard
+
 "fast-deep-equal@npm:^3.1.1, fast-deep-equal@npm:^3.1.3":
   version: 3.1.3
   resolution: "fast-deep-equal@npm:3.1.3"
@@ -26050,7 +26044,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pure-rand@npm:^6.0.0":
+"pure-rand@npm:^6.0.0, pure-rand@npm:^6.1.0":
   version: 6.1.0
   resolution: "pure-rand@npm:6.1.0"
   checksum: 10/256aa4bcaf9297256f552914e03cbdb0039c8fe1db11fa1e6d3f80790e16e563eb0a859a1e61082a95e224fc0c608661839439f8ecc6a3db4e48d46d99216ee4

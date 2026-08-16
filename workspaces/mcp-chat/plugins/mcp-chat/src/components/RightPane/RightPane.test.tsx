@@ -62,7 +62,7 @@ jest.mock('./ProviderStatus', () => ({
     if (error) {
       return (
         <div data-testid="provider-status">
-          <div>Error: {error}</div>
+          <div>Error: {error.message || String(error)}</div>
         </div>
       );
     }
@@ -131,7 +131,7 @@ const defaultProps = {
       timestamp: new Date().toISOString(),
     },
     isLoading: false,
-    error: null,
+    error: undefined,
     refetch: jest.fn(),
   },
   // Conversation history props
@@ -277,7 +277,7 @@ describe('RightPane', () => {
         providerStatus: {
           providerStatusData: null,
           isLoading: true,
-          error: null,
+          error: undefined,
         },
       });
 
@@ -289,7 +289,7 @@ describe('RightPane', () => {
         providerStatus: {
           providerStatusData: null,
           isLoading: false,
-          error: 'Connection failed',
+          error: new Error('Connection failed'),
         },
       });
 
@@ -400,7 +400,7 @@ describe('RightPane', () => {
         providerStatus: {
           providerStatusData: null,
           isLoading: false,
-          error: null,
+          error: undefined,
         },
       });
 

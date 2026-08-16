@@ -7,9 +7,14 @@ import { ApiRef } from '@backstage/core-plugin-api';
 import { BackstagePlugin } from '@backstage/core-plugin-api';
 import { ComponentType } from 'react';
 import { JSX as JSX_2 } from 'react/jsx-runtime';
+import type { MCPServer as MCPServer_2 } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { MCPServerType } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { ProviderConnectionStatus } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import type { ProviderInfo } from '@alithya-oss/backstage-plugin-mcp-chat-common';
 import { RouteRef } from '@backstage/core-plugin-api';
+import type { ServerTool } from '@alithya-oss/backstage-plugin-mcp-chat-common';
 
-// @public (undocumented)
+// @public
 export interface ChatMessage {
   // (undocumented)
   content: string;
@@ -17,7 +22,7 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
 }
 
-// @public (undocumented)
+// @public
 export interface ChatResponse {
   // (undocumented)
   content: string;
@@ -96,33 +101,12 @@ export const mcpChatPlugin: BackstagePlugin<
   {}
 >;
 
-// @public (undocumented)
-export interface MCPServer {
-  // (undocumented)
-  args?: string[];
-  // (undocumented)
+// @public
+export interface MCPServer extends MCPServer_2 {
   enabled: boolean;
-  // (undocumented)
-  id: string;
-  // (undocumented)
-  name: string;
-  // (undocumented)
-  npxCommand?: string;
-  // (undocumented)
-  scriptPath?: string;
-  // (undocumented)
-  status: {
-    valid: boolean;
-    connected: boolean;
-    error?: string;
-  };
-  // (undocumented)
-  type: MCPServerType;
-  // (undocumented)
-  url?: string;
 }
 
-// @public (undocumented)
+// @public
 export interface MCPServerStatusData {
   // (undocumented)
   active: number;
@@ -136,37 +120,14 @@ export interface MCPServerStatusData {
   valid: number;
 }
 
+export { MCPServerType };
+
 // @public
-export enum MCPServerType {
-  // (undocumented)
-  STDIO = 'stdio',
-  // (undocumented)
-  STREAMABLE_HTTP = 'streamable-http',
-}
+export type Provider = ProviderInfo;
 
-// @public (undocumented)
-export interface Provider {
-  // (undocumented)
-  baseUrl: string;
-  // (undocumented)
-  connection: ProviderConnectionStatus;
-  // (undocumented)
-  id: string;
-  // (undocumented)
-  model: string;
-}
+export { ProviderConnectionStatus };
 
-// @public (undocumented)
-export interface ProviderConnectionStatus {
-  // (undocumented)
-  connected: boolean;
-  // (undocumented)
-  error?: string;
-  // (undocumented)
-  models?: string[];
-}
-
-// @public (undocumented)
+// @public
 export interface ProviderStatusData {
   // (undocumented)
   providers: Provider[];
@@ -180,21 +141,13 @@ export interface ProviderStatusData {
   timestamp: string;
 }
 
-// @public (undocumented)
-export interface Tool {
-  // (undocumented)
-  function: {
-    name: string;
-    description: string;
-    parameters: any;
-  };
-  // (undocumented)
-  serverId: string;
+// @public
+export interface Tool extends Omit<ServerTool, 'type'> {
   // (undocumented)
   type: string;
 }
 
-// @public (undocumented)
+// @public
 export interface ToolsResponse {
   // (undocumented)
   availableTools: Tool[];

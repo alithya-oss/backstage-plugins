@@ -43,10 +43,25 @@ export interface Config {
        */
       baseUrl?: string;
       /**
-       * Provider-specific authentication parameters (IAM, session tokens, etc.)
-       * @visibility secret
+       * AWS region for the Bedrock Runtime client
+       * @visibility backend
        */
-      auth?: { [key: string]: string };
+      region?: string;
+      /**
+       * AWS account ID for credential resolution
+       * @visibility backend
+       */
+      accountId?: string;
+      /**
+       * Maximum number of tokens in the response
+       * @visibility backend
+       */
+      maxTokens?: number;
+      /**
+       * Temperature for response generation (0-2)
+       * @visibility backend
+       */
+      temperature?: number;
     }>;
   };
 }

@@ -4,30 +4,15 @@
 
 ```ts
 import { BackendFeature } from '@backstage/backend-plugin-api';
-import { ChatMessage } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { ChatResponse } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { Tool } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { OpenAICompatibleBase } from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 // @public
 const _default: BackendFeature;
 export default _default;
 
 // @public
-export class LiteLLMProvider extends LLMProvider {
+export class LiteLLMProvider extends OpenAICompatibleBase {
   // (undocumented)
-  protected formatRequest(messages: ChatMessage[], tools?: Tool[]): any;
-  // (undocumented)
-  protected getHeaders(): Record<string, string>;
-  // (undocumented)
-  protected parseResponse(response: any): ChatResponse;
-  // (undocumented)
-  sendMessage(messages: ChatMessage[], tools?: Tool[]): Promise<ChatResponse>;
-  // (undocumented)
-  testConnection(): Promise<{
-    connected: boolean;
-    models?: string[];
-    error?: string;
-  }>;
+  protected get providerName(): string;
 }
 ```

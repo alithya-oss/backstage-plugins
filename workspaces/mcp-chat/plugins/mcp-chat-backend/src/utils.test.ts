@@ -20,16 +20,30 @@ import {
   executeToolCall,
   validateConfig,
   validateMessages,
+  isGuestUser,
+  isMissingTableError,
+  findNpxPath,
 } from './utils';
 import { MCPServerType } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { LoggerService } from '@backstage/backend-plugin-api';
+import fc from 'fast-check';
 
 jest.mock('@modelcontextprotocol/sdk/client/index.js', () => ({
   Client: jest.fn(),
 }));
 
 describe('Utils', () => {
+  let mockLogger: jest.Mocked<LoggerService>;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    mockLogger = {
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      debug: jest.fn(),
+      child: jest.fn().mockReturnThis(),
+    } as unknown as jest.Mocked<LoggerService>;
   });
 
   describe('loadServerConfigs', () => {
@@ -179,7 +193,7 @@ describe('Utils', () => {
         },
       });
 
-      expect(() => validateConfig(mockConfig)).toThrow(
+      expect(() => validateConfig(mockConfig, mockLogger)).toThrow(
         'No LLM providers configured in mcpChat.providers. Please add at least one provider.',
       );
     });
@@ -198,7 +212,7 @@ describe('Utils', () => {
         },
       });
 
-      expect(() => validateConfig(mockConfig)).not.toThrow();
+      expect(() => validateConfig(mockConfig, mockLogger)).not.toThrow();
     });
 
     it('should validate MCP server headers configuration', () => {
@@ -217,7 +231,7 @@ describe('Utils', () => {
         },
       });
 
-      expect(() => validateConfig(mockConfig)).toThrow(
+      expect(() => validateConfig(mockConfig, mockLogger)).toThrow(
         'Invalid configuration for MCP server at index 0',
       );
     });
@@ -238,7 +252,7 @@ describe('Utils', () => {
         },
       });
 
-      expect(() => validateConfig(mockConfig)).toThrow(
+      expect(() => validateConfig(mockConfig, mockLogger)).toThrow(
         'Invalid configuration for MCP server at index 0',
       );
     });
@@ -259,7 +273,7 @@ describe('Utils', () => {
         },
       });
 
-      expect(() => validateConfig(mockConfig)).toThrow(
+      expect(() => validateConfig(mockConfig, mockLogger)).toThrow(
         "QuickPrompt at index 0 is missing required field: 'prompt'",
       );
     });
@@ -281,7 +295,7 @@ describe('Utils', () => {
         },
       });
 
-      expect(() => validateConfig(mockConfig)).toThrow();
+      expect(() => validateConfig(mockConfig, mockLogger)).toThrow();
     });
 
     it('should pass validation with valid configuration', () => {
@@ -309,7 +323,7 @@ describe('Utils', () => {
         },
       });
 
-      expect(() => validateConfig(mockConfig)).not.toThrow();
+      expect(() => validateConfig(mockConfig, mockLogger)).not.toThrow();
     });
 
     it('should throw when toolCallTimeout is 0', () => {
@@ -322,7 +336,7 @@ describe('Utils', () => {
         },
       });
 
-      expect(() => validateConfig(mockConfig)).toThrow(
+      expect(() => validateConfig(mockConfig, mockLogger)).toThrow(
         'mcpChat.toolCallTimeout must be a strictly positive number, got: 0',
       );
     });
@@ -337,7 +351,7 @@ describe('Utils', () => {
         },
       });
 
-      expect(() => validateConfig(mockConfig)).toThrow(
+      expect(() => validateConfig(mockConfig, mockLogger)).toThrow(
         'mcpChat.toolCallTimeout must be a strictly positive number, got: -1000',
       );
     });
@@ -352,7 +366,7 @@ describe('Utils', () => {
         },
       });
 
-      expect(() => validateConfig(mockConfig)).not.toThrow();
+      expect(() => validateConfig(mockConfig, mockLogger)).not.toThrow();
     });
   });
 
@@ -364,27 +378,27 @@ describe('Utils', () => {
         { role: 'user', content: 'How are you?' },
       ];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(true);
     });
 
     it('should require messages field', () => {
-      const result = validateMessages(null);
+      const result = validateMessages(null, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe('Messages field is required');
     });
 
     it('should require messages to be an array', () => {
-      const result = validateMessages('not an array');
+      const result = validateMessages('not an array', mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe('Messages must be an array');
     });
 
     it('should require at least one message', () => {
-      const result = validateMessages([]);
+      const result = validateMessages([], mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe('At least one message is required');
@@ -393,7 +407,7 @@ describe('Utils', () => {
     it('should validate message object structure', () => {
       const messages = ['not an object'];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe('Message at index 0 must be an object');
@@ -402,7 +416,7 @@ describe('Utils', () => {
     it('should validate required role field', () => {
       const messages = [{ content: 'Hello' }];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe(
@@ -413,7 +427,7 @@ describe('Utils', () => {
     it('should validate required content field', () => {
       const messages = [{ role: 'user' }];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe(
@@ -424,7 +438,7 @@ describe('Utils', () => {
     it('should validate role values', () => {
       const messages = [{ role: 'invalid', content: 'Hello' }];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toContain(
@@ -435,7 +449,7 @@ describe('Utils', () => {
     it('should validate content types', () => {
       const messages = [{ role: 'user', content: 123 }];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe(
@@ -447,7 +461,7 @@ describe('Utils', () => {
       const longContent = 'a'.repeat(100001);
       const messages = [{ role: 'user', content: longContent }];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe(
@@ -458,7 +472,7 @@ describe('Utils', () => {
     it('should validate empty content for non-tool messages', () => {
       const messages = [{ role: 'user', content: '' }];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe('Message at index 0 has empty content');
@@ -470,7 +484,7 @@ describe('Utils', () => {
         { role: 'user', content: 'Hello' },
       ];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(true);
     });
@@ -481,7 +495,7 @@ describe('Utils', () => {
         { role: 'user', content: 'Hello' },
       ];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe(
@@ -499,7 +513,7 @@ describe('Utils', () => {
         { role: 'user', content: 'Hello' },
       ];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe(
@@ -517,7 +531,7 @@ describe('Utils', () => {
         { role: 'user', content: 'Hello' },
       ];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe(
@@ -535,7 +549,7 @@ describe('Utils', () => {
         { role: 'user', content: 'Hello' },
       ];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe(
@@ -553,7 +567,7 @@ describe('Utils', () => {
         { role: 'user', content: 'Hello' },
       ];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe(
@@ -571,7 +585,7 @@ describe('Utils', () => {
         { role: 'user', content: 'Hello' },
       ];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe(
@@ -585,26 +599,24 @@ describe('Utils', () => {
         { role: 'assistant', content: 'Hi there' },
       ];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(false);
       expect(result.error).toBe('Last message must be from user');
     });
 
     it('should warn about consecutive user messages but still validate', () => {
-      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
       const messages = [
         { role: 'user', content: 'Hello' },
         { role: 'user', content: 'Are you there?' },
       ];
 
-      const result = validateMessages(messages);
+      const result = validateMessages(messages, mockLogger);
 
       expect(result.isValid).toBe(true);
-      expect(consoleSpy).toHaveBeenCalledWith(
+      expect(mockLogger.warn).toHaveBeenCalledWith(
         'Consecutive user messages detected in conversation',
       );
-      consoleSpy.mockRestore();
     });
   });
 
@@ -851,7 +863,7 @@ describe('Utils', () => {
         getOptionalNumber: jest.fn(),
       } as any;
 
-      expect(() => validateConfig(mockConfig)).not.toThrow();
+      expect(() => validateConfig(mockConfig, mockLogger)).not.toThrow();
     });
 
     it('should accept undefined systemPrompt', () => {
@@ -894,7 +906,7 @@ describe('Utils', () => {
         getOptionalNumber: jest.fn(),
       } as any;
 
-      expect(() => validateConfig(mockConfig)).not.toThrow();
+      expect(() => validateConfig(mockConfig, mockLogger)).not.toThrow();
     });
 
     it('should reject empty systemPrompt', () => {
@@ -937,7 +949,7 @@ describe('Utils', () => {
         getOptionalNumber: jest.fn(),
       } as any;
 
-      expect(() => validateConfig(mockConfig)).toThrow(
+      expect(() => validateConfig(mockConfig, mockLogger)).toThrow(
         'systemPrompt cannot be empty or whitespace-only',
       );
     });
@@ -982,7 +994,7 @@ describe('Utils', () => {
         getOptionalNumber: jest.fn(),
       } as any;
 
-      expect(() => validateConfig(mockConfig)).toThrow(
+      expect(() => validateConfig(mockConfig, mockLogger)).toThrow(
         'systemPrompt cannot be empty or whitespace-only',
       );
     });
@@ -1027,9 +1039,200 @@ describe('Utils', () => {
         getOptionalNumber: jest.fn(),
       } as any;
 
-      expect(() => validateConfig(mockConfig)).toThrow(
+      expect(() => validateConfig(mockConfig, mockLogger)).toThrow(
         'systemPrompt must be a string',
       );
+    });
+  });
+
+  describe('isGuestUser', () => {
+    it('should return true for guest user', () => {
+      expect(isGuestUser('user:development/guest')).toBe(true);
+    });
+
+    it('should return true for guest user case-insensitively', () => {
+      expect(isGuestUser('User:Development/Guest')).toBe(true);
+      expect(isGuestUser('USER:DEVELOPMENT/GUEST')).toBe(true);
+    });
+
+    it('should return false for regular users', () => {
+      expect(isGuestUser('user:default/john.doe')).toBe(false);
+      expect(isGuestUser('user:default/admin')).toBe(false);
+    });
+
+    it('should return false for partial guest matches', () => {
+      expect(isGuestUser('user:development/guest-admin')).toBe(false);
+      expect(isGuestUser('user:development/guestuser')).toBe(false);
+    });
+  });
+
+  describe('isMissingTableError', () => {
+    it('should return true for errors with code SQLITE_ERROR', () => {
+      const error = Object.assign(new Error('no such table: conversations'), {
+        code: 'SQLITE_ERROR',
+      });
+      expect(isMissingTableError(error)).toBe(true);
+    });
+
+    it('should return true for errors with code 42P01 (PostgreSQL)', () => {
+      const error = Object.assign(
+        new Error('relation "conversations" does not exist'),
+        { code: '42P01' },
+      );
+      expect(isMissingTableError(error)).toBe(true);
+    });
+
+    it('should return true for errors with message containing "no such table"', () => {
+      const error = new Error('SQLITE: no such table: mcp_conversations');
+      expect(isMissingTableError(error)).toBe(true);
+    });
+
+    it('should return true for errors with message containing "relation ... does not exist"', () => {
+      const error = new Error('relation "mcp_conversations" does not exist');
+      expect(isMissingTableError(error)).toBe(true);
+    });
+
+    it('should return false for random errors', () => {
+      const error = new Error('Connection timeout');
+      expect(isMissingTableError(error)).toBe(false);
+    });
+
+    it('should return false for non-Error values', () => {
+      expect(isMissingTableError('string error')).toBe(false);
+      expect(isMissingTableError(null)).toBe(false);
+      expect(isMissingTableError(undefined)).toBe(false);
+      expect(isMissingTableError(42)).toBe(false);
+      expect(isMissingTableError({})).toBe(false);
+    });
+  });
+
+  describe('Property 6: Utility functions emit diagnostics through injected logger', () => {
+    /**
+     * **Validates: Requirements 6.7**
+     *
+     * For any utility function that emits diagnostic output (validateMessages,
+     * validateConfig), calling it with a mock LoggerService SHALL result in at
+     * least one call to the logger and zero calls to console.log/console.warn/console.error.
+     */
+
+    it('validateConfig calls logger.info on valid config (not console)', () => {
+      fc.assert(
+        fc.property(
+          fc.constantFrom('openai', 'anthropic', 'gemini', 'ollama'),
+          providerId => {
+            const logger: jest.Mocked<LoggerService> = {
+              info: jest.fn(),
+              warn: jest.fn(),
+              error: jest.fn(),
+              debug: jest.fn(),
+              child: jest.fn().mockReturnThis(),
+            } as unknown as jest.Mocked<LoggerService>;
+
+            const consoleSpy = jest.spyOn(console, 'log');
+            const consoleWarnSpy = jest.spyOn(console, 'warn');
+            const consoleErrorSpy = jest.spyOn(console, 'error');
+
+            const config = mockServices.rootConfig({
+              data: {
+                mcpChat: {
+                  providers: [{ id: providerId }],
+                },
+              },
+            });
+
+            validateConfig(config, logger);
+
+            expect(logger.info).toHaveBeenCalledWith(
+              'MCP Chat configuration validated successfully',
+            );
+            expect(consoleSpy).not.toHaveBeenCalled();
+            expect(consoleWarnSpy).not.toHaveBeenCalled();
+            expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+            consoleSpy.mockRestore();
+            consoleWarnSpy.mockRestore();
+            consoleErrorSpy.mockRestore();
+          },
+        ),
+        { numRuns: 100 },
+      );
+    });
+
+    it('validateMessages calls logger.warn on consecutive user messages (not console.warn)', () => {
+      fc.assert(
+        fc.property(
+          fc
+            .string({ minLength: 1, maxLength: 100 })
+            .filter(s => s.trim().length > 0),
+          fc
+            .string({ minLength: 1, maxLength: 100 })
+            .filter(s => s.trim().length > 0),
+          (msg1, msg2) => {
+            const logger: jest.Mocked<LoggerService> = {
+              info: jest.fn(),
+              warn: jest.fn(),
+              error: jest.fn(),
+              debug: jest.fn(),
+              child: jest.fn().mockReturnThis(),
+            } as unknown as jest.Mocked<LoggerService>;
+
+            const consoleSpy = jest.spyOn(console, 'log');
+            const consoleWarnSpy = jest.spyOn(console, 'warn');
+            const consoleErrorSpy = jest.spyOn(console, 'error');
+
+            const messages = [
+              { role: 'user', content: msg1 },
+              { role: 'user', content: msg2 },
+            ];
+
+            const result = validateMessages(messages, logger);
+
+            expect(result.isValid).toBe(true);
+            expect(logger.warn).toHaveBeenCalledWith(
+              'Consecutive user messages detected in conversation',
+            );
+            expect(consoleSpy).not.toHaveBeenCalled();
+            expect(consoleWarnSpy).not.toHaveBeenCalled();
+            expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+            consoleSpy.mockRestore();
+            consoleWarnSpy.mockRestore();
+            consoleErrorSpy.mockRestore();
+          },
+        ),
+        { numRuns: 100 },
+      );
+    });
+
+    it('findNpxPath calls logger.debug when searching (not console)', async () => {
+      const logger: jest.Mocked<LoggerService> = {
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+        debug: jest.fn(),
+        child: jest.fn().mockReturnThis(),
+      } as unknown as jest.Mocked<LoggerService>;
+
+      const consoleSpy = jest.spyOn(console, 'log');
+      const consoleWarnSpy = jest.spyOn(console, 'warn');
+      const consoleErrorSpy = jest.spyOn(console, 'error');
+
+      // findNpxPath will either succeed or throw, but in both cases
+      // it should use logger.debug and not console
+      try {
+        await findNpxPath(logger);
+      } catch {
+        // It's fine if npx is not found in the test environment
+      }
+
+      expect(logger.debug).toHaveBeenCalled();
+      expect(consoleSpy).not.toHaveBeenCalled();
+      expect(consoleWarnSpy).not.toHaveBeenCalled();
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+      consoleSpy.mockRestore();
+      consoleWarnSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
     });
   });
 });
