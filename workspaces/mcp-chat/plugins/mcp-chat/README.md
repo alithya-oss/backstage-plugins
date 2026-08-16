@@ -126,6 +126,23 @@ This plugin consists of two packages:
    <Route path="/mcp-chat" element={<McpChatPage />} />;
    ```
 
+   **For the new frontend system (alpha):**
+
+   ```tsx
+   // In packages/app/src/App.tsx
+   import mcpChatPlugin from '@alithya-oss/backstage-plugin-mcp-chat/alpha';
+
+   // Register the plugin — it provides its own page and API extensions
+   export default createApp({
+     features: [
+       // ... other features
+       mcpChatPlugin,
+     ],
+   });
+   ```
+
+   The alpha entry point uses `PageBlueprint` and `ApiBlueprint` from `@backstage/frontend-plugin-api`, automatically registering the `/mcp-chat` route and MCP Chat API.
+
 3. **Add navigation**:
 
    ```tsx

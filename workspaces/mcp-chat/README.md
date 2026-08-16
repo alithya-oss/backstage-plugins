@@ -28,6 +28,32 @@ The following AI providers and models have been thoroughly tested:
 
 > **Note**: While other providers and models may work, they have not been extensively tested. The plugin supports any provider that implements tool calling functionality, but compatibility is not guaranteed for untested configurations.
 
+## Architecture
+
+The MCP Chat workspace follows a layered architecture aligned with Backstage conventions:
+
+```
+common (browser-safe contract types)
+  ↑
+node (LLMProvider, OpenAICompatibleBase, createLlmProviderModule, extension point)
+  ↑
+9 Provider Modules (vendor-specific, ~20 lines each)
+  ↓ register via extension point
+backend (plugin entry only — internals private)
+  ↑ HTTP API
+frontend (legacy + new frontend system entry points)
+```
+
+| Package                                          | Role                       | Key Exports                                                                                   |
+| ------------------------------------------------ | -------------------------- | --------------------------------------------------------------------------------------------- |
+| `@alithya-oss/backstage-plugin-mcp-chat-common`  | Shared types               | Interfaces, enums — no runtime code                                                           |
+| `@alithya-oss/backstage-plugin-mcp-chat-node`    | Provider extension surface | `LLMProvider`, `OpenAICompatibleBase`, `createLlmProviderModule`, `llmProviderExtensionPoint` |
+| `@alithya-oss/backstage-plugin-mcp-chat-backend` | Backend plugin             | Single default export (`mcpChatPlugin`)                                                       |
+| `@alithya-oss/backstage-plugin-mcp-chat`         | Frontend plugin            | Legacy (`plugin.ts`) and new frontend system (`/alpha`) entry points                          |
+| `...-backend-module-*` (×9)                      | Provider modules           | One per LLM provider — depend on **node** package only                                        |
+
+Provider modules depend on the **node** package (not the backend plugin). To create a custom provider, see the [`mcp-chat-node` README](plugins/mcp-chat-node/README.md).
+
 ## Quick Start with Gemini (Free)
 
 To quickly test this plugin, we recommend using Gemini's free API:
@@ -81,18 +107,23 @@ To quickly test this plugin, we recommend using Gemini's free API:
 
 ## Installation
 
-This plugin consists of two packages:
+This plugin consists of multiple packages:
 
 - `@alithya-oss/backstage-plugin-mcp-chat` - Frontend plugin
 - `@alithya-oss/backstage-plugin-mcp-chat-backend` - Backend plugin
+- `@alithya-oss/backstage-plugin-mcp-chat-backend-module-*` - Provider modules (install one per LLM provider you use)
 
 ### Backend Installation
 
-1. **Install the backend plugin**:
+1. **Install the backend plugin and at least one provider module**:
 
    ```bash
    # From your Backstage root directory
    yarn --cwd packages/backend add @alithya-oss/backstage-plugin-mcp-chat-backend
+
+   # Install the provider module(s) you need (e.g., Gemini and OpenAI)
+   yarn --cwd packages/backend add @alithya-oss/backstage-plugin-mcp-chat-backend-module-gemini
+   yarn --cwd packages/backend add @alithya-oss/backstage-plugin-mcp-chat-backend-module-openai
    ```
 
 2. **Add to your backend**:
@@ -102,7 +133,13 @@ This plugin consists of two packages:
    const backend = createBackend();
    // ... other plugins
    backend.add(import('@alithya-oss/backstage-plugin-mcp-chat-backend'));
+   // Add the provider module(s) you installed
+   backend.add(
+     import('@alithya-oss/backstage-plugin-mcp-chat-backend-module-gemini'),
+   );
    ```
+
+> **Note**: Only the first configured provider in `mcpChat.providers[]` is active at runtime. Install only the modules you intend to use.
 
 ### Frontend Installation
 
@@ -123,6 +160,20 @@ This plugin consists of two packages:
 
    // Add to your routes
    <Route path="/mcp-chat" element={<McpChatPage />} />;
+   ```
+
+   **For the new frontend system (alpha):**
+
+   ```tsx
+   // In packages/app/src/App.tsx
+   import mcpChatPlugin from '@alithya-oss/backstage-plugin-mcp-chat/alpha';
+
+   export default createApp({
+     features: [
+       // ... other features
+       mcpChatPlugin,
+     ],
+   });
    ```
 
 3. **Add navigation**:

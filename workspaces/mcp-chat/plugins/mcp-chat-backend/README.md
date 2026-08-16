@@ -178,12 +178,12 @@ The MCP Chat plugin follows a **modular architecture** using Backstage's backend
 
 ### Package Overview
 
-| Package                                          | Role            | Description                                          |
-| ------------------------------------------------ | --------------- | ---------------------------------------------------- |
-| `@alithya-oss/backstage-plugin-mcp-chat`         | Frontend plugin | Chat UI, tool management panel, conversation history |
-| `@alithya-oss/backstage-plugin-mcp-chat-backend` | Backend plugin  | Core backend: router, MCP client, conversation store |
-| `@alithya-oss/backstage-plugin-mcp-chat-common`  | Common library  | Shared types, `LLMProvider` base class, enums        |
-| `@alithya-oss/backstage-plugin-mcp-chat-node`    | Node library    | `llmProviderExtensionPoint` for module registration  |
+| Package                                          | Role            | Description                                                                       |
+| ------------------------------------------------ | --------------- | --------------------------------------------------------------------------------- |
+| `@alithya-oss/backstage-plugin-mcp-chat`         | Frontend plugin | Chat UI, tool management panel, conversation history                              |
+| `@alithya-oss/backstage-plugin-mcp-chat-backend` | Backend plugin  | Core backend: router, MCP client, conversation store                              |
+| `@alithya-oss/backstage-plugin-mcp-chat-common`  | Common library  | Browser-safe contract types and enums                                             |
+| `@alithya-oss/backstage-plugin-mcp-chat-node`    | Node library    | `LLMProvider`, `OpenAICompatibleBase`, `createLlmProviderModule`, extension point |
 
 ### Provider Modules
 
@@ -683,92 +683,65 @@ backend:
 | `/api/mcp-chat/conversations/:id/star`  | PATCH  | Toggle conversation star status       |
 | `/api/mcp-chat/conversations/:id/title` | PATCH  | Update conversation title             |
 
-## Using as a Library
+## Creating a Custom Provider Module
 
-This plugin ecosystem can be used as a **reusable library** in your own Backstage backend plugins. The modular architecture provides clean separation of concerns:
-
-- **`@alithya-oss/backstage-plugin-mcp-chat-common`** — Import shared types and the `LLMProvider` base class
-- **`@alithya-oss/backstage-plugin-mcp-chat-node`** — Import the `llmProviderExtensionPoint` to build custom provider modules
-- **`@alithya-oss/backstage-plugin-mcp-chat-backend`** — Import services, utilities, and the router
-
-### Quick Example
+You can create your own LLM provider module using the `createLlmProviderModule` factory from the **node** package:
 
 ```typescript
-import {
-  MCPClientServiceImpl,
-  type ChatMessage,
-} from '@alithya-oss/backstage-plugin-mcp-chat-backend';
+import { createLlmProviderModule } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { MyProvider } from './MyProvider';
 
-// Use the full MCP service with tool support
-const mcpService = new MCPClientServiceImpl({ logger, config });
-await mcpService.initializeMCPServers();
-
-const result = await mcpService.processQuery([
-  { role: 'user', content: 'List all pods in default namespace' },
-]);
-```
-
-### Creating a Custom Provider Module
-
-You can create your own LLM provider module by extending the `LLMProvider` base class from the common package and registering it via the extension point from the node package:
-
-```typescript
-import {
-  createBackendModule,
-  coreServices,
-} from '@backstage/backend-plugin-api';
-import { llmProviderExtensionPoint } from '@alithya-oss/backstage-plugin-mcp-chat-node';
-import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-
-class MyCustomProvider extends LLMProvider {
-  // Implement the required methods...
-}
-
-export default createBackendModule({
-  pluginId: 'mcp-chat',
-  moduleId: 'my-custom-provider',
-  register(reg) {
-    reg.registerInit({
-      deps: {
-        config: coreServices.rootConfig,
-        llmProviders: llmProviderExtensionPoint,
-      },
-      async init({ config, llmProviders }) {
-        const providers =
-          config.getOptionalConfigArray('mcpChat.providers') || [];
-        const entry = providers.find(p => p.getString('id') === 'my-custom');
-        if (!entry) return;
-
-        llmProviders.registerProvider(
-          'my-custom',
-          new MyCustomProvider({
-            type: 'my-custom',
-            apiKey: entry.getOptionalString('token'),
-            baseUrl: entry.getString('baseUrl'),
-            model: entry.getString('model'),
-          }),
-        );
-      },
-    });
-  },
+export default createLlmProviderModule({
+  providerId: 'my-provider',
+  defaultBaseUrl: 'https://api.myprovider.com/v1',
+  providerFactory: config => new MyProvider(config),
 });
 ```
 
-### What's Exported
+The provider class extends `LLMProvider` (or `OpenAICompatibleBase` for OpenAI-compatible APIs) from `@alithya-oss/backstage-plugin-mcp-chat-node`:
+
+```typescript
+import {
+  LLMProvider,
+  type ProviderConfig,
+  type ChatMessage,
+  type ChatResponse,
+  type Tool,
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
+
+export class MyProvider extends LLMProvider {
+  async sendMessage(
+    messages: ChatMessage[],
+    tools?: Tool[],
+  ): Promise<ChatResponse> {
+    // Implement vendor-specific API call
+  }
+
+  async testConnection(): Promise<{
+    connected: boolean;
+    models?: string[];
+    error?: string;
+  }> {
+    // Implement connection test
+  }
+}
+```
+
+For full documentation on the provider extension API, see the [`@alithya-oss/backstage-plugin-mcp-chat-node` README](../mcp-chat-node/README.md).
+
+### Package Exports
+
+The backend plugin exposes a single default export (`mcpChatPlugin`). All internal services, utilities, and routes are private implementation details.
 
 | Package     | Category        | Exports                                                                                                                |
 | ----------- | --------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| **common**  | Base Class      | `LLMProvider`                                                                                                          |
 | **common**  | Types           | `ChatMessage`, `ChatResponse`, `ProviderConfig`, `Tool`, `ToolCall`, `MCPServerConfig`, `ConversationRecord`, and more |
 | **common**  | Enums           | `MCPServerType`, `VALID_ROLES`                                                                                         |
+| **node**    | Base Classes    | `LLMProvider`, `OpenAICompatibleBase`                                                                                  |
+| **node**    | Factory         | `createLlmProviderModule`                                                                                              |
 | **node**    | Extension Point | `llmProviderExtensionPoint`, `LlmProviderExtensionPoint`                                                               |
-| **backend** | Services        | `MCPClientService`, `MCPClientServiceImpl`, `ChatConversationStore`, `SummarizationService`                            |
-| **backend** | Utilities       | `validateConfig`, `validateMessages`, `loadServerConfigs`, `executeToolCall`                                           |
-| **backend** | Router          | `createRouter` — reuse the standard API endpoints                                                                      |
-
-### Full Documentation
-
-For comprehensive API documentation, usage examples, and integration patterns, see **[USAGE.md](./USAGE.md)**.
+| **node**    | Types           | `ProviderConfig` (with `logger`), `CreateLlmProviderModuleOptions`                                                     |
+| **backend** | Plugin Entry    | `mcpChatPlugin` (default export)                                                                                       |
 
 ## Contributing
 
