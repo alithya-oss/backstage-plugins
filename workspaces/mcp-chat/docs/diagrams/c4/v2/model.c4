@@ -1,0 +1,104 @@
+model {
+  actor adopter "Backstage Adopter" {
+    description "Developer using Backstage with MCP Chat"
+  }
+
+  external llmService "LLM Service" {
+    description "External LLM API (OpenAI, Gemini, Claude, Ollama, Bedrock, etc.)"
+  }
+
+  external mcpServer "MCP Server" {
+    description "External MCP server (STDIO or HTTP)"
+  }
+
+  system mcpChatV2 "MCP Chat (v2 — layered architecture)" {
+    description "Clean layered architecture — 13 packages with strict boundaries"
+
+    container common "mcp-chat-common" {
+      description """
+        @alithya-oss/backstage-plugin-mcp-chat-common
+        Browser-safe contract types ONLY (no runtime code)
+        - Interfaces: ChatMessage, ChatResponse, Tool, ToolCall, MCPServerConfig, ConversationRecord, etc.
+        - Enums: MCPServerType, VALID_ROLES
+        - NO LLMProvider class (moved to node)
+        - NO @backstage/backend-plugin-api dependency
+      """
+      style {
+        color green
+      }
+    }
+
+    container node "mcp-chat-node" {
+      description """
+        @alithya-oss/backstage-plugin-mcp-chat-node
+        Single provider extension surface
+        - LLMProvider: abstract base class (sendMessage, testConnection)
+        - OpenAICompatibleBase: shared impl for OpenAI-compatible APIs (getHeaders, formatRequest, parseResponse)
+        - createLlmProviderModule(): factory builds a backend module (~20 lines)
+        - llmProviderExtensionPoint: Backstage extension point
+        - ProviderConfig: extended with logger field
+        - Re-exports all common types for provider convenience
+      """
+      style {
+        color indigo
+      }
+    }
+
+    container providers "Provider Modules (x9)" {
+      description """
+        9 separate packages — vendor-specific code only
+        OpenAI-compatible (extend OpenAICompatibleBase):
+          openai, azure-openai, litellm, agentgateway
+        Direct LLMProvider extensions:
+          anthropic, amazon-bedrock, gemini, ollama, openai-responses
+        Each module.ts: createLlmProviderModule({ providerId, defaultBaseUrl, providerFactory })
+        Depend on NODE package only — not backend
+      """
+      style {
+        color blue
+      }
+    }
+
+    container backend "mcp-chat-backend" {
+      description """
+        @alithya-oss/backstage-plugin-mcp-chat-backend
+        Single default export: mcpChatPlugin
+        ALL internals private:
+        - services/: McpServerLifecycle, McpTransportFactory, QueryProcessor, ProviderStatusReporter, McpServerStatusReporter
+        - utils/: loadServerConfigs, validateConfig, findNpxPath, executeToolCall, validateMessages, isGuestUser
+        - routes/: statusRoutes, chatRoutes, conversationRoutes
+        - middleware/: auth, errorHandler (typed @backstage/errors)
+        - 300-line ceiling per service unit
+      """
+      style {
+        color red
+      }
+    }
+
+    container frontend "mcp-chat (Frontend Plugin)" {
+      description """
+        @alithya-oss/backstage-plugin-mcp-chat
+        Shared wiring.ts feeds both entry points:
+        - plugin.ts (legacy): createPlugin from @backstage/core-plugin-api
+        - alpha.tsx (new frontend system): createFrontendPlugin, ApiBlueprint, PageBlueprint
+        Decomposed components (250-line ceiling):
+        - ChatContainer -> useChatContainer + ChatContainerView
+        - ChatMessage -> useChatMessage + ChatMessageView + ToolCallDetails
+        - RightPane -> useRightPane + RightPaneView
+        Hooks use @backstage/frontend-plugin-api
+        Types import from common with local view-model extensions
+      """
+    }
+
+    // Dependency relationships
+    node -> common "imports types"
+    providers -> node "depends on (only)"
+    backend -> node "registers extension point"
+    frontend -> common "imports Contract_Types"
+    frontend -> backend "HTTP API /api/mcp-chat/*"
+  }
+
+  adopter -> mcpChatV2.frontend "uses chat UI"
+  mcpChatV2.backend -> llmService "sends prompts + tools"
+  mcpChatV2.backend -> mcpServer "connects via STDIO/HTTP"
+}

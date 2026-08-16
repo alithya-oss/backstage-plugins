@@ -1,0 +1,5 @@
+{
+  "$schema": "https://likec4.dev/schemas/config.json",
+  "name": "mcp-chat-v1",
+  "title": "MCP Chat v1 (community-plugins)"
+}
