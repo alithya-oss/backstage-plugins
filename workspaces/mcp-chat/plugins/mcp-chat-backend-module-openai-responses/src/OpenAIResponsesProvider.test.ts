@@ -15,6 +15,7 @@
  */
 
 import { OpenAIResponsesProvider } from './OpenAIResponsesProvider';
+import { ResponseError } from '@backstage/errors';
 import type {
   ChatMessage,
   Tool,
@@ -198,5 +199,43 @@ describe('OpenAIResponsesProvider', () => {
 
     expect(result.connected).toBe(false);
     expect(result.error).toBe('Network error');
+  });
+
+  it('throws ResponseError with status 500 when makeRequest receives a non-OK response', async () => {
+    const provider = createProvider();
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      statusText: 'Internal Server Error',
+      headers: { get: () => 'text/plain' },
+      text: async () => 'Something went wrong',
+    });
+
+    await expect(
+      provider.sendMessage([{ role: 'user', content: 'Hi' }]),
+    ).rejects.toMatchObject({
+      name: 'ResponseError',
+      statusCode: 500,
+    });
+  });
+
+  it('throws ResponseError with status 401 when makeRequest receives an unauthorized response', async () => {
+    const provider = createProvider();
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 401,
+      statusText: 'Unauthorized',
+      headers: { get: () => 'application/json' },
+      text: async () =>
+        JSON.stringify({ error: { message: 'Invalid API key' } }),
+    });
+
+    const error = await provider
+      .sendMessage([{ role: 'user', content: 'Hi' }])
+      .catch(e => e);
+
+    expect(error).toBeInstanceOf(ResponseError);
+    expect(error.statusCode).toBe(401);
+    expect(error.statusText).toBe('Unauthorized');
   });
 });

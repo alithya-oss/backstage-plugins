@@ -26,6 +26,7 @@ import {
   type ResponsesApiMessage,
   type ToolCall,
 } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { ResponseError } from '@backstage/errors';
 
 /**
  * OpenAI Responses API provider with native MCP support.
@@ -258,14 +259,10 @@ export class OpenAIResponsesProvider extends LLMProvider {
     const duration = Date.now() - startTime;
 
     if (!response.ok) {
-      const errorText = await response.text();
       this.logger?.error(
         `[${this.type}] Request failed (${response.status}) after ${duration}ms`,
-        { responseData: errorText },
       );
-      throw new Error(
-        `HTTP ${response.status}: ${errorText.substring(0, 200)}`,
-      );
+      throw await ResponseError.fromResponse(response);
     }
 
     const jsonResponse = await response.json();

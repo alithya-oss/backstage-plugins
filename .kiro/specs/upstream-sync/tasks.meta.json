@@ -1,0 +1,288 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Add `@backstage/errors` and bump `@backstage/backend-plugin-api` in mcp-chat-node": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903951545
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903963111
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903995368
+      }
+    ],
+    "1.2 Bump `@backstage/backend-plugin-api` in mcp-chat-backend": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903951835
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903964022
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903996234
+      }
+    ],
+    "1.3 Add `@backstage/errors` to mcp-chat-backend-module-openai-responses": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903952019
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903964931
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903997074
+      }
+    ],
+    "1.4 Run `yarn install` to resolve updated dependencies": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903952239
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904001587
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904046490
+      }
+    ],
+    "2.1 Replace `throw new Error(...)` with `throw await ResponseError.fromResponse(response)` in LLMProvider.ts": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903952436
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904051304
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904155324
+      }
+    ],
+    "2.2 Replace `throw new Error(...)` with `throw await ResponseError.fromResponse(response)` in OpenAIResponsesProvider.ts": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903952678
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904052321
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904156237
+      }
+    ],
+    "3. Checkpoint - Verify compilation": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903952906
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904166822
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904241989
+      }
+    ],
+    "4.1 Create `LLMProvider.test.ts` in the node package": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903953177
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904246152
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904598467
+      }
+    ],
+    "4.2 Update `OpenAICompatibleBase.test.ts` with connection error mapping tests": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903953304
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904246940
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904599400
+      }
+    ],
+    "4.3 Update `OpenAIResponsesProvider.test.ts` to assert ResponseError": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903953555
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904247782
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904600534
+      }
+    ],
+    "4.4 Create `useConversations.test.tsx` in the frontend plugin": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903953827
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904248732
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904601452
+      }
+    ],
+    "5. Checkpoint - Run targeted tests": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903954068
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904609714
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904739920
+      }
+    ],
+    "6.1 Run `yarn tsc:full` and `yarn lint --fix`": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903954285
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904744272
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786905031128
+      }
+    ],
+    "6.2 Run `yarn build:api-reports`": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903954548
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904744935
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786905031848
+      }
+    ],
+    "6.3 Verify copyright headers and configuration files unchanged": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786903954765
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904745722
+      },
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786905032692
+      }
+    ],
+    "1. Update dependency versions in package.json files": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904046755
+      }
+    ],
+    "2. Implement ResponseError integration in source files": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904156536
+      }
+    ],
+    "4. Add and update test files": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786904601751
+      }
+    ],
+    "6. Final verification gates": [
+      {
+        "executionId": "fe671e55-445f-4706-9a0d-eecff5105b7d",
+        "chatSessionId": "sess_91c43b7a-2209-4ee3-b670-b959e842b0db",
+        "timestamp": 1786905032893
+      }
+    ]
+  }
+}

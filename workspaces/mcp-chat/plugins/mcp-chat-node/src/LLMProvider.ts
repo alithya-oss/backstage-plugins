@@ -15,6 +15,7 @@
  */
 
 import { LoggerService } from '@backstage/backend-plugin-api';
+import { ResponseError } from '@backstage/errors';
 import {
   ChatMessage,
   Tool,
@@ -116,14 +117,10 @@ export abstract class LLMProvider {
     const duration = Date.now() - startTime;
 
     if (!response.ok) {
-      const errorText = await response.text();
       this.logger?.error(
         `[${this.type}] Request failed (${response.status}) after ${duration}ms`,
-        { responseData: errorText },
       );
-      throw new Error(
-        `Request failed with status ${response.status}: ${errorText}`,
-      );
+      throw await ResponseError.fromResponse(response);
     }
 
     const responseData = await response.json();

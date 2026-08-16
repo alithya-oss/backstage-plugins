@@ -215,4 +215,124 @@ describe('OpenAICompatibleBase', () => {
       expect(headers['Content-Type']).toBe('application/json');
     });
   });
+
+  /**
+   * **Validates: Requirements 4.2**
+   *
+   * testConnection() error mapping: verifies that HTTP error status codes
+   * from the /models endpoint produce the correct user-facing error messages.
+   */
+  describe('testConnection error mapping', () => {
+    const originalFetch = global.fetch;
+
+    afterEach(() => {
+      global.fetch = originalFetch;
+    });
+
+    it('returns error for HTTP 401 with API key message', async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: false,
+        status: 401,
+        text: async () => 'Unauthorized',
+      });
+
+      const provider = createProvider({ apiKey: 'bad-key' });
+      const result = await provider.testConnection();
+
+      expect(result.connected).toBe(false);
+      expect(result.error).toBe(
+        'Invalid API key. Please check your TestProvider API key configuration.',
+      );
+    });
+
+    it('returns error for HTTP 403 with permissions message', async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        text: async () => 'Forbidden',
+      });
+
+      const provider = createProvider({ apiKey: 'some-key' });
+      const result = await provider.testConnection();
+
+      expect(result.connected).toBe(false);
+      expect(result.error).toBe(
+        'Access forbidden. Please check your API key permissions.',
+      );
+    });
+
+    it('returns error for HTTP 404 with endpoint not found message', async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: false,
+        status: 404,
+        text: async () => 'Not Found',
+      });
+
+      const provider = createProvider({
+        baseUrl: 'http://localhost:8080',
+        apiKey: 'some-key',
+      });
+      const result = await provider.testConnection();
+
+      expect(result.connected).toBe(false);
+      expect(result.error).toBe(
+        'TestProvider endpoint not found at http://localhost:8080/models.',
+      );
+    });
+
+    it('returns error for HTTP 429 with rate limit message', async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: false,
+        status: 429,
+        text: async () => 'Too Many Requests',
+      });
+
+      const provider = createProvider({ apiKey: 'some-key' });
+      const result = await provider.testConnection();
+
+      expect(result.connected).toBe(false);
+      expect(result.error).toBe(
+        'Rate limit exceeded. Please try again later or check your TestProvider usage limits.',
+      );
+    });
+
+    it('returns error message from fetch network error', async () => {
+      global.fetch = jest
+        .fn()
+        .mockRejectedValue(new Error('Network connection refused'));
+
+      const provider = createProvider({ apiKey: 'some-key' });
+      const result = await provider.testConnection();
+
+      expect(result.connected).toBe(false);
+      expect(result.error).toBe('Network connection refused');
+    });
+
+    it('returns "Unknown error" for non-Error thrown values', async () => {
+      global.fetch = jest.fn().mockRejectedValue('something went wrong');
+
+      const provider = createProvider({ apiKey: 'some-key' });
+      const result = await provider.testConnection();
+
+      expect(result.connected).toBe(false);
+      expect(result.error).toBe('Unknown error');
+    });
+
+    it('returns connected true with model list on successful response', async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          data: [{ id: 'gpt-4' }, { id: 'gpt-3.5-turbo' }],
+        }),
+      });
+
+      const provider = createProvider({ apiKey: 'valid-key' });
+      const result = await provider.testConnection();
+
+      expect(result.connected).toBe(true);
+      expect(result.models).toEqual(['gpt-4', 'gpt-3.5-turbo']);
+      expect(result.error).toBeUndefined();
+    });
+  });
 });

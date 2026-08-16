@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^",
-    "@backstage/backend-plugin-api": "^1.4.0"
+    "@backstage/backend-plugin-api": "^1.8.0",
+    "@backstage/errors": "^1.2.7"
   },
   "devDependencies": {
     "@backstage/backend-test-utils": "^1.6.0",

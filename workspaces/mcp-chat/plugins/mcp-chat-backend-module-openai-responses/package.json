@@ -19,7 +19,8 @@
     ]
   },
   "dependencies": {
-    "@alithya-oss/backstage-plugin-mcp-chat-node": "workspace:^"
+    "@alithya-oss/backstage-plugin-mcp-chat-node": "workspace:^",
+    "@backstage/errors": "^1.2.7"
   },
   "devDependencies": {
     "@backstage/backend-test-utils": "^1.6.0",
