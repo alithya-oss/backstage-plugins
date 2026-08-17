@@ -1,0 +1,14 @@
+views {
+  view landscape {
+    title "V1 System Landscape"
+    description "MCP Chat v1 (community-plugins) — monolithic, all providers in backend"
+    include *
+    include mcpChat.*
+  }
+
+  view v1-internals of mcpChat {
+    title "V1 Plugin Internals"
+    description "2 packages: frontend + monolithic backend"
+    include *
+  }
+}

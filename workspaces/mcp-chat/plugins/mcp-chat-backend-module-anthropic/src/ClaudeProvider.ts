@@ -20,7 +20,7 @@ import {
   type Tool,
   type ChatResponse,
   type ToolCall,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 /**
  * Anthropic Claude API provider.

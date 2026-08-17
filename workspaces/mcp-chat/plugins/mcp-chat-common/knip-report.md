@@ -4,5 +4,5 @@
 
 | Name              | Location          | Severity |
 | :---------------- | :---------------- | :------- |
-| @backstage/errors | package.json:35:6 | error    |
+| @backstage/errors | package.json:33:6 | error    |
 

@@ -15,23 +15,28 @@
  */
 
 import {
-  LLMProvider,
+  OpenAICompatibleBase,
   type ChatMessage,
-  type Tool,
   type ChatResponse,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+  type Tool,
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 /**
  * Agent Gateway LLM provider.
  *
- * Agent Gateway exposes an OpenAI-compatible `/chat/completions` endpoint,
- * so this provider reuses the same request/response format as the OpenAI
- * provider while allowing independent configuration (base URL, token, model).
+ * Agent Gateway exposes an OpenAI-compatible `/chat/completions` endpoint.
+ * This provider extends the shared base with tool re-attachment logic:
+ * Bedrock models behind Agent Gateway require tool definitions whenever
+ * the conversation contains tool-related messages.
  *
  * @public
  */
-export class AgentGatewayProvider extends LLMProvider {
+export class AgentGatewayProvider extends OpenAICompatibleBase {
   private lastTools?: Tool[];
+
+  protected get providerName(): string {
+    return 'AgentGateway';
+  }
 
   async sendMessage(
     messages: ChatMessage[],
@@ -54,89 +59,12 @@ export class AgentGatewayProvider extends LLMProvider {
     return this.parseResponse(response);
   }
 
-  /**
-   * Returns true when the conversation history contains tool-related
-   * messages (assistant tool_calls or tool-role results), which means
-   * Bedrock will expect a toolConfig in the request.
-   */
-  private hasToolMessages(messages: ChatMessage[]): boolean {
-    return messages.some(
-      msg =>
-        msg.role === 'tool' ||
-        (msg.role === 'assistant' && msg.tool_calls?.length),
-    );
-  }
-
-  async testConnection(): Promise<{
-    connected: boolean;
-    models?: string[];
-    error?: string;
-  }> {
-    try {
-      const response = await fetch(`${this.baseUrl}/models`, {
-        method: 'GET',
-        headers: this.getHeaders(),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        let errorMessage = `Agent Gateway API error (${response.status})`;
-
-        try {
-          const errorData = JSON.parse(errorText);
-          if (errorData.error?.message) {
-            errorMessage = errorData.error.message;
-          }
-        } catch {
-          errorMessage =
-            errorText.length > 100
-              ? `${errorText.substring(0, 100)}...`
-              : errorText;
-        }
-
-        if (response.status === 401) {
-          errorMessage =
-            'Invalid API key. Please check your Agent Gateway API key configuration.';
-        } else if (response.status === 429) {
-          errorMessage = 'Rate limit exceeded. Please try again later.';
-        } else if (response.status === 403) {
-          errorMessage =
-            'Access forbidden. Please check your API key permissions.';
-        }
-
-        return { connected: false, error: errorMessage };
-      }
-
-      const data = await response.json();
-      const models = data.data?.map((model: any) => model.id) || [];
-
-      return { connected: true, models };
-    } catch (error) {
-      return {
-        connected: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      };
-    }
-  }
-
-  protected getHeaders(): Record<string, string> {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
-
-    if (this.apiKey) {
-      headers.Authorization = `Bearer ${this.apiKey}`;
-    }
-
-    return headers;
-  }
-
-  protected formatRequest(messages: ChatMessage[], tools?: Tool[]): any {
-    const request: any = {
+  protected formatRequest(messages: ChatMessage[], tools?: Tool[]): unknown {
+    const request: Record<string, unknown> = {
       model: this.model,
       messages,
-      max_tokens: 1000,
-      temperature: 0.7,
+      max_tokens: this.maxTokens ?? 1000,
+      temperature: this.temperature ?? 0.7,
     };
 
     if (tools && tools.length > 0) {
@@ -152,7 +80,16 @@ export class AgentGatewayProvider extends LLMProvider {
     return request;
   }
 
-  protected parseResponse(response: any): ChatResponse {
-    return response;
+  /**
+   * Returns true when the conversation history contains tool-related
+   * messages (assistant tool_calls or tool-role results), which means
+   * Bedrock will expect a toolConfig in the request.
+   */
+  private hasToolMessages(messages: ChatMessage[]): boolean {
+    return messages.some(
+      msg =>
+        msg.role === 'tool' ||
+        (msg.role === 'assistant' && msg.tool_calls?.length),
+    );
   }
 }

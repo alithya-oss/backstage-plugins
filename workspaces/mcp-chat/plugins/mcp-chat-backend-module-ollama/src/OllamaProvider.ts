@@ -20,7 +20,7 @@ import {
   type Tool,
   type ChatResponse,
   type ProviderConfig,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 import { Ollama } from 'ollama';
 
 /**

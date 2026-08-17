@@ -15,15 +15,24 @@
  */
 
 import { OpenAIResponsesProvider } from './OpenAIResponsesProvider';
+import { ResponseError } from '@backstage/errors';
 import type {
   ChatMessage,
   Tool,
   ProviderConfig,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 // Mock global.fetch — OpenAIResponsesProvider overrides makeRequest and uses fetch directly
 const mockFetch = jest.fn() as jest.Mock;
 global.fetch = mockFetch;
+
+const mockLogger = {
+  debug: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+  child: jest.fn().mockReturnThis(),
+} as any;
 
 function createProvider(
   configOverrides?: Partial<ProviderConfig>,
@@ -33,6 +42,7 @@ function createProvider(
     baseUrl: 'https://api.openai.com/v1',
     model: 'gpt-4o',
     apiKey: 'test-api-key',
+    logger: mockLogger,
     ...configOverrides,
   };
   return new OpenAIResponsesProvider(config);
@@ -189,5 +199,43 @@ describe('OpenAIResponsesProvider', () => {
 
     expect(result.connected).toBe(false);
     expect(result.error).toBe('Network error');
+  });
+
+  it('throws ResponseError with status 500 when makeRequest receives a non-OK response', async () => {
+    const provider = createProvider();
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      statusText: 'Internal Server Error',
+      headers: { get: () => 'text/plain' },
+      text: async () => 'Something went wrong',
+    });
+
+    await expect(
+      provider.sendMessage([{ role: 'user', content: 'Hi' }]),
+    ).rejects.toMatchObject({
+      name: 'ResponseError',
+      statusCode: 500,
+    });
+  });
+
+  it('throws ResponseError with status 401 when makeRequest receives an unauthorized response', async () => {
+    const provider = createProvider();
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 401,
+      statusText: 'Unauthorized',
+      headers: { get: () => 'application/json' },
+      text: async () =>
+        JSON.stringify({ error: { message: 'Invalid API key' } }),
+    });
+
+    const error = await provider
+      .sendMessage([{ role: 'user', content: 'Hi' }])
+      .catch(e => e);
+
+    expect(error).toBeInstanceOf(ResponseError);
+    expect(error.statusCode).toBe(401);
+    expect(error.statusText).toBe('Unauthorized');
   });
 });

@@ -15,7 +15,7 @@
  */
 
 import { createExtensionPoint } from '@backstage/backend-plugin-api';
-import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { LLMProvider } from './LLMProvider';
 
 /**
  * Extension point for registering LLM provider implementations

@@ -29,11 +29,13 @@
   },
   "dependencies": {
     "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^",
-    "@backstage/backend-plugin-api": "^1.4.0"
+    "@backstage/backend-plugin-api": "^1.8.0",
+    "@backstage/errors": "^1.2.7"
   },
   "devDependencies": {
     "@backstage/backend-test-utils": "^1.6.0",
-    "@backstage/cli": "^0.33.0"
+    "@backstage/cli": "^0.33.0",
+    "fast-check": "^3.22.0"
   },
   "files": [
     "dist"

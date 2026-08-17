@@ -14,54 +14,9 @@
  * limitations under the License.
  */
 
-// =============================================================================
-// Plugin
-// =============================================================================
+/**
+ * The MCP Chat backend plugin.
+ *
+ * @public
+ */
 export { mcpChatPlugin as default } from './plugin';
-
-// =============================================================================
-// Extension Point
-// =============================================================================
-export {
-  llmProviderExtensionPoint,
-  type LlmProviderExtensionPoint,
-} from './extensions';
-
-// =============================================================================
-// LLM Providers
-// =============================================================================
-export { LLMProvider } from './providers';
-
-// =============================================================================
-// Services
-// =============================================================================
-export type { MCPClientService } from './services/MCPClientService';
-export {
-  MCPClientServiceImpl,
-  type Options as MCPClientServiceOptions,
-} from './services/MCPClientServiceImpl';
-export {
-  ChatConversationStore,
-  type ChatConversationStoreOptions,
-} from './services/ChatConversationStore';
-export {
-  SummarizationService,
-  type SummarizationServiceOptions,
-} from './services/SummarizationService';
-
-// =============================================================================
-// Utilities
-// =============================================================================
-export {
-  validateConfig,
-  validateMessages,
-  loadServerConfigs,
-  executeToolCall,
-  findNpxPath,
-  DEFAULT_MCP_TOOL_CALL_TIMEOUT_MS,
-} from './utils';
-
-// =============================================================================
-// Router
-// =============================================================================
-export { createRouter, type RouterOptions } from './router';

@@ -15,6 +15,7 @@
  */
 
 import { HttpAuthService } from '@backstage/backend-plugin-api';
+import { InputError, NotFoundError } from '@backstage/errors';
 import { Request, Response, NextFunction } from 'express';
 import { validate as uuidValidate } from 'uuid';
 import { isGuestUser } from '../utils';
@@ -45,7 +46,7 @@ export function createAuthMiddleware(httpAuth: HttpAuthService) {
       });
       req.userId = credentials.principal.userEntityRef;
       next();
-    } catch (error) {
+    } catch {
       res.status(401).json({ error: 'Unauthorized' });
     }
   };
@@ -57,11 +58,11 @@ export function createAuthMiddleware(httpAuth: HttpAuthService) {
  */
 export function requireNonGuest(
   req: AuthenticatedRequest,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) {
   if (!req.userId || isGuestUser(req.userId)) {
-    return res.status(404).json({ error: 'Conversation not found' });
+    return next(new NotFoundError('Conversation not found'));
   }
   return next();
 }
@@ -73,10 +74,10 @@ export function requireNonGuest(
  * @returns Express middleware function
  */
 export function validateUuidParam(paramName: string) {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     const value = req.params[paramName];
     if (!value || !uuidValidate(value)) {
-      return res.status(400).json({ error: `Invalid ${paramName} format` });
+      return next(new InputError(`Invalid ${paramName} format`));
     }
     return next();
   };

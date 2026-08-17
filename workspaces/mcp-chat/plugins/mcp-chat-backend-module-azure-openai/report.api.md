@@ -4,16 +4,18 @@
 
 ```ts
 import { BackendFeature } from '@backstage/backend-plugin-api';
-import { ChatMessage } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { OpenAIProvider } from '@alithya-oss/backstage-plugin-mcp-chat-backend-module-openai';
-import { ProviderConfig } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { Tool } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { ChatMessage } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { OpenAICompatibleBase } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { ProviderConfig } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { Tool } from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 // @public
-export class AzureOpenAIProvider extends OpenAIProvider {
+export class AzureOpenAIProvider extends OpenAICompatibleBase {
   constructor(config: ProviderConfig);
   // (undocumented)
-  protected formatRequest(messages: ChatMessage[], tools?: Tool[]): any;
+  protected formatRequest(messages: ChatMessage[], tools?: Tool[]): unknown;
+  // (undocumented)
+  protected getHeaders(): Record<string, string>;
   // (undocumented)
   protected get providerName(): string;
   // (undocumented)

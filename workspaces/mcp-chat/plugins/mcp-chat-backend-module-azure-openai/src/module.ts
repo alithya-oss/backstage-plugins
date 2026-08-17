@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  createBackendModule,
-  coreServices,
-} from '@backstage/backend-plugin-api';
-import { llmProviderExtensionPoint } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { createLlmProviderModule } from '@alithya-oss/backstage-plugin-mcp-chat-node';
 import { AzureOpenAIProvider } from './AzureOpenAIProvider';
 
 /**
@@ -27,35 +23,8 @@ import { AzureOpenAIProvider } from './AzureOpenAIProvider';
  *
  * @public
  */
-export default createBackendModule({
-  pluginId: 'mcp-chat',
-  moduleId: 'azure-openai',
-  register(reg) {
-    reg.registerInit({
-      deps: {
-        config: coreServices.rootConfig,
-        llmProviders: llmProviderExtensionPoint,
-      },
-      async init({ config, llmProviders }) {
-        const providers =
-          config.getOptionalConfigArray('mcpChat.providers') || [];
-        const entry = providers.find(p => p.getString('id') === 'azure-openai');
-
-        if (!entry) return; // Skip registration if not configured
-
-        const providerConfig = {
-          type: 'azure-openai',
-          apiKey: entry.getOptionalString('token'),
-          baseUrl: entry.getOptionalString('baseUrl') || '',
-          model: entry.getString('model'),
-          deploymentName: entry.getOptionalString('deploymentName'),
-        };
-
-        llmProviders.registerProvider(
-          'azure-openai',
-          new AzureOpenAIProvider(providerConfig),
-        );
-      },
-    });
-  },
+export default createLlmProviderModule({
+  providerId: 'azure-openai',
+  defaultBaseUrl: '',
+  providerFactory: config => new AzureOpenAIProvider(config),
 });

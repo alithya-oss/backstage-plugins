@@ -24,3 +24,44 @@ export {
   llmProviderExtensionPoint,
   type LlmProviderExtensionPoint,
 } from './extensions';
+
+export { LLMProvider } from './LLMProvider';
+
+export { OpenAICompatibleBase } from './OpenAICompatibleBase';
+
+export {
+  createLlmProviderModule,
+  type CreateLlmProviderModuleOptions,
+} from './createLlmProviderModule';
+
+export type { ProviderConfig } from './types';
+
+// Re-exports from common package (via types.ts)
+export type {
+  CommonProviderConfig,
+  ProviderInfo,
+  ProviderConnectionStatus,
+  ProviderStatusData,
+  MCPServerConfig,
+  MCPServerSecrets,
+  MCPServerFullConfig,
+  MCPServer,
+  MCPServerStatusData,
+  ChatMessage,
+  ChatResponse,
+  QueryResponse,
+  Tool,
+  ToolCall,
+  ServerTool,
+  ToolExecutionResult,
+  MessageValidationResult,
+  ConversationRecord,
+  ConversationRow,
+  ResponsesApiMcpTool,
+  ResponsesApiMcpCall,
+  ResponsesApiMessage,
+  ResponsesApiResponse,
+  ResponsesApiOutputEvent,
+} from './types';
+
+export { MCPServerType, VALID_ROLES } from './types';

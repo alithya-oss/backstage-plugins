@@ -43,10 +43,15 @@ export interface Config {
        */
       baseUrl?: string;
       /**
-       * Provider-specific authentication parameters (IAM, session tokens, etc.)
-       * @visibility secret
+       * Maximum number of tokens to generate in the response
+       * @visibility backend
        */
-      auth?: { [key: string]: string };
+      maxTokens?: number;
+      /**
+       * Sampling temperature for response generation (0.0 to 2.0)
+       * @visibility backend
+       */
+      temperature?: number;
     }>;
   };
 }

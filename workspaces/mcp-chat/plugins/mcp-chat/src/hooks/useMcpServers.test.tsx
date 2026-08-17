@@ -62,7 +62,7 @@ describe('useMcpServers', () => {
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.mcpServers).toHaveLength(2);
     expect(result.current.mcpServers.every(s => s.enabled)).toBe(true);
-    expect(result.current.error).toBeNull();
+    expect(result.current.error).toBeUndefined();
   });
 
   it('should handle API errors', async () => {
@@ -70,7 +70,8 @@ describe('useMcpServers', () => {
     const { result } = renderHook(() => useMcpServers(), { wrapper: Wrapper });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.mcpServers).toEqual([]);
-    expect(result.current.error).toBe('fail');
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error?.message).toBe('fail');
   });
 
   it('should toggle server enabled state', async () => {
@@ -125,6 +126,6 @@ describe('useMcpServers', () => {
     const { result } = renderHook(() => useMcpServers(), { wrapper: Wrapper });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.mcpServers).toEqual([]);
-    expect(result.current.error).toBeNull();
+    expect(result.current.error).toBeUndefined();
   });
 });

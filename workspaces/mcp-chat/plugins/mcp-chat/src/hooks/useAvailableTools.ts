@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useApi } from '@backstage/core-plugin-api';
+import { useApi } from '@backstage/frontend-plugin-api';
 import useAsyncRetry from 'react-use/esm/useAsyncRetry';
 import { mcpChatApiRef } from '../api';
 import { MCPServer, Tool } from '../types';
@@ -22,7 +22,7 @@ import { MCPServer, Tool } from '../types';
 export interface UseAvailableToolsReturn {
   availableTools: Tool[];
   isLoading: boolean;
-  error: string | null;
+  error: Error | undefined;
   refetch: () => void;
 }
 
@@ -46,16 +46,10 @@ export const useAvailableTools = (
     return toolsResponse.availableTools;
   }, [mcpChatApi, mcpServers]);
 
-  const getErrorMessage = () => {
-    if (!error) return null;
-    if (error instanceof Error) return error.message;
-    return 'Failed to fetch available tools';
-  };
-
   return {
     availableTools: availableTools || [],
     isLoading,
-    error: getErrorMessage(),
+    error,
     refetch,
   };
 };

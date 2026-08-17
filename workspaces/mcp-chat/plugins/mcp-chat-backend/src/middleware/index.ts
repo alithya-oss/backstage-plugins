@@ -20,3 +20,4 @@ export {
   validateUuidParam,
 } from './auth';
 export type { AuthenticatedRequest } from './auth';
+export { createErrorHandler } from './errorHandler';

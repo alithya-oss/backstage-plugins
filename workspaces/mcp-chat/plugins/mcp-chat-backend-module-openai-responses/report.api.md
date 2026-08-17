@@ -4,12 +4,12 @@
 
 ```ts
 import { BackendFeature } from '@backstage/backend-plugin-api';
-import { ChatMessage } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { ChatResponse } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { MCPServerFullConfig } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { ResponsesApiResponse } from '@alithya-oss/backstage-plugin-mcp-chat-common';
-import { Tool } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { ChatMessage } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { ChatResponse } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { MCPServerFullConfig } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { ResponsesApiResponse } from '@alithya-oss/backstage-plugin-mcp-chat-node';
+import { Tool } from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 // @public
 const _default: BackendFeature;

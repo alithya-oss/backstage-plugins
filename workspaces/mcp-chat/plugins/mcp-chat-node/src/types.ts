@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 The Alithya Authors
+ * Copyright 2025 The Alithya Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,47 +15,80 @@
  */
 
 import { LoggerService } from '@backstage/backend-plugin-api';
+import { ProviderConfig as CommonProviderConfig } from '@alithya-oss/backstage-plugin-mcp-chat-common';
 
 // =============================================================================
-// LLM Provider Configuration Types
+// Extended Provider Configuration (Node-only)
 // =============================================================================
 
 /**
- * Configuration for an LLM provider.
- *
- * @example
- * ```typescript
- * const openaiConfig: ProviderConfig = {
- *   type: 'openai',
- *   apiKey: 'sk-...',
- *   baseUrl: 'https://api.openai.com/v1',
- *   model: 'gpt-4'
- * };
- *
- * const ollamaConfig: ProviderConfig = {
- *   type: 'ollama',
- *   baseUrl: 'http://localhost:11434',
- *   model: 'llama2'
- * };
- * ```
+ * Extended provider configuration for use within backend/node contexts.
+ * Adds the `logger` field that is only available in Node.js environments.
  *
  * @public
  */
-export interface ProviderConfig {
-  /** Provider type identifier */
-  type: string;
-  /** API key for authentication (optional for local providers like Ollama) */
-  apiKey?: string;
-  /** Base URL for the provider's API */
-  baseUrl: string;
-  /** Model identifier to use */
-  model: string;
-  /** Azure OpenAI deployment name. Required when using the `azure-openai` provider type. */
-  deploymentName?: string;
-  /** Logger for debugging */
-  logger?: LoggerService;
-  /** Maximum number of tokens to generate (default: 1000 for OpenAI-compatible, 4096 for Claude, 8192 for Gemini) */
-  maxTokens?: number;
-  /** Temperature for response randomness, between 0 and 1 (default: 0.7) */
-  temperature?: number;
+export interface ProviderConfig extends CommonProviderConfig {
+  /** Logger instance for diagnostic output */
+  logger: LoggerService;
 }
+
+// =============================================================================
+// Re-exports from Common Package
+// =============================================================================
+
+// Provider types
+export type { ProviderConfig as CommonProviderConfig } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+
+export type {
+  ProviderInfo,
+  ProviderConnectionStatus,
+  ProviderStatusData,
+} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+
+// MCP Server types
+export type {
+  MCPServerConfig,
+  MCPServerSecrets,
+  MCPServerFullConfig,
+  MCPServer,
+  MCPServerStatusData,
+} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+
+// Chat types
+export type {
+  ChatMessage,
+  ChatResponse,
+  QueryResponse,
+} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+
+// Tool types
+export type {
+  Tool,
+  ToolCall,
+  ServerTool,
+  ToolExecutionResult,
+} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+
+// Validation types
+export type { MessageValidationResult } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+
+// Conversation types
+export type {
+  ConversationRecord,
+  ConversationRow,
+} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+
+// Enums and Constants
+export {
+  MCPServerType,
+  VALID_ROLES,
+} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+
+// OpenAI Responses API types
+export type {
+  ResponsesApiMcpTool,
+  ResponsesApiMcpCall,
+  ResponsesApiMessage,
+  ResponsesApiResponse,
+  ResponsesApiOutputEvent,
+} from '@alithya-oss/backstage-plugin-mcp-chat-common';

@@ -45,6 +45,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
+    "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^",
     "@backstage/core-components": "^0.18.9",
     "@backstage/core-plugin-api": "^1.12.5",
     "@backstage/errors": "^1.3.0",
@@ -71,6 +72,7 @@
     "@testing-library/react": "^16.0.0",
     "@types/react": "^17.0.0 || ^18.0.0",
     "@types/react-dom": "^18",
+    "fast-check": "^3.22.0",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-router-dom": "^6.3.0"

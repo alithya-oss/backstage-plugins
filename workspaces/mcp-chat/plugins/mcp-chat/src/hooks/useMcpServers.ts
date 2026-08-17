@@ -15,7 +15,7 @@
  */
 
 import { useState, useCallback } from 'react';
-import { useApi } from '@backstage/core-plugin-api';
+import { useApi } from '@backstage/frontend-plugin-api';
 import useAsyncRetry from 'react-use/esm/useAsyncRetry';
 import { MCPServer } from '../types';
 import { mcpChatApiRef } from '../api';
@@ -23,7 +23,7 @@ import { mcpChatApiRef } from '../api';
 export interface UseMcpServersReturn {
   mcpServers: MCPServer[];
   isLoading: boolean;
-  error: string | null;
+  error: Error | undefined;
   refetch: () => void;
   handleServerToggle: (serverId: string) => void;
 }
@@ -60,7 +60,7 @@ export const useMcpServers = (): UseMcpServersReturn => {
   return {
     mcpServers,
     isLoading,
-    error: error?.message || null,
+    error,
     refetch,
     handleServerToggle,
   };

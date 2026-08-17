@@ -90,7 +90,7 @@ describe('useAvailableTools', () => {
     });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.availableTools).toEqual(mockTools);
-    expect(result.current.error).toBeNull();
+    expect(result.current.error).toBeUndefined();
   });
 
   it('should not fetch tools when no servers are provided', async () => {
@@ -118,7 +118,8 @@ describe('useAvailableTools', () => {
     });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.availableTools).toEqual([]);
-    expect(result.current.error).toBe('API Error');
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error?.message).toBe('API Error');
   });
 
   it('should handle network errors', async () => {
@@ -129,7 +130,8 @@ describe('useAvailableTools', () => {
     });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.availableTools).toEqual([]);
-    expect(result.current.error).toBe('Network error');
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error?.message).toBe('Network error');
   });
 
   it('should handle non-Error exceptions', async () => {
@@ -139,7 +141,8 @@ describe('useAvailableTools', () => {
     });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.availableTools).toEqual([]);
-    expect(result.current.error).toBe('Failed to fetch available tools');
+    // useAsyncRetry stores the thrown value as-is in the error field
+    expect(result.current.error).toBeDefined();
   });
 
   it('should refetch tools when refetch is called', async () => {
@@ -181,7 +184,9 @@ describe('useAvailableTools', () => {
     act(() => {
       result.current.refetch();
     });
-    await waitFor(() => expect(result.current.error).toBe(errorMessage));
+    await waitFor(() =>
+      expect(result.current.error?.message).toBe(errorMessage),
+    );
     expect(result.current.availableTools).toEqual([]);
   });
 
@@ -194,7 +199,7 @@ describe('useAvailableTools', () => {
     });
     expect(result.current.isLoading).toBe(true);
     expect(result.current.availableTools).toEqual([]);
-    expect(result.current.error).toBeNull();
+    expect(result.current.error).toBeUndefined();
   });
 
   it('should return correct interface structure', async () => {

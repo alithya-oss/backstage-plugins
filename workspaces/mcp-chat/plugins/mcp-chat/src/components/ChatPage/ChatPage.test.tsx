@@ -68,14 +68,14 @@ const mockUseMcpServers = jest.fn(() => ({
   mcpServers: [
     { id: '1', name: 'test-server', enabled: true, type: MCPServerType.STDIO },
   ],
-  error: null,
+  error: undefined as Error | undefined,
   handleServerToggle: jest.fn(),
 }));
 
 const mockUseProviderStatus = jest.fn(() => ({
   providerStatusData: { connected: true },
   isLoading: false,
-  error: null,
+  error: undefined,
 }));
 
 const mockUseConversations = jest.fn(() => ({
@@ -135,14 +135,14 @@ describe('ChatPage', () => {
           type: MCPServerType.STDIO,
         },
       ],
-      error: null,
+      error: undefined,
       handleServerToggle: jest.fn(),
     });
 
     mockUseProviderStatus.mockReturnValue({
       providerStatusData: { connected: true },
       isLoading: false,
-      error: null,
+      error: undefined,
     });
   });
 
@@ -239,7 +239,7 @@ describe('ChatPage', () => {
       // Mock the hook to return an error
       mockUseMcpServers.mockReturnValue({
         mcpServers: [],
-        error: 'Failed to load servers' as any,
+        error: new Error('Failed to load servers'),
         handleServerToggle: jest.fn(),
       });
 
@@ -253,7 +253,7 @@ describe('ChatPage', () => {
       // Mock the hook to return an error
       mockUseMcpServers.mockReturnValue({
         mcpServers: [],
-        error: 'Server error' as any,
+        error: new Error('Server error'),
         handleServerToggle: jest.fn(),
       });
 

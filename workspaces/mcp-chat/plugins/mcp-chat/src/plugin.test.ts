@@ -16,7 +16,7 @@
 
 import { mcpChatPlugin, McpChatPage, MCPChatIcon } from './plugin';
 import { mcpChatApiRef } from './api';
-import { rootRouteRef } from './routes';
+import { rootRouteRef } from './wiring';
 import { BotIconComponent } from './components/BotIcon';
 import { McpChat } from './api/McpChatApi';
 

@@ -1,0 +1,26 @@
+views {
+  view landscape {
+    title "V2 System Landscape"
+    description "MCP Chat v2 (layered architecture) — 13 packages, strict boundaries"
+    include *
+    include mcpChatV2.*
+  }
+
+  view v2-internals of mcpChatV2 {
+    title "V2 Package Layers"
+    description "common -> node -> providers -> backend <- frontend"
+    include *
+  }
+
+  view v2-dependency-flow of mcpChatV2 {
+    title "V2 Dependency Flow"
+    description "Package dependency direction: common at base, node as extension surface"
+    include mcpChatV2.*
+    include
+      mcpChatV2.node -> mcpChatV2.common,
+      mcpChatV2.providers -> mcpChatV2.node,
+      mcpChatV2.backend -> mcpChatV2.node,
+      mcpChatV2.frontend -> mcpChatV2.common,
+      mcpChatV2.frontend -> mcpChatV2.backend
+  }
+}

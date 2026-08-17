@@ -19,7 +19,7 @@ import {
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
 import { llmProviderExtensionPoint } from '@alithya-oss/backstage-plugin-mcp-chat-node';
-import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-node';
 import { createRouter } from './router';
 import {
   MCPClientServiceImpl,
@@ -54,7 +54,7 @@ export const mcpChatPlugin = createBackendPlugin({
         httpAuth: coreServices.httpAuth,
       },
       async init({ logger, httpRouter, config, database, httpAuth }) {
-        validateConfig(config);
+        validateConfig(config, logger);
 
         // Resolve active provider from extension point registry (Req 6.3, 8.2)
         const configuredProviders =

@@ -16,7 +16,7 @@
 
 import { startTestBackend, mockServices } from '@backstage/backend-test-utils';
 import { mcpChatPlugin } from './plugin';
-import { llmProviderExtensionPoint } from './extensions';
+import { llmProviderExtensionPoint } from '@alithya-oss/backstage-plugin-mcp-chat-node';
 import request from 'supertest';
 import { TestBackend } from '@backstage/backend-test-utils';
 import { MCPServerType } from '@alithya-oss/backstage-plugin-mcp-chat-common';
@@ -90,6 +90,8 @@ jest.mock('./services/MCPClientServiceImpl', () => ({
 jest.mock('./utils', () => ({
   validateConfig: jest.fn(),
   validateMessages: jest.fn().mockReturnValue({ isValid: true }),
+  isGuestUser: jest.fn().mockReturnValue(true),
+  isMissingTableError: jest.fn().mockReturnValue(false),
 }));
 
 const mockConfig = {
@@ -271,10 +273,7 @@ describe('mcpChatPlugin', () => {
         })
         .expect(400);
 
-      expect(response.body.error).toMatchObject({
-        name: 'InputError',
-        message: 'enabledTools must be an array',
-      });
+      expect(response.body.error).toBe('enabledTools must be an array');
     });
 
     it('should reject non-string enabledTools', async () => {
@@ -286,10 +285,7 @@ describe('mcpChatPlugin', () => {
         })
         .expect(400);
 
-      expect(response.body.error).toMatchObject({
-        name: 'InputError',
-        message: 'All enabledTools must be strings',
-      });
+      expect(response.body.error).toBe('All enabledTools must be strings');
     });
   });
 

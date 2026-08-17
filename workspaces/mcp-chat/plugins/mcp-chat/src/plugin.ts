@@ -23,9 +23,7 @@ import {
   fetchApiRef,
 } from '@backstage/core-plugin-api';
 
-import { rootRouteRef } from './routes';
-import { mcpChatApiRef } from './api';
-import { McpChat } from './api/McpChatApi';
+import { rootRouteRef, mcpChatApiRef, McpChat, chatPageLoader } from './wiring';
 import { BotIconComponent } from './components/BotIcon';
 
 /**
@@ -58,7 +56,7 @@ export const mcpChatPlugin = createPlugin({
 export const McpChatPage = mcpChatPlugin.provide(
   createRoutableExtension({
     name: 'McpChatPage',
-    component: () => import('./components/ChatPage').then(m => m.ChatPage),
+    component: chatPageLoader,
     mountPoint: rootRouteRef,
   }),
 );

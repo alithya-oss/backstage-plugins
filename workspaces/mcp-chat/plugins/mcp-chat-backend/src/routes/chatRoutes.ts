@@ -22,7 +22,7 @@ import { validate as uuidValidate } from 'uuid';
 import { MCPClientService } from '../services/MCPClientService';
 import { ChatConversationStore } from '../services/ChatConversationStore';
 import { SummarizationService } from '../services/SummarizationService';
-import { validateMessages, isGuestUser } from '../utils';
+import { validateMessages, isGuestUser, isMissingTableError } from '../utils';
 
 /**
  * Dependencies required for chat routes.
@@ -61,13 +61,13 @@ export function createChatRoutes(deps: ChatRoutesDeps): express.Router {
 
     // Validate conversationId format if provided
     if (conversationId && !uuidValidate(conversationId)) {
-      return res.status(400).json({ error: 'Invalid conversation ID format' });
+      throw new InputError('Invalid conversation ID format');
     }
 
-    const validation = validateMessages(messages);
+    const validation = validateMessages(messages, logger);
     if (!validation.isValid) {
       logger.warn(`Message validation failed: ${validation.error}`);
-      return res.status(400).json({ error: validation.error });
+      throw new InputError(validation.error!);
     }
 
     if (enabledTools && !Array.isArray(enabledTools)) {
@@ -147,7 +147,7 @@ export function createChatRoutes(deps: ChatRoutesDeps): express.Router {
       }
     } catch (error: any) {
       // Don't fail the request if saving fails
-      if (error?.message?.includes('no such table')) {
+      if (isMissingTableError(error)) {
         logger.warn('Conversations table does not exist yet');
       } else {
         logger.error(`Failed to save conversation: ${error}`);

@@ -1,0 +1,52 @@
+model {
+  actor adopter "Backstage Adopter" {
+    description "Developer using Backstage with MCP Chat"
+  }
+
+  external llmService "LLM Service" {
+    description "External LLM API (OpenAI, Gemini, Claude, Ollama)"
+  }
+
+  external mcpServer "MCP Server" {
+    description "External MCP server (STDIO or HTTP)"
+  }
+
+  system mcpChat "MCP Chat (v1 — community-plugins)" {
+    description "Monolithic architecture — 2 packages, all providers bundled in backend"
+
+    container frontend "mcp-chat (Frontend Plugin)" {
+      description """
+        @backstage-community/plugin-mcp-chat
+        - plugin.ts: Legacy entry — createPlugin + createRoutableExtension + createApiFactory
+        - alpha.tsx: New frontend system entry — duplicates route ref and API factory
+        - ChatContainer.tsx: 507-line monolithic (messages, input, scroll, quick-start)
+        - ChatMessage.tsx: 507-line monolithic (avatar, bubble, markdown, tool calls, copy)
+        - RightPane.tsx: 370-line monolithic (tabs, provider status, tools, history)
+        - Hooks: useConversations, useProviderStatus, useMcpServers, useAvailableTools
+        - Imports from @backstage/core-plugin-api
+      """
+    }
+
+    container backend "mcp-chat-backend (Backend Plugin)" {
+      description """
+        @backstage-community/plugin-mcp-chat-backend
+        Exports EVERYTHING: plugin, providers, services, types, utils, router
+        - LLMProvider base class co-located here
+        - ProviderFactory: switch/case to instantiate 6 providers (OpenAI, Claude, Gemini, Ollama, LiteLLM, OpenAI Responses)
+        - MCPClientServiceImpl: 700-line monolithic (lifecycle, query, transport, status)
+        - utils.ts: 499-line monolithic (validateConfig, loadServerConfigs, findNpxPath, executeToolCall, validateMessages) — uses console.log
+        - router.ts: inline res.status().json() error handling
+        - conversationRoutes: error?.message?.includes() pattern
+      """
+      style {
+        color red
+      }
+    }
+
+    frontend -> backend "HTTP API /api/mcp-chat/*"
+  }
+
+  adopter -> mcpChat.frontend "uses chat UI"
+  mcpChat.backend -> llmService "sends prompts + tools"
+  mcpChat.backend -> mcpServer "connects via STDIO/HTTP"
+}

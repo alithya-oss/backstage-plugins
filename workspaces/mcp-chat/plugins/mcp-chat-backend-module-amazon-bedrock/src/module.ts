@@ -20,27 +20,15 @@ import {
 } from '@backstage/backend-plugin-api';
 import { llmProviderExtensionPoint } from '@alithya-oss/backstage-plugin-mcp-chat-node';
 import { DefaultAwsCredentialsManager } from '@backstage/integration-aws-node';
-import type { Config } from '@backstage/config';
 import { BedrockProvider } from './BedrockProvider';
-
-/**
- * Reads the optional `auth` record from a provider config entry.
- * @param entry - The config entry to read auth from
- * @returns A record of string key-value pairs, or undefined if no auth config
- */
-function readAuthRecord(entry: Config): Record<string, string> | undefined {
-  const authConfig = entry.getOptionalConfig('auth');
-  if (!authConfig) return undefined;
-  const result: Record<string, string> = {};
-  for (const key of authConfig.keys()) {
-    result[key] = authConfig.getString(key);
-  }
-  return result;
-}
 
 /**
  * Backend module that registers the Amazon Bedrock LLM provider
  * with the mcp-chat backend plugin.
+ *
+ * Uses a custom `createBackendModule` instead of `createLlmProviderModule`
+ * because it requires async AWS credential resolution before constructing
+ * the provider.
  *
  * @public
  */
@@ -51,31 +39,34 @@ export default createBackendModule({
     reg.registerInit({
       deps: {
         config: coreServices.rootConfig,
+        logger: coreServices.logger,
         llmProviders: llmProviderExtensionPoint,
       },
-      async init({ config, llmProviders }) {
+      async init({ config, logger, llmProviders }) {
         const providers =
-          config.getOptionalConfigArray('mcpChat.providers') || [];
+          config.getOptionalConfigArray('mcpChat.providers') ?? [];
         const entry = providers.find(
           p => p.getString('id') === 'amazon-bedrock',
         );
 
-        if (!entry) return; // Skip registration if not configured
+        if (!entry) return; // Not configured — skip silently
 
-        const auth = readAuthRecord(entry);
-        const region = auth?.region || 'us-east-1';
+        const region = entry.getOptionalString('region') ?? 'us-east-1';
+        const accountId = entry.getOptionalString('accountId');
 
         const credsManager = DefaultAwsCredentialsManager.fromConfig(config);
         const credProvider = await credsManager.getCredentialProvider({
-          accountId: auth?.accountId,
+          accountId,
         });
 
         const providerConfig = {
           type: 'amazon-bedrock',
           apiKey: entry.getOptionalString('token'),
-          baseUrl: entry.getOptionalString('baseUrl') || '',
+          baseUrl: entry.getOptionalString('baseUrl') ?? '',
           model: entry.getString('model'),
-          auth,
+          logger,
+          maxTokens: entry.getOptionalNumber('maxTokens'),
+          temperature: entry.getOptionalNumber('temperature'),
         };
 
         llmProviders.registerProvider(

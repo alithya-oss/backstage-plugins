@@ -14,28 +14,8 @@
  * limitations under the License.
  */
 
-import {
-  createBackendModule,
-  coreServices,
-} from '@backstage/backend-plugin-api';
-import { llmProviderExtensionPoint } from '@alithya-oss/backstage-plugin-mcp-chat-node';
-import type { Config } from '@backstage/config';
+import { createLlmProviderModule } from '@alithya-oss/backstage-plugin-mcp-chat-node';
 import { OpenAIResponsesProvider } from './OpenAIResponsesProvider';
-
-/**
- * Reads the optional `auth` record from a provider config entry.
- * @param entry - The config entry to read auth from
- * @returns A record of string key-value pairs, or undefined if no auth config
- */
-function readAuthRecord(entry: Config): Record<string, string> | undefined {
-  const authConfig = entry.getOptionalConfig('auth');
-  if (!authConfig) return undefined;
-  const result: Record<string, string> = {};
-  for (const key of authConfig.keys()) {
-    result[key] = authConfig.getString(key);
-  }
-  return result;
-}
 
 /**
  * Backend module that registers the OpenAI Responses API LLM provider
@@ -43,38 +23,8 @@ function readAuthRecord(entry: Config): Record<string, string> | undefined {
  *
  * @public
  */
-export default createBackendModule({
-  pluginId: 'mcp-chat',
-  moduleId: 'openai-responses',
-  register(reg) {
-    reg.registerInit({
-      deps: {
-        config: coreServices.rootConfig,
-        llmProviders: llmProviderExtensionPoint,
-      },
-      async init({ config, llmProviders }) {
-        const providers =
-          config.getOptionalConfigArray('mcpChat.providers') || [];
-        const entry = providers.find(
-          p => p.getString('id') === 'openai-responses',
-        );
-
-        if (!entry) return; // Skip registration if not configured
-
-        const providerConfig = {
-          type: 'openai-responses',
-          apiKey: entry.getOptionalString('token'),
-          baseUrl:
-            entry.getOptionalString('baseUrl') || 'https://api.openai.com/v1',
-          model: entry.getString('model'),
-          auth: readAuthRecord(entry),
-        };
-
-        llmProviders.registerProvider(
-          'openai-responses',
-          new OpenAIResponsesProvider(providerConfig),
-        );
-      },
-    });
-  },
+export default createLlmProviderModule({
+  providerId: 'openai-responses',
+  defaultBaseUrl: 'https://api.openai.com/v1',
+  providerFactory: config => new OpenAIResponsesProvider(config),
 });

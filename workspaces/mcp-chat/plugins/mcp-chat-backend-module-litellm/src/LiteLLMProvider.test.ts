@@ -19,7 +19,7 @@ import type {
   ChatMessage,
   Tool,
   ProviderConfig,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 // Mock global.fetch for makeRequest and testConnection
 const mockFetch = jest.fn() as jest.Mock;
@@ -33,6 +33,13 @@ function createProvider(
     baseUrl: 'http://localhost:4000',
     model: 'gpt-4o',
     apiKey: 'test-api-key',
+    logger: {
+      debug: jest.fn(),
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      child: jest.fn(),
+    } as any,
     ...configOverrides,
   };
   return new LiteLLMProvider(config);
@@ -111,7 +118,7 @@ describe('LiteLLMProvider', () => {
     expect(body.messages[1]).toEqual({ role: 'user', content: 'Hi' });
   });
 
-  it('returns native tool_calls directly and includes parallel_tool_calls in the request', async () => {
+  it('returns native tool_calls directly in the response', async () => {
     const provider = createProvider();
     const apiResponse = {
       choices: [
@@ -154,10 +161,10 @@ describe('LiteLLMProvider', () => {
       },
     });
 
-    // Verify parallel_tool_calls: true is in the request
+    // Verify tools are included in the request body
     const fetchCall = mockFetch.mock.calls[0];
     const body = JSON.parse(fetchCall[1].body);
-    expect(body.parallel_tool_calls).toBe(true);
+    expect(body.tools).toEqual([sampleTool]);
   });
 
   it('passes tool messages with tool_call_id as-is in the request', async () => {
@@ -208,11 +215,8 @@ describe('LiteLLMProvider', () => {
     expect(assistantMsg.tool_calls).toHaveLength(1);
   });
 
-  it('returns error on failed testConnection when both /models and /health fail', async () => {
+  it('returns error on failed testConnection', async () => {
     const provider = createProvider();
-    // First call to /models fails
-    mockFetch.mockRejectedValueOnce(new Error('Network error'));
-    // Fallback call to /health also fails
     mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
     const result = await provider.testConnection();

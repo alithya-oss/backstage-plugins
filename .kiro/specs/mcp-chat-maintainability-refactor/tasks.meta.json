@@ -1,0 +1,835 @@
+{
+  "pbtResults": {
+    "2.8 Write property tests for `OpenAICompatibleBase`": {
+      "status": "passed",
+      "lastRunTimestamp": 1786852115713
+    },
+    "2.7 Write property tests for `createLlmProviderModule`": {
+      "status": "passed",
+      "lastRunTimestamp": 1786852330144
+    },
+    "6.6 Write unit tests for decomposed utility modules": {
+      "status": "passed",
+      "lastRunTimestamp": 1786890546554
+    },
+    "6.7 Write route integration tests": {
+      "status": "passed",
+      "lastRunTimestamp": 1786890570564
+    },
+    "8.9 Write component tests for decomposed frontend units": {
+      "status": "passed",
+      "lastRunTimestamp": 1786893488283
+    }
+  },
+  "executionHistory": {
+    "1.1 Remove `LLMProvider` class export and its source file from the common package": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850564279
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850585638
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850775039
+      }
+    ],
+    "1.2 Remove `@backstage/backend-plugin-api` from common package dependencies": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850564726
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850586546
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850775965
+      }
+    ],
+    "1.3 Clean up dead imports and verify common package compiles": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850565094
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850780411
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850996795
+      }
+    ],
+    "2.1 Add `LLMProvider.ts` abstract base class to the node package": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850565509
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851297202
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851517679
+      }
+    ],
+    "2.2 Add `OpenAICompatibleBase.ts` shared implementation": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850565871
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851522858
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851828266
+      }
+    ],
+    "2.3 Add `createLlmProviderModule.ts` factory function": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850566318
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851523740
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851829145
+      }
+    ],
+    "2.4 Create extended `ProviderConfig` type with `logger` field": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850566632
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851001851
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851293151
+      }
+    ],
+    "2.5 Delete dead files and update node package index": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850566790
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851297955
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851518614
+      }
+    ],
+    "2.6 Add `fast-check` as a devDependency to packages with property tests": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850567188
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851524655
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851830231
+      }
+    ],
+    "2.7 Write property tests for `createLlmProviderModule`": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850567542
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851834485
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786852345728
+      }
+    ],
+    "2.8 Write property tests for `OpenAICompatibleBase`": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850567780
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786851835396
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786852346588
+      }
+    ],
+    "3. Checkpoint — common and node packages compile": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850568073
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887609777
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894154329
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894269459
+      }
+    ],
+    "4.1 Refactor OpenAI-compatible provider modules (openai, litellm, agentgateway, azure-openai)": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850568423
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786852356340
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786854033998
+      }
+    ],
+    "4.2 Refactor non-OpenAI provider modules (anthropic, amazon-bedrock, gemini, ollama, openai-responses)": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850568884
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786852357284
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786854034936
+      }
+    ],
+    "4.3 Add module registration tests for all 9 provider modules": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850569256
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786854039270
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786885751290
+      }
+    ],
+    "4.4 Relocate and update OpenAI provider test": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850569715
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786854040329
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786885752412
+      }
+    ],
+    "5. Checkpoint — all provider modules compile and register correctly": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850570182
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887610304
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894154753
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894269819
+      }
+    ],
+    "6.1 Delete re-export shims, reduce `index.ts` to single default export, and fix dependency placement": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850570435
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786885757744
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786886213571
+      }
+    ],
+    "6.2 Decompose `MCPClientServiceImpl.ts` into service units": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850570808
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786886218437
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786886908882
+      }
+    ],
+    "6.3 Decompose `utils.ts` into per-concern modules": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850571171
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786886219364
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786886909053
+      }
+    ],
+    "6.4 Add error middleware and typed error handling to routes": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850571530
+      },
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786886913324
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887610665
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887622583
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894155063
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894166795
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894270431
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894283386
+      }
+    ],
+    "6.5 Write unit tests for decomposed service units": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850571948
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887611120
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894155467
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894270813
+      }
+    ],
+    "6.6 Write unit tests for decomposed utility modules": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850572304
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887611553
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894155789
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894271439
+      }
+    ],
+    "6.7 Write route integration tests": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850572548
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887611908
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894156228
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894271972
+      }
+    ],
+    "7. Checkpoint — backend plugin compiles with reduced API": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850572922
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887612305
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894156570
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894272382
+      }
+    ],
+    "8.1 Create `src/wiring.ts` shared frontend wiring module": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850573112
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887612586
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894156953
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894272820
+      }
+    ],
+    "8.2 Refactor `plugin.ts` (legacy entry point) to source from wiring": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850573346
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887613018
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894157390
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894273336
+      }
+    ],
+    "8.3 Refactor `alpha.tsx` (alpha entry point) to source from wiring": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850573560
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887613442
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894157769
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894273811
+      }
+    ],
+    "8.4 Switch frontend imports to `@backstage/frontend-plugin-api`": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850573979
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887613838
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894158256
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894274350
+      }
+    ],
+    "8.5 Factor out inner chat page content and conditionally apply `Page`/`Content` wrapper": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850574388
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887614510
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894158725
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894274919
+      }
+    ],
+    "8.6 Decompose `ChatMessage.tsx` (507 lines → ≤250 each)": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850574711
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887614892
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894159166
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894275506
+      }
+    ],
+    "8.7 Decompose `RightPane.tsx` (370 lines → ≤250 each)": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850574956
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887615273
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894159593
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894275980
+      }
+    ],
+    "8.8 Decompose `ChatContainer.tsx` (358 lines → ≤250 each)": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850575295
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887615714
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894160008
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894276314
+      }
+    ],
+    "8.9 Write component tests for decomposed frontend units": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850575651
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887616197
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894160527
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894276782
+      }
+    ],
+    "9. Checkpoint — frontend plugin compiles and renders correctly": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850576002
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887616581
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894160838
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894277101
+      }
+    ],
+    "10.1 Run full verification pipeline": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850576407
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887617000
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894161299
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894277605
+      }
+    ],
+    "10.2 Verify copyright headers and configuration files unchanged": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850576763
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887617459
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894161709
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894278041
+      }
+    ],
+    "10.3 Create changesets for all affected packages": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850577084
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887617864
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894162084
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894278517
+      }
+    ],
+    "11. Final checkpoint — CI-ready": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850577344
+      },
+      {
+        "executionId": "14122fe2-a7cc-4f6c-b0ad-20e76d18af02",
+        "chatSessionId": "sess_2db5c02b-1769-4520-be57-a950696bc09b",
+        "timestamp": 1786887618259
+      },
+      {
+        "executionId": "1131e57c-8df1-4d57-9573-823b60fd2475",
+        "chatSessionId": "sess_ee443298-7711-434b-9334-48e83c56c318",
+        "timestamp": 1786894162556
+      },
+      {
+        "executionId": "b892b873-6671-44e3-ab18-3bb200907bfc",
+        "chatSessionId": "sess_e29e46ee-526c-4c51-94a8-fc0ecf92b683",
+        "timestamp": 1786894278852
+      }
+    ],
+    "1. Common package — strip to browser-safe contract types only": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786850997238
+      }
+    ],
+    "2. Node package — establish single provider extension surface": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786852347015
+      }
+    ],
+    "4. Provider modules — switch all 9 to `createLlmProviderModule`": [
+      {
+        "executionId": "b5dedd38-769c-43ac-810c-6137a1065adb",
+        "chatSessionId": "sess_d2fd2ad9-abee-469e-9836-1266d79a35f0",
+        "timestamp": 1786885752783
+      }
+    ]
+  }
+}

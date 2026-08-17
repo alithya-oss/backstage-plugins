@@ -15,3 +15,4 @@
  */
 
 export { ChatPage } from './ChatPage';
+export { ChatPageContent } from './ChatPageContent';

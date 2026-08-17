@@ -74,7 +74,7 @@ describe('useProviderStatus', () => {
       });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.providerStatusData).toEqual(mockProviderStatusData);
-      expect(result.current.error).toBeNull();
+      expect(result.current.error).toBeUndefined();
     });
 
     it('should handle empty provider data', async () => {
@@ -92,7 +92,7 @@ describe('useProviderStatus', () => {
       });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.providerStatusData).toEqual(emptyData);
-      expect(result.current.error).toBeNull();
+      expect(result.current.error).toBeUndefined();
     });
   });
 
@@ -107,7 +107,8 @@ describe('useProviderStatus', () => {
       });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.providerStatusData).toBeNull();
-      expect(result.current.error).toBe(errorMessage);
+      expect(result.current.error).toBeInstanceOf(Error);
+      expect(result.current.error?.message).toBe(errorMessage);
     });
 
     it('should handle network errors', async () => {
@@ -118,7 +119,8 @@ describe('useProviderStatus', () => {
       });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.providerStatusData).toBeNull();
-      expect(result.current.error).toBe('Network error');
+      expect(result.current.error).toBeInstanceOf(Error);
+      expect(result.current.error?.message).toBe('Network error');
     });
 
     it('should handle non-Error exceptions', async () => {
@@ -128,8 +130,8 @@ describe('useProviderStatus', () => {
       });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.providerStatusData).toBeNull();
-      // When a non-Error is thrown, useAsyncRetry doesn't have a .message property
-      expect(result.current.error).toBeNull();
+      // useAsyncRetry stores the thrown value as-is in the error field
+      expect(result.current.error).toBeDefined();
     });
   });
 
@@ -143,7 +145,7 @@ describe('useProviderStatus', () => {
       });
       expect(result.current.isLoading).toBe(true);
       expect(result.current.providerStatusData).toBeNull();
-      expect(result.current.error).toBeNull();
+      expect(result.current.error).toBeUndefined();
     });
   });
 
@@ -189,7 +191,8 @@ describe('useProviderStatus', () => {
         result.current.refetch();
       });
 
-      await waitFor(() => expect(result.current.error).toBe(errorMessage));
+      await waitFor(() => expect(result.current.error).toBeInstanceOf(Error));
+      expect(result.current.error?.message).toBe(errorMessage);
       expect(result.current.providerStatusData).toBeNull();
     });
   });

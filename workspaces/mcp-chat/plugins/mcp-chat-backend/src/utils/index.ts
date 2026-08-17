@@ -14,4 +14,13 @@
  * limitations under the License.
  */
 
-export { LLMProvider } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+export { loadServerConfigs } from './loadServerConfigs';
+export { validateConfig } from './validateConfig';
+export { findNpxPath } from './findNpxPath';
+export {
+  executeToolCall,
+  DEFAULT_MCP_TOOL_CALL_TIMEOUT_MS,
+} from './executeToolCall';
+export { validateMessages } from './validateMessages';
+export { isGuestUser } from './isGuestUser';
+export { isMissingTableError } from './isMissingTableError';

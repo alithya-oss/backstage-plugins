@@ -21,10 +21,13 @@ import {
   fetchApiRef,
   PageBlueprint,
 } from '@backstage/frontend-plugin-api';
-import { mcpChatApiRef } from './api';
-import { McpChat } from './api/McpChatApi';
+import {
+  rootRouteRef,
+  mcpChatApiRef,
+  McpChat,
+  chatPageContentLoader,
+} from './wiring';
 import { BotIconComponent } from './components/BotIcon';
-import { rootRouteRef } from './routes';
 
 /**
  * MCP Chat Api
@@ -49,14 +52,17 @@ const mcpChatPage = PageBlueprint.make({
     path: '/mcp-chat',
     title: 'MCP Chat',
     icon: <BotIconComponent />,
-    loader: () => import('./components/ChatPage').then(m => <m.ChatPage />),
+    loader: async () => {
+      const Component = await chatPageContentLoader();
+      return <Component />;
+    },
     routeRef: rootRouteRef,
   },
 });
 
 /**
  * MCP Chat plugin.
- @public
+ * @public
  */
 const mcpChatPlugin = createFrontendPlugin({
   pluginId: 'mcp-chat',

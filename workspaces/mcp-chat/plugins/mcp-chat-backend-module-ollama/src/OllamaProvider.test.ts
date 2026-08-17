@@ -19,7 +19,7 @@ import type {
   ChatMessage,
   Tool,
   ProviderConfig,
-} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+} from '@alithya-oss/backstage-plugin-mcp-chat-node';
 
 // Mock the ollama SDK module
 const mockChat = jest.fn();
@@ -31,6 +31,14 @@ jest.mock('ollama', () => ({
   })),
 }));
 
+const mockLogger = {
+  debug: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+  child: jest.fn().mockReturnThis(),
+} as any;
+
 function createProvider(
   configOverrides?: Partial<ProviderConfig>,
 ): OllamaProvider {
@@ -38,6 +46,7 @@ function createProvider(
     type: 'ollama',
     baseUrl: 'http://localhost:11434/v1',
     model: 'llama3',
+    logger: mockLogger,
     ...configOverrides,
   };
   return new OllamaProvider(config);

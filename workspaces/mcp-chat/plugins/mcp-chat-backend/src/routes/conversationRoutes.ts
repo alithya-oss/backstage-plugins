@@ -15,10 +15,11 @@
  */
 
 import { HttpAuthService, LoggerService } from '@backstage/backend-plugin-api';
+import { InputError, NotFoundError } from '@backstage/errors';
 import express from 'express';
 import Router from 'express-promise-router';
 import { ChatConversationStore } from '../services/ChatConversationStore';
-import { isGuestUser } from '../utils';
+import { isGuestUser, isMissingTableError } from '../utils';
 import {
   createAuthMiddleware,
   requireNonGuest,
@@ -66,41 +67,39 @@ export function createConversationRoutes(
   router.get('/', auth, async (req: AuthenticatedRequest, res) => {
     const userId = req.userId!;
 
+    // Guest users don't have saved conversations
+    if (isGuestUser(userId)) {
+      return res.json({
+        conversations: [],
+        count: 0,
+      });
+    }
+
+    // Validate and parse limit query parameter
+    let limit: number | undefined;
+    if (req.query.limit) {
+      const parsed = parseInt(req.query.limit as string, 10);
+      if (isNaN(parsed) || parsed < 1 || parsed > MAX_CONVERSATION_LIMIT) {
+        throw new InputError(
+          `Limit must be between 1 and ${MAX_CONVERSATION_LIMIT}`,
+        );
+      }
+      limit = parsed;
+    }
+
     try {
-      // Guest users don't have saved conversations
-      if (isGuestUser(userId)) {
-        return res.json({
-          conversations: [],
-          count: 0,
-        });
-      }
-
-      // Validate and parse limit query parameter
-      let limit: number | undefined;
-      if (req.query.limit) {
-        const parsed = parseInt(req.query.limit as string, 10);
-        if (isNaN(parsed) || parsed < 1 || parsed > MAX_CONVERSATION_LIMIT) {
-          return res.status(400).json({
-            error: `Limit must be between 1 and ${MAX_CONVERSATION_LIMIT}`,
-          });
-        }
-        limit = parsed;
-      }
-
       const conversations = await store.getConversations(userId, limit);
 
       return res.json({
         conversations,
         count: conversations.length,
       });
-    } catch (error: any) {
-      if (error?.message?.includes('no such table')) {
+    } catch (error: unknown) {
+      if (isMissingTableError(error)) {
         return res.json({ conversations: [], count: 0 });
       }
       logger.error(`Failed to retrieve conversations: ${error}`);
-      return res
-        .status(500)
-        .json({ error: 'Failed to retrieve conversations' });
+      throw error;
     }
   });
 
@@ -121,18 +120,19 @@ export function createConversationRoutes(
         const conversation = await store.getConversationById(userId, id);
 
         if (!conversation) {
-          return res.status(404).json({ error: 'Conversation not found' });
+          throw new NotFoundError('Conversation not found');
         }
 
         return res.json(conversation);
-      } catch (error: any) {
-        if (error?.message?.includes('no such table')) {
-          return res.status(404).json({ error: 'Conversation not found' });
+      } catch (error: unknown) {
+        if (error instanceof NotFoundError) {
+          throw error;
+        }
+        if (isMissingTableError(error)) {
+          throw new NotFoundError('Conversation not found');
         }
         logger.error(`Failed to retrieve conversation ${id}: ${error}`);
-        return res
-          .status(500)
-          .json({ error: 'Failed to retrieve conversation' });
+        throw error;
       }
     },
   );
@@ -150,20 +150,15 @@ export function createConversationRoutes(
       const { id } = req.params;
       const userId = req.userId!;
 
-      try {
-        const deleted = await store.deleteConversation(userId, id);
-        if (!deleted) {
-          return res.status(404).json({ error: 'Conversation not found' });
-        }
-
-        logger.debug(
-          `Deleted conversation ${id} for user ${userId.split('/').pop()}`,
-        );
-        return res.status(204).send();
-      } catch (error) {
-        logger.error(`Failed to delete conversation ${id}: ${error}`);
-        return res.status(500).json({ error: 'Failed to delete conversation' });
+      const deleted = await store.deleteConversation(userId, id);
+      if (!deleted) {
+        throw new NotFoundError('Conversation not found');
       }
+
+      logger.debug(
+        `Deleted conversation ${id} for user ${userId.split('/').pop()}`,
+      );
+      return res.status(204).send();
     },
   );
 
@@ -180,17 +175,12 @@ export function createConversationRoutes(
       const { id } = req.params;
       const userId = req.userId!;
 
-      try {
-        const isStarred = await store.toggleStarred(userId, id);
+      const isStarred = await store.toggleStarred(userId, id);
 
-        logger.debug(
-          `Toggled star for conversation ${id}: isStarred=${isStarred}`,
-        );
-        return res.json({ isStarred });
-      } catch (error) {
-        logger.error(`Failed to toggle star for conversation ${id}: ${error}`);
-        return res.status(500).json({ error: 'Failed to update conversation' });
-      }
+      logger.debug(
+        `Toggled star for conversation ${id}: isStarred=${isStarred}`,
+      );
+      return res.json({ isStarred });
     },
   );
 
@@ -210,24 +200,17 @@ export function createConversationRoutes(
 
       // Validate title
       if (typeof title !== 'string') {
-        return res.status(400).json({ error: 'Title must be a string' });
+        throw new InputError('Title must be a string');
       }
 
       if (title.length > 255) {
-        return res
-          .status(400)
-          .json({ error: 'Title too long (max 255 characters)' });
+        throw new InputError('Title too long (max 255 characters)');
       }
 
-      try {
-        await store.updateTitle(userId, id, title.trim());
+      await store.updateTitle(userId, id, title.trim());
 
-        logger.debug(`Updated title for conversation ${id}`);
-        return res.json({ title: title.trim() });
-      } catch (error) {
-        logger.error(`Failed to update title for conversation ${id}: ${error}`);
-        return res.status(500).json({ error: 'Failed to update conversation' });
-      }
+      logger.debug(`Updated title for conversation ${id}`);
+      return res.json({ title: title.trim() });
     },
   );
 
