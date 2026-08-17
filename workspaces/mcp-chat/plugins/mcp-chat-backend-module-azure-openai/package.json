@@ -1,6 +1,6 @@
 {
   "name": "@alithya-oss/backstage-plugin-mcp-chat-backend-module-azure-openai",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "main": "src/index.ts",
   "types": "src/index.ts",

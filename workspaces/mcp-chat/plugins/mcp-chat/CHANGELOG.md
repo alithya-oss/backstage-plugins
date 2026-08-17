@@ -1,5 +1,16 @@
 # @alithya-oss/backstage-plugin-mcp-chat
 
+## 0.9.0
+
+### Minor Changes
+
+- 91bd77b: Added `/alpha` entry point for the new Backstage frontend system using `@backstage/frontend-plugin-api`. Internal component decomposition for maintainability — no user-facing API changes.
+
+### Patch Changes
+
+- Updated dependencies [91bd77b]
+  - @alithya-oss/backstage-plugin-mcp-chat-common@1.0.0
+
 ## 0.8.0
 
 ### Minor Changes
