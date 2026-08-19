@@ -1,5 +1,20 @@
 # @alithya-oss/backstage-plugin-mcp-chat-backend
 
+## 2.0.0
+
+### Major Changes
+
+- 91bd77b: Public API reduced to the single plugin default export. Removed re-exports of `LLMProvider`, `llmProviderExtensionPoint`, internal services, utilities, and router.
+
+  **Migration:** Import `LLMProvider` and `llmProviderExtensionPoint` from `@alithya-oss/backstage-plugin-mcp-chat-node` instead. Internal utilities and services are no longer public — rely on the plugin's built-in wiring.
+
+### Patch Changes
+
+- Updated dependencies [91bd77b]
+- Updated dependencies [91bd77b]
+  - @alithya-oss/backstage-plugin-mcp-chat-node@1.0.0
+  - @alithya-oss/backstage-plugin-mcp-chat-common@1.0.0
+
 ## 1.0.0
 
 ### Major Changes
