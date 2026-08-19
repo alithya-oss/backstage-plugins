@@ -47,7 +47,7 @@
     "@mui/x-data-grid": "^7.13.0",
     "chart.js": "^4.4.3",
     "react-chartjs-2": "^5.2.0",
-    "react-router-dom": "^6.26.1",
+    "react-router-dom": "^7.0.0",
     "react-use": "^17.2.4"
   },
   "peerDependencies": {
