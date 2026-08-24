@@ -1,0 +1,75 @@
+{
+  "name": "@alithya-oss/backstage-plugins-aws-genai",
+  "description": "Frontend package for the GenAI AWS plugins for Backstage",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alithya-oss/backstage-plugins.git",
+    "directory": "workspaces/aws/plugins/aws-genai"
+  },
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/index.esm.js",
+    "types": "dist/index.d.ts"
+  },
+  "backstage": {
+    "role": "frontend-plugin",
+    "pluginId": "aws-genai",
+    "pluginPackages": [
+      "@alithya-oss/backstage-plugins-aws-genai",
+      "@alithya-oss/backstage-plugins-aws-genai-backend",
+      "@alithya-oss/backstage-plugins-aws-genai-common",
+      "@alithya-oss/backstage-plugins-aws-genai-node"
+    ]
+  },
+  "configSchema": "config.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "start": "backstage-cli package start",
+    "build": "backstage-cli package build",
+    "lint": "backstage-cli package lint",
+    "test": "backstage-cli package test --all --watchAll=false",
+    "clean": "backstage-cli package clean",
+    "prepack": "backstage-cli package prepack",
+    "postpack": "backstage-cli package postpack",
+    "tsc": "tsc",
+    "tsc-config": "tsc --showConfig"
+  },
+  "dependencies": {
+    "@alithya-oss/backstage-plugins-aws-genai-common": "workspace:^",
+    "@backstage/core-components": "backstage:^",
+    "@backstage/core-plugin-api": "backstage:^",
+    "@material-ui/core": "^4.12.2",
+    "@material-ui/icons": "^4.9.1",
+    "eventsource-parser": "^2.0.1",
+    "ts-pattern": "^5.5.0"
+  },
+  "peerDependencies": {
+    "react": "^16.13.1 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.13.1 || ^17.0.0 || ^18.0.0",
+    "react-router-dom": "6.0.0-beta.0 || ^6.3.0"
+  },
+  "devDependencies": {
+    "@backstage/cli": "backstage:^",
+    "@backstage/dev-utils": "backstage:^",
+    "@testing-library/dom": "^10.0.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.0.0",
+    "msw": "^1.0.0"
+  },
+  "files": [
+    "dist",
+    "config.d.ts"
+  ],
+  "bugs": {
+    "url": "https://github.com/alithya-oss/backstage-plugins/issues"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com"
+  }
+}

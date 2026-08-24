@@ -1,0 +1,86 @@
+{
+  "name": "@alithya-oss/backstage-plugins-aws-genai-backend",
+  "description": "Backend package for the GenAI AWS plugins for Backstage",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alithya-oss/backstage-plugins.git",
+    "directory": "workspaces/aws/plugins/aws-genai-backend"
+  },
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/index.cjs.js",
+    "types": "dist/index.d.ts"
+  },
+  "backstage": {
+    "role": "backend-plugin",
+    "pluginId": "aws-genai",
+    "pluginPackages": [
+      "@alithya-oss/backstage-plugins-aws-genai",
+      "@alithya-oss/backstage-plugins-aws-genai-backend",
+      "@alithya-oss/backstage-plugins-aws-genai-common",
+      "@alithya-oss/backstage-plugins-aws-genai-node"
+    ]
+  },
+  "configSchema": "config.d.ts",
+  "scripts": {
+    "start": "backstage-cli package start",
+    "build": "backstage-cli package build",
+    "lint": "backstage-cli package lint",
+    "test": "backstage-cli package test --all --watchAll=false",
+    "clean": "backstage-cli package clean",
+    "prepack": "backstage-cli package prepack",
+    "postpack": "backstage-cli package postpack",
+    "tsc": "tsc",
+    "tsc-config": "tsc --showConfig"
+  },
+  "dependencies": {
+    "@alithya-oss/backstage-plugins-aws-genai-common": "workspace:^",
+    "@alithya-oss/backstage-plugins-aws-genai-node": "workspace:^",
+    "@backstage/backend-defaults": "backstage:^",
+    "@backstage/backend-plugin-api": "backstage:^",
+    "@backstage/catalog-client": "backstage:^",
+    "@backstage/catalog-model": "backstage:^",
+    "@backstage/config": "backstage:^",
+    "@backstage/plugin-catalog-node": "backstage:^",
+    "@backstage/plugin-search-common": "backstage:^",
+    "@langchain/core": "^0.3.58",
+    "@modelcontextprotocol/sdk": "^1.12.3",
+    "@types/express": "^4.17.17",
+    "express": "^4.17.1",
+    "express-promise-router": "^4.1.0",
+    "jsonschema": "^1.5.0",
+    "knex": "^3.0.0",
+    "lodash": "^4.17.21",
+    "node-html-parser": "^7.0.1",
+    "turndown": "^7.2.0",
+    "uuid": "^11.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@backstage/backend-test-utils": "backstage:^",
+    "@backstage/cli": "backstage:^",
+    "@backstage/plugin-auth-backend": "backstage:^",
+    "@backstage/plugin-auth-backend-module-guest-provider": "backstage:^",
+    "@types/lodash": "^4",
+    "@types/supertest": "^2.0.12",
+    "@types/turndown": "^5.0.5",
+    "msw": "^1.0.0",
+    "supertest": "^6.2.4"
+  },
+  "files": [
+    "dist",
+    "config.d.ts",
+    "migrations/**/*.{js,d.ts}"
+  ],
+  "bugs": {
+    "url": "https://github.com/alithya-oss/backstage-plugins/issues"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com"
+  }
+}
