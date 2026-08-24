@@ -1,0 +1,278 @@
+# Generative AI plugin for Backstage (Experimental)
+
+This experimental Backstage plugin helps build generative AI assistants in a manner that can leverage the broader Backstage plugin ecosystem. It relies on "tool use" to provide LLMs with access to existing Backstage backend plugins so that the models can access data via Backstage such as the catalog, TechDocs, CI/CD, Kubernetes resources etc.
+
+![Screenshot](../../docs/aws-genai/images/hero.png)
+
+Features:
+
+- Simple conversational chat interface
+- Configure multiple AI "agents" for specific purposes
+- Modular approach to providing agent implementations
+- Provide "tools" to agents through Backstage extensions
+
+[See here](https://www.youtube.com/watch?v=DCXzCrIDOAs) for the BackstageCon NA 2024 session where this idea is presented.
+
+## Before you begin
+
+Considerations before you explore this plugin:
+
+1. Its experimental
+1. Using this plugin will incur costs from your LLM provider, you are responsible for these
+1. This plugin does not build in guardrails or other protective mechanisms against prompt injection, leaking of sensitive information etc. and you are responsible for these
+
+## Pre-requisites
+
+This plugin relies on external LLMs, and will generally require models that support tool-use/function-calling. Some examples of models that support this include:
+
+1. Anthropic Claude >= 3 (Haiku, Sonnet, Opus)
+1. OpenAI
+1. Meta Llama (certain models)
+
+The example LangGraph implementation provided can use:
+
+1. [Amazon Bedrock](https://aws.amazon.com/bedrock/)
+1. [OpenAI](https://openai.com/)
+
+To explore support for other models/providers please raise a GitHub issue.
+
+## Installation
+
+NOTE: This guide will use the provided LangGraph implementation. To implement your own agent type see [Extending](#extending).
+
+This guide assumes that you are familiar with the general [Getting Started](https://backstage.io/docs/getting-started/) documentation and have assumes you have an existing Backstage application.
+
+### Backend package
+
+Install the backend package in your Backstage app:
+
+```shell
+yarn workspace backend add @alithya-oss/backstage-plugins-aws-genai-backend @alithya-oss/backstage-plugins-aws-genai-agent-langgraph
+```
+
+Add the plugin to the `packages/backend/src/index.ts`:
+
+```typescript
+const backend = createBackend();
+// ...
+backend.add(import('@alithya-oss/backstage-plugins-aws-genai-backend'));
+backend.add(import('@alithya-oss/backstage-plugins-aws-genai-agent-langgraph'));
+// ...
+backend.start();
+```
+
+Verify that the backend plugin is running in your Backstage app. You should receive `{"status":"ok"}` when accessing this URL:
+
+`http://<your backstage app>/api/aws-genai/health`.
+
+### Frontend package
+
+Install the frontend package in your Backstage app:
+
+```shell
+yarn workspace app add @alithya-oss/backstage-plugins-aws-genai
+```
+
+Edit `packages/app/src/App.tsx` to add a route for the chat UI page:
+
+```typescript
+import { AgentChatPage } from '@alithya-oss/backstage-plugins-aws-genai';
+
+{
+  /* ... */
+}
+
+const routes = (
+  <FlatRoutes>
+    /* ... */
+    <Route path="/assistant/:agentName" element={<AgentChatPage />} />
+  </FlatRoutes>
+);
+```
+
+Now edit `packages/app/src/components/Root/Root.tsx` to add a menu item:
+
+```tsx
+import { ChatIcon } from '@backstage/core-components';
+
+{
+  /* ... */
+}
+export const Root = ({ children }: PropsWithChildren<{}>) => (
+  <SidebarPage>
+    <Sidebar>
+      {/* ... */}
+      <SidebarGroup label="Menu" icon={<MenuIcon />}>
+        {/* ... */}
+        <SidebarItem
+          icon={ChatIcon}
+          to="assistant/general"
+          text="Chat Assistant"
+        />
+        {/* ... */}
+      </SidebarGroup>
+      {/* ... */}
+    </Sidebar>
+    {/* ... */}
+  </SidebarPage>
+);
+```
+
+The URL `assistant/general` means we're going to be using an agent named `general`, which we'll configure below.
+
+### Creating your first agent
+
+This plugin is built around the notion of creating one or more "agents" that can be invoked. These are defined by configuration, so lets configure our first agent.
+
+Add this to your Backstage configuration file (for example `app-config.yaml`):
+
+```yaml
+genai:
+  agents:
+    general: # This matches the URL in the frontend
+      description: General chat assistant
+      prompt: >
+        You are an expert in platform engineering and answer questions in a succinct and easy to understand manner.
+
+        Answers should always be well-structured and use well-formed Markdown.
+
+        The current user is {username} and you can provide that information if asked.
+      langgraph:
+        messagesMaxTokens: 150000 # Set based on context of chosen model, prune message history based on number of tokens
+        # Use appropriate snippet for your model provider
+        bedrock:
+          modelId: 'anthropic.claude-3-5-sonnet-20241022-v2:0'
+          region: us-west-2
+        # openai:
+        #   apiKey: ${OPENAI_API_KEY}
+```
+
+See the [LangGraph agent documentation](../aws-genai-agent-langgraph/README.md) for the full configuration reference.
+
+Start the Backstage application:
+
+```
+yarn start
+```
+
+Access the application in your browser and select the "Chat Assistant" option in the menu. Ask a general question like "What is Terraform?".
+
+### Registering actions
+
+We can register Backstage actions as tools available to the agents to retrieve context or perform actions.
+
+Any action available in Backstage is viable to be added as an action to an agent.
+
+Update the previous agent definition to add the `actions` field:
+
+```yaml
+backend:
+  actions:
+    pluginSources:
+      - 'catalog'
+      - 'aws-genai'
+genai:
+  registerCoreActions: true
+  agents:
+    general:
+      description: [...]
+      prompt: [...]
+      langgraph: [...]
+      actions:
+        - get-catalog-entity # This is built in to Backstage
+        - search-catalog
+        - search-techdocs
+```
+
+Also note the `genai.registerCoreActions` flag which has been enabled. This registers several actions related to "core" Backstage functions like the catalog and TechDocs. It is expected that when upstream Backstage makes general implementations of these actions available these will be removed.
+
+These are the core actions provided:
+
+| Tools name        | Description                                        |
+| ----------------- | -------------------------------------------------- |
+| `search-catalog`  | Search the Backstage catalog using the Search API  |
+| `search-techdocs` | Search TechDocs documentation using the Search API |
+| `read-techdocs`   | Reads a specific page of TechDocs documentation    |
+
+You can find other actions from various plugins, such as the [CodePipeline plugin](https://github.com/awslabs/backstage-plugins-for-aws/blob/main/plugins/codepipeline/README.md#model-context-protocol-integration) from the upstream AWS plugins.
+
+### Adding tools
+
+WARNING: This mechanism is deprecated and will be removed soon. Please migrate any custom tools to the actions registry (see above).
+
+We can provide tools/functions that can be called by agents to retrieve context or perform actions. Tools can be added to the agent using a Backstage extension point and packaged as NPM packages.
+
+There are several tools built in to the plugin related to core Backstage functionality. The `backstageCatalogSearch`, `backstageEntity` and `backstageTechDocsSearch` tools to give the model basic access to the Backstage catalog and TechDocs documentation.
+
+Update the previous agent definition to add the `tools` field:
+
+```yaml
+genai:
+  agents:
+    general:
+      description: [...]
+      prompt: [...]
+      langgraph: [...]
+      tools:
+        - backstageCatalogSearch
+        - backstageEntity
+        - backstageTechDocsSearch
+```
+
+Restart Backstage to reload the configuration and try asking the chat assistant a question related to information in the your Backstage catalog, for example "Summarize <component name> from the Backstage catalog".
+
+NOTE: After Backstage starts locally there can be a delay indexing the catalog and TechDocs for search. You will not receive search results until the index is built.
+
+### Agents communicating
+
+WARNING: When configuring agents to communicate with each other you must take care to ensure that agent interactions are behaving appropriately. Failing to do so can result in prolonged agent interactions, for example with looping behavior, that will consume a large number of LLM tokens.
+
+A simple mechanism is provided to allow agents to communicate, which treats agents as tools. An action is added to the registry for each agent of the format `query-agent-<agent name>`.
+
+You can provide these tools to agents:
+
+```yaml
+backend:
+  actions:
+    pluginSources:
+      - 'aws-genai' # You need to enable the registration of actions from this plugin
+genai:
+  agents:
+    general:
+      description: [...]
+      prompt: [...]
+      langgraph: [...]
+      actions:
+        - query-agent-weather
+    weather:
+      description: [...]
+      prompt: [...]
+      langgraph: [...]
+```
+
+The tool for invoking agents simply accepts a parameter called `query` which is expected to be a natural language query, and it will respond with the raw text output of the agent.
+
+## Further reading
+
+You can view the rest of the documentation to understand how to evolve your chat assistant
+
+1. Prompting tips: Various tips on how to configure the agent system prompt. [See here](../../docs/aws-genai/prompting-tips.md).
+1. Agent implementation: Provide an implementation for how an agent responds to prompts. [See here](../../docs/aws-genai/agent-types.md).
+
+## Provenance and attribution
+
+These packages are a fork of the GenAI plugins from
+[awslabs/backstage-plugins-for-aws](https://github.com/awslabs/backstage-plugins-for-aws/tree/main/plugins/genai),
+originally published as `@aws/genai-plugin-for-backstage*`.
+
+Portions of this code are Copyright Amazon.com, Inc. or its affiliates, licensed
+under the Apache License, Version 2.0. The fork is maintained independently in
+this repository and is not supported by AWS.
+
+| Upstream package                                  | Fork                                                       |
+| ------------------------------------------------- | ---------------------------------------------------------- |
+| `@aws/genai-plugin-for-backstage`                 | `@alithya-oss/backstage-plugins-aws-genai`                 |
+| `@aws/genai-plugin-for-backstage-common`          | `@alithya-oss/backstage-plugins-aws-genai-common`          |
+| `@aws/genai-plugin-for-backstage-node`            | `@alithya-oss/backstage-plugins-aws-genai-node`            |
+| `@aws/genai-plugin-for-backstage-backend`         | `@alithya-oss/backstage-plugins-aws-genai-backend`         |
+| `@aws/genai-plugin-langgraph-agent-for-backstage` | `@alithya-oss/backstage-plugins-aws-genai-agent-langgraph` |
