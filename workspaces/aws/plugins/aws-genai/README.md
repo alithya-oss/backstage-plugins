@@ -2,7 +2,7 @@
 
 This experimental Backstage plugin helps build generative AI assistants in a manner that can leverage the broader Backstage plugin ecosystem. It relies on "tool use" to provide LLMs with access to existing Backstage backend plugins so that the models can access data via Backstage such as the catalog, TechDocs, CI/CD, Kubernetes resources etc.
 
-![Screenshot](../../docs/aws-genai/images/hero.png)
+![Screenshot](../../docs/genai/images/hero.png)
 
 Features:
 
@@ -254,10 +254,14 @@ The tool for invoking agents simply accepts a parameter called `query` which is 
 
 ## Further reading
 
-You can view the rest of the documentation to understand how to evolve your chat assistant
+The full documentation for this plugin is published with TechDocs from
+[`workspaces/aws/docs/genai`](../../docs/genai/index.md):
 
-1. Prompting tips: Various tips on how to configure the agent system prompt. [See here](../../docs/aws-genai/prompting-tips.md).
-1. Agent implementation: Provide an implementation for how an agent responds to prompts. [See here](../../docs/aws-genai/agent-types.md).
+1. Installation: install and configure the plugin and your first agent. [See here](../../docs/genai/installation.md).
+1. Actions and tools: give agents access to Backstage data. [See here](../../docs/genai/actions-and-tools.md).
+1. LangGraph agent: full configuration reference for the provided agent implementation. [See here](../../docs/genai/langgraph-agent.md).
+1. Prompting tips: Various tips on how to configure the agent system prompt. [See here](../../docs/genai/prompting-tips.md).
+1. Agent implementation: Provide an implementation for how an agent responds to prompts. [See here](../../docs/genai/agent-types.md).
 
 ## Provenance and attribution
 

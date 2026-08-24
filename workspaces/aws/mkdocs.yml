@@ -1,0 +1,15 @@
+site_name: Backstage AWS plugins
+docs_dir: docs
+plugins:
+  - techdocs-core
+nav:
+  - Home: index.md
+  - Generative AI plugin:
+      - Overview: genai/index.md
+      - Installation: genai/installation.md
+      - Actions and tools: genai/actions-and-tools.md
+      - LangGraph agent: genai/langgraph-agent.md
+      - Agent implementation: genai/agent-types.md
+      - Prompting tips: genai/prompting-tips.md
+  - Maintainers:
+      - Contribute to Harmonix upstream: maintainers/contribute-to-upstream.md
