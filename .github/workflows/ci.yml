@@ -2,6 +2,13 @@ name: CI
 
 on:
   pull_request:
+    # OpenSpec artifacts live at the repo root, outside every workspace. A PR that
+    # touches only them produces an empty workspace matrix, which leaves `ci` and
+    # `verify` skipped and makes the `result` gate below fail even though there is
+    # nothing to build or test. Skip the whole workflow for those PRs instead.
+    # A PR that touches openspec/ *and* a workspace still triggers normally.
+    paths-ignore:
+      - 'openspec/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
