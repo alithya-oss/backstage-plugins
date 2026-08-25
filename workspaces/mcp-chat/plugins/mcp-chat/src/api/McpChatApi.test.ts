@@ -56,9 +56,226 @@ describe('McpChatApi', () => {
     it('should initialize with discovery and fetch APIs', () => {
       expect(mcpChat).toBeDefined();
       expect(typeof mcpChat.sendChatMessage).toBe('function');
+      expect(typeof mcpChat.streamChatMessage).toBe('function');
       expect(typeof mcpChat.getMCPServerStatus).toBe('function');
       expect(typeof mcpChat.getAvailableTools).toBe('function');
       expect(typeof mcpChat.getProviderStatus).toBe('function');
+    });
+  });
+
+  describe('streamChatMessage', () => {
+    const streamMessages: ChatMessage[] = [
+      { role: 'user', content: 'list my components' },
+    ];
+
+    /**
+     * Serves the given byte chunks through a minimal reader, so a test can put
+     * a frame boundary anywhere — including in the middle of a frame.
+     */
+    function readableOf(chunks: string[], onCancel?: jest.Mock) {
+      const encoder = new TextEncoder();
+      let index = 0;
+      return {
+        getReader: () => ({
+          read: async () => {
+            if (index >= chunks.length) {
+              return { done: true, value: undefined };
+            }
+            const value = encoder.encode(chunks[index]);
+            index += 1;
+            return { done: false, value };
+          },
+          cancel: async () => {
+            onCancel?.();
+          },
+        }),
+      };
+    }
+
+    function frame(event: Record<string, unknown>) {
+      return `event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`;
+    }
+
+    async function collect(iterable: AsyncIterable<any>) {
+      const events: any[] = [];
+      for await (const event of iterable) {
+        events.push(event);
+      }
+      return events;
+    }
+
+    it('should yield every event of a well-formed stream, across chunk boundaries', async () => {
+      const complete = frame({
+        type: 'complete',
+        conversationId: 'conv-1',
+        toolsUsed: ['list-components'],
+      });
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        body: readableOf([
+          // A comment and a frame split mid-payload: neither may disturb parsing.
+          ': keep-alive\n\n',
+          frame({ type: 'text', text: 'Look' }),
+          `event: text\ndata: {"type":"text","te`,
+          `xt":"ing up"}\n\n`,
+          frame({
+            type: 'tool-call',
+            id: 'call-1',
+            name: 'list-components',
+            arguments: { owner: 'team-a' },
+            serverId: 'catalog',
+          }),
+          frame({
+            type: 'tool-result',
+            id: 'call-1',
+            result: 'ok',
+            isError: false,
+          }),
+          complete.slice(0, 12),
+          complete.slice(12),
+        ]),
+      });
+
+      const signal = new AbortController().signal;
+      const events = await collect(
+        mcpChat.streamChatMessage(
+          streamMessages,
+          ['catalog'],
+          signal,
+          'conv-1',
+        ),
+      );
+
+      expect(mockFetch).toHaveBeenCalledWith(`${baseUrl}/chat/stream`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'text/event-stream',
+        },
+        body: JSON.stringify({
+          messages: streamMessages,
+          enabledTools: ['catalog'],
+          conversationId: 'conv-1',
+        }),
+        signal,
+      });
+      expect(events).toEqual([
+        { type: 'text', text: 'Look' },
+        { type: 'text', text: 'ing up' },
+        {
+          type: 'tool-call',
+          id: 'call-1',
+          name: 'list-components',
+          arguments: { owner: 'team-a' },
+          serverId: 'catalog',
+        },
+        { type: 'tool-result', id: 'call-1', result: 'ok', isError: false },
+        {
+          type: 'complete',
+          conversationId: 'conv-1',
+          toolsUsed: ['list-components'],
+        },
+      ]);
+    });
+
+    it('should yield the partial text and the terminal failure of a stream ending in error', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        body: readableOf([
+          frame({ type: 'text', text: 'Partial ' }),
+          frame({ type: 'error', message: 'provider rejected the request' }),
+        ]),
+      });
+
+      const events = await collect(mcpChat.streamChatMessage(streamMessages));
+
+      expect(events).toEqual([
+        { type: 'text', text: 'Partial ' },
+        { type: 'error', message: 'provider rejected the request' },
+      ]);
+    });
+
+    it('should propagate an abort and release the reader', async () => {
+      const encoder = new TextEncoder();
+      const cancel = jest.fn();
+      const abortError = new Error('The user aborted a request.');
+      abortError.name = 'AbortError';
+      let reads = 0;
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        body: {
+          getReader: () => ({
+            read: async () => {
+              reads += 1;
+              if (reads === 1) {
+                return {
+                  done: false,
+                  value: encoder.encode(frame({ type: 'text', text: 'Half' })),
+                };
+              }
+              throw abortError;
+            },
+            cancel: async () => {
+              cancel();
+            },
+          }),
+        },
+      });
+
+      const received: any[] = [];
+      await expect(
+        (async () => {
+          for await (const event of mcpChat.streamChatMessage(streamMessages)) {
+            received.push(event);
+          }
+        })(),
+      ).rejects.toThrow('The user aborted a request.');
+
+      expect(received).toEqual([{ type: 'text', text: 'Half' }]);
+      expect(cancel).toHaveBeenCalled();
+    });
+
+    it('should release the reader when the caller stops iterating early', async () => {
+      const cancel = jest.fn();
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        body: readableOf(
+          [
+            frame({ type: 'text', text: 'one' }),
+            frame({ type: 'text', text: 'two' }),
+          ],
+          cancel,
+        ),
+      });
+
+      for await (const event of mcpChat.streamChatMessage(streamMessages)) {
+        expect(event).toEqual({ type: 'text', text: 'one' });
+        break;
+      }
+
+      expect(cancel).toHaveBeenCalled();
+    });
+
+    it('should throw before yielding anything when the request is rejected', async () => {
+      const response = { ok: false, statusText: 'Not Found' };
+      mockFetch.mockResolvedValueOnce(response);
+      jest
+        .spyOn(ResponseError, 'fromResponse')
+        .mockResolvedValueOnce(new Error('Not Found') as any);
+
+      await expect(
+        collect(mcpChat.streamChatMessage(streamMessages)),
+      ).rejects.toThrow('Not Found');
+    });
+
+    it('should throw when the response carries no body', async () => {
+      mockFetch.mockResolvedValueOnce({ ok: true, body: null });
+
+      await expect(
+        collect(mcpChat.streamChatMessage(streamMessages)),
+      ).rejects.toThrow('The chat stream response carried no body');
     });
   });
 

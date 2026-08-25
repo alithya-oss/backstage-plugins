@@ -85,42 +85,42 @@ Covers _Page availability alongside the existing chat page_.
 Covers _Prompt submission_, _Run lifecycle and streamed completion_, _Provider and
 transport error handling_ (state layer).
 
-- [ ] 4.1 Add a streaming method to `src/api/McpChatApi.ts` that posts to
+- [x] 4.1 Add a streaming method to `src/api/McpChatApi.ts` that posts to
       `/chat/stream`, parses the event stream, and surfaces typed events to the
       caller, accepting an `AbortSignal`. Leave `sendChatMessage` and every other
       existing method untouched. Verify with tests over a well-formed stream, a
       stream ending in failure, and an aborted stream.
-- [ ] 4.2 Add a `usePromptThread` hook holding the turn list, the active
+- [x] 4.2 Add a `usePromptThread` hook holding the turn list, the active
       `conversationId`, the in-flight `AbortController` and the running flag.
       Verify with unit tests asserting a submitted prompt is appended and a blank
       prompt is not — scenarios _A prompt is submitted_ and _An empty prompt is
       rejected_.
-- [ ] 4.3 Implement `convertMessage` to `ThreadMessageLike`, mapping accumulated
+- [x] 4.3 Implement `convertMessage` to `ThreadMessageLike`, mapping accumulated
       text to a `text` part and each invocation to a `tool-call` part keyed by
       `toolCallId`, with `isError` read from the tool-result event. Set `status` to
       `running` while fragments arrive, `complete` on success, and `incomplete`
       with reason `error` or `cancelled` otherwise. Verify with unit tests over
       each state.
-- [ ] 4.4 Implement `onNew`: append the user turn, open the stream with the full
+- [x] 4.4 Implement `onNew`: append the user turn, open the stream with the full
       prior conversation, the enabled server ids, the abort signal and the active
       `conversationId`, then apply each event to state — appending fragments,
       inserting a tool-call part on its start event and filling it in place on its
       result event. Verify with tests — scenarios _A reply renders incrementally_,
       _An invocation is shown before its result arrives_, _A running invocation
       receives its result_.
-- [ ] 4.5 Implement `onCancel` — abort the stream, mark the turn cancelled, then
+- [x] 4.5 Implement `onCancel` — abort the stream, mark the turn cancelled, then
       hand the trimmed list back through `setMessages` so the removal survives the
       next snapshot. Verify no partial turn is left marked running — scenario _A run
       is cancelled_.
-- [ ] 4.6 Guard against concurrent runs so a submit during an active run does not
+- [x] 4.6 Guard against concurrent runs so a submit during an active run does not
       interleave two streams. Verify with a test — scenario _A prompt is submitted
       while a run is active_.
-- [ ] 4.7 Map failures to error state rather than assistant content, keeping any
+- [x] 4.7 Map failures to error state rather than assistant content, keeping any
       partial text and marking it interrupted, distinguishing an unreachable
       backend from a provider failure. Verify with tests — scenarios _The chat
       provider returns an error_, _The backend is unreachable_, _A run fails after
       partial output_, _A retry succeeds after a failure_.
-- [ ] 4.8 Assemble the `ExternalStoreAdapter` and pass it to
+- [x] 4.8 Assemble the `ExternalStoreAdapter` and pass it to
       `useExternalStoreRuntime` with exactly the handler set `design.md` fixes —
       `messages`, `convertMessage`, `isRunning`, `isLoading`, `onNew`,
       `setMessages`, `onEdit`, `onReload`, `onCancel` — leaving
