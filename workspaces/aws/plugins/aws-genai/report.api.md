@@ -78,7 +78,6 @@ const awsGenAiPlugin_2: OverridableFrontendPlugin<
         title?: string | undefined;
       };
       output:
-        | ExtensionDataRef<JSX_2.Element, 'core.reactElement', {}>
         | ExtensionDataRef<string, 'core.routing.path', {}>
         | ExtensionDataRef<
             RouteRef_2<AnyRouteRefParams>,
@@ -87,6 +86,7 @@ const awsGenAiPlugin_2: OverridableFrontendPlugin<
               optional: true;
             }
           >
+        | ExtensionDataRef<JSX_2.Element, 'core.reactElement', {}>
         | ExtensionDataRef<
             string,
             'core.title',
