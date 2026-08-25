@@ -1,5 +1,5 @@
-ARG POSTGRES_VERSION="18.3.0"
-FROM public.ecr.aws/bitnami/postgresql:${POSTGRES_VERSION}
+ARG POSTGRES_VERSION="17.6.0"
+FROM docker.io/bitnamilegacy/postgresql:${POSTGRES_VERSION}
 
 USER root
 
