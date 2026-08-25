@@ -4,12 +4,12 @@ For the purposes of this plugin we'll consider LLM agents to be AI tools that di
 
 As this space is rapidly evolving, this plugin takes no opinionated stance on how agents should be implemented. It can also be desirable to provide different implementations of agents for specific purposes.
 
-An agent implementation needs to implement the [AgentType](../../plugins/aws-genai-node/src/types.ts) interface, which has two functions:
+An agent implementation needs to implement the [AgentType](https://github.com/alithya-oss/backstage-plugins/blob/main/workspaces/aws/plugins/aws-genai-node/src/types.ts) interface, which has two functions:
 
 1. A `stream` function for chat, session-based use-cases
 2. A `generate` function for transactional use-cases
 
-The [LangGraph agent implementation](../../plugins/aws-genai-agent-langgraph/README.md) can be used as a reference.
+The [LangGraph agent implementation](langgraph-agent.md) can be used as a reference.
 
 Agents are expected to:
 
