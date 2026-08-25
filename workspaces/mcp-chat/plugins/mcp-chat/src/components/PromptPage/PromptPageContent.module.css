@@ -1,0 +1,24 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  gap: var(--bui-space-4);
+  padding: var(--bui-space-4);
+  background-color: var(--bui-bg-app);
+  color: var(--bui-fg-primary);
+}
+
+.heading {
+  margin: 0;
+  color: var(--bui-fg-primary);
+}
+
+.thread {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  gap: var(--bui-space-2);
+  color: var(--bui-fg-secondary);
+}

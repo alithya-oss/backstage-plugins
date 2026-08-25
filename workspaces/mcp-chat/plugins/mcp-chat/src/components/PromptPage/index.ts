@@ -14,18 +14,4 @@
  * limitations under the License.
  */
 
-import { createRouteRef } from '@backstage/core-plugin-api';
-
-export const rootRouteRef = createRouteRef({
-  id: 'mcp-chat',
-});
-
-/**
- * Route reference for the Assistant UI prompt page.
- *
- * The prompt page is a sibling of the pre-existing chat page rather than a
- * child of it, so mounting one never shadows the other's path.
- */
-export const promptRouteRef = createRouteRef({
-  id: 'mcp-chat.prompt',
-});
+export { PromptPageContent } from './PromptPageContent';

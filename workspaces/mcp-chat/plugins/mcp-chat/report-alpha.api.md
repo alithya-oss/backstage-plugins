@@ -23,6 +23,7 @@ import { RouteRef as RouteRef_2 } from '@backstage/frontend-plugin-api';
 const mcpChatPlugin: OverridableFrontendPlugin<
   {
     root: RouteRef<undefined>;
+    prompt: RouteRef<undefined>;
   },
   {},
   {
@@ -46,6 +47,82 @@ const mcpChatPlugin: OverridableFrontendPlugin<
     'page:mcp-chat': OverridableExtensionDefinition<{
       kind: 'page';
       name: undefined;
+      config: {
+        path: string | undefined;
+        title: string | undefined;
+      };
+      configInput: {
+        path?: string | undefined;
+        title?: string | undefined;
+      };
+      output:
+        | ExtensionDataRef<string, 'core.routing.path', {}>
+        | ExtensionDataRef<
+            RouteRef_2<AnyRouteRefParams>,
+            'core.routing.ref',
+            {
+              optional: true;
+            }
+          >
+        | ExtensionDataRef<JSX_2.Element, 'core.reactElement', {}>
+        | ExtensionDataRef<
+            string,
+            'core.title',
+            {
+              optional: true;
+            }
+          >
+        | ExtensionDataRef<
+            IconElement,
+            'core.icon',
+            {
+              optional: true;
+            }
+          >;
+      inputs: {
+        pages: ExtensionInput<
+          | ConfigurableExtensionDataRef<JSX_2.Element, 'core.reactElement', {}>
+          | ConfigurableExtensionDataRef<string, 'core.routing.path', {}>
+          | ConfigurableExtensionDataRef<
+              RouteRef_2<AnyRouteRefParams>,
+              'core.routing.ref',
+              {
+                optional: true;
+              }
+            >
+          | ConfigurableExtensionDataRef<
+              string,
+              'core.title',
+              {
+                optional: true;
+              }
+            >
+          | ConfigurableExtensionDataRef<
+              IconElement,
+              'core.icon',
+              {
+                optional: true;
+              }
+            >,
+          {
+            singleton: false;
+            optional: false;
+            internal: false;
+          }
+        >;
+      };
+      params: {
+        path: string;
+        title?: string | undefined;
+        icon?: IconElement | undefined;
+        loader?: (() => Promise<JSX_2.Element>) | undefined;
+        routeRef?: RouteRef_2<AnyRouteRefParams> | undefined;
+        noHeader?: boolean | undefined;
+      };
+    }>;
+    'page:mcp-chat/prompt': OverridableExtensionDefinition<{
+      kind: 'page';
+      name: 'prompt';
       config: {
         path: string | undefined;
         title: string | undefined;
