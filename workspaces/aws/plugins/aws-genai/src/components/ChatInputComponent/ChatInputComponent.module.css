@@ -1,0 +1,50 @@
+@layer components {
+  .layout {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: var(--bui-space-2);
+  }
+
+  .field {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--bui-space-1);
+    min-width: 0;
+  }
+
+  .textArea {
+    width: 100%;
+    min-height: var(--bui-space-10);
+    max-height: 12rem;
+    padding: var(--bui-space-2) var(--bui-space-3);
+    border: 1px solid var(--bui-border-1);
+    border-radius: var(--bui-radius-2);
+    background-color: var(--bui-bg-neutral-1);
+    color: var(--bui-fg-primary);
+    font-family: var(--bui-font-regular);
+    font-size: var(--bui-font-size-3);
+    line-height: 1.5;
+    resize: vertical;
+  }
+
+  .textArea:focus-visible {
+    outline: 2px solid var(--bui-ring);
+    outline-offset: -1px;
+  }
+
+  .textArea:disabled {
+    background-color: var(--bui-bg-neutral-1-disabled);
+    color: var(--bui-fg-disabled);
+    cursor: not-allowed;
+  }
+
+  .actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: var(--bui-space-2);
+    padding-bottom: var(--bui-space-1);
+  }
+}

@@ -14,4 +14,7 @@
  * limitations under the License.
  */
 
-export { awsGenAiPlugin, AgentChatPage } from './plugin';
+// Old frontend system support
+export * from './legacy';
+
+export { awsGenAiPlugin as default } from './plugin';

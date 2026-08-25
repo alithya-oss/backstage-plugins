@@ -13,11 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createApp } from '@backstage/frontend-defaults';
-import catalogPlugin from '@backstage/plugin-catalog/alpha';
-import awsGenAiPlugin from '@alithya-oss/backstage-plugins-aws-genai';
-import { navModule } from './modules/nav';
 
-export default createApp({
-  features: [catalogPlugin, awsGenAiPlugin, navModule],
+import { createFrontendPlugin } from '@backstage/frontend-plugin-api';
+import { RiRobot2Line } from '@remixicon/react';
+import extensions from './extensions';
+import { rootRouteRef } from './routes';
+
+/** @public */
+export const awsGenAiPlugin = createFrontendPlugin({
+  pluginId: 'aws-genai',
+  info: { packageJson: () => import('../package.json') },
+  title: 'Chat Assistant',
+  icon: <RiRobot2Line />,
+  routes: {
+    root: rootRouteRef,
+  },
+  extensions,
 });

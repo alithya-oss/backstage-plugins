@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createApp } from '@backstage/frontend-defaults';
-import catalogPlugin from '@backstage/plugin-catalog/alpha';
-import awsGenAiPlugin from '@alithya-oss/backstage-plugins-aws-genai';
-import { navModule } from './modules/nav';
 
-export default createApp({
-  features: [catalogPlugin, awsGenAiPlugin, navModule],
+import { PageBlueprint } from '@backstage/frontend-plugin-api';
+import { rootRouteRef } from '../routes';
+
+export const agentChatPage = PageBlueprint.make({
+  params: {
+    path: '/aws-genai/:agentName',
+    routeRef: rootRouteRef,
+    loader: () =>
+      import('../components/AgentPage').then(m => <m.AgentPageContent />),
+  },
 });

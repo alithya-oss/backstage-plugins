@@ -35,52 +35,51 @@ Install the frontend package in your Backstage app:
 yarn workspace app add @alithya-oss/backstage-plugins-aws-genai
 ```
 
-Edit `packages/app/src/App.tsx` to add a route for the chat UI page:
+The UI is built with [Backstage UI](https://backstage.io/docs/backstage-ui/overview),
+so make sure its stylesheet is imported once in `packages/app/src/index.tsx`:
 
 ```typescript
-import { AgentChatPage } from '@alithya-oss/backstage-plugins-aws-genai';
-
-{
-  /* ... */
-}
-
-const routes = (
-  <FlatRoutes>
-    /* ... */
-    <Route path="/assistant/:agentName" element={<AgentChatPage />} />
-  </FlatRoutes>
-);
+import '@backstage/ui/css/styles.css';
 ```
 
-Now edit `packages/app/src/components/Root/Root.tsx` to add a menu item:
+Add the plugin to `packages/app/src/App.tsx`:
+
+```typescript
+import awsGenAiPlugin from '@alithya-oss/backstage-plugins-aws-genai';
+
+export default createApp({
+  features: [awsGenAiPlugin],
+});
+```
+
+The chat page is mounted at `/aws-genai/:agentName`. Override the path from
+`app-config.yaml` if you prefer another one:
+
+```yaml
+app:
+  extensions:
+    - page:aws-genai:
+        config:
+          path: /assistant/:agentName
+```
+
+The plugin does not contribute a sidebar entry: the route carries an
+`:agentName` parameter, so only your app knows which agent to link to. Add a
+link to a concrete agent path from your app's nav content, for example:
 
 ```tsx
-import { ChatIcon } from '@backstage/core-components';
-
-{
-  /* ... */
-}
-export const Root = ({ children }: PropsWithChildren<{}>) => (
-  <SidebarPage>
-    <Sidebar>
-      {/* ... */}
-      <SidebarGroup label="Menu" icon={<MenuIcon />}>
-        {/* ... */}
-        <SidebarItem
-          icon={ChatIcon}
-          to="assistant/general"
-          text="Chat Assistant"
-        />
-        {/* ... */}
-      </SidebarGroup>
-      {/* ... */}
-    </Sidebar>
-    {/* ... */}
-  </SidebarPage>
-);
+<SidebarItem icon={ChatIcon} to="aws-genai/general" text="Chat Assistant" />
 ```
 
-The URL `assistant/general` means we're going to be using an agent named `general`, which we'll configure below.
+The path segment `general` is the name of the agent we configure below.
+
+### Old frontend system
+
+The plugin still works in apps on the old frontend system through its deprecated
+named exports. See
+[README-OFS.md](https://github.com/alithya-oss/backstage-plugins/blob/main/workspaces/aws/plugins/aws-genai/README-OFS.md)
+for those instructions. Support for the old frontend system will be removed in a
+future release.
 
 ## Creating your first agent
 

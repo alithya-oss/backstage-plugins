@@ -11,9 +11,18 @@
   "types": "src/index.ts",
   "license": "Apache-2.0",
   "publishConfig": {
-    "access": "public",
-    "main": "dist/index.esm.js",
-    "types": "dist/index.d.ts"
+    "access": "public"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "package.json": [
+        "package.json"
+      ]
+    }
   },
   "backstage": {
     "role": "frontend-plugin",
@@ -40,11 +49,13 @@
   },
   "dependencies": {
     "@alithya-oss/backstage-plugins-aws-genai-common": "workspace:^",
-    "@backstage/core-components": "backstage:^",
     "@backstage/core-plugin-api": "backstage:^",
-    "@material-ui/core": "^4.12.2",
-    "@material-ui/icons": "^4.9.1",
+    "@backstage/frontend-plugin-api": "backstage:^",
+    "@backstage/ui": "backstage:^",
+    "@remixicon/react": "^4.9.0",
     "eventsource-parser": "^2.0.1",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "ts-pattern": "^5.5.0"
   },
   "peerDependencies": {
@@ -55,11 +66,18 @@
   "devDependencies": {
     "@backstage/cli": "backstage:^",
     "@backstage/dev-utils": "backstage:^",
+    "@backstage/frontend-test-utils": "backstage:^",
+    "@backstage/test-utils": "backstage:^",
     "@testing-library/dom": "^10.0.0",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.0.0",
-    "msw": "^1.0.0"
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "msw": "^1.0.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-router-dom": "^6.3.0"
   },
   "files": [
     "dist",

@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-import { awsGenAiPlugin } from './plugin';
+export * from './legacy-plugin';
 
-describe('aws-genai-plugin', () => {
-  it('should export plugin', () => {
-    expect(awsGenAiPlugin).toBeDefined();
-  });
-});
+export type { AgentPageProps, AgentPageImpl } from './components-ofs/AgentPage';

@@ -14,118 +14,18 @@
  * limitations under the License.
  */
 
-import { EmptyState, MarkdownContent } from '@backstage/core-components';
-import React, { useEffect, useRef } from 'react';
-
+import { useEffect, useRef, useState } from 'react';
+import { ButtonIcon, Text } from '@backstage/ui';
+import {
+  RiErrorWarningLine,
+  RiInformationLine,
+  RiRobot2Line,
+  RiUser3Line,
+} from '@remixicon/react';
 import { ChatMessage, ToolRecord } from '../types';
-import { Avatar } from '@material-ui/core';
-import Person from '@material-ui/icons/Person';
-import School from '@material-ui/icons/School';
-import Info from '@material-ui/icons/Info';
-import Error from '@material-ui/icons/Error';
+import { MarkdownContent } from '../MarkdownContent';
 import { ToolsModal } from './ToolsModal';
-import { makeStyles } from '@material-ui/core';
-
-const useStyles = makeStyles(theme => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '0',
-  },
-
-  markdownContainer: {
-    flexGrow: 1,
-    position: 'relative',
-  },
-
-  markdown: {
-    position: 'absolute',
-    left: 0,
-    top: '1rem',
-    right: 0,
-    bottom: '1rem',
-    padding: '0 2rem',
-    overflow: 'auto',
-  },
-
-  ChatItem: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    width: '100%',
-    marginBottom: '1rem',
-    fontSize: '16px',
-    background: theme.palette.background.default,
-    borderRadius: '7px',
-    padding: '10px',
-
-    '& $ChatItemAvatarIcon': {
-      backgroundColor: theme.palette.type === 'dark' ? '#B3B3B3' : '#757575',
-      color: 'white',
-    },
-  },
-
-  ChatItemExpert: {
-    background: theme.palette.background.paper,
-
-    '& $ChatItemAvatarIcon': {
-      backgroundColor: '#f59d12',
-    },
-  },
-
-  ChatItemCustomer: {},
-
-  ChatItemMeta: {
-    display: 'flex',
-    alignItems: 'center',
-    flex: '0 1 auto',
-    marginRight: '1rem',
-    marginBottom: '0.5rem',
-    width: '2.5rem',
-  },
-
-  ChatItemContent: {
-    position: 'relative',
-    flex: '1 0 auto',
-    width: '100%',
-  },
-
-  ChatItemToolIcon: {
-    marginTop: '20px',
-    cursor: 'pointer',
-  },
-
-  ChatItemAvatarContainer: {
-    marginTop: '10px',
-    marginBottom: '10px',
-    width: '100px',
-    height: 'auto',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  ChatItemAvatarIcon: {
-    color: theme.palette.text.primary,
-  },
-
-  ChatItemChatText: {
-    position: 'relative',
-    width: '100%',
-    lineHeight: '1.3',
-    marginTop: '5px',
-  },
-
-  ChatItemError: {
-    background: '#fcf2f2',
-    color: '#5b2e2e',
-
-    '& $ChatItemAvatarIcon': {
-      backgroundColor: '#5b2e2e',
-    },
-  },
-}));
+import styles from './ChatHistoryComponent.module.css';
 
 export interface ChatHistoryComponentProps {
   messages?: ChatMessage[];
@@ -134,37 +34,34 @@ export interface ChatHistoryComponentProps {
   showInformation: boolean;
 }
 
-function getMessageExtraClass(message: ChatMessage, classes: any): string {
+function getMessageVariant(message: ChatMessage): 'user' | 'error' | 'agent' {
   if (message.type === 'user') {
-    return classes.ChatItemCustomer;
+    return 'user';
   }
 
   if (message.type === 'error') {
-    return classes.ChatItemError;
+    return 'error';
   }
 
-  return classes.ChatItemExpert;
+  return 'agent';
 }
 
-function getMessageIcon(message: ChatMessage) {
-  if (message.type === 'user') {
-    return <Person />;
+function MessageIcon({ message }: { message: ChatMessage }) {
+  switch (getMessageVariant(message)) {
+    case 'user':
+      return <RiUser3Line size={20} aria-hidden />;
+    case 'error':
+      return <RiErrorWarningLine size={20} aria-hidden />;
+    default:
+      return <RiRobot2Line size={20} aria-hidden />;
   }
-
-  if (message.type === 'error') {
-    return <Error />;
-  }
-
-  return <School />;
 }
 
 export const ChatHistoryComponent = ({
-  messages,
+  messages = [],
   className,
   showInformation,
 }: ChatHistoryComponentProps) => {
-  const classes = useStyles();
-
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -173,67 +70,64 @@ export const ChatHistoryComponent = ({
     }
   }, [messages]);
 
-  const [open, setOpen] = React.useState(false);
-  const [tools, setTools] = React.useState<ToolRecord[]>([]);
+  const [open, setOpen] = useState(false);
+  const [tools, setTools] = useState<ToolRecord[]>([]);
 
   const handleOpen = (message: ChatMessage) => {
-    setOpen(true);
     setTools(message.tools);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
+    setOpen(true);
   };
 
   return (
-    <div className={`${className} ${classes.container}`}>
-      <div className={classes.markdownContainer}>
-        <div className={classes.markdown} ref={contentRef}>
-          {messages!.length === 0 && (
-            <EmptyState
-              missing="data"
-              title="Start chatting!"
-              description="This assistant can answer questions for you, type a message below to get started."
-            />
-          )}
-
-          {messages!.length > 0 &&
-            messages?.map((message, index) => (
-              <div
-                key={index}
-                className={`${classes.ChatItem} ${getMessageExtraClass(
-                  message,
-                  classes,
-                )}`}
-              >
-                <div className={`${classes.ChatItemAvatarContainer}`}>
-                  <div>
-                    <Avatar className={classes.ChatItemAvatarIcon}>
-                      {getMessageIcon(message)}
-                    </Avatar>
-                  </div>
-                  {message.tools.length > 0 && showInformation && (
-                    <Info
-                      className={classes.ChatItemToolIcon}
-                      onClick={() => handleOpen(message)}
-                    />
-                  )}
+    <div
+      className={
+        className ? `${styles.container} ${className}` : styles.container
+      }
+    >
+      <div className={styles.scrollArea} ref={contentRef}>
+        {messages.length === 0 ? (
+          <div className={styles.emptyState}>
+            <Text as="h3" variant="title-medium" weight="bold">
+              Start chatting!
+            </Text>
+            <Text color="secondary">
+              This assistant can answer questions for you, type a message below
+              to get started.
+            </Text>
+          </div>
+        ) : (
+          messages.map((message, index) => (
+            <div
+              // eslint-disable-next-line react/no-array-index-key
+              key={index}
+              className={styles.chatItem}
+              data-variant={getMessageVariant(message)}
+            >
+              <div className={styles.chatItemMeta}>
+                <div className={styles.chatItemAvatar}>
+                  <MessageIcon message={message} />
                 </div>
-                <div className={`${classes.ChatItemChatText}`}>
-                  <MarkdownContent
-                    content={
-                      message.payload.length === 0
-                        ? 'Working...'
-                        : message.payload
-                    }
-                    dialect="gfm"
+                {message.tools.length > 0 && showInformation && (
+                  <ButtonIcon
+                    variant="tertiary"
+                    size="small"
+                    aria-label="Show tool calls"
+                    icon={<RiInformationLine />}
+                    onPress={() => handleOpen(message)}
                   />
-                </div>
+                )}
               </div>
-            ))}
-        </div>
+              <MarkdownContent
+                className={styles.chatItemContent}
+                content={
+                  message.payload.length === 0 ? 'Working...' : message.payload
+                }
+              />
+            </div>
+          ))
+        )}
       </div>
-      <ToolsModal open={open} onClose={handleClose} tools={tools} />
+      <ToolsModal open={open} onOpenChange={setOpen} tools={tools} />
     </div>
   );
 };

@@ -78,6 +78,10 @@ backend.add(
   import('@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps'),
 );
 
+// genai
+backend.add(import('@alithya-oss/backstage-plugins-aws-genai-backend'));
+backend.add(import('@alithya-oss/backstage-plugins-aws-genai-agent-langgraph'));
+
 // scaffolder addons
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-gitlab'));

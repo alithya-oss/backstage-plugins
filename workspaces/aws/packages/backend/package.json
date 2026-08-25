@@ -25,6 +25,8 @@
     "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^",
     "@alithya-oss/backstage-plugin-catalog-backend-module-aws-apps-entities-processor": "workspace:^",
     "@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps": "workspace:^",
+    "@alithya-oss/backstage-plugins-aws-genai-agent-langgraph": "workspace:^",
+    "@alithya-oss/backstage-plugins-aws-genai-backend": "workspace:^",
     "@backstage/backend-defaults": "backstage:^",
     "@backstage/backend-plugin-api": "backstage:^",
     "@backstage/catalog-model": "backstage:^",

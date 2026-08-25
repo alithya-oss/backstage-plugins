@@ -25,6 +25,7 @@ import { AgentApiClient, agentApiRef } from './api';
 import { rootRouteRef } from './routes';
 
 /**
+ * @deprecated Use the new frontend system instead
  * @public
  */
 export const awsGenAiPlugin = createPlugin({
@@ -43,12 +44,14 @@ export const awsGenAiPlugin = createPlugin({
 });
 
 /**
+ * @deprecated Use the new frontend system instead
  * @public
  */
 export const AgentChatPage = awsGenAiPlugin.provide(
   createRoutableExtension({
     name: 'AgentChatPage',
-    component: () => import('./components/AgentPage').then(m => m.AgentPage),
+    component: () =>
+      import('./components-ofs/AgentPage').then(m => m.AgentPageImpl),
     mountPoint: rootRouteRef,
   }),
 );

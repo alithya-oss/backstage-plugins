@@ -17,10 +17,7 @@
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
 
 import { AgentApi } from './AgentApi';
-import {
-  EventSourceParserStream,
-  ParsedEvent,
-} from 'eventsource-parser/stream';
+import type { ParsedEvent } from 'eventsource-parser/stream';
 import {
   ChatEvent,
   ChatRequest,
@@ -46,6 +43,14 @@ export class AgentApiClient implements AgentApi {
     signal?: AbortSignal,
   ): AsyncGenerator<ChatEvent> {
     try {
+      // Imported lazily: the module body of `eventsource-parser/stream`
+      // subclasses `TransformStream` as it evaluates, so a static import would
+      // require every consuming app to polyfill that global before it can even
+      // render this plugin in a jsdom test.
+      const { EventSourceParserStream } = await import(
+        'eventsource-parser/stream'
+      );
+
       const stream = await this.fetch('v1/chat', {
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',

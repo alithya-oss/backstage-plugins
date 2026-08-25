@@ -13,11 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createApp } from '@backstage/frontend-defaults';
-import catalogPlugin from '@backstage/plugin-catalog/alpha';
-import awsGenAiPlugin from '@alithya-oss/backstage-plugins-aws-genai';
-import { navModule } from './modules/nav';
 
-export default createApp({
-  features: [catalogPlugin, awsGenAiPlugin, navModule],
+import {
+  ApiBlueprint,
+  discoveryApiRef,
+  fetchApiRef,
+} from '@backstage/frontend-plugin-api';
+import { AgentApiClient, agentApiRef } from '../api';
+
+export const agentApi = ApiBlueprint.make({
+  params: defineParams =>
+    defineParams({
+      api: agentApiRef,
+      deps: { discoveryApi: discoveryApiRef, fetchApi: fetchApiRef },
+      factory: ({ discoveryApi, fetchApi }) =>
+        new AgentApiClient({ discoveryApi, fetchApi }),
+    }),
 });

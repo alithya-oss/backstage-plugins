@@ -15,6 +15,6 @@
  */
 
 import { createDevApp } from '@backstage/dev-utils';
-import { awsGenAiPlugin } from '../src/plugin';
+import { awsGenAiPlugin } from '../src/legacy-plugin';
 
 createDevApp().registerPlugin(awsGenAiPlugin).render();

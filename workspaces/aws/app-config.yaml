@@ -46,6 +46,12 @@ backend:
   database:
     client: better-sqlite3
     connection: ':memory:'
+  # Plugins whose actions are exposed to the actions registry, consumed by the
+  # GenAI agents configured under `genai.agents`
+  actions:
+    pluginSources:
+      - 'catalog'
+      - 'aws-genai'
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
 integrations:
@@ -173,3 +179,35 @@ aws:
 
 costInsights:
   engineerCost: 20000
+
+# Generative AI assistant, see plugins/aws-genai/README.md
+# The frontend page is mounted at /aws-genai/:agentName, so the `general` key
+# below is what the sidebar link resolves to.
+genai:
+  chat:
+    # Expose the button that shows which tools an agent called
+    showInformation: true
+  # Register the built-in catalog/TechDocs actions so agents can use them
+  registerCoreActions: true
+  agents:
+    general:
+      description: General chat assistant
+      prompt: >
+        You are an expert in platform engineering and answer questions in a
+        succinct and easy to understand manner.
+
+        Answers should always be well-structured and use well-formed Markdown.
+
+        The current user is {username} and you can provide that information if
+        asked.
+      actions:
+        - search-catalog
+        - search-techdocs
+      langgraph:
+        # Prune message history based on the context window of the chosen model
+        messagesMaxTokens: 150000
+        # Requires credentials with Amazon Bedrock access for this model.
+        # Replace with the `openai` or `ollama` block to use another provider.
+        bedrock:
+          modelId: 'anthropic.claude-3-5-sonnet-20241022-v2:0'
+          region: us-west-2

@@ -15,41 +15,28 @@
  */
 
 import {
-  Modal,
-  Typography,
-  makeStyles,
   Accordion,
-  AccordionSummary,
-  AccordionDetails,
-} from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+  AccordionGroup,
+  AccordionPanel,
+  AccordionTrigger,
+  Dialog,
+  DialogBody,
+  DialogHeader,
+  Text,
+} from '@backstage/ui';
 import { ToolRecord } from '../types';
-import { MarkdownContent } from '@backstage/core-components';
-
-const useStyles = makeStyles(theme => ({
-  paper: {
-    position: 'absolute',
-    width: 800,
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-  },
-}));
+import { MarkdownContent } from '../MarkdownContent';
 
 interface ToolParametersProps {
   tool: ToolRecord;
 }
 
 const ToolsParameters = ({ tool }: ToolParametersProps) => {
-  let data: any;
+  let data: unknown;
 
   try {
     data = JSON.parse(tool.input);
-  } catch (e) {
+  } catch {
     data = tool.input;
   }
 
@@ -57,42 +44,34 @@ const ToolsParameters = ({ tool }: ToolParametersProps) => {
 ~~~json\n${JSON.stringify(data, undefined, 2)}\n~~~
 `;
 
-  return <MarkdownContent content={markdown} dialect="gfm" />;
+  return <MarkdownContent content={markdown} />;
 };
 
 interface ToolsModalProps {
   open: boolean;
-  onClose: () => void;
+  onOpenChange: (open: boolean) => void;
   tools: ToolRecord[];
 }
 
-export const ToolsModal = ({ open, onClose, tools }: ToolsModalProps) => {
-  const classes = useStyles();
-
-  return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      aria-labelledby="tools-modal-title"
-      aria-describedby="tools-modal-description"
-    >
-      <div className={classes.paper}>
-        <h2 id="tools-modal-title">Tools</h2>
-        {tools.map((tool, index) => (
-          <Accordion key={index}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls={`panel${index}-content`}
-              id={`panel${index}-header`}
-            >
-              <Typography>{tool.name}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ToolsParameters tool={tool} />
-            </AccordionDetails>
-          </Accordion>
-        ))}
-      </div>
-    </Modal>
-  );
-};
+export const ToolsModal = ({ open, onOpenChange, tools }: ToolsModalProps) => (
+  <Dialog isOpen={open} onOpenChange={onOpenChange} width={800}>
+    <DialogHeader>Tools</DialogHeader>
+    <DialogBody>
+      {tools.length === 0 ? (
+        <Text color="secondary">No tools were called for this message.</Text>
+      ) : (
+        <AccordionGroup allowsMultiple>
+          {tools.map((tool, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Accordion key={`${tool.name}-${index}`}>
+              <AccordionTrigger title={tool.name} />
+              <AccordionPanel>
+                <ToolsParameters tool={tool} />
+              </AccordionPanel>
+            </Accordion>
+          ))}
+        </AccordionGroup>
+      )}
+    </DialogBody>
+  </Dialog>
+);

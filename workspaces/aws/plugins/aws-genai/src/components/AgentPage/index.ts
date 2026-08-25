@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export { AgentPage } from './AgentPage';
+export { AgentPageContent } from './AgentPage';
