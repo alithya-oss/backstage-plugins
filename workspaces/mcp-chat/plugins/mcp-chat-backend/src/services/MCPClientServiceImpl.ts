@@ -30,6 +30,7 @@ import {
 import { McpServerLifecycle } from './McpServerLifecycle';
 import { McpTransportFactory } from './McpTransportFactory';
 import { QueryProcessor } from './QueryProcessor';
+import type { QueryStreamEvent, QueryStreamOptions } from './QueryProcessor';
 import { ProviderStatusReporter } from './ProviderStatusReporter';
 import { McpServerStatusReporter } from './McpServerStatusReporter';
 
@@ -108,6 +109,18 @@ export class MCPClientServiceImpl implements MCPClientService {
     enabledTools?: string[],
   ): Promise<QueryResponse> {
     return this.queryProcessor.processQuery(messagesInput, enabledTools);
+  }
+
+  streamQuery(
+    messagesInput: any[],
+    enabledTools?: string[],
+    options?: QueryStreamOptions,
+  ): AsyncGenerator<QueryStreamEvent, void, undefined> {
+    return this.queryProcessor.streamQuery(
+      messagesInput,
+      enabledTools,
+      options,
+    );
   }
 
   getAvailableTools(): ServerTool[] {

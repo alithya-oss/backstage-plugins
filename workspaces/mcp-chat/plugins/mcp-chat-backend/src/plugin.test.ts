@@ -92,6 +92,12 @@ jest.mock('./utils', () => ({
   validateMessages: jest.fn().mockReturnValue({ isValid: true }),
   isGuestUser: jest.fn().mockReturnValue(true),
   isMissingTableError: jest.fn().mockReturnValue(false),
+  // The chat routes validate through this helper; keep the real one so the
+  // payloads below are rejected with their real messages.
+  validateChatRequest: jest.requireActual('./utils/validateChatRequest')
+    .validateChatRequest,
+  // Stands in for a guest run: nothing is stored, no conversation id reported.
+  saveChatConversation: jest.fn().mockResolvedValue(undefined),
 }));
 
 const mockConfig = {

@@ -35,6 +35,7 @@ describe('createRouter', () => {
     mcpClientService = {
       initializeMCPServers: jest.fn(),
       processQuery: jest.fn(),
+      streamQuery: jest.fn(),
       getAvailableTools: jest.fn(),
       getProviderStatus: jest.fn(),
       getMCPServerStatus: jest.fn(),

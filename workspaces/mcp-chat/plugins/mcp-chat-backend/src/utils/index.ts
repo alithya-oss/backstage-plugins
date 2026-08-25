@@ -22,5 +22,9 @@ export {
   DEFAULT_MCP_TOOL_CALL_TIMEOUT_MS,
 } from './executeToolCall';
 export { validateMessages } from './validateMessages';
+export { validateChatRequest } from './validateChatRequest';
+export type { ValidatedChatRequest } from './validateChatRequest';
+export { saveChatConversation } from './saveChatConversation';
+export type { SaveChatConversationOptions } from './saveChatConversation';
 export { isGuestUser } from './isGuestUser';
 export { isMissingTableError } from './isMissingTableError';
