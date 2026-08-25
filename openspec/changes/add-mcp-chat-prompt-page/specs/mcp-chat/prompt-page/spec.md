@@ -53,36 +53,56 @@ whitespace-only prompt SHALL NOT start a run.
 - **WHEN** a run is already in flight and the user submits another prompt
 - **THEN** the page SHALL NOT interleave two runs against the same conversation
 
-### Requirement: Run lifecycle and completion
+### Requirement: Run lifecycle and streamed completion
 
 While a run is in flight the page SHALL indicate that the assistant is working,
 and SHALL keep that indication visible until the run completes, fails or is
-cancelled. On success the assistant turn SHALL be appended with the provider's
-reply rendered as formatted text.
+cancelled.
 
-The reply SHALL be revealed as a single completed turn. Incremental
-token-by-token rendering is explicitly NOT required by this capability, because
-the chat endpoint answers once, after the provider and all tool calls have
-finished. A future change MAY introduce incremental rendering; doing so SHALL
-NOT change any other requirement in this capability.
+The assistant reply SHALL be rendered incrementally as it arrives, so text
+becomes readable before the run finishes. The turn SHALL be marked as still
+running while fragments are arriving and as complete once the run terminates.
+Fragments SHALL be appended in arrival order so the rendered text always matches
+what the provider has produced so far.
+
+Where the active provider cannot produce incremental output, the reply SHALL
+still render correctly — arriving as a single fragment — without a separate code
+path on the page.
 
 #### Scenario: A run is in progress
 
-- **WHEN** a prompt has been submitted and the provider has not yet answered
+- **WHEN** a prompt has been submitted and no reply fragment has arrived yet
 - **THEN** the page shows a running indication and offers a way to cancel
+
+#### Scenario: A reply renders incrementally
+
+- **WHEN** reply fragments arrive one after another
+- **THEN** the assistant turn grows as each fragment arrives, remains marked as
+  running, and its text at any moment equals the fragments received so far
 
 #### Scenario: A run completes successfully
 
-- **WHEN** the provider returns a reply
-- **THEN** the running indication clears and the reply is appended as an
-  assistant turn with markdown rendered as formatted text
+- **WHEN** the run reaches its terminal completion
+- **THEN** the running indication clears, the assistant turn is marked complete,
+  and its markdown is rendered as formatted text
+
+#### Scenario: A non-streaming provider is used
+
+- **WHEN** the active provider delivers its whole reply as a single fragment
+- **THEN** the assistant turn renders that reply and completes normally
 
 #### Scenario: A run is cancelled
 
 - **WHEN** the user cancels a run that is in flight
-- **THEN** the in-flight request is aborted, the running indication clears, no
-  assistant turn is appended for the abandoned run, and the conversation is left
-  in a state where the user can submit again
+- **THEN** the request is abandoned, the running indication clears, any partial
+  assistant turn is removed rather than left marked as running, and the
+  conversation is left in a state where the user can submit again
+
+#### Scenario: A run fails after partial output
+
+- **WHEN** the run fails once some reply text has already been rendered
+- **THEN** the partial text is kept and marked as interrupted rather than silently
+  presented as a complete answer, and a retry is offered
 
 ### Requirement: MCP tool call rendering
 
@@ -91,6 +111,23 @@ invocation as part of the assistant turn, showing the tool's name and, on
 demand, the arguments it received and the result it returned. Results SHALL be
 collapsed by default, individually expandable, and copyable. A tool invocation
 that failed SHALL be visually distinguishable from one that succeeded.
+
+An invocation SHALL appear as soon as the run reports it starting, before its
+result is known, and SHALL show that it is still running until its outcome
+arrives.
+
+#### Scenario: An invocation is shown before its result arrives
+
+- **WHEN** the run reports a tool invocation starting and its result has not yet
+  arrived
+- **THEN** the invocation appears on the assistant turn with its name and
+  arguments, marked as still running
+
+#### Scenario: A running invocation receives its result
+
+- **WHEN** the outcome of an invocation already shown as running arrives
+- **THEN** that same invocation stops being marked as running and exposes its
+  result, without appearing a second time
 
 #### Scenario: A single tool is invoked
 

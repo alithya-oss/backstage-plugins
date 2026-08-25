@@ -4,7 +4,7 @@ See `proposal.md` — Why. What shapes the approach here is the shape of the
 existing transport and of the library, both verified against the code and the
 published package rather than from documentation:
 
-**The transport is request/response, not a stream.**
+**The existing transport is request/response; a streaming one is added.**
 `McpChatApi.sendChatMessage(messages, enabledTools, signal, conversationId)`
 returns `Promise<ChatResponse>`. `POST /chat` in
 `plugins/mcp-chat-backend/src/routes/chatRoutes.ts` calls
@@ -12,16 +12,30 @@ returns `Promise<ChatResponse>`. `POST /chat` in
 `{ role: 'assistant', content, toolResponses, toolsUsed, conversationId }`.
 Tool calls run **server-side**, inside `processQuery`, and are reported after the
 fact as `ToolExecutionResult[]` — `{ id, name, arguments, result, serverId }`.
-The frontend never executes a tool and never observes one starting.
+The frontend never executes a tool.
+
+Streaming is in scope for this change, so that endpoint is joined by a
+server-sent-event one. The constraint that shapes the design is the provider
+layer: `LLMProvider` (`plugins/mcp-chat-node/src/LLMProvider.ts`) is an **abstract
+class** whose `sendMessage` returns a complete `ChatResponse`, and there are
+**nine** provider modules extending it (`openai`, `anthropic`, `amazon-bedrock`,
+`gemini`, `ollama`, `litellm`, `azure-openai`, `openai-responses`,
+`agentgateway`). Adding an abstract streaming method would break all nine at
+once. `QueryProcessor.processQuery` also has two paths — the tool-calling loop and
+a separate `processQueryWithResponsesApi` for providers reporting
+`supportsNativeMcp()`.
 
 **The library at `@assistant-ui/react@0.15.16`.** `useExternalStoreRuntime` and
 `ExternalStoreAdapter` re-export from `@assistant-ui/core@0.3.15`. On
 `ExternalStoreAdapter`, only `onNew` is required. `unstable_enableToolInvocations`
 defaults to `false`, which is what we want: the runtime then does not drive
 client-side tool callbacks and simply renders the tool-call parts we put in
-`messages`. The package ships **no CSS** and pulls in no Tailwind — its
-primitives are unstyled Radix wrappers, so it composes with CSS modules over BUI
-tokens.
+`messages`. `ThreadMessageLike` accepts a `status`, and `MessageStatus` covers
+`{ type: 'running' }`, `{ type: 'complete', reason }` and
+`{ type: 'incomplete', reason: 'cancelled' | 'error' | ... }` — which is how a
+partially streamed turn is represented. The package ships **no CSS** and pulls in
+no Tailwind — its primitives are unstyled Radix wrappers, so it composes with CSS
+modules over BUI tokens.
 
 **`adapters.threadList` is flagged unstable.** In
 `external-store-adapter.d.ts`, the `threadList` slot itself and its `threadId`,
@@ -39,7 +53,11 @@ not `@backstage/core-components` or Material UI icons.
 
 **Goals**
 
-- Reuse the existing transport untouched; the adapter is the only new seam.
+- Add streaming without touching the existing `POST /chat` contract or the
+  existing page.
+- Keep the nine provider modules compiling and working untouched, so streaming can
+  be adopted per provider instead of in one flag-day change.
+- Give the frontend a single code path whether or not the active provider streams.
 - Keep the new page's failure modes independent of the existing page's.
 - Depend only on stable Assistant UI surface.
 - Keep the reduced side panel's data layer as existing hooks, so panel behaviour
@@ -51,27 +69,93 @@ not `@backstage/core-components` or Material UI icons.
   presentation component extracted between old and new page. Duplicated markup
   is accepted for this change: the old components are Material UI and the new
   ones are BUI, so a shared component would have to satisfy both.
-- No change to `McpChatApi`, `src/types.ts`, or any backend package.
+- No change to the behaviour of `sendChatMessage` or `POST /chat`, and no
+  database or conversation-schema change.
+- No native incremental output implemented in the nine provider modules here —
+  only the seam and the fallback.
 - No Assistant UI Cloud, no `AssistantCloud`, no remote thread list.
+- No WebSocket transport.
 
 ## Decisions
 
+### Transport: server-sent events on a new route
+
+A new `POST /chat/stream` sits beside `POST /chat`, taking the same body and
+answering `text/event-stream`. SSE is chosen over the alternatives because the
+traffic is one-directional (the client sends one request, then only reads), it
+rides the existing HTTP stack and Backstage auth with no new infrastructure, and
+`fetchApi.fetch` already gives the frontend a readable body stream plus an
+`AbortSignal` for cancellation.
+
+Rejected: WebSockets (bidirectional machinery for a one-way flow, plus proxy and
+auth complications for no gain); chunked JSON lines over the existing route
+(would change `POST /chat`'s response type, breaking the current page); polling
+(no incremental output).
+
+The event names and payloads are fixed by
+`specs/mcp-chat/chat-streaming/spec.md` — a text fragment event, a tool-call
+event, a tool-result event, and exactly one terminal completion-or-failure event.
+Shared payload types live in `mcp-chat-common` so backend and frontend cannot
+drift.
+
+### Provider streaming: optional method on the base class, never abstract
+
+`LLMProvider` is abstract and nine modules extend it, so a new `abstract`
+streaming method would fail to compile in all nine at once. Instead the base class
+gains a **concrete** `streamMessage` whose default implementation awaits the
+existing `sendMessage` and emits the whole reply as one fragment, plus a
+`supportsStreaming()` returning `false` by default. A module opts in by overriding
+both.
+
+This is what lets the capability ship now and be honest about it: the endpoint and
+its contract exist for every provider today, the frontend has one code path, and
+each module can gain native streaming later without touching the route, the
+adapter or the page. `supportsStreaming()` is surfaced on provider status so the
+UI can distinguish real streaming from the fallback rather than pretending.
+
+The `processQueryWithResponsesApi` path used by `supportsNativeMcp()` providers
+keeps returning a complete response and is served by the same fallback, so
+native-MCP providers are covered from day one without that path being rewritten
+here.
+
+Rejected: making the method abstract and updating nine modules in one change
+(large blast radius, and it would block the frontend on provider work);
+frontend-side fake streaming that chunks a complete reply for visual effect
+(dishonest — it would report streaming while nothing streams, and the spec's
+capability-reporting requirement exists precisely to avoid that).
+
+### Tool events during a run
+
+The tool-calling loop in `QueryProcessor` already knows when it is about to invoke
+a tool and when the result lands, so the streaming variant emits a tool-call event
+before invoking and a tool-result event after, correlated by the invocation id.
+That is what lets the page show an invocation as running before its outcome
+exists, which the non-streaming path could never express.
+
+A failed or timed-out tool produces a tool-result marked failed and the run
+continues to its terminal event, matching the current behaviour where a tool
+failure does not abort the reply.
+
 ### Runtime: `useExternalStoreRuntime`, not `useLocalRuntime`
 
-`useLocalRuntime` expects a `ChatModelAdapter` that yields
-`ChatModelRunResult` updates — it is built for a model call the frontend drives
-and can stream from. Our backend performs the whole provider-plus-tools cycle
-server-side and answers once, and conversation persistence is already the
-backend's job, keyed by `conversationId`. `useExternalStoreRuntime` fits that:
-React state remains the single source of truth for the message list, the runtime
-renders it, and each handler maps onto one transport call. It is also what makes
-the "selecting an existing conversation" requirement cheap — loading a stored
-conversation is a `setState`, not a runtime migration.
+`useLocalRuntime` takes a `ChatModelAdapter` whose `run` may return
+`AsyncGenerator<ChatModelRunResult, void>` — the idiomatic streaming shape, and on
+the face of it the obvious choice now that we stream. It is still not the right
+fit: it moves the message list inside the runtime, whereas two spec'd behaviours
+need it in React state that the page owns — selecting a stored conversation
+replaces the whole list, and the reduced side panel drives that selection. With
+`useLocalRuntime` that becomes `ExportedMessageRepository` import gymnastics on
+every selection.
 
-Rejected: `useLocalRuntime` (would need a fake streaming adapter over a
-non-streaming call, and would duplicate persistence);
-`useAssistantTransportRuntime` / `AssistantCloud` (assume protocols the backend
-does not speak).
+`useExternalStoreRuntime` keeps React state as the single source of truth: the
+stream consumer appends each fragment to the last assistant turn's text and marks
+it `status: { type: 'running' }`, flipping to `complete` on the terminal event and
+`incomplete` with reason `error` or `cancelled` otherwise. Rendering follows from
+state, so streaming needs no runtime concept the adapter does not already have.
+Conversation persistence also stays the backend's job, keyed by `conversationId`.
+
+Rejected: `useLocalRuntime` (above); `useAssistantTransportRuntime` /
+`AssistantCloud` (assume protocols the backend does not speak).
 
 ### Handler matrix
 
@@ -82,13 +166,13 @@ from the one sketched in the parent issue, for reasons given below.
 | ---------------------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | `messages`                                     | yes                   | React state of the converted turn list                                                                            |
 | `convertMessage`                               | yes                   | our `Message` view-model → `ThreadMessageLike`                                                                    |
-| `isRunning`                                    | yes                   | request-in-flight flag, drives the running indicator                                                              |
+| `isRunning`                                    | yes                   | true from submit until the terminal event, drives the running indicator                                           |
 | `isLoading`                                    | yes                   | true while a stored conversation is being fetched                                                                 |
-| `onNew`                                        | yes (required)        | append user turn, then `sendChatMessage`                                                                          |
+| `onNew`                                        | yes (required)        | append user turn, then consume the event stream, updating state per event                                         |
 | `setMessages`                                  | yes                   | lets the runtime rewrite the list — **required for cancel and for branch switching to survive the next snapshot** |
-| `onEdit`                                       | yes                   | truncate to the edited turn, re-run from it                                                                       |
-| `onReload`                                     | yes                   | re-run from a `parentId`, producing another branch                                                                |
-| `onCancel`                                     | yes                   | `AbortController.abort()`, then drop the trailing user turn                                                       |
+| `onEdit`                                       | yes                   | truncate to the edited turn, re-stream from it                                                                    |
+| `onReload`                                     | yes                   | re-stream from a `parentId`, producing another branch                                                             |
+| `onCancel`                                     | yes                   | `AbortController.abort()`, closing the stream, then drop the partial turn                                         |
 | `onDelete`                                     | no                    | not in the spec; no per-message delete affordance                                                                 |
 | `onAddToolResult`                              | **no**                | see below                                                                                                         |
 | `unstable_enableToolInvocations`               | **no** (left `false`) | tools run server-side                                                                                             |
@@ -99,8 +183,8 @@ from the one sketched in the parent issue, for reasons given below.
 assumption. That handler exists so a _client-side_ tool can hand its result back
 to the runtime; the type doc states results flow through it "from `execute()`
 returning, or from `streamCall` resolving". In `mcp-chat` every tool executes
-server-side and its result is already inside the response we convert into
-message parts, so nothing would ever call it. Wiring it would be dead code, and
+server-side and its result arrives in the stream we convert into message parts,
+so nothing would ever call it. Wiring it would be dead code, and
 enabling the tracker that drives it (`unstable_enableToolInvocations: true`)
 would make the runtime try to dispatch our server-side tool calls a second time.
 
@@ -109,16 +193,33 @@ it, "cancelling a run leaves a trailing user message in the thread and the
 composer untouched". Since cancel is a spec'd scenario, `setMessages` is
 required to satisfy it.
 
-### Message conversion
+### Message conversion and streaming state
 
 `convertMessage` maps one view-model message to a `ThreadMessageLike`. An
 assistant turn's `content` array is built as: one `{ type: 'text', text }` part
-for the reply, preceded by one `{ type: 'tool-call', toolCallId, toolName, args,
-result, isError }` part per `ToolExecutionResult` — `id` → `toolCallId`, `name` →
-`toolName`, `arguments` → `args`, `result` → `result`. `ToolExecutionResult` has
-no error flag, so `isError` is derived from the result payload; the check lives
-in one helper so it can be replaced if the backend later reports errors
-explicitly.
+carrying the text accumulated so far, preceded by one
+`{ type: 'tool-call', toolCallId, toolName, args, result, isError }` part per
+invocation — `id` → `toolCallId`, `name` → `toolName`, `arguments` → `args`,
+`result` → `result`.
+
+Streaming makes the turn's lifecycle explicit through `ThreadMessageLike.status`:
+
+- fragments still arriving → `{ type: 'running' }`
+- terminal completion → `{ type: 'complete', reason: 'stop' }`
+- terminal failure → `{ type: 'incomplete', reason: 'error' }`, keeping whatever
+  text had arrived, which is what the spec's "failure after partial output"
+  scenario requires
+- cancelled → `{ type: 'incomplete', reason: 'cancelled' }` before the partial
+  turn is dropped
+
+A tool-call part is written as soon as the tool-call event arrives, with `result`
+absent — that absence is what the tool UI renders as "still running" — and is
+filled in place, keyed by `toolCallId`, when its tool-result event lands. Keying
+by id is what keeps a resolving invocation from appearing twice.
+
+The backend's tool-result event carries an explicit failure flag, so `isError` is
+read from the event rather than inferred from the payload as the non-streaming
+path would have required.
 
 This is the seam that lets tool rendering meet its spec without any client-side
 tool machinery: the parts are already in the message, and `makeAssistantToolUI`
@@ -191,12 +292,24 @@ nothing else in the workspace is tested against React 19.
 
 ## Risks / Trade-offs
 
-- **No token streaming, while the parent issue's acceptance criteria ask for
-  streaming** → Cannot be resolved in this change: the backend answers once.
-  Mitigated by a running indicator and working cancel, so the page never looks
-  frozen. Escalated rather than absorbed silently — the spec states the
-  non-requirement explicitly and the proposal records it as deferred, so adding a
-  streaming endpoint later changes no other requirement.
+- **Streaming ships as a contract before most providers implement it** → Every
+  provider is reachable through the endpoint from day one via the base-class
+  fallback, so nothing is broken; but a user on a non-streaming provider sees the
+  reply arrive in one piece. Mitigated by surfacing `supportsStreaming()` on
+  provider status so the UI states which mode is active rather than implying
+  token-by-token output everywhere. Per-provider work is tracked as follow-up.
+- **The streaming path duplicates the tool-calling loop's logic** → Two code paths
+  through `QueryProcessor` can drift, so tool filtering by enabled server and the
+  system-prompt injection must be factored into helpers both paths call rather than
+  copied. Tests cover both paths against the same fixtures.
+- **SSE through proxies and load balancers can buffer** → Set the conventional
+  no-buffering response headers and keep events small. If an adopter's ingress
+  still buffers, the fallback behaviour (whole reply in one fragment) is what they
+  observe — degraded, not broken.
+- **A dropped connection mid-run could orphan provider or tool work** → The route
+  ties an `AbortController` to client disconnect, and the spec forbids starting new
+  tool invocations for a cancelled run. A tool already in flight still runs to its
+  timeout; that is accepted.
 - **Assistant UI is pre-1.0 (`0.15.16`)** → Depend only on non-`unstable_`,
   non-deprecated surface (this is what rules out `adapters.threadList`). Pin an
   exact-minor range and treat upgrades as reviewed changes.
@@ -204,21 +317,29 @@ nothing else in the workspace is tested against React 19.
   `yarn dedupe` is run and `yarn dedupe --check` gated in CI. `zod` and `zustand`
   arriving in the workspace risks duplicate resolutions; dedupe before `tsc:full`,
   since duplicate copies of one library surface as spurious type errors.
-- **Two chat UIs to maintain** → Accepted and time-boxed: retiring the old page
-  is a separate decision once the new one has adopter feedback.
+- **Two chat UIs to maintain, now over two transports** → Accepted and time-boxed:
+  retiring the old page is a separate decision once the new one has adopter
+  feedback. The old page stays on `POST /chat`, which this change does not touch.
 - **Duplicated panel presentation between old and new page** → Accepted: the data
   layer (`useMcpServers`, `useProviderStatus`, `useConversations`) is shared, only
   the markup is not, because the two pages target different component libraries.
-- **`isError` for a tool call is inferred, not reported** → Isolated in one
-  helper, so a future backend field replaces one function.
 
 ## Migration Plan
 
-Additive and adopter-driven. The new page ships behind its own route and is not
-mounted automatically; adopters add its extension when they want it. Rollback for
-an adopter is removing the mount — the existing page is untouched, so there is no
-data or route migration and nothing to reverse on the backend. The only change
-visible to an adopter who does nothing is the narrowed React peer range.
+Additive and adopter-driven, on both sides. The new page ships behind its own
+route and is not mounted automatically; the streaming endpoint is a new route that
+nothing else calls. Adopters who upgrade without mounting the page get the new
+endpoint and keep the old behaviour untouched.
+
+Deployment order matters in one direction only: the backend package must be
+deployed before the new page is mounted, since the page calls the new route. An
+adopter who mounts the page against an older backend gets a 404 on the streaming
+route — the page's transport-failure requirement covers that, showing an error
+with a retry rather than hanging.
+
+Rollback is removing the mount; the existing page and `POST /chat` are unchanged,
+so there is no data, schema or route migration to reverse. The only change visible
+to an adopter who does nothing is the narrowed React peer range.
 
 ## Open Questions
 
