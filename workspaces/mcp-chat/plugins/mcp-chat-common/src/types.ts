@@ -214,6 +214,14 @@ export interface ProviderInfo {
   baseUrl: string;
   /** Current connection status */
   connection: ProviderConnectionStatus;
+  /**
+   * Whether the provider produces incremental output.
+   *
+   * When `false`, the streaming chat endpoint still answers with a valid
+   * stream, delivering the whole reply as a single text event. This lets a
+   * client tell genuine streaming from that single-fragment fallback.
+   */
+  supportsStreaming?: boolean;
 }
 
 /**
@@ -451,6 +459,116 @@ export interface ToolExecutionResult {
   /** ID of the MCP server that executed the tool */
   serverId: string;
 }
+
+// =============================================================================
+// Chat Streaming Types
+// =============================================================================
+
+/**
+ * An incremental fragment of the assistant reply.
+ *
+ * Fragments arrive in reply order, so concatenating their `text` in arrival
+ * order reproduces the complete reply.
+ *
+ * @public
+ */
+export interface ChatStreamTextEvent {
+  /** Event discriminant */
+  type: 'text';
+  /** Reply text produced since the previous text event */
+  text: string;
+}
+
+/**
+ * Announces an MCP tool invocation that is about to run.
+ *
+ * Emitted before the tool executes, so a client can show an invocation as
+ * running before its outcome exists.
+ *
+ * @public
+ */
+export interface ChatStreamToolCallEvent {
+  /** Event discriminant */
+  type: 'tool-call';
+  /** Correlation id, shared with the matching tool-result event */
+  id: string;
+  /** Name of the tool being invoked */
+  name: string;
+  /** Parsed arguments passed to the tool */
+  arguments: Record<string, unknown>;
+  /** ID of the MCP server that will run the tool */
+  serverId: string;
+}
+
+/**
+ * Carries the outcome of an MCP tool invocation.
+ *
+ * Never precedes the {@link ChatStreamToolCallEvent} bearing the same `id`.
+ *
+ * @public
+ */
+export interface ChatStreamToolResultEvent {
+  /** Event discriminant */
+  type: 'tool-result';
+  /** Correlation id of the tool-call event this result belongs to */
+  id: string;
+  /** Result returned by the tool, or the error detail when `isError` is true */
+  result: string;
+  /** Whether the invocation failed or timed out */
+  isError: boolean;
+}
+
+/**
+ * Terminal event of a run that produced a reply.
+ *
+ * @public
+ */
+export interface ChatStreamCompleteEvent {
+  /** Event discriminant */
+  type: 'complete';
+  /** ID of the persisted conversation. Absent when nothing was stored. */
+  conversationId?: string;
+  /** Names of the tools invoked during the run */
+  toolsUsed: string[];
+}
+
+/**
+ * Terminal event of a run that failed.
+ *
+ * Fragments already sent before the failure are not retracted.
+ *
+ * @public
+ */
+export interface ChatStreamErrorEvent {
+  /** Event discriminant */
+  type: 'error';
+  /** Human-readable failure message */
+  message: string;
+}
+
+/**
+ * Terminal event of a streamed run. Exactly one is sent, and no event follows
+ * it.
+ *
+ * @public
+ */
+export type ChatStreamTerminalEvent =
+  | ChatStreamCompleteEvent
+  | ChatStreamErrorEvent;
+
+/**
+ * Any event carried by the streaming chat endpoint.
+ *
+ * The `type` discriminant doubles as the server-sent event name, so backend and
+ * frontend read the same wire contract from this one union.
+ *
+ * @public
+ */
+export type ChatStreamEvent =
+  | ChatStreamTextEvent
+  | ChatStreamToolCallEvent
+  | ChatStreamToolResultEvent
+  | ChatStreamTerminalEvent;
 
 // =============================================================================
 // Validation Types

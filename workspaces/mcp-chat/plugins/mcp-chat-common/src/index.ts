@@ -42,6 +42,15 @@ export type {
   ChatResponse,
   QueryResponse,
 
+  // Chat streaming types
+  ChatStreamTextEvent,
+  ChatStreamToolCallEvent,
+  ChatStreamToolResultEvent,
+  ChatStreamCompleteEvent,
+  ChatStreamErrorEvent,
+  ChatStreamTerminalEvent,
+  ChatStreamEvent,
+
   // Tool types
   Tool,
   ToolCall,

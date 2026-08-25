@@ -36,6 +36,13 @@ export {
 
 export type { ProviderConfig } from './types';
 
+export type {
+  LLMStreamTextChunk,
+  LLMStreamResponseChunk,
+  LLMStreamChunk,
+  LLMStreamOptions,
+} from './types';
+
 // Re-exports from common package (via types.ts)
 export type {
   CommonProviderConfig,

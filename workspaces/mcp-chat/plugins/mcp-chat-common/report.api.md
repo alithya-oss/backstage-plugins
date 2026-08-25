@@ -30,6 +30,54 @@ export interface ChatResponse {
 }
 
 // @public
+export interface ChatStreamCompleteEvent {
+  conversationId?: string;
+  toolsUsed: string[];
+  type: 'complete';
+}
+
+// @public
+export interface ChatStreamErrorEvent {
+  message: string;
+  type: 'error';
+}
+
+// @public
+export type ChatStreamEvent =
+  | ChatStreamTextEvent
+  | ChatStreamToolCallEvent
+  | ChatStreamToolResultEvent
+  | ChatStreamTerminalEvent;
+
+// @public
+export type ChatStreamTerminalEvent =
+  | ChatStreamCompleteEvent
+  | ChatStreamErrorEvent;
+
+// @public
+export interface ChatStreamTextEvent {
+  text: string;
+  type: 'text';
+}
+
+// @public
+export interface ChatStreamToolCallEvent {
+  arguments: Record<string, unknown>;
+  id: string;
+  name: string;
+  serverId: string;
+  type: 'tool-call';
+}
+
+// @public
+export interface ChatStreamToolResultEvent {
+  id: string;
+  isError: boolean;
+  result: string;
+  type: 'tool-result';
+}
+
+// @public
 export interface ConversationRecord {
   createdAt: Date;
   id: string;
@@ -130,6 +178,7 @@ export interface ProviderInfo {
   connection: ProviderConnectionStatus;
   id: string;
   model: string;
+  supportsStreaming?: boolean;
 }
 
 // @public

@@ -9,19 +9,19 @@ endpoint before the page that consumes it.
 
 Covers _Providers without native streaming_.
 
-- [ ] 1.1 Add shared stream event payload types to `plugins/mcp-chat-common`
+- [x] 1.1 Add shared stream event payload types to `plugins/mcp-chat-common`
       (text fragment, tool-call, tool-result, terminal completion, terminal
       failure) plus a streaming capability flag on provider status, so backend and
       frontend cannot drift. Verify with `yarn tsc:full`.
-- [ ] 1.2 Add a **concrete** `streamMessage` to the `LLMProvider` base class in
+- [x] 1.2 Add a **concrete** `streamMessage` to the `LLMProvider` base class in
       `plugins/mcp-chat-node`, defaulting to awaiting the existing `sendMessage`
       and emitting the whole reply as one fragment, plus `supportsStreaming()`
       returning `false`. Do **not** make either abstract. Verify that all nine
       `mcp-chat-backend-module-*` packages still typecheck untouched with
       `yarn tsc:full` — that is the whole point of the default implementation.
-- [ ] 1.3 Surface `supportsStreaming()` on the provider status payload. Verify with
+- [x] 1.3 Surface `supportsStreaming()` on the provider status payload. Verify with
       a test — scenario _Streaming capability is reported_.
-- [ ] 1.4 Add tests proving the fallback path yields exactly one fragment then the
+- [x] 1.4 Add tests proving the fallback path yields exactly one fragment then the
       terminal event — scenario _A provider does not stream natively_.
 
 ## 2. Streaming chat endpoint

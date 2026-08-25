@@ -46,6 +46,7 @@ export class ProviderStatusReporter {
             models: status.models || [],
             error: status.error,
           },
+          supportsStreaming: this.llmProvider.supportsStreaming(),
         },
       ];
 

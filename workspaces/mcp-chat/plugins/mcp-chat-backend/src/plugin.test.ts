@@ -133,6 +133,7 @@ describe('mcpChatPlugin', () => {
             getModel: () => 'gpt-4o-mini',
             getBaseUrl: () => 'https://api.openai.com/v1',
             supportsNativeMcp: () => false,
+            supportsStreaming: () => false,
             setMcpServerConfigs: jest.fn(),
             getLastResponseOutput: () => null,
           } as any);

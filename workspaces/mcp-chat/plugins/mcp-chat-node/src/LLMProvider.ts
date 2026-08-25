@@ -22,6 +22,8 @@ import {
   ChatResponse,
   ProviderConfig,
   MCPServerFullConfig,
+  LLMStreamChunk,
+  LLMStreamOptions,
 } from './types';
 
 /**
@@ -86,6 +88,50 @@ export abstract class LLMProvider {
 
   supportsNativeMcp(): boolean {
     return false;
+  }
+
+  /**
+   * Whether this provider produces incremental output.
+   *
+   * `false` on the base class, because the default `streamMessage` delivers the
+   * whole reply as a single fragment. A provider that streams natively
+   * overrides this method together with `streamMessage`.
+   *
+   * Surfaced on provider status so a client can tell genuine streaming from the
+   * single-fragment fallback.
+   */
+  supportsStreaming(): boolean {
+    return false;
+  }
+
+  /**
+   * Streams a reply as a sequence of chunks: zero or more text fragments in
+   * reply order, then exactly one `response` chunk carrying the complete
+   * response including any tool calls the provider requested.
+   *
+   * This method is deliberately concrete, not abstract: the default
+   * implementation awaits `sendMessage` and emits its reply as a single
+   * fragment, so every provider is streamable without implementing anything.
+   * Overriding it — together with `supportsStreaming()` — is what turns on
+   * genuine incremental output.
+   */
+  async *streamMessage(
+    messages: ChatMessage[],
+    tools?: Tool[],
+    options?: LLMStreamOptions,
+  ): AsyncGenerator<LLMStreamChunk, void, undefined> {
+    const response = await this.sendMessage(messages, tools);
+
+    if (options?.signal?.aborted) {
+      return;
+    }
+
+    const content = response.choices[0]?.message?.content;
+    if (content) {
+      yield { type: 'text', text: content };
+    }
+
+    yield { type: 'response', response };
   }
 
   setMcpServerConfigs(_configs: MCPServerFullConfig[]): void {

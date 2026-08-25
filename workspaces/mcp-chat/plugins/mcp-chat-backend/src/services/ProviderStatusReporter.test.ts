@@ -30,6 +30,7 @@ describe('ProviderStatusReporter', () => {
       getType: jest.fn().mockReturnValue('openai'),
       getModel: jest.fn().mockReturnValue('gpt-4'),
       getBaseUrl: jest.fn().mockReturnValue('https://api.openai.com/v1'),
+      supportsStreaming: jest.fn().mockReturnValue(false),
     };
   });
 
@@ -119,6 +120,23 @@ describe('ProviderStatusReporter', () => {
 
       expect(status.providers).toEqual([]);
       expect(status.summary.error).toBe('Unknown error');
+    });
+
+    it('reports whether the active provider streams incrementally', async () => {
+      mockLLMProvider.testConnection.mockResolvedValue({ connected: true });
+      mockLLMProvider.supportsStreaming.mockReturnValue(true);
+
+      reporter = new ProviderStatusReporter({
+        logger: mockLogger,
+        llmProvider: mockLLMProvider,
+      });
+
+      const streaming = await reporter.getProviderStatus();
+      expect(streaming.providers[0].supportsStreaming).toBe(true);
+
+      mockLLMProvider.supportsStreaming.mockReturnValue(false);
+      const fallback = await reporter.getProviderStatus();
+      expect(fallback.providers[0].supportsStreaming).toBe(false);
     });
 
     it('logs a warning when testConnection throws', async () => {
