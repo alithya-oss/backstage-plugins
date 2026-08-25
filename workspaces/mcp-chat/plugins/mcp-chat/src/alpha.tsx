@@ -21,11 +21,14 @@ import {
   fetchApiRef,
   PageBlueprint,
 } from '@backstage/frontend-plugin-api';
+import { RiChat3Line } from '@remixicon/react';
 import {
   rootRouteRef,
+  promptRouteRef,
   mcpChatApiRef,
   McpChat,
   chatPageContentLoader,
+  promptPageContentLoader,
 } from './wiring';
 import { BotIconComponent } from './components/BotIcon';
 
@@ -61,14 +64,36 @@ const mcpChatPage = PageBlueprint.make({
 });
 
 /**
+ * MCP Chat Prompt Page
+ *
+ * Assistant UI conversation page. It is a sibling of {@link mcpChatPage}, not a
+ * child of it: both are mounted independently and neither shadows the other.
+ * @public
+ */
+const mcpChatPromptPage = PageBlueprint.make({
+  name: 'prompt',
+  params: {
+    path: '/mcp-chat-prompt',
+    title: 'MCP Prompt',
+    icon: <RiChat3Line />,
+    loader: async () => {
+      const Component = await promptPageContentLoader();
+      return <Component />;
+    },
+    routeRef: promptRouteRef,
+  },
+});
+
+/**
  * MCP Chat plugin.
  * @public
  */
 const mcpChatPlugin = createFrontendPlugin({
   pluginId: 'mcp-chat',
-  extensions: [mcpChatApi, mcpChatPage],
+  extensions: [mcpChatApi, mcpChatPage, mcpChatPromptPage],
   routes: {
     root: rootRouteRef,
+    prompt: promptRouteRef,
   },
 });
 

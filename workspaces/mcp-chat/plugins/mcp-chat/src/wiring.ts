@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { createRouteRef } from '@backstage/core-plugin-api';
-
 /**
- * Root route reference for the MCP Chat plugin.
- * Shared between the legacy and alpha entry points.
+ * Route references for the MCP Chat plugin.
+ *
+ * `rootRouteRef` is shared between the legacy and alpha entry points;
+ * `promptRouteRef` is distinct so both pages stay independently routable.
  */
-export const rootRouteRef = createRouteRef({ id: 'mcp-chat' });
+export { rootRouteRef, promptRouteRef } from './routes';
 
 export { mcpChatApiRef } from './api';
 export { McpChat } from './api/McpChatApi';
@@ -39,3 +39,11 @@ export const chatPageLoader = () =>
  */
 export const chatPageContentLoader = () =>
   import('./components/ChatPage').then(m => m.ChatPageContent);
+
+/**
+ * Lazy loader for the prompt page content (alpha entry point).
+ * Returns the inner content without Page/Content wrapper —
+ * PageBlueprint provides the page shell.
+ */
+export const promptPageContentLoader = () =>
+  import('./components/PromptPage').then(m => m.PromptPageContent);

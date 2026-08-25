@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "@alithya-oss/backstage-plugin-mcp-chat-common": "workspace:^",
+    "@assistant-ui/react": "^0.15.16",
     "@backstage/core-components": "^0.18.9",
     "@backstage/core-plugin-api": "^1.12.5",
     "@backstage/errors": "^1.3.0",
@@ -53,28 +54,30 @@
     "@backstage/theme": "^0.7.3",
     "@mui/icons-material": "^5.17.1",
     "@mui/material": "^5.17.1",
+    "@remixicon/react": "^4.9.0",
     "react-markdown": "^10.1.0",
     "react-use": "^17.2.4"
   },
   "peerDependencies": {
-    "@types/react": "^17.0.0 || ^18.0.0",
-    "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0",
+    "@types/react": "^18",
+    "react": "^18",
+    "react-dom": "^18",
     "react-router": "^6.30.2",
     "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@backstage/cli": "^0.36.1",
     "@backstage/dev-utils": "^1.1.22",
+    "@backstage/frontend-test-utils": "^0.5.2",
     "@backstage/test-utils": "^1.7.17",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
-    "@types/react": "^17.0.0 || ^18.0.0",
+    "@types/react": "^18",
     "@types/react-dom": "^18",
     "fast-check": "^3.22.0",
-    "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0",
+    "react": "^18",
+    "react-dom": "^18",
     "react-router-dom": "^6.3.0"
   },
   "files": [

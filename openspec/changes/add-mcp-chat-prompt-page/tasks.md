@@ -62,18 +62,18 @@ disconnection_, _Authorization and persistence parity_.
 
 Covers _Page availability alongside the existing chat page_.
 
-- [ ] 3.1 Add `@assistant-ui/react@0.15.16` and `@remixicon/react` to
+- [x] 3.1 Add `@assistant-ui/react@0.15.16` and `@remixicon/react` to
       `plugins/mcp-chat/package.json` dependencies, and narrow the `react`,
       `react-dom` and `@types/react` peer ranges from `^17.0.0 || ^18.0.0` to
       `^18`. Verify with `yarn install` reporting no unmet peer warning for
       `@assistant-ui/react`.
-- [ ] 3.2 Run `yarn dedupe` and commit the resulting `yarn.lock`. Verify
+- [x] 3.2 Run `yarn dedupe` and commit the resulting `yarn.lock`. Verify
       `yarn dedupe --check` exits zero — this is what CI gates on, and it must
       pass before any `tsc` result is trusted.
-- [ ] 3.3 Add `promptRouteRef` to `plugins/mcp-chat/src/routes.ts` and export it
+- [x] 3.3 Add `promptRouteRef` to `plugins/mcp-chat/src/routes.ts` and export it
       from `src/wiring.ts` alongside a lazy loader for the new page, following the
       existing `chatPageContentLoader` pattern. Verify `yarn tsc:full` passes.
-- [ ] 3.4 Add a second `PageBlueprint` to `plugins/mcp-chat/src/alpha.tsx` bound
+- [x] 3.4 Add a second `PageBlueprint` to `plugins/mcp-chat/src/alpha.tsx` bound
       to `promptRouteRef`, register it in the plugin's `extensions` and `routes`,
       and leave the existing `mcpChatPage` untouched. Verify by extending
       `src/alpha.test.tsx` so it asserts both pages render at their own paths —

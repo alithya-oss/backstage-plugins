@@ -343,9 +343,11 @@ to an adopter who does nothing is the narrowed React peer range.
 
 ## Open Questions
 
-- Which path the new route should take (`/mcp-chat/prompt` as a child of the
-  existing path, or a sibling such as `/mcp-chat-prompt`). Both satisfy the
-  spec's "own route" requirement and the choice does not affect the adapter, the
-  panel or the task breakdown.
+- ~~Which path the new route should take (`/mcp-chat/prompt` as a child of the
+  existing path, or a sibling such as `/mcp-chat-prompt`).~~ **Settled during
+  task group 3: `/mcp-chat-prompt`, a sibling.** A child path would sit under the
+  existing page's own path, so the two mounts could shadow one another depending
+  on how the app orders its routes; a sibling makes that impossible. As noted, the
+  choice does not affect the adapter, the panel or the task breakdown.
 - Whether the reduced panel should default to collapsed on narrow viewports. A
   presentation detail with no spec'd behaviour attached.
