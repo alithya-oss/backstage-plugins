@@ -94,8 +94,14 @@ export abstract class LLMProvider {
   ): Promise<ChatResponse>;
   // (undocumented)
   setMcpServerConfigs(_configs: MCPServerFullConfig[]): void;
+  streamMessage(
+    messages: ChatMessage[],
+    tools?: Tool[],
+    options?: LLMStreamOptions,
+  ): AsyncGenerator<LLMStreamChunk, void, undefined>;
   // (undocumented)
   supportsNativeMcp(): boolean;
+  supportsStreaming(): boolean;
   // (undocumented)
   protected temperature?: number;
   // (undocumented)
@@ -117,6 +123,26 @@ export interface LlmProviderExtensionPoint {
 
 // @public
 export const llmProviderExtensionPoint: ExtensionPoint<LlmProviderExtensionPoint>;
+
+// @public
+export type LLMStreamChunk = LLMStreamTextChunk | LLMStreamResponseChunk;
+
+// @public
+export interface LLMStreamOptions {
+  signal?: AbortSignal;
+}
+
+// @public
+export interface LLMStreamResponseChunk {
+  response: ChatResponse;
+  type: 'response';
+}
+
+// @public
+export interface LLMStreamTextChunk {
+  text: string;
+  type: 'text';
+}
 
 export { MCPServer };
 

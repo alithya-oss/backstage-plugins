@@ -15,7 +15,13 @@
  */
 
 import { LLMProvider } from './LLMProvider';
-import type { ChatMessage, ChatResponse, Tool, ProviderConfig } from './types';
+import type {
+  ChatMessage,
+  ChatResponse,
+  Tool,
+  ProviderConfig,
+  LLMStreamChunk,
+} from './types';
 
 /**
  * Concrete test subclass that exposes `makeRequest` for testing.
@@ -312,6 +318,96 @@ describe('LLMProvider', () => {
           }),
         }),
       );
+    });
+  });
+
+  describe('streaming fallback', () => {
+    it('reports no native streaming support by default', () => {
+      expect(createProvider().supportsStreaming()).toBe(false);
+    });
+
+    it('emits exactly one text fragment then the response chunk', async () => {
+      const response: ChatResponse = {
+        choices: [
+          { message: { role: 'assistant', content: 'The whole reply.' } },
+        ],
+      };
+      const provider = createProvider();
+      const sendMessage = jest
+        .spyOn(provider, 'sendMessage')
+        .mockResolvedValue(response);
+      const tools: Tool[] = [
+        {
+          type: 'function',
+          function: { name: 'list_files', description: 'x', parameters: {} },
+        },
+      ];
+      const messages: ChatMessage[] = [{ role: 'user', content: 'hi' }];
+
+      const chunks: LLMStreamChunk[] = [];
+      for await (const chunk of provider.streamMessage(messages, tools)) {
+        chunks.push(chunk);
+      }
+
+      expect(chunks).toEqual([
+        { type: 'text', text: 'The whole reply.' },
+        { type: 'response', response },
+      ]);
+      expect(chunks.filter(c => c.type === 'text')).toHaveLength(1);
+      expect(sendMessage).toHaveBeenCalledWith(messages, tools);
+    });
+
+    it('emits only the response chunk when the reply carries no text', async () => {
+      const response: ChatResponse = {
+        choices: [
+          {
+            message: {
+              role: 'assistant',
+              content: null,
+              tool_calls: [
+                {
+                  id: 'call_1',
+                  type: 'function',
+                  function: { name: 'list_files', arguments: '{}' },
+                },
+              ],
+            },
+          },
+        ],
+      };
+      const provider = createProvider();
+      jest.spyOn(provider, 'sendMessage').mockResolvedValue(response);
+
+      const chunks: LLMStreamChunk[] = [];
+      for await (const chunk of provider.streamMessage([
+        { role: 'user', content: 'hi' },
+      ])) {
+        chunks.push(chunk);
+      }
+
+      expect(chunks).toEqual([{ type: 'response', response }]);
+    });
+
+    it('emits nothing once the caller has aborted', async () => {
+      const provider = createProvider();
+      const controller = new AbortController();
+      jest.spyOn(provider, 'sendMessage').mockImplementation(async () => {
+        controller.abort();
+        return {
+          choices: [{ message: { role: 'assistant', content: 'too late' } }],
+        };
+      });
+
+      const chunks: LLMStreamChunk[] = [];
+      for await (const chunk of provider.streamMessage(
+        [{ role: 'user', content: 'hi' }],
+        undefined,
+        { signal: controller.signal },
+      )) {
+        chunks.push(chunk);
+      }
+
+      expect(chunks).toEqual([]);
     });
   });
 });

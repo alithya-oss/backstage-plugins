@@ -15,7 +15,10 @@
  */
 
 import { LoggerService } from '@backstage/backend-plugin-api';
-import { ProviderConfig as CommonProviderConfig } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import {
+  ProviderConfig as CommonProviderConfig,
+  ChatResponse,
+} from '@alithya-oss/backstage-plugin-mcp-chat-common';
 
 // =============================================================================
 // Extended Provider Configuration (Node-only)
@@ -30,6 +33,60 @@ import { ProviderConfig as CommonProviderConfig } from '@alithya-oss/backstage-p
 export interface ProviderConfig extends CommonProviderConfig {
   /** Logger instance for diagnostic output */
   logger: LoggerService;
+}
+
+// =============================================================================
+// Provider Streaming (Node-only)
+// =============================================================================
+
+/**
+ * An incremental fragment of provider output.
+ *
+ * @public
+ */
+export interface LLMStreamTextChunk {
+  /** Chunk discriminant */
+  type: 'text';
+  /** Reply text produced since the previous chunk */
+  text: string;
+}
+
+/**
+ * The complete provider response, emitted once after every text chunk.
+ *
+ * Carries any tool calls the provider requested, so the caller can keep driving
+ * its tool-calling loop from the same stream.
+ *
+ * @public
+ */
+export interface LLMStreamResponseChunk {
+  /** Chunk discriminant */
+  type: 'response';
+  /** The provider's complete response for this turn */
+  response: ChatResponse;
+}
+
+/**
+ * A chunk emitted by {@link LLMProvider.streamMessage}.
+ *
+ * @public
+ */
+export type LLMStreamChunk = LLMStreamTextChunk | LLMStreamResponseChunk;
+
+/**
+ * Options accepted by {@link LLMProvider.streamMessage}.
+ *
+ * @public
+ */
+export interface LLMStreamOptions {
+  /**
+   * Signals that the caller has stopped consuming the stream.
+   *
+   * A provider that streams natively passes it to its own request. The default
+   * fallback cannot interrupt an in-flight `sendMessage`, but stops emitting
+   * once it is aborted.
+   */
+  signal?: AbortSignal;
 }
 
 // =============================================================================

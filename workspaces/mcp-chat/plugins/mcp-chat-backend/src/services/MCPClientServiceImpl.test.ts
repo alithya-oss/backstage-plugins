@@ -57,6 +57,7 @@ describe('MCPClientServiceImpl', () => {
       getModel: jest.fn().mockReturnValue('gpt-4'),
       getBaseUrl: jest.fn().mockReturnValue('https://api.openai.com/v1'),
       supportsNativeMcp: jest.fn().mockReturnValue(false),
+      supportsStreaming: jest.fn().mockReturnValue(false),
       setMcpServerConfigs: jest.fn(),
       getLastResponseOutput: jest.fn().mockReturnValue(null),
     };
