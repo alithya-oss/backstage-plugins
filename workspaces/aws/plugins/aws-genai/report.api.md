@@ -8,7 +8,16 @@ import { JSX as JSX_2 } from 'react/jsx-runtime';
 import { RouteRef } from '@backstage/core-plugin-api';
 
 // @public (undocumented)
-export const AgentChatPage: (input: { title?: string }) => JSX_2.Element;
+export const AgentChatPage: (input: AgentPageProps) => JSX_2.Element;
+
+// @public
+export const AgentPage: (input: AgentPageProps) => JSX_2.Element;
+
+// @public
+export interface AgentPageProps {
+  // (undocumented)
+  title?: string;
+}
 
 // @public (undocumented)
 export const awsGenAiPlugin: BackstagePlugin<

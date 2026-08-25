@@ -1,0 +1,32 @@
+@layer components {
+  .page {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+  }
+
+  .body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .history {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .inputContainer {
+    flex: 0 0 auto;
+    padding: var(--bui-space-4);
+  }
+
+  .initializing {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bui-space-2);
+    padding: var(--bui-space-6);
+  }
+}

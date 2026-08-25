@@ -35,6 +35,38 @@ Install the frontend package in your Backstage app:
 yarn workspace app add @alithya-oss/backstage-plugins-aws-genai
 ```
 
+The UI is built with [Backstage UI](https://backstage.io/docs/backstage-ui/overview),
+so make sure its stylesheet is imported once in `packages/app/src/index.tsx`:
+
+```typescript
+import '@backstage/ui/css/styles.css';
+```
+
+### New frontend system
+
+Add the plugin to `packages/app/src/App.tsx`:
+
+```typescript
+import awsGenAiPlugin from '@alithya-oss/backstage-plugins-aws-genai/alpha';
+
+export default createApp({
+  features: [awsGenAiPlugin],
+});
+```
+
+The chat page is mounted at `/aws-genai/:agentName`. Override the path from
+`app-config.yaml` if you prefer another one:
+
+```yaml
+app:
+  extensions:
+    - page:aws-genai:
+        config:
+          path: /assistant/:agentName
+```
+
+### Legacy frontend system
+
 Edit `packages/app/src/App.tsx` to add a route for the chat UI page:
 
 ```typescript

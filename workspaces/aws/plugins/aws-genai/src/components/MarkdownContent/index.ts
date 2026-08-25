@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export { AgentPage, AgentPageContent, NfsAgentPage } from './AgentPage';
-export type { AgentPageProps } from './AgentPage';
+export { MarkdownContent } from './MarkdownContent';
+export type { MarkdownContentProps } from './MarkdownContent';

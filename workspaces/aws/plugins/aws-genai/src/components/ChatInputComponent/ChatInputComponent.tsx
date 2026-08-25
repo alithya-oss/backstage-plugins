@@ -14,33 +14,11 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, makeStyles, TextField } from '@material-ui/core';
-import SendIcon from '@material-ui/icons/Send';
-import DeleteIcon from '@material-ui/icons/Delete';
-
-const useStyles = makeStyles({
-  ChatInputLayout: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-
-  ChatInputContainer: {
-    flex: 1,
-  },
-
-  ChatInputButtons: {
-    marginLeft: '0.5rem',
-    display: 'flex',
-    alignItems: 'center',
-  },
-
-  ChatInputButton: {
-    marginLeft: '0.5rem',
-    minWidth: '36px',
-    padding: '10px',
-  },
-});
+import { useEffect, useId, useRef, useState } from 'react';
+import type { KeyboardEvent } from 'react';
+import { Button, ButtonIcon, Text } from '@backstage/ui';
+import { RiDeleteBinLine, RiSendPlane2Line } from '@remixicon/react';
+import styles from './ChatInputComponent.module.css';
 
 interface ChatInputComponentProps {
   onMessage: (message: string) => void;
@@ -55,15 +33,13 @@ export const ChatInputComponent = ({
   onClear,
   onCancel,
 }: ChatInputComponentProps) => {
-  const classes = useStyles();
-
-  const inputRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const labelId = useId();
   const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
     if (!disabled) {
-      const textArea = inputRef.current?.querySelector('textarea');
-      textArea?.focus();
+      inputRef.current?.focus();
     }
   }, [disabled]);
 
@@ -72,70 +48,53 @@ export const ChatInputComponent = ({
     setMessage('');
   };
 
-  const checkKeyPress = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-    if (evt.code === 'Enter') {
-      if (!evt.shiftKey && message.trim()) {
-        processMessage();
-        evt.preventDefault();
-      }
+  const checkKeyPress = (evt: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (evt.code === 'Enter' && !evt.shiftKey && message.trim()) {
+      processMessage();
+      evt.preventDefault();
     }
   };
 
   return (
-    <div>
-      <div className={classes.ChatInputLayout}>
-        <div className={classes.ChatInputContainer}>
-          <TextField
-            id="outlined-multiline-flexible"
-            label="Type a message"
-            multiline
-            variant="outlined"
-            value={message}
-            style={{
-              marginRight: '1rem',
-            }}
-            maxRows={8}
-            minRows={1}
-            onKeyDown={checkKeyPress}
-            onChange={evt => setMessage(evt.target.value)}
-            fullWidth
-            disabled={disabled}
-            ref={inputRef}
-          />
-        </div>
-        <div className={classes.ChatInputButtons}>
-          {disabled && onCancel ? (
-            <Button
-              title="Cancel"
-              onClick={onCancel}
-              variant="contained"
-              color="secondary"
-              className={classes.ChatInputButton}
-            >
-              Cancel
-            </Button>
-          ) : (
-            <Button
-              title="Send"
-              onClick={processMessage}
-              disabled={!message.trim()}
-              variant="contained"
-              color="primary"
-              className={classes.ChatInputButton}
-            >
-              <SendIcon />
-            </Button>
-          )}
-          <Button
-            title="Clear"
-            onClick={onClear}
-            disabled={disabled}
-            variant="text"
-            className={classes.ChatInputButton}
-          >
-            <DeleteIcon />
+    <div className={styles.layout}>
+      <div className={styles.field}>
+        <Text as="label" id={labelId} variant="body-medium" color="secondary">
+          Type a message
+        </Text>
+        {/* BUI has no multiline text field, so the auto-growing chat input is a
+            native textarea styled with BUI design tokens. */}
+        <textarea
+          ref={inputRef}
+          className={styles.textArea}
+          aria-labelledby={labelId}
+          rows={1}
+          value={message}
+          disabled={disabled}
+          onKeyDown={checkKeyPress}
+          onChange={evt => setMessage(evt.target.value)}
+        />
+      </div>
+      <div className={styles.actions}>
+        {disabled && onCancel ? (
+          <Button variant="secondary" destructive onPress={onCancel}>
+            Cancel
           </Button>
-        </div>
+        ) : (
+          <ButtonIcon
+            variant="primary"
+            aria-label="Send"
+            icon={<RiSendPlane2Line />}
+            isDisabled={!message.trim()}
+            onPress={processMessage}
+          />
+        )}
+        <ButtonIcon
+          variant="tertiary"
+          aria-label="Clear"
+          icon={<RiDeleteBinLine />}
+          isDisabled={disabled}
+          onPress={() => onClear?.()}
+        />
       </div>
     </div>
   );

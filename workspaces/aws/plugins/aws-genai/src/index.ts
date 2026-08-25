@@ -15,3 +15,5 @@
  */
 
 export { awsGenAiPlugin, AgentChatPage } from './plugin';
+export { AgentPage } from './components/AgentPage';
+export type { AgentPageProps } from './components/AgentPage';

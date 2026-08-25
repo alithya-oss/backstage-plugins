@@ -15,35 +15,27 @@
  */
 
 import { configApiRef, useApi } from '@backstage/core-plugin-api';
-import { Page, Header, Content, InfoCard } from '@backstage/core-components';
+import { Card, CardBody, FullPage, Header, Skeleton } from '@backstage/ui';
+import { useParams } from 'react-router-dom';
 import { ChatHistoryComponent } from '../ChatHistoryComponent';
 import { ChatInputComponent } from '../ChatInputComponent';
-import { useParams } from 'react-router-dom';
-import { LinearProgress, makeStyles } from '@material-ui/core';
 import { useChatSession } from '../../hooks';
+import styles from './AgentPage.module.css';
 
-const useStyles = makeStyles({
-  flex: {
-    display: 'flex',
-    height: '100%',
-    flexDirection: 'column',
-  },
+/**
+ * Props for the agent chat page.
+ *
+ * @public
+ */
+export interface AgentPageProps {
+  title?: string;
+}
 
-  grow: {
-    flexGrow: 1,
-    minHeight: 'max-content',
-    maxHeight: '100%',
-    marginBottom: '1rem',
-  },
-
-  chatInputContainer: {
-    margin: '1rem',
-  },
-});
-
-export const AgentPage = ({ title = 'Chat Assistant' }: { title?: string }) => {
-  const classes = useStyles();
-
+/**
+ * The chat body, shared by the legacy and the new frontend system variants.
+ * It deliberately renders no page shell of its own.
+ */
+export const AgentPageContent = () => {
   const config = useApi(configApiRef);
   const showInformation =
     config.getOptionalBoolean('genai.chat.showInformation') ?? false;
@@ -68,35 +60,53 @@ export const AgentPage = ({ title = 'Chat Assistant' }: { title?: string }) => {
 
   if (isInitializing) {
     return (
-      <Content>
-        <LinearProgress />
-      </Content>
+      <div className={styles.initializing}>
+        <Skeleton height={24} />
+        <Skeleton height={24} width="60%" />
+      </div>
     );
   }
 
   return (
-    <Page themeId="tool">
-      <Header title={title} />
-      <Content noPadding>
-        <div className={classes.flex}>
-          <ChatHistoryComponent
-            messages={messages}
-            className={classes.grow}
-            isStreaming={isLoading}
-            showInformation={showInformation}
-          />
-          <div className={classes.chatInputContainer}>
-            <InfoCard>
-              <ChatInputComponent
-                onMessage={onUserMessage}
-                disabled={isLoading}
-                onClear={onClear}
-                onCancel={onCancel}
-              />
-            </InfoCard>
-          </div>
-        </div>
-      </Content>
-    </Page>
+    <div className={styles.body}>
+      <ChatHistoryComponent
+        messages={messages}
+        className={styles.history}
+        isStreaming={isLoading}
+        showInformation={showInformation}
+      />
+      <div className={styles.inputContainer}>
+        <Card>
+          <CardBody>
+            <ChatInputComponent
+              onMessage={onUserMessage}
+              disabled={isLoading}
+              onClear={onClear}
+              onCancel={onCancel}
+            />
+          </CardBody>
+        </Card>
+      </div>
+    </div>
   );
 };
+
+/**
+ * Agent chat page for the legacy frontend system, including its own page shell.
+ *
+ * @public
+ */
+export const AgentPage = ({ title = 'Chat Assistant' }: AgentPageProps) => (
+  <FullPage className={styles.page}>
+    <Header title={title} />
+    <AgentPageContent />
+  </FullPage>
+);
+
+/**
+ * Agent chat page for the new frontend system. The framework renders the page
+ * header, so this variant only contributes the chat body.
+ *
+ * @public
+ */
+export const NfsAgentPage = () => <AgentPageContent />;
