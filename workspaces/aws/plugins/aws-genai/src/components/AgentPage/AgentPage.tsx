@@ -15,7 +15,7 @@
  */
 
 import { configApiRef, useApi } from '@backstage/core-plugin-api';
-import { Card, CardBody, FullPage, Header, Skeleton } from '@backstage/ui';
+import { Card, CardBody, Skeleton } from '@backstage/ui';
 import { useParams } from 'react-router-dom';
 import { ChatHistoryComponent } from '../ChatHistoryComponent';
 import { ChatInputComponent } from '../ChatInputComponent';
@@ -23,17 +23,9 @@ import { useChatSession } from '../../hooks';
 import styles from './AgentPage.module.css';
 
 /**
- * Props for the agent chat page.
- *
- * @public
- */
-export interface AgentPageProps {
-  title?: string;
-}
-
-/**
- * The chat body, shared by the legacy and the new frontend system variants.
- * It deliberately renders no page shell of its own.
+ * The chat body, shared by the new frontend system page and the deprecated old
+ * frontend system page. It deliberately renders no page shell of its own: in
+ * the new frontend system the framework provides the page header.
  */
 export const AgentPageContent = () => {
   const config = useApi(configApiRef);
@@ -90,23 +82,3 @@ export const AgentPageContent = () => {
     </div>
   );
 };
-
-/**
- * Agent chat page for the legacy frontend system, including its own page shell.
- *
- * @public
- */
-export const AgentPage = ({ title = 'Chat Assistant' }: AgentPageProps) => (
-  <FullPage className={styles.page}>
-    <Header title={title} />
-    <AgentPageContent />
-  </FullPage>
-);
-
-/**
- * Agent chat page for the new frontend system. The framework renders the page
- * header, so this variant only contributes the chat body.
- *
- * @public
- */
-export const NfsAgentPage = () => <AgentPageContent />;

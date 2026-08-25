@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-// Old frontend system support
-export * from './legacy';
+import { AgentChatPage, awsGenAiPlugin } from './legacy-plugin';
+import { rootRouteRef } from './routes';
 
-export { awsGenAiPlugin as default } from './plugin';
+describe('awsGenAiPlugin (old frontend system)', () => {
+  it('should still expose the deprecated plugin and routable page', () => {
+    expect(awsGenAiPlugin.getId()).toBe('aws-genai');
+    expect(awsGenAiPlugin.routes.root).toBe(rootRouteRef);
+    expect(AgentChatPage).toBeDefined();
+  });
+});

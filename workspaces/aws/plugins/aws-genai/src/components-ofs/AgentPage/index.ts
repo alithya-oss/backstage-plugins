@@ -14,7 +14,5 @@
  * limitations under the License.
  */
 
-// Old frontend system support
-export * from './legacy';
-
-export { awsGenAiPlugin as default } from './plugin';
+export type { AgentPageProps } from './AgentPage';
+export { AgentPageImpl } from './AgentPage';

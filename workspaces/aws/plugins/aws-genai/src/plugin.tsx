@@ -14,7 +14,19 @@
  * limitations under the License.
  */
 
-// Old frontend system support
-export * from './legacy';
+import { createFrontendPlugin } from '@backstage/frontend-plugin-api';
+import { RiRobot2Line } from '@remixicon/react';
+import extensions from './extensions';
+import { rootRouteRef } from './routes';
 
-export { awsGenAiPlugin as default } from './plugin';
+/** @public */
+export const awsGenAiPlugin = createFrontendPlugin({
+  pluginId: 'aws-genai',
+  info: { packageJson: () => import('../package.json') },
+  title: 'Chat Assistant',
+  icon: <RiRobot2Line />,
+  routes: {
+    root: rootRouteRef,
+  },
+  extensions,
+});

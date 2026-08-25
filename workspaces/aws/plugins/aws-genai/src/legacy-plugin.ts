@@ -15,54 +15,43 @@
  */
 
 import {
-  ApiBlueprint,
-  createFrontendPlugin,
+  createApiFactory,
+  createPlugin,
+  createRoutableExtension,
   discoveryApiRef,
   fetchApiRef,
-  PageBlueprint,
-} from '@backstage/frontend-plugin-api';
-import { RiRobot2Line } from '@remixicon/react';
+} from '@backstage/core-plugin-api';
 import { AgentApiClient, agentApiRef } from './api';
 import { rootRouteRef } from './routes';
 
 /**
- * Agent API used by the chat page to talk to the GenAI backend.
+ * @deprecated Use the new frontend system instead
+ * @public
  */
-const agentApi = ApiBlueprint.make({
-  params: defineParams =>
-    defineParams({
+export const awsGenAiPlugin = createPlugin({
+  id: 'aws-genai',
+  routes: {
+    root: rootRouteRef,
+  },
+  apis: [
+    createApiFactory({
       api: agentApiRef,
       deps: { discoveryApi: discoveryApiRef, fetchApi: fetchApiRef },
       factory: ({ discoveryApi, fetchApi }) =>
         new AgentApiClient({ discoveryApi, fetchApi }),
     }),
+  ],
 });
 
 /**
- * Agent chat page, mounted per agent name.
- */
-const agentChatPage = PageBlueprint.make({
-  params: {
-    path: '/aws-genai/:agentName',
-    routeRef: rootRouteRef,
-    loader: () =>
-      import('./components/AgentPage').then(m => <m.NfsAgentPage />),
-  },
-});
-
-/**
- * AWS GenAI plugin for the new frontend system.
- *
+ * @deprecated Use the new frontend system instead
  * @public
  */
-export default createFrontendPlugin({
-  pluginId: 'aws-genai',
-  title: 'Chat Assistant',
-  icon: <RiRobot2Line />,
-  extensions: [agentApi, agentChatPage],
-  routes: {
-    root: rootRouteRef,
-  },
-});
-
-export { NfsAgentPage as AgentChatPage } from './components/AgentPage';
+export const AgentChatPage = awsGenAiPlugin.provide(
+  createRoutableExtension({
+    name: 'AgentChatPage',
+    component: () =>
+      import('./components-ofs/AgentPage').then(m => m.AgentPageImpl),
+    mountPoint: rootRouteRef,
+  }),
+);

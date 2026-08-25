@@ -15,40 +15,18 @@
  */
 
 import {
-  createApiFactory,
-  createPlugin,
-  createRoutableExtension,
+  ApiBlueprint,
   discoveryApiRef,
   fetchApiRef,
-} from '@backstage/core-plugin-api';
-import { AgentApiClient, agentApiRef } from './api';
-import { rootRouteRef } from './routes';
+} from '@backstage/frontend-plugin-api';
+import { AgentApiClient, agentApiRef } from '../api';
 
-/**
- * @public
- */
-export const awsGenAiPlugin = createPlugin({
-  id: 'aws-genai',
-  routes: {
-    root: rootRouteRef,
-  },
-  apis: [
-    createApiFactory({
+export const agentApi = ApiBlueprint.make({
+  params: defineParams =>
+    defineParams({
       api: agentApiRef,
       deps: { discoveryApi: discoveryApiRef, fetchApi: fetchApiRef },
       factory: ({ discoveryApi, fetchApi }) =>
         new AgentApiClient({ discoveryApi, fetchApi }),
     }),
-  ],
 });
-
-/**
- * @public
- */
-export const AgentChatPage = awsGenAiPlugin.provide(
-  createRoutableExtension({
-    name: 'AgentChatPage',
-    component: () => import('./components/AgentPage').then(m => m.AgentPage),
-    mountPoint: rootRouteRef,
-  }),
-);

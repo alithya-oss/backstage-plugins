@@ -16,16 +16,25 @@
 
 import { renderTestApp } from '@backstage/frontend-test-utils';
 import { screen } from '@testing-library/react';
-import awsGenAiPlugin from './alpha';
+import { awsGenAiPlugin } from './plugin';
+import defaultExport, { awsGenAiPlugin as legacyPlugin } from './index';
 import { agentApiRef } from './api';
 import { rootRouteRef } from './routes';
 
 jest.mock('./components/AgentPage', () => ({
-  NfsAgentPage: () => <div>agent chat page content</div>,
+  AgentPageContent: () => <div>agent chat page content</div>,
 }));
 
-describe('aws-genai alpha plugin', () => {
-  it('should be wired for the new frontend system', () => {
+describe('awsGenAiPlugin (new frontend system)', () => {
+  it('should be wired as the default export of the package entry point', () => {
+    expect(defaultExport).toBe(awsGenAiPlugin);
+    // The named export stays the deprecated old frontend system plugin, so
+    // existing apps are not broken by the new default export.
+    expect(legacyPlugin).not.toBe(awsGenAiPlugin);
+    expect(legacyPlugin.getId()).toBe('aws-genai');
+  });
+
+  it('should register the agent api and chat page extensions', () => {
     expect(awsGenAiPlugin.pluginId).toBe('aws-genai');
     expect(awsGenAiPlugin.routes.root).toBe(rootRouteRef);
     expect(awsGenAiPlugin.getExtension('api:aws-genai')).toBeDefined();

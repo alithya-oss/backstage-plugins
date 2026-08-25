@@ -14,7 +14,14 @@
  * limitations under the License.
  */
 
-// Old frontend system support
-export * from './legacy';
+import { PageBlueprint } from '@backstage/frontend-plugin-api';
+import { rootRouteRef } from '../routes';
 
-export { awsGenAiPlugin as default } from './plugin';
+export const agentChatPage = PageBlueprint.make({
+  params: {
+    path: '/aws-genai/:agentName',
+    routeRef: rootRouteRef,
+    loader: () =>
+      import('../components/AgentPage').then(m => <m.AgentPageContent />),
+  },
+});
