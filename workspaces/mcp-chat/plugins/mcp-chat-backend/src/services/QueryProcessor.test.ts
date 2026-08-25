@@ -40,6 +40,7 @@ describe('QueryProcessor', () => {
 
     mockLLMProvider = {
       sendMessage: jest.fn(),
+      streamMessage: jest.fn(),
       supportsNativeMcp: jest.fn().mockReturnValue(false),
       setMcpServerConfigs: jest.fn(),
       getLastResponseOutput: jest.fn().mockReturnValue(null),
@@ -380,6 +381,253 @@ describe('QueryProcessor', () => {
         result: 'tool output',
         serverId: 'server-1',
       });
+    });
+  });
+
+  describe('streamQuery', () => {
+    /** Builds a provider stream from a list of chunks. */
+    const streamOf = (...chunks: any[]) =>
+      jest.fn(async function* () {
+        for (const chunk of chunks) {
+          yield chunk;
+        }
+      });
+
+    const textChunk = (text: string) => ({ type: 'text', text });
+    const responseChunk = (message: any) => ({
+      type: 'response',
+      response: { choices: [{ message }] },
+    });
+
+    const drain = async (
+      generator: AsyncGenerator<any, void, undefined>,
+    ): Promise<any[]> => {
+      const events: any[] = [];
+      for await (const event of generator) {
+        events.push(event);
+      }
+      return events;
+    };
+
+    const toolCall: ToolCall = {
+      id: 'call_1',
+      type: 'function',
+      function: { name: 'test_tool', arguments: '{"arg1":"value1"}' },
+    };
+
+    it('streams a reply in order and terminates once when no tool is used', async () => {
+      mockLLMProvider.streamMessage = streamOf(
+        textChunk('Hello'),
+        textChunk(', '),
+        textChunk('world'),
+        responseChunk({ role: 'assistant', content: 'Hello, world' }),
+      );
+
+      const events = await drain(
+        processor.streamQuery([{ role: 'user', content: 'Hi' }]),
+      );
+
+      expect(events.map(event => event.type)).toEqual([
+        'text',
+        'text',
+        'text',
+        'result',
+      ]);
+      expect(
+        events
+          .filter(event => event.type === 'text')
+          .map(event => event.text)
+          .join(''),
+      ).toBe('Hello, world');
+      expect(events[events.length - 1].result).toEqual({
+        reply: 'Hello, world',
+        toolCalls: [],
+        toolResponses: [],
+      });
+      expect(events.filter(event => event.type === 'result')).toHaveLength(1);
+    });
+
+    it('emits a single text event for a provider that does not stream natively', async () => {
+      // The base-class fallback shape: whole reply as one fragment.
+      mockLLMProvider.streamMessage = streamOf(
+        textChunk('One shot reply'),
+        responseChunk({ role: 'assistant', content: 'One shot reply' }),
+      );
+
+      const events = await drain(
+        processor.streamQuery([{ role: 'user', content: 'Hi' }]),
+      );
+
+      expect(events).toEqual([
+        { type: 'text', text: 'One shot reply' },
+        {
+          type: 'result',
+          result: {
+            reply: 'One shot reply',
+            toolCalls: [],
+            toolResponses: [],
+          },
+        },
+      ]);
+    });
+
+    it('announces a tool invocation before its result and streams the follow-up reply', async () => {
+      mockLLMProvider.streamMessage = jest
+        .fn()
+        .mockImplementationOnce(async function* () {
+          yield responseChunk({
+            role: 'assistant',
+            content: null,
+            tool_calls: [toolCall],
+          });
+        })
+        .mockImplementationOnce(async function* () {
+          yield textChunk('Based on ');
+          yield textChunk('the tool');
+          yield responseChunk({
+            role: 'assistant',
+            content: 'Based on the tool',
+          });
+        });
+
+      const events = await drain(
+        processor.streamQuery([{ role: 'user', content: 'Use a tool' }]),
+      );
+
+      expect(events.map(event => event.type)).toEqual([
+        'tool-call',
+        'tool-result',
+        'text',
+        'text',
+        'result',
+      ]);
+      expect(events[0]).toEqual({
+        type: 'tool-call',
+        id: 'call_1',
+        name: 'test_tool',
+        arguments: { arg1: 'value1' },
+        serverId: 'test-server',
+      });
+      expect(events[1]).toEqual({
+        type: 'tool-result',
+        id: 'call_1',
+        result: 'tool result',
+        isError: false,
+      });
+      expect(events[events.length - 1].result).toMatchObject({
+        reply: 'Based on the tool',
+        toolCalls: [toolCall],
+      });
+    });
+
+    it('marks a failed tool invocation and still reaches the terminal chunk', async () => {
+      utils.executeToolCall.mockRejectedValue(new Error('tool exploded'));
+      mockLLMProvider.streamMessage = jest
+        .fn()
+        .mockImplementationOnce(async function* () {
+          yield responseChunk({
+            role: 'assistant',
+            content: null,
+            tool_calls: [toolCall],
+          });
+        })
+        .mockImplementationOnce(async function* () {
+          yield textChunk('Sorry, that failed');
+          yield responseChunk({
+            role: 'assistant',
+            content: 'Sorry, that failed',
+          });
+        });
+
+      const events = await drain(
+        processor.streamQuery([{ role: 'user', content: 'Use a tool' }]),
+      );
+
+      const toolResult = events.find(event => event.type === 'tool-result');
+      expect(toolResult).toEqual({
+        type: 'tool-result',
+        id: 'call_1',
+        result: "Error executing tool 'test_tool': tool exploded",
+        isError: true,
+      });
+      expect(events[events.length - 1]).toMatchObject({
+        type: 'result',
+        result: { reply: 'Sorry, that failed' },
+      });
+    });
+
+    it('starts no further tool invocation and emits no terminal chunk once aborted', async () => {
+      const controller = new AbortController();
+      mockLLMProvider.streamMessage = jest
+        .fn()
+        .mockImplementationOnce(async function* () {
+          yield textChunk('Partial');
+          yield responseChunk({
+            role: 'assistant',
+            content: null,
+            tool_calls: [toolCall],
+          });
+        });
+
+      const events: any[] = [];
+      for await (const event of processor.streamQuery(
+        [{ role: 'user', content: 'Use a tool' }],
+        undefined,
+        { signal: controller.signal },
+      )) {
+        events.push(event);
+        // Cancel as soon as the first fragment lands.
+        controller.abort();
+      }
+
+      expect(events).toEqual([{ type: 'text', text: 'Partial' }]);
+      expect(utils.executeToolCall).not.toHaveBeenCalled();
+      expect(events.some(event => event.type === 'result')).toBe(false);
+      // Only the first pass ran; no follow-up request was made.
+      expect(mockLLMProvider.streamMessage).toHaveBeenCalledTimes(1);
+    });
+
+    it('replays a native-MCP provider run as tool events followed by its reply', async () => {
+      mockLLMProvider.supportsNativeMcp.mockReturnValue(true);
+      mockLLMProvider.sendMessage.mockResolvedValue({
+        choices: [
+          {
+            message: {
+              role: 'assistant',
+              content: 'Native reply',
+              tool_calls: [toolCall],
+            },
+          },
+        ],
+      });
+      mockLLMProvider.getLastResponseOutput.mockReturnValue([
+        {
+          type: 'mcp_call',
+          id: 'mcp_1',
+          name: 'tool1',
+          arguments: '{"key":"value"}',
+          output: 'tool output',
+          server_label: 'server-1',
+        },
+      ]);
+
+      const events = await drain(
+        processor.streamQuery([{ role: 'user', content: 'Use a tool' }]),
+      );
+
+      expect(events.map(event => event.type)).toEqual([
+        'tool-call',
+        'tool-result',
+        'text',
+        'result',
+      ]);
+      expect(events[1]).toEqual({
+        type: 'tool-result',
+        id: 'mcp_1',
+        result: 'tool output',
+        isError: false,
+      });
+      expect(events[2]).toEqual({ type: 'text', text: 'Native reply' });
     });
   });
 });

@@ -29,32 +29,32 @@ Covers _Providers without native streaming_.
 Covers _Streaming chat endpoint_, _Stream event sequence_, _Cancellation and
 disconnection_, _Authorization and persistence parity_.
 
-- [ ] 2.1 Factor the parts of `QueryProcessor.processQuery` both paths need —
+- [x] 2.1 Factor the parts of `QueryProcessor.processQuery` both paths need —
       system-prompt injection and tool filtering by enabled server id — into
       helpers, so the streaming variant reuses them instead of copying. Verify
       existing tests still pass unchanged.
-- [ ] 2.2 Add a streaming query path emitting a text event per provider fragment,
+- [x] 2.2 Add a streaming query path emitting a text event per provider fragment,
       a tool-call event before each MCP invocation and a tool-result event after
       it, correlated by invocation id, then exactly one terminal event. Verify with
       tests — scenarios _A reply is streamed without tools_, _A tool is invoked
       mid-run_, _A tool invocation fails_.
-- [ ] 2.3 Add the `POST /chat/stream` route emitting `text/event-stream` with
+- [x] 2.3 Add the `POST /chat/stream` route emitting `text/event-stream` with
       no-buffering headers, validating the body exactly as `POST /chat` does before
       opening the stream. Verify with tests — scenarios _A streaming request is
       accepted_ and _The request is invalid_.
-- [ ] 2.4 Tie an `AbortController` to client disconnect: abandon the provider
+- [x] 2.4 Tie an `AbortController` to client disconnect: abandon the provider
       request, start no further tool invocation, and persist nothing for the
       cancelled run. Verify with tests — scenarios _The client disconnects
       mid-stream_ and _A cancelled run is not stored_.
-- [ ] 2.5 Apply the same credentials and persistence rules as `POST /chat`,
+- [x] 2.5 Apply the same credentials and persistence rules as `POST /chat`,
       including guest skipping and title generation for a new conversation, and
       keep a persistence failure from failing the run. Verify with tests —
       scenarios _An authenticated user streams a reply_, _A guest user streams a
       reply_, _Persistence fails_.
-- [ ] 2.6 Confirm `POST /chat` is untouched and still passes its existing tests —
+- [x] 2.6 Confirm `POST /chat` is untouched and still passes its existing tests —
       scenario _The non-streaming endpoint is unaffected_. Verify with
       `git diff` on `chatRoutes.ts` showing only additive changes.
-- [ ] 2.7 Add a changeset for each backend package touched
+- [x] 2.7 Add a changeset for each backend package touched
       (`mcp-chat-backend`, `mcp-chat-node`, `mcp-chat-common`) describing the new
       endpoint and the provider seam for adopters.
 

@@ -22,6 +22,7 @@ import {
   QueryResponse,
   ServerTool,
 } from '@alithya-oss/backstage-plugin-mcp-chat-common';
+import type { QueryStreamEvent, QueryStreamOptions } from './QueryProcessor';
 
 /**
  * Service interface for MCP (Model Context Protocol) client operations.
@@ -81,6 +82,38 @@ export interface MCPClientService {
     messagesInput: ChatMessage[],
     enabledTools?: string[],
   ): Promise<QueryResponse>;
+
+  /**
+   * Streams a chat query through the LLM provider, surfacing the reply as it is
+   * produced and each MCP tool invocation as it happens.
+   *
+   * Emits a text chunk per provider fragment, a tool-call chunk before every MCP
+   * invocation and a tool-result chunk after it — correlated by invocation id —
+   * then exactly one terminal `result` chunk carrying the complete outcome.
+   *
+   * An aborted run stops without a terminal chunk, which is how the caller knows
+   * not to persist it.
+   *
+   * @param messagesInput - Array of chat messages representing the conversation
+   * @param enabledTools - Optional array of server IDs to enable. Same semantics as {@link MCPClientService.processQuery}.
+   * @param options - Stream options, notably the abort signal tied to client disconnect
+   * @returns Async generator of stream chunks
+   *
+   * @example
+   * ```typescript
+   * const controller = new AbortController();
+   * for await (const event of service.streamQuery(messages, ['kubernetes-server'], {
+   *   signal: controller.signal,
+   * })) {
+   *   if (event.type === 'text') process.stdout.write(event.text);
+   * }
+   * ```
+   */
+  streamQuery(
+    messagesInput: ChatMessage[],
+    enabledTools?: string[],
+    options?: QueryStreamOptions,
+  ): AsyncGenerator<QueryStreamEvent, void, undefined>;
 
   /**
    * Returns all tools available from connected MCP servers.
