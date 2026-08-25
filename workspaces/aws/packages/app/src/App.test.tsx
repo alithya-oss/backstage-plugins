@@ -17,6 +17,9 @@ import { render, waitFor } from '@testing-library/react';
 import App from './App';
 
 describe('App', () => {
+  // Also guards the plugin import path: every feature in App.tsx is imported
+  // here, so a plugin whose module body needs a browser-only global (such as
+  // `TransformStream`) fails this test rather than only failing at runtime.
   it('should render', async () => {
     process.env = {
       NODE_ENV: 'test',

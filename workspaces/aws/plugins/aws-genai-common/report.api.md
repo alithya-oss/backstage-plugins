@@ -79,12 +79,12 @@ export const EventSchema: z.ZodDiscriminatedUnion<
       'strip',
       z.ZodTypeAny,
       {
-        type: 'ChunkEvent';
         token: string;
+        type: 'ChunkEvent';
       },
       {
-        type: 'ChunkEvent';
         token: string;
+        type: 'ChunkEvent';
       }
     >,
     z.ZodObject<

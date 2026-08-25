@@ -15,8 +15,9 @@
  */
 import { createApp } from '@backstage/frontend-defaults';
 import catalogPlugin from '@backstage/plugin-catalog/alpha';
+import awsGenAiPlugin from '@alithya-oss/backstage-plugins-aws-genai';
 import { navModule } from './modules/nav';
 
 export default createApp({
-  features: [catalogPlugin, navModule],
+  features: [catalogPlugin, awsGenAiPlugin, navModule],
 });

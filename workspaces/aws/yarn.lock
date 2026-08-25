@@ -180,7 +180,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/backstage-plugins-aws-genai-agent-langgraph@workspace:plugins/aws-genai-agent-langgraph":
+"@alithya-oss/backstage-plugins-aws-genai-agent-langgraph@workspace:^, @alithya-oss/backstage-plugins-aws-genai-agent-langgraph@workspace:plugins/aws-genai-agent-langgraph":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugins-aws-genai-agent-langgraph@workspace:plugins/aws-genai-agent-langgraph"
   dependencies:
@@ -205,7 +205,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/backstage-plugins-aws-genai-backend@workspace:plugins/aws-genai-backend":
+"@alithya-oss/backstage-plugins-aws-genai-backend@workspace:^, @alithya-oss/backstage-plugins-aws-genai-backend@workspace:plugins/aws-genai-backend":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugins-aws-genai-backend@workspace:plugins/aws-genai-backend"
   dependencies:
@@ -267,7 +267,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@alithya-oss/backstage-plugins-aws-genai@workspace:plugins/aws-genai":
+"@alithya-oss/backstage-plugins-aws-genai@workspace:^, @alithya-oss/backstage-plugins-aws-genai@workspace:plugins/aws-genai":
   version: 0.0.0-use.local
   resolution: "@alithya-oss/backstage-plugins-aws-genai@workspace:plugins/aws-genai"
   dependencies:
@@ -16324,6 +16324,7 @@ __metadata:
   resolution: "app@workspace:packages/app"
   dependencies:
     "@alithya-oss/backstage-plugin-aws-apps": "workspace:^"
+    "@alithya-oss/backstage-plugins-aws-genai": "workspace:^"
     "@backstage/cli": "backstage:^"
     "@backstage/core-components": "backstage:^"
     "@backstage/core-plugin-api": "backstage:^"
@@ -16972,6 +16973,8 @@ __metadata:
     "@alithya-oss/backstage-plugin-aws-apps-common": "workspace:^"
     "@alithya-oss/backstage-plugin-catalog-backend-module-aws-apps-entities-processor": "workspace:^"
     "@alithya-oss/backstage-plugin-scaffolder-backend-module-aws-apps": "workspace:^"
+    "@alithya-oss/backstage-plugins-aws-genai-agent-langgraph": "workspace:^"
+    "@alithya-oss/backstage-plugins-aws-genai-backend": "workspace:^"
     "@backstage/backend-defaults": "backstage:^"
     "@backstage/backend-plugin-api": "backstage:^"
     "@backstage/catalog-model": "backstage:^"

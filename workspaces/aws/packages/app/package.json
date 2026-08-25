@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@alithya-oss/backstage-plugin-aws-apps": "workspace:^",
+    "@alithya-oss/backstage-plugins-aws-genai": "workspace:^",
     "@backstage/cli": "backstage:^",
     "@backstage/core-components": "backstage:^",
     "@backstage/core-plugin-api": "backstage:^",

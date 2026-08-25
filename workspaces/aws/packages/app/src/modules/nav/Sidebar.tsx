@@ -31,6 +31,7 @@ import {
   RiPuzzleLine,
   RiCloudLine,
   RiSeoLine,
+  RiRobot2Line,
 } from '@remixicon/react';
 import { SidebarSearchModal } from '@backstage/plugin-search';
 import { UserSettingsSignInAvatar } from '@backstage/plugin-user-settings';
@@ -42,6 +43,7 @@ const CloudIcon = () => <RiCloudLine size={20} />;
 const PuzzleIcon = () => <RiPuzzleLine size={20} />;
 const MoneyIcon = () => <RiMoneyDollarCircleLine size={20} />;
 const SearchIcon = () => <RiSeoLine size={20} />;
+const ChatIcon = () => <RiRobot2Line size={20} />;
 
 const AwsCatalogSubmenu = () => {
   const app = useApp();
@@ -88,6 +90,10 @@ export const SidebarContent = NavContentBlueprint.make({
       nav.take('page:catalog-graph'); // Removed from sidebar
       nav.take('page:catalog-import');
       nav.take('page:api-docs');
+      // Mounted per agent (/aws-genai/:agentName), so the inferred nav item
+      // cannot produce a usable link. Rendered below as a link to the `general`
+      // agent configured under `genai.agents`.
+      nav.take('page:aws-genai');
 
       return (
         <Sidebar>
@@ -113,6 +119,11 @@ export const SidebarContent = NavContentBlueprint.make({
             {nav.take('page:techdocs')}
             <SidebarDivider />
             <SidebarScrollWrapper>
+              <SidebarItem
+                icon={ChatIcon}
+                to="aws-genai/general"
+                text="Chat Assistant"
+              />
               <SidebarItem
                 icon={MoneyIcon}
                 to="cost-insights"
