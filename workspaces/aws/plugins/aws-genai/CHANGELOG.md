@@ -1,5 +1,11 @@
 # @alithya-oss/backstage-plugins-aws-genai
 
+## 0.2.1
+
+### Patch Changes
+
+- c6963c6: Moved the GenAI plugin documentation to `docs/genai` and made it available as a TechDocs site. The README now links to the full documentation set.
+
 ## 0.2.0
 
 ### Minor Changes
