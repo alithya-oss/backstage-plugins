@@ -5,6 +5,7 @@
 ```ts
 import { ApiRef } from '@backstage/core-plugin-api';
 import { BackstagePlugin } from '@backstage/core-plugin-api';
+import { ChatStreamEvent } from '@alithya-oss/backstage-plugin-mcp-chat-common';
 import { ComponentType } from 'react';
 import { JSX as JSX_2 } from 'react/jsx-runtime';
 import type { MCPServer as MCPServer_2 } from '@alithya-oss/backstage-plugin-mcp-chat-common';
@@ -75,6 +76,12 @@ export interface McpChatApi {
     signal?: AbortSignal,
     conversationId?: string,
   ): Promise<ChatResponse>;
+  streamChatMessage(
+    messages: ChatMessage[],
+    enabledTools?: string[],
+    signal?: AbortSignal,
+    conversationId?: string,
+  ): AsyncIterable<ChatStreamEvent>;
   // (undocumented)
   toggleConversationStar(id: string): Promise<{
     isStarred: boolean;

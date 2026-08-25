@@ -15,3 +15,15 @@
  */
 
 export { PromptPageContent } from './PromptPageContent';
+export { usePromptThread, toPromptTurns } from './usePromptThread';
+export type {
+  UsePromptThreadOptions,
+  UsePromptThreadResult,
+} from './usePromptThread';
+export { convertMessage } from './convertMessage';
+export type {
+  PromptThreadError,
+  PromptToolInvocation,
+  PromptTurn,
+  PromptTurnStatus,
+} from './promptThreadTypes';

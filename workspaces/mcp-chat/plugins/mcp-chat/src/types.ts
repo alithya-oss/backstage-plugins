@@ -26,6 +26,18 @@ export { MCPServerType } from '@alithya-oss/backstage-plugin-mcp-chat-common';
 // Re-export types that are used as-is (no view-model extension needed)
 export type { ProviderConnectionStatus } from '@alithya-oss/backstage-plugin-mcp-chat-common';
 
+// Re-export the streaming wire contract so the frontend reads the very types
+// the backend writes, and the two cannot drift.
+export type {
+  ChatStreamEvent,
+  ChatStreamTextEvent,
+  ChatStreamToolCallEvent,
+  ChatStreamToolResultEvent,
+  ChatStreamCompleteEvent,
+  ChatStreamErrorEvent,
+  ChatStreamTerminalEvent,
+} from '@alithya-oss/backstage-plugin-mcp-chat-common';
+
 /**
  * Frontend view of provider status data.
  * Extends the common ProviderInfo type by aliasing it as `Provider`.
