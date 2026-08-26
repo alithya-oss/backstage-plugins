@@ -16,6 +16,7 @@
 
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { TestApiProvider } from '@backstage/test-utils';
+import { identityApiRef } from '@backstage/frontend-plugin-api';
 import { mcpChatApiRef } from '../../api';
 import type { ChatStreamEvent } from '../../types';
 import { PromptPageContent } from './PromptPageContent';
@@ -75,17 +76,47 @@ function renderPromptPage(streamChatMessage: jest.Mock) {
   const mcpChatApi = {
     sendChatMessage: jest.fn(),
     streamChatMessage,
-    getMCPServerStatus: jest.fn(),
+    getMCPServerStatus: jest.fn().mockResolvedValue({ servers: [] }),
     getAvailableTools: jest.fn(),
-    getProviderStatus: jest.fn(),
-    getConversations: jest.fn(),
+    getProviderStatus: jest.fn().mockResolvedValue({
+      providers: [
+        {
+          id: 'openai',
+          model: 'gpt-4o-mini',
+          baseUrl: 'https://api.openai.com/v1',
+          connection: { connected: true },
+          supportsStreaming: true,
+        },
+      ],
+      summary: { totalProviders: 1, healthyProviders: 1 },
+      timestamp: '2026-01-01T00:00:00Z',
+    }),
+    getConversations: jest.fn().mockResolvedValue({ conversations: [] }),
     getConversationById: jest.fn(),
     deleteConversation: jest.fn(),
     toggleConversationStar: jest.fn(),
   };
 
+  // The page's side panel reads the signed-in identity to decide whether the
+  // user can own stored conversations, so the identity API is part of the
+  // harness even though these tests are about the conversation surface.
+  const identityApi = {
+    getBackstageIdentity: jest.fn().mockResolvedValue({
+      type: 'user',
+      userEntityRef: 'user:default/tester',
+      ownershipEntityRefs: ['user:default/tester'],
+    }),
+    getCredentials: jest.fn().mockResolvedValue({ token: undefined }),
+    getProfileInfo: jest.fn().mockResolvedValue({ displayName: 'Tester' }),
+  };
+
   render(
-    <TestApiProvider apis={[[mcpChatApiRef, mcpChatApi]]}>
+    <TestApiProvider
+      apis={[
+        [mcpChatApiRef, mcpChatApi],
+        [identityApiRef, identityApi],
+      ]}
+    >
       <PromptPageContent />
     </TestApiProvider>,
   );

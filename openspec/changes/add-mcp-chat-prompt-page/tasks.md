@@ -197,27 +197,27 @@ Covers _Revising and regenerating turns_.
 Covers _MCP server selection and provider status_ and _Selecting an existing
 conversation_.
 
-- [ ] 8.1 Build the MCP server toggle list on `useMcpServers`, feeding the enabled
+- [x] 8.1 Build the MCP server toggle list on `useMcpServers`, feeding the enabled
       ids into the adapter's run parameters, without reusing the Material UI
       `ActiveMcpServers` view. Verify with a test asserting a disabled server's id
       is absent from the next request — scenario _A server is disabled_.
-- [ ] 8.2 Build the read-only provider status block on `useProviderStatus`,
+- [x] 8.2 Build the read-only provider status block on `useProviderStatus`,
       showing connection state, reported model name and whether the provider
       streams incrementally, with no control to change them, and reporting
       unavailability without blocking the composer. Verify with tests — scenarios
       _Provider status is shown_ and _Provider status cannot be loaded_.
-- [ ] 8.3 Build the conversation list on `useConversations`, ordered most recently
+- [x] 8.3 Build the conversation list on `useConversations`, ordered most recently
       updated first, with pinned conversations grouped ahead of the rest. Selecting
       one calls `loadConversation` and pushes its turns and id into the thread
       state; "new conversation" clears both. Verify with tests — scenarios _An
       existing conversation is selected_ and _A fresh conversation is started_.
-- [ ] 8.4 Wire the search field to `useConversations`' `searchQuery`. Verify with a
+- [x] 8.4 Wire the search field to `useConversations`' `searchQuery`. Verify with a
       test asserting case-insensitive narrowing over titles and user turns —
       scenario _The list is searched_.
-- [ ] 8.5 Wire pin and delete to `toggleStar` and `deleteConversation`, including
+- [x] 8.5 Wire pin and delete to `toggleStar` and `deleteConversation`, including
       the rollback-and-inform path on a failed delete. Verify with tests —
       scenarios _A conversation is pinned_ and _A conversation is deleted_.
-- [ ] 8.6 Handle the empty and non-owning-identity cases so the panel reports an
+- [x] 8.6 Handle the empty and non-owning-identity cases so the panel reports an
       empty list without an error and the composer still accepts a prompt. Verify
       with a test — scenario _The user has no stored conversations_.
 
