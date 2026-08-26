@@ -15,6 +15,16 @@
  */
 
 export { PromptPageContent } from './PromptPageContent';
+export { SidePanel } from './SidePanel';
+export type { SidePanelProps } from './SidePanel';
+export { McpServerToggles } from './McpServerToggles';
+export type { McpServerTogglesProps } from './McpServerToggles';
+export { ProviderStatusBlock } from './ProviderStatusBlock';
+export type { ProviderStatusBlockProps } from './ProviderStatusBlock';
+export { ConversationList } from './ConversationList';
+export type { ConversationListProps } from './ConversationList';
+export { ConversationListItem } from './ConversationListItem';
+export type { ConversationListItemProps } from './ConversationListItem';
 export { usePromptThread, toPromptTurns } from './usePromptThread';
 export type {
   UsePromptThreadOptions,

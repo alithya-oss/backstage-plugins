@@ -267,7 +267,9 @@ the stored list is unavailable to them.
 The side panel SHALL list the configured MCP servers and let the user enable or
 disable each one. Only enabled servers' tools SHALL be offered to the provider
 on subsequent runs. The panel SHALL also show, read-only, whether the chat
-provider is reachable and which model it reports.
+provider is reachable, which model it reports, and whether it produces
+incremental output or reaches the streaming endpoint through the single-fragment
+fallback.
 
 Failure to load the server list or the provider status SHALL NOT prevent the
 user from holding a conversation.
@@ -281,8 +283,8 @@ user from holding a conversation.
 #### Scenario: Provider status is shown
 
 - **WHEN** the provider status has loaded
-- **THEN** the panel shows the connection state and the reported model name, and
-  offers no control to change them
+- **THEN** the panel shows the connection state, the reported model name and the
+  reported streaming capability, and offers no control to change them
 
 #### Scenario: Provider status cannot be loaded
 
