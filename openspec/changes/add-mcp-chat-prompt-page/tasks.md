@@ -133,25 +133,25 @@ transport error handling_ (state layer).
 Covers _Prompt submission_, _Run lifecycle and streamed completion_, _Provider and
 transport error handling_ (presentation).
 
-- [ ] 5.1 Build the composer from `ComposerPrimitive` with multi-line input,
+- [x] 5.1 Build the composer from `ComposerPrimitive` with multi-line input,
       submit-on-Enter and newline-on-Shift-Enter, styled with a CSS module over
       BUI tokens. Verify with a test driving `screen` queries and `findBy*` —
       scenario _A prompt is submitted_.
-- [ ] 5.2 Build the message list and viewport from `ThreadPrimitive` and
+- [x] 5.2 Build the message list and viewport from `ThreadPrimitive` and
       `MessagePrimitive`, rendering assistant text as markdown, including while it
       is still growing. Verify with tests — scenarios _A reply renders
       incrementally_ and _A run completes successfully_.
-- [ ] 5.3 Render the running indicator and the cancel control from the runtime's
+- [x] 5.3 Render the running indicator and the cancel control from the runtime's
       running state. Verify with a test asserting both appear while a run is in
       flight and clear afterwards — scenario _A run is in progress_.
-- [ ] 5.4 Render run failures as an error distinct from assistant content, with a
+- [x] 5.4 Render run failures as an error distinct from assistant content, with a
       retry control, preserving any partial text. Verify with tests — scenarios
       _The chat provider returns an error_, _The backend is unreachable_, _A run
       fails after partial output_.
-- [ ] 5.5 Verify a non-streaming provider's single-fragment reply renders and
+- [x] 5.5 Verify a non-streaming provider's single-fragment reply renders and
       completes normally, with a test — scenario _A non-streaming provider is
       used_.
-- [ ] 5.6 Confirm no file added under `src/components/PromptPage` imports
+- [x] 5.6 Confirm no file added under `src/components/PromptPage` imports
       `@backstage/core-components`, `@mui/material` or `@mui/icons-material`.
       Verify with `grep` over the new directory and with `yarn lint --fix`
       reporting clean.

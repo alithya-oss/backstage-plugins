@@ -1,0 +1,43 @@
+.userRoot {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--bui-space-2) 0;
+}
+
+.userBubble {
+  max-width: 80%;
+  padding: var(--bui-space-2) var(--bui-space-4);
+  border: 1px solid var(--bui-border-1);
+  border-radius: var(--bui-radius-3);
+  background-color: var(--bui-bg-neutral-2);
+}
+
+.assistantRoot {
+  display: flex;
+  justify-content: flex-start;
+  padding: var(--bui-space-2) 0;
+}
+
+.assistantBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bui-space-2);
+  max-width: 100%;
+  min-width: 0;
+}
+
+.interrupted {
+  display: flex;
+  align-items: center;
+  gap: var(--bui-space-1);
+  margin: 0;
+  color: var(--bui-fg-warning);
+  font-family: var(--bui-font-regular);
+  font-size: var(--bui-font-size-2);
+}
+
+.interruptedIcon {
+  flex: 0 0 auto;
+  width: var(--bui-space-4);
+  height: var(--bui-space-4);
+}

@@ -19,6 +19,7 @@ import {
   useExternalStoreRuntime,
 } from '@assistant-ui/react';
 import { usePromptThread } from './usePromptThread';
+import { PromptThread } from './PromptThread';
 import styles from './PromptPageContent.module.css';
 
 /**
@@ -30,20 +31,22 @@ import styles from './PromptPageContent.module.css';
  * truth: selecting a stored conversation replaces the list without the runtime
  * having to import a message repository.
  *
- * The thread primitives, tool call rendering and reduced side panel are added by
- * the following task groups of the `add-mcp-chat-prompt-page` change.
+ * The run failure is the one piece of state the surface receives as a prop
+ * rather than reading from the runtime: it is the page's, not a message's, which
+ * is what keeps a failure from being rendered as assistant content.
+ *
+ * The tool call rendering and the reduced side panel are added by the following
+ * task groups of the `add-mcp-chat-prompt-page` change.
  */
 export const PromptPageContent = () => {
-  const { adapter } = usePromptThread();
+  const { adapter, error, retry } = usePromptThread();
   const runtime = useExternalStoreRuntime(adapter);
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       <div className={styles.root}>
         <h1 className={styles.heading}>MCP Prompt</h1>
-        <div className={styles.thread}>
-          <p>The conversation surface is not wired up yet.</p>
-        </div>
+        <PromptThread error={error} onRetry={retry} />
       </div>
     </AssistantRuntimeProvider>
   );

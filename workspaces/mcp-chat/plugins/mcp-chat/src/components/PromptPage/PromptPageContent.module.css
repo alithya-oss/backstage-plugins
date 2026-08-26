@@ -12,13 +12,6 @@
 .heading {
   margin: 0;
   color: var(--bui-fg-primary);
-}
-
-.thread {
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  flex-direction: column;
-  gap: var(--bui-space-2);
-  color: var(--bui-fg-secondary);
+  font-family: var(--bui-font-regular);
+  font-size: var(--bui-font-size-6);
 }

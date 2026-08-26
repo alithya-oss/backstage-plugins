@@ -1,0 +1,44 @@
+.root {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--bui-space-3);
+  min-height: 0;
+}
+
+.viewport {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  padding-right: var(--bui-space-2);
+  overflow-y: auto;
+  scrollbar-color: var(--bui-scrollbar-thumb) var(--bui-scrollbar);
+}
+
+.empty {
+  margin: auto 0;
+  color: var(--bui-fg-secondary);
+  font-family: var(--bui-font-regular);
+  font-size: var(--bui-font-size-3);
+  text-align: center;
+}
+
+.running {
+  display: flex;
+  align-items: center;
+  gap: var(--bui-space-2);
+  margin: var(--bui-space-2) 0;
+  color: var(--bui-fg-secondary);
+  font-family: var(--bui-font-regular);
+  font-size: var(--bui-font-size-2);
+}
+
+.spinner {
+  flex: 0 0 auto;
+  width: var(--bui-space-3);
+  height: var(--bui-space-3);
+  border-radius: var(--bui-radius-full);
+  background-color: var(--bui-fg-secondary);
+  animation: var(--bui-animate-pulse);
+}

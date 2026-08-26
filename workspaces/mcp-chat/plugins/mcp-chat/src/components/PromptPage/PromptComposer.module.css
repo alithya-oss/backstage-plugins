@@ -1,0 +1,78 @@
+.root {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: var(--bui-space-2);
+  padding: var(--bui-space-2);
+  border: 1px solid var(--bui-border-1);
+  border-radius: var(--bui-radius-3);
+  background-color: var(--bui-bg-neutral-1);
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--bui-space-2);
+  border: none;
+  background-color: transparent;
+  color: var(--bui-fg-primary);
+  font-family: var(--bui-font-regular);
+  font-size: var(--bui-font-size-3);
+  line-height: 1.5;
+  resize: none;
+}
+
+.input::placeholder {
+  color: var(--bui-fg-secondary);
+}
+
+.input:focus-visible {
+  outline: none;
+}
+
+.root:focus-within {
+  outline: 2px solid var(--bui-ring);
+  outline-offset: -1px;
+}
+
+.actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--bui-space-1);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--bui-space-8);
+  height: var(--bui-space-8);
+  padding: 0;
+  border: none;
+  border-radius: var(--bui-radius-full);
+  background-color: var(--bui-bg-solid);
+  color: var(--bui-fg-solid);
+  cursor: pointer;
+}
+
+.button:hover:not(:disabled) {
+  background-color: var(--bui-bg-solid-hover);
+}
+
+.button:disabled {
+  background-color: var(--bui-bg-solid-disabled);
+  color: var(--bui-fg-solid-disabled);
+  cursor: not-allowed;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--bui-ring);
+  outline-offset: 2px;
+}
+
+.icon {
+  width: var(--bui-space-5);
+  height: var(--bui-space-5);
+}
