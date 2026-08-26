@@ -1,0 +1,164 @@
+.root {
+  border: 1px solid var(--bui-border-1);
+  border-radius: var(--bui-radius-2);
+  background-color: var(--bui-bg-neutral-1);
+  overflow: hidden;
+}
+
+/* A failed invocation is told apart by its border and heading colour, not only
+   by its label, so the failure reads at a glance in a turn full of calls. */
+.root[data-state='failed'] {
+  border-color: var(--bui-border-danger);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--bui-space-2);
+  width: 100%;
+  padding: var(--bui-space-2) var(--bui-space-3);
+  border: none;
+  background-color: transparent;
+  color: var(--bui-fg-primary);
+  font-family: var(--bui-font-regular);
+  font-size: var(--bui-font-size-2);
+  text-align: left;
+  cursor: pointer;
+}
+
+.header:hover {
+  background-color: var(--bui-bg-neutral-1-hover);
+}
+
+.header:focus-visible {
+  outline: 2px solid var(--bui-ring);
+  outline-offset: -2px;
+}
+
+.chevron {
+  flex: 0 0 auto;
+  width: var(--bui-space-4);
+  height: var(--bui-space-4);
+  transition: transform 0.15s ease-in-out;
+}
+
+.header[aria-expanded='true'] .chevron {
+  transform: rotate(90deg);
+}
+
+.icon {
+  flex: 0 0 auto;
+  width: var(--bui-space-4);
+  height: var(--bui-space-4);
+  color: var(--bui-fg-secondary);
+}
+
+.root[data-state='failed'] .icon {
+  color: var(--bui-fg-danger);
+}
+
+.name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--bui-font-monospace);
+  overflow-wrap: anywhere;
+}
+
+.state {
+  flex: 0 0 auto;
+  color: var(--bui-fg-secondary);
+}
+
+.root[data-state='failed'] .state {
+  color: var(--bui-fg-danger);
+}
+
+.root[data-state='running'] .state {
+  color: var(--bui-fg-info);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bui-space-3);
+  padding: 0 var(--bui-space-3) var(--bui-space-3);
+  border-top: 1px solid var(--bui-border-1);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bui-space-1);
+  min-width: 0;
+}
+
+.sectionHeading {
+  margin: var(--bui-space-3) 0 0;
+  color: var(--bui-fg-secondary);
+  font-family: var(--bui-font-regular);
+  font-size: var(--bui-font-size-1);
+  font-weight: var(--bui-font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.code {
+  margin: 0;
+  padding: var(--bui-space-2);
+  max-height: 18rem;
+  overflow: auto;
+  border: 1px solid var(--bui-border-1);
+  border-radius: var(--bui-radius-2);
+  background-color: var(--bui-bg-neutral-2);
+  font-family: var(--bui-font-monospace);
+  font-size: var(--bui-font-size-2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.pending {
+  margin: 0;
+  color: var(--bui-fg-secondary);
+  font-family: var(--bui-font-regular);
+  font-size: var(--bui-font-size-2);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--bui-space-2);
+}
+
+.copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bui-space-1);
+  padding: var(--bui-space-1) var(--bui-space-2);
+  border: 1px solid var(--bui-border-1);
+  border-radius: var(--bui-radius-2);
+  background-color: transparent;
+  color: var(--bui-fg-primary);
+  font-family: var(--bui-font-regular);
+  font-size: var(--bui-font-size-1);
+  cursor: pointer;
+}
+
+.copy:hover {
+  background-color: var(--bui-bg-neutral-1-hover);
+}
+
+.copy:focus-visible {
+  outline: 2px solid var(--bui-ring);
+  outline-offset: 2px;
+}
+
+.copyIcon {
+  width: var(--bui-space-4);
+  height: var(--bui-space-4);
+}
+
+.acknowledgement {
+  color: var(--bui-fg-secondary);
+  font-family: var(--bui-font-regular);
+  font-size: var(--bui-font-size-1);
+}

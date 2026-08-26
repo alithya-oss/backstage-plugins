@@ -160,20 +160,25 @@ transport error handling_ (presentation).
 
 Covers _MCP tool call rendering_.
 
-- [ ] 6.1 Register one catch-all tool UI via `makeAssistantToolUI` rendering a
-      tool-call part's name collapsed by default, expandable to its arguments and
-      result, in BUI with `@remixicon/react` icons. Verify with tests over one and
-      several invocations, asserting independent expansion — scenarios _A single
-      tool is invoked_ and _Several tools are invoked in one turn_.
-- [ ] 6.2 Render an invocation whose `result` is still absent as running, and let
+- [x] 6.1 Register one catch-all tool UI through the
+      `components={{ tools: { Fallback } }}` override of `MessagePrimitive.Parts`,
+      rendering a tool-call part's name collapsed by default, expandable to its
+      arguments and result, in BUI with `@remixicon/react` icons. `Fallback` is the
+      slot the library uses for a tool it has no specific renderer for, so it is
+      name-agnostic — which `makeAssistantToolUI` cannot be, since
+      `AssistantToolUIProps` requires one exact `toolName`, and it is deprecated
+      besides. Verify with tests over one and several invocations, asserting
+      independent expansion — scenarios _A single tool is invoked_ and _Several
+      tools are invoked in one turn_.
+- [x] 6.2 Render an invocation whose `result` is still absent as running, and let
       it resolve in place. Verify with tests — scenarios _An invocation is shown
       before its result arrives_ and _A running invocation receives its result_.
-- [ ] 6.3 Add the copy affordance for an expanded result, with acknowledgement.
+- [x] 6.3 Add the copy affordance for an expanded result, with acknowledgement.
       Verify with a test asserting the clipboard write and the acknowledgement —
       scenario _A tool result is copied_.
-- [ ] 6.4 Style a failed invocation distinctly and expose its error detail on
+- [x] 6.4 Style a failed invocation distinctly and expose its error detail on
       expansion. Verify with a test — scenario _A tool invocation fails_.
-- [ ] 6.5 Verify a reply with no tool results renders no tool-call section, with a
+- [x] 6.5 Verify a reply with no tool results renders no tool-call section, with a
       test — scenario _No tool is invoked_.
 
 ## 7. Revising and regenerating

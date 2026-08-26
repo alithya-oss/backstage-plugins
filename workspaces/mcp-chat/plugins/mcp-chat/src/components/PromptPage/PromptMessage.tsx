@@ -17,6 +17,7 @@
 import { AuiIf, MessagePrimitive } from '@assistant-ui/react';
 import { RiAlertLine } from '@remixicon/react';
 import { MarkdownText } from './MarkdownText';
+import { PromptToolCall } from './PromptToolCall';
 import styles from './PromptMessage.module.css';
 
 /**
@@ -26,11 +27,16 @@ import styles from './PromptMessage.module.css';
  * renders: `MessagePrimitive.Parts` treats a new `components` object as a
  * change, and a growing text part re-renders often enough for that to matter.
  *
- * Only `Text` is overridden here. Tool-call parts keep the library's default
- * until the catch-all tool renderer of the following task group replaces it, so
- * an invocation is never dropped from the turn in the meantime.
+ * `tools.Fallback` is the slot the library uses for a tool it has no specific
+ * renderer for, which is exactly what MCP needs: tool names come from
+ * configuration, so a single name-agnostic renderer handles every invocation
+ * and `by_name` stays unused. This is the standard components variant — the
+ * chain-of-thought variant types `tools` as `never`, so the two cannot be mixed.
  */
-const PART_COMPONENTS = { Text: MarkdownText };
+const PART_COMPONENTS = {
+  Text: MarkdownText,
+  tools: { Fallback: PromptToolCall },
+};
 
 /**
  * A user turn.
