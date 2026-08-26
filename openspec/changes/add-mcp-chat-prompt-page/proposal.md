@@ -22,9 +22,10 @@ them one hook at a time, without disturbing the page adopters run today.
 - Adapt the existing `mcpChatApiRef` transport into an `ExternalStoreAdapter`
   and provide it through `useExternalStoreRuntime`. No new backend endpoint, no
   change to `McpChatApi`.
-- Render MCP tool calls with `makeAssistantToolUI` instead of a bespoke
-  `ToolCallDetails`-style component, mapping the backend's `toolResponses`
-  entries onto Assistant UI `tool-call` message parts.
+- Render MCP tool calls with a single catch-all renderer in the `tools.Fallback`
+  slot of `MessagePrimitive.Parts` instead of a bespoke `ToolCallDetails`-style
+  component, mapping the backend's tool events onto Assistant UI `tool-call`
+  message parts.
 - Ship a **reduced side panel** on the new page carrying the three concerns
   Assistant UI has no model for — MCP server enable/disable toggles, read-only
   provider status, and conversation selection — built on the existing

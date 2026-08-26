@@ -222,16 +222,35 @@ read from the event rather than inferred from the payload as the non-streaming
 path would have required.
 
 This is the seam that lets tool rendering meet its spec without any client-side
-tool machinery: the parts are already in the message, and `makeAssistantToolUI`
-renders them.
+tool machinery: the parts are already in the message, and the `tools.Fallback`
+slot of `MessagePrimitive.Parts` renders them.
 
-### Tool call UI: one catch-all `makeAssistantToolUI`
+### Tool call UI: one catch-all in `MessagePrimitive.Parts`
 
 MCP tool names are configuration-driven and unknown at build time, so no
 per-tool component can be registered. A single fallback tool UI renders every
 tool-call part uniformly — name, collapsed arguments and result, copy action,
 error styling — replacing what `ToolCallDetails` does today, in BUI with
 `@remixicon/react` icons.
+
+That single renderer is registered through the component override of
+`MessagePrimitive.Parts`, as
+`components={{ tools: { Fallback: <the renderer> } }}` — `Fallback` is the slot
+the library uses for any tool it has no specific renderer for, so it is
+name-agnostic by construction. `by_name` stays unused, for want of names known at
+build time.
+
+`makeAssistantToolUI` — and its `useAssistantToolUI` hook — is deliberately
+**not** used, for two reasons. Its `AssistantToolUIProps` requires
+`toolName: string`, binding a renderer to one exact name, which is the one thing
+configuration-driven names cannot supply. And the whole trio is marked
+`@deprecated` in `0.15.16`, which is the same criterion that rules out
+`adapters.threadList` for the conversation list below.
+
+One constraint follows from the slot: in `MessagePrimitiveParts.Props`,
+`components` is a union whose `ChainOfThoughtComponents` variant types `tools` as
+`never`. The parts are therefore mounted with the standard variant, and the
+chain-of-thought grouping is not used.
 
 ### Conversation list: own component, not `adapters.threadList`
 
