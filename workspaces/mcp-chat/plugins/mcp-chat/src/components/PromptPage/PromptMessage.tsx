@@ -14,9 +14,15 @@
  * limitations under the License.
  */
 
-import { AuiIf, MessagePrimitive } from '@assistant-ui/react';
-import { RiAlertLine } from '@remixicon/react';
+import {
+  ActionBarPrimitive,
+  AuiIf,
+  MessagePrimitive,
+} from '@assistant-ui/react';
+import { RiAlertLine, RiPencilLine, RiRefreshLine } from '@remixicon/react';
 import { MarkdownText } from './MarkdownText';
+import { PromptBranchPicker } from './PromptBranchPicker';
+import { PromptEditComposer } from './PromptEditComposer';
 import { PromptToolCall } from './PromptToolCall';
 import styles from './PromptMessage.module.css';
 
@@ -40,12 +46,36 @@ const PART_COMPONENTS = {
 
 /**
  * A user turn.
+ *
+ * The turn swaps for its edit composer while one is open, rather than opening a
+ * dialog beside it, so the edit reads as a revision of that turn. The swap is
+ * driven by the message's own composer state, which is what the runtime toggles
+ * when the edit action fires.
  */
 export const PromptUserMessage = () => (
   <MessagePrimitive.Root className={styles.userRoot}>
-    <div className={styles.userBubble}>
-      <MessagePrimitive.Parts components={PART_COMPONENTS} />
-    </div>
+    <AuiIf condition={state => state.message.composer.isEditing}>
+      <PromptEditComposer />
+    </AuiIf>
+    <AuiIf condition={state => !state.message.composer.isEditing}>
+      <div className={styles.userColumn}>
+        <div className={styles.userBubble}>
+          <MessagePrimitive.Parts components={PART_COMPONENTS} />
+        </div>
+        <ActionBarPrimitive.Root
+          hideWhenRunning
+          className={styles.userActions}
+          aria-label="Prompt actions"
+        >
+          <ActionBarPrimitive.Edit
+            className={styles.actionButton}
+            aria-label="Edit prompt"
+          >
+            <RiPencilLine aria-hidden className={styles.actionIcon} />
+          </ActionBarPrimitive.Edit>
+        </ActionBarPrimitive.Root>
+      </div>
+    </AuiIf>
   </MessagePrimitive.Root>
 );
 
@@ -59,6 +89,10 @@ export const PromptUserMessage = () => (
  * is labelled as interrupted rather than being retracted or presented as a
  * finished answer. The label is driven by the message's own status, so it
  * follows the run without the page tracking it.
+ *
+ * Regenerating keeps the answer on screen as a version and adds the new one
+ * beside it, so the action bar and the branch picker sit together: one produces
+ * an alternative, the other moves between them.
  */
 export const PromptAssistantMessage = () => (
   <MessagePrimitive.Root className={styles.assistantRoot}>
@@ -70,6 +104,21 @@ export const PromptAssistantMessage = () => (
           This answer was interrupted and is incomplete.
         </p>
       </AuiIf>
+      <div className={styles.assistantFooter}>
+        <ActionBarPrimitive.Root
+          hideWhenRunning
+          className={styles.assistantActions}
+          aria-label="Answer actions"
+        >
+          <ActionBarPrimitive.Reload
+            className={styles.actionButton}
+            aria-label="Regenerate answer"
+          >
+            <RiRefreshLine aria-hidden className={styles.actionIcon} />
+          </ActionBarPrimitive.Reload>
+        </ActionBarPrimitive.Root>
+        <PromptBranchPicker />
+      </div>
     </div>
   </MessagePrimitive.Root>
 );

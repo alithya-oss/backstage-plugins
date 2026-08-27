@@ -17,10 +17,14 @@
 import { FC, ReactNode } from 'react';
 import { act, renderHook } from '@testing-library/react';
 import { TestApiProvider } from '@backstage/test-utils';
-import type { AppendMessage } from '@assistant-ui/react';
+import type { AppendMessage, ThreadMessage } from '@assistant-ui/react';
 import { mcpChatApiRef } from '../../api';
 import type { ChatStreamEvent } from '../../types';
-import { usePromptThread, toPromptTurns } from './usePromptThread';
+import {
+  usePromptThread,
+  toPromptTurns,
+  type UsePromptThreadResult,
+} from './usePromptThread';
 
 /**
  * A stream the test drives event by event, so a turn can be inspected between
@@ -114,6 +118,52 @@ function renderPromptThread(streamChatMessage: jest.Mock) {
     { wrapper },
   );
   return { ...rendered, api };
+}
+
+/**
+ * The visible path as the runtime would report it back through `setMessages`.
+ * Only the ids carry meaning there, so the repository's own messages are the
+ * honest stand-in.
+ */
+function threadMessages(state: UsePromptThreadResult): ThreadMessage[] {
+  return state.adapter.messageRepository!.messages.map(item => item.message);
+}
+
+/** A conversation whose single prompt has two answers, the second one shown. */
+async function renderTwoVersions() {
+  const first = createStream();
+  const streamChatMessage = jest.fn().mockReturnValue(first.iterable);
+  const rendered = renderPromptThread(streamChatMessage);
+  const { result } = rendered;
+
+  let run: Promise<void> = Promise.resolve();
+  await act(async () => {
+    run = result.current.adapter.onNew(appendMessage('name three tools'));
+  });
+  await act(async () => {
+    first.push({ type: 'text', text: 'first answer' });
+    first.push({ type: 'complete', conversationId: 'conv-1', toolsUsed: [] });
+    first.close();
+    await run;
+  });
+
+  const second = createStream();
+  streamChatMessage.mockReturnValue(second.iterable);
+  let reloadRun: Promise<void> = Promise.resolve();
+  await act(async () => {
+    reloadRun = result.current.adapter.onReload!(
+      result.current.turns[0].id,
+      {} as any,
+    );
+  });
+  await act(async () => {
+    second.push({ type: 'text', text: 'second answer' });
+    second.push({ type: 'complete', toolsUsed: [] });
+    second.close();
+    await reloadRun;
+  });
+
+  return { ...rendered, streamChatMessage };
 }
 
 describe('usePromptThread', () => {
@@ -560,30 +610,219 @@ describe('usePromptThread', () => {
     expect(result.current.conversationId).toBeUndefined();
   });
 
-  it('lets the runtime rewrite the list through setMessages', () => {
-    const streamChatMessage = jest.fn();
+  it('lets the runtime rewrite the list through setMessages', async () => {
+    const stream = createStream();
+    const streamChatMessage = jest.fn().mockReturnValue(stream.iterable);
     const { result } = renderPromptThread(streamChatMessage);
 
+    let run: Promise<void> = Promise.resolve();
+    await act(async () => {
+      run = result.current.adapter.onNew(appendMessage('kept'));
+    });
+    await act(async () => {
+      stream.push({ type: 'text', text: 'dropped answer' });
+      stream.push({ type: 'complete', toolsUsed: [] });
+      stream.close();
+      await run;
+    });
+
+    // The runtime hands back the messages it decided to keep. Only their ids
+    // matter: the content is the hook's already.
     act(() => {
-      result.current.adapter.setMessages!([
-        { id: 'a', role: 'user', text: 'kept' },
-      ]);
+      result.current.adapter.setMessages!(
+        threadMessages(result.current).slice(0, 1),
+      );
     });
 
     expect(result.current.turns).toEqual([
-      { id: 'a', role: 'user', text: 'kept' },
+      { id: result.current.turns[0].id, role: 'user', text: 'kept' },
     ]);
+    expect(result.current.tailVersions).toEqual([]);
+  });
+
+  it('keeps the previous answer as a version when an answer is regenerated', async () => {
+    const first = createStream();
+    const streamChatMessage = jest.fn().mockReturnValue(first.iterable);
+    const { result } = renderPromptThread(streamChatMessage);
+
+    let run: Promise<void> = Promise.resolve();
+    await act(async () => {
+      run = result.current.adapter.onNew(appendMessage('name three tools'));
+    });
+    await act(async () => {
+      first.push({ type: 'text', text: 'first answer' });
+      first.push({ type: 'complete', conversationId: 'conv-1', toolsUsed: [] });
+      first.close();
+      await run;
+    });
+
+    const userTurnId = result.current.turns[0].id;
+    const second = createStream();
+    streamChatMessage.mockReturnValue(second.iterable);
+    let reloadRun: Promise<void> = Promise.resolve();
+    await act(async () => {
+      reloadRun = result.current.adapter.onReload!(userTurnId, {} as any);
+    });
+    await act(async () => {
+      second.push({ type: 'text', text: 'second answer' });
+      second.push({ type: 'complete', toolsUsed: [] });
+      second.close();
+      await reloadRun;
+    });
+
+    // Both answers exist and the new one is the one shown.
+    expect(result.current.tailVersions.map(version => version.text)).toEqual([
+      'first answer',
+      'second answer',
+    ]);
+    expect(result.current.tailIndex).toBe(1);
+    expect(result.current.turns.map(turn => turn.text)).toEqual([
+      'name three tools',
+      'second answer',
+    ]);
+    // The regeneration re-ran the same prompt, not the prompt plus its answer.
+    expect(streamChatMessage.mock.calls[1][0]).toEqual([
+      { role: 'user', content: 'name three tools' },
+    ]);
+  });
+
+  it('switches the shown answer without touching the conversation above it', async () => {
+    const { result } = await renderTwoVersions();
+
+    const userTurn = result.current.turns[0];
+    const firstVersion = result.current.tailVersions[0];
+
+    act(() => {
+      // The visible path the runtime reports after a branch switch: same path,
+      // the other version at its end.
+      result.current.adapter.setMessages!([
+        { id: userTurn.id } as ThreadMessage,
+        { id: firstVersion.id } as ThreadMessage,
+      ]);
+    });
+
+    expect(result.current.tailIndex).toBe(0);
+    expect(result.current.turns.map(turn => turn.text)).toEqual([
+      'name three tools',
+      'first answer',
+    ]);
+    // Both versions are still there, and the prompt above is untouched.
+    expect(result.current.tailVersions).toHaveLength(2);
+    expect(result.current.turns[0]).toEqual(userTurn);
+  });
+
+  it('abandons the tail versions when a new prompt is sent, carrying the selected answer', async () => {
+    const { result, streamChatMessage } = await renderTwoVersions();
+
+    // Go back to the first answer, then continue the conversation from it.
+    act(() => {
+      result.current.adapter.setMessages!([
+        { id: result.current.turns[0].id } as ThreadMessage,
+        { id: result.current.tailVersions[0].id } as ThreadMessage,
+      ]);
+    });
+
+    const third = createStream();
+    streamChatMessage.mockReturnValue(third.iterable);
+    let run: Promise<void> = Promise.resolve();
+    await act(async () => {
+      run = result.current.adapter.onNew(appendMessage('and the fourth?'));
+    });
+
+    // The tail advanced: only the run in flight is a version now.
+    expect(result.current.tailVersions).toHaveLength(1);
+    expect(result.current.turns.map(turn => turn.text)).toEqual([
+      'name three tools',
+      'first answer',
+      'and the fourth?',
+      '',
+    ]);
+    // The selected version is the one the next run sends, so it is the one the
+    // backend stores — the selection is persisted without a schema change.
+    expect(streamChatMessage.mock.calls[2][0]).toEqual([
+      { role: 'user', content: 'name three tools' },
+      { role: 'assistant', content: 'first answer' },
+      { role: 'user', content: 'and the fourth?' },
+    ]);
+
+    await act(async () => {
+      third.push({ type: 'complete', toolsUsed: [] });
+      third.close();
+      await run;
+    });
+  });
+
+  it('returns a stored conversation linear, and keeps its answer as the first version when regenerated', async () => {
+    const stream = createStream();
+    const streamChatMessage = jest.fn().mockReturnValue(stream.iterable);
+    const { result } = renderPromptThread(streamChatMessage);
+
+    act(() => {
+      result.current.setConversation(
+        toPromptTurns([
+          { role: 'user', content: 'stored question' },
+          { role: 'assistant', content: 'stored answer' },
+        ]),
+        'conv-9',
+      );
+    });
+
+    // Reloading a conversation gives a linear thread: one answer, no versions,
+    // so the picker has a single branch to show.
+    expect(result.current.tailVersions).toEqual([]);
+    expect(result.current.tailIndex).toBe(0);
+    expect(
+      result.current.adapter.messageRepository!.messages.map(
+        item => item.parentId,
+      ),
+    ).toEqual([null, 'stored-0']);
+
+    let run: Promise<void> = Promise.resolve();
+    await act(async () => {
+      run = result.current.adapter.onReload!('stored-0', {} as any);
+    });
+    await act(async () => {
+      stream.push({ type: 'text', text: 'a different answer' });
+      stream.push({ type: 'complete', toolsUsed: [] });
+      stream.close();
+      await run;
+    });
+
+    expect(result.current.tailVersions.map(version => version.text)).toEqual([
+      'stored answer',
+      'a different answer',
+    ]);
+    expect(streamChatMessage.mock.calls[0][3]).toBe('conv-9');
+  });
+
+  it('parents every tail version on the last user turn and points the head at the selected one', async () => {
+    const { result } = await renderTwoVersions();
+
+    const [userTurn] = result.current.turns;
+    const repository = result.current.adapter.messageRepository!;
+
+    expect(
+      repository.messages.map(item => [item.message.id, item.parentId]),
+    ).toEqual([
+      [userTurn.id, null],
+      [result.current.tailVersions[0].id, userTurn.id],
+      [result.current.tailVersions[1].id, userTurn.id],
+    ]);
+    expect(repository.headId).toBe(result.current.tailVersions[1].id);
   });
 
   it('exposes exactly the handler set the design fixes', () => {
     const streamChatMessage = jest.fn();
     const { result } = renderPromptThread(streamChatMessage);
 
+    // `messages` gave way to `messageRepository`: a flat list cannot express two
+    // answers to the same prompt, and the repository is what the branch picker
+    // reads. `convertMessage` went with it — the hook applies it itself when it
+    // builds the repository, rather than handing it to the runtime.
     expect(Object.keys(result.current.adapter).sort()).toEqual([
-      'convertMessage',
       'isLoading',
       'isRunning',
-      'messages',
+      'messageRepository',
       'onCancel',
       'onEdit',
       'onNew',
@@ -596,5 +835,8 @@ describe('usePromptThread', () => {
       result.current.adapter.unstable_enableToolInvocations,
     ).toBeUndefined();
     expect(result.current.adapter.adapters).toBeUndefined();
+    // Branch switching rides on the stable `setMessages`, not on the
+    // experimental branch-change callback.
+    expect(result.current.adapter.unstable_onBranchChange).toBeUndefined();
   });
 });

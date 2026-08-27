@@ -251,10 +251,15 @@ describe('the MCP tool call rendering', () => {
     expect(
       screen.queryByRole('heading', { name: 'Result' }),
     ).not.toBeInTheDocument();
-    // The composer is the only button of the surface: no invocation header.
+    // No invocation header: the only buttons are the composer's send control
+    // and the per-turn edit and regenerate actions.
     expect(
       screen.getByRole('button', { name: 'Send prompt' }),
     ).toBeInTheDocument();
-    expect(screen.getAllByRole('button')).toHaveLength(1);
+    expect(
+      screen
+        .getAllByRole('button')
+        .map(button => button.getAttribute('aria-label')),
+    ).toEqual(['Edit prompt', 'Regenerate answer', 'Send prompt']);
   });
 });

@@ -194,6 +194,13 @@ describe('the prompt page side panel wiring', () => {
     // The stored turns become the page's conversation, in their stored order.
     expect(await screen.findByText('How do I deploy?')).toBeVisible();
     expect(await screen.findByText('Run the pipeline.')).toBeVisible();
+    // A reloaded conversation is linear: its answer has no alternatives, so the
+    // version picker has nothing to show and reports no inconsistency.
+    expect(screen.queryByText(/Answer\s*\d\s*of\s*\d/)).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Previous answer' }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 
     await submitPrompt('And how do I roll back?');
 

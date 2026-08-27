@@ -162,22 +162,24 @@ Rejected: `useLocalRuntime` (above); `useAssistantTransportRuntime` /
 `ExternalStoreAdapter` is populated as follows. The set differs in two places
 from the one sketched in the parent issue, for reasons given below.
 
-| Member                                         | Used                  | Maps to                                                                                                           |
-| ---------------------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `messages`                                     | yes                   | React state of the converted turn list                                                                            |
-| `convertMessage`                               | yes                   | our `Message` view-model → `ThreadMessageLike`                                                                    |
-| `isRunning`                                    | yes                   | true from submit until the terminal event, drives the running indicator                                           |
-| `isLoading`                                    | yes                   | true while a stored conversation is being fetched                                                                 |
-| `onNew`                                        | yes (required)        | append user turn, then consume the event stream, updating state per event                                         |
-| `setMessages`                                  | yes                   | lets the runtime rewrite the list — **required for cancel and for branch switching to survive the next snapshot** |
-| `onEdit`                                       | yes                   | truncate to the edited turn, re-stream from it                                                                    |
-| `onReload`                                     | yes                   | re-stream from a `parentId`, producing another branch                                                             |
-| `onCancel`                                     | yes                   | `AbortController.abort()`, closing the stream, then drop the partial turn                                         |
-| `onDelete`                                     | no                    | not in the spec; no per-message delete affordance                                                                 |
-| `onAddToolResult`                              | **no**                | see below                                                                                                         |
-| `unstable_enableToolInvocations`               | **no** (left `false`) | tools run server-side                                                                                             |
-| `adapters.threadList`                          | **no**                | see "Conversation list" below                                                                                     |
-| `adapters.attachments` / `speech` / `feedback` | no                    | no backend support                                                                                                |
+| Member                                         | Used                   | Maps to                                                                                                           |
+| ---------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `messageRepository`                            | yes                    | the linear path plus the versions of its last answer, as an `ExportedMessageRepository`                           |
+| `messages`                                     | **no**                 | superseded by `messageRepository` — see "Alternative answers" below                                               |
+| `convertMessage`                               | **not on the adapter** | still the turn → `ThreadMessageLike` mapper, applied by the hook when it builds the repository                    |
+| `isRunning`                                    | yes                    | true from submit until the terminal event, drives the running indicator                                           |
+| `isLoading`                                    | yes                    | true while a stored conversation is being fetched                                                                 |
+| `onNew`                                        | yes (required)         | append user turn, then consume the event stream, updating state per event                                         |
+| `setMessages`                                  | yes                    | lets the runtime rewrite the list — **required for cancel and for branch switching to survive the next snapshot** |
+| `onEdit`                                       | yes                    | truncate to the edited turn, re-stream from it                                                                    |
+| `onReload`                                     | yes                    | re-stream from a `parentId`, adding a version to the last answer                                                  |
+| `onCancel`                                     | yes                    | `AbortController.abort()`, closing the stream, then drop the partial turn                                         |
+| `onDelete`                                     | no                     | not in the spec; no per-message delete affordance                                                                 |
+| `onAddToolResult`                              | **no**                 | see below                                                                                                         |
+| `unstable_onBranchChange`                      | **no**                 | deprecated, and `setMessages` already carries the switch — see "Alternative answers"                              |
+| `unstable_enableToolInvocations`               | **no** (left `false`)  | tools run server-side                                                                                             |
+| `adapters.threadList`                          | **no**                 | see "Conversation list" below                                                                                     |
+| `adapters.attachments` / `speech` / `feedback` | no                     | no backend support                                                                                                |
 
 **`onAddToolResult` is deliberately omitted**, against the parent issue's
 assumption. That handler exists so a _client-side_ tool can hand its result back
@@ -224,6 +226,84 @@ path would have required.
 This is the seam that lets tool rendering meet its spec without any client-side
 tool machinery: the parts are already in the message, and the `tools.Fallback`
 slot of `MessagePrimitive.Parts` renders them.
+
+### Alternative answers: the last answer only, no persistence change
+
+Regenerating an answer used to overwrite the previous one. It no longer does: the
+answer stays available and the new one is added beside it. The scope is
+deliberately narrow — **only the latest user turn** ever carries more than one
+answer. Editing any turn, and regenerating an older turn's answer, still truncate.
+
+The state is a linear `path` plus a `tailVersions` list and the index shown:
+
+```
+path         : PromptTurn[]   // the conversation up to the branch point
+tailVersions : PromptTurn[]   // the versions of the last answer, oldest first
+tailIndex    : number         // which one is on screen
+```
+
+There is one branch point and it never moves: the last user turn. That is what
+this decision buys, and what it deliberately does not buy.
+
+**Why not the general tree.** A tree of turns — every user turn forking, every
+branch kept — requires `ConversationRecord.messages` to become nodes chained by
+`parentId`, the head to be persisted, and every adopter's existing rows to be
+migrated. That is a persistence change, and this change committed to none
+(see Non-Goals). Confining alternatives to the tail keeps the stored conversation
+a flat `ChatMessage[]`: `ConversationRecord`, `ConversationRow` and the database
+schema are untouched, and no adopter runs a migration. The full tree is left to a
+later proposal, which would own the schema and the migration.
+
+**Why `messageRepository` rather than `messages`.** A flat array cannot express
+two answers to one prompt, and `BranchPickerPrimitive` reads
+`MessageRepository.getBranches(messageId)` — the siblings of a message. So the
+adapter passes a repository built by
+`ExportedMessageRepository.fromBranchableArray(items, { headId })`, where every
+tail version carries the last user turn as its `parentId` and `headId` names the
+version on screen. This is a deliberate change of adapter shape, not an
+incidental one: the test that pins the adapter's key set was updated to match
+rather than worked around.
+
+Two consequences follow from the runtime's own code and are worth stating:
+
+- With `messageRepository`, the runtime no longer calls `convertMessage`. It is
+  still the turn → `ThreadMessageLike` mapper, but the hook applies it itself when
+  it assembles the repository. Handing it to the runtime as well would be worse
+  than redundant: with a converter present, `setMessages` receives the messages
+  bound to their external originals, and a repository's messages have no such
+  binding, so the callback would be handed an empty list.
+- `setMessages` therefore takes `ThreadMessage`, and only the ids in it are
+  meaningful — the content is the hook's already. Two rewrites arrive that way: a
+  branch switch, where the path is unchanged and the trailing id names the version
+  to show, and a removal, where the path itself shrank. An id the hook no longer
+  holds is dropped rather than resurrected, which is what keeps the runtime's
+  post-cancel resync from putting an abandoned turn back.
+
+**`unstable_onBranchChange` is not a dependency.** It is deprecated, and its own
+type doc says switching "still requires `setMessages`, and this callback does not
+on its own enable branch switching". Since `setMessages` already carries the
+switch, wiring the callback would add an unstable surface for no capability. Same
+criterion that ruled out `adapters.threadList`.
+
+**Where the selection is persisted.** The backend stores what a run posts, and a
+run posts the path — which ends with the answer that was shown. So the selected
+version is the one the next run persists, and the tail's other versions are
+abandoned at that same moment. This keeps the model bounded and the stored
+conversation honest, at one cost worth naming: switching version does not by
+itself write anything, so a user who switches back and reloads the page before
+running again sees the version the last run stored. Making a bare switch durable
+needs a route that rewrites a stored conversation's messages, which is a
+persistence change this iteration excluded.
+
+**Truncation is announced before it applies.** Editing an older turn removes
+everything after it, and that is not recoverable. The edit composer states how
+many turns saving would discard, before the save — without it, correcting a typo
+six exchanges up silently removes those exchanges and reads as a bug.
+
+**A note on cost.** Regenerating re-runs the MCP tools server-side. Keeping the
+previous answer has a measurable effect: comparing two phrasings costs one
+regeneration instead of two, and depending on what an adopter plugs in, a
+re-execution is not free.
 
 ### Tool call UI: one catch-all in `MessagePrimitive.Parts`
 

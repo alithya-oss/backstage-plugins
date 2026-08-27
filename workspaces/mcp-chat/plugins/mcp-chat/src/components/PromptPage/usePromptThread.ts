@@ -16,7 +16,13 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useApi } from '@backstage/frontend-plugin-api';
-import type { AppendMessage, ExternalStoreAdapter } from '@assistant-ui/react';
+import {
+  ExportedMessageRepository,
+  type AppendMessage,
+  type ExternalStoreAdapter,
+  type ThreadMessage,
+  type ThreadMessageLike,
+} from '@assistant-ui/react';
 import { mcpChatApiRef } from '../../api';
 import type { ChatMessage } from '../../types';
 import { convertMessage } from './convertMessage';
@@ -53,6 +59,16 @@ export function toPromptTurns(messages: ChatMessage[]): PromptTurn[] {
 }
 
 /**
+ * How a run relates to the answers already on screen.
+ *
+ * `restart` drops whatever answers the tail held — the prompt itself changed, so
+ * the old answers are no longer alternatives to the same question. `alternative`
+ * keeps them and adds one more, which is what makes regenerating
+ * non-destructive.
+ */
+type RunMode = 'restart' | 'alternative';
+
+/**
  * Options of {@link usePromptThread}.
  */
 export interface UsePromptThreadOptions {
@@ -70,9 +86,16 @@ export interface UsePromptThreadOptions {
  */
 export interface UsePromptThreadResult {
   /** The adapter to hand to `useExternalStoreRuntime`. */
-  adapter: ExternalStoreAdapter<PromptTurn>;
-  /** The conversation, as the page's own view model. */
+  adapter: ExternalStoreAdapter<ThreadMessage>;
+  /** The conversation as currently shown: the path plus the selected answer. */
   turns: PromptTurn[];
+  /**
+   * The alternative versions of the last answer, oldest first. A single element
+   * means regenerating has not happened since the tail last moved.
+   */
+  tailVersions: PromptTurn[];
+  /** Which of {@link tailVersions} is shown. */
+  tailIndex: number;
   /** ID of the conversation the backend persisted, once it reported one. */
   conversationId: string | undefined;
   /** Whether a run is in flight. */
@@ -92,9 +115,15 @@ export interface UsePromptThreadResult {
  * `conversationId`, the in-flight `AbortController` and the running flag, and
  * assembles the `ExternalStoreAdapter` over them.
  *
- * The turn list is mirrored in a ref because a run applies stream events from
- * an async loop: reading the ref keeps every event applied to the list as it
- * stands, not to the list a stale closure captured.
+ * The conversation is held as a linear `path` plus the versions of its last
+ * answer. There is exactly one branch point and it never moves: the last user
+ * turn. That is what keeps regenerating non-destructive without introducing a
+ * general tree — and it is why nothing about persistence changes, since the
+ * selected version is the one a later run sends and the backend stores.
+ *
+ * Both are mirrored in refs because a run applies stream events from an async
+ * loop: reading the ref keeps every event applied to the state as it stands, not
+ * to the state a stale closure captured.
  */
 export function usePromptThread(
   options: UsePromptThreadOptions = {},
@@ -102,14 +131,21 @@ export function usePromptThread(
   const { enabledServerIds = [], isLoading = false } = options;
   const mcpChatApi = useApi(mcpChatApiRef);
 
-  const [turns, setTurnsState] = useState<PromptTurn[]>([]);
+  // The conversation up to, and excluding, the answer that carries versions.
+  const [path, setPathState] = useState<PromptTurn[]>([]);
+  // Versions of the last answer, oldest first. Empty when the conversation has
+  // no branchable tail — a fresh page, or one just loaded from storage.
+  const [tailVersions, setTailVersionsState] = useState<PromptTurn[]>([]);
+  const [tailIndex, setTailIndexState] = useState(0);
   const [conversationId, setConversationIdState] = useState<
     string | undefined
   >();
   const [isRunning, setIsRunning] = useState(false);
   const [error, setError] = useState<PromptThreadError | undefined>();
 
-  const turnsRef = useRef<PromptTurn[]>([]);
+  const pathRef = useRef<PromptTurn[]>([]);
+  const tailVersionsRef = useRef<PromptTurn[]>([]);
+  const tailIndexRef = useRef(0);
   const conversationIdRef = useRef<string | undefined>(undefined);
   const runRef = useRef<AbortController | null>(null);
   const idRef = useRef(0);
@@ -121,15 +157,42 @@ export function usePromptThread(
     return `turn-${idRef.current}`;
   }, []);
 
-  const commit = useCallback((next: PromptTurn[]) => {
-    turnsRef.current = next;
-    setTurnsState(next);
-  }, []);
+  const commit = useCallback(
+    (nextPath: PromptTurn[], versions: PromptTurn[], index: number) => {
+      pathRef.current = nextPath;
+      tailVersionsRef.current = versions;
+      tailIndexRef.current = index;
+      setPathState(nextPath);
+      setTailVersionsState(versions);
+      setTailIndexState(index);
+    },
+    [],
+  );
 
-  const patchTurn = useCallback(
+  /** The conversation as shown: the path followed by the selected answer. */
+  const currentTurns = useCallback(
+    () =>
+      tailVersionsRef.current.length > 0
+        ? [
+            ...pathRef.current,
+            tailVersionsRef.current[tailIndexRef.current] as PromptTurn,
+          ]
+        : pathRef.current,
+    [],
+  );
+
+  /**
+   * Patches the version being streamed. Only the tail ever changes mid-run, so
+   * the patch is confined to the version list.
+   */
+  const patchTail = useCallback(
     (id: string, patch: (turn: PromptTurn) => PromptTurn) => {
       commit(
-        turnsRef.current.map(turn => (turn.id === id ? patch(turn) : turn)),
+        pathRef.current,
+        tailVersionsRef.current.map(turn =>
+          turn.id === id ? patch(turn) : turn,
+        ),
+        tailIndexRef.current,
       );
     },
     [commit],
@@ -146,25 +209,27 @@ export function usePromptThread(
   );
 
   const runStream = useCallback(
-    async (history: PromptTurn[]) => {
+    async (nextPath: PromptTurn[], mode: RunMode) => {
       const controller = new AbortController();
       runRef.current = controller;
       setIsRunning(true);
       setError(undefined);
 
       const assistantId = nextId();
-      commit([
-        ...history,
-        {
-          id: assistantId,
-          role: 'assistant',
-          text: '',
-          invocations: [],
-          status: { type: 'running' },
-        },
-      ]);
+      const assistantTurn: PromptTurn = {
+        id: assistantId,
+        role: 'assistant',
+        text: '',
+        invocations: [],
+        status: { type: 'running' },
+      };
+      const versions =
+        mode === 'alternative'
+          ? [...tailVersionsRef.current, assistantTurn]
+          : [assistantTurn];
+      commit(nextPath, versions, versions.length - 1);
 
-      const payload: ChatMessage[] = history
+      const payload: ChatMessage[] = nextPath
         .filter(turn => turn.text.length > 0)
         .map(turn => ({ role: turn.role, content: turn.text }));
 
@@ -178,7 +243,7 @@ export function usePromptThread(
         )) {
           switch (event.type) {
             case 'text':
-              patchTurn(assistantId, turn => ({
+              patchTail(assistantId, turn => ({
                 ...turn,
                 text: turn.text + event.text,
               }));
@@ -190,7 +255,7 @@ export function usePromptThread(
                 arguments: event.arguments,
                 serverId: event.serverId,
               };
-              patchTurn(assistantId, turn => ({
+              patchTail(assistantId, turn => ({
                 ...turn,
                 invocations: [...(turn.invocations ?? []), invocation],
               }));
@@ -199,7 +264,7 @@ export function usePromptThread(
             case 'tool-result':
               // Filled in place, keyed by id, so a resolving invocation never
               // appears twice.
-              patchTurn(assistantId, turn => ({
+              patchTail(assistantId, turn => ({
                 ...turn,
                 invocations: (turn.invocations ?? []).map(invocation =>
                   invocation.id === event.id
@@ -218,7 +283,7 @@ export function usePromptThread(
                 conversationIdRef.current = event.conversationId;
                 setConversationIdState(event.conversationId);
               }
-              patchTurn(assistantId, turn => ({
+              patchTail(assistantId, turn => ({
                 ...turn,
                 status: { type: 'complete' },
               }));
@@ -227,7 +292,7 @@ export function usePromptThread(
               // The failure is state, not assistant content: whatever text had
               // arrived stays and the turn is marked interrupted.
               terminated = true;
-              patchTurn(assistantId, turn => ({
+              patchTail(assistantId, turn => ({
                 ...turn,
                 status: { type: 'error', message: event.message },
               }));
@@ -240,7 +305,7 @@ export function usePromptThread(
 
         if (!terminated && !controller.signal.aborted) {
           const message = 'The chat run ended before it completed.';
-          patchTurn(assistantId, turn => ({
+          patchTail(assistantId, turn => ({
             ...turn,
             status: { type: 'error', message },
           }));
@@ -254,7 +319,7 @@ export function usePromptThread(
         const detail =
           caught instanceof Error ? caught.message : String(caught);
         const message = `The chat service is unavailable: ${detail}`;
-        patchTurn(assistantId, turn => ({
+        patchTail(assistantId, turn => ({
           ...turn,
           status: { type: 'error', message },
         }));
@@ -266,12 +331,52 @@ export function usePromptThread(
         }
       }
     },
-    [mcpChatApi, commit, patchTurn, nextId],
+    [mcpChatApi, commit, patchTail, nextId],
   );
 
+  /**
+   * Applies a message list the runtime rewrote.
+   *
+   * The runtime hands back `ThreadMessage`s, so only their ids are meaningful
+   * here — the content is ours already. Two rewrites reach this: a branch
+   * switch, where the path is unchanged and the trailing id names the version to
+   * show, and a removal, where the path itself shrank. An id we no longer hold
+   * is dropped rather than resurrected, which is what keeps the runtime's
+   * post-cancel resync from putting an abandoned turn back.
+   */
   const setMessages = useCallback(
-    (next: readonly PromptTurn[]) => {
-      commit([...next]);
+    (next: readonly ThreadMessage[]) => {
+      const known = new Map<string, PromptTurn>();
+      for (const turn of pathRef.current) {
+        known.set(turn.id, turn);
+      }
+      for (const version of tailVersionsRef.current) {
+        known.set(version.id, version);
+      }
+
+      const resolved = next
+        .map(message => known.get(message.id))
+        .filter((turn): turn is PromptTurn => turn !== undefined);
+
+      const last = resolved[resolved.length - 1];
+      const switchedTo = last
+        ? tailVersionsRef.current.findIndex(version => version.id === last.id)
+        : -1;
+
+      if (switchedTo !== -1 && resolved.length === pathRef.current.length + 1) {
+        // A branch switch: same path, another version selected.
+        commit(pathRef.current, tailVersionsRef.current, switchedTo);
+        return;
+      }
+
+      // A rewritten path. The version the runtime kept, if any, stays as the
+      // only one: alternatives belong to a tail that no longer exists.
+      const keptVersion = switchedTo === -1 ? undefined : last;
+      commit(
+        keptVersion ? resolved.slice(0, -1) : resolved,
+        keptVersion ? [keptVersion] : [],
+        0,
+      );
     },
     [commit],
   );
@@ -288,12 +393,15 @@ export function usePromptThread(
       if (runRef.current) {
         return;
       }
-      await runStream([
-        ...turnsRef.current,
-        { id: nextId(), role: 'user', text },
-      ]);
+      // The tail advances, taking the selected version with it: the earlier
+      // alternatives are abandoned here, which is what keeps the model bounded
+      // and the stored conversation linear.
+      await runStream(
+        [...currentTurns(), { id: nextId(), role: 'user', text }],
+        'restart',
+      );
     },
-    [runStream, nextId],
+    [runStream, nextId, currentTurns],
   );
 
   const onEdit = useCallback(
@@ -302,14 +410,19 @@ export function usePromptThread(
       if (!text || runRef.current) {
         return;
       }
+      const turns = currentTurns();
       const index = message.sourceId
-        ? turnsRef.current.findIndex(turn => turn.id === message.sourceId)
+        ? turns.findIndex(turn => turn.id === message.sourceId)
         : -1;
-      const history =
-        index === -1 ? [...turnsRef.current] : turnsRef.current.slice(0, index);
-      await runStream([...history, { id: nextId(), role: 'user', text }]);
+      // Editing truncates: the prompt changed, so everything that followed it
+      // answered a different question. The page warns before this applies.
+      const history = index === -1 ? [...turns] : turns.slice(0, index);
+      await runStream(
+        [...history, { id: nextId(), role: 'user', text }],
+        'restart',
+      );
     },
-    [runStream, nextId],
+    [runStream, nextId, currentTurns],
   );
 
   const onReload = useCallback(
@@ -317,18 +430,33 @@ export function usePromptThread(
       if (runRef.current) {
         return;
       }
+      const turns = currentTurns();
       const index =
-        parentId === null
-          ? -1
-          : turnsRef.current.findIndex(turn => turn.id === parentId);
-      const history = index === -1 ? [] : turnsRef.current.slice(0, index + 1);
+        parentId === null ? -1 : turns.findIndex(turn => turn.id === parentId);
+      const history = index === -1 ? [] : turns.slice(0, index + 1);
       // Nothing to regenerate without a prompt to regenerate from.
       if (!history.some(turn => turn.role === 'user')) {
         return;
       }
-      await runStream(history);
+      const lastUserIndex = turns.reduce(
+        (found, turn, at) => (turn.role === 'user' ? at : found),
+        -1,
+      );
+      if (index !== lastUserIndex) {
+        // Regenerating an older turn is a truncation, like an edit: the branch
+        // point is only ever the last user turn.
+        await runStream(history, 'restart');
+        return;
+      }
+      // The answer already on screen is kept as a version. A conversation just
+      // loaded from storage has no version list yet, so its stored answer
+      // becomes the first one.
+      if (tailVersionsRef.current.length === 0) {
+        commit(history, turns.slice(index + 1), 0);
+      }
+      await runStream(history, 'alternative');
     },
-    [runStream],
+    [runStream, currentTurns, commit],
   );
 
   const onCancel = useCallback(async () => {
@@ -340,30 +468,25 @@ export function usePromptThread(
     runRef.current = null;
     setIsRunning(false);
 
-    const cancelledIds = new Set(
-      turnsRef.current
-        .filter(turn => turn.status?.type === 'running')
-        .map(turn => turn.id),
+    // Drop the interrupted version rather than leaving it marked running, and
+    // leave the versions that preceded it alone: cancelling a regeneration
+    // falls back to the answer that was already there.
+    const remaining = tailVersionsRef.current.filter(
+      version => version.status?.type !== 'running',
     );
-
-    // Mark the interrupted turn cancelled first — no turn is ever left marked
-    // running — then hand the trimmed list back through setMessages, which is
-    // what makes the removal survive the runtime's next snapshot.
-    const marked = turnsRef.current.map(turn =>
-      cancelledIds.has(turn.id)
-        ? { ...turn, status: { type: 'cancelled' as const } }
-        : turn,
+    commit(
+      pathRef.current,
+      remaining,
+      Math.max(0, Math.min(tailIndexRef.current, remaining.length - 1)),
     );
-    commit(marked);
-    setMessages(marked.filter(turn => !cancelledIds.has(turn.id)));
-  }, [commit, setMessages]);
+  }, [commit]);
 
   const retry = useCallback(async () => {
     if (runRef.current) {
       return;
     }
-    const current = turnsRef.current;
-    const lastUser = current.reduce(
+    const turns = currentTurns();
+    const lastUser = turns.reduce(
       (found, turn, index) => (turn.role === 'user' ? index : found),
       -1,
     );
@@ -372,8 +495,8 @@ export function usePromptThread(
     }
     // Re-running from the last user turn drops the failed assistant turn, so
     // the error is replaced by the new turn rather than sitting beside it.
-    await runStream(current.slice(0, lastUser + 1));
-  }, [runStream]);
+    await runStream(turns.slice(0, lastUser + 1), 'restart');
+  }, [runStream, currentTurns]);
 
   const setConversation = useCallback(
     (nextTurns: PromptTurn[], nextConversationId?: string) => {
@@ -383,7 +506,9 @@ export function usePromptThread(
       setError(undefined);
       conversationIdRef.current = nextConversationId;
       setConversationIdState(nextConversationId);
-      commit(nextTurns);
+      // A stored conversation is linear by construction: no versions, so the
+      // branch picker has nothing to show.
+      commit(nextTurns, [], 0);
     },
     [commit],
   );
@@ -392,13 +517,44 @@ export function usePromptThread(
     setConversation([], undefined);
   }, [setConversation]);
 
+  const turns = useMemo(
+    () =>
+      tailVersions.length > 0
+        ? [...path, tailVersions[tailIndex] as PromptTurn]
+        : path,
+    [path, tailVersions, tailIndex],
+  );
+
+  /**
+   * The conversation as the runtime reads it.
+   *
+   * Every version shares the last user turn as its parent, which is what makes
+   * them siblings the branch picker can walk, and `headId` names the one on
+   * screen. A repository is passed rather than a flat message list because a
+   * flat list cannot express two answers to the same prompt.
+   */
+  const messageRepository = useMemo(() => {
+    const items: { message: ThreadMessageLike; parentId: string | null }[] = [];
+    let parentId: string | null = null;
+    for (const turn of path) {
+      items.push({ message: convertMessage(turn), parentId });
+      parentId = turn.id;
+    }
+    for (const version of tailVersions) {
+      items.push({ message: convertMessage(version), parentId });
+    }
+    const head = tailVersions[tailIndex] ?? path[path.length - 1];
+    return ExportedMessageRepository.fromBranchableArray(items, {
+      headId: head?.id ?? null,
+    });
+  }, [path, tailVersions, tailIndex]);
+
   // Exactly the handler set design.md fixes: no onAddToolResult, no
   // adapters.threadList, and unstable_enableToolInvocations left at its false
   // default because every MCP tool runs server-side.
-  const adapter = useMemo<ExternalStoreAdapter<PromptTurn>>(
+  const adapter = useMemo<ExternalStoreAdapter<ThreadMessage>>(
     () => ({
-      messages: turns,
-      convertMessage,
+      messageRepository,
       isRunning,
       isLoading,
       onNew,
@@ -408,7 +564,7 @@ export function usePromptThread(
       onCancel,
     }),
     [
-      turns,
+      messageRepository,
       isRunning,
       isLoading,
       onNew,
@@ -422,6 +578,8 @@ export function usePromptThread(
   return {
     adapter,
     turns,
+    tailVersions,
+    tailIndex,
     conversationId,
     isRunning,
     error,

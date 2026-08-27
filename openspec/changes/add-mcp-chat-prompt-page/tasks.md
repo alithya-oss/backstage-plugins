@@ -126,7 +126,9 @@ transport error handling_ (state layer).
       `setMessages`, `onEdit`, `onReload`, `onCancel` — leaving
       `unstable_enableToolInvocations` at its `false` default and omitting
       `onAddToolResult` and `adapters.threadList`. Verify `yarn tsc:full` passes
-      with no `unstable_` or deprecated member referenced.
+      with no `unstable_` or deprecated member referenced. **Superseded by 7.6**:
+      `messages` and `convertMessage` gave way to `messageRepository` once
+      alternative answers landed.
 
 ## 5. Thread surface
 
@@ -183,19 +185,37 @@ Covers _MCP tool call rendering_.
 
 ## 7. Revising and regenerating
 
-Covers _Revising and regenerating turns_.
+Covers _Revising and regenerating turns_. Alternative answers are confined to the
+latest user turn, so nothing about persistence changes — see design.md,
+_Alternative answers_.
 
-- [ ] 7.1 Implement `onEdit` — truncate the list to the edited user turn and
-      re-stream from its new text — and surface it through the message action bar
-      and edit composer primitives. Verify with a test — scenario _A user turn is
-      edited and re-run_.
-- [ ] 7.2 Implement `onReload` for the latest user turn and surface a regenerate
-      action. Verify with a test asserting a second answer is produced for the
-      same prompt — scenario _An answer is regenerated_.
-- [ ] 7.3 Render `BranchPickerPrimitive` so a turn with several answers shows its
-      position and allows moving between them, keeping `setMessages` wired so a
-      switch survives the next snapshot. Verify with a test — scenario _Moving
-      between alternative answers_.
+- [x] 7.1 Surface `onEdit` through the message action bar and the edit composer,
+      **and state what the truncation will discard before it applies**. Verify
+      with tests — scenarios _A user turn is edited and re-run_ and _The user is
+      warned before an edit discards turns_.
+- [x] 7.2 Make `onReload` non-destructive for the latest user turn: keep the
+      previous answer as a tail version, add the new one, and move the selection
+      to it. Verify with a test asserting **both** versions exist after
+      regenerating — scenario _An answer is regenerated_.
+- [x] 7.3 Render `BranchPickerPrimitive` on the children of the last user turn
+      only, with the position spelled out, keeping `setMessages` wired so a switch
+      survives the next snapshot. Verify with a test that navigating changes the
+      shown answer and leaves the conversation above it untouched — scenario
+      _Moving between alternative answers_.
+- [x] 7.4 Abandon the tail versions when a new prompt is sent: the tail advances
+      carrying the selected answer. Verify with a test — scenario _The
+      conversation continues past its alternatives_.
+- [x] 7.5 Persist the **selected** version without a schema change: the run that
+      continues the conversation posts the shown answer. Verify with a test that a
+      reloaded conversation comes back linear, with one version and no picker
+      inconsistency — scenario _A reloaded conversation is linear_.
+- [x] 7.6 Move the adapter from `messages` to `messageRepository`, and update the
+      adapter key-set test of `usePromptThread.test.tsx` **deliberately** rather
+      than working around it.
+- [x] 7.7 Record the scope in the OpenSpec artefacts: the _Revising and
+      regenerating turns_ requirement states "latest answer only", and design.md
+      records why — linear persistence kept, no migration imposed on adopters, the
+      full tree left to a later proposal.
 
 ## 8. Reduced side panel
 

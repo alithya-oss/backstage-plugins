@@ -187,8 +187,18 @@ assistant content, and SHALL NOT leave the page stuck in a running state.
 
 The page SHALL let the user edit an earlier user turn and re-run from it, and
 regenerate the answer to the latest user turn. Both SHALL start a new run from
-the edited or repeated prompt. Where a turn has more than one answer, the page
-SHALL let the user move between them and SHALL indicate which one is shown.
+the edited or repeated prompt.
+
+Alternative answers SHALL be confined to the **latest** user turn: regenerating
+its answer SHALL keep the previous answer available, and where that turn has more
+than one answer the page SHALL let the user move between them and SHALL indicate
+which one is shown. Every other revision — editing any user turn, regenerating an
+older turn's answer — SHALL discard the turns that follow it, and the page SHALL
+tell the user what will be discarded before it applies.
+
+Sending a new prompt SHALL continue the conversation from the answer that was
+shown and SHALL abandon the other answers of that turn, so a conversation is
+linear everywhere except at its own end.
 
 #### Scenario: A user turn is edited and re-run
 
@@ -196,16 +206,37 @@ SHALL let the user move between them and SHALL indicate which one is shown.
 - **THEN** a run starts from the edited text and its answer becomes the shown
   answer for that turn
 
+#### Scenario: The user is warned before an edit discards turns
+
+- **WHEN** the user opens the edit composer of a user turn that is followed by
+  other turns
+- **THEN** the page states how many turns saving would discard, and no turn is
+  discarded until the edit is saved
+
 #### Scenario: An answer is regenerated
 
 - **WHEN** the user regenerates the answer to the latest user turn
-- **THEN** a run starts from that same prompt and produces another answer for it
+- **THEN** a run starts from that same prompt and produces another answer for it,
+  and the previous answer remains available
 
 #### Scenario: Moving between alternative answers
 
-- **WHEN** a user turn has more than one answer
+- **WHEN** the latest user turn has more than one answer
 - **THEN** the page indicates the position among them and lets the user move to
-  another, and the conversation below reflects the selected one
+  another, and the conversation above it is unchanged
+
+#### Scenario: The conversation continues past its alternatives
+
+- **WHEN** the user sends a new prompt while the latest user turn has more than
+  one answer
+- **THEN** the conversation continues from the answer that was shown and the
+  other answers are abandoned
+
+#### Scenario: A reloaded conversation is linear
+
+- **WHEN** the user selects a stored conversation
+- **THEN** each of its turns has exactly one answer and no position among
+  alternatives is shown
 
 ### Requirement: Selecting an existing conversation
 
