@@ -63,6 +63,16 @@ migration path if the slot stabilises.
 
 ### Deferred
 
+- **Revising a turn and regenerating an answer. Moved out of this change**, to
+  `add-mcp-chat-conversation-branching`. The requirement was written here and its
+  task group 7 was suspended pending an arbitration between a destructive
+  implementation and a tree of turns. The tree was chosen, which changes the
+  behaviour outright — editing an earlier turn forks instead of truncating — and
+  makes the stored schema part of the work, which this change promised not to
+  touch. The requirement is therefore removed from this change's delta spec and
+  reappears there, reshaped. The adapter's `onEdit` and `onReload` handlers
+  delivered by task group 4 stay in the code, unexposed, and are rewritten by that
+  change.
 - **Native incremental output for every provider module.** The streaming endpoint
   and its contract are delivered now, and every provider is reachable through it,
   but a provider that has not yet implemented incremental output is served by the
@@ -83,8 +93,8 @@ migration path if the slot stabilises.
 - `mcp-chat/prompt-page`: an Assistant UI-based conversation page for the
   `mcp-chat` plugin — prompt submission, incremental reply rendering, run
   lifecycle and cancellation, MCP tool-call rendering, provider error handling,
-  message editing and regeneration, and a reduced side panel for MCP server
-  toggles, provider status and conversation selection.
+  and a reduced side panel for MCP server toggles, provider status and
+  conversation selection.
 
 ### Modified Capabilities
 

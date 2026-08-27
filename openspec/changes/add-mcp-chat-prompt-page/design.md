@@ -179,6 +179,14 @@ from the one sketched in the parent issue, for reasons given below.
 | `adapters.threadList`                          | **no**                | see "Conversation list" below                                                                                     |
 | `adapters.attachments` / `speech` / `feedback` | no                    | no backend support                                                                                                |
 
+**`onEdit` and `onReload` are wired but not exposed in this change.** The
+requirement that would have surfaced them moved to
+`add-mcp-chat-conversation-branching` (see `proposal.md` — Deferred), which
+replaces the truncating semantics described in the two rows above with a fork and
+a sibling answer, and replaces `messages` / `convertMessage` with
+`messageRepository`. The rows are left as they were implemented rather than
+rewritten here, so the diff of that change shows what it alters.
+
 **`onAddToolResult` is deliberately omitted**, against the parent issue's
 assumption. That handler exists so a _client-side_ tool can hand its result back
 to the runtime; the type doc states results flow through it "from `execute()`

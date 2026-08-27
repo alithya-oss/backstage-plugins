@@ -2,8 +2,14 @@
 
 Defines the conversation page the `mcp-chat` plugin offers alongside its
 existing chat page: how a user submits a prompt, how the run reports progress
-and completes, how MCP tool calls and provider failures surface, how a user
-revises or regenerates a turn, and what the page's side panel controls.
+and completes, how MCP tool calls and provider failures surface, and what the
+page's side panel controls.
+
+Revising a turn and regenerating an answer are **not** part of this capability.
+They were, and moved to `add-mcp-chat-conversation-branching`, whose
+`mcp-chat/conversation-branching` capability defines them as non-destructive
+operations on a tree of turns. Nothing here describes them, because the shape
+they take depends on that change's stored schema.
 
 ## ADDED Requirements
 
@@ -182,30 +188,6 @@ assistant content, and SHALL NOT leave the page stuck in a running state.
 - **WHEN** the user retries a run that previously failed and the provider answers
 - **THEN** the error is replaced by the assistant turn and the conversation
   continues from that turn
-
-### Requirement: Revising and regenerating turns
-
-The page SHALL let the user edit an earlier user turn and re-run from it, and
-regenerate the answer to the latest user turn. Both SHALL start a new run from
-the edited or repeated prompt. Where a turn has more than one answer, the page
-SHALL let the user move between them and SHALL indicate which one is shown.
-
-#### Scenario: A user turn is edited and re-run
-
-- **WHEN** the user edits an earlier user turn and confirms
-- **THEN** a run starts from the edited text and its answer becomes the shown
-  answer for that turn
-
-#### Scenario: An answer is regenerated
-
-- **WHEN** the user regenerates the answer to the latest user turn
-- **THEN** a run starts from that same prompt and produces another answer for it
-
-#### Scenario: Moving between alternative answers
-
-- **WHEN** a user turn has more than one answer
-- **THEN** the page indicates the position among them and lets the user move to
-  another, and the conversation below reflects the selected one
 
 ### Requirement: Selecting an existing conversation
 

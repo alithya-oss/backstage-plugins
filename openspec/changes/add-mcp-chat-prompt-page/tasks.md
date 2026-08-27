@@ -181,21 +181,27 @@ Covers _MCP tool call rendering_.
 - [x] 6.5 Verify a reply with no tool results renders no tool-call section, with a
       test — scenario _No tool is invoked_.
 
-## 7. Revising and regenerating
+## 7. Revising and regenerating — moved out of this change
 
-Covers _Revising and regenerating turns_.
+**This group is not work in this change. It moved to
+`add-mcp-chat-conversation-branching`**, along with the
+_Revising and regenerating turns_ requirement it covered, which is no longer in
+`specs/mcp-chat/prompt-page/spec.md`.
 
-- [ ] 7.1 Implement `onEdit` — truncate the list to the edited user turn and
-      re-stream from its new text — and surface it through the message action bar
-      and edit composer primitives. Verify with a test — scenario _A user turn is
-      edited and re-run_.
-- [ ] 7.2 Implement `onReload` for the latest user turn and surface a regenerate
-      action. Verify with a test asserting a second answer is produced for the
-      same prompt — scenario _An answer is regenerated_.
-- [ ] 7.3 Render `BranchPickerPrimitive` so a turn with several answers shows its
-      position and allows moving between them, keeping `setMessages` wired so a
-      switch survives the next snapshot. Verify with a test — scenario _Moving
-      between alternative answers_.
+The three tasks that stood here were written for a destructive implementation —
+`onEdit` truncating to the edited turn, `onReload` discarding the answer it
+replaces. The arbitration recorded on the parent issue chose a tree of turns
+instead, so editing an earlier turn forks and regenerating adds an alternative.
+Implementing them as written and reworking them afterwards would be thrown work,
+and the branch picker could not survive a reload without the stored schema
+change that this change ruled out of scope.
+
+What is left behind on purpose: the adapter's `onEdit` and `onReload` handlers
+from task group 4 are in the code and tested, with no affordance exposing them.
+That is inert, not broken — the page reaches none of it — and the new change
+rewrites both, along with the adapter's member set.
+
+Nothing to check here. See groups 3, 4 and 5 of that change's `tasks.md`.
 
 ## 8. Reduced side panel
 
