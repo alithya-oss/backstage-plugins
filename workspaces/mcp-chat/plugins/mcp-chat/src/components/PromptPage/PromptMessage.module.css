@@ -4,12 +4,68 @@
   padding: var(--bui-space-2) 0;
 }
 
-.userBubble {
+.userColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--bui-space-1);
   max-width: 80%;
+  min-width: 0;
+}
+
+.userBubble {
+  max-width: 100%;
   padding: var(--bui-space-2) var(--bui-space-4);
   border: 1px solid var(--bui-border-1);
   border-radius: var(--bui-radius-3);
   background-color: var(--bui-bg-neutral-2);
+}
+
+.userActions,
+.assistantActions {
+  display: flex;
+  align-items: center;
+  gap: var(--bui-space-1);
+}
+
+.assistantFooter {
+  display: flex;
+  align-items: center;
+  gap: var(--bui-space-2);
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--bui-space-6);
+  height: var(--bui-space-6);
+  padding: 0;
+  border: none;
+  border-radius: var(--bui-radius-2);
+  background-color: transparent;
+  color: var(--bui-fg-secondary);
+  cursor: pointer;
+}
+
+.actionButton:hover:not(:disabled) {
+  background-color: var(--bui-bg-neutral-2);
+  color: var(--bui-fg-primary);
+}
+
+.actionButton:disabled {
+  color: var(--bui-fg-disabled);
+  cursor: not-allowed;
+}
+
+.actionButton:focus-visible {
+  outline: 2px solid var(--bui-ring);
+  outline-offset: 2px;
+}
+
+.actionIcon {
+  width: var(--bui-space-4);
+  height: var(--bui-space-4);
 }
 
 .assistantRoot {
