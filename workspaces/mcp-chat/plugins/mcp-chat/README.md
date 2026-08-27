@@ -16,6 +16,8 @@ The MCP Chat plugin brings conversational AI capabilities directly into your Bac
 - 💬 **Rich Chat Interface**: Beautiful, responsive chat UI with markdown support
 - ⚡ **Quick Setup**: Configurable QuickStart prompts for common use cases
 - 📜 **Conversation History**: View, search, star, and manage your chat sessions
+- ⏩ **Streamed Replies**: An Assistant UI prompt page that renders a reply as it arrives, shows each MCP invocation before its result lands, and lets a run be cancelled mid-flight
+- 🔁 **Non-Destructive Regeneration**: Regenerate the latest answer without losing the previous one, and compare the two side by side
 
 ## Supported AI Providers
 
@@ -107,6 +109,8 @@ This plugin consists of two packages:
 
 ### Frontend Installation
 
+> **Deployment order:** deploy `@alithya-oss/backstage-plugin-mcp-chat-backend` **before** you mount the Assistant UI prompt page. The prompt page streams over `POST /api/mcp-chat/chat/stream`, which older backends do not serve — against one, the page reports the chat service as unavailable on every prompt. The classic `/mcp-chat` page is unaffected and works against any supported backend version. Rolling the frontend back is safe on its own; rolling the backend back below the version that added the streaming route requires unmounting the prompt page too.
+
 1. **Install the frontend plugin**:
 
    ```bash
@@ -126,6 +130,8 @@ This plugin consists of two packages:
    <Route path="/mcp-chat" element={<McpChatPage />} />;
    ```
 
+   The Assistant UI prompt page is only available through the new frontend system entry point below.
+
    **For the new frontend system (alpha):**
 
    ```tsx
@@ -141,7 +147,22 @@ This plugin consists of two packages:
    });
    ```
 
-   The alpha entry point uses `PageBlueprint` and `ApiBlueprint` from `@backstage/frontend-plugin-api`, automatically registering the `/mcp-chat` route and MCP Chat API.
+   The alpha entry point uses `PageBlueprint` and `ApiBlueprint` from `@backstage/frontend-plugin-api`, automatically registering the MCP Chat API and **two** pages:
+
+   | Extension              | Route              | Description                                                                                             |
+   | ---------------------- | ------------------ | ------------------------------------------------------------------------------------------------------- |
+   | `page:mcp-chat`        | `/mcp-chat`        | The original chat page.                                                                                 |
+   | `page:mcp-chat/prompt` | `/mcp-chat-prompt` | The Assistant UI prompt page — streamed replies, MCP tool call rendering, non-destructive regeneration. |
+
+   The two are siblings: neither shadows the other, and they share the same stored conversations. To keep only the original page, disable the prompt page in `app-config.yaml`:
+
+   ```yaml
+   app:
+     extensions:
+       - page:mcp-chat/prompt: false
+   ```
+
+   Do that if your backend predates the streaming route — see the deployment order note above.
 
 3. **Add navigation**:
 
@@ -368,12 +389,15 @@ backend:
 
 ### Backend Endpoints
 
-| Endpoint                        | Method | Description                           |
-| ------------------------------- | ------ | ------------------------------------- |
-| `/api/mcp-chat/chat`            | POST   | Send chat messages                    |
-| `/api/mcp-chat/provider/status` | GET    | Get status of connected AI provider   |
-| `/api/mcp-chat/mcp/status`      | GET    | Get status of connected MCP servers   |
-| `/api/mcp-chat/tools`           | GET    | List available MCP tools from servers |
+| Endpoint                        | Method | Description                                        |
+| ------------------------------- | ------ | -------------------------------------------------- |
+| `/api/mcp-chat/chat`            | POST   | Send chat messages                                 |
+| `/api/mcp-chat/chat/stream`     | POST   | Send chat messages, streamed as server-sent events |
+| `/api/mcp-chat/provider/status` | GET    | Get status of connected AI provider                |
+| `/api/mcp-chat/mcp/status`      | GET    | Get status of connected MCP servers                |
+| `/api/mcp-chat/tools`           | GET    | List available MCP tools from servers              |
+
+`/chat/stream` takes the same request body as `/chat` and applies the same validation, identity and persistence rules. It emits a `text` event per reply fragment, a `tool-call` event before each MCP invocation and a `tool-result` event after it — correlated by invocation id — then exactly one terminal `complete` or `error` event. Every configured provider is streamable: one with no native streaming is served by the `LLMProvider` fallback, which delivers its whole reply as a single fragment. `/chat` is unchanged and remains available.
 
 ## Contributing
 

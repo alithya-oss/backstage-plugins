@@ -248,21 +248,28 @@ conversation_.
 
 ## 9. Workspace verification and release artifacts
 
-- [ ] 9.1 Re-run `yarn dedupe`, then `CI=true yarn test` and `yarn tsc:full`, in
+- [x] 9.1 Re-run `yarn dedupe`, then `CI=true yarn test` and `yarn tsc:full`, in
       that order, and confirm all three pass. Order matters: dedupe rewrites
       resolved versions, so earlier test and type results do not carry over.
-- [ ] 9.2 Run `yarn lint --fix` and `yarn prettier --write` over the changed
+- [x] 9.2 Run `yarn lint --fix` and `yarn prettier --write` over the changed
       paths, and confirm every new `.ts`/`.tsx` file carries the Apache 2.0
       header with the current year, without touching the year on existing files.
-- [ ] 9.3 Run `yarn build:api-reports` and commit the updated reports for every
-      package whose public API changed — the frontend plugin, `mcp-chat-common`
-      and `mcp-chat-node` at minimum.
-- [ ] 9.4 Add a changeset for `@alithya-oss/backstage-plugin-mcp-chat` describing
+- [x] 9.3 Regenerate the API reports the way CI does — `rm -rf dist-types`, then
+      `yarn tsc`, then `yarn build:api-reports:only` — and commit the updated
+      reports for every package whose public API changed: the frontend plugin,
+      `mcp-chat-common` and `mcp-chat-node`. Verify with
+      `yarn build:api-reports:only --ci`, which is the step CI runs. Do **not**
+      use `yarn build:api-reports`: it implies `--tsc` and recompiles in-process,
+      which gives the type printer a different declaration order than CI's
+      separate `yarn tsc` step. The output is semantically identical but orders
+      union members differently, and the CI check is a byte comparison — that is
+      what failed PR #235 on its first pass.
+- [x] 9.4 Add a changeset for `@alithya-oss/backstage-plugin-mcp-chat` describing
       the new page for adopters and calling out the narrowed React peer range as a
       breaking change with its migration note. Confirm the backend changesets from
       2.7 are present.
-- [ ] 9.5 Confirm the diff leaves `POST /chat`'s behaviour, `sendChatMessage`, and
+- [x] 9.5 Confirm the diff leaves `POST /chat`'s behaviour, `sendChatMessage`, and
       `src/components/ChatContainer/**`, `src/components/RightPane/**`,
       `src/components/ChatPage/**` unchanged. Verify with `git diff --stat`.
-- [ ] 9.6 Confirm deployment ordering is documented for adopters: the backend
+- [x] 9.6 Confirm deployment ordering is documented for adopters: the backend
       packages must ship before the new page is mounted.
