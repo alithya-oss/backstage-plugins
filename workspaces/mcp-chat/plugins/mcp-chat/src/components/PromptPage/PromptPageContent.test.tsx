@@ -238,6 +238,77 @@ describe('the prompt page side panel wiring', () => {
     ]);
   });
 
+  it('shows a conversation a completed run stored, and leaves the list alone when a run fails', async () => {
+    const stored: ConversationRecord = {
+      id: 'conv-new',
+      userId: 'user:default/tester',
+      title: 'Scale the deployment',
+      messages: [
+        { role: 'user', content: 'How do I scale it?' },
+        { role: 'assistant', content: 'Done.' },
+      ],
+      isStarred: false,
+      createdAt: '2026-01-03T00:00:00Z',
+      updatedAt: '2026-01-03T00:00:00Z',
+    };
+    // The list the backend serves changes underneath the page: the first fetch
+    // predates the run, every later one includes what the run stored.
+    const getConversations = jest
+      .fn()
+      .mockResolvedValueOnce({
+        conversations: storedConversations,
+        count: storedConversations.length,
+      })
+      .mockResolvedValue({
+        conversations: [stored, ...storedConversations],
+        count: storedConversations.length + 1,
+      });
+    const { mcpChatApi } = renderPage({ getConversations });
+
+    expect(
+      await screen.findByRole('button', { name: 'Deploy the service' }),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('button', { name: 'Scale the deployment' }),
+    ).not.toBeInTheDocument();
+
+    await submitPrompt('How do I scale it?');
+
+    // The run reported conv-new, so the list is re-read and shows it — with the
+    // title the backend gave it — without the page being reloaded.
+    expect(
+      await screen.findByRole('button', { name: 'Scale the deployment' }),
+    ).toBeVisible();
+    expect(getConversations).toHaveBeenCalledTimes(2);
+    expect(mcpChatApi.streamChatMessage).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not re-read the list when a run fails', async () => {
+    const getConversations = jest.fn().mockResolvedValue({
+      conversations: storedConversations,
+      count: storedConversations.length,
+    });
+    async function* failingStream(): AsyncGenerator<ChatStreamEvent> {
+      yield { type: 'error', message: 'provider down' };
+    }
+    renderPage({
+      getConversations,
+      streamChatMessage: jest.fn().mockImplementation(() => failingStream()),
+    });
+
+    expect(
+      await screen.findByRole('button', { name: 'Deploy the service' }),
+    ).toBeVisible();
+
+    await submitPrompt('Answer me');
+
+    expect(
+      await screen.findByText('The chat provider could not answer.'),
+    ).toBeVisible();
+    // Nothing was stored, so nothing about the list can have changed.
+    expect(getConversations).toHaveBeenCalledTimes(1);
+  });
+
   it('narrows the list case-insensitively over titles and user turns', async () => {
     renderPage();
 

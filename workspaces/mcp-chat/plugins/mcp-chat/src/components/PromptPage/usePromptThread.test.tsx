@@ -23,6 +23,7 @@ import type { ChatStreamEvent } from '../../types';
 import {
   usePromptThread,
   toPromptTurns,
+  type UsePromptThreadOptions,
   type UsePromptThreadResult,
 } from './usePromptThread';
 
@@ -108,13 +109,16 @@ function createApi(streamChatMessage: jest.Mock) {
   };
 }
 
-function renderPromptThread(streamChatMessage: jest.Mock) {
+function renderPromptThread(
+  streamChatMessage: jest.Mock,
+  options: Partial<UsePromptThreadOptions> = {},
+) {
   const api = createApi(streamChatMessage);
   const wrapper: FC<{ children: ReactNode }> = ({ children }) => (
     <TestApiProvider apis={[[mcpChatApiRef, api]]}>{children}</TestApiProvider>
   );
   const rendered = renderHook(
-    () => usePromptThread({ enabledServerIds: ['catalog'] }),
+    () => usePromptThread({ enabledServerIds: ['catalog'], ...options }),
     { wrapper },
   );
   return { ...rendered, api };
@@ -809,6 +813,71 @@ describe('usePromptThread', () => {
       [result.current.tailVersions[1].id, userTurn.id],
     ]);
     expect(repository.headId).toBe(result.current.tailVersions[1].id);
+  });
+
+  it('reports every persisted conversation and reports nothing for a failed run', async () => {
+    const onConversationPersisted = jest.fn();
+    const created = createStream();
+    const streamChatMessage = jest.fn().mockReturnValue(created.iterable);
+    const { result } = renderPromptThread(streamChatMessage, {
+      onConversationPersisted,
+    });
+
+    let run: Promise<void> = Promise.resolve();
+    await act(async () => {
+      run = result.current.adapter.onNew(appendMessage('first question'));
+    });
+    await act(async () => {
+      created.push({ type: 'text', text: 'an answer' });
+      created.push({
+        type: 'complete',
+        conversationId: 'conv-1',
+        toolsUsed: [],
+      });
+      created.close();
+      await run;
+    });
+
+    expect(onConversationPersisted).toHaveBeenCalledTimes(1);
+    expect(onConversationPersisted).toHaveBeenLastCalledWith('conv-1');
+
+    // Continuing the conversation reports it again: the id has not changed, but
+    // what the backend stores under it has.
+    const appended = createStream();
+    streamChatMessage.mockReturnValue(appended.iterable);
+    await act(async () => {
+      run = result.current.adapter.onNew(appendMessage('a follow-up'));
+    });
+    await act(async () => {
+      appended.push({
+        type: 'complete',
+        conversationId: 'conv-1',
+        toolsUsed: [],
+      });
+      appended.close();
+      await run;
+    });
+
+    expect(onConversationPersisted).toHaveBeenCalledTimes(2);
+    expect(onConversationPersisted).toHaveBeenLastCalledWith('conv-1');
+
+    // A failed run stores nothing, so there is nothing to report.
+    const failed = createStream();
+    streamChatMessage.mockReturnValue(failed.iterable);
+    await act(async () => {
+      run = result.current.adapter.onNew(appendMessage('and another'));
+    });
+    await act(async () => {
+      failed.push({ type: 'error', message: 'provider down' });
+      failed.close();
+      await run;
+    });
+
+    expect(result.current.error).toEqual({
+      kind: 'provider',
+      message: 'provider down',
+    });
+    expect(onConversationPersisted).toHaveBeenCalledTimes(2);
   });
 
   it('exposes exactly the handler set the design fixes', () => {
