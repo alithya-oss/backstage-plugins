@@ -1,6 +1,6 @@
 {
   "name": "@alithya-oss/backstage-plugin-mcp-chat-node",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "Apache-2.0",
   "description": "Node.js library for the mcp-chat plugin",
   "main": "src/index.ts",
