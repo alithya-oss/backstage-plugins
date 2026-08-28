@@ -41,6 +41,13 @@ export const chatPageContentLoader = () =>
   import('./components/ChatPage').then(m => m.ChatPageContent);
 
 /**
+ * Lazy loader for the prompt page component (legacy entry point).
+ * Wraps content with Page/Content shell.
+ */
+export const promptPageLoader = () =>
+  import('./components/PromptPage').then(m => m.PromptPage);
+
+/**
  * Lazy loader for the prompt page content (alpha entry point).
  * Returns the inner content without Page/Content wrapper —
  * PageBlueprint provides the page shell.

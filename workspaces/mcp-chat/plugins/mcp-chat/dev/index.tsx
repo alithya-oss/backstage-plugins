@@ -15,7 +15,17 @@
  */
 
 import { createDevApp } from '@backstage/dev-utils';
-import { mcpChatPlugin, McpChatPage, MCPChatIcon } from '../src/plugin';
+import { RiChat3Line } from '@remixicon/react';
+import {
+  mcpChatPlugin,
+  McpChatPage,
+  McpChatPromptPage,
+  MCPChatIcon,
+} from '../src/plugin';
+
+// Remix icons declare a wider `fontSize` than Backstage's IconComponent, so the
+// icon is wrapped rather than passed directly.
+const PromptIcon = () => <RiChat3Line />;
 
 createDevApp()
   .registerPlugin(mcpChatPlugin)
@@ -24,5 +34,11 @@ createDevApp()
     title: 'MCP Chat',
     path: '/',
     icon: MCPChatIcon,
+  })
+  .addPage({
+    element: <McpChatPromptPage />,
+    title: 'MCP Prompt',
+    path: '/mcp-chat-prompt',
+    icon: PromptIcon,
   })
   .render();

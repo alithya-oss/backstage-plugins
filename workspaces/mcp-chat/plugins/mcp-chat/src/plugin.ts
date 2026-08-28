@@ -23,7 +23,14 @@ import {
   fetchApiRef,
 } from '@backstage/core-plugin-api';
 
-import { rootRouteRef, mcpChatApiRef, McpChat, chatPageLoader } from './wiring';
+import {
+  rootRouteRef,
+  promptRouteRef,
+  mcpChatApiRef,
+  McpChat,
+  chatPageLoader,
+  promptPageLoader,
+} from './wiring';
 import { BotIconComponent } from './components/BotIcon';
 
 /**
@@ -35,6 +42,7 @@ export const mcpChatPlugin = createPlugin({
   id: 'mcp-chat',
   routes: {
     root: rootRouteRef,
+    prompt: promptRouteRef,
   },
   apis: [
     createApiFactory({
@@ -58,6 +66,22 @@ export const McpChatPage = mcpChatPlugin.provide(
     name: 'McpChatPage',
     component: chatPageLoader,
     mountPoint: rootRouteRef,
+  }),
+);
+
+/**
+ * MCP Chat Prompt Page
+ *
+ * Assistant UI conversation page for the legacy entry point. It mounts on its own
+ * route ref, so it is a sibling of {@link McpChatPage} rather than a replacement:
+ * an app may mount either or both.
+ * @public
+ */
+export const McpChatPromptPage = mcpChatPlugin.provide(
+  createRoutableExtension({
+    name: 'McpChatPromptPage',
+    component: promptPageLoader,
+    mountPoint: promptRouteRef,
   }),
 );
 

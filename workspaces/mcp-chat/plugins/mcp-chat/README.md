@@ -124,13 +124,17 @@ This plugin consists of two packages:
 
    ```tsx
    // In packages/app/src/App.tsx
-   import { McpChatPage } from '@alithya-oss/backstage-plugin-mcp-chat';
+   import {
+     McpChatPage,
+     McpChatPromptPage,
+   } from '@alithya-oss/backstage-plugin-mcp-chat';
 
    // Add to your routes
    <Route path="/mcp-chat" element={<McpChatPage />} />;
+   <Route path="/mcp-chat-prompt" element={<McpChatPromptPage />} />;
    ```
 
-   The Assistant UI prompt page is only available through the new frontend system entry point below.
+   The two routes are siblings: mount either or both. Mount only `McpChatPage` and the app behaves exactly as it did before this plugin gained the prompt page.
 
    **For the new frontend system (alpha):**
 
@@ -307,7 +311,7 @@ export KUBECONFIG="/path/to/your/kubeconfig.yaml"
    yarn start
    ```
 
-4. **Access the plugin**: Navigate to <http://localhost:3000/mcp-chat>
+4. **Access the plugin**: the dev app serves the classic chat page at <http://localhost:3000/> and the Assistant UI prompt page at <http://localhost:3000/mcp-chat-prompt>, both reachable from the sidebar. The prompt page needs `mcp-chat-backend` running, since it streams over `POST /api/mcp-chat/chat/stream`.
 
 ### Testing
 

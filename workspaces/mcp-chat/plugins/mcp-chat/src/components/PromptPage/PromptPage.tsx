@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-export {
-  mcpChatPlugin,
-  McpChatPage,
-  McpChatPromptPage,
-  MCPChatIcon,
-} from './plugin';
-export { mcpChatApiRef } from './api';
-export type { McpChatApi } from './api/McpChatApi';
-export type {
-  ChatMessage,
-  ChatResponse,
-  ToolsResponse,
-  Tool,
-  MCPServerStatusData,
-  ProviderStatusData,
-  MCPServer,
-  MCPServerType,
-  Provider,
-  ProviderConnectionStatus,
-  ConversationRecord,
-  ConversationsResponse,
-} from './types';
+import { Content, Page } from '@backstage/core-components';
+import { PromptPageContent } from './PromptPageContent';
+
+/**
+ * Prompt page component for the legacy entry point.
+ * Wraps PromptPageContent with the Page/Content shell required by
+ * createRoutableExtension — the alpha entry point gets that shell from
+ * PageBlueprint instead.
+ */
+export const PromptPage = () => {
+  return (
+    <Page themeId="tool">
+      <Content noPadding>
+        <PromptPageContent />
+      </Content>
+    </Page>
+  );
+};
