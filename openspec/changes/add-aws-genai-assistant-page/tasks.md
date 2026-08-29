@@ -13,20 +13,20 @@ page that consumes it.
 
 Covers _Compatibility of the existing chat contract_ (types side).
 
-- [ ] 1.1 Add the run-scope request fields to `ChatRequest` in
+- [x] 1.1 Add the run-scope request fields to `ChatRequest` in
       `plugins/aws-genai-common/src/types.ts` — enabled tool names, enabled search
       index types, and the tool-outcome opt-in — all **optional**, so an existing
       caller still typechecks. Verify with `yarn tsc:full`.
-- [ ] 1.2 Add an optional invocation id to `ToolEvent` and a `ToolResultEvent`
+- [x] 1.2 Add an optional invocation id to `ToolEvent` and a `ToolResultEvent`
       (`id`, `output`, `isError`) to `EventSchema` in
       `plugins/aws-genai-common/src/events.ts`. Verify with tests that a payload
       without the id still parses and that the historical four event shapes are
       unchanged — scenario _A run does not opt in_.
-- [ ] 1.3 Add the catalogue and history payload types — an agent tool descriptor,
+- [x] 1.3 Add the catalogue and history payload types — an agent tool descriptor,
       a search index descriptor, a conversation summary and a stored turn
       (including its interrupted marker and recorded invocations). Verify with
       `yarn tsc:full`.
-- [ ] 1.4 Add a changeset for `aws-genai-common` describing the additive request
+- [x] 1.4 Add a changeset for `aws-genai-common` describing the additive request
       fields and the new event.
 
 ## 2. Route, dependency and page wiring

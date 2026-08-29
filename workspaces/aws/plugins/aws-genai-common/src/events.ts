@@ -17,6 +17,13 @@
 import { z } from 'zod';
 
 /**
+ * Events a chat run streams.
+ *
+ * This is a strict discriminated union: a client throws on a `type` it does not
+ * know. `ToolResultEvent`, and the `id` on `ToolEvent`, are therefore emitted
+ * only to a request that set `toolResults` on its `ChatRequest` — every
+ * other request sees the four shapes that predate them, unchanged.
+ *
  * @public
  */
 export const EventSchema = z.discriminatedUnion('type', [
@@ -32,6 +39,19 @@ export const EventSchema = z.discriminatedUnion('type', [
     type: z.literal('ToolEvent'),
     name: z.string(),
     input: z.string(),
+    /**
+     * Identifies the invocation, so its `ToolResultEvent` fills the invocation
+     * already shown rather than showing it twice. Absent unless the request
+     * opted into tool results.
+     */
+    id: z.string().optional(),
+  }),
+  z.object({
+    type: z.literal('ToolResultEvent'),
+    /** Identifier of the `ToolEvent` this outcome belongs to. */
+    id: z.string(),
+    output: z.string(),
+    isError: z.boolean(),
   }),
   z.object({
     type: z.literal('ErrorEvent'),
