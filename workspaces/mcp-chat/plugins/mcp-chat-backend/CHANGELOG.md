@@ -1,5 +1,50 @@
 # @alithya-oss/backstage-plugin-mcp-chat-backend
 
+## 2.1.0
+
+### Minor Changes
+
+- 1c75649: Added `POST /chat/stream`, a server-sent event endpoint that delivers the same
+  run as `POST /chat` while it happens: a `text` event per reply fragment, a
+  `tool-call` event before each MCP invocation and a `tool-result` event after it —
+  correlated by invocation id — then exactly one terminal `complete` or `error`
+  event. Payload shapes come from `ChatStreamEvent` in
+  `@alithya-oss/backstage-plugin-mcp-chat-common`.
+
+  It takes the same request body as `POST /chat`, validates it identically before
+  opening the stream, and applies the same identity and persistence rules: stored
+  for an authenticated non-guest user with a title generated for a new
+  conversation, skipped for a guest, and a storage failure never fails the run.
+  Disconnecting abandons the provider request, starts no further tool invocation,
+  and persists nothing.
+
+  Every configured provider is streamable: one that does not stream natively is
+  served by the `LLMProvider` fallback, which delivers its reply as a single
+  fragment, so clients need no second code path. `MCPClientService` gains
+  `streamQuery` alongside the unchanged `processQuery`.
+
+  `POST /chat` is unchanged — same request, same response, same behaviour.
+
+### Patch Changes
+
+- 0dbd092: Added the streaming seam that the upcoming streaming chat endpoint builds on.
+
+  `mcp-chat-common` now exports the stream event payload types (`ChatStreamEvent`
+  and its members) so backend and frontend share one wire contract.
+
+  `LLMProvider` gains a concrete `streamMessage` and a `supportsStreaming()`
+  returning `false`. Neither is abstract, so every existing provider module keeps
+  compiling and streaming works everywhere from day one: the default
+  implementation awaits `sendMessage` and emits the whole reply as a single
+  fragment. A provider adds genuine incremental output by overriding both.
+
+  Provider status now carries `supportsStreaming`, letting a client tell real
+  streaming from that single-fragment fallback.
+
+- Updated dependencies [0dbd092]
+  - @alithya-oss/backstage-plugin-mcp-chat-common@1.1.0
+  - @alithya-oss/backstage-plugin-mcp-chat-node@1.1.0
+
 ## 2.0.0
 
 ### Major Changes
