@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-import { mcpChatPlugin, McpChatPage, MCPChatIcon } from './plugin';
+import {
+  mcpChatPlugin,
+  McpChatPage,
+  McpChatPromptPage,
+  MCPChatIcon,
+} from './plugin';
 import { mcpChatApiRef } from './api';
-import { rootRouteRef } from './wiring';
+import { rootRouteRef, promptRouteRef } from './wiring';
 import { BotIconComponent } from './components/BotIcon';
 import { McpChat } from './api/McpChatApi';
 
@@ -29,6 +34,8 @@ describe('mcp-chat plugin', () => {
     it('should have correct plugin configuration', () => {
       expect(mcpChatPlugin.getId()).toBe('mcp-chat');
       expect(mcpChatPlugin.routes.root).toBe(rootRouteRef);
+      expect(mcpChatPlugin.routes.prompt).toBe(promptRouteRef);
+      expect(promptRouteRef).not.toBe(rootRouteRef);
     });
 
     it('should register API factory with correct dependencies', () => {
@@ -63,6 +70,14 @@ describe('mcp-chat plugin', () => {
     it('should be a routable extension', () => {
       expect(McpChatPage).toBeDefined();
       expect(typeof McpChatPage).toBe('function');
+    });
+  });
+
+  describe('McpChatPromptPage', () => {
+    it('should be a routable extension distinct from the chat page', () => {
+      expect(McpChatPromptPage).toBeDefined();
+      expect(typeof McpChatPromptPage).toBe('function');
+      expect(McpChatPromptPage).not.toBe(McpChatPage);
     });
   });
 

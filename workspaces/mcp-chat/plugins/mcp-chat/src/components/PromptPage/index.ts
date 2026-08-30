@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+export { PromptPage } from './PromptPage';
 export { PromptPageContent } from './PromptPageContent';
 export { SidePanel } from './SidePanel';
 export type { SidePanelProps } from './SidePanel';

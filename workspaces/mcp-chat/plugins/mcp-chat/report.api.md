@@ -103,10 +103,14 @@ export const McpChatPage: () => JSX_2.Element;
 export const mcpChatPlugin: BackstagePlugin<
   {
     root: RouteRef<undefined>;
+    prompt: RouteRef<undefined>;
   },
   {},
   {}
 >;
+
+// @public
+export const McpChatPromptPage: () => JSX_2.Element;
 
 // @public
 export interface MCPServer extends MCPServer_2 {
