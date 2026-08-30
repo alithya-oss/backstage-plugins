@@ -79,6 +79,13 @@ export interface UsePromptThreadOptions {
   enabledServerIds?: string[];
   /** Whether a stored conversation is being fetched. */
   isLoading?: boolean;
+  /**
+   * Called once a run reports the conversation the backend stored, whether it
+   * created that conversation or appended to it — both change what a stored
+   * conversation list should show. Not called for a run that failed or was
+   * cancelled, since neither persists anything.
+   */
+  onConversationPersisted?: (conversationId: string) => void;
 }
 
 /**
@@ -128,7 +135,11 @@ export interface UsePromptThreadResult {
 export function usePromptThread(
   options: UsePromptThreadOptions = {},
 ): UsePromptThreadResult {
-  const { enabledServerIds = [], isLoading = false } = options;
+  const {
+    enabledServerIds = [],
+    isLoading = false,
+    onConversationPersisted,
+  } = options;
   const mcpChatApi = useApi(mcpChatApiRef);
 
   // The conversation up to, and excluding, the answer that carries versions.
@@ -151,6 +162,11 @@ export function usePromptThread(
   const idRef = useRef(0);
   const enabledServerIdsRef = useRef<string[]>(enabledServerIds);
   enabledServerIdsRef.current = enabledServerIds;
+  // Held in a ref for the same reason as the enabled ids: a run applies its
+  // events from an async loop, so it must reach the callback as it stands now
+  // rather than the one its starting render captured.
+  const onConversationPersistedRef = useRef(onConversationPersisted);
+  onConversationPersistedRef.current = onConversationPersisted;
 
   const nextId = useCallback(() => {
     idRef.current += 1;
@@ -282,6 +298,13 @@ export function usePromptThread(
               if (event.conversationId) {
                 conversationIdRef.current = event.conversationId;
                 setConversationIdState(event.conversationId);
+                // The stored list is now behind: this run either added a
+                // conversation to it or changed the update time and title of one
+                // already there. Reporting the id lets the owner of that list
+                // re-read it; the id is unchanged when the run continued a
+                // conversation, which is why the report is not conditional on
+                // it having changed.
+                onConversationPersistedRef.current?.(event.conversationId);
               }
               patchTail(assistantId, turn => ({
                 ...turn,

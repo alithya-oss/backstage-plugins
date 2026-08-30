@@ -41,6 +41,8 @@ import styles from './PromptPageContent.module.css';
  * The page owns the side panel's state too, because it is the same state a run
  * reads: the enabled server ids go into the next request, and a selected
  * conversation replaces both the turn list and the id subsequent runs continue.
+ * It is also why the page, not the thread hook, is what re-reads the stored list
+ * once a run has persisted a conversation.
  *
  * The run failure is the one piece of state the surface receives as a prop
  * rather than reading from the runtime: it is the page's, not a message's, which
@@ -66,6 +68,7 @@ export const PromptPageContent = () => {
     searchQuery,
     setSearchQuery,
     loadConversation,
+    refreshConversations,
     deleteConversation,
     toggleStar,
   } = useConversations();
@@ -83,6 +86,10 @@ export const PromptPageContent = () => {
     usePromptThread({
       enabledServerIds,
       isLoading: isLoadingConversation,
+      // A completed run has changed the stored list — a new conversation, or a
+      // new update time on the one being continued — so the list is re-read
+      // rather than left as it was when the page loaded.
+      onConversationPersisted: refreshConversations,
     });
   const runtime = useExternalStoreRuntime(adapter);
 
