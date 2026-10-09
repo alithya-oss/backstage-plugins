@@ -39,7 +39,7 @@
     "@alithya-oss/backstage-plugin-time-saver-common": "workspace:^",
     "@backstage/core-plugin-api": "backstage:^",
     "@backstage/errors": "backstage:^",
-    "@faker-js/faker": "^9.0.3",
+    "@faker-js/faker": "^10.0.0",
     "@material-ui/core": "^4.9.13",
     "@mui/material": "^6.1.5",
     "@mui/x-data-grid": "^7.22.0",
@@ -54,7 +54,7 @@
   "devDependencies": {
     "@backstage/cli": "backstage:^",
     "@backstage/test-utils": "backstage:^",
-    "@faker-js/faker": "^9.0.3",
+    "@faker-js/faker": "^10.0.0",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^14.0.0",
     "react": "^16.13.1 || ^17.0.0 || ^18.0.0"

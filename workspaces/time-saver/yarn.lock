@@ -74,7 +74,7 @@ __metadata:
     "@backstage/core-plugin-api": "backstage:^"
     "@backstage/errors": "backstage:^"
     "@backstage/test-utils": "backstage:^"
-    "@faker-js/faker": "npm:^9.0.3"
+    "@faker-js/faker": "npm:^10.0.0"
     "@material-ui/core": "npm:^4.9.13"
     "@mui/material": "npm:^6.1.5"
     "@mui/x-data-grid": "npm:^7.22.0"
@@ -5626,10 +5626,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@faker-js/faker@npm:^9.0.3":
-  version: 9.2.0
-  resolution: "@faker-js/faker@npm:9.2.0"
-  checksum: 10/c233aaa41ebc4f4bed36c1304c399c424b9e5abca9cb8fe54ce73d4162ec7acd66f294b90c85ed7a5df774400e44f0a10364bdd41f49e72cb519a48b5948939f
+"@faker-js/faker@npm:^10.0.0":
+  version: 10.6.0
+  resolution: "@faker-js/faker@npm:10.6.0"
+  checksum: 10/f45220ceae76133d831dee8c8f5c8566767bfd857b7f872b5ec58866b68da889dabe96e805a598e095a6c58eae250363a7f335aa0afc513cb2ad5fe69e2a967f
   languageName: node
   linkType: hard
 
