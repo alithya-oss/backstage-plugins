@@ -50,7 +50,7 @@ __metadata:
     msw: "npm:^2.3.1"
     node-fetch: "npm:^2.6.7"
     supertest: "npm:^6.3.4"
-    uuid: "npm:^9.0.0"
+    uuid: "npm:^11.0.0"
     yn: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
