@@ -171,6 +171,10 @@ export class ChatSessionManager {
             this.messages[lastIndex] = lastMessage;
             this.emitMessagesChanged();
           })
+          .with({ type: 'ToolResultEvent' }, () => {
+            // This page never opts into tool outcomes, so the backend never
+            // sends one. The branch only keeps the match exhaustive.
+          })
           .with({ type: 'ErrorEvent' }, e => {
             const lastIndex = this.messages.length - 1;
             const lastMessage = this.messages[lastIndex];

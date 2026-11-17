@@ -20,6 +20,15 @@ export interface AgentRequestOptions {
   token: string;
 }
 
+// @public
+export interface AgentToolDescriptor {
+  // (undocumented)
+  description?: string;
+  name: string;
+  // (undocumented)
+  title: string;
+}
+
 // @public (undocumented)
 export type ChatEvent = z.TypeOf<typeof EventSchema>;
 
@@ -27,8 +36,11 @@ export type ChatEvent = z.TypeOf<typeof EventSchema>;
 export interface ChatRequest {
   // (undocumented)
   agentName: string;
+  enabledActions?: string[];
+  enabledSearchIndexes?: string[];
   // (undocumented)
   sessionId: string | undefined;
+  toolResults?: boolean;
   // (undocumented)
   userMessage: string;
 }
@@ -50,6 +62,29 @@ export interface ChatSession {
 }
 
 // @public (undocumented)
+export type ConversationRole = 'user' | 'assistant';
+
+// @public
+export interface ConversationSummary {
+  ended?: string;
+  lastActivity: string;
+  // (undocumented)
+  sessionId: string;
+  title?: string;
+}
+
+// @public
+export interface ConversationTurn {
+  // (undocumented)
+  content: string;
+  interrupted?: boolean;
+  // (undocumented)
+  role: ConversationRole;
+  // (undocumented)
+  toolInvocations?: ToolInvocation[];
+}
+
+// @public (undocumented)
 export class DefaultAgentClient implements AgentClient {
   constructor(discoveryApi: { getBaseUrl(pluginId: string): Promise<string> });
   // (undocumented)
@@ -67,7 +102,7 @@ export interface EndSessionRequest {
   sessionId: string;
 }
 
-// @public (undocumented)
+// @public
 export const EventSchema: z.ZodDiscriminatedUnion<
   'type',
   [
@@ -108,6 +143,7 @@ export const EventSchema: z.ZodDiscriminatedUnion<
         type: z.ZodLiteral<'ToolEvent'>;
         name: z.ZodString;
         input: z.ZodString;
+        id: z.ZodOptional<z.ZodString>;
       },
       'strip',
       z.ZodTypeAny,
@@ -115,11 +151,35 @@ export const EventSchema: z.ZodDiscriminatedUnion<
         input: string;
         type: 'ToolEvent';
         name: string;
+        id?: string | undefined;
       },
       {
         input: string;
         type: 'ToolEvent';
         name: string;
+        id?: string | undefined;
+      }
+    >,
+    z.ZodObject<
+      {
+        type: z.ZodLiteral<'ToolResultEvent'>;
+        id: z.ZodString;
+        output: z.ZodString;
+        isError: z.ZodBoolean;
+      },
+      'strip',
+      z.ZodTypeAny,
+      {
+        output: string;
+        type: 'ToolResultEvent';
+        id: string;
+        isError: boolean;
+      },
+      {
+        output: string;
+        type: 'ToolResultEvent';
+        id: string;
+        isError: boolean;
       }
     >,
     z.ZodObject<
@@ -157,12 +217,33 @@ export interface GenerateResponse {
   output: any;
 }
 
+// @public
+export interface SearchIndexDescriptor {
+  covered: boolean;
+  // (undocumented)
+  title: string;
+  type: string;
+}
+
 // @public (undocumented)
 export interface SyncResponse {
   // (undocumented)
   output: any;
   // (undocumented)
   sessionId: string;
+}
+
+// @public
+export interface ToolInvocation {
+  // (undocumented)
+  id: string;
+  // (undocumented)
+  input: string;
+  // (undocumented)
+  isError?: boolean;
+  // (undocumented)
+  name: string;
+  output?: string;
 }
 
 // (No @packageDocumentation comment for this package)
