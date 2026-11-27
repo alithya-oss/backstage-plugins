@@ -17,7 +17,7 @@
 import { createFrontendPlugin } from '@backstage/frontend-plugin-api';
 import { RiRobot2Line } from '@remixicon/react';
 import extensions from './extensions';
-import { rootRouteRef } from './routes';
+import { assistantRouteRef, rootRouteRef } from './routes';
 
 /** @public */
 export const awsGenAiPlugin = createFrontendPlugin({
@@ -27,6 +27,7 @@ export const awsGenAiPlugin = createFrontendPlugin({
   icon: <RiRobot2Line />,
   routes: {
     root: rootRouteRef,
+    assistant: assistantRouteRef,
   },
   extensions,
 });

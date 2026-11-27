@@ -16,5 +16,6 @@
 
 import { agentApi } from './apis';
 import { agentChatPage } from './agent-page';
+import { assistantPage } from './assistant-page';
 
-export default [agentApi, agentChatPage];
+export default [agentApi, agentChatPage, assistantPage];

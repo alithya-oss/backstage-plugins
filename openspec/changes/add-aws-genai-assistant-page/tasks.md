@@ -33,14 +33,14 @@ Covers _Compatibility of the existing chat contract_ (types side).
 
 Covers _Page availability alongside the historical chat page_.
 
-- [ ] 2.1 Add `@assistant-ui/react` to `plugins/aws-genai/package.json`
+- [x] 2.1 Add `@assistant-ui/react` to `plugins/aws-genai/package.json`
       dependencies and narrow the `react` / `react-dom` peer ranges from
       `^16.13.1 || ^17.0.0 || ^18.0.0` to `^18`. Verify `yarn install` reports no
       unmet peer warning for `@assistant-ui/react`.
-- [ ] 2.2 Run `yarn fix --publish` and `yarn dedupe`, and commit both results.
+- [x] 2.2 Run `yarn fix --publish` and `yarn dedupe`, and commit both results.
       Verify `yarn fix --check` and `yarn dedupe --check` exit zero — this is what
       CI gates on, and it must pass before any `tsc` result is trusted.
-- [ ] 2.3 Add `assistantRouteRef` (param `agentName`) to
+- [x] 2.3 Add `assistantRouteRef` (param `agentName`) to
       `plugins/aws-genai/src/routes.ts` and a second `PageBlueprint` under
       `src/extensions/` at `/aws-genai-assistant/:agentName`, registered in the
       plugin's `extensions` and `routes`. Leave `agentChatPage` and
@@ -48,14 +48,14 @@ Covers _Page availability alongside the historical chat page_.
       so it asserts both pages render at their own paths — scenarios _Both pages
       are reachable_, _The new page is not mounted_ and _The page is opened for an
       agent_.
-- [ ] 2.4 Add the second sidebar entry to
+- [x] 2.4 Add the second sidebar entry to
       `packages/app/src/modules/nav/Sidebar.tsx`: suppress the inferred nav item
       for the new page as the existing one is suppressed, then hand-write a
       `SidebarItem` to `aws-genai-assistant/general` with its own
       `@remixicon/react` icon. Verify with `yarn start` reaching both pages from
       the sidebar, and record the check in the PR — scenario _The development
       application shows both entries_.
-- [ ] 2.5 Render a placeholder page body that mounts the runtime provider with an
+- [x] 2.5 Render a placeholder page body that mounts the runtime provider with an
       empty conversation, so the route is exercised before the surface exists.
       Verify `CI=true yarn test plugins/aws-genai` passes.
 

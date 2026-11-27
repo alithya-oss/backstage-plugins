@@ -20,3 +20,8 @@ export const rootRouteRef = createRouteRef({
   id: 'aws-genai',
   params: ['agentName'],
 });
+
+export const assistantRouteRef = createRouteRef({
+  id: 'aws-genai-assistant',
+  params: ['agentName'],
+});

@@ -32,6 +32,7 @@ import {
   RiCloudLine,
   RiSeoLine,
   RiRobot2Line,
+  RiSparklingLine,
 } from '@remixicon/react';
 import { SidebarSearchModal } from '@backstage/plugin-search';
 import { UserSettingsSignInAvatar } from '@backstage/plugin-user-settings';
@@ -44,6 +45,7 @@ const PuzzleIcon = () => <RiPuzzleLine size={20} />;
 const MoneyIcon = () => <RiMoneyDollarCircleLine size={20} />;
 const SearchIcon = () => <RiSeoLine size={20} />;
 const ChatIcon = () => <RiRobot2Line size={20} />;
+const AssistantIcon = () => <RiSparklingLine size={20} />;
 
 const AwsCatalogSubmenu = () => {
   const app = useApp();
@@ -94,6 +96,8 @@ export const SidebarContent = NavContentBlueprint.make({
       // cannot produce a usable link. Rendered below as a link to the `general`
       // agent configured under `genai.agents`.
       nav.take('page:aws-genai');
+      // Same for the Assistant UI page (/aws-genai-assistant/:agentName).
+      nav.take('page:aws-genai/assistant');
 
       return (
         <Sidebar>
@@ -123,6 +127,11 @@ export const SidebarContent = NavContentBlueprint.make({
                 icon={ChatIcon}
                 to="aws-genai/general"
                 text="Chat Assistant"
+              />
+              <SidebarItem
+                icon={AssistantIcon}
+                to="aws-genai-assistant/general"
+                text="Assistant UI"
               />
               <SidebarItem
                 icon={MoneyIcon}
