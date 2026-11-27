@@ -19,10 +19,14 @@ import { screen } from '@testing-library/react';
 import { awsGenAiPlugin } from './plugin';
 import defaultExport, { awsGenAiPlugin as legacyPlugin } from './index';
 import { agentApiRef } from './api';
-import { rootRouteRef } from './routes';
+import { assistantRouteRef, rootRouteRef } from './routes';
 
 jest.mock('./components/AgentPage', () => ({
   AgentPageContent: () => <div>agent chat page content</div>,
+}));
+
+jest.mock('./components/AssistantPage', () => ({
+  AssistantPageContent: () => <div>assistant page content</div>,
 }));
 
 describe('awsGenAiPlugin (new frontend system)', () => {
@@ -51,5 +55,37 @@ describe('awsGenAiPlugin (new frontend system)', () => {
     expect(
       await screen.findByText('agent chat page content'),
     ).toBeInTheDocument();
+  });
+
+  it('should register the assistant page on its own route', () => {
+    expect(awsGenAiPlugin.routes.assistant).toBe(assistantRouteRef);
+    expect(assistantRouteRef).not.toBe(rootRouteRef);
+    expect(
+      awsGenAiPlugin.getExtension('page:aws-genai/assistant'),
+    ).toBeDefined();
+  });
+
+  it('should render the assistant page for an agent, leaving the chat page unchanged', async () => {
+    renderTestApp({
+      features: [awsGenAiPlugin],
+      initialRouteEntries: ['/aws-genai-assistant/my-agent'],
+    });
+
+    expect(
+      await screen.findByText('assistant page content'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('agent chat page content')).toBeNull();
+  });
+
+  it('should render only the chat page when the legacy path is opened', async () => {
+    renderTestApp({
+      features: [awsGenAiPlugin],
+      initialRouteEntries: ['/aws-genai/my-agent'],
+    });
+
+    expect(
+      await screen.findByText('agent chat page content'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('assistant page content')).toBeNull();
   });
 });

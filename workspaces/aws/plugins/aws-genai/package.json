@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "@alithya-oss/backstage-plugins-aws-genai-common": "workspace:^",
+    "@assistant-ui/react": "^0.15.16",
     "@backstage/core-plugin-api": "backstage:^",
     "@backstage/frontend-plugin-api": "backstage:^",
     "@backstage/ui": "backstage:^",
@@ -59,8 +60,8 @@
     "ts-pattern": "^5.5.0"
   },
   "peerDependencies": {
-    "react": "^16.13.1 || ^17.0.0 || ^18.0.0",
-    "react-dom": "^16.13.1 || ^17.0.0 || ^18.0.0",
+    "react": "^18",
+    "react-dom": "^18",
     "react-router-dom": "6.0.0-beta.0 || ^6.3.0"
   },
   "devDependencies": {
